@@ -23,7 +23,11 @@
     "react-sizeme": "^3.0.1",
     "react-use": "^17.2.3",
     "redux": "^4.0.5",
+    "redux-thunk": "^2.3.0",
     "sass": "^1.32.11",
     "shortid": "^2.2.16"
+  },
+  "devDependencies": {
+    "redux-devtools-extension": "^2.13.9"
   }
 }

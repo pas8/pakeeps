@@ -2,14 +2,15 @@ import PropTypes from 'prop-types';
 import { Drawer, IconButton, makeStyles, useTheme } from '@material-ui/core';
 import ArrowForwardIosOutlinedIcon from '@material-ui/icons/ArrowForwardIosOutlined';
 import ArrowBackIosOutlinedIcon from '@material-ui/icons/ArrowBackIosOutlined';
+import { takePercentage } from 'hooks/takePercentage.hook';
 
 const useStyles = makeStyles(theme => ({
   drawer: {
-    width: 240,
+    width: '240px',
     flexShrink: 0
   },
   drawerPaper: {
-    width: 240
+    width: '240px'
   },
   drawerHeader: {
     display: 'flex',
@@ -22,13 +23,15 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const HeaderDrawer = ({ open, handleDrawerClose }) => {
+  // const drawerWidth = takePercentage();
+
   const classes = useStyles();
   const theme = useTheme();
   return (
     <Drawer
       className={classes.drawer}
-      variant="persistent"
-      anchor="left"
+      variant={'persistent'}
+      anchor={'right'}
       open={open}
       classes={{
         paper: classes.drawerPaper

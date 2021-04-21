@@ -12,6 +12,7 @@ const diiaHeadRegular = {
 
 export const theme = responsiveFontSizes(
   createMuiTheme({
+    direction: 'rtl',
     palette: {
       type: 'dark',
       primary: {

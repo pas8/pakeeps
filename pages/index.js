@@ -1,13 +1,20 @@
-import { Typography } from '@material-ui/core';
+import { Container, Typography } from '@material-ui/core';
 import Header from 'components/Header';
+import NewPaKeep from 'components/NewPakeep';
+import { connect } from 'react-redux';
 
-const Pakeeps = () => {
+const Pakeeps = ({ data }) => {
+  console.log(data);
   return (
-    <div>
-      <Header />
-      <Typography variant={'h1'}>pakeeps</Typography>
-    </div>
+    <Container>
+      <NewPaKeep />
+      <Typography variant={'h1'}>pakeep</Typography>
+    </Container>
   );
 };
 
-export default Pakeeps;
+const mapStateToProps = ({ app: { data } }) => ({ data });
+
+// const mapDispatchToProps = dispatch => ({ setData: data => dispatch(setData(data)) });
+
+export default connect(mapStateToProps, null)(Pakeeps);
