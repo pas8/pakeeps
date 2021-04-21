@@ -1,14 +1,18 @@
 import { Container, Typography } from '@material-ui/core';
-import Header from 'components/Header';
-import NewPaKeep from 'components/NewPakeep';
 import { connect } from 'react-redux';
+import dynamic from 'next/dynamic';
+
+//! workaround
+const DynamicComponentWithNoSSR = dynamic(() => import('components/NewPakeep'), {
+  ssr: false
+});
 
 const Pakeeps = ({ data }) => {
   console.log(data);
   return (
     <Container>
-      <NewPaKeep />
-      <Typography variant={'h1'}>pakeep</Typography>
+      <DynamicComponentWithNoSSR />
+      {/* <Typography variant={'h1'}>pakeep</Typography> */}
     </Container>
   );
 };

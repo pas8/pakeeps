@@ -14,6 +14,7 @@ export const theme = responsiveFontSizes(
   createMuiTheme({
     direction: 'rtl',
     palette: {
+      success: { main: '#4caf50' },
       type: 'dark',
       primary: {
         main: '#ffff8d'
