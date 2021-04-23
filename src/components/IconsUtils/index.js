@@ -1,7 +1,11 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import shortid from 'shortid';
-import { IconButton, makeStyles, Popover, Box, Typography } from '@material-ui/core';
+import PopupState, { bindHover, bindPopover, bindTrigger, bindMenu } from 'material-ui-popup-state';
+import Menu from 'material-ui-popup-state/HoverMenu';
+import MenuItem from '@material-ui/core/MenuItem';
+import Popover from 'material-ui-popup-state/HoverPopover';
+import { IconButton, makeStyles, Typography, Grid } from '@material-ui/core';
 import CheckBoxOutlinedIcon from '@material-ui/icons/CheckBoxOutlined';
 import PaletteOutlinedIcon from '@material-ui/icons/PaletteOutlined'; //! to change icon
 import EventAvailableOutlinedIcon from '@material-ui/icons/EventAvailableOutlined';
@@ -13,18 +17,18 @@ import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
 import LabelOutlinedIcon from '@material-ui/icons/LabelOutlined';
 import BookmarksOutlinedIcon from '@material-ui/icons/BookmarksOutlined';
 import { themeColors } from 'components/theme';
+import MoreOutlinedIcon from '@material-ui/icons/MoreOutlined';
+import CloseOutlinedIcon from '@material-ui/icons/CloseOutlined';
 
-// import SaveOutlinedIcon from '@material-ui/icons/SaveOutlined';
 const useStyles = makeStyles(theme => ({
-  popover: { pointerEvents: 'none' },
-  paper: {
-    padding: theme.spacing(1)
-  },
-  container: { display: 'flex', position: 'absolute', bottom: 0, left: 0, right: 8 }
+  popover: { padding: theme.spacing(0.4, 0.8) },
+  container: { display: 'flex', position: 'absolute', bottom: 0, left: 0, right: 8 },
+  moreIcon: { margin: theme.spacing(0.4, 1.4, 0, -0.8) }
 }));
 
 const IconsUtils = ({
-  open = !true,
+  isAllIconsIsShown = !false,
+  sliceArrayTo = 8,
   setEditTitleIsTrue,
   favorite = true,
   handleSetFavoritePakeep,
@@ -36,11 +40,6 @@ const IconsUtils = ({
   handleSetColorPakeep
 }) => {
   const classes = useStyles();
-  const [anchorEl, setAnchorEl] = useState(null);
-
-  const handlePopoverOpen = ({ currentTarget, target: { name } }) => setAnchorEl(currentTarget);
-
-  const handlePopoverClose = () => setAnchorEl(false);
 
   const handleClick = () => console.log('placeholder');
   const buttonUtilsNewPakeepArray = [
@@ -91,48 +90,115 @@ const IconsUtils = ({
       activeIcon: bookmark ? true : false
     }
   ];
+  const [slicedArr, setSlicedArr] = useState([]);
 
+  useEffect(() => {
+    if (!isAllIconsIsShown) setSlicedArr(buttonUtilsNewPakeepArray.slice(sliceArrayTo));
+  }, []);
+
+  console.log(slicedArr);
   return (
     <>
-      {buttonUtilsNewPakeepArray.map(({ icon: Icon, popoverText, name, onClick, activeIcon }) => (
-        <Box key={shortid()}>
-          <IconButton
-            name={name}
-            onMouseEnter={handlePopoverOpen}
-            onMouseLeave={handlePopoverClose}
-            onClick={onClick}
-            aria-owns={Boolean(anchorEl[name]) ? 'mouse-over-popover' : undefined}
-            aria-haspopup={'true'}
-          >
-            <Icon
-              style={{
-                filter: activeIcon ? `drop-shadow(0 0 0.4rem ${themeColors.primaryMain})` : '',
-                color: activeIcon ? themeColors.primaryMain : `rgba(255,255,255,${Boolean(anchorEl[name]) ? 0.8 : 0.4}`
-              }}
-            />
-          </IconButton>
-          <Popover
-            className={classes.popover}
-            classes={{
-              paper: classes.paper
-            }}
-            open={Boolean(anchorEl)}
-            anchorEl={anchorEl}
-            anchorOrigin={{
-              vertical: 'bottom',
-              horizontal: 'center'
-            }}
-            transformOrigin={{
-              vertical: 'top',
-              horizontal: 'center'
-            }}
-            onClose={handlePopoverClose}
-            disableRestoreFocus
-          >
-            <Typography variant={'subtitle2'}>{popoverText}</Typography>
-          </Popover>
-        </Box>
-      ))}
+      {buttonUtilsNewPakeepArray.map(({ icon: Icon, popoverText, name, onClick, activeIcon }, idx) => {
+        const element = (
+          <PopupState variant={'popover'} key={shortid()}>
+            {popupState => (
+              <>
+                <IconButton {...bindHover(popupState)} name={name} onClick={onClick} aria-haspopup={'true'}>
+                  <Icon
+                    style={{
+                      filter: activeIcon ? `drop-shadow(0 0 0.4rem ${themeColors.primaryMain})` : '',
+                      color: activeIcon ? themeColors.primaryMain : `rgba(255,255,255,${popupState.isOpen ? 0.8 : 0.4}`
+                    }}
+                  />
+                </IconButton>
+                <Popover
+                  {...bindPopover(popupState)}
+                  anchorOrigin={{
+                    vertical: 'bottom',
+                    horizontal: 'center'
+                  }}
+                  transformOrigin={{
+                    vertical: 'top',
+                    horizontal: 'center'
+                  }}
+                >
+                  <Typography variant={'subtitle2'} className={classes.popover}>
+                    {popoverText}
+                  </Typography>
+                </Popover>
+              </>
+            )}
+          </PopupState>
+        );
+
+        return (
+          <>
+            {isAllIconsIsShown ? (
+              element
+            ) : sliceArrayTo > idx ? (
+              element
+            ) : sliceArrayTo === idx ? (
+              <PopupState variant={'popover'} key={shortid()}>
+                {popupState => (
+                  <>
+                    <IconButton {...bindTrigger(popupState)} name={name} aria-haspopup={'true'}>
+                      <MoreOutlinedIcon
+                        style={{
+                          transform: `rotate(${popupState.isOpen ? 180 : 0}deg)`,
+                          color: `rgba(255,255,255,${popupState.isOpen ? 0.8 : 0.4}`
+                        }}
+                      />
+                    </IconButton>
+
+                    <Menu
+                      {...bindMenu(popupState)}
+                      anchorOrigin={{
+                        vertical: 'top',
+                        horizontal: 'right'
+                      }}
+                      transformOrigin={{
+                        vertical: 'top',
+                        horizontal: 'left'
+                      }}
+                    >
+                      <MenuItem onClick={() => popupState.close()}>
+                        <Grid className={classes.moreIcon}>
+                          <CloseOutlinedIcon
+                            style={{
+                              filter: activeIcon ? `drop-shadow(0 0 0.4rem ${themeColors.primaryMain})` : '',
+                              color: activeIcon
+                                ? themeColors.primaryMain
+                                : `rgba(255,255,255,${popupState.isOpen ? 0.8 : 0.4}`
+                            }}
+                          />
+                        </Grid>
+                        <Typography variant={'subtitle2'}>{'Close'}</Typography>
+                      </MenuItem>
+
+                      {slicedArr.map(({ icon: Icon, popoverText, name, onClick, activeIcon }) => (
+                        <MenuItem onClick={onClick}>
+                          <Grid className={classes.moreIcon}>
+                            <Icon
+                              style={{
+                                filter: activeIcon ? `drop-shadow(0 0 0.4rem ${themeColors.primaryMain})` : '',
+                                color: activeIcon
+                                  ? themeColors.primaryMain
+                                  : `rgba(255,255,255,${popupState.isOpen ? 0.8 : 0.4}`
+                              }}
+                            />
+                          </Grid>
+                          <Typography variant={'subtitle2'}>{popoverText}</Typography>
+                        </MenuItem>
+                      ))}
+                    </Menu>
+                  </>
+                )}
+              </PopupState>
+            ) : null}
+          </>
+        );
+      })}
     </>
   );
 };
@@ -146,6 +212,8 @@ IconsUtils.propTypes = {
   handleSetBookmarkPakeep: PropTypes.any,
   handleSetColorPakeep: PropTypes.any,
   handleSetFavoritePakeep: PropTypes.func,
+  isAllIconsIsShown: PropTypes.bool,
+  sliceArrayTo: PropTypes.number,
   labels: PropTypes.any,
   open: PropTypes.bool,
   setEditTitleIsTrue: PropTypes.func

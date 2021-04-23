@@ -43,9 +43,7 @@ const NewPakeepUtils = ({
   };
   return (
     <Box className={clsx(classes.container, !open ? classes.hidden : null)}>
-      <Box className={classes.buttonGroupWrapper}>
-        <Box className={classes.buttonWrapper}>
-          <IconsUtils
+      <IconsUtils
             setEditTitleIsTrue={setEditTitleIsTrue}
             favorite={favorite}
             handleSetFavoritePakeep={handleSetFavoritePakeep}
@@ -56,6 +54,9 @@ const NewPakeepUtils = ({
             handleSetBookmarkPakeep={handleSetBookmarkPakeep}
             handleSetColorPakeep={handleSetColorPakeep}
           />
+      <Box className={classes.buttonGroupWrapper}>
+        <Box className={classes.buttonWrapper}>
+          
           <Button color={'success'} style={{ color: 'rgba(255,255,255,0.4)' }}>
             Close
           </Button>
