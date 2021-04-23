@@ -21,7 +21,6 @@ const useStyles = makeStyles(theme => ({
 
 const NewPaKeep = ({ pakeeps, addNewPaKeepThunk }) => {
   const classes = useStyles();
-  console.log('pakeeps', { ...pakeeps });
 
   const [state, setState] = useState({
     title: '',
@@ -38,7 +37,6 @@ const NewPaKeep = ({ pakeeps, addNewPaKeepThunk }) => {
   const [changingTitle, setChangingTitle] = useState(false);
   const [showUtils, setShowUtils] = useState(false);
 
-  console.log(state);
   const handleState = ({ target: { name, value } }) => setState(state => ({ ...state, [name]: value }));
 
   const setFocusIsTrue = () => setFocus(true);
@@ -59,16 +57,13 @@ const NewPaKeep = ({ pakeeps, addNewPaKeepThunk }) => {
       setWritingText(true);
       setShowUtils(true);
     }
-
-    // if (writingText === true && state.text === '' && focus === false) setWritingText(false);
-    // if(focus && )
   }, [focus, enter]);
+
   const handleNewPakeepSave = () => {
     addNewPaKeepThunk(state);
     setWritingText(false);
     setState({ title: '', text: '', bookmark: false, favorite: false, color: 'transparent', labels: false });
   };
-  // console.log(enter);
   document.onkeydown = evt => {
     if (evt.key === 'Enter' && enter === false) setEnter(true);
     else if (enter === true && evt.key !== 'Enter') setEnter(false);
@@ -79,19 +74,6 @@ const NewPaKeep = ({ pakeeps, addNewPaKeepThunk }) => {
   return (
     <Box className={classes.container}>
       <Paper variant={'elevation'} className={classes.wrapper}>
-        {/* <form className={classes.root} noValidate autoComplete={'off'}> */}
-        {/* <Box className={clsx({ [classes.hidden]: !focus })}>
-          <TextField
-            className={classes.inputTitle}
-            // label={'Title'} 
-            placeholder={'title'}
-            variant={'outlined'}
-            value={state.title}
-            onChange={handleState}
-            name={'title'}
-            fullWidth
-          />
-        </Box> */}
         <Box>
           <TextField
             className={classes.textField}
