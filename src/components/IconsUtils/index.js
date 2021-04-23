@@ -1,3 +1,4 @@
+import clsx from 'clsx';
 import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import shortid from 'shortid';
@@ -23,12 +24,14 @@ import CloseOutlinedIcon from '@material-ui/icons/CloseOutlined';
 const useStyles = makeStyles(theme => ({
   popover: { padding: theme.spacing(0.4, 0.8) },
   container: { display: 'flex', position: 'absolute', bottom: 0, left: 0, right: 8 },
-  moreIcon: { margin: theme.spacing(0.4, 1.4, 0, -0.8) }
+  moreIcon: { margin: theme.spacing(0.4, 1.4, 0, -0.8) },
+  firstIcon: { marginLeft: theme.spacing(-1.8) },
+  iconsCloser:{ marginRight:theme.spacing(-1)}
 }));
 
 const IconsUtils = ({
-  isAllIconsIsShown = !false,
-  sliceArrayTo = 8,
+  isAllIconsIsShown = false,
+  sliceArrayTo = 4,
   setEditTitleIsTrue,
   favorite = true,
   handleSetFavoritePakeep,
@@ -37,7 +40,8 @@ const IconsUtils = ({
   labels,
   checkbox,
   handleSetBookmarkPakeep,
-  handleSetColorPakeep
+  handleSetColorPakeep,
+  iconsCloser = false
 }) => {
   const classes = useStyles();
 
@@ -96,7 +100,6 @@ const IconsUtils = ({
     if (!isAllIconsIsShown) setSlicedArr(buttonUtilsNewPakeepArray.slice(sliceArrayTo));
   }, []);
 
-  console.log(slicedArr);
   return (
     <>
       {buttonUtilsNewPakeepArray.map(({ icon: Icon, popoverText, name, onClick, activeIcon }, idx) => {
@@ -104,7 +107,13 @@ const IconsUtils = ({
           <PopupState variant={'popover'} key={shortid()}>
             {popupState => (
               <>
-                <IconButton {...bindHover(popupState)} name={name} onClick={onClick} aria-haspopup={'true'}>
+                <IconButton
+                  {...bindHover(popupState)}
+                  name={name}
+                  onClick={onClick}
+                  aria-haspopup={'true'}
+                  className={clsx(idx === 0 && iconsCloser ? classes.firstIcon : null, iconsCloser ? classes.iconsCloser : null)}
+                >
                   <Icon
                     style={{
                       filter: activeIcon ? `drop-shadow(0 0 0.4rem ${themeColors.primaryMain})` : '',

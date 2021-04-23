@@ -6,7 +6,7 @@ const useStyles = makeStyles(theme => ({
   container: { marginTop: theme.spacing(8) }
 }));
 
-const PakeepList = ({ pakeeps }) => {
+const PakeepList = ({ pakeeps,labels }) => {
   const classes = useStyles();
 
   return (
@@ -18,7 +18,7 @@ const PakeepList = ({ pakeeps }) => {
   );
 };
 
-const mapStateToProps = ({ app: { pakeeps } }) => ({ pakeeps });
+const mapStateToProps = ({ app: { pakeeps,labels } }) => ({ pakeeps ,labels});
 // const mapDispatchToProps = dispatch => ({ setData: data => dispatch(setData(data)) });
 
 export default connect(mapStateToProps, null)(PakeepList);
