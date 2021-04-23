@@ -31,7 +31,9 @@ const NewPakeepUtils = ({
   checkbox,
   handleSetBookmarkPakeep,
   handleSetColorPakeep,
-  handleNewPakeepSave
+  handleNewPakeepSave,
+  handleSetWidth,
+  fullWidthOfNewPakeepContainer
 }) => {
   const classes = useStyles();
 
@@ -44,19 +46,20 @@ const NewPakeepUtils = ({
   return (
     <Box className={clsx(classes.container, !open ? classes.hidden : null)}>
       <IconsUtils
-            setEditTitleIsTrue={setEditTitleIsTrue}
-            favorite={favorite}
-            handleSetFavoritePakeep={handleSetFavoritePakeep}
-            changingTitle={changingTitle}
-            bookmark={bookmark}
-            labels={labels}
-            checkbox={checkbox}
-            handleSetBookmarkPakeep={handleSetBookmarkPakeep}
-            handleSetColorPakeep={handleSetColorPakeep}
-          />
+        setEditTitleIsTrue={setEditTitleIsTrue}
+        favorite={favorite}
+        handleSetFavoritePakeep={handleSetFavoritePakeep}
+        changingTitle={changingTitle}
+        bookmark={bookmark}
+        labels={labels}
+        checkbox={checkbox}
+        handleSetBookmarkPakeep={handleSetBookmarkPakeep}
+        handleSetColorPakeep={handleSetColorPakeep}
+        handleSetWidth={handleSetWidth}
+        fullWidth={fullWidthOfNewPakeepContainer}
+      />
       <Box className={classes.buttonGroupWrapper}>
         <Box className={classes.buttonWrapper}>
-          
           <Button color={'success'} style={{ color: 'rgba(255,255,255,0.4)' }}>
             Close
           </Button>

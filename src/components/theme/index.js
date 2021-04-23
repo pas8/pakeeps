@@ -12,8 +12,17 @@ const diiaHeadRegular = {
 
 export const themeColors = { primaryMain: '#ffff8d', secondaryMain: '#00b0ff' };
 
+export const breakpoints = [1920,1280,960,600,400,0]
+
 export const theme = responsiveFontSizes(
   createMuiTheme({
+    // breakpoints: {
+    //   xs: breakpoints[4],
+    //   sm: breakpoints[3],
+    //   md: breakpoints[2],
+    //   lg: breakpoints[1],
+    //   xl: breakpoints[0]
+    // },
     direction: 'rtl',
     palette: {
       success: { main: '#4caf50' },

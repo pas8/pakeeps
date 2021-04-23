@@ -20,17 +20,17 @@ import BookmarksOutlinedIcon from '@material-ui/icons/BookmarksOutlined';
 import { themeColors } from 'components/theme';
 import MoreOutlinedIcon from '@material-ui/icons/MoreOutlined';
 import CloseOutlinedIcon from '@material-ui/icons/CloseOutlined';
+import UnfoldMoreOutlinedIcon from '@material-ui/icons/UnfoldMoreOutlined';
+import UnfoldLessOutlinedIcon from '@material-ui/icons/UnfoldLessOutlined';
 
 const useStyles = makeStyles(theme => ({
   popover: { padding: theme.spacing(0.4, 0.8) },
   container: { display: 'flex', position: 'absolute', bottom: 0, left: 0, right: 8 },
   moreIcon: { margin: theme.spacing(0.4, 1.4, 0, -0.8) },
-  firstIcon: { marginLeft: theme.spacing(-1.8) },
-  iconsCloser:{ marginRight:theme.spacing(-1)}
 }));
 
 const IconsUtils = ({
-  isAllIconsIsShown = false,
+  isAllIconsIsShown = true,
   sliceArrayTo = 4,
   setEditTitleIsTrue,
   favorite = true,
@@ -41,7 +41,8 @@ const IconsUtils = ({
   checkbox,
   handleSetBookmarkPakeep,
   handleSetColorPakeep,
-  iconsCloser = false
+  handleSetWidth,
+  fullWidth = false
 }) => {
   const classes = useStyles();
 
@@ -52,7 +53,7 @@ const IconsUtils = ({
       popoverText: 'Show a checkboxes',
       name: 'checkbox',
       onClick: handleClick,
-      activeIcon: checkbox ? true : false
+      activeIcon: checkbox 
     },
     {
       icon: PaletteOutlinedIcon,
@@ -69,7 +70,7 @@ const IconsUtils = ({
       popoverText: 'Edit title',
       name: 'edit',
       onClick: setEditTitleIsTrue,
-      activeIcon: changingTitle ? true : false
+      activeIcon: changingTitle 
     },
 
     {
@@ -77,22 +78,32 @@ const IconsUtils = ({
       popoverText: 'Add labels',
       name: 'labels',
       onClick: setEditTitleIsTrue,
-      activeIcon: labels ? true : false
+      activeIcon: labels 
     },
     {
       icon: FavoriteBorderOutlinedIcon,
       popoverText: 'Add to favorites',
       name: 'favorite',
       onClick: handleSetFavoritePakeep,
-      activeIcon: favorite ? true : false
+      activeIcon: favorite 
     },
     {
       icon: BookmarksOutlinedIcon,
       popoverText: 'Add to bookmark',
       name: 'bookmark',
       onClick: handleSetBookmarkPakeep,
-      activeIcon: bookmark ? true : false
-    }
+      activeIcon: bookmark
+    },
+    {
+      icon:!fullWidth ? UnfoldMoreOutlinedIcon :  UnfoldLessOutlinedIcon,
+      popoverText: 'To full width',
+      name: 'width',
+      onClick: handleSetWidth,
+      activeIcon: fullWidth,
+      rotateDeg:90
+    },
+    
+    
   ];
   const [slicedArr, setSlicedArr] = useState([]);
 
@@ -101,8 +112,8 @@ const IconsUtils = ({
   }, []);
 
   return (
-    <>
-      {buttonUtilsNewPakeepArray.map(({ icon: Icon, popoverText, name, onClick, activeIcon }, idx) => {
+    <Grid container display={'flex'} wrap={'nowrap'}  justify={isAllIconsIsShown ?'flex-start' : "space-between"} >
+      {buttonUtilsNewPakeepArray.map(({ icon: Icon, popoverText, name, onClick, activeIcon,rotateDeg }, idx) => {
         const element = (
           <PopupState variant={'popover'} key={shortid()}>
             {popupState => (
@@ -112,11 +123,12 @@ const IconsUtils = ({
                   name={name}
                   onClick={onClick}
                   aria-haspopup={'true'}
-                  className={clsx(idx === 0 && iconsCloser ? classes.firstIcon : null, iconsCloser ? classes.iconsCloser : null)}
                 >
                   <Icon
+                  
                     style={{
-                      filter: activeIcon ? `drop-shadow(0 0 0.4rem ${themeColors.primaryMain})` : '',
+                      // filter: name === 'favorite' && activeIcon ? `drop-shadow(0 0 0.4rem ${themeColors.primaryMain})` : '',
+                      transform:`rotate(${rotateDeg ? rotateDeg : 0 }deg)`,
                       color: activeIcon ? themeColors.primaryMain : `rgba(255,255,255,${popupState.isOpen ? 0.8 : 0.4}`
                     }}
                   />
@@ -208,7 +220,7 @@ const IconsUtils = ({
           </>
         );
       })}
-    </>
+    </Grid>
   );
 };
 
