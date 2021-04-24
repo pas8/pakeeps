@@ -2,6 +2,13 @@ const ADD_NEW_PAKEEP = 'ADD_NEW_PAKEEP';
 
 const initialState = {
   data: 1,
+  labels: [
+    { color:'primary', title: 'Day plans', icon: '', key: 0 },
+    { color:'primary', title: 'Week plans', icon: '', key: 1 },
+    { color:'primary', title: 'Mouth plans', icon: '', key: 2 },
+    { color:'primary', title: 'Year plans', icon: '', key: 3 },
+    { color:'primary', title: 'Hobby Placeholders', icon: '', key: 4 }
+  ],
   pakeeps: [
     {
       title: 'Placeholder',
@@ -10,7 +17,13 @@ const initialState = {
       bookmark: false,
       favorite: false,
       color: 'transparent',
-      labels: false
+      labels: [
+        { color:'secondary', title: 'Plans', icon: '', key: 0 },
+        { color:'default', title: 'Week plans', icon: '', key: 1 },
+        { color:'primary', title: 'Mouth plans', icon: '', key: 2 },
+        { color:'primary', title: 'Year plans', icon: '', key: 3 },
+        { color:'secondary', title: 'Hobby Placeholders', icon: '', key: 4 }
+      ]
     },
     {
       title: 'Placeholder',
@@ -19,7 +32,7 @@ const initialState = {
       bookmark: false,
       favorite: false,
       color: 'transparent',
-      labels: false
+      labels: [{ color:'primary', title: 'Day plans', icon: '', key: 0 }]
     },
     {
       title: 'Placeholder',
@@ -28,7 +41,7 @@ const initialState = {
       bookmark: false,
       favorite: false,
       color: 'transparent',
-      labels: false
+      labels: []
     },
     {
       title: 'Placeholder',
@@ -37,16 +50,22 @@ const initialState = {
       bookmark: false,
       favorite: false,
       color: 'transparent',
-      labels: false
-    },{
+      labels: [
+        { color:'default', title: 'Day plans', icon: '', key: 0 },
+        { color:'default', title: 'Week plans', icon: '', key: 1 },
+        { color:'primary', title: 'Mouth plans', icon: 'keyboard', key: 2 },
+        { color:'secondary', title: 'Year plans', icon: '', key: 3 }
+      ]
+    },
+    {
       title: 'Placeholder',
       text:
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
       bookmark: false,
       favorite: false,
       color: 'transparent',
-      labels: false
-    },
+      labels:[ { color:'default', title: 'Hobby Placeholders', icon: 'alarm', key: 4 }]
+    }
   ]
 };
 

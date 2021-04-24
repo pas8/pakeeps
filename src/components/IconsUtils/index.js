@@ -1,3 +1,4 @@
+import clsx from 'clsx';
 import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import shortid from 'shortid';
@@ -19,16 +20,18 @@ import BookmarksOutlinedIcon from '@material-ui/icons/BookmarksOutlined';
 import { themeColors } from 'components/theme';
 import MoreOutlinedIcon from '@material-ui/icons/MoreOutlined';
 import CloseOutlinedIcon from '@material-ui/icons/CloseOutlined';
+import UnfoldMoreOutlinedIcon from '@material-ui/icons/UnfoldMoreOutlined';
+import UnfoldLessOutlinedIcon from '@material-ui/icons/UnfoldLessOutlined';
 
 const useStyles = makeStyles(theme => ({
   popover: { padding: theme.spacing(0.4, 0.8) },
   container: { display: 'flex', position: 'absolute', bottom: 0, left: 0, right: 8 },
-  moreIcon: { margin: theme.spacing(0.4, 1.4, 0, -0.8) }
+  moreIcon: { margin: theme.spacing(0.4, 1.4, 0, -0.8) },
 }));
 
 const IconsUtils = ({
-  isAllIconsIsShown = !false,
-  sliceArrayTo = 8,
+  isAllIconsIsShown = true,
+  sliceArrayTo = 4,
   setEditTitleIsTrue,
   favorite = true,
   handleSetFavoritePakeep,
@@ -37,7 +40,9 @@ const IconsUtils = ({
   labels,
   checkbox,
   handleSetBookmarkPakeep,
-  handleSetColorPakeep
+  handleSetColorPakeep,
+  handleSetWidth,
+  fullWidth = false
 }) => {
   const classes = useStyles();
 
@@ -48,7 +53,7 @@ const IconsUtils = ({
       popoverText: 'Show a checkboxes',
       name: 'checkbox',
       onClick: handleClick,
-      activeIcon: checkbox ? true : false
+      activeIcon: checkbox 
     },
     {
       icon: PaletteOutlinedIcon,
@@ -65,7 +70,7 @@ const IconsUtils = ({
       popoverText: 'Edit title',
       name: 'edit',
       onClick: setEditTitleIsTrue,
-      activeIcon: changingTitle ? true : false
+      activeIcon: changingTitle 
     },
 
     {
@@ -73,22 +78,32 @@ const IconsUtils = ({
       popoverText: 'Add labels',
       name: 'labels',
       onClick: setEditTitleIsTrue,
-      activeIcon: labels ? true : false
+      activeIcon: labels 
     },
     {
       icon: FavoriteBorderOutlinedIcon,
       popoverText: 'Add to favorites',
       name: 'favorite',
       onClick: handleSetFavoritePakeep,
-      activeIcon: favorite ? true : false
+      activeIcon: favorite 
     },
     {
       icon: BookmarksOutlinedIcon,
       popoverText: 'Add to bookmark',
       name: 'bookmark',
       onClick: handleSetBookmarkPakeep,
-      activeIcon: bookmark ? true : false
-    }
+      activeIcon: bookmark
+    },
+    {
+      icon:!fullWidth ? UnfoldMoreOutlinedIcon :  UnfoldLessOutlinedIcon,
+      popoverText: 'To full width',
+      name: 'width',
+      onClick: handleSetWidth,
+      activeIcon: fullWidth,
+      rotateDeg:90
+    },
+    
+    
   ];
   const [slicedArr, setSlicedArr] = useState([]);
 
@@ -96,18 +111,24 @@ const IconsUtils = ({
     if (!isAllIconsIsShown) setSlicedArr(buttonUtilsNewPakeepArray.slice(sliceArrayTo));
   }, []);
 
-  console.log(slicedArr);
   return (
-    <>
-      {buttonUtilsNewPakeepArray.map(({ icon: Icon, popoverText, name, onClick, activeIcon }, idx) => {
+    <Grid container display={'flex'} wrap={'nowrap'}  justify={isAllIconsIsShown ?'flex-start' : "space-between"} >
+      {buttonUtilsNewPakeepArray.map(({ icon: Icon, popoverText, name, onClick, activeIcon,rotateDeg }, idx) => {
         const element = (
           <PopupState variant={'popover'} key={shortid()}>
             {popupState => (
               <>
-                <IconButton {...bindHover(popupState)} name={name} onClick={onClick} aria-haspopup={'true'}>
+                <IconButton
+                  {...bindHover(popupState)}
+                  name={name}
+                  onClick={onClick}
+                  aria-haspopup={'true'}
+                >
                   <Icon
+                  
                     style={{
-                      filter: activeIcon ? `drop-shadow(0 0 0.4rem ${themeColors.primaryMain})` : '',
+                      // filter: name === 'favorite' && activeIcon ? `drop-shadow(0 0 0.4rem ${themeColors.primaryMain})` : '',
+                      transform:`rotate(${rotateDeg ? rotateDeg : 0 }deg)`,
                       color: activeIcon ? themeColors.primaryMain : `rgba(255,255,255,${popupState.isOpen ? 0.8 : 0.4}`
                     }}
                   />
@@ -199,7 +220,7 @@ const IconsUtils = ({
           </>
         );
       })}
-    </>
+    </Grid>
   );
 };
 

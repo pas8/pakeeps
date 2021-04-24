@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import { Drawer, IconButton, makeStyles, useTheme } from '@material-ui/core';
 import ArrowForwardIosOutlinedIcon from '@material-ui/icons/ArrowForwardIosOutlined';
 import ArrowBackIosOutlinedIcon from '@material-ui/icons/ArrowBackIosOutlined';
-import { takePercentage } from 'hooks/takePercentage.hook';
+
 
 const useStyles = makeStyles(theme => ({
   drawer: {
@@ -42,7 +42,7 @@ const HeaderDrawer = ({ open, handleDrawerClose }) => {
           {theme.direction === 'ltr' ? <ArrowBackIosOutlinedIcon /> : <ArrowForwardIosOutlinedIcon />}
         </IconButton>
       </div>
-      ewfjkhjhkwefbvwefvnm
+      
     </Drawer>
   );
 };

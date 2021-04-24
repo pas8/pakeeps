@@ -1,4 +1,4 @@
-import { Box, IconButton, makeStyles, Paper, TextField } from '@material-ui/core';
+import { Box, Grid, IconButton, makeStyles, Paper, TextField } from '@material-ui/core';
 import { useEffect, useState } from 'react';
 import clsx from 'clsx';
 import CheckBoxOutlinedIcon from '@material-ui/icons/CheckBoxOutlined';
@@ -11,12 +11,25 @@ import { connect } from 'react-redux';
 import { addNewPaKeepThunk } from 'store/AppReducer';
 
 const useStyles = makeStyles(theme => ({
-  container: { marginTop: theme.spacing(8), width: '92ch' },
+  container: { marginTop: theme.spacing(8) },
   wrapper: { padding: theme.spacing(0), backgroundColor: 'transparent', position: 'relative' },
   hidden: { display: 'none' },
   inputTitle: { padding: 0 },
   showUtils: { position: 'absolute', right: 4, top: 4, display: 'grid', placeItems: 'center' },
-  textField: { paddingBottom: 0 }
+  textField: { paddingBottom: 0 },
+  full: {
+    transition: theme.transitions.create('all', {
+      easing: theme.transitions.easing.easeIn,
+      duration: theme.transitions.duration.complex
+    })
+  },
+  unFull: {
+    transition: theme.transitions.create('all', {
+      easing: theme.transitions.easing.easeInOut,
+      duration: theme.transitions.duration.complex
+    })
+  },
+  
 }));
 
 const NewPaKeep = ({ pakeeps, addNewPaKeepThunk }) => {
@@ -36,6 +49,7 @@ const NewPaKeep = ({ pakeeps, addNewPaKeepThunk }) => {
   const [writingText, setWritingText] = useState(false);
   const [changingTitle, setChangingTitle] = useState(false);
   const [showUtils, setShowUtils] = useState(false);
+  const [fullWidthOfNewPakeepContainer, setFullWidthOfNewPakeepContainer] = useState(!false);
 
   const handleState = ({ target: { name, value } }) => setState(state => ({ ...state, [name]: value }));
 
@@ -70,9 +84,17 @@ const NewPaKeep = ({ pakeeps, addNewPaKeepThunk }) => {
 
     if (evt.key === 'Enter' && changingTitle === true) setChangingTitle(false);
   };
+  const handleSetWidthInNewPakeep = () => setFullWidthOfNewPakeepContainer(!fullWidthOfNewPakeepContainer);
 
   return (
-    <Box className={classes.container}>
+    <Grid
+      className={clsx(classes.container, fullWidthOfNewPakeepContainer ? classes.full : classes.unFull)}
+      xs={fullWidthOfNewPakeepContainer ? 12 : 12}
+      sm={fullWidthOfNewPakeepContainer ? 12 : 11}
+      md={fullWidthOfNewPakeepContainer ? 12 : 9}
+      lg={fullWidthOfNewPakeepContainer ? 12 : 7}
+      xl={fullWidthOfNewPakeepContainer ? 12 : 5}
+    >
       <Paper variant={'elevation'} className={classes.wrapper}>
         <Box>
           <TextField
@@ -100,7 +122,9 @@ const NewPaKeep = ({ pakeeps, addNewPaKeepThunk }) => {
           handleSetBookmarkPakeep={handleSetBookmarkPakeep}
           handleSetColorPakeep={handleSetColorPakeep}
           handleNewPakeepSave={handleNewPakeepSave}
+          handleSetWidth={handleSetWidthInNewPakeep}
           {...state}
+          fullWidthOfNewPakeepContainer={fullWidthOfNewPakeepContainer}
         />
         <Box className={classes.showUtils} onClick={setUtilsIsVisible}>
           <IconButton>
@@ -112,7 +136,7 @@ const NewPaKeep = ({ pakeeps, addNewPaKeepThunk }) => {
           </IconButton>
         </Box>
       </Paper>
-    </Box>
+    </Grid>
   );
 };
 
