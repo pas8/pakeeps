@@ -7,7 +7,7 @@ const initialState = {
     { color:'primary', title: 'Week plans', icon: '', key: 1 },
     { color:'primary', title: 'Mouth plans', icon: '', key: 2 },
     { color:'primary', title: 'Year plans', icon: '', key: 3 },
-    { color:'primary', title: 'Hobby Placeholders', icon: '', key: 4 }
+    { color:'primary', title: 'Hobby Placeholders', icon: '', key: 4 },
   ],
   pakeeps: [
     {
@@ -23,7 +23,8 @@ const initialState = {
         { color:'primary', title: 'Mouth plans', icon: '', key: 2 },
         { color:'primary', title: 'Year plans', icon: '', key: 3 },
         { color:'secondary', title: 'Hobby Placeholders', icon: '', key: 4 }
-      ]
+      ],
+      key:'1a'
     },
     {
       title: 'Placeholder',
@@ -32,7 +33,8 @@ const initialState = {
       bookmark: false,
       favorite: false,
       color: 'transparent',
-      labels: [{ color:'primary', title: 'Day plans', icon: '', key: 0 }]
+      labels: [{ color:'primary', title: 'Day plans', icon: '', key: 0 }],
+      key:'2a'
     },
     {
       title: 'Placeholder',
@@ -41,7 +43,9 @@ const initialState = {
       bookmark: false,
       favorite: false,
       color: 'transparent',
-      labels: []
+      labels: [],
+      key:'3b'
+
     },
     {
       title: 'Placeholder',
@@ -55,7 +59,8 @@ const initialState = {
         { color:'default', title: 'Week plans', icon: '', key: 1 },
         { color:'primary', title: 'Mouth plans', icon: 'keyboard', key: 2 },
         { color:'secondary', title: 'Year plans', icon: '', key: 3 }
-      ]
+      ],
+      key:'4a'
     },
     {
       title: 'Placeholder',
@@ -64,7 +69,8 @@ const initialState = {
       bookmark: false,
       favorite: false,
       color: 'transparent',
-      labels:[ { color:'default', title: 'Hobby Placeholders', icon: 'alarm', key: 4 }]
+      labels:[ { color:'default', title: 'Hobby Placeholders', icon: 'alarm', key: 4 }],
+      key:'5a'
     }
   ]
 };
@@ -81,7 +87,6 @@ const AppReducer = (state = initialState, action) => {
 const addNewPakeep = data => ({ type: ADD_NEW_PAKEEP, newPaKeep: data });
 
 export const addNewPaKeepThunk = data => dispatch => {
-  console.log(dispatch);
   dispatch(addNewPakeep(data));
 };
 

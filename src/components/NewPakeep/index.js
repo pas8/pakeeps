@@ -9,6 +9,7 @@ import BookmarkBorderIcon from '@material-ui/icons/BookmarkBorder';
 import BookmarkIcon from '@material-ui/icons/Bookmark';
 import { connect } from 'react-redux';
 import { addNewPaKeepThunk } from 'store/AppReducer';
+import wordcount from 'wordcount';
 
 const useStyles = makeStyles(theme => ({
   container: { marginTop: theme.spacing(8) },
@@ -28,8 +29,7 @@ const useStyles = makeStyles(theme => ({
       easing: theme.transitions.easing.easeInOut,
       duration: theme.transitions.duration.complex
     })
-  },
-  
+  }
 }));
 
 const NewPaKeep = ({ pakeeps, addNewPaKeepThunk }) => {
@@ -41,7 +41,7 @@ const NewPaKeep = ({ pakeeps, addNewPaKeepThunk }) => {
     bookmark: false,
     favorite: false,
     color: 'transparent',
-    labels: false
+    labels: []
   });
   const [focus, setFocus] = useState(false);
   const [placeholder, setPlaceholder] = useState('Write a title or press ctrl + Alt + 8 to skip a title');
@@ -71,10 +71,11 @@ const NewPaKeep = ({ pakeeps, addNewPaKeepThunk }) => {
       setWritingText(true);
       setShowUtils(true);
     }
-  }, [focus, enter]);
+  }, [focus, enter]);   
 
   const handleNewPakeepSave = () => {
-    addNewPaKeepThunk(state);
+    console.log( wordcount(state.title) / state.title.length  );
+    addNewPaKeepThunk({...state,wordsCoefficient : 1});
     setWritingText(false);
     setState({ title: '', text: '', bookmark: false, favorite: false, color: 'transparent', labels: false });
   };
