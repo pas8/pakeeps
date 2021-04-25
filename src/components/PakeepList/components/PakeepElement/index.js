@@ -43,7 +43,7 @@ const useStyles = makeStyles(theme => ({
   title: { textOverflow: 'ellipsis', overflow: 'hidden' }
 }));
 
-const PakeepElement = ({ title, text, bookmark, favorite, color, labels, func, myKey }) => {
+const PakeepElement = ({ title, text, bookmark, favorite, color, labels }) => {
   const classes = useStyles(color);
   const [hover, setHover] = useState(false);
   const [labelHover, setLabelHover] = useState(!false);
@@ -57,20 +57,9 @@ const PakeepElement = ({ title, text, bookmark, favorite, color, labels, func, m
   const handleDeleteLabel = () => {};
   const [ref, { x, y, width, height, top, right, bottom, left }] = useMeasure();
   const sliceArrayTo = takeValueFromBreakpoints([5, 5, 4, 4, 6, 4]);
-  // useEffect(() => {func(height, myKey);console.log(height)}, [height,myKey]);
 
   return (
-    <Grid
-      item
-      // sm={6}
-      // xs={12}
-      // md={4}
-      // lg={3}
-      // xl={2}
-      onMouseEnter={setHoverIsTrue}
-      onMouseLeave={setHoverIsFalse}
-      ref={ref}
-    >
+    <Grid item onMouseEnter={setHoverIsTrue} onMouseLeave={setHoverIsFalse} ref={ref}>
       <Paper
         variant={'outlined'}
         style={{ backgroundColor: color }}
