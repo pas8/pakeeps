@@ -24,6 +24,8 @@ import UnfoldMoreOutlinedIcon from '@material-ui/icons/UnfoldMoreOutlined';
 import UnfoldLessOutlinedIcon from '@material-ui/icons/UnfoldLessOutlined';
 import MouseOverPopover from './components/PopoverAndMenu';
 import PopoverAndMenu from './components/PopoverAndMenu';
+import AddDateToPakeep from './components/AddDateToPakeep';
+import IconButtonByPas from 'components/IconButton';
 
 const useStyles = makeStyles(theme => ({
   popover: { padding: theme.spacing(0.4, 0.8) },
@@ -71,7 +73,13 @@ const IconsUtils = ({
       onClick: handleClick,
       onlyPopover: true
     },
-    { icon: EventAvailableOutlinedIcon, popoverText: 'Add date to pakeep', name: 'date', onClick: handleClick },
+    {
+      icon: EventAvailableOutlinedIcon,
+      popoverText: 'Add date to pakeep',
+      name: 'date',
+      onClick: handleClick,
+      menuComponents: <AddDateToPakeep />
+    },
     { icon: WallpaperOutlinedIcon, popoverText: 'Add picture', name: 'picture', onClick: handleClick },
     { icon: ShareOutlinedIcon, popoverText: 'Share', name: 'share', onClick: handleClick },
     {
@@ -118,7 +126,7 @@ const IconsUtils = ({
     name: 'null',
     menuIsOpen: false,
     popoverIsOpen: true,
-    onMenuClose:null
+    onMenuClose: null
   });
 
   const handlePopoverAndMenuState = value => setPopoverAndMenuState(value);
@@ -130,28 +138,27 @@ const IconsUtils = ({
   return (
     <Grid container display={'flex'} wrap={'nowrap'} justify={isAllIconsIsShown ? 'flex-start' : 'space-between'}>
       {buttonUtilsNewPakeepArray.map(
-        ({ icon: Icon, popoverText, name, onClick, activeIcon, rotateDeg, onlyPopover }, idx) => {
+        (
+          { icon: Icon, popoverText, name, onClick, activeIcon, rotateDeg, onlyPopover = false, menuComponents },
+          idx
+        ) => {
           const element = (
             <PopoverAndMenu
               name={name}
               popoverText={popoverText}
-              menuComponents={onlyPopover ? null : null}
+              menuComponents={onlyPopover ? null : menuComponents ? menuComponents : <div>Fuck</div>}
               onlyPopover={onlyPopover}
               handlePopoverAndMenuState={handlePopoverAndMenuState}
               mainComponent={
-                <IconButton onClick={onClick}>
-                  <Icon
-                    style={{
-                      // filter: name === 'favorite' && activeIcon ? `drop-shadow(0 0 0.4rem ${themeColors.primaryMain})` : '',
-                      transform: `rotate(${rotateDeg ? rotateDeg : 0}deg)`,
-                      color: activeIcon
-                        ? themeColors.primaryMain
-                        : `rgba(255,255,255,${
-                            popoverAndMenuState.name === name && popoverAndMenuState.popoverIsOpen ? 0.8 : 0.4
-                          }`
-                    }}
-                  />
-                </IconButton>
+                <IconButtonByPas
+                icon={Icon}
+                  onClick={onClick}
+                  iconName={name}
+                  activeIcon={false}
+                  activeIconName={popoverAndMenuState.name}
+                  activeProperty={popoverAndMenuState.popoverIsOpen}
+                  rotateDeg={rotateDeg}
+                />
               }
             />
           );
@@ -171,14 +178,14 @@ const IconsUtils = ({
                     onlyPopover={onlyPopover}
                     handlePopoverAndMenuState={handlePopoverAndMenuState}
                     mainComponent={
-                      <IconButton aria-haspopup={'true'}>
-                        <MoreOutlinedIcon
-                          style={{
-                            transform: `rotate(${  popoverAndMenuState.name === 'menu' && popoverAndMenuState.menuIsOpen ? 180 : 0}deg)`,
-                            color: `rgba(255,255,255,${ popoverAndMenuState.name === 'menu' && popoverAndMenuState.popoverIsOpen ? 0.8 : 0.4}`
-                          }}
-                        />
-                      </IconButton>
+                      <IconButtonByPas
+                        iconName={'menu'}
+                        icon={MoreOutlinedIcon}
+                        activeIcon={false}
+                        activeIconName={popoverAndMenuState.name}
+                        activeProperty={popoverAndMenuState.popoverIsOpen}
+                        rotateDeg={popoverAndMenuState.name === 'menu' && popoverAndMenuState.menuIsOpen ? 180 : 0}
+                      />
                     }
                     menuComponents={
                       <>
