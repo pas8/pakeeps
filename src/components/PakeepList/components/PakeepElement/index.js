@@ -10,9 +10,10 @@ import ClearOutlinedIcon from '@material-ui/icons/ClearOutlined';
 import DeleteForeverOutlinedIcon from '@material-ui/icons/DeleteForeverOutlined';
 import { takeValueFromBreakpoints } from 'hooks/takeValueFromBreakpoints.hook';
 import { useMeasure } from 'react-use';
+import { themeColors } from 'components/theme';
 
 const useStyles = makeStyles(theme => ({
-  paper: { padding: theme.spacing(1.96), paddingTop: theme.spacing(1.4), cursor: 'pointer', position: 'relative' },
+  paper: { padding: theme.spacing(1.96), paddingTop: theme.spacing(1.0 + 4 / 10 ), cursor: 'pointer', position: 'relative' },
   title: { marginBottom: theme.spacing(1) },
   hover: {
     paddingBottom: theme.spacing(8 * 0.8),
@@ -28,6 +29,7 @@ const useStyles = makeStyles(theme => ({
       duration: theme.transitions.duration.leavingScreen
     })
   },
+
   iconsUtils: {
     position: 'absolute',
     bottom: 0,
@@ -40,10 +42,10 @@ const useStyles = makeStyles(theme => ({
   },
   label: { marginTop: theme.spacing(0) },
   labelsContainer: { marginTop: theme.spacing(0.8) },
-  title: { textOverflow: 'ellipsis', overflow: 'hidden' }
+  title: { textOverflow: 'ellipsis', overflow: 'hidden' },
+  isDragging:{borderColor: themeColors.primaryMain}
 }));
-
-const PakeepElement = ({ title, text, bookmark, favorite, color, labels }) => {
+const PakeepElement = ({ title, text, bookmark, favorite, color, labels,isDragging }) => {
   const classes = useStyles(color);
   const [hover, setHover] = useState(false);
   const [labelHover, setLabelHover] = useState(!false);
@@ -58,12 +60,13 @@ const PakeepElement = ({ title, text, bookmark, favorite, color, labels }) => {
   const [ref, { x, y, width, height, top, right, bottom, left }] = useMeasure();
   const sliceArrayTo = takeValueFromBreakpoints([5, 5, 4, 4, 6, 4]);
 
+
   return (
     <Grid item onMouseEnter={setHoverIsTrue} onMouseLeave={setHoverIsFalse} ref={ref}  >
       <Paper
         variant={'outlined'}
         style={{ backgroundColor: color === 'default' ? '#303030' : color}}
-        className={clsx(hover ? classes.hover : classes.unHover, classes.paper)}
+        className={clsx(hover ? classes.hover : classes.unHover, classes.paper, isDragging ? classes.isDragging : null)}
         elevation={3}
       >
         <Grid item className={classes.title}>
@@ -124,11 +127,14 @@ const PakeepElement = ({ title, text, bookmark, favorite, color, labels }) => {
 
 PakeepElement.propTypes = {
   bookmark: PropTypes.any,
-  color: PropTypes.any,
+  color: PropTypes.string,
   favorite: PropTypes.any,
-  labels: PropTypes.any,
-  text: PropTypes.any,
-  title: PropTypes.any
-};
+  isDragging: PropTypes.bool,
+  labels: PropTypes.shape({
+    map: PropTypes.func
+  }),
+  text: PropTypes.string,
+  title: PropTypes.string
+}
 
 export default PakeepElement;
