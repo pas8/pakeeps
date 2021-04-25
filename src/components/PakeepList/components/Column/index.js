@@ -13,7 +13,6 @@ const useStyles = makeStyles(theme => ({
 
 const Column = ({ column, pakeepsInColumn, lastColumn, firstColumn }) => {
   const classes = useStyles();
-  console.log(lastColumn);
   return (
     <Grid
       className={clsx(classes.column, lastColumn ? classes.columnLast : firstColumn ? classes.columnFirst : null)}
@@ -24,7 +23,6 @@ const Column = ({ column, pakeepsInColumn, lastColumn, firstColumn }) => {
       xl={2}
       spacing={8}
     >
-      {column.title}
       <Droppable droppableId={column.id} direction={'vertical'}>
         {provided => (
           <Grid innerRef={provided.innerRef} {...provided.droppableProps}>

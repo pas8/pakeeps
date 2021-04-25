@@ -1,5 +1,6 @@
 const ADD_NEW_PAKEEP = 'ADD_NEW_PAKEEP';
 const CHANGE_PAKEEP_COLUMNS = 'CHANGE_PAKEEP_COLUMNS';
+const CHANGE_TWO_PAKEEP_COLUMNS = 'CHANGE_TWO_PAKEEP_COLUMNS';
 
 const initialState = {
   data: 1,
@@ -80,7 +81,7 @@ const initialState = {
       favorite: false,
       color: 'default',
       labels: [{ color: 'secondary', title: 'Hobby', icon: 'alarm', key: 4 }],
-      id: 'pakeep5'
+      id: 'pakeep6'
     }
   },
 
@@ -177,6 +178,11 @@ const initialState = {
     }
   },
   columnOrder: ['column-1', 'column-2', 'column-3', 'column-4', 'column-5', 'column-6']
+  // xs: ['column-1'],
+  // sm: ['column-1', 'column-2'],
+  // md: ['column-1', 'column-2', 'column-3'],
+  // lg: ['column-1', 'column-2', 'column-3', 'column-4'],
+  // xl: ['column-1', 'column-2', 'column-3', 'column-4', 'column-5', 'column-6']
 };
 
 const AppReducer = (state = initialState, action) => {
@@ -185,22 +191,51 @@ const AppReducer = (state = initialState, action) => {
       return { ...state, pakeeps: { ...state.pakeeps, [action.newPaKeep.id]: action.newPaKeep } };
 
     case CHANGE_PAKEEP_COLUMNS:
-      return { ...state, columns: { ...state.columns, [action.columns.id]: action.columns } };
-
+      return {
+        ...state,
+        columns: {
+          ...state.columns,
+          [action.breakpointName]: {
+            ...state.columns[action.breakpointName],
+            [action.columnValue.id]: action.columnValue
+          }
+        }
+      };
+    case CHANGE_TWO_PAKEEP_COLUMNS:
+        return {
+        ...state,
+        columns: {
+          ...state.columns,
+          [action.breakpointName]: {
+            ...state.columns[action.breakpointName],
+            [action.startColumn.id]: action.startColumn,
+            [action.finishColumn.id]: action.finishColumn,
+          }
+        }
+      };
     default:
       return state;
   }
 };
 
 const addNewPakeep = data => ({ type: ADD_NEW_PAKEEP, newPaKeep: data });
-const changeColumns = columns => ({ type: CHANGE_PAKEEP_COLUMNS, columns });
+const changeColumns = (columnValue, breakpointName) => ({ type: CHANGE_PAKEEP_COLUMNS, columnValue, breakpointName });
+const changeTwoColumns = (startColumn, finishColumn, breakpointName) => ({
+  type: CHANGE_TWO_PAKEEP_COLUMNS,
+  startColumn,
+  finishColumn,
+  breakpointName
+});
 
 export const addNewPaKeepThunk = data => dispatch => {
   dispatch(addNewPakeep(data));
 };
 
-export const changePakeepColumnsDataThunk = data => dispatch => {
-  dispatch(changeColumns(data));
+export const changePakeepColumnsDataThunk = (columnValue, breakpointName) => dispatch => {
+  dispatch(changeColumns(columnValue, breakpointName));
+};
+export const changeTwoPakeepColumnsDataThunk = (startColumn, finishColumn, breakpointName) => dispatch => {
+  dispatch(changeTwoColumns(startColumn, finishColumn, breakpointName));
 };
 
 export default AppReducer;
