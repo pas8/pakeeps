@@ -59,10 +59,10 @@ const PakeepElement = ({ title, text, bookmark, favorite, color, labels }) => {
   const sliceArrayTo = takeValueFromBreakpoints([5, 5, 4, 4, 6, 4]);
 
   return (
-    <Grid item onMouseEnter={setHoverIsTrue} onMouseLeave={setHoverIsFalse} ref={ref}>
+    <Grid item onMouseEnter={setHoverIsTrue} onMouseLeave={setHoverIsFalse} ref={ref}  >
       <Paper
         variant={'outlined'}
-        style={{ backgroundColor: color }}
+        style={{ backgroundColor: color === 'default' ? '#303030' : color}}
         className={clsx(hover ? classes.hover : classes.unHover, classes.paper)}
         elevation={3}
       >

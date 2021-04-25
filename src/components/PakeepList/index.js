@@ -6,7 +6,7 @@ import { useMeasure } from 'react-use';
 import { useState } from 'react';
 import Column from './components/Column';
 import { DragDropContext } from 'react-beautiful-dnd';
-
+import {changePakeepColumnsDataThunk} from 'store/AppReducer/index'
 const useStyles = makeStyles(theme => ({
   container: { marginTop: theme.spacing(8) },
   s: {
@@ -15,27 +15,40 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const PakeepList = ({ pakeeps, labels, columns, columnOrder }) => {
+const PakeepList = ({ pakeeps, labels, columns, columnOrder,changePakeepColumnsDataThunk }) => {
   const theme = useTheme();
   const classes = useStyles();
 
-  const onDragEnd = () => {};
+  const onDragEnd = ({ destination, source, draggableId }) => {
+    if (!destination) return;
+    if (!destination.id === source.draggableId && destination.index === source.index) return;
 
+    const column = columns[source.droppableId];
+    let newPaKeepIds = Array.from(column.pakeepIds);
+    console.log(newPaKeepIds)
+
+    newPaKeepIds.splice(source.index, 1);
+    newPaKeepIds.splice(destination.index, 0, draggableId);
+
+    const newColumn = {
+      ...column,
+      pakeepIds: newPaKeepIds
+    };
+
+    changePakeepColumnsDataThunk(newColumn)
+  };
 
   return (
-    
     <DragDropContext onDragEnd={onDragEnd}>
-    
-    <Grid container display={'flex'} spacing={2} className={classes.container}>
+      <Grid container display={'flex'} spacing={2} className={classes.container}>
         {columnOrder.map(columnId => {
           const column = columns[columnId];
-          const pakeepsInColumn = column.pakeepIds.map((pakeepId) =>  pakeeps[pakeepId])
+          const pakeepsInColumn = column.pakeepIds.map(pakeepId => pakeeps[pakeepId]);
           console.log(pakeepsInColumn);
           return <Column key={column.id} column={column} pakeepsInColumn={pakeepsInColumn} />;
         })}
       </Grid>
-      </DragDropContext>
-    
+    </DragDropContext>
   );
 };
 
@@ -45,6 +58,6 @@ const mapStateToProps = ({ app: { pakeeps, labels, columns, columnOrder } }) => 
   columns,
   columnOrder
 });
-// const mapDispatchToProps = dispatch => ({ setData: data => dispatch(setData(data)) });
+const mapDispatchToProps = dispatch => ({ changePakeepColumnsDataThunk: data => dispatch(changePakeepColumnsDataThunk(data)) });
 
-export default connect(mapStateToProps, null)(PakeepList);
+export default connect(mapStateToProps, mapDispatchToProps)(PakeepList);
