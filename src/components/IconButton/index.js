@@ -4,7 +4,7 @@ import { themeColors } from 'components/theme';
 import React from 'react';
 
 const IconButtonByPas = ({
-  onClick = {},
+  onClick = ()=> console.log('iconButton'),
   rotateDeg = false,
   activeIcon,
   icon:Icon,

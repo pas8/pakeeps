@@ -74,7 +74,7 @@ const IconsUtils = ({
       onlyPopover: true
     },
     {
-      icon: EventAvailableOutlinedIcon,
+      icon: EventAvailableOutlinedIcon, 
       popoverText: 'Add date to pakeep',
       name: 'date',
       onClick: handleClick,
@@ -151,7 +151,7 @@ const IconsUtils = ({
               handlePopoverAndMenuState={handlePopoverAndMenuState}
               mainComponent={
                 <IconButtonByPas
-                icon={Icon}
+                  icon={Icon}
                   onClick={onClick}
                   iconName={name}
                   activeIcon={false}
@@ -170,53 +170,51 @@ const IconsUtils = ({
               ) : sliceArrayTo > idx ? (
                 element
               ) : sliceArrayTo === idx ? (
-                <>
-                  <PopoverAndMenu
-                    name={'menu'}
-                    popoverText={'Open menu'}
-                    menuComponents={onlyPopover ? null : <div>MenuComponent</div>}
-                    onlyPopover={onlyPopover}
-                    handlePopoverAndMenuState={handlePopoverAndMenuState}
-                    mainComponent={
-                      <IconButtonByPas
-                        iconName={'menu'}
-                        icon={MoreOutlinedIcon}
-                        activeIcon={false}
-                        activeIconName={popoverAndMenuState.name}
-                        activeProperty={popoverAndMenuState.popoverIsOpen}
-                        rotateDeg={popoverAndMenuState.name === 'menu' && popoverAndMenuState.menuIsOpen ? 180 : 0}
-                      />
-                    }
-                    menuComponents={
-                      <>
-                        {slicedArr.map(({ icon: Icon, popoverText, name, onClick, activeIcon }) => (
-                          <MenuItem onClick={onClick}>
-                            <Grid className={classes.moreIcon}>
-                              <Icon
-                                style={{
-                                  filter: activeIcon ? `drop-shadow(0 0 0.4rem ${themeColors.primaryMain})` : '',
-                                  color: activeIcon ? themeColors.primaryMain : `rgba(255,255,255,${true ? 0.8 : 0.4}`
-                                }}
-                              />
-                            </Grid>
-                            <Typography variant={'subtitle2'}>{popoverText}</Typography>
-                          </MenuItem>
-                        ))}
-                        <MenuItem onClick={() => popoverAndMenuState.onMenuClose()}>
+                <PopoverAndMenu
+                  name={'menu'}
+                  popoverText={'Open menu'}
+                  onlyPopover={false}
+                  handlePopoverAndMenuState={handlePopoverAndMenuState}
+                  mainComponent={
+                    <IconButtonByPas
+                      iconName={'menu'}
+                      icon={MoreOutlinedIcon}
+                      onClick={handleClick}
+                      activeIcon={false}
+                      activeIconName={popoverAndMenuState.name}
+                      activeProperty={popoverAndMenuState.popoverIsOpen}
+                      rotateDeg={popoverAndMenuState.name === 'menu' && popoverAndMenuState.menuIsOpen ? 180 : 0}
+                    />
+                  }
+                  menuComponents={
+                    <>
+                      {slicedArr.map(({ icon: Icon, popoverText, name, onClick, activeIcon }) => (
+                        <MenuItem onClick={onClick}>
                           <Grid className={classes.moreIcon}>
-                            <CloseOutlinedIcon
+                            <Icon
                               style={{
                                 filter: activeIcon ? `drop-shadow(0 0 0.4rem ${themeColors.primaryMain})` : '',
                                 color: activeIcon ? themeColors.primaryMain : `rgba(255,255,255,${true ? 0.8 : 0.4}`
                               }}
                             />
                           </Grid>
-                          <Typography variant={'subtitle2'}>{'Close'}</Typography>
+                          <Typography variant={'subtitle2'}>{popoverText}</Typography>
                         </MenuItem>
-                      </>
-                    }
-                  />
-                </>
+                      ))}
+                      <MenuItem onClick={() => popoverAndMenuState.onMenuClose()}>
+                        <Grid className={classes.moreIcon}>
+                          <CloseOutlinedIcon
+                            style={{
+                              filter: activeIcon ? `drop-shadow(0 0 0.4rem ${themeColors.primaryMain})` : '',
+                              color: activeIcon ? themeColors.primaryMain : `rgba(255,255,255,${true ? 0.8 : 0.4}`
+                            }}
+                          />
+                        </Grid>
+                        <Typography variant={'subtitle2'}>{'Close'}</Typography>
+                      </MenuItem>
+                    </>
+                  }
+                />
               ) : null}
             </>
           );

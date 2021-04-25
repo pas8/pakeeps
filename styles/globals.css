@@ -1,6 +1,5 @@
 html,
 body {
-
 }
 
 a {
@@ -10,10 +9,13 @@ a {
 
 * {
   box-sizing: border-box;
- 
+  padding: 0;
+  margin: 0;
+}
+ul {
+  padding: 0 !important;
 }
 
-.react-draggable-transparent-selection{
-/* all:inherit ; */
-
+.react-draggable-transparent-selection {
+  /* all:inherit ; */
 }
