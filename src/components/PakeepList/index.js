@@ -46,7 +46,6 @@ const PakeepList = ({
       };
       changePakeepColumnsDataThunk(newColumn, breakpointNames);
       return;
-      
     }
 
     let startPaKeepIds = Array.from(columnStart.pakeepIds);
@@ -58,21 +57,19 @@ const PakeepList = ({
     const newColumnStart = { ...columnStart, pakeepIds: startPaKeepIds };
     const newColumnFinish = { ...columnFinish, pakeepIds: finishPaKeepIds };
 
-
     changeTwoPakeepColumnsDataThunk(newColumnStart, newColumnFinish, breakpointNames);
-  }; 
-
+  };
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       <Grid container display={'flex'} className={classes.container}>
         {responsiveColumnOrder || responsiveColumns
-          ? responsiveColumnOrder.map((columnId, idx) => {
+          ? responsiveColumnOrder?.map((columnId, idx) => {
               const column = responsiveColumns[columnId];
-              const pakeepsInColumn = column.pakeepIds.map(pakeepId => pakeeps[pakeepId]);
+              const pakeepsInColumn = column?.pakeepIds?.map(pakeepId => pakeeps[pakeepId]);
               return (
                 <Column
-                  key={column.id}
+                  key={column?.id}
                   column={column}
                   pakeepsInColumn={pakeepsInColumn}
                   lastColumn={idx + 1 === responsiveColumnOrder.length ? true : false}
