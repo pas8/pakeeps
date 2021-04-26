@@ -26,6 +26,7 @@ import shortid from 'shortid';
 import HeaderOfAddDateToPakeep from './components/HeaderOfAddDateToPakeep';
 import DynamicInputDateAndTimePickers from './components/dynamicComponents/components/DynamicInputDateAndTimePickers';
 import { addDays, isValid } from 'date-fns';
+import { connect } from 'react-redux';
 
 const useStyles = makeStyles(theme => ({
   dateContainer: { padding: theme.spacing(0, 0) },
@@ -45,7 +46,7 @@ const useStyles = makeStyles(theme => ({
   timePickerWrapper: { '& input': { width: theme.spacing(16) } }
 }));
 
-const AddDateToPakeep = ({ ampm = false, onMenuClose }) => {
+const AddDateToPakeep = ({ ampm = false, onMenuClose,id }) => {
   let DateNow = new Date();
 
   const nullifyOfMenuItemState = {
@@ -138,7 +139,7 @@ const AddDateToPakeep = ({ ampm = false, onMenuClose }) => {
   const setNullifyOfMenuItemState = () => setMenuItemState(nullifyOfMenuItemState);
 
   let currentClickStatus = menuItemState.clickStatus;
-
+  
   return (
     <>
       <HeaderOfAddDateToPakeep
@@ -212,14 +213,18 @@ const AddDateToPakeep = ({ ampm = false, onMenuClose }) => {
           </MenuItem>
         );
       })}
-      {/* Choose date */}
     </>
   );
 };
 
 AddDateToPakeep.propTypes = {
   ampm: PropTypes.bool,
+  id: PropTypes.any,
   onMenuClose: PropTypes.func
-};
+}
 
-export default AddDateToPakeep;
+const mapStateToProps = ({ app: { data } }) => ({ data });
+// const mapDispatchToProps = dispatch => ({ setData: data => dispatch(setData(data)) });
+
+export default connect(mapStateToProps, null)(AddDateToPakeep);
+

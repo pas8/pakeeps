@@ -46,7 +46,8 @@ const IconsUtils = ({
   handleSetBookmarkPakeep,
   handleSetColorPakeep,
   handleSetWidth,
-  fullWidth = false
+  fullWidth = false,
+  id
 }) => {
   const classes = useStyles();
 
@@ -146,7 +147,7 @@ const IconsUtils = ({
             <PopoverAndMenu
               name={name}
               popoverText={popoverText}
-              menuComponents={onlyPopover ? null : MenuComponents ? <MenuComponents onMenuClose={popoverAndMenuState.onMenuClose}/> : <div>Fuck</div>}
+              menuComponents={onlyPopover ? null : MenuComponents ? <MenuComponents onMenuClose={popoverAndMenuState.onMenuClose} id={id}/> : <div>Fuck</div>}
               onlyPopover={onlyPopover}
               handlePopoverAndMenuState={handlePopoverAndMenuState}
               mainComponent={

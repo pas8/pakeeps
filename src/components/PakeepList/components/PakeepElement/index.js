@@ -13,7 +13,12 @@ import { useMeasure } from 'react-use';
 import { themeColors } from 'components/theme';
 
 const useStyles = makeStyles(theme => ({
-  paper: { padding: theme.spacing(1.96), paddingTop: theme.spacing(1.0 + 4 / 10 ), cursor: 'pointer', position: 'relative' },
+  paper: {
+    padding: theme.spacing(1.96),
+    paddingTop: theme.spacing(1.0 + 4 / 10),
+    cursor: 'pointer',
+    position: 'relative'
+  },
   title: { marginBottom: theme.spacing(1) },
   hover: {
     paddingBottom: theme.spacing(8 * 0.8),
@@ -43,9 +48,9 @@ const useStyles = makeStyles(theme => ({
   label: { marginTop: theme.spacing(0) },
   labelsContainer: { marginTop: theme.spacing(0.8) },
   title: { textOverflow: 'ellipsis', overflow: 'hidden' },
-  isDragging:{borderColor: themeColors.primaryMain}
+  isDragging: { borderColor: themeColors.primaryMain }
 }));
-const PakeepElement = ({ title, text, bookmark, favorite, color, labels,isDragging }) => {
+const PakeepElement = ({ title, text, bookmark, favorite, color, labels, isDragging, id }) => {
   const classes = useStyles(color);
   const [hover, setHover] = useState(false);
   const [labelHover, setLabelHover] = useState(!false);
@@ -60,12 +65,30 @@ const PakeepElement = ({ title, text, bookmark, favorite, color, labels,isDraggi
   const [ref, { x, y, width, height, top, right, bottom, left }] = useMeasure();
   const sliceArrayTo = takeValueFromBreakpoints([5, 5, 4, 4, 6, 4]);
 
+  const iconsUtilsProps = {
+    isAllIconsIsShown: false,
+    sliceArrayTo,
+    setEditTitleIsTrue,
+    favorite,
+    handleSetFavoritePakeep: handleSetFavoritePakeep,
+    changingTitle: false,
+    bookmark,
+    labels,
+    id,
+    checkbox: false,
+    handleSetBookmarkPakeep,
+    handleSetColorPakeep: handleSetColorPakeep,
+    iconsCloser: true
+  };
+
+  const setLabelHoverStatusIsFalse = () => setLabelHover(false);
+  const setLabelHoverStatus = () => setLabelHover({ title, isHovering: true });
 
   return (
-    <Grid item onMouseEnter={setHoverIsTrue} onMouseLeave={setHoverIsFalse} ref={ref}  >
+    <Grid item onMouseEnter={setHoverIsTrue} onMouseLeave={setHoverIsFalse} ref={ref}>
       <Paper
         variant={'outlined'}
-        style={{ backgroundColor: color === 'default' ? '#303030' : color}}
+        style={{ backgroundColor: color === 'default' ? '#303030' : color }}
         className={clsx(hover ? classes.hover : classes.unHover, classes.paper, isDragging ? classes.isDragging : null)}
         elevation={3}
       >
@@ -76,48 +99,38 @@ const PakeepElement = ({ title, text, bookmark, favorite, color, labels,isDraggi
         </Grid>
         <Grid item>{text}</Grid>
         <Grid display={'flex'} spacing={1} container className={classes.labelsContainer}>
-          {labels &&
-            labels.map(({ title, icon: labelIcon, key, color }) => (
+          
+          {labels?.map(({ title, icon: labelIcon, key, color }) => {
+            const onDeleteOfLabelItem = () =>
+              (labelHover?.isHovering && labelHover?.title === title) || !labelIcon
+                ? () => handleDeleteLabel(key)
+                : null;
+
+            const labelChipProps = {
+              onMouseEnter: setLabelHoverStatus,
+              onMouseLeave: setLabelHoverStatusIsFalse,
+              icon: !(labelHover?.isHovering && labelHover?.title === title)
+                ? iconsArr.find(({ iconName }) => iconName === labelIcon)?.icon
+                : null,
+              label: title,
+              onDelete: onDeleteOfLabelItem,
+              className: classes.chip,
+              variant: 'outlined',
+              color,
+              size: 'small',
+              deleteIcon: <DeleteForeverOutlinedIcon />
+            };
+
+            return (
               <Grid className={classes.label} item>
-                <Chip
-                  onMouseEnter={() => setLabelHover({ title, isHovering: true })}
-                  onMouseLeave={() => setLabelHover(false)}
-                  icon={
-                    !(labelHover?.isHovering && labelHover?.title === title)
-                      ? iconsArr.find(({ iconName }) => iconName === labelIcon)?.icon
-                      : null
-                  }
-                  label={title}
-                  onDelete={
-                    (labelHover?.isHovering && labelHover?.title === title) || !labelIcon
-                      ? () => handleDeleteLabel(key)
-                      : null
-                  }
-                  className={classes.chip}
-                  variant={'outlined'}
-                  color={color}
-                  size={'small'}
-                  deleteIcon={<DeleteForeverOutlinedIcon />}
-                />
+                <Chip {...labelChipProps} />
               </Grid>
-            ))}
+            );
+          })}
         </Grid>
         <Grow in={hover}>
           <Grid className={classes.iconsUtils}>
-            <IconsUtils
-              isAllIconsIsShown={false}
-              sliceArrayTo={sliceArrayTo}
-              setEditTitleIsTrue={setEditTitleIsTrue}
-              favorite={favorite}
-              handleSetFavoritePakeep={handleSetFavoritePakeep}
-              changingTitle={false}
-              bookmark={bookmark}
-              labels={labels}
-              checkbox={false}
-              handleSetBookmarkPakeep={handleSetBookmarkPakeep}
-              handleSetColorPakeep={handleSetColorPakeep}
-              iconsCloser
-            />
+            <IconsUtils {...iconsUtilsProps} />
           </Grid>
         </Grow>
       </Paper>
@@ -135,6 +148,6 @@ PakeepElement.propTypes = {
   }),
   text: PropTypes.string,
   title: PropTypes.string
-}
+};
 
 export default PakeepElement;
