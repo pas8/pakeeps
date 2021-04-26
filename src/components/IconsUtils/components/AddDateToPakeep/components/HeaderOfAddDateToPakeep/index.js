@@ -1,24 +1,29 @@
 import PropTypes from 'prop-types';
-import { Grid, IconButton, Typography, makeStyles } from '@material-ui/core';
+import { Grid, IconButton, Typography, makeStyles, SvgIcon } from '@material-ui/core';
 import ArrowBackOutlinedIcon from '@material-ui/icons/ArrowBackOutlined';
 import SaveOutlinedIcon from '@material-ui/icons/SaveOutlined';
 import { themeColors } from 'components/theme';
+import IconButtonByPas from 'components/IconButton';
+import SaveRoundedIcon from '@material-ui/icons/SaveRounded';
 
 const useStyles = makeStyles(theme => ({
   container: { borderBottom: '1px solid rgba(255,255,255,0.4)' },
   wrapperOfSaveButton: { marginRight: theme.spacing(1 * 0.8) }
 }));
 
-const HeaderOfAddDateToPakeep = ({ buttonSaveState, arrowButtonFunc, dynamicTitle }) => {
+const HeaderOfAddDateToPakeep = ({ buttonSaveState, arrowButtonFunc, dynamicTitle, activeProperty }) => {
   const classes = useStyles();
 
   return (
     <Grid borderBottom={1} className={classes.container} container justify={'space-between'}>
       <Grid item>
         <Grid container alignItems={'center'}>
-          <IconButton onClick={arrowButtonFunc}>
-            <ArrowBackOutlinedIcon />
-          </IconButton>
+          <IconButtonByPas
+            icon={ArrowBackOutlinedIcon}
+            onClick={arrowButtonFunc}
+            activeProperty={Boolean(!buttonSaveState)}
+          />
+
           <Typography
             variant={'subtitle1'}
             style={{
@@ -31,7 +36,7 @@ const HeaderOfAddDateToPakeep = ({ buttonSaveState, arrowButtonFunc, dynamicTitl
       </Grid>
       <Grid item className={classes.wrapperOfSaveButton}>
         <IconButton>
-          <SaveOutlinedIcon
+          <SaveRoundedIcon
             style={{
               color:
                 buttonSaveState === 'saved'

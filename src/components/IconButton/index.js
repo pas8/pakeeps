@@ -1,40 +1,43 @@
 import PropTypes from 'prop-types';
-import { IconButton } from '@material-ui/core';
+import { IconButton, makeStyles } from '@material-ui/core';
 import { themeColors } from 'components/theme';
-import React from 'react';
+
+const useStyles = makeStyles({ icon: ({ iconColor, rotate }) => ({ color: iconColor, transform: rotate }) });
 
 const IconButtonByPas = ({
-  onClick = ()=> console.log('iconButton'),
+  onClick = null,
   rotateDeg = false,
-  activeIcon,
-  icon:Icon,
-  iconName,
-  activeIconName,
-  activeProperty
+  activeIcon = false,
+  icon: Icon,
+  iconName = 'icon',
+  activeIconName = 'icon',
+  activeProperty = false,
 }) => {
+  const iconColor = activeIcon
+    ? themeColors.primaryMain
+    : activeIconName === iconName && activeProperty
+    ? 'rgba(255,255,255,0.8)'
+    : 'rgba(255,255,255,0.4)';
+
+  const rotate = rotateDeg ? `rotate(${rotateDeg}deg)` : 'rotate(0deg)';
+
+  const classes = useStyles({ iconColor, rotate });
+
   return (
     <IconButton onClick={onClick}>
-      <Icon
-        style={{
-          // filter: name === 'favorite' && activeIcon ? `drop-shadow(0 0 0.4rem ${themeColors.primaryMain})` : '',
-          transform: `rotate(${rotateDeg ? rotateDeg : 0}deg)`,
-          color: activeIcon
-            ? themeColors.primaryMain
-            : `rgba(255,255,255,${activeIconName === iconName && activeProperty ? 0.8 : 0.4}`
-        }}
-      />
+      <Icon className={classes.icon} />
     </IconButton>
   );
 };
 
 IconButtonByPas.propTypes = {
-  Icon: PropTypes.any,
-  activeIcon: PropTypes.any,
-  activeIconName: PropTypes.any,
+  Icon: PropTypes.node,
+  activeIcon: PropTypes.bool,
+  activeIconName: PropTypes.string,
   activeProperty: PropTypes.any,
-  iconName: PropTypes.any,
+  iconName: PropTypes.string,
   onClick: PropTypes.any,
-  rotateDeg: PropTypes.any
+  rotateDeg: PropTypes.number
 };
 
 export default IconButtonByPas;
