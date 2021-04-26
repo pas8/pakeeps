@@ -1,15 +1,17 @@
+import PropTypes from 'prop-types';
 import { KeyboardDateTimePicker, KeyboardTimePicker } from '@material-ui/pickers';
 
+const DynamicInputDateAndTimePickers = ({ value, onChange, onlyTime, KeyboardIcon, name, ampm }) => {
+  const handleChange = value => onChange(name, value);
 
-const DynamicInputDateAndTimePickers = ({ value, onChange,onlyTime,KeyboardIcon ,name,ampm}) => {
   return (
     <>
       {!onlyTime ? (
         <KeyboardDateTimePicker
           value={value}
-          onChange={onChange}
+          onChange={handleChange}
           ampm={ampm}
-          name={name}
+          minDate={Date.now()}
           showTodayButton
           animateYearScrolling
           keyboardIcon={<KeyboardIcon />}
@@ -21,16 +23,26 @@ const DynamicInputDateAndTimePickers = ({ value, onChange,onlyTime,KeyboardIcon 
       ) : (
         <KeyboardTimePicker
           keyboardIcon={<KeyboardIcon />}
-          fullWidth={false}
           value={value}
-          name={name}
-
-          onChange={onChange}
+          showTodayButton
+          // orientation={'landscape'}
+          views={['hours', 'minutes']}
+          onChange={handleChange}
           ampm={ampm}
+          openTo={'hours'}
         />
       )}
     </>
   );
+};
+
+DynamicInputDateAndTimePickers.propTypes = {
+  KeyboardIcon: PropTypes.node,
+  ampm: PropTypes.bool,
+  name: PropTypes.string,
+  onChange: PropTypes.func,
+  onlyTime: PropTypes.bool,
+  value: PropTypes.string
 };
 
 export default DynamicInputDateAndTimePickers;

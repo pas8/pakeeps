@@ -1,3 +1,4 @@
+import PropTypes from "prop-types";
 import React, { Fragment, useState } from 'react';
 import {
   Box,
@@ -24,6 +25,7 @@ import clsx from 'clsx';
 import shortid from 'shortid';
 import HeaderOfAddDateToPakeep from './components/HeaderOfAddDateToPakeep';
 import DynamicInputDateAndTimePickers from './components/dynamicComponents/components';
+import { addDays } from 'date-fns';
 
 const useStyles = makeStyles(theme => ({
   dateContainer: { padding: theme.spacing(0, 0) },
@@ -36,7 +38,9 @@ const useStyles = makeStyles(theme => ({
   timePickerWrapper: { '& input': { width: theme.spacing(16) } }
 }));
 
-const AddDateToPakeep = ({ ampm = false }) => {
+const AddDateToPakeep = ({ ampm = false,onMenuClose }) => {
+  let DateNow = Date.now();
+
   const nullifyOfMenuItemState = {
     name: '',
     hoverStatus: false,
@@ -46,15 +50,14 @@ const AddDateToPakeep = ({ ampm = false }) => {
   };
 
   const nullifyDateAndTimeInputsState = {
-    laterToday: { value: '', isValid: true, isChosen: false },
-    tomorrow: { value: '', isValid: true, isChosen: false },
+    laterToday: { value: DateNow, isValid: true, isChosen: false },
+    tomorrow: { value: addDays(DateNow, 1), isValid: true, isChosen: false },
     nextWeek: { value: '', isValid: true, isChosen: false },
     addToDashboard: { value: '', isValid: true, isChosen: false },
-    addDateAndTime: { value: '', isValid: true, isChosen: false },
+    addDateAndTime: { value: DateNow, isValid: true, isChosen: false },
     addLocation: { value: '', isValid: true, isChosen: false },
     addMoreEvents: { value: '', isValid: true, isChosen: false }
   };
-  const [selectedDate, handleDateChange] = useState(new Date());
   const [buttonSaveState, setButtonSaveState] = useState(false);
   const [menuItemState, setMenuItemState] = useState(nullifyOfMenuItemState);
   const [dateAndTimeInputsState, setDateAndTimeInputsState] = useState(nullifyDateAndTimeInputsState);
@@ -62,8 +65,8 @@ const AddDateToPakeep = ({ ampm = false }) => {
   const classes = useStyles();
   const placeholderFunc = value => ({ value });
 
-  const handleDateAndTimeInputsState = ({ target: { name, value } }) =>
-    setDateAndTimeInputsState(state => ({ ...state, [name]: { ...state[name], value } }));
+  const handleDateAndTimeInputsState = (name, value) =>
+    setDateAndTimeInputsState(state => ({ ...state, [name]: { ...state[name], value, isChosen: true } }));
 
   const dateListArr = [
     {
@@ -71,9 +74,23 @@ const AddDateToPakeep = ({ ampm = false }) => {
       icon: TodayOutlinedIcon,
       onClick: placeholderFunc,
       name: 'laterToday',
-      dynamicComponent: { component: DynamicInputDateAndTimePickers, className: null, props: { onlyTime: true } }
+      dynamicComponent: {
+        component: DynamicInputDateAndTimePickers,
+        className: classes.timePickerWrapper,
+        props: { onlyTime: true }
+      }
     },
-    { title: 'Tomorrow', icon: CalendarTodayOutlinedIcon, onClick: placeholderFunc, name: 'tomorrow' },
+    {
+      title: 'Tomorrow',
+      icon: CalendarTodayOutlinedIcon,
+      onClick: placeholderFunc,
+      name: 'tomorrow',
+      dynamicComponent: {
+        component: DynamicInputDateAndTimePickers,
+        className: classes.timePickerWrapper,
+        props: { onlyTime: true }
+      }
+    },
     { title: 'Next week', icon: ViewWeekOutlinedIcon, onClick: placeholderFunc, name: 'nextWeek' },
     { title: 'Add to dashboard', icon: DashboardOutlinedIcon, onClick: placeholderFunc, name: 'addToDashboard' },
     {
@@ -98,20 +115,21 @@ const AddDateToPakeep = ({ ampm = false }) => {
     setMenuItemState(state => ({ ...state, name, hoverStatus: false, clickStatus: true, dynamicTitle: title }));
 
   const setNullifyOfMenuItemState = () => setMenuItemState(nullifyOfMenuItemState);
+  
+  let currentClickStatus = menuItemState.clickStatus;
 
   return (
     <>
       <HeaderOfAddDateToPakeep
         buttonSaveState={buttonSaveState}
-        arrowButtonFunc={setNullifyOfMenuItemState}
+        arrowButtonFunc={!currentClickStatus ? onMenuClose : setNullifyOfMenuItemState}
         dynamicTitle={menuItemState.dynamicTitle}
       />
       {dateListArr.map(({ title, icon: Icon, onClick, hidden, dynamicComponent = false, name }, idx) => {
-        const DynamicComponent = dynamicComponent.component;
 
-        let correctName = name === menuItemState.name;
-        let activeIcon = correctName && menuItemState.hoverStatus;
-        let currentClickStatus = menuItemState.clickStatus;
+        const DynamicComponent = dynamicComponent.component;
+        const correctName = name === menuItemState.name;
+        const activeIcon = correctName && menuItemState.hoverStatus;
 
         const onMouseEnterOfMenuItem = () => (currentClickStatus ? null : setHoverOfMenuItemIsTrue(name));
         const onMouseLeaveOfMenuItem = () => (currentClickStatus ? null : setHoverOfMenuItemIsFalse(name));
@@ -121,7 +139,10 @@ const AddDateToPakeep = ({ ampm = false }) => {
           key: shortid(),
           onMouseEnter: onMouseEnterOfMenuItem,
           onMouseLeave: onMouseLeaveOfMenuItem,
-          onClick: currentClickStatus ? null : onClickOfMenuItem
+          onClick:
+            currentClickStatus || (dateAndTimeInputsState[name].value && dateAndTimeInputsState[name].isChosen)
+              ? null
+              : onClickOfMenuItem
         };
 
         let dynamicComponentProps = {
@@ -129,6 +150,7 @@ const AddDateToPakeep = ({ ampm = false }) => {
           onChange: handleDateAndTimeInputsState,
           value: dateAndTimeInputsState[name].value,
           KeyboardIcon: Icon,
+          name,
           ampm
         };
 
@@ -136,7 +158,9 @@ const AddDateToPakeep = ({ ampm = false }) => {
 
         return (
           <MenuItem {...menuItemProps} disableGutters>
-            {Boolean(dynamicComponent) && correctName && currentClickStatus ? (
+            {Boolean(dynamicComponent) &&
+            ((correctName && currentClickStatus) ||
+              (dateAndTimeInputsState[name].value && dateAndTimeInputsState[name].isChosen)) ? (
               <Grid item className={clsx(classes.marginTop, classes.itemGrid, dynamicComponent.className)}>
                 <DynamicComponent {...dynamicComponentProps} />
               </Grid>
@@ -158,5 +182,10 @@ const AddDateToPakeep = ({ ampm = false }) => {
     </>
   );
 };
+
+AddDateToPakeep.propTypes = {
+  ampm: PropTypes.bool,
+  onMenuClose: PropTypes.func
+}
 
 export default AddDateToPakeep;
