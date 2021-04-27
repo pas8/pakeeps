@@ -24,7 +24,7 @@ const IconButtonByPas = ({
   const classes = useStyles({ iconColor, rotate });
 
   return (
-    <IconButton onClick={onClick}>
+    <IconButton onClick={onClick} >
       <Icon className={classes.icon} />
     </IconButton>
   );

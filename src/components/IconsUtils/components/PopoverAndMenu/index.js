@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect,useState } from 'react';
 import Popover from '@material-ui/core/Popover';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
@@ -26,7 +26,7 @@ const PopoverAndMenu = ({
   name
 }) => {
   const classes = useStyles();
-  const [anchorEl, setAnchorEl] = React.useState({ name, currentTarget: null, menu: false, popover: false });
+  const [anchorEl, setAnchorEl] = useState({ name, currentTarget: null, menu: false, popover: false });
 
   const handlePopoverOpen = ({ currentTarget }) => setAnchorEl(state => ({ ...state, currentTarget, popover: true }));
 
@@ -37,7 +37,7 @@ const PopoverAndMenu = ({
     setAnchorEl(state => ({ ...state, currentTarget, menu: true, popover: false }));
 
   const handleMenuClose = () => setAnchorEl(state => ({ ...state, currentTarget: null, menu: false, popover: false }));
-
+console.log(name)
   useEffect(
     () =>
       handlePopoverAndMenuState({

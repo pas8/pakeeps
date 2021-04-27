@@ -21,7 +21,7 @@ const DynamicInputDateAndTimePickers = ({
   onlyTime,
   KeyboardIcon,
   name,
-  ampm,
+  ampm = false,
   itemState: { saved: savedStatus, isValid:propsIsValid, value },
   correctName,
   title
@@ -39,6 +39,7 @@ const DynamicInputDateAndTimePickers = ({
 
   const onAccept = data => onChange(name, data);
   const onFocus = () => setFocus(true);
+
   const keyboardPickerState = {
     value: inputValue,
     onChange: setInputValue,

@@ -75,11 +75,11 @@ const IconsUtils = ({
       onlyPopover: true
     },
     {
-      icon: EventAvailableOutlinedIcon, 
+      icon: EventAvailableOutlinedIcon,
       popoverText: 'Add date to pakeep',
       name: 'date',
       onClick: handleClick,
-      menuComponents: AddDateToPakeep 
+      menuComponents: AddDateToPakeep
     },
     { icon: WallpaperOutlinedIcon, popoverText: 'Add picture', name: 'picture', onClick: handleClick },
     { icon: ShareOutlinedIcon, popoverText: 'Share', name: 'share', onClick: handleClick },
@@ -140,14 +140,29 @@ const IconsUtils = ({
     <Grid container display={'flex'} wrap={'nowrap'} justify={isAllIconsIsShown ? 'flex-start' : 'space-between'}>
       {buttonUtilsNewPakeepArray.map(
         (
-          { icon: Icon, popoverText, name, onClick, activeIcon, rotateDeg, onlyPopover = false, menuComponents :MenuComponents },
+          {
+            icon: Icon,
+            popoverText,
+            name,
+            onClick,
+            activeIcon,
+            rotateDeg,
+            onlyPopover = false,
+            menuComponents: MenuComponents
+          },
           idx
         ) => {
           const element = (
             <PopoverAndMenu
               name={name}
               popoverText={popoverText}
-              menuComponents={onlyPopover ? null : MenuComponents ? <MenuComponents onMenuClose={popoverAndMenuState.onMenuClose} id={id}/> : <div>Fuck</div>}
+              menuComponents={
+                onlyPopover ? null : MenuComponents ? (
+                  <MenuComponents onMenuClose={popoverAndMenuState.onMenuClose} id={id} />
+                ) : (
+                  <div>Fuck</div>
+                )
+              }
               onlyPopover={onlyPopover}
               handlePopoverAndMenuState={handlePopoverAndMenuState}
               mainComponent={

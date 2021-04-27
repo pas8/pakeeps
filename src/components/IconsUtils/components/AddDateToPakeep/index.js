@@ -45,15 +45,10 @@ const useStyles = makeStyles(theme => ({
   box: { borderBottom: '1px solid rgba(255,255,255,0.4)' },
   menuItemButton: { outline: 'none', background: 'none', border: 'none' },
   timePickerWrapper: { '& input': { width: theme.spacing(16) } },
-  preventClickOfMenuItem:{'& .MuiTouchRipple-root' :{display:'none',}}
-
+  preventClickOfMenuItem: { '& .MuiTouchRipple-root': { display: 'none' } }
 }));
 
-<<<<<<< Updated upstream
-const AddDateToPakeep = ({ ampm = false, onMenuClose,id }) => {
-=======
 const AddDateToPakeep = ({ ampm = false, onMenuClose, id, events }) => {
->>>>>>> Stashed changes
   let DateNow = new Date();
 
   const nullifyOfMenuItemState = {
@@ -73,15 +68,58 @@ const AddDateToPakeep = ({ ampm = false, onMenuClose, id, events }) => {
     addLocation: { value: '', isValid: true, isChosen: false, saved: false },
     addMoreEvents: {
       value: [
-        { title: '', iconName: '', value: DateNow, color: 'default', saved: false, isValid: true,key:'AMV1' },
-        { title: '', iconName: '', value: addDays(DateNow, 2), color: 'primary', saved: false, isValid: true ,key:'AMV3'},
-        { title: '', iconName: '', value: addDays(DateNow, 4), color: 'primary', saved: false, isValid: true ,key:'AMV4'},
-        { title: '', iconName: '', value: addDays(DateNow, 1), color: 'primary', saved: false, isValid: true ,key:'AMV2'},
+        {
+          title: '',
+          iconName: '',
+          value: DateNow,
+          color: 'default',
+          saved: false,
+          isValid: true,
+          key: 'AMV1',
+          isInPatternList: false,
+          location:false
+        },
+        {
+          title: '',
+          iconName: '',
+          value: addDays(DateNow, 2),
+          color: 'primary',
+          saved: false,
+          isValid: true,
+          key: 'AMV3',
+          isInPatternList: false,
+          location:false
+
+        },
+        {
+          title: '',
+          iconName: '',
+          value: addDays(DateNow, 4),
+          color: 'primary',
+          saved: false,
+          isValid: true,
+          key: 'AMV4',
+          isInPatternList: false,
+          location:false
+
+        },
+        {
+          title: '',
+          iconName: '',
+          value: addDays(DateNow, 1),
+          color: 'primary',
+          saved: false,
+          isValid: true,
+          key: 'AMV2',
+          isInPatternList: false,
+          location:false
+
+        }
       ],
       isValid: true,
       isChosen: false,
       saved: false
-    },
+    }
   };
 
   // const eventsOrder = [{key:'laterToday',value:'',iconName:'book'},'tomorrow','nextWeek','addDateAndTime','addMoreEvents']
@@ -99,7 +137,7 @@ const AddDateToPakeep = ({ ampm = false, onMenuClose, id, events }) => {
     }));
   };
 
-  const onChangeOfAddMoreEvents = (name, value) => {
+  const onChangeOfAddMoreEvents = ( value) => {
     setDateAndTimeInputsState(state => ({
       ...state,
       addMoreEvents: { ...state.addMoreEvents, value }
@@ -192,9 +230,9 @@ const AddDateToPakeep = ({ ampm = false, onMenuClose, id, events }) => {
         const onClickOfMenuItem = () => setClickStatusOfMenuItemIsTrue(name, title);
 
         let menuItemProps = {
-          disableGutters:true,
+          disableGutters: true,
           key: shortid(),
-          className:correctName && currentClickStatus ? classes.preventClickOfMenuItem : null,
+          className: correctName && currentClickStatus ? classes.preventClickOfMenuItem : null,
           onMouseEnter: onMouseEnterOfMenuItem,
           onMouseLeave: onMouseLeaveOfMenuItem,
           onClick:
@@ -239,9 +277,7 @@ const AddDateToPakeep = ({ ampm = false, onMenuClose, id, events }) => {
         );
 
         return (
-          <MenuItem {...menuItemProps}  >
-            {isDynamicComponentShouldBeShown ? dynamicMenuItem : staticMenuItem}
-          </MenuItem>
+          <MenuItem {...menuItemProps}>{isDynamicComponentShouldBeShown ? dynamicMenuItem : staticMenuItem}</MenuItem>
         );
       })}
     </>
