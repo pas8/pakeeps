@@ -17,18 +17,16 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const DynamicInputDateAndTimePickers = ({
-  value,
   onChange,
   onlyTime,
   KeyboardIcon,
   name,
   ampm,
-  savedStatus,
+  itemState: { saved: savedStatus, isValid:propsIsValid, value },
   correctName,
-  title,
-  clickStatus,
-  error
+  title
 }) => {
+  const error = !propsIsValid;
   const keyboardIconColor = savedStatus ? themeColors.primaryMain : null;
   const classes = useStyles({ keyboardIconColor, correctName, error });
 
@@ -37,7 +35,7 @@ const DynamicInputDateAndTimePickers = ({
 
   const isInputValueValid = isValid(inputValue);
 
-  document.onkeydown = evt => (evt.key === 'Enter' && focus && isInputValueValid) ? onChange(name, inputValue) : null;
+  document.onkeydown = evt => (evt.key === 'Enter' && focus && isInputValueValid ? onChange(name, inputValue) : null);
 
   const onAccept = data => onChange(name, data);
   const onFocus = () => setFocus(true);
@@ -71,12 +69,15 @@ const DynamicInputDateAndTimePickers = ({
 DynamicInputDateAndTimePickers.propTypes = {
   KeyboardIcon: PropTypes.node,
   ampm: PropTypes.bool,
+  clickStatus: PropTypes.any,
+  correctName: PropTypes.any,
+  error: PropTypes.any,
   name: PropTypes.string,
   onChange: PropTypes.func,
   onlyTime: PropTypes.bool,
   savedStatus: PropTypes.bool,
-  value: PropTypes.string,
-  title: PropTypes.string
+  title: PropTypes.string,
+  value: PropTypes.string
 };
 
 export default DynamicInputDateAndTimePickers;
