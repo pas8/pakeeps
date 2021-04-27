@@ -65,7 +65,6 @@ const DynamicAddMoreEvents = ({ onChangeOfAddMoreEvents, itemState: { value }, .
 
   const addOneMoreEventFunc = () => handleMoreEventState(null, nullifyElementOfDynamicMoreEvents);
   const onChangeOfInputPicker = (keyName, value) => handleMoreEventState(keyName, value);
-
   // useEffect(() => onChangeOfAddMoreEvents(moreEventsState), [moreEventsState]);
 
   return (

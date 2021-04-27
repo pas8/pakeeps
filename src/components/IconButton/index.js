@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import { IconButton, makeStyles } from '@material-ui/core';
 import { themeColors } from 'components/theme';
+import _ from 'lodash';
 
 const useStyles = makeStyles({ icon: ({ iconColor, rotate }) => ({ color: iconColor, transform: rotate }) });
 
@@ -11,11 +12,14 @@ const IconButtonByPas = ({
   icon: Icon,
   iconName = 'icon',
   activeIconName = 'icon',
-  activeProperty = false,
+  activeProperty = false
 }) => {
+
+
+  const currentHoverStatusIsTrue = _.isEqual(activeIconName, iconName) && activeProperty
   const iconColor = activeIcon
     ? themeColors.primaryMain
-    : activeIconName === iconName && activeProperty
+    : currentHoverStatusIsTrue
     ? 'rgba(255,255,255,0.8)'
     : 'rgba(255,255,255,0.4)';
 
@@ -24,7 +28,7 @@ const IconButtonByPas = ({
   const classes = useStyles({ iconColor, rotate });
 
   return (
-    <IconButton onClick={onClick} >
+    <IconButton onClick={onClick}>
       <Icon className={classes.icon} />
     </IconButton>
   );

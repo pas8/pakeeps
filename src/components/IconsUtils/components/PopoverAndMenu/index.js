@@ -1,8 +1,9 @@
-import { useEffect,useState } from 'react';
+import { useEffect,useState ,useRef} from 'react';
 import Popover from '@material-ui/core/Popover';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import { Grid, Menu, MenuItem } from '@material-ui/core';
+import { takeCurrentCursorPositionOfCorectHalfOfScreen } from 'hooks/takeCurrentCursorPositionOfCorectHalfOfScreen';
 
 const useStyles = makeStyles(theme => ({
   popover: {
@@ -26,7 +27,9 @@ const PopoverAndMenu = ({
   name
 }) => {
   const classes = useStyles();
-  const [anchorEl, setAnchorEl] = useState({ name, currentTarget: null, menu: false, popover: false });
+  const anchorElRef = useRef(null)
+  // const direction = takeCurrentCursorPositionOfCorectHalfOfScreen(anchorElRef,anchorEl)
+  const [anchorEl, setAnchorEl] = useState({ name, currentTarget: null, menu: false, popover: false, });
 
   const handlePopoverOpen = ({ currentTarget }) => setAnchorEl(state => ({ ...state, currentTarget, popover: true }));
 
@@ -37,7 +40,6 @@ const PopoverAndMenu = ({
     setAnchorEl(state => ({ ...state, currentTarget, menu: true, popover: false }));
 
   const handleMenuClose = () => setAnchorEl(state => ({ ...state, currentTarget: null, menu: false, popover: false }));
-console.log(name)
   useEffect(
     () =>
       handlePopoverAndMenuState({
@@ -57,6 +59,7 @@ console.log(name)
         onMouseEnter={handlePopoverOpen}
         onMouseLeave={!anchorEl.menu ? handlePopoverClose : null}
         onClick={handleMenuOpen}
+        ref={anchorElRef}
       >
         {mainComponent}
       </Grid>
@@ -88,14 +91,14 @@ console.log(name)
           keepMounted
           open={Boolean(anchorEl) && anchorEl.menu}
           onClose={handleMenuClose}
-          anchorOrigin={{
-            vertical: 'top',
-            horizontal: 'right'
-          }}
-          transformOrigin={{
-            vertical: 'top',
-            horizontal: 'left'
-          }}
+          // anchorOrigin={{
+          //   vertical: 'top',
+          //   horizontal: 'left'
+          // }}
+          // transformOrigin={{
+          //   vertical: 'top',
+          //   horizontal: 'right'
+          // }}
         >
           {menuComponents && menuComponents}
         </Menu>

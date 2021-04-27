@@ -77,11 +77,10 @@ const ButtonGroupUtilsOfDynamicAddMoreEvents = ({
           menuComponentsProps
         }) => {
           const iconName = { keyName, buttonUtilsName };
-
           const iconButtonProps = {
             icon: Icon,
             onClick: onClick,
-            name:iconName,
+            iconName,
             activeIcon,
             activeIconName: popoverAndMenuState.name,
             activeProperty: popoverAndMenuState.popoverIsOpen
@@ -94,7 +93,7 @@ const ButtonGroupUtilsOfDynamicAddMoreEvents = ({
           const mainComponent = <IconButtonByPas {...iconButtonProps} />;
 
           const popoverAndMenuProps = {
-            name: buttonUtilsName,
+            name: iconName,
             popoverText,
             menuComponents,
             onlyPopover,

@@ -224,7 +224,7 @@ const AddDateToPakeep = ({ ampm = false, onMenuClose, id, events }) => {
         const isItemShouldBeOfFullWidth = dynamicComponent?.props?.onlyTime;
         const isDynamicComponentShouldBeShown =
           (Boolean(dynamicComponent) && correctName && currentClickStatus) || dateAndTimeInputsState[name].isChosen;
-
+const ItemOfMenu =isDynamicComponentShouldBeShown ? Grid : MenuItem 
         const onMouseEnterOfMenuItem = () => (currentClickStatus ? null : setHoverOfMenuItemIsTrue(name));
         const onMouseLeaveOfMenuItem = () => (currentClickStatus ? null : setHoverOfMenuItemIsFalse(name));
         const onClickOfMenuItem = () => setClickStatusOfMenuItemIsTrue(name, title);
@@ -277,7 +277,7 @@ const AddDateToPakeep = ({ ampm = false, onMenuClose, id, events }) => {
         );
 
         return (
-          <MenuItem {...menuItemProps}>{isDynamicComponentShouldBeShown ? dynamicMenuItem : staticMenuItem}</MenuItem>
+          <ItemOfMenu {...menuItemProps}>{isDynamicComponentShouldBeShown ? dynamicMenuItem : staticMenuItem}</ItemOfMenu>
         );
       })}
     </>
