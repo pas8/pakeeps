@@ -2,39 +2,14 @@ import { useState } from 'react';
 import { HexColorPicker } from 'react-colorful';
 import UnfoldMoreOutlinedIcon from '@material-ui/icons/UnfoldMoreOutlined';
 import TextureOutlinedIcon from '@material-ui/icons/TextureOutlined';
-import { Button, colors, Grid, IconButton, makeStyles, Paper, Typography } from '@material-ui/core';
+import { Box, Button, colors, Grid, IconButton, makeStyles, Paper, Typography } from '@material-ui/core';
 import { themeColors } from 'components/theme';
 import ColorLensOutlinedIcon from '@material-ui/icons/ColorLensOutlined';
 import PlaylistAddOutlinedIcon from '@material-ui/icons/PlaylistAddOutlined';
 import WrapperOfPopoverAndMenu from 'components/IconsUtils/components/WrapperOfPopoverAndMenu';
-// .custom-layout  {
-//   padding: 16px;
-//   border-radius: 12px;
-//   background: #33333a;
-//   box-shadow: 0 6px 12px #999;
-// }
-
-// .custom-layout .react-colorful__saturation {
-//   margin: 15px 0;
-//   border-radius: 5px;
-//   border-bottom: none;
-// }
-
-// .custom-layout .react-colorful__hue {
-//   order: -1;
-// }
-
-// .custom-layout .react-colorful__hue,
-// .custom-layout .react-colorful__alpha {
-//   height: 14px;
-//   border-radius: 5px;
-// }
-
-// .custom-layout .react-colorful__hue-pointer,
-// .custom-layout .react-colorful__alpha-pointer {
-//   width: 20px;
-//   height: 20px;
-// }
+import IconButtonByPas from 'components/IconButton';
+import SaveRoundedIcon from '@material-ui/icons/SaveRounded';
+import DoneOutlineOutlinedIcon from '@material-ui/icons/DoneOutlineOutlined';
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -97,6 +72,7 @@ const useStyles = makeStyles(theme => ({
 
 const ColorPickerByPas = () => {
   const [color, setColor] = useState(themeColors.primaryMain);
+  const [savedStatus, setSavedStatus] = useState(false);
   const [transparencyStatus, setTransparencyStatus] = useState(false);
   const [extendMoreColorsStatus, setExtendMoreColorsStatus] = useState(false);
   const [customizationsStatus, setCustomizationsStatus] = useState(false);
@@ -164,7 +140,20 @@ const ColorPickerByPas = () => {
   const wrapperOfPopoverAndMenuProps = {
     buttonUtilsArr,
     handlePopoverAndMenuState,
-    popoverAndMenuState
+    popoverAndMenuState,
+    iconSize: 'small'
+  };
+
+  const handleSetColor = value => setColor(value);
+  console.log(color);
+
+  const onSave = () => console.log('onSave');
+
+  const saveIconButtonProps = {
+    onClick: onSave,
+    icon: SaveRoundedIcon,
+    activeProperty: !color,
+    activeIcon: savedStatus
   };
 
   return (
@@ -180,16 +169,24 @@ const ColorPickerByPas = () => {
               ['A400', 'A700']
             ];
 
+            // const isCorrectColorOfExtendedElement = color ===
+
             const extendedElement = (
               <Paper className={classes.elementOfGridColorPicker}>
                 {namesOfPartsOfGridElement.map(row => (
                   <Grid container>
-                    {row.map(name => (
-                      <Grid
-                        style={{ backgroundColor: colors[colorName][name] }}
-                        className={classes.extendedElementOfGridColorPicker}
-                      />
-                    ))}
+                    {row.map(name => {
+                      const colorOfElementOfPartsOfGridElementProps = colors[colorName][name];
+                      const onClick = () => handleSetColor(colorOfElementOfPartsOfGridElementProps);
+
+                      const elementOfPartsOfGridElementProps = {
+                        onClick: onClick,
+                        style: { backgroundColor: colorOfElementOfPartsOfGridElementProps },
+                        className: classes.extendedElementOfGridColorPicker
+                      };
+
+                      return <Grid {...elementOfPartsOfGridElementProps} />;
+                    })}
                   </Grid>
                 ))}
               </Paper>
@@ -204,7 +201,7 @@ const ColorPickerByPas = () => {
 
           return (
             <Grid item>
-              <Grid container>{gridRow}</Grid>{' '}
+              <Grid container>{gridRow}</Grid>
             </Grid>
           );
         })}
@@ -216,16 +213,14 @@ const ColorPickerByPas = () => {
           </Grid>
         </Grid>
 
-        <Grid item>
-          <Button onClick={setCustomizationsStatus}>
-            <Typography
-              variant={'subtitle2'}
-              // style={{color: 'rgba(255,255,255,0.4)' }}
-            >
+        <Box mr={1}>
+          <Button onClick={setCustomizationsStatus} size={'small'}>
+            <Typography variant={'subtitle2'} style={{ color: 'rgba(255,255,255,0.8)' }}>
               Customization
             </Typography>
           </Button>
-        </Grid>
+          <IconButtonByPas {...saveIconButtonProps} size={'small'} />
+        </Box>
       </Grid>
     </Grid>
   );

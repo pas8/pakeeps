@@ -6,7 +6,8 @@ const WrapperOfPopoverAndMenu = ({
   handlePopoverAndMenuState,
   popoverAndMenuState,
   keyName,
-  isIconNameExtended = false
+  isIconNameExtended = false,
+  iconSize = 'default'
 }) => {
   return (
     <>
@@ -29,6 +30,7 @@ const WrapperOfPopoverAndMenu = ({
             icon: Icon,
             onClick: onClick,
             iconName,
+            size: iconSize,
             activeIcon,
             activeIconName: popoverAndMenuState.name,
             activeProperty: popoverAndMenuState.popoverIsOpen
