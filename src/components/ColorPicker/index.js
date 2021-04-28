@@ -10,6 +10,8 @@ import WrapperOfPopoverAndMenu from 'components/IconsUtils/components/WrapperOfP
 import IconButtonByPas from 'components/IconButton';
 import SaveRoundedIcon from '@material-ui/icons/SaveRounded';
 import DoneOutlineOutlinedIcon from '@material-ui/icons/DoneOutlineOutlined';
+import clsx from 'clsx';
+import CenteredGrid from 'components/CenteredGrid';
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -17,6 +19,7 @@ const useStyles = makeStyles(theme => ({
       easing: theme.transitions.easing.easeIn,
       duration: theme.transitions.duration.complex
     }),
+    paddingBottom: theme.spacing(0.4),
 
     '& .react-colorful': {
       padding: theme.spacing(0, 1),
@@ -50,10 +53,16 @@ const useStyles = makeStyles(theme => ({
     }
   },
   elementOfGridColorPicker: {
-    width: theme.spacing(8 * 0.8),
-    height: theme.spacing(8 * 0.8),
+    width: theme.spacing(16 * 0.42),
+    height: theme.spacing(16 * 0.42),
     margin: theme.spacing(0.8),
-    overflow: 'hidden'
+    overflow: 'hidden',
+    border: '1px solid rgba(255,255,255,0)',
+    transition: theme.transitions.create('border', {
+      easing: theme.transitions.easing.easeIn,
+      duration: theme.transitions.duration.leavingScreen
+    }),
+    cursor: 'pointer'
   },
   containerOfElementOfGridColorPicker: {
     margin: theme.spacing(1.8)
@@ -67,11 +76,18 @@ const useStyles = makeStyles(theme => ({
   containerOfExtendedElementOfGridColorPicker: {
     margin: theme.spacing(1.4),
     borderRadius: '10px'
+  },
+  elementOfGridColorPickerWithBorder: {
+    borderColor: 'rgba(255,255,255,1)',
+    transition: theme.transitions.create('border', {
+      easing: theme.transitions.easing.easeIn,
+      duration: theme.transitions.duration.enteringScreen
+    })
   }
 }));
 
 const ColorPickerByPas = () => {
-  const [color, setColor] = useState(themeColors.primaryMain);
+  const [color, setColor] = useState('rgba(255,255,255,0)');
   const [savedStatus, setSavedStatus] = useState(false);
   const [transparencyStatus, setTransparencyStatus] = useState(false);
   const [extendMoreColorsStatus, setExtendMoreColorsStatus] = useState(false);
@@ -168,10 +184,14 @@ const ColorPickerByPas = () => {
               ['A100', 'A200'],
               ['A400', 'A700']
             ];
+            // console.log(namesOfPartsOfGridElement.some(el => colors[colorName][el] === color));
+            const correctNamesOfPartsOfGridElementArr = _.flattenDeep(namesOfPartsOfGridElement);
 
-            // const isCorrectColorOfExtendedElement = color ===
+            const isExtendedElementColorCorrect = correctNamesOfPartsOfGridElementArr.some(
+              name => colors[colorName][name] === color
+            );
 
-            const extendedElement = (
+            const staticExtendedElement = (
               <Paper className={classes.elementOfGridColorPicker}>
                 {namesOfPartsOfGridElement.map(row => (
                   <Grid container>
@@ -191,11 +211,37 @@ const ColorPickerByPas = () => {
                 ))}
               </Paper>
             );
+            const selectedElement = (correctStatus, color, onClickOfSelectElement) => {
+              const defaultOnClick = () => handleSetColor(color);
+              const onClick = onClickOfSelectElement ?? defaultOnClick;
 
-            const nonExtendedElement = (
-              <Paper style={{ backgroundColor: colors[colorName][500] }} className={classes.elementOfGridColorPicker} />
-            );
+              const selectedElementPaperContainerProps = {
+                style: { backgroundColor: color },
+                className: clsx(
+                  classes.elementOfGridColorPicker,
+                  correctStatus ? classes.elementOfGridColorPickerWithBorder : null
+                ),
+                elevation: 8,
+                onClick
+              };
+              return (
+                <Paper {...selectedElementPaperContainerProps}>
+                  <CenteredGrid>{correctStatus && <DoneOutlineOutlinedIcon />}</CenteredGrid>
+                </Paper>
+              );
+            };
+
+            const nonExtendedElementColor = colors[colorName][500];
+            const isNonExtendedElementColorCorrect = color === nonExtendedElementColor;
+
+            const nonExtendedElement = selectedElement(isNonExtendedElementColorCorrect, nonExtendedElementColor);
+
+            const extendedElement = isExtendedElementColorCorrect
+              ? selectedElement(true, color,() => handleSetColor(false))
+              : staticExtendedElement;
+
             const elementOfGridColorPicker = extendMoreColorsStatus ? extendedElement : nonExtendedElement;
+
             return elementOfGridColorPicker;
           });
 
@@ -206,22 +252,29 @@ const ColorPickerByPas = () => {
           );
         })}
       </Grid>
-      <Grid container justify={'space-between'} alignItems={'center'}>
-        <Grid item>
-          <Grid container>
-            <WrapperOfPopoverAndMenu {...wrapperOfPopoverAndMenuProps} />
+      <Box mt={0.4}>
+        <Grid container justify={'space-between'} alignItems={'center'}>
+          <Grid item>
+            <Grid container>
+              <WrapperOfPopoverAndMenu {...wrapperOfPopoverAndMenuProps} />
+            </Grid>
           </Grid>
-        </Grid>
 
-        <Box mr={1}>
-          <Button onClick={setCustomizationsStatus} size={'small'}>
-            <Typography variant={'subtitle2'} style={{ color: 'rgba(255,255,255,0.8)' }}>
-              Customization
-            </Typography>
-          </Button>
-          <IconButtonByPas {...saveIconButtonProps} size={'small'} />
-        </Box>
-      </Grid>
+          <Box mr={1.16}>
+            <Button
+              onClick={setCustomizationsStatus}
+              size={'small'}
+              variant={'outlined'}
+              style={{ borderColor: color }}
+            >
+              <Typography variant={'subtitle2'} style={{ color: 'rgba(255,255,255,0.8)' }}>
+                Customization
+              </Typography>
+            </Button>
+            <IconButtonByPas {...saveIconButtonProps} size={'small'} />
+          </Box>
+        </Grid>
+      </Box>
     </Grid>
   );
 };

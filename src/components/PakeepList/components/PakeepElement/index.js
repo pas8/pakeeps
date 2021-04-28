@@ -16,7 +16,7 @@ const useStyles = makeStyles(theme => ({
   paper: {
     padding: theme.spacing(1.96),
     paddingTop: theme.spacing(1.0 + 4 / 10),
-    cursor: 'pointer',
+    cursor: 'grab',
     position: 'relative'
   },
   title: { marginBottom: theme.spacing(1) },
