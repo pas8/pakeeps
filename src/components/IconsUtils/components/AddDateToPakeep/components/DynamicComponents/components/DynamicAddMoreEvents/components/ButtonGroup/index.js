@@ -78,53 +78,17 @@ const ButtonGroupUtilsOfDynamicAddMoreEvents = ({
     }
   ];
 
+  const wrapperOfPopoverAndMenuProps = {
+    buttonUtilsArr,
+    handlePopoverAndMenuState,
+    isIconNameExtended: true,
+    popoverAndMenuState,
+    keyName
+  };
+
   return (
     <Grid container justify={'space-between'}>
-      {/* {buttonUtilsArr.map(
-        ({
-          icon: Icon,
-          popoverText,
-          name: buttonUtilsName,
-          onClick,
-          activeIcon,
-          onlyPopover = false,
-          menuComponents: MenuComponents,
-          menuComponentsProps
-        }) => {
-          const iconName = { keyName, buttonUtilsName };
-          const iconButtonProps = {
-            icon: Icon,
-            onClick: onClick,
-            iconName,
-            activeIcon,
-            activeIconName: popoverAndMenuState.name,
-            activeProperty: popoverAndMenuState.popoverIsOpen
-          };
-
-          const menuComponents = !onlyPopover && MenuComponents && (
-            <MenuComponents {...menuComponentsProps} onMenuClose={popoverAndMenuState.onMenuClose} />
-          );
-
-          const mainComponent = <IconButtonByPas {...iconButtonProps} />;
-
-          const popoverAndMenuProps = {
-            name: iconName,
-            popoverText,
-            menuComponents,
-            onlyPopover,
-            handlePopoverAndMenuState,
-            mainComponent
-          };
-
-          return <PopoverAndMenu {...popoverAndMenuProps} />;
-        }
-      )} */}
-      <WrapperOfPopoverAndMenu
-        buttonUtilsArr={buttonUtilsArr}
-        handlePopoverAndMenuState={handlePopoverAndMenuState}
-        isIconNameExtended={true}
-        popoverAndMenuState={popoverAndMenuState}
-      />
+      <WrapperOfPopoverAndMenu {...wrapperOfPopoverAndMenuProps} />
     </Grid>
   );
 };

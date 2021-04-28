@@ -1,5 +1,5 @@
-import IconButtonByPas from "components/IconButton";
-import PopoverAndMenu from "../PopoverAndMenu";
+import IconButtonByPas from 'components/IconButton';
+import PopoverAndMenu from '../PopoverAndMenu';
 
 const WrapperOfPopoverAndMenu = ({
   buttonUtilsArr,
@@ -19,8 +19,11 @@ const WrapperOfPopoverAndMenu = ({
           activeIcon,
           onlyPopover = false,
           menuComponents: MenuComponents,
-          menuComponentsProps
+          menuComponentsProps,
+          hidden = false
         }) => {
+          if (hidden) return;
+
           const iconName = isIconNameExtended ? { keyName, buttonUtilsName } : buttonUtilsName;
           const iconButtonProps = {
             icon: Icon,

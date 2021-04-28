@@ -20,13 +20,14 @@ const IconButtonByPas = ({
   const iconColor = activeIcon
     ? themeColors.primaryMain
     : currentHoverStatusIsTrue
-    ? 'rgba(255,255,255,0.8)'
-    : 'rgba(255,255,255,0.4)';
+    ? 'rgba(255,255,255,0.92)'
+    : 'rgba(255,255,255,0.42)';
 
   const rotate = rotateDeg ? `rotate(${rotateDeg}deg)` : 'rotate(0deg)';
 
   const classes = useStyles({ iconColor, rotate });
 
+  
   return (
     <IconButton onClick={onClick}>
       <Icon className={classes.icon} />
