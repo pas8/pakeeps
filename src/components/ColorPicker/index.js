@@ -1,10 +1,11 @@
 import { useState } from 'react';
-import { RgbaColorPicker } from 'react-colorful';
-
+import { HexColorPicker } from 'react-colorful';
+import UnfoldMoreOutlinedIcon from '@material-ui/icons/UnfoldMoreOutlined';
 import TextureOutlinedIcon from '@material-ui/icons/TextureOutlined';
-import { Grid, makeStyles } from '@material-ui/core';
+import { Button, colors, Grid, IconButton, makeStyles } from '@material-ui/core';
 import { themeColors } from 'components/theme';
-
+import ColorLensOutlinedIcon from '@material-ui/icons/ColorLensOutlined';
+import PlaylistAddOutlinedIcon from '@material-ui/icons/PlaylistAddOutlined';
 // .custom-layout  {
 //   padding: 16px;
 //   border-radius: 12px;
@@ -37,12 +38,13 @@ import { themeColors } from 'components/theme';
 const useStyles = makeStyles(theme => ({
   container: {
     '& .react-colorful': {
-      padding: theme.spacing(0,1),width:theme.spacing(10)
+      padding: theme.spacing(0, 1),
+      width: theme.spacing(42)
     },
     '& .react-colorful__pointer': {
       borderRadius: theme.spacing(0.8),
-      width:theme.spacing(2.8),
-      height:theme.spacing(2.8),
+      width: theme.spacing(2.8),
+      height: theme.spacing(2.8),
       cursor: 'pointer',
       backgroundColor: 'transparent',
       border: '3px solid rgba(255, 255, 255,0.8)',
@@ -58,25 +60,54 @@ const useStyles = makeStyles(theme => ({
       order: -1
     },
     '& .react-colorful__hue,.react-colorful__alpha ': {
-      borderRadius:theme.spacing(0.8),
-      margin: theme.spacing(2,0),
+      borderRadius: theme.spacing(0.8),
+      margin: theme.spacing(2, 0),
       height: theme.spacing(2)
     },
-    '& .react-colorful__hue-pointer,.react-colorful__alpha-pointer':{
-  //  borderWidth: '5px'
-
-
+    '& .react-colorful__hue-pointer,.react-colorful__alpha-pointer': {
+      //  borderWidth: '5px'
     }
-
   }
 }));
+
 const ColorPickerByPas = () => {
-  const [color, setColor] = useState(themeColors.primaryMain);
+  const [color, setColor] = useState('1111111');
   const classes = useStyles();
+
+  const colorsArr = [
+    [{ colorName: 'red' }, { colorName: 'pink' }, { colorName: 'purple' }, { colorName: 'deepPurple' }],
+    [{ colorName: 'indigo' }, { colorName: 'blue' }, { colorName: 'lightBlue' }, { colorName: 'cyan' }],
+    [{ colorName: 'teal' }, { colorName: 'green' }, { colorName: 'lightGreen' }, { colorName: 'lime' }],
+    [{ colorName: 'yellow' }, { colorName: 'amber' }, { colorName: 'orange' }, { colorName: 'deepOrange' }]
+  ];
+
+  const arr = colorsArr.map(el => console.log(colors[el.colorName]));
+
+  // console.log(colors.red)
+
   return (
     <Grid className={classes.container}>
-      {' '}
-      <RgbaColorPicker color={color} onChange={setColor} />
+      {}
+      <HexColorPicker color={color} onChange={setColor} />
+      <Grid container justify={'space-between'} alignItems={'center'}>
+        <Grid item>
+          <IconButton>
+            <UnfoldMoreOutlinedIcon />
+          </IconButton>
+          <IconButton>
+            <ColorLensOutlinedIcon />
+          </IconButton>
+          <IconButton>
+            <TextureOutlinedIcon />
+          </IconButton>
+          <IconButton>
+            <PlaylistAddOutlinedIcon />
+          </IconButton>
+        </Grid>
+        <Grid item>
+          <Button>Customization</Button>
+        </Grid>
+      </Grid>
     </Grid>
   );
 };

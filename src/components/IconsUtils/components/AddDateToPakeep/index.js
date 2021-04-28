@@ -77,7 +77,7 @@ const AddDateToPakeep = ({ ampm = false, onMenuClose, id, events }) => {
           isValid: true,
           key: 'AMV1',
           isInPatternList: false,
-          location:false
+          location: false
         },
         {
           title: '',
@@ -88,8 +88,7 @@ const AddDateToPakeep = ({ ampm = false, onMenuClose, id, events }) => {
           isValid: true,
           key: 'AMV3',
           isInPatternList: false,
-          location:false
-
+          location: false
         },
         {
           title: '',
@@ -100,8 +99,7 @@ const AddDateToPakeep = ({ ampm = false, onMenuClose, id, events }) => {
           isValid: true,
           key: 'AMV4',
           isInPatternList: false,
-          location:false
-
+          location: false
         },
         {
           title: '',
@@ -112,8 +110,7 @@ const AddDateToPakeep = ({ ampm = false, onMenuClose, id, events }) => {
           isValid: true,
           key: 'AMV2',
           isInPatternList: false,
-          location:false
-
+          location: false
         }
       ],
       isValid: true,
@@ -137,7 +134,7 @@ const AddDateToPakeep = ({ ampm = false, onMenuClose, id, events }) => {
     }));
   };
 
-  const onChangeOfAddMoreEvents = ( value) => {
+  const onChangeOfAddMoreEvents = value => {
     setDateAndTimeInputsState(state => ({
       ...state,
       addMoreEvents: { ...state.addMoreEvents, value }
@@ -224,7 +221,8 @@ const AddDateToPakeep = ({ ampm = false, onMenuClose, id, events }) => {
         const isItemShouldBeOfFullWidth = dynamicComponent?.props?.onlyTime;
         const isDynamicComponentShouldBeShown =
           (Boolean(dynamicComponent) && correctName && currentClickStatus) || dateAndTimeInputsState[name].isChosen;
-const ItemOfMenu =isDynamicComponentShouldBeShown ? Grid : MenuItem 
+        const ItemOfMenu = isDynamicComponentShouldBeShown ? Grid : MenuItem;
+        
         const onMouseEnterOfMenuItem = () => (currentClickStatus ? null : setHoverOfMenuItemIsTrue(name));
         const onMouseLeaveOfMenuItem = () => (currentClickStatus ? null : setHoverOfMenuItemIsFalse(name));
         const onClickOfMenuItem = () => setClickStatusOfMenuItemIsTrue(name, title);
@@ -277,7 +275,9 @@ const ItemOfMenu =isDynamicComponentShouldBeShown ? Grid : MenuItem
         );
 
         return (
-          <ItemOfMenu {...menuItemProps}>{isDynamicComponentShouldBeShown ? dynamicMenuItem : staticMenuItem}</ItemOfMenu>
+          <ItemOfMenu {...menuItemProps}>
+            {isDynamicComponentShouldBeShown ? dynamicMenuItem : staticMenuItem}
+          </ItemOfMenu>
         );
       })}
     </>

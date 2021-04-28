@@ -33,3 +33,20 @@ ul {
 }
 
 
+
+.MuiBackdrop-root{
+
+
+  backdrop-filter: blur(4px);
+}
+
+.MuiPickersCalendarHeader-switchHeader svg{
+
+transform: rotate(180deg);
+
+}
+.MuiPickersModal-dialogRoot {
+
+transform: scale(1.08);
+
+}

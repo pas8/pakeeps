@@ -22,7 +22,7 @@ const DynamicInputDateAndTimePickers = ({
   KeyboardIcon,
   name,
   ampm = false,
-  itemState: { saved: savedStatus, isValid:propsIsValid, value },
+  itemState: { saved: savedStatus, isValid: propsIsValid, value },
   correctName,
   title
 }) => {
@@ -40,29 +40,31 @@ const DynamicInputDateAndTimePickers = ({
   const onAccept = data => onChange(name, data);
   const onFocus = () => setFocus(true);
 
+  const keyboardIcon = savedStatus ? <DoneOutlineOutlinedIcon /> : <KeyboardIcon />;
+
   const keyboardPickerState = {
     value: inputValue,
     onChange: setInputValue,
     todayButton: !onlyTime,
     label: !correctName ? title : error ? 'Invalid Date Format ' : null,
     inputVariant: 'outlined',
-    keyboardIcon: savedStatus ? <DoneOutlineOutlinedIcon /> : <KeyboardIcon />,
+    keyboardIcon,
     autoOk: false,
     format: onlyTime ? 'hh:mm' : 'yyyy  /  MM  /  dd  /  hh:mm',
     disablePast: true,
     error,
     onFocus,
     onAccept,
-    ampm
+    ampm,
+    fullWidth:true,
+    variant:'dialog'
   };
+
+  const KeyboardPicker = onlyTime ? KeyboardTimePicker : KeyboardDateTimePicker;
 
   return (
     <Grid item className={classes.container}>
-      {!onlyTime ? (
-        <KeyboardDateTimePicker {...keyboardPickerState} />
-      ) : (
-        <KeyboardTimePicker {...keyboardPickerState} />
-      )}
+      <KeyboardPicker {...keyboardPickerState} />
     </Grid>
   );
 };

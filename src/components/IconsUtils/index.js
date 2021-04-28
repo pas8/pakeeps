@@ -152,7 +152,9 @@ const IconsUtils = ({
           },
           idx
         ) => {
+          
           const element = (
+            
             <PopoverAndMenu
               name={name}
               popoverText={popoverText}

@@ -7,8 +7,10 @@ import IconButtonByPas from 'components/IconButton';
 import ColorPickerByPas from 'components/ColorPicker';
 import PopoverAndMenu from 'components/IconsUtils/components/PopoverAndMenu';
 import AlarmAddOutlinedIcon from '@material-ui/icons/AlarmAddOutlined';
+import CategoryOutlinedIcon from '@material-ui/icons/CategoryOutlined';
 import { Grid } from '@material-ui/core';
 import shortid from 'shortid';
+import WrapperOfPopoverAndMenu from 'components/IconsUtils/components/WrapperOfPopoverAndMenu';
 
 const ButtonGroupUtilsOfDynamicAddMoreEvents = ({
   handlePopoverAndMenuState,
@@ -20,16 +22,12 @@ const ButtonGroupUtilsOfDynamicAddMoreEvents = ({
   location,
   handlerOfTitleButton,
   addOneMoreEventFunc,
-  keyName
+  keyName,
+  iconName: iconNameOfEventElement,
+  handlerOfEventButtonGroupIcon,
+  KeyboardIcon
 }) => {
-  const buttonUtils = [
-    {
-      icon: TextRotationNoneOutlinedIcon,
-      popoverText: 'Add a title',
-      name: 'addTitle',
-      activeIcon: writingTitleStatus,
-      onClick: handlerOfTitleButton
-    },
+  const buttonUtilsArr = [
     {
       icon: PaletteOutlinedIcon,
       popoverText: 'Set color',
@@ -51,7 +49,8 @@ const ButtonGroupUtilsOfDynamicAddMoreEvents = ({
       popoverText: 'Add location',
       name: 'location',
       activeIcon: location,
-      menuComponents: null
+      menuComponents: null,
+      menuComponentsProps: { location, handlerOfEventButtonGroupIcon }
     },
     {
       icon: AlarmAddOutlinedIcon,
@@ -60,12 +59,28 @@ const ButtonGroupUtilsOfDynamicAddMoreEvents = ({
       activeIcon: false,
       onlyPopover: true,
       onClick: addOneMoreEventFunc
+    },
+    {
+      icon: CategoryOutlinedIcon,
+      popoverText: 'Choose an icon',
+      name: 'iconName',
+      activeIcon: iconNameOfEventElement,
+      onlyPopover: true,
+      onClick: 'handlerOfEventButtonGroupIcon'
+    },
+    {
+      icon: writingTitleStatus ? KeyboardIcon : TextRotationNoneOutlinedIcon,
+      popoverText: 'Add a title',
+      name: 'addTitle',
+      activeIcon: writingTitleStatus,
+      onClick: handlerOfTitleButton,
+      onlyPopover: true
     }
   ];
 
   return (
     <Grid container justify={'space-between'}>
-      {buttonUtils.map(
+      {/* {buttonUtilsArr.map(
         ({
           icon: Icon,
           popoverText,
@@ -103,7 +118,13 @@ const ButtonGroupUtilsOfDynamicAddMoreEvents = ({
 
           return <PopoverAndMenu {...popoverAndMenuProps} />;
         }
-      )}
+      )} */}
+      <WrapperOfPopoverAndMenu
+        buttonUtilsArr={buttonUtilsArr}
+        handlePopoverAndMenuState={handlePopoverAndMenuState}
+        isIconNameExtended={true}
+        popoverAndMenuState={popoverAndMenuState}
+      />
     </Grid>
   );
 };
