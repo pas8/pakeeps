@@ -1,21 +1,26 @@
 import { Button, ButtonGroup, Typography, makeStyles, SvgIcon, IconButton, Badge } from '@material-ui/core';
 import ColorIcon from 'components/Icons/components/ColorIcon';
 import { themeColors } from 'components/theme';
-import React from 'react';
+import { useState } from 'react';
 
 const useStyles = makeStyles(theme => ({
   buttonGroupContainer: {
     '&  .MuiBadge-badge': {
-      backgroundColor: ({ customColorsInHexFormat }) => customColorsInHexFormat,
-      backgroundColor: '#424242',
+      backgroundColor: ({ customColorsInHexFormat, hoverStatusOfButtonOfAddingCustomColorToColorLayouts }) =>
+        hoverStatusOfButtonOfAddingCustomColorToColorLayouts ? customColorsInHexFormat : '#424242',
       fontSize: theme.spacing(1.96),
       fontWeight: 900,
       color: themeColors.whiteRgbaColorWith0dot8valueOfAlfaCanal,
       maxWidth: theme.spacing(1.96),
       maxHeight: theme.spacing(1.96),
       top: theme.spacing(0.42),
-      right: theme.spacing(0.42)
+      right: theme.spacing(0.42),
       // opacity: 0.8
+
+      transition: theme.transitions.create('background', {
+        easing: theme.transitions.easing.sharp,
+        duration: theme.transitions.duration.standard
+      })
     }
   }
 }));
@@ -29,15 +34,31 @@ const CustomizationButton = ({
   onMouseLeave,
   onMouseEnter
 }) => {
-  const classes = useStyles({ customColorsInHexFormat });
+  const [
+    hoverStatusOfButtonOfAddingCustomColorToColorLayouts,
+    setHoverStatusOfButtonOfAddingCustomColorToColorLayouts
+  ] = useState(false);
+  const classes = useStyles({ customColorsInHexFormat, hoverStatusOfButtonOfAddingCustomColorToColorLayouts });
+
+  const setHoverStatusOfButtonOfAddingCustomColorToColorLayoutsIsTrue = () =>
+    setHoverStatusOfButtonOfAddingCustomColorToColorLayouts(true);
+
+  const setHoverStatusOfButtonOfAddingCustomColorToColorLayoutsIsFalse = () =>
+    setHoverStatusOfButtonOfAddingCustomColorToColorLayouts(false);
+
+  const buttonOfAddingCustomColorToColorLayoutsProps = {
+    onClick: setCustomizationsStatus,
+    onMouseEnter: setHoverStatusOfButtonOfAddingCustomColorToColorLayoutsIsTrue,
+    onMouseLeave: setHoverStatusOfButtonOfAddingCustomColorToColorLayoutsIsFalse
+  };
 
   const hoveredButtonGroupChildren = (
     <>
-      <Button onClick={setCustomizationsStatus}>
+      <Button {...buttonOfAddingCustomColorToColorLayoutsProps}>
         <Typography variant={'subtitle2'} style={{ color: nullityColor }}>
           {/* <IconButton> */}
-          <Badge badgeContent={'+'} >
-            <ColorIcon/>
+          <Badge badgeContent={'+'}>
+            <ColorIcon />
           </Badge>
         </Typography>
       </Button>
@@ -48,6 +69,7 @@ const CustomizationButton = ({
       </Button>
     </>
   );
+
   const unHoveredButtonGroupChildren = (
     <Button onClick={setCustomizationsStatus}>
       <Typography variant={'subtitle2'} style={{ color: nullityColor }}>

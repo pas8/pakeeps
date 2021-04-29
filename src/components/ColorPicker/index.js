@@ -92,6 +92,16 @@ const ColorPickerByPas = () => {
   const handleCustomizationStatus = () => setCustomizationsStatus(state => !state);
   const handleCustomColorStatus = () => setCustomColorsStatus(state => !state);
 
+  const customizationButtonProps = {
+    nullityColor,
+    customColorsInHexFormat,
+    buttonCustomizationHoverStatus,
+    setCustomizationsStatus,
+    color,
+    onMouseEnter: () => setButtonCustomizationHoverStatus(true),
+    onMouseLeave: () => setButtonCustomizationHoverStatus(false)
+  };
+
   const buttonUtilsArr = [
     {
       icon: TextureOutlinedIcon,
@@ -122,15 +132,17 @@ const ColorPickerByPas = () => {
       onClick: handleCustomColorStatus,
       customColor: customColorsStatus ? customColorsInHexFormat : null
     },
-
     {
-      icon: PlaylistAddOutlinedIcon,
-      popoverText: 'Add ',
-      name: 'addOneMoreEvent',
+      customElementComponentOfIconGroup: <CustomizationButton {...customizationButtonProps} />
+    },
+    {
+      icon: SaveRoundedIcon,
+      popoverText: 'Save changes',
+      name: 'save',
       activeIcon: false,
       onlyPopover: true,
-      hidden: true
-      // onClick: addOneMoreEventFunc
+      onClick: onSave,
+      customColor: color ? customColorsInHexFormat : null
     }
   ];
 
@@ -141,29 +153,12 @@ const ColorPickerByPas = () => {
     iconSize: 'small'
   };
 
-  
   const handleSetColor = value => setColor(value);
 
   const onSave = () => console.log('onSave');
 
-  const saveIconButtonProps = {
-    onClick: onSave,
-    icon: SaveRoundedIcon,
-    activeProperty: color,
-    activeIcon: savedStatus
-  };
-
   const customColorProps = { setColor, color, transparencyStatus };
 
-  const customizationButtonProps = {
-    nullityColor,
-    customColorsInHexFormat,
-    buttonCustomizationHoverStatus,
-    setCustomizationsStatus,
-    color,
-    onMouseEnter: () => setButtonCustomizationHoverStatus(true),
-    onMouseLeave: () =>  setButtonCustomizationHoverStatus(false)
-  };
   return (
     <Grid className={classes.container}>
       <Grid container direction={'column'}>
@@ -249,16 +244,16 @@ const ColorPickerByPas = () => {
       </Grid>
       <Box mt={0.4}>
         <Grid container justify={'space-between'} alignItems={'center'}>
-          <Grid item>
-            <Grid container>
-              <WrapperOfPopoverAndMenu {...wrapperOfPopoverAndMenuProps} />
-            </Grid>
-          </Grid>
+        {/* <Grid item> */}
+        {/* <Grid container> */}
+        <WrapperOfPopoverAndMenu {...wrapperOfPopoverAndMenuProps} />
+        {/* </Grid> */}
+        {/* </Grid> */}
 
-          <Box mr={0.8}>
-            <CustomizationButton {...customizationButtonProps} />
-            <IconButtonByPas {...saveIconButtonProps} size={'small'} customColor={customColorsInHexFormat} />
-          </Box>
+        {/* <Box mr={0.8}> */}
+        {/* <CustomizationButton {...customizationButtonProps} /> */}
+        {/* <IconButtonByPas {...saveIconButtonProps} size={'small'} customColor={customColorsInHexFormat} /> */}
+        {/* </Box> */}
         </Grid>
       </Box>
     </Grid>

@@ -1,4 +1,5 @@
-import { useEffect,useState ,useRef} from 'react';
+import PropTypes from "prop-types";
+import { useEffect, useState, useRef } from 'react';
 import Popover from '@material-ui/core/Popover';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
@@ -15,8 +16,6 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const PopoverAndMenu = ({
-  popoverName,
-  menuName,
   popoverText,
   mainComponent,
   menuComponents,
@@ -27,9 +26,9 @@ const PopoverAndMenu = ({
   name
 }) => {
   const classes = useStyles();
-  const anchorElRef = useRef(null)
+  const anchorElRef = useRef(null);
   // const direction = takeCurrentCursorPositionOfCorectHalfOfScreen(anchorElRef,anchorEl)
-  const [anchorEl, setAnchorEl] = useState({ name, currentTarget: null, menu: false, popover: false, });
+  const [anchorEl, setAnchorEl] = useState({ name, currentTarget: null, menu: false, popover: false });
 
   const handlePopoverOpen = ({ currentTarget }) => setAnchorEl(state => ({ ...state, currentTarget, popover: true }));
 
@@ -106,5 +105,16 @@ const PopoverAndMenu = ({
     </>
   );
 };
+
+PopoverAndMenu.propTypes = {
+  handlePopoverAndMenuState: PropTypes.func,
+  mainComponent: PropTypes.any,
+  menuComponents: PropTypes.any,
+  name: PropTypes.string,
+  onlyMenu: PropTypes.bool,
+  onlyPopover: PropTypes.bool,
+  popoverText: PropTypes.string,
+  popoverTypographyVariant: PropTypes.string
+}
 
 export default PopoverAndMenu;
