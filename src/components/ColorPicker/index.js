@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { HexColorPicker, RgbaColorPicker } from 'react-colorful';
 import UnfoldMoreOutlinedIcon from '@material-ui/icons/UnfoldMoreOutlined';
 import TextureOutlinedIcon from '@material-ui/icons/TextureOutlined';
-import { Box, Button, colors, Grid, IconButton, makeStyles, Paper, Typography } from '@material-ui/core';
+import { Box, Button, ButtonGroup, colors, Grid, IconButton, makeStyles, Paper, Typography } from '@material-ui/core';
 import { themeColors } from 'components/theme';
 import ColorLensOutlinedIcon from '@material-ui/icons/ColorLensOutlined';
 import PlaylistAddOutlinedIcon from '@material-ui/icons/PlaylistAddOutlined';
@@ -14,6 +14,7 @@ import clsx from 'clsx';
 import CenteredGrid from 'components/CenteredGrid';
 import CustomColor from './components/CustomColor';
 import { colord } from 'colord';
+import CustomizationButton from './components/CustomizationButton';
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -54,22 +55,20 @@ const useStyles = makeStyles(theme => ({
       easing: theme.transitions.easing.easeIn,
       duration: theme.transitions.duration.enteringScreen
     })
-  },
-  withOutAnimation: {
-    transitionDuration: 0
   }
 }));
 
 const ColorPickerByPas = () => {
-  const whiteColor = 'rgba(255,255,255,0.8)';
-  const [color, setColor] = useState(whiteColor);
+  const nullityColor = themeColors.whiteRgbaColorWith0dot8valueOfAlfaCanal;
+  const [color, setColor] = useState(nullityColor);
   const [savedStatus, setSavedStatus] = useState(false);
   const [transparencyStatus, setTransparencyStatus] = useState(false);
   const [extendMoreColorsStatus, setExtendMoreColorsStatus] = useState(false);
   const [customizationsStatus, setCustomizationsStatus] = useState(false);
   const [customColorsStatus, setCustomColorsStatus] = useState(false);
+  const [buttonCustomizationHoverStatus, setButtonCustomizationHoverStatus] = useState(false);
   const classes = useStyles();
-
+  console.log(buttonCustomizationHoverStatus);
   const customColorsInHexFormat = colord(color).toHex();
 
   const colorsArr = [
@@ -113,7 +112,6 @@ const ColorPickerByPas = () => {
       onClick: handleExtendMoreColorsStatus,
       hidden: customColorsStatus,
       customColor: extendMoreColorsStatus ? customColorsInHexFormat : null
-
     },
     {
       icon: ColorLensOutlinedIcon,
@@ -123,7 +121,6 @@ const ColorPickerByPas = () => {
       onlyPopover: true,
       onClick: handleCustomColorStatus,
       customColor: customColorsStatus ? customColorsInHexFormat : null
-      
     },
 
     {
@@ -136,7 +133,6 @@ const ColorPickerByPas = () => {
       // onClick: addOneMoreEventFunc
     }
   ];
-  // console.log(colors.red)
 
   const wrapperOfPopoverAndMenuProps = {
     buttonUtilsArr,
@@ -145,6 +141,7 @@ const ColorPickerByPas = () => {
     iconSize: 'small'
   };
 
+  
   const handleSetColor = value => setColor(value);
 
   const onSave = () => console.log('onSave');
@@ -158,6 +155,15 @@ const ColorPickerByPas = () => {
 
   const customColorProps = { setColor, color, transparencyStatus };
 
+  const customizationButtonProps = {
+    nullityColor,
+    customColorsInHexFormat,
+    buttonCustomizationHoverStatus,
+    setCustomizationsStatus,
+    color,
+    onMouseEnter: () => setButtonCustomizationHoverStatus(true),
+    onMouseLeave: () =>  setButtonCustomizationHoverStatus(false)
+  };
   return (
     <Grid className={classes.container}>
       <Grid container direction={'column'}>
@@ -249,21 +255,8 @@ const ColorPickerByPas = () => {
             </Grid>
           </Grid>
 
-          <Box mr={1.16}>
-            <Grid component={'span'}   onMouseEnter={()=> console.log('l')} >
-            <Button
-              onClick={setCustomizationsStatus}
-              size={'small'}
-              variant={'outlined'}
-              style={{ borderColor: color === whiteColor ? 'rgba(255,255,255,0)' : customColorsInHexFormat }}
-              className={customColorsStatus && classes.withOutAnimation}
-            
-            >
-              <Typography variant={'subtitle2'} style={{ color: 'rgba(255,255,255,0.8)' }}>
-                Customization
-              </Typography>
-            </Button>
-            </Grid>
+          <Box mr={0.8}>
+            <CustomizationButton {...customizationButtonProps} />
             <IconButtonByPas {...saveIconButtonProps} size={'small'} customColor={customColorsInHexFormat} />
           </Box>
         </Grid>
