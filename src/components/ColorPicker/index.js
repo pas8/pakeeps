@@ -178,7 +178,6 @@ const ColorPickerByPas = () => {
               ];
               // console.log(namesOfPartsOfGridElement.some(el => colors[colorName][el] === color));
               const correctNamesOfPartsOfGridElementArr = _.flattenDeep(namesOfPartsOfGridElement);
-
               const isExtendedElementColorCorrect = correctNamesOfPartsOfGridElementArr.some(
                 name => colors[colorName][name] === color
               );

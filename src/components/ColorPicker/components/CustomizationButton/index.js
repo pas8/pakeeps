@@ -3,6 +3,7 @@ import ColorIcon from 'components/Icons/components/ColorIcon';
 import { themeColors } from 'components/theme';
 import { useState } from 'react';
 import TuneOutlinedIcon from '@material-ui/icons/TuneOutlined';
+import DialogOfAddingCustomColorToColorLayouts from './components/DialogOfAddingCustomColorToColorLayouts';
 
 const useStyles = makeStyles(theme => ({
   buttonGroupContainer: {
@@ -56,6 +57,8 @@ const CustomizationButton = ({
     hoverStatusOfButtonOfAddingCustomColorToColorLayouts,
     setHoverStatusOfButtonOfAddingCustomColorToColorLayouts
   ] = useState(false);
+  const [openStatusOfDialog, setOpenStatusOfDialog] = useState(false);
+
   const classes = useStyles({ customColorsInHexFormat, hoverStatusOfButtonOfAddingCustomColorToColorLayouts });
 
   const setHoverStatusOfButtonOfAddingCustomColorToColorLayoutsIsTrue = () =>
@@ -70,11 +73,22 @@ const CustomizationButton = ({
     onMouseLeave: setHoverStatusOfButtonOfAddingCustomColorToColorLayoutsIsFalse
   };
 
+  const setOpenStatusOfDialogIsTrue = () => setOpenStatusOfDialog(true);
+  const setOpenStatusOfDialogIsFalse = () => setOpenStatusOfDialog(false);
+
+  const dialogOfAddingCustomColorToColorLayoutsProps = {
+    open: openStatusOfDialog,
+    onClose: setOpenStatusOfDialogIsFalse,
+    customColorsInHexFormat,
+    onSave:setOpenStatusOfDialogIsFalse
+
+  };
+
   const hoveredButtonGroupChildren = (
     <Grid>
       <Button {...buttonOfAddingCustomColorToColorLayoutsProps}>
         {/* <IconButton> */}
-        <Grid className={classes.buttonWithBargeContainer}>
+        <Grid className={classes.buttonWithBargeContainer} onClick={setOpenStatusOfDialogIsTrue}>
           <Badge badgeContent={'+'}>
             <ColorIcon />
           </Badge>
@@ -85,6 +99,7 @@ const CustomizationButton = ({
         <TuneOutlinedIcon />
         {/* </Typography> */}
       </Button>
+
     </Grid>
   );
 
@@ -110,6 +125,8 @@ const CustomizationButton = ({
       style={{ border: '1px solid', borderColor: color === nullityColor ? 'transparent' : customColorsInHexFormat }}
     >
       {buttonGroupChildren}
+      <DialogOfAddingCustomColorToColorLayouts {...dialogOfAddingCustomColorToColorLayoutsProps} />
+
     </ButtonGroup>
   );
 };
