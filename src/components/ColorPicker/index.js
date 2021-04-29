@@ -55,6 +55,9 @@ const useStyles = makeStyles(theme => ({
       easing: theme.transitions.easing.easeIn,
       duration: theme.transitions.duration.enteringScreen
     })
+  },
+  iconUtilsContainer: {
+    '& .MuiSvgIcon-root': { width: theme.spacing(2 / (0.8 - 0.1)) }
   }
 }));
 
@@ -242,18 +245,18 @@ const ColorPickerByPas = () => {
           })
         )}
       </Grid>
-      <Box mt={0.4}>
+      <Box m={0.4} mb={0} mt={0.8} className={classes.iconUtilsContainer}>
         <Grid container justify={'space-between'} alignItems={'center'}>
-        {/* <Grid item> */}
-        {/* <Grid container> */}
-        <WrapperOfPopoverAndMenu {...wrapperOfPopoverAndMenuProps} />
-        {/* </Grid> */}
-        {/* </Grid> */}
+          {/* <Grid item> */}
+          {/* <Grid container> */}
+          <WrapperOfPopoverAndMenu {...wrapperOfPopoverAndMenuProps} />
+          {/* </Grid> */}
+          {/* </Grid> */}
 
-        {/* <Box mr={0.8}> */}
-        {/* <CustomizationButton {...customizationButtonProps} /> */}
-        {/* <IconButtonByPas {...saveIconButtonProps} size={'small'} customColor={customColorsInHexFormat} /> */}
-        {/* </Box> */}
+          {/* <Box mr={0.8}> */}
+          {/* <CustomizationButton {...customizationButtonProps} /> */}
+          {/* <IconButtonByPas {...saveIconButtonProps} size={'small'} customColor={customColorsInHexFormat} /> */}
+          {/* </Box> */}
         </Grid>
       </Box>
     </Grid>
