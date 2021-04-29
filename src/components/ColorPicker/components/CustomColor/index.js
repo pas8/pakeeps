@@ -1,6 +1,7 @@
+import PropTypes from 'prop-types';
 import { Grid, makeStyles } from '@material-ui/core';
 import { colord } from 'colord';
-import React from 'react';
+import { useState } from 'react';
 import { RgbaColorPicker } from 'react-colorful';
 import { themeColors } from 'components/theme';
 
@@ -9,6 +10,7 @@ const useStyles = makeStyles(theme => ({
     '& .react-colorful': {
       padding: theme.spacing(0, 1),
       width: 'auto',
+      minWidth: theme.spacing(42 - 8 - 0.8),
       paddingTop: transparencyStatus ? 0 : theme.spacing(1.4),
       height: theme.spacing(42 - 10 + 1.2)
     },
@@ -56,23 +58,35 @@ const useStyles = makeStyles(theme => ({
   })
 }));
 
-const CustomColor = ({ color, setColor, transparencyStatus }) => {
+const CustomColor = ({ color, setColor, transparencyStatus, nullityColor, setTransparencyStatus }) => {
+  const [state, setState] = useState();
+
   const classes = useStyles({ transparencyStatus });
-  console.log();
   const isColorInHexFormat = _.isString(color) && color.startsWith('#');
   const colorInRgbFormat = colord(color).toRgb();
+
   const correctAndFormattedColor =
-  _.isEqual(color,'rgba(255,255,255,0.8)') && !transparencyStatus
+    _.isEqual(color, 'rgba(255,255,255,0.8)') && !transparencyStatus
       ? colord(themeColors.primaryMain).toRgb()
       : isColorInHexFormat
       ? colorInRgbFormat
       : color;
-  console.log(  _.isEqual(color,'rgba(255,255,255,0.8)') && !transparencyStatus);
+
   return (
     <Grid className={classes.containerOfCustomColor}>
       <RgbaColorPicker color={correctAndFormattedColor} onChange={setColor} />
     </Grid>
   );
+};
+
+CustomColor.propTypes = {
+  color: PropTypes.shape({
+    startsWith: PropTypes.func
+  }),
+  nullityColor: PropTypes.string,
+  setColor: PropTypes.func,
+  setTransparencyStatus: PropTypes.func,
+  transparencyStatus: PropTypes.bool
 };
 
 export default CustomColor;

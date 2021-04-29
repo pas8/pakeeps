@@ -160,7 +160,7 @@ const ColorPickerByPas = () => {
 
   const onSave = () => console.log('onSave');
 
-  const customColorProps = { setColor, color, transparencyStatus };
+  const customColorProps = { setColor, color, transparencyStatus, nullityColor, setTransparencyStatus };
 
   return (
     <Grid className={classes.container}>
