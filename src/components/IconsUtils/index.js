@@ -26,6 +26,7 @@ import MouseOverPopover from './components/PopoverAndMenu';
 import PopoverAndMenu from './components/PopoverAndMenu';
 import AddDateToPakeep from './components/AddDateToPakeep';
 import IconButtonByPas from 'components/IconButton';
+import ColorPickerByPas from 'components/ColorPicker';
 
 const useStyles = makeStyles(theme => ({
   popover: { padding: theme.spacing(0.4, 0.8) },
@@ -65,7 +66,8 @@ const IconsUtils = ({
       icon: PaletteOutlinedIcon,
       popoverText: 'Change backgroundColor',
       name: 'palette',
-      onClick: handleSetColorPakeep
+      // onClick: handleSetColorPakeep,
+      menuComponents: ColorPickerByPas
     },
     {
       icon: ArchiveOutlinedIcon,

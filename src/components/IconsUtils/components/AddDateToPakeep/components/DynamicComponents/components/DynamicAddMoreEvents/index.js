@@ -82,6 +82,8 @@ const DynamicAddMoreEvents = ({ onChangeOfAddMoreEvents, itemState: { value }, .
 
     setMoreEventsState(resultArr);
   };
+
+
   const [popoverAndMenuState, setPopoverAndMenuState] = useState({
     name: 'null',
     menuIsOpen: false,

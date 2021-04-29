@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { HexColorPicker } from 'react-colorful';
+import { HexColorPicker, RgbaColorPicker } from 'react-colorful';
 import UnfoldMoreOutlinedIcon from '@material-ui/icons/UnfoldMoreOutlined';
 import TextureOutlinedIcon from '@material-ui/icons/TextureOutlined';
 import { Box, Button, colors, Grid, IconButton, makeStyles, Paper, Typography } from '@material-ui/core';
@@ -12,6 +12,8 @@ import SaveRoundedIcon from '@material-ui/icons/SaveRounded';
 import DoneOutlineOutlinedIcon from '@material-ui/icons/DoneOutlineOutlined';
 import clsx from 'clsx';
 import CenteredGrid from 'components/CenteredGrid';
+import CustomColor from './components/CustomColor';
+import { colord } from 'colord';
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -19,38 +21,7 @@ const useStyles = makeStyles(theme => ({
       easing: theme.transitions.easing.easeIn,
       duration: theme.transitions.duration.complex
     }),
-    paddingBottom: theme.spacing(0.4),
-
-    '& .react-colorful': {
-      padding: theme.spacing(0, 1),
-      width: theme.spacing(42)
-    },
-    '& .react-colorful__pointer': {
-      borderRadius: theme.spacing(0.8),
-      width: theme.spacing(2.8),
-      height: theme.spacing(2.8),
-      cursor: 'pointer',
-      backgroundColor: 'transparent',
-      border: '3px solid rgba(255, 255, 255,0.8)',
-      transition: theme.transitions.create('border', {
-        easing: theme.transitions.easing.easeInOut,
-        duration: theme.transitions.duration.complex
-      }),
-      '&:hover': {
-        borderColor: 'rgba(255, 255, 255,0.96)'
-      }
-    },
-    '& .react-colorful__alpha': {
-      order: -1
-    },
-    '& .react-colorful__hue,.react-colorful__alpha ': {
-      borderRadius: theme.spacing(0.8),
-      margin: theme.spacing(2, 0),
-      height: theme.spacing(2)
-    },
-    '& .react-colorful__hue-pointer,.react-colorful__alpha-pointer': {
-      //  borderWidth: '5px'
-    }
+    paddingBottom: theme.spacing(0.4)
   },
   elementOfGridColorPicker: {
     width: theme.spacing(16 * 0.42),
@@ -83,16 +54,23 @@ const useStyles = makeStyles(theme => ({
       easing: theme.transitions.easing.easeIn,
       duration: theme.transitions.duration.enteringScreen
     })
+  },
+  withOutAnimation: {
+    transitionDuration: 0
   }
 }));
 
 const ColorPickerByPas = () => {
-  const [color, setColor] = useState('rgba(255,255,255,0)');
+  const whiteColor = 'rgba(255,255,255,0.8)';
+  const [color, setColor] = useState(whiteColor);
   const [savedStatus, setSavedStatus] = useState(false);
   const [transparencyStatus, setTransparencyStatus] = useState(false);
   const [extendMoreColorsStatus, setExtendMoreColorsStatus] = useState(false);
   const [customizationsStatus, setCustomizationsStatus] = useState(false);
+  const [customColorsStatus, setCustomColorsStatus] = useState(false);
   const classes = useStyles();
+
+  const customColorsInHexFormat = colord(color).toHex();
 
   const colorsArr = [
     [{ colorName: 'deepOrange' }, { colorName: 'orange' }, { colorName: 'amber' }, { colorName: 'yellow' }],
@@ -100,7 +78,6 @@ const ColorPickerByPas = () => {
     [{ colorName: 'cyan' }, { colorName: 'lightBlue' }, { colorName: 'blue' }, { colorName: 'indigo' }],
     [{ colorName: 'deepPurple' }, { colorName: 'purple' }, { colorName: 'pink' }, { colorName: 'red' }]
   ];
-
   // const arr = colorsArr.map(el => console.log(colors[el.colorName]));
   const [popoverAndMenuState, setPopoverAndMenuState] = useState({
     name: 'null',
@@ -114,33 +91,41 @@ const ColorPickerByPas = () => {
   const handleTransparencyColorPickerStatus = () => setTransparencyStatus(state => !state);
   const handleExtendMoreColorsStatus = () => setExtendMoreColorsStatus(state => !state);
   const handleCustomizationStatus = () => setCustomizationsStatus(state => !state);
+  const handleCustomColorStatus = () => setCustomColorsStatus(state => !state);
 
   const buttonUtilsArr = [
-    {
-      icon: UnfoldMoreOutlinedIcon,
-      popoverText: 'Extend more colors',
-      name: 'extendMoreColors',
-      activeIcon: extendMoreColorsStatus,
-      onlyPopover: true,
-      onClick: handleExtendMoreColorsStatus
-    },
-    {
-      icon: ColorLensOutlinedIcon,
-      popoverText: 'Add to pattern',
-      name: 'pattern',
-      activeIcon: false,
-      onlyPopover: true
-      // onClick: addToPatternList,
-    },
     {
       icon: TextureOutlinedIcon,
       popoverText: 'Change transparency Status',
       name: 'changeTransparencyStatus',
-      activeIcon: transparencyStatus,
+      activeIcon: false,
       onlyPopover: true,
       onClick: handleTransparencyColorPickerStatus,
-      hidden: true
+      hidden: !customColorsStatus,
+      customColor: transparencyStatus ? customColorsInHexFormat : null
     },
+    {
+      icon: UnfoldMoreOutlinedIcon,
+      popoverText: 'Extend more colors',
+      name: 'extendMoreColors',
+      activeIcon: false,
+      onlyPopover: true,
+      onClick: handleExtendMoreColorsStatus,
+      hidden: customColorsStatus,
+      customColor: extendMoreColorsStatus ? customColorsInHexFormat : null
+
+    },
+    {
+      icon: ColorLensOutlinedIcon,
+      popoverText: 'Add custom color',
+      name: 'pattern',
+      activeIcon: false,
+      onlyPopover: true,
+      onClick: handleCustomColorStatus,
+      customColor: customColorsStatus ? customColorsInHexFormat : null
+      
+    },
+
     {
       icon: PlaylistAddOutlinedIcon,
       popoverText: 'Add ',
@@ -161,96 +146,100 @@ const ColorPickerByPas = () => {
   };
 
   const handleSetColor = value => setColor(value);
-  console.log(color);
 
   const onSave = () => console.log('onSave');
 
   const saveIconButtonProps = {
     onClick: onSave,
     icon: SaveRoundedIcon,
-    activeProperty: !color,
+    activeProperty: color,
     activeIcon: savedStatus
   };
 
+  const customColorProps = { setColor, color, transparencyStatus };
+
   return (
     <Grid className={classes.container}>
-      {/* <HexColorPicker color={color} onChange={setColor} /> */}
       <Grid container direction={'column'}>
-        {colorsArr.map(arr => {
-          const gridRow = arr.map(({ colorName }) => {
-            // console.log(colors[colorName.500])
+        {customColorsStatus ? (
+          <CustomColor {...customColorProps} />
+        ) : (
+          colorsArr.map(arr => {
+            const gridRow = arr.map(({ colorName }) => {
+              // console.log(colors[colorName.500])
 
-            const namesOfPartsOfGridElement = [
-              ['A100', 'A200'],
-              ['A400', 'A700']
-            ];
-            // console.log(namesOfPartsOfGridElement.some(el => colors[colorName][el] === color));
-            const correctNamesOfPartsOfGridElementArr = _.flattenDeep(namesOfPartsOfGridElement);
+              const namesOfPartsOfGridElement = [
+                ['A100', 'A200'],
+                ['A400', 'A700']
+              ];
+              // console.log(namesOfPartsOfGridElement.some(el => colors[colorName][el] === color));
+              const correctNamesOfPartsOfGridElementArr = _.flattenDeep(namesOfPartsOfGridElement);
 
-            const isExtendedElementColorCorrect = correctNamesOfPartsOfGridElementArr.some(
-              name => colors[colorName][name] === color
-            );
+              const isExtendedElementColorCorrect = correctNamesOfPartsOfGridElementArr.some(
+                name => colors[colorName][name] === color
+              );
 
-            const staticExtendedElement = (
-              <Paper className={classes.elementOfGridColorPicker}>
-                {namesOfPartsOfGridElement.map(row => (
-                  <Grid container>
-                    {row.map(name => {
-                      const colorOfElementOfPartsOfGridElementProps = colors[colorName][name];
-                      const onClick = () => handleSetColor(colorOfElementOfPartsOfGridElementProps);
+              const staticExtendedElement = (
+                <Paper className={classes.elementOfGridColorPicker}>
+                  {namesOfPartsOfGridElement.map(row => (
+                    <Grid container>
+                      {row.map(name => {
+                        const colorOfElementOfPartsOfGridElementProps = colors[colorName][name];
+                        const onClick = () => handleSetColor(colorOfElementOfPartsOfGridElementProps);
 
-                      const elementOfPartsOfGridElementProps = {
-                        onClick: onClick,
-                        style: { backgroundColor: colorOfElementOfPartsOfGridElementProps },
-                        className: classes.extendedElementOfGridColorPicker
-                      };
+                        const elementOfPartsOfGridElementProps = {
+                          onClick: onClick,
+                          style: { backgroundColor: colorOfElementOfPartsOfGridElementProps },
+                          className: classes.extendedElementOfGridColorPicker
+                        };
 
-                      return <Grid {...elementOfPartsOfGridElementProps} />;
-                    })}
-                  </Grid>
-                ))}
-              </Paper>
-            );
-            const selectedElement = (correctStatus, color, onClickOfSelectElement) => {
-              const defaultOnClick = () => handleSetColor(color);
-              const onClick = onClickOfSelectElement ?? defaultOnClick;
-
-              const selectedElementPaperContainerProps = {
-                style: { backgroundColor: color },
-                className: clsx(
-                  classes.elementOfGridColorPicker,
-                  correctStatus ? classes.elementOfGridColorPickerWithBorder : null
-                ),
-                elevation: 8,
-                onClick
-              };
-              return (
-                <Paper {...selectedElementPaperContainerProps}>
-                  <CenteredGrid>{correctStatus && <DoneOutlineOutlinedIcon />}</CenteredGrid>
+                        return <Grid {...elementOfPartsOfGridElementProps} />;
+                      })}
+                    </Grid>
+                  ))}
                 </Paper>
               );
-            };
+              const selectedElement = (correctStatus, color, onClickOfSelectElement) => {
+                const defaultOnClick = () => handleSetColor(color);
+                const onClick = onClickOfSelectElement ?? defaultOnClick;
 
-            const nonExtendedElementColor = colors[colorName][500];
-            const isNonExtendedElementColorCorrect = color === nonExtendedElementColor;
+                const selectedElementPaperContainerProps = {
+                  style: { backgroundColor: color },
+                  className: clsx(
+                    classes.elementOfGridColorPicker,
+                    correctStatus ? classes.elementOfGridColorPickerWithBorder : null
+                  ),
+                  elevation: 8,
+                  onClick
+                };
+                return (
+                  <Paper {...selectedElementPaperContainerProps}>
+                    <CenteredGrid>{correctStatus && <DoneOutlineOutlinedIcon />}</CenteredGrid>
+                  </Paper>
+                );
+              };
 
-            const nonExtendedElement = selectedElement(isNonExtendedElementColorCorrect, nonExtendedElementColor);
+              const nonExtendedElementColor = colors[colorName][500];
+              const isNonExtendedElementColorCorrect = color === nonExtendedElementColor;
 
-            const extendedElement = isExtendedElementColorCorrect
-              ? selectedElement(true, color,() => handleSetColor(false))
-              : staticExtendedElement;
+              const nonExtendedElement = selectedElement(isNonExtendedElementColorCorrect, nonExtendedElementColor);
 
-            const elementOfGridColorPicker = extendMoreColorsStatus ? extendedElement : nonExtendedElement;
+              const extendedElement = isExtendedElementColorCorrect
+                ? selectedElement(true, color, () => handleSetColor(false))
+                : staticExtendedElement;
 
-            return elementOfGridColorPicker;
-          });
+              const elementOfGridColorPicker = extendMoreColorsStatus ? extendedElement : nonExtendedElement;
 
-          return (
-            <Grid item>
-              <Grid container>{gridRow}</Grid>
-            </Grid>
-          );
-        })}
+              return elementOfGridColorPicker;
+            });
+
+            return (
+              <Grid item>
+                <Grid container>{gridRow}</Grid>
+              </Grid>
+            );
+          })
+        )}
       </Grid>
       <Box mt={0.4}>
         <Grid container justify={'space-between'} alignItems={'center'}>
@@ -261,17 +250,21 @@ const ColorPickerByPas = () => {
           </Grid>
 
           <Box mr={1.16}>
+            <Grid component={'span'}   onMouseEnter={()=> console.log('l')} >
             <Button
               onClick={setCustomizationsStatus}
               size={'small'}
               variant={'outlined'}
-              style={{ borderColor: color }}
+              style={{ borderColor: color === whiteColor ? 'rgba(255,255,255,0)' : customColorsInHexFormat }}
+              className={customColorsStatus && classes.withOutAnimation}
+            
             >
               <Typography variant={'subtitle2'} style={{ color: 'rgba(255,255,255,0.8)' }}>
                 Customization
               </Typography>
             </Button>
-            <IconButtonByPas {...saveIconButtonProps} size={'small'} />
+            </Grid>
+            <IconButtonByPas {...saveIconButtonProps} size={'small'} customColor={customColorsInHexFormat} />
           </Box>
         </Grid>
       </Box>

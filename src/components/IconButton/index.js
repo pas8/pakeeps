@@ -17,14 +17,16 @@ const IconButtonByPas = ({
   activeIconName = 'icon',
   activeProperty = false,
   size,
+  customColor = null
 }) => {
   const currentHoverStatusIsTrue = _.isEqual(activeIconName, iconName) && activeProperty;
   const iconColor = activeIcon
     ? themeColors.primaryMain
+    : customColor
+    ? customColor
     : currentHoverStatusIsTrue
     ? 'rgba(255,255,255,0.92)'
     : 'rgba(255,255,255,0.42)';
-
   const rotate = rotateDeg ? `rotate(${rotateDeg}deg)` : 'rotate(0deg)';
 
   const classes = useStyles({ iconColor, rotate });

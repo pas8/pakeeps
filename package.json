@@ -14,6 +14,8 @@
     "@material-ui/lab": "^4.0.0-alpha.57",
     "@material-ui/pickers": "^3.3.10",
     "axios": "^0.21.1",
+    "color-alpha": "^1.1.2",
+    "colord": "^1.4.0",
     "compare-func": "^2.0.0",
     "date-fns": "^2.21.1",
     "lodash": "^4.17.21",
@@ -35,6 +37,8 @@
     "redux-thunk": "^2.3.0",
     "sass": "^1.32.11",
     "shortid": "^2.2.16",
+    "tinycolor": "^0.0.1",
+    "tinycolor2": "^1.4.2",
     "wordcount": "^1.1.1"
   },
   "devDependencies": {

@@ -21,13 +21,15 @@ const WrapperOfPopoverAndMenu = ({
           onlyPopover = false,
           menuComponents: MenuComponents,
           menuComponentsProps,
-          hidden = false
+          hidden = false,
+          customColor
         }) => {
           if (hidden) return;
 
           const iconName = isIconNameExtended ? { keyName, buttonUtilsName } : buttonUtilsName;
           const iconButtonProps = {
             icon: Icon,
+            customColor,
             onClick: onClick,
             iconName,
             size: iconSize,
