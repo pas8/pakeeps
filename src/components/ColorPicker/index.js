@@ -72,7 +72,6 @@ const ColorPickerByPas = () => {
   const [customColorsStatus, setCustomColorsStatus] = useState(false);
   const [buttonCustomizationHoverStatus, setButtonCustomizationHoverStatus] = useState(false);
   const classes = useStyles();
-  console.log(buttonCustomizationHoverStatus);
   const customColorsInHexFormat = colord(color).toHex();
 
   const colorsArr = [
@@ -172,7 +171,7 @@ const ColorPickerByPas = () => {
 
   const onSave = () => console.log('onSave');
 
-  const customColorProps = { setColor, color, transparencyStatus, nullityColor, setTransparencyStatus };
+  const customColorProps = { setColor, color, transparencyStatus, nullityColor, setTransparencyStatus ,customColorsInHexFormat};
 
   return (
     <Grid className={classes.container}>
