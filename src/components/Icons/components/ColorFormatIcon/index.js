@@ -1,7 +1,7 @@
 import { Grid, makeStyles, SvgIcon } from '@material-ui/core';
 
 const useStyles = makeStyles(theme => ({
-  iConContainer: {
+  iconContainer: {
     '& path': {
       transform: 'scale(0.042)'
     },
@@ -12,8 +12,7 @@ const ColorFormatIcon = () => {
   const classes = useStyles();
 
   return (
-
-    <Grid className={classes.iConContainer} container alignItems={'center'} justify={'center'}>
+    <Grid className={classes.iconContainer} container alignItems={'center'} justify={'center'}>
       <SvgIcon>
         <path
           d={
