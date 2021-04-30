@@ -1,7 +1,6 @@
 import { Button, DialogActions, Typography, withStyles } from '@material-ui/core';
 import { ToggleButton, ToggleButtonGroup } from '@material-ui/lab';
-import React from 'react';
-
+import FilterVintageOutlinedIcon from '@material-ui/icons/FilterVintageOutlined';
 import GradientOutlinedIcon from '@material-ui/icons/GradientOutlined';
 
 const StyledToggleButtonGroup = withStyles(theme => ({
@@ -28,7 +27,7 @@ const DialogActionsOfAddingCustomColorToColorLayouts = () => {
         aria-label="text alignment"
       >
         <ToggleButton value="left" aria-label="left aligned">
-          icon
+          <FilterVintageOutlinedIcon/>
         </ToggleButton>
         <ToggleButton value="right" aria-label="left aligned">
           <GradientOutlinedIcon/>

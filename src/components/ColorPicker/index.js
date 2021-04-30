@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { HexColorPicker, RgbaColorPicker } from 'react-colorful';
 import UnfoldMoreOutlinedIcon from '@material-ui/icons/UnfoldMoreOutlined';
-import TextureOutlinedIcon from '@material-ui/icons/TextureOutlined';
 import { Box, Button, ButtonGroup, colors, Grid, IconButton, makeStyles, Paper, Typography } from '@material-ui/core';
 import { themeColors } from 'components/theme';
 import ColorLensOutlinedIcon from '@material-ui/icons/ColorLensOutlined';
@@ -15,6 +14,8 @@ import CenteredGrid from 'components/CenteredGrid';
 import CustomColor from './components/CustomColor';
 import { colord } from 'colord';
 import CustomizationButton from './components/CustomizationButton';
+import FilterVintageOutlinedIcon from '@material-ui/icons/FilterVintageOutlined';
+import TextureOutlinedIcon from '@material-ui/icons/TextureOutlined';
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -57,7 +58,7 @@ const useStyles = makeStyles(theme => ({
     })
   },
   iconUtilsContainer: {
-    '& .MuiSvgIcon-root': { width: theme.spacing(2 / (0.8 - 0.1)) }
+    '& .MuiSvgIcon-root': { width: theme.spacing(2 / (0.8 -0.1)) }
   }
 }));
 
@@ -107,6 +108,16 @@ const ColorPickerByPas = () => {
 
   const buttonUtilsArr = [
     {
+      icon: FilterVintageOutlinedIcon,
+      popoverText: 'Gradient',
+      name: 'changeGradientStatus',
+      activeIcon: false,
+      onlyPopover: true,
+      onClick: handleTransparencyColorPickerStatus,
+      hidden: !customColorsStatus,
+      customColor: transparencyStatus ? customColorsInHexFormat : null
+    },
+    {
       icon: TextureOutlinedIcon,
       popoverText: 'Change transparency Status',
       name: 'changeTransparencyStatus',
@@ -126,6 +137,7 @@ const ColorPickerByPas = () => {
       hidden: customColorsStatus,
       customColor: extendMoreColorsStatus ? customColorsInHexFormat : null
     },
+    
     {
       icon: ColorLensOutlinedIcon,
       popoverText: 'Add custom color',
