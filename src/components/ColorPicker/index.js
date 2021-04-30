@@ -74,7 +74,6 @@ const ColorPickerByPas = () => {
   const [customColorsStatus, setCustomColorsStatus] = useState(false);
   const [buttonCustomizationHoverStatus, setButtonCustomizationHoverStatus] = useState(false);
   const classes = useStyles();
-  console.log(buttonCustomizationHoverStatus);
   const customColorsInHexFormat = colord(color).toHex();
 
   const colorsArr = [
