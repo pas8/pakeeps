@@ -40,7 +40,7 @@ const useStyles = makeStyles(theme => ({
     }
   },
   buttonWithBargeContainer: {
-    '& .MuiSvgIcon-root': { width: theme.spacing(2 / (0.8 + 0.016)) }
+    '& .MuiSvgIcon-root': { width: theme.spacing(2 / (0.8 + 0.1)) }
   }
 }));
 
