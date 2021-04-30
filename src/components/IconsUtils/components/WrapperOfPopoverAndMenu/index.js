@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import IconButtonByPas from 'components/IconButton';
 import PopoverAndMenu from '../PopoverAndMenu';
 
@@ -22,9 +23,11 @@ const WrapperOfPopoverAndMenu = ({
           menuComponents: MenuComponents,
           menuComponentsProps,
           hidden = false,
-          customColor
+          customColor,
+          customElementComponentOfIconGroup = false
         }) => {
           if (hidden) return;
+          if (customElementComponentOfIconGroup) return customElementComponentOfIconGroup;
 
           const iconName = isIconNameExtended ? { keyName, buttonUtilsName } : buttonUtilsName;
           const iconButtonProps = {
@@ -58,6 +61,23 @@ const WrapperOfPopoverAndMenu = ({
       )}
     </>
   );
+};
+
+WrapperOfPopoverAndMenu.propTypes = {
+  CustomElementComponentOfIconGroup: PropTypes.oneOf(['bool', 'node']),
+  buttonUtilsArr: PropTypes.shape({
+    map: PropTypes.func
+  }),
+  customElementComponentOfIconGroupProps: PropTypes.node,
+  handlePopoverAndMenuState: PropTypes.func,
+  iconSize: PropTypes.string,
+  isIconNameExtended: PropTypes.bool,
+  keyName: PropTypes.any,
+  popoverAndMenuState: PropTypes.shape({
+    name: PropTypes.any,
+    onMenuClose: PropTypes.func,
+    popoverIsOpen: PropTypes.bool
+  })
 };
 
 export default WrapperOfPopoverAndMenu;

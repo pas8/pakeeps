@@ -63,21 +63,21 @@ const PakeepList = ({
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       <Grid container display={'flex'} className={classes.container}>
-        {responsiveColumnOrder || responsiveColumns
-          ? responsiveColumnOrder?.map((columnId, idx) => {
-              const column = responsiveColumns[columnId];
-              const pakeepsInColumn = column?.pakeepIds?.map(pakeepId => pakeeps[pakeepId]);
-              return (
-                <Column
-                  key={column?.id}
-                  column={column}
-                  pakeepsInColumn={pakeepsInColumn}
-                  lastColumn={idx + 1 === responsiveColumnOrder.length ? true : false}
-                  firstColumn={idx === 0 ? true : false}
-                />
-              );
-            })
-          : null}
+        {responsiveColumnOrder?.map((columnId, idx) => {
+          const column = responsiveColumns[columnId];
+          if (!column) return;
+
+          const pakeepsInColumn = column.pakeepIds.map(pakeepId => pakeeps[pakeepId]);
+          return (
+            <Column
+              key={column?.id}
+              column={column}
+              pakeepsInColumn={pakeepsInColumn}
+              lastColumn={idx + 1 === responsiveColumnOrder.length ? true : false}
+              firstColumn={idx === 0 ? true : false}
+            />
+          );
+        })}
       </Grid>
     </DragDropContext>
   );

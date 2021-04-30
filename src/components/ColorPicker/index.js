@@ -1,8 +1,7 @@
 import { useState } from 'react';
 import { HexColorPicker, RgbaColorPicker } from 'react-colorful';
 import UnfoldMoreOutlinedIcon from '@material-ui/icons/UnfoldMoreOutlined';
-import TextureOutlinedIcon from '@material-ui/icons/TextureOutlined';
-import { Box, Button, colors, Grid, IconButton, makeStyles, Paper, Typography } from '@material-ui/core';
+import { Box, Button, ButtonGroup, colors, Grid, IconButton, makeStyles, Paper, Typography } from '@material-ui/core';
 import { themeColors } from 'components/theme';
 import ColorLensOutlinedIcon from '@material-ui/icons/ColorLensOutlined';
 import PlaylistAddOutlinedIcon from '@material-ui/icons/PlaylistAddOutlined';
@@ -14,6 +13,9 @@ import clsx from 'clsx';
 import CenteredGrid from 'components/CenteredGrid';
 import CustomColor from './components/CustomColor';
 import { colord } from 'colord';
+import CustomizationButton from './components/CustomizationButton';
+import FilterVintageOutlinedIcon from '@material-ui/icons/FilterVintageOutlined';
+import TextureOutlinedIcon from '@material-ui/icons/TextureOutlined';
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -55,21 +57,22 @@ const useStyles = makeStyles(theme => ({
       duration: theme.transitions.duration.enteringScreen
     })
   },
-  withOutAnimation: {
-    transitionDuration: 0
+  iconUtilsContainer: {
+    '& .MuiSvgIcon-root': { width: theme.spacing(2 / (0.8 -0.1)) }
   }
 }));
 
 const ColorPickerByPas = () => {
-  const whiteColor = 'rgba(255,255,255,0.8)';
-  const [color, setColor] = useState(whiteColor);
+  const nullityColor = themeColors.whiteRgbaColorWith0dot8valueOfAlfaCanal;
+  const [color, setColor] = useState(nullityColor);
   const [savedStatus, setSavedStatus] = useState(false);
   const [transparencyStatus, setTransparencyStatus] = useState(false);
   const [extendMoreColorsStatus, setExtendMoreColorsStatus] = useState(false);
   const [customizationsStatus, setCustomizationsStatus] = useState(false);
   const [customColorsStatus, setCustomColorsStatus] = useState(false);
+  const [buttonCustomizationHoverStatus, setButtonCustomizationHoverStatus] = useState(false);
   const classes = useStyles();
-
+  console.log(buttonCustomizationHoverStatus);
   const customColorsInHexFormat = colord(color).toHex();
 
   const colorsArr = [
@@ -93,7 +96,27 @@ const ColorPickerByPas = () => {
   const handleCustomizationStatus = () => setCustomizationsStatus(state => !state);
   const handleCustomColorStatus = () => setCustomColorsStatus(state => !state);
 
+  const customizationButtonProps = {
+    nullityColor,
+    customColorsInHexFormat,
+    buttonCustomizationHoverStatus,
+    setCustomizationsStatus,
+    color,
+    onMouseEnter: () => setButtonCustomizationHoverStatus(true),
+    onMouseLeave: () => setButtonCustomizationHoverStatus(false)
+  };
+
   const buttonUtilsArr = [
+    {
+      icon: FilterVintageOutlinedIcon,
+      popoverText: 'Gradient',
+      name: 'changeGradientStatus',
+      activeIcon: false,
+      onlyPopover: true,
+      onClick: handleTransparencyColorPickerStatus,
+      hidden: !customColorsStatus,
+      customColor: transparencyStatus ? customColorsInHexFormat : null
+    },
     {
       icon: TextureOutlinedIcon,
       popoverText: 'Change transparency Status',
@@ -113,8 +136,8 @@ const ColorPickerByPas = () => {
       onClick: handleExtendMoreColorsStatus,
       hidden: customColorsStatus,
       customColor: extendMoreColorsStatus ? customColorsInHexFormat : null
-
     },
+    
     {
       icon: ColorLensOutlinedIcon,
       popoverText: 'Add custom color',
@@ -123,20 +146,20 @@ const ColorPickerByPas = () => {
       onlyPopover: true,
       onClick: handleCustomColorStatus,
       customColor: customColorsStatus ? customColorsInHexFormat : null
-      
     },
-
     {
-      icon: PlaylistAddOutlinedIcon,
-      popoverText: 'Add ',
-      name: 'addOneMoreEvent',
+      customElementComponentOfIconGroup: <CustomizationButton {...customizationButtonProps} />
+    },
+    {
+      icon: SaveRoundedIcon,
+      popoverText: 'Save changes',
+      name: 'save',
       activeIcon: false,
       onlyPopover: true,
-      hidden: true
-      // onClick: addOneMoreEventFunc
+      onClick: onSave,
+      customColor: color ? customColorsInHexFormat : null
     }
   ];
-  // console.log(colors.red)
 
   const wrapperOfPopoverAndMenuProps = {
     buttonUtilsArr,
@@ -149,14 +172,7 @@ const ColorPickerByPas = () => {
 
   const onSave = () => console.log('onSave');
 
-  const saveIconButtonProps = {
-    onClick: onSave,
-    icon: SaveRoundedIcon,
-    activeProperty: color,
-    activeIcon: savedStatus
-  };
-
-  const customColorProps = { setColor, color, transparencyStatus };
+  const customColorProps = { setColor, color, transparencyStatus, nullityColor, setTransparencyStatus };
 
   return (
     <Grid className={classes.container}>
@@ -174,7 +190,6 @@ const ColorPickerByPas = () => {
               ];
               // console.log(namesOfPartsOfGridElement.some(el => colors[colorName][el] === color));
               const correctNamesOfPartsOfGridElementArr = _.flattenDeep(namesOfPartsOfGridElement);
-
               const isExtendedElementColorCorrect = correctNamesOfPartsOfGridElementArr.some(
                 name => colors[colorName][name] === color
               );
@@ -241,31 +256,18 @@ const ColorPickerByPas = () => {
           })
         )}
       </Grid>
-      <Box mt={0.4}>
+      <Box m={0.4} mb={0} mt={0.8} className={classes.iconUtilsContainer}>
         <Grid container justify={'space-between'} alignItems={'center'}>
-          <Grid item>
-            <Grid container>
-              <WrapperOfPopoverAndMenu {...wrapperOfPopoverAndMenuProps} />
-            </Grid>
-          </Grid>
+          {/* <Grid item> */}
+          {/* <Grid container> */}
+          <WrapperOfPopoverAndMenu {...wrapperOfPopoverAndMenuProps} />
+          {/* </Grid> */}
+          {/* </Grid> */}
 
-          <Box mr={1.16}>
-            <Grid component={'span'}   onMouseEnter={()=> console.log('l')} >
-            <Button
-              onClick={setCustomizationsStatus}
-              size={'small'}
-              variant={'outlined'}
-              style={{ borderColor: color === whiteColor ? 'rgba(255,255,255,0)' : customColorsInHexFormat }}
-              className={customColorsStatus && classes.withOutAnimation}
-            
-            >
-              <Typography variant={'subtitle2'} style={{ color: 'rgba(255,255,255,0.8)' }}>
-                Customization
-              </Typography>
-            </Button>
-            </Grid>
-            <IconButtonByPas {...saveIconButtonProps} size={'small'} customColor={customColorsInHexFormat} />
-          </Box>
+          {/* <Box mr={0.8}> */}
+          {/* <CustomizationButton {...customizationButtonProps} /> */}
+          {/* <IconButtonByPas {...saveIconButtonProps} size={'small'} customColor={customColorsInHexFormat} /> */}
+          {/* </Box> */}
         </Grid>
       </Box>
     </Grid>
