@@ -16,6 +16,8 @@ import { colord } from 'colord';
 import CustomizationButton from './components/CustomizationButton';
 import FilterVintageOutlinedIcon from '@material-ui/icons/FilterVintageOutlined';
 import TextureOutlinedIcon from '@material-ui/icons/TextureOutlined';
+import ColorFormatIcon from 'components/Icons/components/ColorFormatIcon';
+import IconUtilsOfColorPicker from './components/IconsUtils';
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -58,7 +60,7 @@ const useStyles = makeStyles(theme => ({
     })
   },
   iconUtilsContainer: {
-    '& .MuiSvgIcon-root': { width: theme.spacing(2 / (0.8 -0.1)) }
+    '& .MuiSvgIcon-root': { width: theme.spacing(2 / (0.8 - 0.1)) }
   }
 }));
 
@@ -106,73 +108,34 @@ const ColorPickerByPas = () => {
     onMouseLeave: () => setButtonCustomizationHoverStatus(false)
   };
 
-  const buttonUtilsArr = [
-    {
-      icon: FilterVintageOutlinedIcon,
-      popoverText: 'Gradient',
-      name: 'changeGradientStatus',
-      activeIcon: false,
-      onlyPopover: true,
-      onClick: handleTransparencyColorPickerStatus,
-      hidden: !customColorsStatus,
-      customColor: transparencyStatus ? customColorsInHexFormat : null
-    },
-    {
-      icon: TextureOutlinedIcon,
-      popoverText: 'Change transparency Status',
-      name: 'changeTransparencyStatus',
-      activeIcon: false,
-      onlyPopover: true,
-      onClick: handleTransparencyColorPickerStatus,
-      hidden: !customColorsStatus,
-      customColor: transparencyStatus ? customColorsInHexFormat : null
-    },
-    {
-      icon: UnfoldMoreOutlinedIcon,
-      popoverText: 'Extend more colors',
-      name: 'extendMoreColors',
-      activeIcon: false,
-      onlyPopover: true,
-      onClick: handleExtendMoreColorsStatus,
-      hidden: customColorsStatus,
-      customColor: extendMoreColorsStatus ? customColorsInHexFormat : null
-    },
-    
-    {
-      icon: ColorLensOutlinedIcon,
-      popoverText: 'Add custom color',
-      name: 'pattern',
-      activeIcon: false,
-      onlyPopover: true,
-      onClick: handleCustomColorStatus,
-      customColor: customColorsStatus ? customColorsInHexFormat : null
-    },
-    {
-      customElementComponentOfIconGroup: <CustomizationButton {...customizationButtonProps} />
-    },
-    {
-      icon: SaveRoundedIcon,
-      popoverText: 'Save changes',
-      name: 'save',
-      activeIcon: false,
-      onlyPopover: true,
-      onClick: onSave,
-      customColor: color ? customColorsInHexFormat : null
-    }
-  ];
-
-  const wrapperOfPopoverAndMenuProps = {
-    buttonUtilsArr,
-    handlePopoverAndMenuState,
-    popoverAndMenuState,
-    iconSize: 'small'
-  };
-
   const handleSetColor = value => setColor(value);
 
   const onSave = () => console.log('onSave');
 
-  const customColorProps = { setColor, color, transparencyStatus, nullityColor, setTransparencyStatus };
+  const customColorProps = {
+    setColor,
+    color,
+    transparencyStatus,
+    nullityColor,
+    setTransparencyStatus,
+    customColorsInHexFormat
+  };
+
+  const iconUtilsProps = {
+    handleCustomColorStatus,
+    handleCustomizationStatus,
+    handleExtendMoreColorsStatus,
+    handleTransparencyColorPickerStatus,
+    handlePopoverAndMenuState,
+    onSave,
+    customColorsStatus,
+    customizationButtonProps,
+    transparencyStatus,
+    extendMoreColorsStatus,
+    color,
+    customColorsInHexFormat,
+    popoverAndMenuState
+  };
 
   return (
     <Grid className={classes.container}>
@@ -258,16 +221,7 @@ const ColorPickerByPas = () => {
       </Grid>
       <Box m={0.4} mb={0} mt={0.8} className={classes.iconUtilsContainer}>
         <Grid container justify={'space-between'} alignItems={'center'}>
-          {/* <Grid item> */}
-          {/* <Grid container> */}
-          <WrapperOfPopoverAndMenu {...wrapperOfPopoverAndMenuProps} />
-          {/* </Grid> */}
-          {/* </Grid> */}
-
-          {/* <Box mr={0.8}> */}
-          {/* <CustomizationButton {...customizationButtonProps} /> */}
-          {/* <IconButtonByPas {...saveIconButtonProps} size={'small'} customColor={customColorsInHexFormat} /> */}
-          {/* </Box> */}
+          <IconUtilsOfColorPicker {...iconUtilsProps} />
         </Grid>
       </Box>
     </Grid>
