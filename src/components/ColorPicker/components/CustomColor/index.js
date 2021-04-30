@@ -1,14 +1,31 @@
-import { Grid, makeStyles } from '@material-ui/core';
+import PropTypes from 'prop-types';
+import {
+  FilledInput,
+  FormControl,
+  Grid,
+  InputAdornment,
+  InputLabel,
+  makeStyles,
+  OutlinedInput,
+  TextField
+} from '@material-ui/core';
 import { colord } from 'colord';
-import React from 'react';
 import { RgbaColorPicker } from 'react-colorful';
 import { themeColors } from 'components/theme';
-
+import clsx from 'clsx';
+import PlayArrowOutlinedIcon from '@material-ui/icons/PlayArrowOutlined';
+import KeyboardArrowDownOutlinedIcon from '@material-ui/icons/KeyboardArrowDownOutlined';
+import KeyboardArrowUpOutlinedIcon from '@material-ui/icons/KeyboardArrowUpOutlined';
+import { ToggleButton, ToggleButtonGroup } from '@material-ui/lab';
+import AddOutlinedIcon from '@material-ui/icons/AddOutlined';
+import IndeterminateCheckBoxOutlinedIcon from '@material-ui/icons/IndeterminateCheckBoxOutlined';
+import RemoveOutlinedIcon from '@material-ui/icons/RemoveOutlined';
 const useStyles = makeStyles(theme => ({
   containerOfCustomColor: ({ transparencyStatus }) => ({
     '& .react-colorful': {
       padding: theme.spacing(0, 1),
       width: 'auto',
+      minWidth: theme.spacing(42 - 8 - 0.8),
       paddingTop: transparencyStatus ? 0 : theme.spacing(1.4),
       height: theme.spacing(42 - 10 + 1.2)
     },
@@ -53,26 +70,88 @@ const useStyles = makeStyles(theme => ({
         duration: theme.transitions.duration.complex
       })
     }
-  })
+  }),
+  containerOfInputsOfColorPicker: {
+    '& > div': {
+      width: '20ch',
+      ' & input[type=number]::-webkit-inner-spin-button': {
+        '-webkit-appearance': 'none'
+      }
+    }
+  },
+  margin: {
+    margin: theme.spacing(1)
+  },
+  withoutLabel: {
+    marginTop: theme.spacing(3)
+  },
+  textField: {
+    width: '25ch'
+  },
+
+  inputAdornmentArrowContainer: {
+    marginRight: theme.spacing(-0.8),
+    '& button': {
+      padding: 0,
+      border: 'none',
+      '&:hover': {
+        color: 'white'
+      }
+    }
+  }
 }));
 
-const CustomColor = ({ color, setColor, transparencyStatus }) => {
-  const classes = useStyles({ transparencyStatus });
-  console.log();
-  const isColorInHexFormat = _.isString(color) && color.startsWith('#');
+const CustomColor = ({ color, setColor, transparencyStatus, nullityColor = '#fff', setTransparencyStatus }) => {
+  const classes = useStyles({ transparencyStatus: true });
+  const isColorInHexFormat = _.isString(color, nullityColor) && color.startsWith('#');
   const colorInRgbFormat = colord(color).toRgb();
+
   const correctAndFormattedColor =
-  _.isEqual(color,'rgba(255,255,255,0.8)') && !transparencyStatus
+    _.isEqual(color, 'rgba(255,255,255,0.8)') && !transparencyStatus
       ? colord(themeColors.primaryMain).toRgb()
       : isColorInHexFormat
       ? colorInRgbFormat
       : color;
-  console.log(  _.isEqual(color,'rgba(255,255,255,0.8)') && !transparencyStatus);
+
   return (
     <Grid className={classes.containerOfCustomColor}>
       <RgbaColorPicker color={correctAndFormattedColor} onChange={setColor} />
+      <Grid className={classes.containerOfInputsOfColorPicker}>
+        <FormControl variant={'outlined'} className={clsx(classes.margin, classes.textField)}>
+          <InputLabel>Hex</InputLabel>
+          <OutlinedInput
+            type={'text'}
+            labelWidth={32}
+            endAdornment={
+              <InputAdornment position={'end'} className={classes.inputAdornmentArrowContainer}>
+                <ToggleButtonGroup orientation={'vertical'} value={'null'} exclusive size={'small'}>
+                  <ToggleButton value={'plus'} aria-label={'plus one'}>
+                    <AddOutlinedIcon />
+                  </ToggleButton>
+                  <ToggleButton value={'minus'} aria-label={'minus one'}>
+                    <RemoveOutlinedIcon />
+                  </ToggleButton>
+                </ToggleButtonGroup>
+              </InputAdornment>
+            }
+          />
+        </FormControl>
+        <TextField type={'number'} variant={'outlined'} />
+        <TextField type={'number'} variant={'outlined'} />
+        <TextField type={'number'} variant={'outlined'} />
+      </Grid>
     </Grid>
   );
+};
+
+CustomColor.propTypes = {
+  color: PropTypes.shape({
+    startsWith: PropTypes.func
+  }),
+  nullityColor: PropTypes.string,
+  setColor: PropTypes.func,
+  setTransparencyStatus: PropTypes.func,
+  transparencyStatus: PropTypes.bool
 };
 
 export default CustomColor;
