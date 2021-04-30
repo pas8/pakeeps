@@ -7,9 +7,13 @@ import store from '../src/store/index';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import DateFnsUtils from '@date-io/date-fns';
 import dynamic from 'next/dynamic';
+import LogRocket from 'logrocket';
+
 const DynamicComponentWithNoSSR = dynamic(() => import('../src/layouts/index'), {
   ssr: false
 });
+// LogRocket.init('b6se1p/pakeeps');
+
 function MyApp({ Component, pageProps }) {
   return (
     <ThemeProvider theme={theme}>

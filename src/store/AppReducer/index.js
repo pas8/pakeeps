@@ -82,7 +82,8 @@ const initialState = {
       favorite: false,
       color: 'default',
       labels: [{ color: 'secondary', title: 'Hobby', icon: 'alarm', key: 4 }],
-      id: 'pakeep6'
+      id: 'pakeep6',
+      events:[{ color: 'secondary', title: 'Hobby', icon: 'alarm', key: 4 }]
     }
   },
 

@@ -1,8 +1,10 @@
-import React, { useEffect } from 'react';
+import PropTypes from "prop-types";
+import { useEffect, useState, useRef } from 'react';
 import Popover from '@material-ui/core/Popover';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import { Grid, Menu, MenuItem } from '@material-ui/core';
+import { takeCurrentCursorPositionOfCorectHalfOfScreen } from 'hooks/takeCurrentCursorPositionOfCorectHalfOfScreen';
 
 const useStyles = makeStyles(theme => ({
   popover: {
@@ -14,8 +16,6 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const PopoverAndMenu = ({
-  popoverName,
-  menuName,
   popoverText,
   mainComponent,
   menuComponents,
@@ -26,7 +26,9 @@ const PopoverAndMenu = ({
   name
 }) => {
   const classes = useStyles();
-  const [anchorEl, setAnchorEl] = React.useState({ name, currentTarget: null, menu: false, popover: false });
+  const anchorElRef = useRef(null);
+  // const direction = takeCurrentCursorPositionOfCorectHalfOfScreen(anchorElRef,anchorEl)
+  const [anchorEl, setAnchorEl] = useState({ name, currentTarget: null, menu: false, popover: false });
 
   const handlePopoverOpen = ({ currentTarget }) => setAnchorEl(state => ({ ...state, currentTarget, popover: true }));
 
@@ -37,7 +39,6 @@ const PopoverAndMenu = ({
     setAnchorEl(state => ({ ...state, currentTarget, menu: true, popover: false }));
 
   const handleMenuClose = () => setAnchorEl(state => ({ ...state, currentTarget: null, menu: false, popover: false }));
-
   useEffect(
     () =>
       handlePopoverAndMenuState({
@@ -57,6 +58,7 @@ const PopoverAndMenu = ({
         onMouseEnter={handlePopoverOpen}
         onMouseLeave={!anchorEl.menu ? handlePopoverClose : null}
         onClick={handleMenuOpen}
+        ref={anchorElRef}
       >
         {mainComponent}
       </Grid>
@@ -88,14 +90,14 @@ const PopoverAndMenu = ({
           keepMounted
           open={Boolean(anchorEl) && anchorEl.menu}
           onClose={handleMenuClose}
-          anchorOrigin={{
-            vertical: 'top',
-            horizontal: 'right'
-          }}
-          transformOrigin={{
-            vertical: 'top',
-            horizontal: 'left'
-          }}
+          // anchorOrigin={{
+          //   vertical: 'top',
+          //   horizontal: 'left'
+          // }}
+          // transformOrigin={{
+          //   vertical: 'top',
+          //   horizontal: 'right'
+          // }}
         >
           {menuComponents && menuComponents}
         </Menu>
@@ -103,5 +105,16 @@ const PopoverAndMenu = ({
     </>
   );
 };
+
+PopoverAndMenu.propTypes = {
+  handlePopoverAndMenuState: PropTypes.func,
+  mainComponent: PropTypes.any,
+  menuComponents: PropTypes.any,
+  name: PropTypes.string,
+  onlyMenu: PropTypes.bool,
+  onlyPopover: PropTypes.bool,
+  popoverText: PropTypes.string,
+  popoverTypographyVariant: PropTypes.string
+}
 
 export default PopoverAndMenu;

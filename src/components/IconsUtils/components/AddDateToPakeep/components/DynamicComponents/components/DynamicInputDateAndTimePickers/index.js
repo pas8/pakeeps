@@ -17,18 +17,16 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const DynamicInputDateAndTimePickers = ({
-  value,
   onChange,
   onlyTime,
   KeyboardIcon,
   name,
-  ampm,
-  savedStatus,
+  ampm = false,
+  itemState: { saved: savedStatus, isValid: propsIsValid, value },
   correctName,
-  title,
-  clickStatus,
-  error
+  title
 }) => {
+  const error = !propsIsValid;
   const keyboardIconColor = savedStatus ? themeColors.primaryMain : null;
   const classes = useStyles({ keyboardIconColor, correctName, error });
 
@@ -37,33 +35,36 @@ const DynamicInputDateAndTimePickers = ({
 
   const isInputValueValid = isValid(inputValue);
 
-  document.onkeydown = evt => (evt.key === 'Enter' && focus && isInputValueValid) ? onChange(name, inputValue) : null;
+  document.onkeydown = evt => (evt.key === 'Enter' && focus && isInputValueValid ? onChange(name, inputValue) : null);
 
   const onAccept = data => onChange(name, data);
   const onFocus = () => setFocus(true);
+
+  const keyboardIcon = savedStatus ? <DoneOutlineOutlinedIcon /> : <KeyboardIcon />;
+
   const keyboardPickerState = {
     value: inputValue,
     onChange: setInputValue,
     todayButton: !onlyTime,
     label: !correctName ? title : error ? 'Invalid Date Format ' : null,
     inputVariant: 'outlined',
-    keyboardIcon: savedStatus ? <DoneOutlineOutlinedIcon /> : <KeyboardIcon />,
+    keyboardIcon,
     autoOk: false,
     format: onlyTime ? 'hh:mm' : 'yyyy  /  MM  /  dd  /  hh:mm',
     disablePast: true,
     error,
     onFocus,
     onAccept,
-    ampm
+    ampm,
+    fullWidth:true,
+    variant:'dialog'
   };
+
+  const KeyboardPicker = onlyTime ? KeyboardTimePicker : KeyboardDateTimePicker;
 
   return (
     <Grid item className={classes.container}>
-      {!onlyTime ? (
-        <KeyboardDateTimePicker {...keyboardPickerState} />
-      ) : (
-        <KeyboardTimePicker {...keyboardPickerState} />
-      )}
+      <KeyboardPicker {...keyboardPickerState} />
     </Grid>
   );
 };
@@ -71,12 +72,15 @@ const DynamicInputDateAndTimePickers = ({
 DynamicInputDateAndTimePickers.propTypes = {
   KeyboardIcon: PropTypes.node,
   ampm: PropTypes.bool,
+  clickStatus: PropTypes.any,
+  correctName: PropTypes.any,
+  error: PropTypes.any,
   name: PropTypes.string,
   onChange: PropTypes.func,
   onlyTime: PropTypes.bool,
   savedStatus: PropTypes.bool,
-  value: PropTypes.string,
-  title: PropTypes.string
+  title: PropTypes.string,
+  value: PropTypes.string
 };
 
 export default DynamicInputDateAndTimePickers;

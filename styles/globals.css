@@ -1,6 +1,5 @@
 html,
 body {
-  
 }
 
 a {
@@ -17,6 +16,37 @@ ul {
   padding: 0 !important;
 }
 
-.react-draggable-transparent-selection {
-  /* all:inherit ; */
+*::-webkit-scrollbar {
+  width: 0.42em;
+}
+*::-webkit-scrollbar-track {
+  /* border-left: 1px solid rgba(255, 255, 255, 0.2); */
+  background: transparent;
+}
+*::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.4);
+  border-radius: 0.8em;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(255, 255, 255, 0.8);
+}
+
+
+
+.MuiBackdrop-root{
+
+
+  backdrop-filter: blur(4px);
+}
+
+.MuiPickersCalendarHeader-switchHeader svg{
+
+transform: rotate(180deg);
+
+}
+.MuiPickersModal-dialogRoot {
+
+transform: scale(1.08);
+
 }

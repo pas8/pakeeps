@@ -1,8 +1,12 @@
 import PropTypes from 'prop-types';
-import { IconButton, makeStyles } from '@material-ui/core';
+import { Grid, IconButton, makeStyles } from '@material-ui/core';
 import { themeColors } from 'components/theme';
+import _ from 'lodash';
 
-const useStyles = makeStyles({ icon: ({ iconColor, rotate }) => ({ color: iconColor, transform: rotate }) });
+const useStyles = makeStyles(theme => ({
+  icon: ({ iconColor, rotate }) => ({ color: iconColor, transform: rotate }),
+  smallButtonSize: { '& button ': { padding: theme.spacing(1) } }
+}));
 
 const IconButtonByPas = ({
   onClick = null,
@@ -12,21 +16,27 @@ const IconButtonByPas = ({
   iconName = 'icon',
   activeIconName = 'icon',
   activeProperty = false,
+  size,
+  customColor = null
 }) => {
+  const currentHoverStatusIsTrue = _.isEqual(activeIconName, iconName) && activeProperty;
   const iconColor = activeIcon
     ? themeColors.primaryMain
-    : activeIconName === iconName && activeProperty
-    ? 'rgba(255,255,255,0.8)'
-    : 'rgba(255,255,255,0.4)';
-
+    : customColor
+    ? customColor
+    : currentHoverStatusIsTrue
+    ? 'rgba(255,255,255,0.92)'
+    : 'rgba(255,255,255,0.42)';
   const rotate = rotateDeg ? `rotate(${rotateDeg}deg)` : 'rotate(0deg)';
 
   const classes = useStyles({ iconColor, rotate });
 
   return (
-    <IconButton onClick={onClick}>
-      <Icon className={classes.icon} />
-    </IconButton>
+    <Grid className={size === 'small' ? classes.smallButtonSize : null} component={'span'}>
+      <IconButton onClick={onClick}>
+        <Icon className={classes.icon} />
+      </IconButton>
+    </Grid>
   );
 };
 
