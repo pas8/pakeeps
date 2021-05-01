@@ -24,7 +24,9 @@ const WrapperOfPopoverAndMenu = ({
           menuComponentsProps,
           hidden = false,
           customColor,
-          customElementComponentOfIconGroup = false
+          customElementComponentOfIconGroup = false,
+          menuLocation,
+          popoverLocation
         }) => {
           if (hidden) return;
           if (customElementComponentOfIconGroup) return customElementComponentOfIconGroup;
@@ -38,7 +40,8 @@ const WrapperOfPopoverAndMenu = ({
             size: iconSize,
             activeIcon,
             activeIconName: popoverAndMenuState.name,
-            activeProperty: popoverAndMenuState.popoverIsOpen
+            activeProperty: popoverAndMenuState.popoverIsOpen,
+           
           };
 
           const menuComponents = !onlyPopover && MenuComponents && (
@@ -49,6 +52,8 @@ const WrapperOfPopoverAndMenu = ({
 
           const popoverAndMenuProps = {
             name: iconName,
+            menuLocation,
+            popoverLocation,
             popoverText,
             menuComponents,
             onlyPopover,

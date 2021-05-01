@@ -72,6 +72,7 @@ const ColorPickerByPas = () => {
   const [extendMoreColorsStatus, setExtendMoreColorsStatus] = useState(false);
   const [customizationsStatus, setCustomizationsStatus] = useState(false);
   const [customColorsStatus, setCustomColorsStatus] = useState(false);
+  const [customFormatsStatus, setCustomFormatsStatus] = useState(false);
   const [buttonCustomizationHoverStatus, setButtonCustomizationHoverStatus] = useState(false);
   const classes = useStyles();
   const customColorsInHexFormat = colord(color).toHex();
@@ -96,6 +97,7 @@ const ColorPickerByPas = () => {
   const handleExtendMoreColorsStatus = () => setExtendMoreColorsStatus(state => !state);
   const handleCustomizationStatus = () => setCustomizationsStatus(state => !state);
   const handleCustomColorStatus = () => setCustomColorsStatus(state => !state);
+  const handleCustomColorFormatStatus = () => setCustomFormatsStatus(state => !state);
 
   const customizationButtonProps = {
     nullityColor,
@@ -133,7 +135,9 @@ const ColorPickerByPas = () => {
     extendMoreColorsStatus,
     color,
     customColorsInHexFormat,
-    popoverAndMenuState
+    popoverAndMenuState,
+    handleCustomColorFormatStatus,
+    customFormatsStatus
   };
 
   return (

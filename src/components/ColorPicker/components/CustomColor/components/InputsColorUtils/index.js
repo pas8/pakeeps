@@ -18,6 +18,8 @@ import lchPlugin from 'colord/plugins/lch';
 import { colord, extend } from 'colord';
 import _, { sum } from 'lodash';
 
+
+
 const useStyles = makeStyles(theme => ({
   textFieldInHexFormat: {
     width: theme.spacing(8 + 4 + 2),
@@ -71,6 +73,9 @@ const InputsColorUtilsOfCustomColorPicker = ({ color, setColor, customColorsInHe
   extend([lchPlugin]);
   const classes = useStyles();
 
+
+
+
   const formatPropertiesArr = {
     rgb: [
       { maxLength: 255, shotName: 'R', name: 'Red' },
@@ -113,14 +118,14 @@ const InputsColorUtilsOfCustomColorPicker = ({ color, setColor, customColorsInHe
   };
 
   console.log(color)
-  const onChangeOfCustomFormatState = ({ target: { value, name } }) => {
+  const onChangeOfCustomFormatState = ({ target: { value, name:idx } }) => {
     // switch (name) {
     //   case value:
     //   default:
     //     return name
     // }
 
-    console.log(value, name);
+    console.log(value, customFormatElementNames[idx]);
   };
 
   useEffect(() => console.log(colorInHexFormat), [colorInHexFormat]);
@@ -163,7 +168,7 @@ const InputsColorUtilsOfCustomColorPicker = ({ color, setColor, customColorsInHe
       <Grid item>
         <Grid container className={classes.containerOfInputsGroupOfCustomFormatColor}>
           {currentCustomFormatInputsGroupArr.map(({ maxLength, shotName, name }, idx) => {
-            const isFocused = customFormatElementFocusStatus === name;
+            const isFocused = customFormatElementFocusStatus === `${idx}`;
             const currentLabelName = isFocused ? name : shotName;
             const onClick =  ()=>onButtonClick(name)
             const groupButtonsOfNumberInputOfEndAdornment = (
@@ -182,7 +187,7 @@ const InputsColorUtilsOfCustomColorPicker = ({ color, setColor, customColorsInHe
             const outlinedInputProps = {
               type: 'number',
               onChange: onChangeOfCustomFormatState,
-              name: name,
+              name: idx,
               labelWidth: currentLabelName.length * 9.6,
               value: customFormatState[name],
               endAdornment: isFocused ? groupButtonsOfNumberInputOfEndAdornment : null

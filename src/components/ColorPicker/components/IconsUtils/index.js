@@ -7,6 +7,7 @@ import FilterVintageOutlinedIcon from '@material-ui/icons/FilterVintageOutlined'
 import TextureOutlinedIcon from '@material-ui/icons/TextureOutlined';
 import ColorFormatIcon from 'components/Icons/components/ColorFormatIcon';
 import CustomizationButton from '../CustomizationButton';
+import SelectColorFormat from '../CustomColor/components/SelectColorFormat';
 
 const IconUtilsOfColorPicker = ({
   handleCustomColorStatus,
@@ -21,8 +22,11 @@ const IconUtilsOfColorPicker = ({
   extendMoreColorsStatus,
   color,
   customColorsInHexFormat,
-  popoverAndMenuState
+  popoverAndMenuState,
+  customFormatsStatus
 }) => {
+  const m = () => <SelectColorFormat open={customFormatsStatus} color={customColorsInHexFormat} />;
+
   const buttonUtilsArr = [
     {
       icon: FilterVintageOutlinedIcon,
@@ -51,7 +55,8 @@ const IconUtilsOfColorPicker = ({
       activeIcon: false,
       hidden: !customColorsStatus,
       customColor: transparencyStatus ? customColorsInHexFormat : null,
-      // menuComponents: <div>Tst</div>
+      menuComponents: m,
+      menuLocation:'center'
     },
     {
       icon: UnfoldMoreOutlinedIcon,
