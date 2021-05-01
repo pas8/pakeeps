@@ -5,6 +5,7 @@ import DoneOutlineOutlinedIcon from '@material-ui/icons/DoneOutlineOutlined';
 import KeyboardVoiceOutlinedIcon from '@material-ui/icons/KeyboardVoiceOutlined';
 import BookOutlinedIcon from '@material-ui/icons/BookOutlined';
 import StarBorderOutlinedIcon from '@material-ui/icons/StarBorderOutlined';
+import CategoryOutlinedIcon from '@material-ui/icons/CategoryOutlined';
 
 export const iconsArr = [
   { icon: <AlarmOutlinedIcon/>, iconName: 'alarm' },
@@ -13,6 +14,7 @@ export const iconsArr = [
   { icon: <DoneOutlineOutlinedIcon/>, iconName: 'done' },
   { icon: <KeyboardVoiceOutlinedIcon/>, iconName: 'keyboard' },
   { icon: <BookOutlinedIcon/>, iconName: 'book' },
-  { icon: <StarBorderOutlinedIcon/>, iconName: 'star' }
+  { icon: <StarBorderOutlinedIcon/>, iconName: 'star' },
+  { icon: <CategoryOutlinedIcon/>, iconName: 'category' },
 ];
 
