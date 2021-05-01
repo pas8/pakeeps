@@ -73,6 +73,8 @@ const ColorPickerByPas = () => {
   const [customizationsStatus, setCustomizationsStatus] = useState(false);
   const [customColorsStatus, setCustomColorsStatus] = useState(false);
   const [customFormatsStatus, setCustomFormatsStatus] = useState(false);
+  const [customFormatName, setCustomFormatName] = useState('rgb');
+  
   const [buttonCustomizationHoverStatus, setButtonCustomizationHoverStatus] = useState(false);
   const classes = useStyles();
   const customColorsInHexFormat = colord(color).toHex();
@@ -120,7 +122,9 @@ const ColorPickerByPas = () => {
     transparencyStatus,
     nullityColor,
     setTransparencyStatus,
-    customColorsInHexFormat
+    customColorsInHexFormat,
+    customFormatName,
+    setCustomFormatName
   };
 
   const iconUtilsProps = {
@@ -138,7 +142,9 @@ const ColorPickerByPas = () => {
     customColorsInHexFormat,
     popoverAndMenuState,
     handleCustomColorFormatStatus,
-    customFormatsStatus
+    customFormatsStatus,
+    setCustomFormatName,
+    customFormatName
   };
 
   return (

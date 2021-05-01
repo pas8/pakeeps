@@ -78,7 +78,7 @@ const useStyles = makeStyles(theme => ({
 
 const InputsColorUtilsOfCustomColorPicker = ({ color, setColor, customColorsInHexFormat, customFormatName }) => {
   extend([lchPlugin]);
-  const classes = useStyles();
+  const classes = useStyles({customColorsInHexFormat});
 
   const formatPropertiesArr = {
     rgb: [
@@ -104,7 +104,6 @@ const InputsColorUtilsOfCustomColorPicker = ({ color, setColor, customColorsInHe
   };
   const alphaColorCanalProperty = { maxLength: 100, shotName: 'A', name: 'Alpha' };
   const currentCustomFormatInputsGroupArr = _.concat(formatPropertiesArr[customFormatName], alphaColorCanalProperty);
-console.log(currentCustomFormatInputsGroupArr)
   const customFormatElementNames = ['first', 'second', 'third', 'alpha'];
   const sumReduceFunc = (sum, name) => ({ ...sum, [name]: '' });
   const nullityValueOfCustomFormatState = _.reduce(customFormatElementNames, sumReduceFunc, '');
