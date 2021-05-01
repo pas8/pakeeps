@@ -13,7 +13,7 @@ import {
   TextField,
   Typography
 } from '@material-ui/core';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useMemo, useState } from 'react';
 import lchPlugin from 'colord/plugins/lch';
 import { colord, extend } from 'colord';
 import _, { sum } from 'lodash';
@@ -21,14 +21,16 @@ import _, { sum } from 'lodash';
 const useStyles = makeStyles(theme => ({
   textFieldInHexFormat: {
     width: theme.spacing(8 + 4 + 2),
-    marginRight: theme.spacing(1.4 + 4)
+    marginRight: theme.spacing(1.4 + 4),
+    '& .MuiFormLabel-root.Mui-focused ': { color: ({ customColorsInHexFormat }) => customColorsInHexFormat },
+    '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline':{ borderColor: ({ customColorsInHexFormat }) => customColorsInHexFormat }
   },
   removeMarginFromTextFieldInHexFormat: {
     width: theme.spacing(8 + 4 + 2),
-    marginRight: theme.spacing(1.4 )
+    marginRight: theme.spacing(1.4)
   },
   textField: {
-    width: theme.spacing(12),
+    width: theme.spacing(12)
     // transition: theme.transitions.create('all', {
     //   easing: theme.transitions.easing.sharp,
     //   duration: theme.transitions.duration.complex,
@@ -60,17 +62,26 @@ const useStyles = makeStyles(theme => ({
     //   duration: theme.transitions.duration.enteringScreen,
 
     // }),
-    width: theme.spacing(8)
+    width: theme.spacing(8),
+    
   },
   containerOfInputsGroupOfCustomFormatColor: {
-    gap: theme.spacing(1.4)
-  }
+    gap: theme.spacing(1.4),
+
+    '& .MuiFormLabel-root.Mui-focused ': { color: ({ customColorsInHexFormat }) => customColorsInHexFormat },
+    '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline':{ borderColor: ({ customColorsInHexFormat }) => customColorsInHexFormat }
+  },
+  
 }));
 
-const InputsColorUtilsOfCustomColorPicker = ({ color, setColor, customColorsInHexFormat }) => {
+const InputsColorUtilsOfCustomColorPicker = ({ color, setColor, customColorsInHexFormat, customFormatName }) => {
   extend([lchPlugin]);
+<<<<<<< Updated upstream
   const classes = useStyles();
 
+=======
+  const classes = useStyles({ customColorsInHexFormat });
+>>>>>>> Stashed changes
   const formatPropertiesArr = {
     rgb: [
       { maxLength: 255, shotName: 'R', name: 'Red' },
@@ -94,24 +105,28 @@ const InputsColorUtilsOfCustomColorPicker = ({ color, setColor, customColorsInHe
     ]
   };
   const alphaColorCanalProperty = { maxLength: 100, shotName: 'A', name: 'Alpha' };
+  const currentCustomFormatInputsGroupArr = _.concat(formatPropertiesArr[customFormatName], alphaColorCanalProperty);
 
   const customFormatElementNames = ['first', 'second', 'third', 'alpha'];
   const sumReduceFunc = (sum, name) => ({ ...sum, [name]: '' });
   const nullityValueOfCustomFormatState = _.reduce(customFormatElementNames, sumReduceFunc, '');
-
   const [colorInHexFormat, setColorInHexFormat] = useState(customColorsInHexFormat);
-  const [colorInCustomFormat, setColorInCustomFormat] = useState(customColorsInHexFormat);
-  const [customFormatName, setCustomFormatName] = useState('rgb');
   const [customFormatState, setCustomFormatState] = useState(nullityValueOfCustomFormatState);
   const [customFormatElementFocusStatus, setCustomFormatElementFocus] = useState(false);
 
-  // console.log(customFormatState);
 
   const onChangeOfColorInHexFormat = ({ target: { value } }) => {
     if (value.length >= 3) setColor(value);
     setColorInHexFormat(value);
   };
+  // console.log(customColorsInHexFormat)
+  const onChangeOfCustomFormatState = ({ target: { value, name: idx } }) => {
+    const isValid = currentCustomFormatInputsGroupArr[idx].maxLength >= +value;
+    const currentValue = isValid ? value : currentCustomFormatInputsGroupArr[idx].maxLength.toString();
+    setCustomFormatState(state => ({ ...state, [customFormatElementNames[idx]]: currentValue }));
+  };
 
+<<<<<<< Updated upstream
   console.log(color)
   const onChangeOfCustomFormatState = ({ target: { value, name } }) => {
     // switch (name) {
@@ -122,28 +137,54 @@ const InputsColorUtilsOfCustomColorPicker = ({ color, setColor, customColorsInHe
 
     console.log(value, name);
   };
+=======
+  useEffect(() => {
+    _.debounce(() => setColorInHexFormat(customColorsInHexFormat), 160);
+    console.log(customColorsInHexFormat);
+  }, [customColorsInHexFormat]);
 
-  useEffect(() => console.log(colorInHexFormat), [colorInHexFormat]);
+  useEffect(() => {
+    setColor(colorInHexFormat);
+  }, [colorInHexFormat]);
 
-  const inputInHexFormatProps = {
-    labelText: 'Hex',
-    maxLength: 8,
-    type: 'text',
-    ariaLabel: 'Enter pl a hex value',
-    value: colorInHexFormat,
-    maxValue: 'any',
-    onChange: onChangeOfColorInHexFormat,
-    hexFormat: true,
-    labelWidth: 3 * 9.6,
-    name: 'hex'
-  };
+  useEffect(() => {
+    const correctFormatObj = {
+      //! to make  better logic
+      [customFormatName[0]]: customFormatState[customFormatElementNames[0]],
+      [customFormatName[1]]: customFormatState[customFormatElementNames[1]],
+      [customFormatName[2]]: customFormatState[customFormatElementNames[2]],
+      a: customFormatState[customFormatElementNames[3]] / 100
+    };
+    setColorInHexFormat(colord(correctFormatObj).toHex());
+    setColor(colord(correctFormatObj).toRgb());
+  }, [customFormatName, customFormatState]);
+>>>>>>> Stashed changes
 
-  const currentCustomFormatInputsGroupArr = _.concat(formatPropertiesArr[customFormatName], alphaColorCanalProperty);
-  const preventDefaultFunc = (e) =>   e.preventDefault();
-  
+
   const onInputFocus = ({ target: { name } }) => setCustomFormatElementFocus(name);
-  const onButtonClick = (name) =>console.log(name)
+  const onButtonClick = name => console.log(name);
   const onInputBlur = () => setCustomFormatElementFocus(false);
+  
+  const inputInHexFormatProps = useMemo(
+    () => ({
+      labelText: 'Hex',
+      maxLength: 8,
+      type: 'text',
+      ariaLabel: 'Enter pl a hex value',
+      value: customFormatElementFocusStatus === 'hex' ? colorInHexFormat : customColorsInHexFormat,
+      maxValue: 'any',
+      onChange: onChangeOfColorInHexFormat,
+      hexFormat: true,
+      labelWidth: 3 * 9.6, //
+      name: 'hex',
+      onFocus:onInputFocus,
+      onBlur:onInputBlur
+    }),
+    [customColorsInHexFormat, onChangeOfColorInHexFormat,  customFormatElementFocusStatus]
+  );
+
+  const preventDefaultFunc = e => e.preventDefault();
+
   return (
     <Grid className={classes.containerOfInputsOfColorPicker} container>
       <Grid item>
@@ -165,14 +206,19 @@ const InputsColorUtilsOfCustomColorPicker = ({ color, setColor, customColorsInHe
           {currentCustomFormatInputsGroupArr.map(({ maxLength, shotName, name }, idx) => {
             const isFocused = customFormatElementFocusStatus === name;
             const currentLabelName = isFocused ? name : shotName;
-            const onClick =  ()=>onButtonClick(name)
+            const onClick = () => onButtonClick(name);
             const groupButtonsOfNumberInputOfEndAdornment = (
               <InputAdornment position={'end'} className={classes.inputAdornmentArrowContainer}>
                 <ToggleButtonGroup orientation={'vertical'} value={'null'} exclusive size={'small'}>
-                  <ToggleButton value={'plus'} aria-label={'plus one'} onClick={onClick}  onMouseDown={preventDefaultFunc}>
+                  <ToggleButton
+                    value={'plus'}
+                    aria-label={'plus one'}
+                    onClick={onClick}
+                    onMouseDown={preventDefaultFunc}
+                  >
                     <AddOutlinedIcon />
                   </ToggleButton>
-                  <ToggleButton value={'minus'} aria-label={'minus one'}  onMouseDown={preventDefaultFunc}>
+                  <ToggleButton value={'minus'} aria-label={'minus one'} onMouseDown={preventDefaultFunc}>
                     <RemoveOutlinedIcon />
                   </ToggleButton>
                 </ToggleButtonGroup>
@@ -184,7 +230,7 @@ const InputsColorUtilsOfCustomColorPicker = ({ color, setColor, customColorsInHe
               onChange: onChangeOfCustomFormatState,
               name: name,
               labelWidth: currentLabelName.length * 9.6,
-              value: customFormatState[name],
+              value: customFormatState[customFormatElementNames[idx]],
               endAdornment: isFocused ? groupButtonsOfNumberInputOfEndAdornment : null
             };
 

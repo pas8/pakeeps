@@ -23,7 +23,14 @@ const PopoverAndMenu = ({
   onlyMenu = false,
   onlyPopover = false,
   handlePopoverAndMenuState,
+<<<<<<< Updated upstream
   name
+=======
+  name,
+  menuLocation = 'default',
+  popoverLocation = 'default',
+  popoverLevel = 'first'
+>>>>>>> Stashed changes
 }) => {
   const classes = useStyles();
   const anchorElRef = useRef(null);

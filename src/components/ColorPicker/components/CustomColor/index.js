@@ -17,6 +17,7 @@ import KeyboardArrowDownOutlinedIcon from '@material-ui/icons/KeyboardArrowDownO
 import KeyboardArrowUpOutlinedIcon from '@material-ui/icons/KeyboardArrowUpOutlined';
 import IndeterminateCheckBoxOutlinedIcon from '@material-ui/icons/IndeterminateCheckBoxOutlined';
 import InputsColorUtilsOfCustomColorPicker from './components/InputsColorUtils';
+
 const useStyles = makeStyles(theme => ({
   containerOfCustomColor: ({ transparencyStatus }) => ({
     '& .react-colorful': {
@@ -67,12 +68,18 @@ const useStyles = makeStyles(theme => ({
         duration: theme.transitions.duration.complex
       })
     }
-  }),
-
-
+  })
 }));
 
-const CustomColor = ({ color, setColor, transparencyStatus, nullityColor = '#fff', setTransparencyStatus,customColorsInHexFormat }) => {
+const CustomColor = ({
+  color,
+  setColor,
+  transparencyStatus,
+  nullityColor = '#fff',
+  setTransparencyStatus,
+  customColorsInHexFormat,
+  customFormatName
+}) => {
   const classes = useStyles({ transparencyStatus: true });
   const isColorInHexFormat = _.isString(color, nullityColor) && color.startsWith('#');
   const colorInRgbFormat = colord(color).toRgb();
@@ -87,7 +94,12 @@ const CustomColor = ({ color, setColor, transparencyStatus, nullityColor = '#fff
   return (
     <Grid className={classes.containerOfCustomColor}>
       <RgbaColorPicker color={correctAndFormattedColor} onChange={setColor} />
-      <InputsColorUtilsOfCustomColorPicker color={color} setColor={setColor} customColorsInHexFormat={customColorsInHexFormat} />
+      <InputsColorUtilsOfCustomColorPicker
+        color={color}
+        setColor={setColor}
+        customColorsInHexFormat={customColorsInHexFormat}
+        customFormatName={customFormatName}
+      />
     </Grid>
   );
 };

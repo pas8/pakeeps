@@ -71,6 +71,7 @@ const ColorPickerByPas = () => {
   const [customizationsStatus, setCustomizationsStatus] = useState(false);
   const [customColorsStatus, setCustomColorsStatus] = useState(false);
   const [buttonCustomizationHoverStatus, setButtonCustomizationHoverStatus] = useState(false);
+  const [customFormatName, setCustomFormatName] = useState('rgb');
   const classes = useStyles();
   const customColorsInHexFormat = colord(color).toHex();
 
@@ -105,6 +106,7 @@ const ColorPickerByPas = () => {
     onMouseLeave: () => setButtonCustomizationHoverStatus(false)
   };
 
+<<<<<<< Updated upstream
   const buttonUtilsArr = [
     {
       icon: FilterVintageOutlinedIcon,
@@ -159,12 +161,34 @@ const ColorPickerByPas = () => {
       customColor: color ? customColorsInHexFormat : null
     }
   ];
+=======
+  const handleSetColor = value => setColor(value);
+
+  const onSave = () => console.log('onSave');
+
+  const customColorProps = {
+    setColor,
+    color,
+    transparencyStatus,
+    nullityColor,
+    setTransparencyStatus,
+    customColorsInHexFormat,
+    customFormatName
+  };
+>>>>>>> Stashed changes
 
   const wrapperOfPopoverAndMenuProps = {
     buttonUtilsArr,
     handlePopoverAndMenuState,
     popoverAndMenuState,
+<<<<<<< Updated upstream
     iconSize: 'small'
+=======
+    handleCustomColorFormatStatus,
+    customFormatsStatus,
+    customFormatName,
+    setCustomFormatName
+>>>>>>> Stashed changes
   };
 
   const handleSetColor = value => setColor(value);
