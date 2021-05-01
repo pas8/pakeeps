@@ -23,9 +23,18 @@ const IconUtilsOfColorPicker = ({
   color,
   customColorsInHexFormat,
   popoverAndMenuState,
-  customFormatsStatus
+  customFormatsStatus,
+  customFormatName,
+  setCustomFormatName
 }) => {
-  const m = () => <SelectColorFormat open={customFormatsStatus} color={customColorsInHexFormat} />;
+
+  const ColorFormatMenuComponent = () => (
+    <SelectColorFormat
+      customFormatName={customFormatName}
+      setCustomFormatName={setCustomFormatName}
+      color={customColorsInHexFormat}
+    />
+  );
 
   const buttonUtilsArr = [
     {
@@ -55,8 +64,8 @@ const IconUtilsOfColorPicker = ({
       activeIcon: false,
       hidden: !customColorsStatus,
       customColor: transparencyStatus ? customColorsInHexFormat : null,
-      menuComponents: m,
-      menuLocation:'center'
+      menuComponents: ColorFormatMenuComponent,
+      menuLocation: 'center'
     },
     {
       icon: UnfoldMoreOutlinedIcon,

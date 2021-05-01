@@ -21,9 +21,12 @@ const PopoverAndMenu = ({
   onlyMenu = false,
   onlyPopover = false,
   handlePopoverAndMenuState,
+  name
+=======
   name,
   menuLocation = 'default',
-  popoverLocation = 'default'
+  popoverLocation = 'default',
+  popoverLevel = 'first'
 }) => {
   const classes = useStyles();
   const anchorElRef = useRef(null);

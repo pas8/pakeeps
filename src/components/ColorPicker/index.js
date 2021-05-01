@@ -109,6 +109,7 @@ const ColorPickerByPas = () => {
     onMouseLeave: () => setButtonCustomizationHoverStatus(false)
   };
 
+
   const handleSetColor = value => setColor(value);
 
   const onSave = () => console.log('onSave');
