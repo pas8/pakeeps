@@ -2,10 +2,14 @@ import { Grid, makeStyles, SvgIcon } from '@material-ui/core';
 
 const useStyles = makeStyles(theme => ({
   iconContainer: {
+    transform:'rotate(259deg)',
+    
     '& path': {
-      transform: 'scale(0.042)'
+      transform: 'scale(0.042) '
     },
-    margin: theme.spacing(0.32, 0, 0, 0.16)
+    // margin: theme.spacing(0.32, 0, 0, 0.16)
+
+    margin: theme.spacing(0, 0, 0.16, 0.16)
   }
 }));
 const ColorFormatIcon = () => {

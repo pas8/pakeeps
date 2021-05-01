@@ -1,17 +1,15 @@
-import PropTypes from "prop-types";
+import PropTypes from 'prop-types';
 import { useEffect, useState, useRef } from 'react';
 import Popover from '@material-ui/core/Popover';
 import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
-import { Grid, Menu, MenuItem } from '@material-ui/core';
-import { takeCurrentCursorPositionOfCorectHalfOfScreen } from 'hooks/takeCurrentCursorPositionOfCorectHalfOfScreen';
+import { Grid, Menu, makeStyles } from '@material-ui/core';
 
 const useStyles = makeStyles(theme => ({
   popover: {
     pointerEvents: 'none'
   },
-  paper: {
-    padding: theme.spacing(1)
+  padding: {
+    padding: theme.spacing(0.8)
   }
 }));
 
@@ -23,11 +21,12 @@ const PopoverAndMenu = ({
   onlyMenu = false,
   onlyPopover = false,
   handlePopoverAndMenuState,
-  name
+  name,
+  menuLocation = 'default',
+  popoverLocation = 'default'
 }) => {
   const classes = useStyles();
   const anchorElRef = useRef(null);
-  // const direction = takeCurrentCursorPositionOfCorectHalfOfScreen(anchorElRef,anchorEl)
   const [anchorEl, setAnchorEl] = useState({ name, currentTarget: null, menu: false, popover: false });
 
   const handlePopoverOpen = ({ currentTarget }) => setAnchorEl(state => ({ ...state, currentTarget, popover: true }));
@@ -49,59 +48,90 @@ const PopoverAndMenu = ({
       }),
     [anchorEl]
   );
+  const defaultLocationOfPopoverToWitCentered = {
+    anchorOrigin: {
+      vertical: 'bottom',
+      horizontal: 'center'
+    },
+    transformOrigin: {
+      vertical: 'top',
+      horizontal: 'center'
+    }
+  };
 
+  const defaultLocationOfMenuToWitRightSite = {
+    anchorOrigin: {
+      vertical: 'top',
+      horizontal: 'right'
+    },
+    transformOrigin: {
+      vertical: 'top',
+      horizontal: 'left'
+    }
+  };
+
+  const leftSiteLocation = {
+    anchorOrigin: {
+      vertical: 'top',
+      horizontal: 'right'
+    },
+    transformOrigin: {
+      vertical: 'top',
+      horizontal: 'left'
+    }
+  };
+
+  const locationOfPopover =
+    popoverLocation === 'default'
+      ? defaultLocationOfPopoverToWitCentered
+      : popoverLocation === 'left'
+      ? leftSiteLocation
+      : defaultLocationOfMenuToWitRightSite;
+
+  const locationOfMenu =
+    menuLocation === 'default'
+      ? defaultLocationOfMenuToWitRightSite
+      : menuLocation === 'center'
+      ? defaultLocationOfPopoverToWitCentered
+      : leftSiteLocation;
+
+  const wrapperOfMainComponentProps = {
+    'aria-haspopup': true,
+    onMouseEnter: handlePopoverOpen,
+    onMouseLeave: !anchorEl.menu ? handlePopoverClose : null,
+    ref: anchorElRef,
+    onClick: handleMenuOpen
+  };
+
+  const popoverProps = {
+    ...locationOfPopover,
+    className: classes.popover,
+    classes: { paper: classes.padding },
+
+    open: Boolean(anchorEl.currentTarget) && anchorEl.popover,
+    anchorEl: anchorEl.currentTarget,
+    onClose: handlePopoverClose,
+    disableRestoreFocus: true
+  };
+
+  const menuProps = {
+    ...locationOfMenu,
+    anchorEl: anchorEl.currentTarget,
+    keepMounted: true,
+    open: Boolean(anchorEl) && anchorEl.menu,
+    onClose: handleMenuClose
+  };
   return (
     <>
-      <Grid
-        // aria-owns={open ? 'mouse-over-popover' : undefined}
-        aria-haspopup={'true'}
-        onMouseEnter={handlePopoverOpen}
-        onMouseLeave={!anchorEl.menu ? handlePopoverClose : null}
-        onClick={handleMenuOpen}
-        ref={anchorElRef}
-      >
-        {mainComponent}
-      </Grid>
+      <Grid {...wrapperOfMainComponentProps}>{mainComponent}</Grid>
+
       {!onlyMenu && (
-        <Popover
-          className={classes.popover}
-          classes={{
-            paper: classes.paper
-          }}
-          open={Boolean(anchorEl.currentTarget) && anchorEl.popover}
-          anchorEl={anchorEl.currentTarget}
-          anchorOrigin={{
-            vertical: 'bottom',
-            horizontal: 'center'
-          }}
-          transformOrigin={{
-            vertical: 'top',
-            horizontal: 'center'
-          }}
-          onClose={handlePopoverClose}
-          disableRestoreFocus
-        >
+        <Popover {...popoverProps}>
           <Typography variant={popoverTypographyVariant}>{popoverText}</Typography>
         </Popover>
       )}
-      {!onlyPopover && (
-        <Menu
-          anchorEl={anchorEl.currentTarget}
-          keepMounted
-          open={Boolean(anchorEl) && anchorEl.menu}
-          onClose={handleMenuClose}
-          // anchorOrigin={{
-          //   vertical: 'top',
-          //   horizontal: 'left'
-          // }}
-          // transformOrigin={{
-          //   vertical: 'top',
-          //   horizontal: 'right'
-          // }}
-        >
-          {menuComponents && menuComponents}
-        </Menu>
-      )}
+
+      {!onlyPopover && <Menu {...menuProps}>{menuComponents && menuComponents}</Menu>}
     </>
   );
 };
@@ -110,11 +140,13 @@ PopoverAndMenu.propTypes = {
   handlePopoverAndMenuState: PropTypes.func,
   mainComponent: PropTypes.any,
   menuComponents: PropTypes.any,
+  menuLocation: PropTypes.string,
   name: PropTypes.string,
   onlyMenu: PropTypes.bool,
   onlyPopover: PropTypes.bool,
+  popoverLocation: PropTypes.string,
   popoverText: PropTypes.string,
   popoverTypographyVariant: PropTypes.string
-}
+};
 
 export default PopoverAndMenu;
