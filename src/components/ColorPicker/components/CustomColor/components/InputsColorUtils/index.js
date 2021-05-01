@@ -76,7 +76,6 @@ const useStyles = makeStyles(theme => ({
 
 const InputsColorUtilsOfCustomColorPicker = ({ color, setColor, customColorsInHexFormat, customFormatName }) => {
   extend([lchPlugin]);
-<<<<<<< Updated upstream
   const classes = useStyles();
 
 =======
@@ -106,7 +105,7 @@ const InputsColorUtilsOfCustomColorPicker = ({ color, setColor, customColorsInHe
   };
   const alphaColorCanalProperty = { maxLength: 100, shotName: 'A', name: 'Alpha' };
   const currentCustomFormatInputsGroupArr = _.concat(formatPropertiesArr[customFormatName], alphaColorCanalProperty);
-
+console.log(currentCustomFormatInputsGroupArr)
   const customFormatElementNames = ['first', 'second', 'third', 'alpha'];
   const sumReduceFunc = (sum, name) => ({ ...sum, [name]: '' });
   const nullityValueOfCustomFormatState = _.reduce(customFormatElementNames, sumReduceFunc, '');
@@ -126,18 +125,7 @@ const InputsColorUtilsOfCustomColorPicker = ({ color, setColor, customColorsInHe
     setCustomFormatState(state => ({ ...state, [customFormatElementNames[idx]]: currentValue }));
   };
 
-<<<<<<< Updated upstream
-  console.log(color)
-  const onChangeOfCustomFormatState = ({ target: { value, name } }) => {
-    // switch (name) {
-    //   case value:
-    //   default:
-    //     return name
-    // }
-
-    console.log(value, name);
-  };
-=======
+  
   useEffect(() => {
     _.debounce(() => setColorInHexFormat(customColorsInHexFormat), 160);
     console.log(customColorsInHexFormat);
@@ -204,7 +192,7 @@ const InputsColorUtilsOfCustomColorPicker = ({ color, setColor, customColorsInHe
       <Grid item>
         <Grid container className={classes.containerOfInputsGroupOfCustomFormatColor}>
           {currentCustomFormatInputsGroupArr.map(({ maxLength, shotName, name }, idx) => {
-            const isFocused = customFormatElementFocusStatus === name;
+            const isFocused = customFormatElementFocusStatus === `${idx}`;
             const currentLabelName = isFocused ? name : shotName;
             const onClick = () => onButtonClick(name);
             const groupButtonsOfNumberInputOfEndAdornment = (

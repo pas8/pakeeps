@@ -23,9 +23,6 @@ const PopoverAndMenu = ({
   onlyMenu = false,
   onlyPopover = false,
   handlePopoverAndMenuState,
-<<<<<<< Updated upstream
-  name
-=======
   name,
   menuLocation = 'default',
   popoverLocation = 'default',
