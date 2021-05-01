@@ -78,7 +78,6 @@ const useStyles = makeStyles(theme => ({
 
 const InputsColorUtilsOfCustomColorPicker = ({ color, setColor, customColorsInHexFormat, customFormatName }) => {
   extend([lchPlugin]);
-<<<<<<< Updated upstream
   const classes = useStyles();
 
   const formatPropertiesArr = {
@@ -105,7 +104,7 @@ const InputsColorUtilsOfCustomColorPicker = ({ color, setColor, customColorsInHe
   };
   const alphaColorCanalProperty = { maxLength: 100, shotName: 'A', name: 'Alpha' };
   const currentCustomFormatInputsGroupArr = _.concat(formatPropertiesArr[customFormatName], alphaColorCanalProperty);
-
+console.log(currentCustomFormatInputsGroupArr)
   const customFormatElementNames = ['first', 'second', 'third', 'alpha'];
   const sumReduceFunc = (sum, name) => ({ ...sum, [name]: '' });
   const nullityValueOfCustomFormatState = _.reduce(customFormatElementNames, sumReduceFunc, '');
@@ -125,17 +124,6 @@ const InputsColorUtilsOfCustomColorPicker = ({ color, setColor, customColorsInHe
     setCustomFormatState(state => ({ ...state, [customFormatElementNames[idx]]: currentValue }));
   };
 
-<<<<<<< Updated upstream
-  console.log(color)
-  const onChangeOfCustomFormatState = ({ target: { value, name:idx } }) => {
-    // switch (name) {
-    //   case value:
-    //   default:
-    //     return name
-    // }
-
-    console.log(value, customFormatElementNames[idx]);
-  };
   
   useEffect(() => {
     _.debounce(() => setColorInHexFormat(customColorsInHexFormat), 160);
