@@ -38,7 +38,7 @@ const ButtonUtilsOfCustomGradient = ({ color }) => {
 
   const setHoverStatusOFCircleSliderIsFalse = () => setHoverStatusOFCircleSlider(false);
   const setHoverStatusOFCircleSliderIsTrue = () => setHoverStatusOFCircleSlider(true);
-  console.log(hoverStatusOFCircleSlider);
+  // console.log(hoverStatusOFCircleSlider);
 
   const handleChangeOfCircleSlider = value => setGradientAngle(value);
   const handleChangeOfGradientAngleInput = ({ target: { value } }) => setGradientAngle(value);

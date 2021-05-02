@@ -82,7 +82,9 @@ const CustomColor = ({
   nullityColor = '#fff',
   setTransparencyStatus,
   customColorsInHexFormat,
-  customFormatName
+  customFormatName,
+  gradientColor,
+  setGradientColor
 }) => {
   const classes = useStyles({ transparencyStatus: true });
   const isColorInHexFormat = _.isString(color, nullityColor) && color.startsWith('#');
@@ -102,9 +104,15 @@ const CustomColor = ({
           <Grid container>
             <RgbaColorPicker color={correctAndFormattedColor} onChange={setColor} />
             <Grid item>
-            <GradientPreviewer color={customColorsInHexFormat} />
+              <GradientPreviewer gradientColor={gradientColor} />
 
-              <CustomGradient />
+              <CustomGradient
+                setColor={setColor}
+                setGradientColor={setGradientColor}
+                customColorsInHexFormat={customColorsInHexFormat}
+                color={color}
+                nullityColor={nullityColor}
+              />
             </Grid>
           </Grid>
           <Grid item>

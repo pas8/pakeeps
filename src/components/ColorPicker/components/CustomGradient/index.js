@@ -2,10 +2,10 @@ import { Box, FormControl, Grid, InputLabel, makeStyles, OutlinedInput, Paper } 
 import { ToggleButton } from '@material-ui/lab';
 import _ from 'lodash';
 import PropTypes from 'prop-types';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import NumberAdornment from '../CustomColor/components/NumberAdornment';
 import CloseIcon from '@material-ui/icons/Close';
-
+import clsx from 'clsx';
 const useStyles = makeStyles(theme => ({
   container: {
     margin: theme.spacing(2.16, 4, 0.8, 1.2),
@@ -20,7 +20,8 @@ const useStyles = makeStyles(theme => ({
   colorPreviewer: {
     width: theme.spacing(8 * 0.8),
     height: theme.spacing(8 * 0.8),
-    cursor: 'pointer'
+    cursor: 'pointer',
+    border: '2px solid rgba(255, 255, 255,0)'
   },
   textFieldInHexFormat: {
     margin: theme.spacing(0.08, 2, 0, 2),
@@ -54,36 +55,62 @@ const useStyles = makeStyles(theme => ({
   numberAdornment: {
     paddingTop: theme.spacing(1.4),
     marginRight: theme.spacing(-0.4)
+  },
+  colorPreviewerFocused: {
+    borderColor: ' rgba(255, 255, 255,1)'
   }
 }));
 
-const CustomGradient = () => {
+
+const CustomGradient = ({ setColor, setGradientColor, customColorsInHexFormat, color, nullityColor }) => {
   const testColorPlaceholder = [
-    { color: '#090979', stopDeg: 0, name: '0' },
-    { color: '#1f13e5', stopDeg: 42, name: '1' },
-    { color: '#00d4ff', stopDeg: 80, name: '2' },
-    { color: '#0024ff', stopDeg: 100, name: '3' }
+    { color: '#090979', stopDeg: 0, key: '0' },
+    { color: '#1f13e5', stopDeg: 42, key: '1' },
+    { color: '#00d4ff', stopDeg: 80, key: '2' },
+    { color: '#0024ff', stopDeg: 100, key: '3' }
   ];
 
   const [hoverStatusOfCloseButton, setHoverStatusOfCloseButton] = useState(false);
   const [gradientHoveredElementName, setGradientHoveredElementName] = useState(false);
-  const [gradientFocusedElementColor, setGradientFocusedElementColor] = useState(false);
+  const [gradientFocusedElementState, setGradientFocusedElementState] = useState({
+    color: testColorPlaceholder[0].color,
+    name: testColorPlaceholder[0].name,
+    stopDeg: testColorPlaceholder[0].stopDeg
+  });
+  console.log(gradientFocusedElementState);
 
-  const sumReduceFunc = (sum, { color, name }) => ({ ...sum, [name]: color });
-  const nullityValueOfCustomFormatState = _.reduce(testColorPlaceholder, sumReduceFunc, 1);
+  // const sumReduceFunc = (sum, { color, name }) => ({ ...sum, [name]: color });
+  // const nullityValueOfCustomFormatState = _.reduce(testColorPlaceholder, sumReduceFunc, 1);
   // console.log(nullityValueOfCustomFormatState);
 
   const onHoverOfCloseButton = () => setHoverStatusOfCloseButton(true);
   const onUnHoverOfCloseButton = () => setHoverStatusOfCloseButton(false);
 
-  const classes = useStyles({ borderColorOfFocusedInput: gradientFocusedElementColor });
+  const classes = useStyles({ borderColorOfFocusedInput: gradientFocusedElementState.color });
+  console.log(customColorsInHexFormat);
+
+  useEffect(() => setColor(gradientFocusedElementState.color), [gradientFocusedElementState]);
+
+  useEffect(() => {
+    if (color !== nullityColor)
+      _.debounce(() => setGradientFocusedElementState(state => ({ ...state, color: customColorsInHexFormat })), 160);
+  }, [customColorsInHexFormat]);
 
   return (
     <Grid container direction={'column'} className={classes.container}>
       {testColorPlaceholder.map(({ color, stopDeg, name }) => {
+        const isHovered = gradientHoveredElementName === name;
+        const isFocused = gradientFocusedElementState.color === color;
+
         const setGradientHoveredElementNameIsFalse = () => setGradientHoveredElementName(false);
         const handleGradientHoveredElementName = () => setGradientHoveredElementName(name);
-        const handleGradientFocusedElementColor = () => setGradientFocusedElementColor(color);
+
+        const handleGradientFocusedElementColor = () =>
+          setGradientFocusedElementState({
+            color,
+            name,
+            stopDeg
+          });
 
         const hexInputProps = {
           type: 'text',
@@ -116,7 +143,13 @@ const CustomGradient = () => {
           >
             {/* <Paper elevation={0}> */}
             <Grid container>
-              <Paper style={{ background: color }} className={classes.colorPreviewer} elevation={4} onClick={null} />
+              <Paper
+                style={{ background: color }}
+                className={clsx(classes.colorPreviewer, isFocused && classes.colorPreviewerFocused)}
+                elevation={4}
+                onClick={null}
+                onClick={handleGradientFocusedElementColor}
+              />
               <FormControl
                 variant={'outlined'}
                 // onFocus={onInputFocus}
@@ -139,7 +172,7 @@ const CustomGradient = () => {
               </FormControl>
               <ToggleButton
                 value={'close'}
-                selected={gradientHoveredElementName === name && hoverStatusOfCloseButton}
+                selected={isHovered && hoverStatusOfCloseButton}
                 onMouseEnter={onHoverOfCloseButton}
                 onMouseLeave={onUnHoverOfCloseButton}
                 onClick={() => console.log(';')}

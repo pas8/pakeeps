@@ -66,7 +66,11 @@ const useStyles = makeStyles(theme => ({
 
 const ColorPickerByPas = () => {
   const nullityColor = themeColors.whiteRgbaColorWith0dot8valueOfAlfaCanal;
+
   const [color, setColor] = useState(nullityColor);
+  const customColorsInHexFormat = colord(color).toHex();
+
+  const [gradientColor, setGradientColor] = useState(customColorsInHexFormat);
   const [savedStatus, setSavedStatus] = useState(false);
   const [transparencyStatus, setTransparencyStatus] = useState(false);
   const [extendMoreColorsStatus, setExtendMoreColorsStatus] = useState(false);
@@ -76,10 +80,9 @@ const ColorPickerByPas = () => {
   const [extendedCustomColorUtilsStatus, setExtendedCustomColorUtilsStatus] = useState(false);
   const [gradientsStatus, setGradientsStatus] = useState(!false);
   const [customFormatName, setCustomFormatName] = useState('rgb');
-  
+
   const [buttonCustomizationHoverStatus, setButtonCustomizationHoverStatus] = useState(false);
   const classes = useStyles();
-  const customColorsInHexFormat = colord(color).toHex();
 
   const colorsArr = [
     [{ colorName: 'deepOrange' }, { colorName: 'orange' }, { colorName: 'amber' }, { colorName: 'yellow' }],
@@ -115,7 +118,6 @@ const ColorPickerByPas = () => {
     onMouseLeave: () => setButtonCustomizationHoverStatus(false)
   };
 
-
   const handleSetColor = value => setColor(value);
 
   const onSave = () => console.log('onSave');
@@ -129,6 +131,8 @@ const ColorPickerByPas = () => {
     customColorsInHexFormat,
     customFormatName,
     gradientsStatus,
+    gradientColor,
+    setGradientColor
   };
 
   const iconUtilsProps = {
