@@ -8,7 +8,7 @@ import TextureOutlinedIcon from '@material-ui/icons/TextureOutlined';
 import ColorFormatIcon from 'components/Icons/components/ColorFormatIcon';
 import CustomizationButton from '../CustomizationButton';
 import SelectColorFormat from '../CustomColor/components/SelectColorFormat';
-
+import UnfoldLessOutlinedIcon from '@material-ui/icons/UnfoldLessOutlined';
 const IconUtilsOfColorPicker = ({
   handleCustomColorStatus,
   handleCustomizationStatus,
@@ -25,9 +25,12 @@ const IconUtilsOfColorPicker = ({
   popoverAndMenuState,
   customFormatsStatus,
   customFormatName,
-  setCustomFormatName
+  setCustomFormatName,
+  gradientsStatus,
+  handleExtendedCustomColorUtilsStatus,
+  handleGradientsStatus,
+  extendedCustomColorUtilsStatus
 }) => {
-
   const ColorFormatMenuComponent = () => (
     <SelectColorFormat
       customFormatName={customFormatName}
@@ -37,6 +40,17 @@ const IconUtilsOfColorPicker = ({
   );
 
   const buttonUtilsArr = [
+    {
+      icon: !extendMoreColorsStatus ? UnfoldMoreOutlinedIcon : UnfoldLessOutlinedIcon,
+      popoverText: 'Extend more colors',
+      name: 'extendMoreColors',
+      activeIcon: false,
+      onlyPopover: true,
+      onClick: handleExtendMoreColorsStatus,
+      hidden: false,
+      customColor: extendMoreColorsStatus ? customColorsInHexFormat : null
+    },
+
     {
       icon: FilterVintageOutlinedIcon,
       popoverText: 'Gradient',
@@ -66,16 +80,6 @@ const IconUtilsOfColorPicker = ({
       customColor: transparencyStatus ? customColorsInHexFormat : null,
       menuComponents: ColorFormatMenuComponent,
       menuLocation: 'center'
-    },
-    {
-      icon: UnfoldMoreOutlinedIcon,
-      popoverText: 'Extend more colors',
-      name: 'extendMoreColors',
-      activeIcon: false,
-      onlyPopover: true,
-      onClick: handleExtendMoreColorsStatus,
-      hidden: customColorsStatus,
-      customColor: extendMoreColorsStatus ? customColorsInHexFormat : null
     },
 
     {

@@ -17,15 +17,16 @@ import { useCallback, useEffect, useLayoutEffect, useMemo, useState } from 'reac
 import lchPlugin from 'colord/plugins/lch';
 import { colord, extend } from 'colord';
 import _, { sum } from 'lodash';
-
-
+import NumberAdornment from '../NumberAdornment';
 
 const useStyles = makeStyles(theme => ({
   textFieldInHexFormat: {
     width: theme.spacing(8 + 4 + 2),
     marginRight: theme.spacing(1.4 + 4),
     '& .MuiFormLabel-root.Mui-focused ': { color: ({ customColorsInHexFormat }) => customColorsInHexFormat },
-    '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline':{ borderColor: ({ customColorsInHexFormat }) => customColorsInHexFormat }
+    '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
+      borderColor: ({ customColorsInHexFormat }) => customColorsInHexFormat
+    }
   },
   removeMarginFromTextFieldInHexFormat: {
     width: theme.spacing(8 + 4 + 2),
@@ -64,21 +65,21 @@ const useStyles = makeStyles(theme => ({
     //   duration: theme.transitions.duration.enteringScreen,
 
     // }),
-    width: theme.spacing(8),
-    
+    width: theme.spacing(8)
   },
   containerOfInputsGroupOfCustomFormatColor: {
     gap: theme.spacing(1.4),
 
     '& .MuiFormLabel-root.Mui-focused ': { color: ({ customColorsInHexFormat }) => customColorsInHexFormat },
-    '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline':{ borderColor: ({ customColorsInHexFormat }) => customColorsInHexFormat }
-  },
-  
+    '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
+      borderColor: ({ customColorsInHexFormat }) => customColorsInHexFormat
+    }
+  }
 }));
 
 const InputsColorUtilsOfCustomColorPicker = ({ color, setColor, customColorsInHexFormat, customFormatName }) => {
   extend([lchPlugin]);
-  const classes = useStyles({customColorsInHexFormat});
+  const classes = useStyles({ customColorsInHexFormat });
 
   const formatPropertiesArr = {
     rgb: [
@@ -107,10 +108,10 @@ const InputsColorUtilsOfCustomColorPicker = ({ color, setColor, customColorsInHe
   const customFormatElementNames = ['first', 'second', 'third', 'alpha'];
   const sumReduceFunc = (sum, name) => ({ ...sum, [name]: '' });
   const nullityValueOfCustomFormatState = _.reduce(customFormatElementNames, sumReduceFunc, '');
+
   const [colorInHexFormat, setColorInHexFormat] = useState(customColorsInHexFormat);
   const [customFormatState, setCustomFormatState] = useState(nullityValueOfCustomFormatState);
   const [customFormatElementFocusStatus, setCustomFormatElementFocus] = useState(false);
-
 
   const onChangeOfColorInHexFormat = ({ target: { value } }) => {
     if (value.length >= 3) setColor(value);
@@ -123,7 +124,6 @@ const InputsColorUtilsOfCustomColorPicker = ({ color, setColor, customColorsInHe
     setCustomFormatState(state => ({ ...state, [customFormatElementNames[idx]]: currentValue }));
   };
 
-  
   useEffect(() => {
     _.debounce(() => setColorInHexFormat(customColorsInHexFormat), 160);
     console.log(customColorsInHexFormat);
@@ -145,12 +145,10 @@ const InputsColorUtilsOfCustomColorPicker = ({ color, setColor, customColorsInHe
     setColor(colord(correctFormatObj).toRgb());
   }, [customFormatName, customFormatState]);
 
-
-
   const onInputFocus = ({ target: { name } }) => setCustomFormatElementFocus(name);
   const onButtonClick = name => console.log(name);
   const onInputBlur = () => setCustomFormatElementFocus(false);
-  
+
   const inputInHexFormatProps = useMemo(
     () => ({
       labelText: 'Hex',
@@ -161,15 +159,13 @@ const InputsColorUtilsOfCustomColorPicker = ({ color, setColor, customColorsInHe
       maxValue: 'any',
       onChange: onChangeOfColorInHexFormat,
       hexFormat: true,
-      labelWidth: 3 * 9.6, //
+      labelWidth: 3 * 9.6, 
       name: 'hex',
-      onFocus:onInputFocus,
-      onBlur:onInputBlur
+      onFocus: onInputFocus,
+      onBlur: onInputBlur
     }),
-    [customColorsInHexFormat, onChangeOfColorInHexFormat,  customFormatElementFocusStatus]
+    [customColorsInHexFormat, onChangeOfColorInHexFormat, customFormatElementFocusStatus]
   );
-
-  const preventDefaultFunc = e => e.preventDefault();
 
   return (
     <Grid className={classes.containerOfInputsOfColorPicker} container>
@@ -193,23 +189,6 @@ const InputsColorUtilsOfCustomColorPicker = ({ color, setColor, customColorsInHe
             const isFocused = customFormatElementFocusStatus === `${idx}`;
             const currentLabelName = isFocused ? name : shotName;
             const onClick = () => onButtonClick(name);
-            const groupButtonsOfNumberInputOfEndAdornment = (
-              <InputAdornment position={'end'} className={classes.inputAdornmentArrowContainer}>
-                <ToggleButtonGroup orientation={'vertical'} value={'null'} exclusive size={'small'}>
-                  <ToggleButton
-                    value={'plus'}
-                    aria-label={'plus one'}
-                    onClick={onClick}
-                    onMouseDown={preventDefaultFunc}
-                  >
-                    <AddOutlinedIcon />
-                  </ToggleButton>
-                  <ToggleButton value={'minus'} aria-label={'minus one'} onMouseDown={preventDefaultFunc}>
-                    <RemoveOutlinedIcon />
-                  </ToggleButton>
-                </ToggleButtonGroup>
-              </InputAdornment>
-            );
 
             const outlinedInputProps = {
               type: 'number',
@@ -217,7 +196,7 @@ const InputsColorUtilsOfCustomColorPicker = ({ color, setColor, customColorsInHe
               name: idx,
               labelWidth: currentLabelName.length * 9.6,
               value: customFormatState[customFormatElementNames[idx]],
-              endAdornment: isFocused ? groupButtonsOfNumberInputOfEndAdornment : null
+              endAdornment: isFocused ? <NumberAdornment /> : null
             };
 
             return (

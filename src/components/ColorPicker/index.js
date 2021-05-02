@@ -73,6 +73,8 @@ const ColorPickerByPas = () => {
   const [customizationsStatus, setCustomizationsStatus] = useState(false);
   const [customColorsStatus, setCustomColorsStatus] = useState(false);
   const [customFormatsStatus, setCustomFormatsStatus] = useState(false);
+  const [extendedCustomColorUtilsStatus, setExtendedCustomColorUtilsStatus] = useState(false);
+  const [gradientsStatus, setGradientsStatus] = useState(!false);
   const [customFormatName, setCustomFormatName] = useState('rgb');
   
   const [buttonCustomizationHoverStatus, setButtonCustomizationHoverStatus] = useState(false);
@@ -100,6 +102,8 @@ const ColorPickerByPas = () => {
   const handleCustomizationStatus = () => setCustomizationsStatus(state => !state);
   const handleCustomColorStatus = () => setCustomColorsStatus(state => !state);
   const handleCustomColorFormatStatus = () => setCustomFormatsStatus(state => !state);
+  const handleGradientsStatus = () => setGradientsStatus(state => !state);
+  const handleExtendedCustomColorUtilsStatus = () => setExtendedCustomColorUtilsStatus(state => !state);
 
   const customizationButtonProps = {
     nullityColor,
@@ -124,7 +128,7 @@ const ColorPickerByPas = () => {
     setTransparencyStatus,
     customColorsInHexFormat,
     customFormatName,
-    setCustomFormatName
+    gradientsStatus,
   };
 
   const iconUtilsProps = {
@@ -144,7 +148,11 @@ const ColorPickerByPas = () => {
     handleCustomColorFormatStatus,
     customFormatsStatus,
     setCustomFormatName,
-    customFormatName
+    customFormatName,
+    gradientsStatus,
+    handleExtendedCustomColorUtilsStatus,
+    handleGradientsStatus,
+    extendedCustomColorUtilsStatus
   };
 
   return (
@@ -177,7 +185,7 @@ const ColorPickerByPas = () => {
 
                         const elementOfPartsOfGridElementProps = {
                           onClick: onClick,
-                          style: { backgroundColor: colorOfElementOfPartsOfGridElementProps },
+                          style: { background: colorOfElementOfPartsOfGridElementProps },
                           className: classes.extendedElementOfGridColorPicker
                         };
 
