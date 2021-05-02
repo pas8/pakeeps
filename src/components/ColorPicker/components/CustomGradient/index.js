@@ -61,7 +61,7 @@ const CustomGradient = () => {
   const testColorPlaceholder = [
     { color: '#090979', stopDeg: 0, name: '0' },
     { color: '#1f13e5', stopDeg: 42, name: '1' },
-    { color: '#00d4ff', stopDeg: 100, name: '2' },
+    { color: '#00d4ff', stopDeg: 80, name: '2' },
     { color: '#0024ff', stopDeg: 100, name: '3' }
   ];
 
