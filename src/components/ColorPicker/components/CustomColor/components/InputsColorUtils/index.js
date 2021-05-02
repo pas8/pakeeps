@@ -41,7 +41,6 @@ const useStyles = makeStyles(theme => ({
     // })
   },
   containerOfInputsOfColorPicker: {
-    
     margin: theme.spacing(0, 1.4),
     '& > div': {
       // width: '20ch',
@@ -161,7 +160,7 @@ const InputsColorUtilsOfCustomColorPicker = ({ color, setColor, customColorsInHe
       maxValue: 'any',
       onChange: onChangeOfColorInHexFormat,
       hexFormat: true,
-      labelWidth: 3 * 9.6, 
+      labelWidth: 3 * 9.6,
       name: 'hex',
       onFocus: onInputFocus,
       onBlur: onInputBlur
@@ -214,9 +213,6 @@ const InputsColorUtilsOfCustomColorPicker = ({ color, setColor, customColorsInHe
             );
           })}
         </Grid>
-      </Grid>
-      <Grid item>
-      <ButtonUtilsOfCustomGradient color={customColorsInHexFormat}/>
       </Grid>
     </Grid>
   );

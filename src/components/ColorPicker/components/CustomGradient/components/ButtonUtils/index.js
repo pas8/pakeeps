@@ -34,7 +34,7 @@ const ButtonUtilsOfCustomGradient = ({ color }) => {
   const [gradientDirection, setGradientDirection] = useState('Linear');
   const [hoverStatusOFCircleSlider, setHoverStatusOFCircleSlider] = useState(false);
   const [gradientAngle, setGradientAngle] = useState(180);
-  const handleGradientDirection = (placeholder, direction) => setGradientDirection(direction);
+  const handleGradientDirection = (placeholder, direction) => direction && setGradientDirection(direction);
 
   const setHoverStatusOFCircleSliderIsFalse = () => setHoverStatusOFCircleSlider(false);
   const setHoverStatusOFCircleSliderIsTrue = () => setHoverStatusOFCircleSlider(true);
@@ -48,7 +48,7 @@ const ButtonUtilsOfCustomGradient = ({ color }) => {
     onChange: handleChangeOfGradientAngleInput,
     name: 'gradientAngle',
     value: gradientAngle,
-    endAdornment: <NumberAdornment setStateFunc={setGradientAngle}  />
+    endAdornment: <NumberAdornment setStateFunc={setGradientAngle} />
   };
 
   const circleSliderProps = {

@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import {
+  Box,
   FilledInput,
   FormControl,
   Grid,
@@ -20,15 +21,16 @@ import IndeterminateCheckBoxOutlinedIcon from '@material-ui/icons/IndeterminateC
 import CustomGradient from '../CustomGradient';
 import GradientPreviewer from '../CustomGradient/components/GradientPreviewer';
 import InputsColorUtilsOfCustomColorPicker from './components/InputsColorUtils';
+import ButtonUtilsOfCustomGradient from '../CustomGradient/components/ButtonUtils';
+import { useEffect, useState } from 'react';
+import _ from 'lodash';
 
 const useStyles = makeStyles(theme => ({
-  containerOfCustomColor: ({ transparencyStatus }) => ({
+  containerOfCustomColor: ({ isExtended }) => ({
     '& .react-colorful': {
-      padding: theme.spacing(0, 1),
       width: 'auto',
-      minWidth: theme.spacing(42 + 8 - 1),
-      paddingTop: transparencyStatus ? 0 : theme.spacing(1.4),
-      height: theme.spacing(42 + 0.8)
+      minWidth: theme.spacing(42 - 1.8),
+      height: theme.spacing(42 - 10 + 0.8)
       // marginRight: theme.spacing(10 + 0.16)
     },
 
@@ -65,7 +67,7 @@ const useStyles = makeStyles(theme => ({
     },
     '& .react-colorful__alpha': {
       order: -1,
-      display: transparencyStatus ? 'block' : 'none',
+      display: isExtended ? 'block' : 'none',
 
       transition: theme.transitions.create('opacity', {
         easing: theme.transitions.easing.easeIn,
@@ -84,44 +86,63 @@ const CustomColor = ({
   customColorsInHexFormat,
   customFormatName,
   gradientColor,
-  setGradientColor
+  gradientsStatus,
+  setGradientColor,
+  extendMoreColorsStatus,
+  customColorsStatus
 }) => {
-  const classes = useStyles({ transparencyStatus: true });
+  const isExtended = customColorsStatus && extendMoreColorsStatus;
+  const classes = useStyles({ isExtended });
   const isColorInHexFormat = _.isString(color, nullityColor) && color.startsWith('#');
-  const colorInRgbFormat = colord(color).toRgb();
+  const colorToRgbFormat = colord(color).toRgb();
 
   const correctAndFormattedColor =
-    _.isEqual(color, 'rgba(255,255,255,0.8)') && !transparencyStatus
+    _.isEqual(color, 'rgba(255,255,255,0.8)') && !extendMoreColorsStatus && customColorsStatus
       ? colord(themeColors.primaryMain).toRgb()
       : isColorInHexFormat
-      ? colorInRgbFormat
+      ? colorToRgbFormat
       : color;
 
+  // console.log(correctAndFormattedColor,color)
   return (
     <Grid className={classes.containerOfCustomColor}>
       <Grid container>
         <Grid item>
-          <Grid container>
+          <Box
+            mb={isExtended ? 0.42 : -1.1}
+            borderBottom={gradientsStatus ? 1 : 0}
+            borderColor={'grey.600'}
+            mx={isExtended ? 1.8 : 1.4}
+            mt={isExtended ? -0.4 : 1.4}
+          >
+            {/* <Grid container> */}
             <RgbaColorPicker color={correctAndFormattedColor} onChange={setColor} />
             <Grid item>
-              <GradientPreviewer gradientColor={gradientColor} />
+              {/* <GradientPreviewer gradientColor={gradientColor} />
 
-              <CustomGradient
-                setColor={setColor}
-                setGradientColor={setGradientColor}
-                customColorsInHexFormat={customColorsInHexFormat}
-                color={color}
-                nullityColor={nullityColor}
-              />
+                <CustomGradient
+                  setColor={setColor}
+                  setGradientColor={setGradientColor}
+                  customColorsInHexFormat={customColorsInHexFormat}
+                  color={color}
+                  nullityColor={nullityColor}
+                /> */}
             </Grid>
-          </Grid>
+            {/* </Grid> */}
+          </Box>
           <Grid item>
-            <InputsColorUtilsOfCustomColorPicker
-              color={color}
-              setColor={setColor}
-              customColorsInHexFormat={customColorsInHexFormat}
-              customFormatName={customFormatName}
-            />
+            {isExtended && (
+              <Box borderBottom={1} borderColor={'grey.600'} pb={2}>
+                <InputsColorUtilsOfCustomColorPicker
+                  color={color}
+                  setColor={setColor}
+                  customColorsInHexFormat={customColorsInHexFormat}
+                  customFormatName={customFormatName}
+                />
+              </Box>
+            )}
+
+            {gradientsStatus && <ButtonUtilsOfCustomGradient color={customColorsInHexFormat} />}
           </Grid>
         </Grid>
       </Grid>

@@ -68,7 +68,7 @@ const ColorPickerByPas = () => {
   const nullityColor = themeColors.whiteRgbaColorWith0dot8valueOfAlfaCanal;
 
   const [color, setColor] = useState(nullityColor);
-  const customColorsInHexFormat = colord(color).toHex();
+  const customColorsInHexFormat = colord(color).toHex() 
 
   const [gradientColor, setGradientColor] = useState(customColorsInHexFormat);
   const [savedStatus, setSavedStatus] = useState(false);
@@ -77,8 +77,7 @@ const ColorPickerByPas = () => {
   const [customizationsStatus, setCustomizationsStatus] = useState(false);
   const [customColorsStatus, setCustomColorsStatus] = useState(false);
   const [customFormatsStatus, setCustomFormatsStatus] = useState(false);
-  const [extendedCustomColorUtilsStatus, setExtendedCustomColorUtilsStatus] = useState(false);
-  const [gradientsStatus, setGradientsStatus] = useState(!false);
+  const [gradientsStatus, setGradientsStatus] = useState(false);
   const [customFormatName, setCustomFormatName] = useState('rgb');
 
   const [buttonCustomizationHoverStatus, setButtonCustomizationHoverStatus] = useState(false);
@@ -97,16 +96,18 @@ const ColorPickerByPas = () => {
     popoverIsOpen: true,
     onMenuClose: null
   });
-
+  console.log(gradientsStatus);
   const handlePopoverAndMenuState = value => setPopoverAndMenuState(value);
 
   const handleTransparencyColorPickerStatus = () => setTransparencyStatus(state => !state);
   const handleExtendMoreColorsStatus = () => setExtendMoreColorsStatus(state => !state);
   const handleCustomizationStatus = () => setCustomizationsStatus(state => !state);
-  const handleCustomColorStatus = () => setCustomColorsStatus(state => !state);
+  const handleCustomColorStatus = () => {
+    setCustomColorsStatus(state => !state);
+    // setGradientsStatus(state => !state);
+  };
   const handleCustomColorFormatStatus = () => setCustomFormatsStatus(state => !state);
   const handleGradientsStatus = () => setGradientsStatus(state => !state);
-  const handleExtendedCustomColorUtilsStatus = () => setExtendedCustomColorUtilsStatus(state => !state);
 
   const customizationButtonProps = {
     nullityColor,
@@ -132,7 +133,9 @@ const ColorPickerByPas = () => {
     customFormatName,
     gradientsStatus,
     gradientColor,
-    setGradientColor
+    setGradientColor,
+    extendMoreColorsStatus,
+    customColorsStatus
   };
 
   const iconUtilsProps = {
@@ -154,14 +157,12 @@ const ColorPickerByPas = () => {
     setCustomFormatName,
     customFormatName,
     gradientsStatus,
-    handleExtendedCustomColorUtilsStatus,
-    handleGradientsStatus,
-    extendedCustomColorUtilsStatus
+    handleGradientsStatus
   };
 
   return (
     <Grid className={classes.container}>
-      <Grid container direction={'column'}>
+      <Grid container direction={gradientsStatus ? 'row' : 'column'}>
         {customColorsStatus ? (
           <CustomColor {...customColorProps} />
         ) : (
@@ -240,12 +241,21 @@ const ColorPickerByPas = () => {
             );
           })
         )}
+        {gradientsStatus && (
+          <Box m={0.4} mb={0} mt={0.8} className={classes.iconUtilsContainer}>
+            <Grid container justify={'space-between'} alignItems={'center'} direction={'column'}>
+              <IconUtilsOfColorPicker {...iconUtilsProps} />
+            </Grid>
+          </Box>
+        )}
       </Grid>
-      <Box m={0.4} mb={0} mt={0.8} className={classes.iconUtilsContainer}>
-        <Grid container justify={'space-between'} alignItems={'center'}>
-          <IconUtilsOfColorPicker {...iconUtilsProps} />
-        </Grid>
-      </Box>
+      {!gradientsStatus && (
+        <Box m={0.4} mb={0} mt={0.8} className={classes.iconUtilsContainer}>
+          <Grid container justify={'space-between'} alignItems={'center'}>
+            <IconUtilsOfColorPicker {...iconUtilsProps} />
+          </Grid>
+        </Box>
+      )}
     </Grid>
   );
 };

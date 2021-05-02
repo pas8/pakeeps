@@ -77,7 +77,7 @@ const CustomGradient = ({ setColor, setGradientColor, customColorsInHexFormat, c
     name: testColorPlaceholder[0].name,
     stopDeg: testColorPlaceholder[0].stopDeg
   });
-  console.log(gradientFocusedElementState);
+  // console.log(gradientFocusedElementState);
 
   // const sumReduceFunc = (sum, { color, name }) => ({ ...sum, [name]: color });
   // const nullityValueOfCustomFormatState = _.reduce(testColorPlaceholder, sumReduceFunc, 1);
@@ -87,7 +87,7 @@ const CustomGradient = ({ setColor, setGradientColor, customColorsInHexFormat, c
   const onUnHoverOfCloseButton = () => setHoverStatusOfCloseButton(false);
 
   const classes = useStyles({ borderColorOfFocusedInput: gradientFocusedElementState.color });
-  console.log(customColorsInHexFormat);
+  // console.log(customColorsInHexFormat);
 
   useEffect(() => setColor(gradientFocusedElementState.color), [gradientFocusedElementState]);
 
@@ -98,12 +98,12 @@ const CustomGradient = ({ setColor, setGradientColor, customColorsInHexFormat, c
 
   return (
     <Grid container direction={'column'} className={classes.container}>
-      {testColorPlaceholder.map(({ color, stopDeg, name }) => {
-        const isHovered = gradientHoveredElementName === name;
+      {testColorPlaceholder.map(({ color, stopDeg, key }) => {
+        const isHovered = gradientHoveredElementName === key;
         const isFocused = gradientFocusedElementState.color === color;
 
         const setGradientHoveredElementNameIsFalse = () => setGradientHoveredElementName(false);
-        const handleGradientHoveredElementName = () => setGradientHoveredElementName(name);
+        const handleGradientHoveredElementName = () => setGradientHoveredElementName(key);
 
         const handleGradientFocusedElementColor = () =>
           setGradientFocusedElementState({

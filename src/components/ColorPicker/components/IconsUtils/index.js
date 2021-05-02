@@ -27,9 +27,7 @@ const IconUtilsOfColorPicker = ({
   customFormatName,
   setCustomFormatName,
   gradientsStatus,
-  handleExtendedCustomColorUtilsStatus,
   handleGradientsStatus,
-  extendedCustomColorUtilsStatus
 }) => {
   const ColorFormatMenuComponent = () => (
     <SelectColorFormat
@@ -46,41 +44,11 @@ const IconUtilsOfColorPicker = ({
       name: 'extendMoreColors',
       activeIcon: false,
       onlyPopover: true,
-      onClick: handleExtendMoreColorsStatus,
+      onClick:  handleExtendMoreColorsStatus,
       hidden: false,
       customColor: extendMoreColorsStatus ? customColorsInHexFormat : null
     },
 
-    {
-      icon: FilterVintageOutlinedIcon,
-      popoverText: 'Gradient',
-      name: 'changeGradientStatus',
-      activeIcon: false,
-      onlyPopover: true,
-      onClick: handleTransparencyColorPickerStatus,
-      hidden: !customColorsStatus,
-      customColor: transparencyStatus ? customColorsInHexFormat : null
-    },
-    {
-      icon: TextureOutlinedIcon,
-      popoverText: 'Change transparency Status',
-      name: 'changeTransparencyStatus',
-      activeIcon: false,
-      onlyPopover: true,
-      onClick: handleTransparencyColorPickerStatus,
-      hidden: !customColorsStatus,
-      customColor: transparencyStatus ? customColorsInHexFormat : null
-    },
-    {
-      icon: ColorFormatIcon,
-      popoverText: 'Chose color format which u like',
-      name: 'choseColorFormatWhichULike',
-      activeIcon: false,
-      hidden: !customColorsStatus,
-      customColor: transparencyStatus ? customColorsInHexFormat : null,
-      menuComponents: ColorFormatMenuComponent,
-      menuLocation: 'center'
-    },
 
     {
       icon: ColorLensOutlinedIcon,
@@ -91,7 +59,29 @@ const IconUtilsOfColorPicker = ({
       onClick: handleCustomColorStatus,
       customColor: customColorsStatus ? customColorsInHexFormat : null
     },
+
     {
+      icon: FilterVintageOutlinedIcon,
+      popoverText: 'Gradient',
+      name: 'changeGradientStatus',
+      activeIcon: false,
+      onlyPopover: true,
+      onClick: handleGradientsStatus,
+      hidden: !customColorsStatus,
+      customColor: gradientsStatus ? customColorsInHexFormat : null
+    },
+    {
+      icon: ColorFormatIcon,
+      popoverText: 'Chose color format which u like',
+      name: 'choseColorFormatWhichULike',
+      activeIcon: false,
+      hidden: !extendMoreColorsStatus,
+      customColor: customColorsInHexFormat ,
+      menuComponents: ColorFormatMenuComponent,
+      menuLocation: 'center'
+    },
+    {
+      hidden: gradientsStatus,
       customElementComponentOfIconGroup: <CustomizationButton {...customizationButtonProps} />
     },
     {
