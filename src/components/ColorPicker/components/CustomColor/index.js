@@ -26,7 +26,7 @@ const useStyles = makeStyles(theme => ({
     '& .react-colorful': {
       padding: theme.spacing(0, 1),
       width: 'auto',
-      minWidth: theme.spacing(42 + 8 - 1.42),
+      minWidth: theme.spacing(42 + 8 - 1),
       paddingTop: transparencyStatus ? 0 : theme.spacing(1.4),
       height: theme.spacing(42 + 0.8)
       // marginRight: theme.spacing(10 + 0.16)
