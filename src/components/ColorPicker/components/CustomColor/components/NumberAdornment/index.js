@@ -3,6 +3,8 @@ import { ToggleButton, ToggleButtonGroup } from '@material-ui/lab';
 import PropTypes from 'prop-types';
 import RemoveOutlinedIcon from '@material-ui/icons/RemoveOutlined';
 import AddOutlinedIcon from '@material-ui/icons/AddOutlined';
+import { useState } from 'react';
+import _ from 'lodash';
 const useStyles = makeStyles(theme => ({
   inputAdornmentArrowContainer: {
     marginRight: theme.spacing(-0.8),
@@ -16,26 +18,22 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const NumberAdornment = ({ onClickOfPlusButton =null, onClickOfMinusButton = null }) => {
+const NumberAdornment = ({ setStateFunc }) => {
   const classes = useStyles();
   const preventDefaultFunc = e => e.preventDefault();
+  const handleDecrement = () => setStateFunc(number => number - 1);
+  const handleIncrement = () => setStateFunc(number => number + 1);
 
   return (
     <InputAdornment position={'end'} className={classes.inputAdornmentArrowContainer}>
       <ToggleButtonGroup orientation={'vertical'} value={'null'} exclusive size={'small'}>
-        <ToggleButton
-          value={'plus'}
-          aria-label={'plus one'}
-          onClick={onClickOfPlusButton}
-          onMouseDown={preventDefaultFunc}
-        >
+        <ToggleButton value={'plus'} aria-label={'plus one'} onClick={handleIncrement} onMouseDown={preventDefaultFunc}>
           <AddOutlinedIcon />
         </ToggleButton>
         <ToggleButton
           value={'minus'}
           aria-label={'minus one'}
-          onClick={onClickOfMinusButton}
-          onMouseDown={preventDefaultFunc}
+          onClick={handleDecrement}
         >
           <RemoveOutlinedIcon />
         </ToggleButton>
@@ -45,8 +43,7 @@ const NumberAdornment = ({ onClickOfPlusButton =null, onClickOfMinusButton = nul
 };
 
 NumberAdornment.propTypes = {
-  onClickOfMinusButton: PropTypes.func,
-  onClickOfPlusButton: PropTypes.func
-}
+  setStateFunc: PropTypes.func
+};
 
 export default NumberAdornment;

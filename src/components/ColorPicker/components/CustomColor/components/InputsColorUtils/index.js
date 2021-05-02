@@ -18,7 +18,7 @@ import lchPlugin from 'colord/plugins/lch';
 import { colord, extend } from 'colord';
 import _, { sum } from 'lodash';
 import NumberAdornment from '../NumberAdornment';
-import IconUtilsOfCustomGradient from 'components/ColorPicker/components/CustomGradient/components/IconUtils';
+import ButtonUtilsOfCustomGradient from 'components/ColorPicker/components/CustomGradient/components/ButtonUtils';
 
 const useStyles = makeStyles(theme => ({
   textFieldInHexFormat: {
@@ -215,7 +215,9 @@ const InputsColorUtilsOfCustomColorPicker = ({ color, setColor, customColorsInHe
           })}
         </Grid>
       </Grid>
-      <IconUtilsOfCustomGradient/>
+      <Grid item>
+      <ButtonUtilsOfCustomGradient color={customColorsInHexFormat}/>
+      </Grid>
     </Grid>
   );
 };

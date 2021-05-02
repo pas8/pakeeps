@@ -49,7 +49,7 @@ const useStyles = makeStyles(theme => ({
   closeButton: {
     width: theme.spacing(8 * 0.8),
     height: theme.spacing(8 * 0.8),
-    marginLeft: theme.spacing(1.4)
+    marginLeft: theme.spacing(1.8)
   },
   numberAdornment: {
     paddingTop: theme.spacing(1.4),
@@ -71,7 +71,7 @@ const CustomGradient = () => {
 
   const sumReduceFunc = (sum, { color, name }) => ({ ...sum, [name]: color });
   const nullityValueOfCustomFormatState = _.reduce(testColorPlaceholder, sumReduceFunc, 1);
-  console.log(nullityValueOfCustomFormatState);
+  // console.log(nullityValueOfCustomFormatState);
 
   const onHoverOfCloseButton = () => setHoverStatusOfCloseButton(true);
   const onUnHoverOfCloseButton = () => setHoverStatusOfCloseButton(false);
@@ -81,7 +81,6 @@ const CustomGradient = () => {
   return (
     <Grid container direction={'column'} className={classes.container}>
       {testColorPlaceholder.map(({ color, stopDeg, name }) => {
-        console.log(gradientHoveredElementName === name);
         const setGradientHoveredElementNameIsFalse = () => setGradientHoveredElementName(false);
         const handleGradientHoveredElementName = () => setGradientHoveredElementName(name);
         const handleGradientFocusedElementColor = () => setGradientFocusedElementColor(color);
