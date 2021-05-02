@@ -7,7 +7,7 @@ import ColorPickerByPs from 'components/ColorPicker';
 import TextRotationNoneOutlinedIcon from '@material-ui/icons/TextRotationNoneOutlined';
 import PaletteOutlinedIcon from '@material-ui/icons/PaletteOutlined';
 import ButtonGroupUtilsOfDynamicAddMoreEvents from './components/ButtonGroup';
-import shortid from 'shortid';
+import { nanoid } from 'nanoid'
 import clsx from 'clsx';
 
 const useStyles = makeStyles(theme => ({
@@ -62,7 +62,7 @@ const DynamicAddMoreEvents = ({ onChangeOfAddMoreEvents, itemState: { value }, .
     color: 'primary',
     saved: false,
     isValid: true,
-    key: shortid(),
+    key: nanoid(),
     isInPatternList: false,
     location: false
   };

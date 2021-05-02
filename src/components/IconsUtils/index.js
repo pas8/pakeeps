@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import shortid from 'shortid';
+import { nanoid } from 'nanoid'
 import PopupState, { bindHover, bindPopover, bindTrigger, bindMenu } from 'material-ui-popup-state';
 import Menu from 'material-ui-popup-state/HoverMenu';
 import MenuItem from '@material-ui/core/MenuItem';
