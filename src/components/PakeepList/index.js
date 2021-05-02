@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import { Grid, makeStyles, useTheme } from '@material-ui/core';
 import { connect } from 'react-redux';
 import PakeepElement from './components/PakeepElement';
-import shortid from 'shortid';
+
 import { useMeasure } from 'react-use';
 import { useState } from 'react';
 import Column from './components/Column';

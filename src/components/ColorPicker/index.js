@@ -66,18 +66,23 @@ const useStyles = makeStyles(theme => ({
 
 const ColorPickerByPas = () => {
   const nullityColor = themeColors.whiteRgbaColorWith0dot8valueOfAlfaCanal;
+
   const [color, setColor] = useState(nullityColor);
+  const customColorsInHexFormat = colord(color).toHex();
+
+  const [gradientColor, setGradientColor] = useState(customColorsInHexFormat);
   const [savedStatus, setSavedStatus] = useState(false);
   const [transparencyStatus, setTransparencyStatus] = useState(false);
   const [extendMoreColorsStatus, setExtendMoreColorsStatus] = useState(false);
   const [customizationsStatus, setCustomizationsStatus] = useState(false);
   const [customColorsStatus, setCustomColorsStatus] = useState(false);
   const [customFormatsStatus, setCustomFormatsStatus] = useState(false);
+  const [extendedCustomColorUtilsStatus, setExtendedCustomColorUtilsStatus] = useState(false);
+  const [gradientsStatus, setGradientsStatus] = useState(!false);
   const [customFormatName, setCustomFormatName] = useState('rgb');
-  
+
   const [buttonCustomizationHoverStatus, setButtonCustomizationHoverStatus] = useState(false);
   const classes = useStyles();
-  const customColorsInHexFormat = colord(color).toHex();
 
   const colorsArr = [
     [{ colorName: 'deepOrange' }, { colorName: 'orange' }, { colorName: 'amber' }, { colorName: 'yellow' }],
@@ -100,6 +105,8 @@ const ColorPickerByPas = () => {
   const handleCustomizationStatus = () => setCustomizationsStatus(state => !state);
   const handleCustomColorStatus = () => setCustomColorsStatus(state => !state);
   const handleCustomColorFormatStatus = () => setCustomFormatsStatus(state => !state);
+  const handleGradientsStatus = () => setGradientsStatus(state => !state);
+  const handleExtendedCustomColorUtilsStatus = () => setExtendedCustomColorUtilsStatus(state => !state);
 
   const customizationButtonProps = {
     nullityColor,
@@ -110,7 +117,6 @@ const ColorPickerByPas = () => {
     onMouseEnter: () => setButtonCustomizationHoverStatus(true),
     onMouseLeave: () => setButtonCustomizationHoverStatus(false)
   };
-
 
   const handleSetColor = value => setColor(value);
 
@@ -124,7 +130,9 @@ const ColorPickerByPas = () => {
     setTransparencyStatus,
     customColorsInHexFormat,
     customFormatName,
-    setCustomFormatName
+    gradientsStatus,
+    gradientColor,
+    setGradientColor
   };
 
   const iconUtilsProps = {
@@ -144,7 +152,11 @@ const ColorPickerByPas = () => {
     handleCustomColorFormatStatus,
     customFormatsStatus,
     setCustomFormatName,
-    customFormatName
+    customFormatName,
+    gradientsStatus,
+    handleExtendedCustomColorUtilsStatus,
+    handleGradientsStatus,
+    extendedCustomColorUtilsStatus
   };
 
   return (
@@ -177,7 +189,7 @@ const ColorPickerByPas = () => {
 
                         const elementOfPartsOfGridElementProps = {
                           onClick: onClick,
-                          style: { backgroundColor: colorOfElementOfPartsOfGridElementProps },
+                          style: { background: colorOfElementOfPartsOfGridElementProps },
                           className: classes.extendedElementOfGridColorPicker
                         };
 

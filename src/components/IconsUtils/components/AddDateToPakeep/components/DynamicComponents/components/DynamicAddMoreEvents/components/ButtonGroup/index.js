@@ -9,7 +9,7 @@ import PopoverAndMenu from 'components/IconsUtils/components/PopoverAndMenu';
 import AlarmAddOutlinedIcon from '@material-ui/icons/AlarmAddOutlined';
 import CategoryOutlinedIcon from '@material-ui/icons/CategoryOutlined';
 import { Grid } from '@material-ui/core';
-import shortid from 'shortid';
+
 import WrapperOfPopoverAndMenu from 'components/IconsUtils/components/WrapperOfPopoverAndMenu';
 
 const ButtonGroupUtilsOfDynamicAddMoreEvents = ({

@@ -22,7 +22,7 @@ import EventNoteOutlinedIcon from '@material-ui/icons/EventNoteOutlined';
 import DateRangeOutlinedIcon from '@material-ui/icons/DateRangeOutlined';
 import DoneOutlineOutlinedIcon from '@material-ui/icons/DoneOutlineOutlined';
 import clsx from 'clsx';
-import shortid from 'shortid';
+import { nanoid } from 'nanoid'
 import HeaderOfAddDateToPakeep from './components/HeaderOfAddDateToPakeep';
 import DynamicInputDateAndTimePickers from './components/DynamicComponents/components/DynamicInputDateAndTimePickers';
 import { addDays, isValid } from 'date-fns';
@@ -229,7 +229,7 @@ const AddDateToPakeep = ({ ampm = false, onMenuClose, id, events }) => {
 
         let menuItemProps = {
           disableGutters: true,
-          key: shortid(),
+          key: nanoid(),
           className: correctName && currentClickStatus ? classes.preventClickOfMenuItem : null,
           onMouseEnter: onMouseEnterOfMenuItem,
           onMouseLeave: onMouseLeaveOfMenuItem,

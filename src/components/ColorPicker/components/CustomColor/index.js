@@ -7,6 +7,7 @@ import {
   InputLabel,
   makeStyles,
   OutlinedInput,
+  Paper,
   TextField
 } from '@material-ui/core';
 import { colord } from 'colord';
@@ -16,6 +17,8 @@ import PlayArrowOutlinedIcon from '@material-ui/icons/PlayArrowOutlined';
 import KeyboardArrowDownOutlinedIcon from '@material-ui/icons/KeyboardArrowDownOutlined';
 import KeyboardArrowUpOutlinedIcon from '@material-ui/icons/KeyboardArrowUpOutlined';
 import IndeterminateCheckBoxOutlinedIcon from '@material-ui/icons/IndeterminateCheckBoxOutlined';
+import CustomGradient from '../CustomGradient';
+import GradientPreviewer from '../CustomGradient/components/GradientPreviewer';
 import InputsColorUtilsOfCustomColorPicker from './components/InputsColorUtils';
 
 const useStyles = makeStyles(theme => ({
@@ -23,9 +26,10 @@ const useStyles = makeStyles(theme => ({
     '& .react-colorful': {
       padding: theme.spacing(0, 1),
       width: 'auto',
-      minWidth: theme.spacing(42 - 8 - 0.8),
+      minWidth: theme.spacing(42 + 8 - 1),
       paddingTop: transparencyStatus ? 0 : theme.spacing(1.4),
-      height: theme.spacing(42 - 10 + 1.2)
+      height: theme.spacing(42 + 0.8)
+      // marginRight: theme.spacing(10 + 0.16)
     },
 
     '& .react-colorful__saturation': {
@@ -78,7 +82,9 @@ const CustomColor = ({
   nullityColor = '#fff',
   setTransparencyStatus,
   customColorsInHexFormat,
-  customFormatName
+  customFormatName,
+  gradientColor,
+  setGradientColor
 }) => {
   const classes = useStyles({ transparencyStatus: true });
   const isColorInHexFormat = _.isString(color, nullityColor) && color.startsWith('#');
@@ -93,13 +99,32 @@ const CustomColor = ({
 
   return (
     <Grid className={classes.containerOfCustomColor}>
-      <RgbaColorPicker color={correctAndFormattedColor} onChange={setColor} />
-      <InputsColorUtilsOfCustomColorPicker
-        color={color}
-        setColor={setColor}
-        customColorsInHexFormat={customColorsInHexFormat}
-        customFormatName={customFormatName}
-      />
+      <Grid container>
+        <Grid item>
+          <Grid container>
+            <RgbaColorPicker color={correctAndFormattedColor} onChange={setColor} />
+            <Grid item>
+              <GradientPreviewer gradientColor={gradientColor} />
+
+              <CustomGradient
+                setColor={setColor}
+                setGradientColor={setGradientColor}
+                customColorsInHexFormat={customColorsInHexFormat}
+                color={color}
+                nullityColor={nullityColor}
+              />
+            </Grid>
+          </Grid>
+          <Grid item>
+            <InputsColorUtilsOfCustomColorPicker
+              color={color}
+              setColor={setColor}
+              customColorsInHexFormat={customColorsInHexFormat}
+              customFormatName={customFormatName}
+            />
+          </Grid>
+        </Grid>
+      </Grid>
     </Grid>
   );
 };
