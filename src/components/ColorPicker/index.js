@@ -62,6 +62,16 @@ const useStyles = makeStyles(theme => ({
   },
   iconUtilsContainer: {
     '& .MuiSvgIcon-root': { width: theme.spacing(2 / (0.8 - 0.1)) }
+  },
+  iconUtilsContainerGradientStatusIsTrue: {
+    '& button': { transform: 'scale(1.1)' },
+    // padding:theme.spacing(0.8),
+
+    padding: theme.spacing(1.4, 0.8),
+    borderLeft: '2px solid rgba(255, 255, 255,0.4)'
+    // '& .MuiSvgIcon-root': { width: theme.spacing(10) },
+
+    // '& .MuiSvgIcon-root': { width: theme.spacing(4) }
   }
 }));
 
@@ -71,13 +81,14 @@ const ColorPickerByPas = () => {
   const [color, setColor] = useState(nullityColor);
   const customColorsInHexFormat = colord(color).toHex();
 
-  const [savedStatus, setSavedStatus] = useState(false);
-  const [transparencyStatus, setTransparencyStatus] = useState(false);
-  const [extendMoreColorsStatus, setExtendMoreColorsStatus] = useState(false);
-  const [customizationsStatus, setCustomizationsStatus] = useState(false);
-  const [customColorsStatus, setCustomColorsStatus] = useState(false);
-  const [customFormatsStatus, setCustomFormatsStatus] = useState(false);
-  const [gradientsStatus, setGradientsStatus] = useState(false);
+  const [statusState, setStatusState] = useState({
+    saved: false,
+    extended: false,
+    customization: false,
+    customFormats: false,
+    customColor: false,
+    gradient: false
+  });
 
   const [gradientColor, setGradientColor] = useState(customColorsInHexFormat);
   const [gradientAngle, setGradientAngle] = useState(90);
@@ -93,9 +104,22 @@ const ColorPickerByPas = () => {
     key: gradientColorState[0].key,
     stopDeg: gradientColorState[0].stopDeg
   });
+
+  const onClickOfPalletteButton = () => {
+    setStatusState(state => ({ ...state, customColor: !state.customColor, gradient: false }));
+  };
+
+  const onClickOfGradientButton = () => {
+    setStatusState(state => ({ ...state, gradient: !state.gradient, extended: true }));
+  };
+  const onClickOfExtendButton = () => {
+    setStatusState(state => ({ ...state, extended: !state.extended }));
+  };
+
+  const setCustomizationsStatus = value => setStatusState(state => ({ ...state, customization: value }));
+
   const [customFormatName, setCustomFormatName] = useState('rgb');
 
-  const [buttonCustomizationHoverStatus, setButtonCustomizationHoverStatus] = useState(false);
   const classes = useStyles();
 
   const colorsArr = [
@@ -113,7 +137,6 @@ const ColorPickerByPas = () => {
   });
 
   useEffect(() => {
-    
     const reduceFunc = (sum, { color, stopDeg }, idx) =>
       `${sum} ${color} ${stopDeg}${gradientColorState.length - 1 === idx ? '%' : '%,'}`;
 
@@ -135,32 +158,11 @@ const ColorPickerByPas = () => {
   // console.log(gradientsStatus);
   const handlePopoverAndMenuState = value => setPopoverAndMenuState(value);
 
-  const handleTransparencyColorPickerStatus = () => setTransparencyStatus(state => !state);
-  const handleExtendMoreColorsStatus = () => setExtendMoreColorsStatus(state => !state);
-  const handleCustomizationStatus = () => setCustomizationsStatus(state => !state);
-  const handleCustomColorStatus = () => {
-    setCustomColorsStatus(state => !state);
-    // setGradientsStatus(state => !state);
-  };
-  const handleCustomColorFormatStatus = () => setCustomFormatsStatus(state => !state);
-  const handleGradientsStatus = () => setGradientsStatus(state => !state);
-  const onClickOfGradientButton = () => {
-    handleGradientsStatus();
-    setExtendMoreColorsStatus(true);
-  };
-  const onClickOfExtendButton = () => {
-    handleExtendMoreColorsStatus();
-    setGradientsStatus(false);
-  };
-
   const customizationButtonProps = {
     nullityColor,
     customColorsInHexFormat,
-    buttonCustomizationHoverStatus,
     setCustomizationsStatus,
-    color,
-    onMouseEnter: () => setButtonCustomizationHoverStatus(true),
-    onMouseLeave: () => setButtonCustomizationHoverStatus(false)
+    color
   };
 
   const handleSetColor = value => setColor(value);
@@ -170,16 +172,10 @@ const ColorPickerByPas = () => {
   const customColorProps = {
     setColor,
     color,
-    transparencyStatus,
     nullityColor,
-    setTransparencyStatus,
     customColorsInHexFormat,
     customFormatName,
-    gradientsStatus,
     gradientColor,
-    setGradientColor,
-    extendMoreColorsStatus,
-    customColorsStatus,
     gradientColorState,
     setGradientColorState,
     gradientDirection,
@@ -187,37 +183,30 @@ const ColorPickerByPas = () => {
     gradientAngle,
     setGradientAngle,
     gradientFocusedElementState,
-    setGradientFocusedElementState
+    setGradientFocusedElementState,
+    statusState
   };
 
   const iconUtilsProps = {
-    handleCustomColorStatus,
-    handleCustomizationStatus,
-    handleExtendMoreColorsStatus,
-    handleTransparencyColorPickerStatus,
+    statusState,
     handlePopoverAndMenuState,
     onSave,
-    customColorsStatus,
     customizationButtonProps,
-    transparencyStatus,
-    extendMoreColorsStatus,
     color,
     customColorsInHexFormat,
     popoverAndMenuState,
-    handleCustomColorFormatStatus,
-    customFormatsStatus,
     setCustomFormatName,
     customFormatName,
-    gradientsStatus,
-    handleGradientsStatus,
     onClickOfGradientButton,
-    onClickOfExtendButton
+    onClickOfExtendButton,
+    onClickOfPalletteButton
   };
 
+  console.log(statusState);
   return (
     <Grid className={classes.container}>
-      <Grid container direction={gradientsStatus ? 'row' : 'column'}>
-        {customColorsStatus ? (
+      <Grid container direction={statusState.gradient ? 'row' : 'column'}>
+        {statusState.customColor ? (
           <CustomColor {...customColorProps} />
         ) : (
           colorsArr.map(arr => {
@@ -283,7 +272,7 @@ const ColorPickerByPas = () => {
                 ? selectedElement(true, color, () => handleSetColor(false))
                 : staticExtendedElement;
 
-              const elementOfGridColorPicker = extendMoreColorsStatus ? extendedElement : nonExtendedElement;
+              const elementOfGridColorPicker = statusState.extended ? extendedElement : nonExtendedElement;
 
               return elementOfGridColorPicker;
             });
@@ -295,8 +284,8 @@ const ColorPickerByPas = () => {
             );
           })
         )}
-        {gradientsStatus && (
-          <Box my={0.8} className={classes.iconUtilsContainer}>
+        {statusState.gradient && (
+          <Box className={classes.iconUtilsContainerGradientStatusIsTrue}>
             <Grid
               container
               justify={'space-between'}
@@ -309,7 +298,7 @@ const ColorPickerByPas = () => {
           </Box>
         )}
       </Grid>
-      {!gradientsStatus && (
+      {!statusState.gradient && (
         <Box m={0.4} mb={0} mt={0.8} className={classes.iconUtilsContainer}>
           <Grid container justify={'space-between'} alignItems={'center'}>
             <IconUtilsOfColorPicker {...iconUtilsProps} />

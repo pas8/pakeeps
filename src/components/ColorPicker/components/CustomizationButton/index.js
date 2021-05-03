@@ -47,11 +47,8 @@ const useStyles = makeStyles(theme => ({
 const CustomizationButton = ({
   nullityColor,
   customColorsInHexFormat,
-  buttonCustomizationHoverStatus,
   setCustomizationsStatus,
   color,
-  onMouseLeave,
-  onMouseEnter
 }) => {
   // const [
   //   hoverStatusOfButtonOfAddingCustomColorToColorLayouts,

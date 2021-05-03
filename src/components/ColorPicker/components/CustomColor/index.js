@@ -74,24 +74,25 @@ const useStyles = makeStyles(theme => ({
         duration: theme.transitions.duration.complex
       })
     }
-  })
+    // marginRight: theme.spacing(-1)
+  }),
+  containerOfGradientUtils: {
+    padding: theme.spacing(0, 2),
+    borderLeft: '2px solid rgba(255, 255, 255,0.4)'
+  }
 }));
 
 const CustomColor = ({
   color,
+  statusState,
   setColor,
-  transparencyStatus,
   nullityColor = '#fff',
-  setTransparencyStatus,
   customColorsInHexFormat,
   customFormatName,
   gradientColor,
   gradientFocusedElementState,
   setGradientFocusedElementState,
-  gradientsStatus,
   setGradientColor,
-  extendMoreColorsStatus,
-  customColorsStatus,
   gradientColorState,
   setGradientColorState,
   gradientDirection,
@@ -99,13 +100,13 @@ const CustomColor = ({
   gradientAngle,
   setGradientAngle
 }) => {
-  const isExtended = customColorsStatus && extendMoreColorsStatus;
+  const isExtended = statusState.customColor && statusState.extended;
   const classes = useStyles({ isExtended });
   const isColorInHexFormat = _.isString(color, nullityColor) && color.startsWith('#');
   const colorToRgbFormat = colord(color).toRgb();
 
   const correctAndFormattedColor =
-    _.isEqual(color, 'rgba(255,255,255,0.8)') && !extendMoreColorsStatus && customColorsStatus
+    _.isEqual(color, 'rgba(255,255,255,0.8)') && !statusState.extended && statusState.customColor
       ? colord(themeColors.primaryMain).toRgb()
       : isColorInHexFormat
       ? colorToRgbFormat
@@ -113,8 +114,13 @@ const CustomColor = ({
 
   // console.log(correctAndFormattedColor,color)
   return (
-    <Grid className={classes.containerOfCustomColor}>
-      {gradientsStatus && (
+    <Box
+      className={classes.containerOfCustomColor}
+      mb={isExtended ? 0 : -1.1}
+      mx={isExtended ? 1.8 : 1.4}
+      mt={isExtended ? -0.4 : 1.4}
+    >
+      {statusState.gradient && (
         <Box mt={1.4} mx={1.4} mr={4}>
           <GradientPreviewer
             gradientColor={gradientColor}
@@ -127,7 +133,7 @@ const CustomColor = ({
       )}
       <Grid container>
         <Grid item>
-          <Box mb={isExtended ? 0 : -1.1} mx={isExtended ? 1.8 : 1.4} mt={isExtended ? -0.4 : 1.4}>
+          <Box>
             <RgbaColorPicker color={correctAndFormattedColor} onChange={setColor} />
             {isExtended && (
               <Box pb={0.8}>
@@ -141,11 +147,10 @@ const CustomColor = ({
             )}
           </Box>
         </Grid>
-
-        <Grid item xs={5}>
-          <Grid container direction={'column'} justify={'space-between'} style={{ height: '100%' }} >
-            <Grid item>
-              {gradientsStatus && (
+        {statusState.gradient  && (
+          <Grid item className={classes.containerOfGradientUtils}>
+            <Grid container direction={'column'} justify={'space-between'} style={{ height: '100%' }}>
+              <Grid item>
                 <CustomGradient
                   setColor={setColor}
                   setGradientColor={setGradientColor}
@@ -157,10 +162,8 @@ const CustomColor = ({
                   gradientFocusedElementState={gradientFocusedElementState}
                   setGradientFocusedElementState={setGradientFocusedElementState}
                 />
-              )}
-            </Grid>
-            <Box mb={0.8}>
-              {gradientsStatus && (
+              </Grid>
+              <Grid>
                 <ButtonUtilsOfCustomGradient
                   color={customColorsInHexFormat}
                   gradientDirection={gradientDirection}
@@ -168,12 +171,12 @@ const CustomColor = ({
                   gradientAngle={gradientAngle}
                   setGradientAngle={setGradientAngle}
                 />
-              )}
-            </Box>
+              </Grid>
+            </Grid>
           </Grid>
-        </Grid>
+        )}
       </Grid>
-    </Grid>
+    </Box>
   );
 };
 

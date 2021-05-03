@@ -10,26 +10,20 @@ import CustomizationButton from '../CustomizationButton';
 import SelectColorFormat from '../CustomColor/components/SelectColorFormat';
 import UnfoldLessOutlinedIcon from '@material-ui/icons/UnfoldLessOutlined';
 const IconUtilsOfColorPicker = ({
-  handleCustomColorStatus,
-  handleCustomizationStatus,
-  handleExtendMoreColorsStatus,
-  handleTransparencyColorPickerStatus,
+
+  statusState,
   handlePopoverAndMenuState,
   onSave,
-  customColorsStatus,
   customizationButtonProps,
-  transparencyStatus,
-  extendMoreColorsStatus,
   color,
   customColorsInHexFormat,
   popoverAndMenuState,
-  customFormatsStatus,
-  customFormatName,
   setCustomFormatName,
-  gradientsStatus,
-  handleGradientsStatus,
+  customFormatName,
   onClickOfGradientButton,
-  onClickOfExtendButton
+  onClickOfExtendButton,
+  onClickOfPalletteButton
+  
 }) => {
   const ColorFormatMenuComponent = () => (
     <SelectColorFormat
@@ -38,28 +32,27 @@ const IconUtilsOfColorPicker = ({
       color={customColorsInHexFormat}
     />
   );
-
   const buttonUtilsArr = [
     {
-      icon: !extendMoreColorsStatus ? UnfoldMoreOutlinedIcon : UnfoldLessOutlinedIcon,
+      icon: !statusState.extended ? UnfoldMoreOutlinedIcon : UnfoldLessOutlinedIcon,
       popoverText: 'Extend more colors',
       name: 'extendMoreColors',
       activeIcon: false,
       onlyPopover: true,
       onClick:  onClickOfExtendButton,
       hidden: false,
-      customColor: extendMoreColorsStatus ? customColorsInHexFormat : null
+      customColor: statusState.extended ? customColorsInHexFormat : null
     },
 
 
     {
       icon: ColorLensOutlinedIcon,
       popoverText: 'Add custom color',
-      name: 'pattern',
+      name: 'pallette',
       activeIcon: false,
       onlyPopover: true,
-      onClick: handleCustomColorStatus,
-      customColor: customColorsStatus ? customColorsInHexFormat : null
+      onClick: onClickOfPalletteButton,
+      customColor: statusState.customColor ? customColorsInHexFormat : null
     },
 
     {
@@ -69,21 +62,21 @@ const IconUtilsOfColorPicker = ({
       activeIcon: false,
       onlyPopover: true,
       onClick: onClickOfGradientButton,
-      hidden: !customColorsStatus,
-      customColor: gradientsStatus ? customColorsInHexFormat : null
+      hidden: !statusState.customColor,
+      customColor: statusState.gradient ? customColorsInHexFormat : null
     },
     {
       icon: ColorFormatIcon,
       popoverText: 'Chose color format which u like',
       name: 'choseColorFormatWhichULike',
       activeIcon: false,
-      hidden: !extendMoreColorsStatus,
+      hidden: !statusState.customColor,
       customColor: customColorsInHexFormat ,
       menuComponents: ColorFormatMenuComponent,
       menuLocation: 'center'
     },
     {
-      hidden: gradientsStatus,
+      hidden: statusState.gradient,
       customElementComponentOfIconGroup: <CustomizationButton {...customizationButtonProps} />
     },
     {
