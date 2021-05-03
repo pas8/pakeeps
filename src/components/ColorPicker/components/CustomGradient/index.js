@@ -61,23 +61,21 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-
-const CustomGradient = ({ setColor, setGradientColor, customColorsInHexFormat, color, nullityColor }) => {
-  const testColorPlaceholder = [
-    { color: '#090979', stopDeg: 0, key: '0' },
-    { color: '#1f13e5', stopDeg: 42, key: '1' },
-    { color: '#00d4ff', stopDeg: 80, key: '2' },
-    { color: '#0024ff', stopDeg: 100, key: '3' }
-  ];
+const CustomGradient = ({
+  setColor,
+  setGradientColor,
+  customColorsInHexFormat,
+  color,
+  nullityColor,
+  gradientColorState,
+  setGradientColorState,
+  gradientFocusedElementState, setGradientFocusedElementState
+}) => {
 
   const [hoverStatusOfCloseButton, setHoverStatusOfCloseButton] = useState(false);
   const [gradientHoveredElementName, setGradientHoveredElementName] = useState(false);
-  const [gradientFocusedElementState, setGradientFocusedElementState] = useState({
-    color: testColorPlaceholder[0].color,
-    name: testColorPlaceholder[0].name,
-    stopDeg: testColorPlaceholder[0].stopDeg
-  });
-  console.log(gradientFocusedElementState);
+
+  // console.log(gradientFocusedElementState);
 
   // const sumReduceFunc = (sum, { color, name }) => ({ ...sum, [name]: color });
   // const nullityValueOfCustomFormatState = _.reduce(testColorPlaceholder, sumReduceFunc, 1);
@@ -87,28 +85,24 @@ const CustomGradient = ({ setColor, setGradientColor, customColorsInHexFormat, c
   const onUnHoverOfCloseButton = () => setHoverStatusOfCloseButton(false);
 
   const classes = useStyles({ borderColorOfFocusedInput: gradientFocusedElementState.color });
-  console.log(customColorsInHexFormat);
+  // console.log(customColorsInHexFormat);
 
   useEffect(() => setColor(gradientFocusedElementState.color), [gradientFocusedElementState]);
 
-  useEffect(() => {
-    if (color !== nullityColor)
-      _.debounce(() => setGradientFocusedElementState(state => ({ ...state, color: customColorsInHexFormat })), 160);
-  }, [customColorsInHexFormat]);
 
   return (
     <Grid container direction={'column'} className={classes.container}>
-      {testColorPlaceholder.map(({ color, stopDeg, name }) => {
-        const isHovered = gradientHoveredElementName === name;
+      {gradientColorState.map(({ color, stopDeg, key }) => {
+        const isHovered = gradientHoveredElementName === key;
         const isFocused = gradientFocusedElementState.color === color;
 
         const setGradientHoveredElementNameIsFalse = () => setGradientHoveredElementName(false);
-        const handleGradientHoveredElementName = () => setGradientHoveredElementName(name);
+        const handleGradientHoveredElementName = () => setGradientHoveredElementName(key);
 
         const handleGradientFocusedElementColor = () =>
           setGradientFocusedElementState({
             color,
-            name,
+            key,
             stopDeg
           });
 
