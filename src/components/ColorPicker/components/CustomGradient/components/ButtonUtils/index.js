@@ -20,20 +20,32 @@ const useStyles = makeStyles(theme => ({
     // transform: 'scale(0.16)',
     // width: theme.spacing(8),
     // height: theme.spacing(8)
+    '& > div': {
+      // width: '20ch',
+      ' & input[type=number]::-webkit-inner-spin-button': {
+        '-webkit-appearance': 'none'
+      }
+    }
   },
   inputOfGradientAngle: {
-    width: theme.spacing(10),
+    width: theme.spacing(10 + 0.8),
     '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
       borderColor: ({ color }) => color
     }
   }
 }));
 
-const ButtonUtilsOfCustomGradient = ({ color }) => {
+const ButtonUtilsOfCustomGradient = ({
+  color,
+  gradientDirection,
+  setGradientDirection,
+  gradientAngle,
+  setGradientAngle
+}) => {
   const classes = useStyles({ color });
-  const [gradientDirection, setGradientDirection] = useState('Linear');
+
   const [hoverStatusOFCircleSlider, setHoverStatusOFCircleSlider] = useState(false);
-  const [gradientAngle, setGradientAngle] = useState(180);
+
   const handleGradientDirection = (placeholder, direction) => direction && setGradientDirection(direction);
 
   const setHoverStatusOFCircleSliderIsFalse = () => setHoverStatusOFCircleSlider(false);
@@ -63,9 +75,10 @@ const ButtonUtilsOfCustomGradient = ({ color }) => {
     knobSize: 24,
     dataIndex: gradientAngle,
     valueFontSize: '0rem',
-    width: 42 + 4,
+    width: 42 + 8,
     trackColor: `rgba(255,255,255,0.${hoverStatusOFCircleSlider ? 8 : 2})`
   };
+
   return (
     <Grid container>
       <Grid item>
@@ -75,17 +88,17 @@ const ButtonUtilsOfCustomGradient = ({ color }) => {
           exclusive
           value={gradientDirection}
         >
-          <ToggleButton value={'Linear'}>
+          <ToggleButton value={'linear-gradient'}>
             <BlurCircularOutlinedIcon />
           </ToggleButton>
 
-          <ToggleButton value={'Radial'}>
+          <ToggleButton value={'radial-gradient'}>
             <ViewDayOutlinedIcon />
           </ToggleButton>
         </ToggleButtonGroup>
       </Grid>
       <Box ml={1.8}>
-        <Grid container>
+        <Grid container className={classes.containerOfCircleSlider}>
           <Box
             className={classes.containerOfCircleSlider}
             onMouseEnter={setHoverStatusOFCircleSliderIsTrue}

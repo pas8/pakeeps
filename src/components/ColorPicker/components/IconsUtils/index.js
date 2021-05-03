@@ -28,6 +28,8 @@ const IconUtilsOfColorPicker = ({
   setCustomFormatName,
   gradientsStatus,
   handleGradientsStatus,
+  onClickOfGradientButton,
+  onClickOfExtendButton
 }) => {
   const ColorFormatMenuComponent = () => (
     <SelectColorFormat
@@ -44,7 +46,7 @@ const IconUtilsOfColorPicker = ({
       name: 'extendMoreColors',
       activeIcon: false,
       onlyPopover: true,
-      onClick:  handleExtendMoreColorsStatus,
+      onClick:  onClickOfExtendButton,
       hidden: false,
       customColor: extendMoreColorsStatus ? customColorsInHexFormat : null
     },
@@ -66,7 +68,7 @@ const IconUtilsOfColorPicker = ({
       name: 'changeGradientStatus',
       activeIcon: false,
       onlyPopover: true,
-      onClick: handleGradientsStatus,
+      onClick: onClickOfGradientButton,
       hidden: !customColorsStatus,
       customColor: gradientsStatus ? customColorsInHexFormat : null
     },

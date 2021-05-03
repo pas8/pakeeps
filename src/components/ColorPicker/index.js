@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { HexColorPicker, RgbaColorPicker } from 'react-colorful';
 import UnfoldMoreOutlinedIcon from '@material-ui/icons/UnfoldMoreOutlined';
 import { Box, Button, ButtonGroup, colors, Grid, IconButton, makeStyles, Paper, Typography } from '@material-ui/core';
@@ -18,6 +18,7 @@ import FilterVintageOutlinedIcon from '@material-ui/icons/FilterVintageOutlined'
 import TextureOutlinedIcon from '@material-ui/icons/TextureOutlined';
 import ColorFormatIcon from 'components/Icons/components/ColorFormatIcon';
 import IconUtilsOfColorPicker from './components/IconsUtils';
+import _ from 'lodash';
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -68,9 +69,8 @@ const ColorPickerByPas = () => {
   const nullityColor = themeColors.whiteRgbaColorWith0dot8valueOfAlfaCanal;
 
   const [color, setColor] = useState(nullityColor);
-  const customColorsInHexFormat = colord(color).toHex() 
+  const customColorsInHexFormat = colord(color).toHex();
 
-  const [gradientColor, setGradientColor] = useState(customColorsInHexFormat);
   const [savedStatus, setSavedStatus] = useState(false);
   const [transparencyStatus, setTransparencyStatus] = useState(false);
   const [extendMoreColorsStatus, setExtendMoreColorsStatus] = useState(false);
@@ -78,6 +78,21 @@ const ColorPickerByPas = () => {
   const [customColorsStatus, setCustomColorsStatus] = useState(false);
   const [customFormatsStatus, setCustomFormatsStatus] = useState(false);
   const [gradientsStatus, setGradientsStatus] = useState(false);
+
+  const [gradientColor, setGradientColor] = useState(customColorsInHexFormat);
+  const [gradientAngle, setGradientAngle] = useState(90);
+  const [gradientDirection, setGradientDirection] = useState('linear-gradient');
+  const [gradientColorState, setGradientColorState] = useState([
+    { color: '#090979', stopDeg: 0, key: '0' },
+    { color: '#1f13e5', stopDeg: 42, key: '1' },
+    { color: '#00d4ff', stopDeg: 80, key: '2' },
+    { color: '#0024ff', stopDeg: 100, key: '3' }
+  ]);
+  const [gradientFocusedElementState, setGradientFocusedElementState] = useState({
+    color: gradientColorState[0].color,
+    key: gradientColorState[0].key,
+    stopDeg: gradientColorState[0].stopDeg
+  });
   const [customFormatName, setCustomFormatName] = useState('rgb');
 
   const [buttonCustomizationHoverStatus, setButtonCustomizationHoverStatus] = useState(false);
@@ -96,7 +111,28 @@ const ColorPickerByPas = () => {
     popoverIsOpen: true,
     onMenuClose: null
   });
-  console.log(gradientsStatus);
+
+  useEffect(() => {
+    
+    const reduceFunc = (sum, { color, stopDeg }, idx) =>
+      `${sum} ${color} ${stopDeg}${gradientColorState.length - 1 === idx ? '%' : '%,'}`;
+
+    const mainPart = _.reduce(gradientColorState, reduceFunc, '');
+
+    const gradientPosition = gradientDirection === 'radial-gradient' ? 'circle' : gradientAngle + 'deg,';
+    const gradientRoute = `${gradientDirection}(${gradientPosition}`;
+
+    const gradientColor = `${gradientRoute} ${mainPart})`;
+
+    setGradientColor(gradientColor);
+  }, [gradientColorState, gradientDirection, gradientAngle, gradientAngle]);
+
+  useEffect(() => {
+    if (color !== nullityColor)
+      _.debounce(() => setGradientFocusedElementState(state => ({ ...state, color: customColorsInHexFormat })), 160);
+  }, [customColorsInHexFormat]);
+
+  // console.log(gradientsStatus);
   const handlePopoverAndMenuState = value => setPopoverAndMenuState(value);
 
   const handleTransparencyColorPickerStatus = () => setTransparencyStatus(state => !state);
@@ -108,6 +144,14 @@ const ColorPickerByPas = () => {
   };
   const handleCustomColorFormatStatus = () => setCustomFormatsStatus(state => !state);
   const handleGradientsStatus = () => setGradientsStatus(state => !state);
+  const onClickOfGradientButton = () => {
+    handleGradientsStatus();
+    setExtendMoreColorsStatus(true);
+  };
+  const onClickOfExtendButton = () => {
+    handleExtendMoreColorsStatus();
+    setGradientsStatus(false);
+  };
 
   const customizationButtonProps = {
     nullityColor,
@@ -135,7 +179,15 @@ const ColorPickerByPas = () => {
     gradientColor,
     setGradientColor,
     extendMoreColorsStatus,
-    customColorsStatus
+    customColorsStatus,
+    gradientColorState,
+    setGradientColorState,
+    gradientDirection,
+    setGradientDirection,
+    gradientAngle,
+    setGradientAngle,
+    gradientFocusedElementState,
+    setGradientFocusedElementState
   };
 
   const iconUtilsProps = {
@@ -157,7 +209,9 @@ const ColorPickerByPas = () => {
     setCustomFormatName,
     customFormatName,
     gradientsStatus,
-    handleGradientsStatus
+    handleGradientsStatus,
+    onClickOfGradientButton,
+    onClickOfExtendButton
   };
 
   return (
@@ -242,8 +296,14 @@ const ColorPickerByPas = () => {
           })
         )}
         {gradientsStatus && (
-          <Box m={0.4} mb={0} mt={0.8} className={classes.iconUtilsContainer}>
-            <Grid container justify={'space-between'} alignItems={'center'} direction={'column'}>
+          <Box my={0.8} className={classes.iconUtilsContainer}>
+            <Grid
+              container
+              justify={'space-between'}
+              alignItems={'center'}
+              direction={'column'}
+              style={{ height: '100%' }}
+            >
               <IconUtilsOfColorPicker {...iconUtilsProps} />
             </Grid>
           </Box>

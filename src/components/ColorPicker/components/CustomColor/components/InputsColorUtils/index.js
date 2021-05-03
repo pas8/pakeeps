@@ -41,7 +41,6 @@ const useStyles = makeStyles(theme => ({
     // })
   },
   containerOfInputsOfColorPicker: {
-    margin: theme.spacing(0, 1.4),
     '& > div': {
       // width: '20ch',
       ' & input[type=number]::-webkit-inner-spin-button': {
