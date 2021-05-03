@@ -5,12 +5,20 @@ import clsx from 'clsx';
 import _ from 'lodash';
 import { useState } from 'react';
 import compareFunc from 'compare-func';
+import { colord, extend } from 'colord';
+import mixPlugin from 'colord/plugins/mix';
+import { nanoid } from 'nanoid';
+
 const useStyles = makeStyles(theme => ({
   previewer: {
-    marginBottom: theme.spacing(8 * 0.8),
-    position: 'relative',
+    marginBottom: theme.spacing(4 - 0.4),
+
     background: ({ gradientColor }) => gradientColor,
     height: theme.spacing(6),
+    transition: theme.transitions.create('all', {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.complex
+    }),
     // boxShadow: '0px 0px 8px rgba(0, 0, 0, 0.4)',
     cursor: 'copy'
   },
@@ -28,15 +36,16 @@ const useStyles = makeStyles(theme => ({
   },
   OutlinedInputOfStopDegNumber: {
     // margin: theme.spacing(0.08, 2, 0, 2),
-    marginLeft: theme.spacing(-2),
-    marginTop: theme.spacing(1),
+    marginLeft: theme.spacing(-2.2),
+    marginTop: theme.spacing(1.4),
     width: theme.spacing(8 - 2),
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-
+    background: '#424242',
     '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
-      borderColor: ({ focusedColor }) => focusedColor
+      borderColor: ({ focusedColor }) => focusedColor,
+      boxShadow: ({ focusedColor }) => `0 0 16px 2px ${focusedColor}6B`
     },
     '& input': {
       height: theme.spacing(0),
@@ -61,15 +70,37 @@ const GradientPreviewer = ({
 }) => {
   const classes = useStyles({ gradientColor, focusedColor: gradientFocusedElementState?.color });
 
+  const [hoverNameOfDraggingElement, setHoverNameOfDraggingElement] = useState(false);
+
   const i = document.querySelector('#GradientPreviewer');
   const widthOfPreviewContainer = i?.clientWidth;
-  const heightOfDraggableElement = 94;
+  const heightOfDraggableElement = 96 + 1.4;
   const widthOfDraggableElement = 10;
+  extend([mixPlugin]);
 
   const unitOfDraggable = !widthOfPreviewContainer ? 8 : (widthOfPreviewContainer - widthOfDraggableElement) / 100;
   // console.log(gradientColorState)
+
+  const onClickOfGradientPreviewer = ({ nativeEvent: { layerX } }) => {
+    console.log(hoverNameOfDraggingElement);
+
+    if (Boolean(hoverNameOfDraggingElement)) return;
+
+    const clickedStopDeg = ~~((layerX / widthOfPreviewContainer) * 100);
+
+    const neighborMore = _.find(gradientColorState, ({ stopDeg }) => stopDeg > clickedStopDeg);
+    const neighborLess = _.findLast(gradientColorState, ({ stopDeg }) => stopDeg < clickedStopDeg);
+    const colorRatio = neighborLess.stopDeg / neighborMore.stopDeg;
+
+    const clickedColor = colord(neighborMore.color).mix(neighborLess.color, colorRatio).toHex();
+    setGradientColorState(state =>
+      [...state, { key: nanoid(), color: clickedColor, stopDeg: clickedStopDeg }].sort(compareFunc('stopDeg'))
+    );
+    // console.log(colorRatio);
+  };
+  // console.log(gradientColorState);
   return (
-    <Paper className={classes.previewer} id="GradientPreviewer" elevation={0}>
+    <Paper className={classes.previewer} id="GradientPreviewer" elevation={0} onClick={onClickOfGradientPreviewer}>
       {gradientColorState.map(({ color, stopDeg, key }, idx) => {
         const positionX = unitOfDraggable * stopDeg;
 
@@ -77,6 +108,8 @@ const GradientPreviewer = ({
         const positionY = idx === 0 ? unitOfYValue : unitOfYValue - heightOfDraggableElement * idx;
 
         const onStop = (placeholder, { lastX }) => {
+          placeholder.preventDefault();
+
           const newStopDegValue = ~~(lastX / unitOfDraggable);
           const filteredArr = _.filter(gradientColorState, ({ key: gradientColorKey }) => gradientColorKey !== key);
           filteredArr.push({ color, stopDeg: newStopDegValue, key });
@@ -84,6 +117,7 @@ const GradientPreviewer = ({
           setGradientColorState(sortedArr);
         };
         // const onStart = (placeholder, { lastX }) => {
+        //   placeholder.preventDefault()
         //   const newStopDegValue = ~~(lastX / unitOfDraggable);
         //   const filteredArr = _.filter(gradientColorState, ({ key: gradientColorKey }) => gradientColorKey !== key);
         //   filteredArr.push({ color, stopDeg: newStopDegValue, key });
@@ -91,16 +125,14 @@ const GradientPreviewer = ({
         //   setGradientColorState(sortedArr);
         // };
         const onDrag = (placeholder, { lastX }) => {
-          // const newStopDegValue = ~~(lastX / unitOfDraggable);
+          placeholder.preventDefault();
 
+          // const newStopDegValue = ~~(lastX / unitOfDraggable);
           // const filteredArr = _.filter(gradientColorState, ({ key: gradientColorKey }) => gradientColorKey !== key)
           // filteredArr.push({ color, stopDeg: newStopDegValue, key });
           // const sortedArr =  filteredArr.sort(compareFunc('stopDeg'))
           // setGradientColorState(sortedArr);
-
         };
-
-        console.log(gradientColorState);
 
         const onFocus = () => setGradientFocusedElementState({ color, stopDeg, key });
 
@@ -116,9 +148,17 @@ const GradientPreviewer = ({
         return (
           <Draggable {...draggableProps}>
             <Grid className={'handle'} item>
-              <Grid className={classes.draggableElement} item></Grid>
+              <Grid
+                className={classes.draggableElement}
+                item
+                style={{ background: color }}
+                onMouseEnter={() => setHoverNameOfDraggingElement(key)}
+                onMouseLeave={() => setHoverNameOfDraggingElement(false)}
+              ></Grid>
 
               <FormControl
+                onMouseEnter={() => setHoverNameOfDraggingElement(key)}
+                onMouseLeave={() => setHoverNameOfDraggingElement(false)}
                 variant={'outlined'}
                 className={clsx(
                   classes.OutlinedInputOfStopDegNumber,

@@ -79,6 +79,16 @@ const useStyles = makeStyles(theme => ({
   containerOfGradientUtils: {
     padding: theme.spacing(0, 2),
     borderLeft: '2px solid rgba(255, 255, 255,0.4)'
+  },
+  containerOfMainGradientUtils: {
+    '& >  div': {
+      paddingTop: theme.spacing(2.4)
+    },
+    borderTop: '2px solid rgba(255, 255, 255,0.4)'
+  },
+  containerOfButtonUtilsOfCustomGradient: {
+    paddingTop: '20px',
+    borderTop: '2px solid rgba(255, 255, 255,0.4)'
   }
 }));
 
@@ -98,7 +108,8 @@ const CustomColor = ({
   gradientDirection,
   setGradientDirection,
   gradientAngle,
-  setGradientAngle
+  setGradientAngle,
+  
 }) => {
   const isExtended = statusState.customColor && statusState.extended;
   const classes = useStyles({ isExtended });
@@ -111,14 +122,21 @@ const CustomColor = ({
       : isColorInHexFormat
       ? colorToRgbFormat
       : color;
+  const [correctColor, setCorrectColor] = useState();
 
-  // console.log(correctAndFormattedColor,color)
+  useEffect(() => {
+    if (!_.isEqual(color, { r: 0, g: 0, b: 0, a: 1 })) {
+      setCorrectColor(correctAndFormattedColor);
+    }
+  }, []);
+
   return (
     <Box
       className={classes.containerOfCustomColor}
-      mb={isExtended ? 0 : -1.1}
+      mb={statusState.gradient ? 0 : isExtended ? 0 : -1.1}
       mx={isExtended ? 1.8 : 1.4}
       mt={isExtended ? -0.4 : 1.4}
+      pb={statusState.gradient && 1.8}
     >
       {statusState.gradient && (
         <Box mt={1.4} mx={1.4} mr={4}>
@@ -131,12 +149,12 @@ const CustomColor = ({
           />
         </Box>
       )}
-      <Grid container>
+      <Grid container className={statusState.gradient && classes.containerOfMainGradientUtils}>
         <Grid item>
-          <Box>
-            <RgbaColorPicker color={correctAndFormattedColor} onChange={setColor} />
+          <Box pr={statusState.gradient && 3}>
+            <RgbaColorPicker color={correctColor} onChange={setColor} />
             {isExtended && (
-              <Box pb={0.8}>
+              <Box>
                 <InputsColorUtilsOfCustomColorPicker
                   color={color}
                   setColor={setColor}
@@ -147,7 +165,7 @@ const CustomColor = ({
             )}
           </Box>
         </Grid>
-        {statusState.gradient  && (
+        {statusState.gradient && (
           <Grid item className={classes.containerOfGradientUtils}>
             <Grid container direction={'column'} justify={'space-between'} style={{ height: '100%' }}>
               <Grid item>
@@ -163,7 +181,7 @@ const CustomColor = ({
                   setGradientFocusedElementState={setGradientFocusedElementState}
                 />
               </Grid>
-              <Grid>
+              <Grid className={classes.containerOfButtonUtilsOfCustomGradient}>
                 <ButtonUtilsOfCustomGradient
                   color={customColorsInHexFormat}
                   gradientDirection={gradientDirection}

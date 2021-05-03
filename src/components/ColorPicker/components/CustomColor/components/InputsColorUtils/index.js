@@ -126,11 +126,12 @@ const InputsColorUtilsOfCustomColorPicker = ({ color, setColor, customColorsInHe
 
   useEffect(() => {
     _.debounce(() => setColorInHexFormat(customColorsInHexFormat), 160);
-    console.log(customColorsInHexFormat);
   }, [customColorsInHexFormat]);
 
   useEffect(() => {
-    setColor(colorInHexFormat);
+    // if (!_.isEqual(colorInHexFormat, '#000000')) {
+      setColor(colorInHexFormat);
+    // }
   }, [colorInHexFormat]);
 
   useEffect(() => {
