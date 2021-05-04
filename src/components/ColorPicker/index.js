@@ -31,6 +31,7 @@ import ColorFormatIcon from 'components/Icons/components/ColorFormatIcon';
 import IconUtilsOfColorPicker from './components/IconsUtils';
 import _ from 'lodash';
 import { useCopyToClipboard } from 'react-use';
+import compareFunc from 'compare-func';
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -104,10 +105,10 @@ const ColorPickerByPas = () => {
     customFormats: false,
     customColor: false,
     gradient: false,
-    copy:false,
-    colorPreview: !false
+    copy: false,
+    colorPreview: !false,
+    focusOfPicker:false
   });
-
   const [gradientColor, setGradientColor] = useState(customColorsInHexFormat);
   const [gradientAngle, setGradientAngle] = useState(90);
   const [gradientDirection, setGradientDirection] = useState('linear-gradient');
@@ -117,11 +118,11 @@ const ColorPickerByPas = () => {
     { color: '#00d4ff', stopDeg: 80, key: '2' },
     { color: '#0024ff', stopDeg: 100, key: '3' }
   ]);
-  const [gradientFocusedElementState, setGradientFocusedElementState] = useState({
-    color: gradientColorState[0].color,
-    key: gradientColorState[0].key,
-    stopDeg: gradientColorState[0].stopDeg
-  });
+
+  const [keyOfGradientFocusedElement, setKeyOfGradientFocusedElement] = useState(gradientColorState[0].key);
+
+  const setFocusStatusOfPicker = value => setStatusState(state => ({ ...state, focusOfPicker: value }));
+  console.log(keyOfGradientFocusedElement);
 
   const onClickOfPalletteButton = () => {
     setStatusState(state => ({
@@ -144,14 +145,12 @@ const ColorPickerByPas = () => {
   };
 
   const onClickOfCopyButton = () => {
+    setStatusState(state => ({ ...state, copy: true }));
+    copyToClipboardFunc(gradientColor);
 
-    setStatusState(state => ({ ...state, copy: true}));
-    copyToClipboardFunc(gradientColor)
+    setTimeout(() => setStatusState(state => ({ ...state, copy: false })), 10000);
+  };
 
-
-    setTimeout(() =>  setStatusState(state => ({ ...state, copy: false})) , 10000);
-  }
-  
   const setCustomizationsStatus = value => setStatusState(state => ({ ...state, customization: value }));
 
   const [customFormatName, setCustomFormatName] = useState('rgb');
@@ -186,24 +185,34 @@ const ColorPickerByPas = () => {
     setGradientColor(gradientColor);
   }, [gradientColorState, gradientDirection, gradientAngle, gradientAngle]);
 
-
   // useEffect(() => {
-  //   if (color !== nullityColor)
-  //     _.debounce(() => setGradientFocusedElementState(state => ({ ...state, color: customColorsInHexFormat })), 160);
-  // }, [customColorsInHexFormat]);
-
-  useEffect(() => {
-    if (statusState.gradient) setColor(gradientFocusedElementState.color);
-  }, []);
+  //   if (statusState.gradient) setColor(gradientFocusedElementState.color);
+  // }, []);
 
   // console.log(gradientsStatus);
-  const handlePopoverAndMenuState = value => setPopoverAndMenuState(value);
 
+  useEffect(() => {
+    if (color === nullityColor) return;
+    const filteredArr = _.filter(
+      gradientColorState,
+      ({ key: gradientColorKey }) => gradientColorKey !== keyOfGradientFocusedElement
+    );
+    const focusedElement = _.find(gradientColorState, ({ key }) => keyOfGradientFocusedElement === key);
+
+    filteredArr.push({ ...focusedElement, color: customColorsInHexFormat });
+    const sortedArr = filteredArr.sort(compareFunc('stopDeg'));
+
+    // _.debounce(() => setGradientColorState(sortedArr), 100);
+    // setGradientColorState(sortedArr);
+
+    return _.debounce(() => setGradientColorState(sortedArr), 96);
+  }, [customColorsInHexFormat, keyOfGradientFocusedElement]);
+
+  const handlePopoverAndMenuState = value => setPopoverAndMenuState(value);
 
   const customizationButtonProps = {
     nullityColor,
     customColorsInHexFormat,
-    setCustomizationsStatus,
     color
   };
 
@@ -224,9 +233,12 @@ const ColorPickerByPas = () => {
     setGradientDirection,
     gradientAngle,
     setGradientAngle,
-    gradientFocusedElementState,
-    setGradientFocusedElementState,
-    statusState
+    keyOfGradientFocusedElement,
+    setKeyOfGradientFocusedElement,
+    statusState,
+    setFocusStatusOfPicker,
+    setCustomizationsStatus,
+
   };
 
   const iconUtilsProps = {

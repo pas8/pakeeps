@@ -65,10 +65,12 @@ const GradientPreviewer = ({
   gradientColor,
   gradientColorState,
   setGradientColorState,
-  gradientFocusedElementState,
-  setGradientFocusedElementState
+  keyOfGradientFocusedElement,
+  setKeyOfGradientFocusedElement
 }) => {
-  const classes = useStyles({ gradientColor, focusedColor: gradientFocusedElementState?.color });
+  console.log(gradientColorState)
+  const focusedColor = _.find(gradientColorState, ({ key }) => key === keyOfGradientFocusedElement)?.color;
+  const classes = useStyles({ gradientColor, focusedColor });
 
   const [hoverNameOfDraggingElement, setHoverNameOfDraggingElement] = useState(false);
 
@@ -90,12 +92,15 @@ const GradientPreviewer = ({
 
     const neighborMore = _.find(gradientColorState, ({ stopDeg }) => stopDeg > clickedStopDeg);
     const neighborLess = _.findLast(gradientColorState, ({ stopDeg }) => stopDeg < clickedStopDeg);
-    const colorRatio = neighborLess.stopDeg / neighborMore.stopDeg;
 
-    const clickedColor = colord(neighborMore.color).mix(neighborLess.color, colorRatio).toHex();
-    setGradientColorState(state =>
-      [...state, { key: nanoid(), color: clickedColor, stopDeg: clickedStopDeg }].sort(compareFunc('stopDeg'))
-    );
+    const mediumColorRatio = neighborLess?.stopDeg / neighborMore?.stopDeg;
+    const mediumColor = colord(neighborMore?.color).mix(neighborLess?.color, mediumColorRatio).toHex();
+    const nullityMediumColor = '#00000000';
+
+    const clickedColor = mediumColor !== nullityMediumColor ? mediumColor : neighborLess.color || neighborMore.color;
+    const newArrElement = { key: nanoid(), color: clickedColor, stopDeg: clickedStopDeg };
+
+    setGradientColorState(state => [...state, newArrElement].sort(compareFunc('stopDeg')));
     // console.log(colorRatio);
   };
   // console.log(gradientColorState);
@@ -116,14 +121,16 @@ const GradientPreviewer = ({
           const sortedArr = filteredArr.sort(compareFunc('stopDeg'));
           setGradientColorState(sortedArr);
         };
-        // const onStart = (placeholder, { lastX }) => {
-        //   placeholder.preventDefault()
-        //   const newStopDegValue = ~~(lastX / unitOfDraggable);
-        //   const filteredArr = _.filter(gradientColorState, ({ key: gradientColorKey }) => gradientColorKey !== key);
-        //   filteredArr.push({ color, stopDeg: newStopDegValue, key });
-        //   const sortedArr = filteredArr.sort(compareFunc('stopDeg'));
-        //   setGradientColorState(sortedArr);
-        // };
+        const onStart = (placeholder, { lastX }) => {
+          if (!hoverNameOfDraggingElement) return;
+
+          // placeholder.preventDefault()
+          // const newStopDegValue = ~~(lastX / unitOfDraggable);
+          // const filteredArr = _.filter(gradientColorState, ({ key: gradientColorKey }) => gradientColorKey !== key);
+          // filteredArr.push({ color, stopDeg: newStopDegValue, key });
+          // const sortedArr = filteredArr.sort(compareFunc('stopDeg'));
+          // setGradientColorState(sortedArr);
+        };
         const onDrag = (placeholder, { lastX }) => {
           placeholder.preventDefault();
 
@@ -133,11 +140,15 @@ const GradientPreviewer = ({
           // const sortedArr =  filteredArr.sort(compareFunc('stopDeg'))
           // setGradientColorState(sortedArr);
         };
+        const deleteGradientItem = () => {
+          const filteredArr = _.filter(gradientColorState, ({ key: currentKey }) => currentKey !== key);
+          console.log(filteredArr)
+          setGradientColorState(filteredArr);
+        };
 
-        const onFocus = () => setGradientFocusedElementState({ color, stopDeg, key });
-
+        const onFocus = () => setKeyOfGradientFocusedElement(key);
         const draggableProps = {
-          // onStart,
+          onStart,
           onDrag,
           onStop,
           axis: 'x',
@@ -152,9 +163,10 @@ const GradientPreviewer = ({
                 className={classes.draggableElement}
                 item
                 style={{ background: color }}
+                onDoubleClick={deleteGradientItem}
                 onMouseEnter={() => setHoverNameOfDraggingElement(key)}
                 onMouseLeave={() => setHoverNameOfDraggingElement(false)}
-              ></Grid>
+              />
 
               <FormControl
                 onMouseEnter={() => setHoverNameOfDraggingElement(key)}

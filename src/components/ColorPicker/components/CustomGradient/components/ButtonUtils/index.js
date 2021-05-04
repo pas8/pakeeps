@@ -7,6 +7,7 @@ import { useState } from 'react';
 import CircularSlider from '@fseehawer/react-circular-slider';
 import CenteredGrid from 'components/CenteredGrid';
 import NumberAdornment from 'components/ColorPicker/components/CustomColor/components/NumberAdornment';
+import { themeColors } from 'components/theme';
 
 const useStyles = makeStyles(theme => ({
   containerOfGradientDirectionButtons: {
@@ -30,7 +31,8 @@ const useStyles = makeStyles(theme => ({
   inputOfGradientAngle: {
     width: theme.spacing(10 + 0.8),
     '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
-      borderColor: ({ color }) => color
+      borderColor: ({ color, colorPreview }) =>
+        colorPreview ? color : themeColors.whiteRgbaColorWith0dot96valueOfAlfaCanal
     }
   }
 }));
@@ -40,9 +42,10 @@ const ButtonUtilsOfCustomGradient = ({
   gradientDirection,
   setGradientDirection,
   gradientAngle,
-  setGradientAngle
+  setGradientAngle,
+  colorPreview
 }) => {
-  const classes = useStyles({ color });
+  const classes = useStyles({ color, colorPreview });
 
   const [hoverStatusOFCircleSlider, setHoverStatusOFCircleSlider] = useState(false);
 
@@ -70,7 +73,7 @@ const ButtonUtilsOfCustomGradient = ({
     direction: 1,
     label: '',
     appendToValue: '°',
-    knobColor: color,
+    knobColor: colorPreview ? color : themeColors.whiteRgbaColorWith0dot96valueOfAlfaCanal,
     trackSize: 2,
     knobSize: 24,
     dataIndex: gradientAngle,

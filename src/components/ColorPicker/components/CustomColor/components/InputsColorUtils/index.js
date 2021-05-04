@@ -77,7 +77,14 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const InputsColorUtilsOfCustomColorPicker = ({ color, setColor, customColorsInHexFormat, customFormatName }) => {
+const InputsColorUtilsOfCustomColorPicker = ({
+  color,
+  setColor,
+  customColorsInHexFormat,
+  customFormatName,
+  gradientStatus,
+  focusOfPicker
+}) => {
   extend([lchPlugin]);
   const classes = useStyles({ customColorsInHexFormat });
 
@@ -125,12 +132,12 @@ const InputsColorUtilsOfCustomColorPicker = ({ color, setColor, customColorsInHe
   };
 
   useEffect(() => {
-    _.debounce(() => setColorInHexFormat(customColorsInHexFormat), 160);
+    !gradientStatus && _.debounce(() => setColorInHexFormat(customColorsInHexFormat), 160);
   }, [customColorsInHexFormat]);
 
   useEffect(() => {
     // if (!_.isEqual(colorInHexFormat, '#000000')) {
-      setColor(colorInHexFormat);
+    !focusOfPicker && setColor(colorInHexFormat);
     // }
   }, [colorInHexFormat]);
 
