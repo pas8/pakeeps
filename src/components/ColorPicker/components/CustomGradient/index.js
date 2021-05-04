@@ -3,6 +3,7 @@ import { ToggleButton } from '@material-ui/lab';
 import _ from 'lodash';
 import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
+import compareFunc from 'compare-func';
 import NumberAdornment from '../CustomColor/components/NumberAdornment';
 import CloseIcon from '@material-ui/icons/Close';
 import clsx from 'clsx';
@@ -69,9 +70,10 @@ const CustomGradient = ({
   nullityColor,
   gradientColorState,
   setGradientColorState,
-  gradientFocusedElementState, setGradientFocusedElementState
+  focusOfPicker,
+  keyOfGradientFocusedElement,
+  setKeyOfGradientFocusedElement
 }) => {
-
   const [hoverStatusOfCloseButton, setHoverStatusOfCloseButton] = useState(false);
   const [gradientHoveredElementName, setGradientHoveredElementName] = useState(false);
 
@@ -84,39 +86,59 @@ const CustomGradient = ({
   const onHoverOfCloseButton = () => setHoverStatusOfCloseButton(true);
   const onUnHoverOfCloseButton = () => setHoverStatusOfCloseButton(false);
 
-  const classes = useStyles({ borderColorOfFocusedInput: gradientFocusedElementState.color });
   // console.log(customColorsInHexFormat);
+  const focusedElement = _.find(gradientColorState, ({ key }) => keyOfGradientFocusedElement === key);
+  const classes = useStyles({ borderColorOfFocusedInput: focusedElement?.color });
 
-  useEffect(() => setColor(gradientFocusedElementState.color), [gradientFocusedElementState]);
+  // useEffect(() => setColor(gradientFocusedElementState.color), [gradientFocusedElementState]);
 
-
+  useEffect(() => !focusOfPicker && setColor(focusedElement?.color), [focusedElement]);
   return (
     <Grid container direction={'column'} className={classes.container}>
       {gradientColorState.map(({ color, stopDeg, key }) => {
         const isHovered = gradientHoveredElementName === key;
-        const isFocused = gradientFocusedElementState.color === color;
+        const isFocused = keyOfGradientFocusedElement === key;
 
         const setGradientHoveredElementNameIsFalse = () => setGradientHoveredElementName(false);
         const handleGradientHoveredElementName = () => setGradientHoveredElementName(key);
 
-        const handleGradientFocusedElementColor = () =>
-          setGradientFocusedElementState({
-            color,
-            key,
-            stopDeg
-          });
+        const handleGradientFocusedElementColor = () => setKeyOfGradientFocusedElement(key);
+
+        const onChangeOfHexInput = ({ target: { value } }) => {
+          // console.log(value);
+
+          const filteredArr = _.filter(gradientColorState, ({ key: gradientColorKey }) => gradientColorKey !== key);
+          filteredArr.push({ color: value, stopDeg, key });
+          const sortedArr = filteredArr.sort(compareFunc('stopDeg'));
+          setGradientColorState(sortedArr);
+        };
+
+        const onChangeOfNumberInput = ({ target: { value } }) => {
+          // console.log(value);
+
+          const filteredArr = _.filter(gradientColorState, ({ key: gradientColorKey }) => gradientColorKey !== key);
+          filteredArr.push({ color, stopDeg: value > 100 ? 100 : value, key });
+          const sortedArr = filteredArr.sort(compareFunc('stopDeg'));
+          setGradientColorState(sortedArr);
+        };
+
+        const deleteGradientItem = () => {
+          const filteredArr = _.filter(gradientColorState, ({ key: currentKey }) => currentKey !== key);
+          setGradientColorState(filteredArr);
+        };
 
         const hexInputProps = {
           type: 'text',
           // onChange: onChangeOfCustomFormatState,
           // name: idx,
+          onChange: onChangeOfHexInput,
           // labelWidth: currentLabelName * 9.6,
           value: color
         };
 
         const numberInputProps = {
           type: 'number',
-          // onChange: onChangeOfCustomFormatState,
+          onChange: onChangeOfNumberInput,
           // name: idx,
           // labelWidth: currentLabelName * 9.6,
           value: stopDeg,
@@ -169,7 +191,7 @@ const CustomGradient = ({
                 selected={isHovered && hoverStatusOfCloseButton}
                 onMouseEnter={onHoverOfCloseButton}
                 onMouseLeave={onUnHoverOfCloseButton}
-                onClick={() => console.log(';')}
+                onClick={deleteGradientItem}
                 // onChange={() => {
                 //   setSelected(!selected);
                 // }}

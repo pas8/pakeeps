@@ -22,16 +22,22 @@ import CustomGradient from '../CustomGradient';
 import GradientPreviewer from '../CustomGradient/components/GradientPreviewer';
 import InputsColorUtilsOfCustomColorPicker from './components/InputsColorUtils';
 import ButtonUtilsOfCustomGradient from '../CustomGradient/components/ButtonUtils';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import _ from 'lodash';
+import { useClickAway } from 'react-use';
 
 const useStyles = makeStyles(theme => ({
-  containerOfCustomColor: ({ isExtended }) => ({
+  containerOfCustomColor: ({ isExtended, gradientColorStateLength, gradientStatus }) => ({
     '& .react-colorful': {
       width: 'auto',
       minWidth: theme.spacing(42 - 1.8),
-      height: isExtended ? theme.spacing(42) : theme.spacing(42 - 10 + 0.8)
-      // marginRight: theme.spacing(10 + 0.16)
+      minHeight: gradientColorStateLength ? theme.spacing(4 * 9.6) : 'auto',
+      height: gradientStatus
+        ? theme.spacing(gradientColorStateLength * (8 + 1))
+        : isExtended
+        ? theme.spacing(42)
+        : theme.spacing(42 - 10 + 0.8)
+      // marginRight: theme.spacing(10 + 0.16),
     },
 
     '& .react-colorful__saturation': {
@@ -77,8 +83,23 @@ const useStyles = makeStyles(theme => ({
     // marginRight: theme.spacing(-1)
   }),
   containerOfGradientUtils: {
-    padding: theme.spacing(0, 2),
+    padding: theme.spacing(0, 0, 0, 0),
     borderLeft: '2px solid rgba(255, 255, 255,0.4)'
+  },
+  containerOfMainGradientUtils: {
+    '& >  div': {
+      paddingTop: theme.spacing(2.4)
+    },
+    borderTop: '2px solid rgba(255, 255, 255,0.4)'
+  },
+  containerOfButtonUtilsOfCustomGradient: {
+    paddingTop: theme.spacing(2),
+    paddingLeft: theme.spacing(1.4),
+    borderTop: '2px solid rgba(255, 255, 255,0.4)'
+  },
+  wrapperOfGradientUtils: {
+    height: '100%',
+    paddingBottom: theme.spacing(1.8)
   }
 }));
 
@@ -90,82 +111,105 @@ const CustomColor = ({
   customColorsInHexFormat,
   customFormatName,
   gradientColor,
-  gradientFocusedElementState,
-  setGradientFocusedElementState,
+  keyOfGradientFocusedElement,
+  setKeyOfGradientFocusedElement,
   setGradientColor,
   gradientColorState,
   setGradientColorState,
   gradientDirection,
   setGradientDirection,
   gradientAngle,
-  setGradientAngle
+  setGradientAngle,
+  setFocusStatusOfPicker
 }) => {
   const isExtended = statusState.customColor && statusState.extended;
-  const classes = useStyles({ isExtended });
+  const gradientColorStateLength = gradientColorState.length;
+  const classes = useStyles({ isExtended, gradientColorStateLength, gradientStatus: statusState.gradient });
   const isColorInHexFormat = _.isString(color, nullityColor) && color.startsWith('#');
   const colorToRgbFormat = colord(color).toRgb();
 
-  const correctAndFormattedColor =
-    _.isEqual(color, 'rgba(255,255,255,0.8)') && !statusState.extended && statusState.customColor
-      ? colord(themeColors.primaryMain).toRgb()
-      : isColorInHexFormat
-      ? colorToRgbFormat
-      : color;
+  const correctAndFormattedColor = isColorInHexFormat
+    ? // _.isEqual(color, 'rgba(255,255,255,0.8)') && !statusState.extended && statusState.customColor
+      // ? colord(themeColors.primaryMain).toRgb()
+      // : isColorInHexFormat
+      colorToRgbFormat
+    : color;
 
-  // console.log(correctAndFormattedColor,color)
+  // const [correctColor, setCorrectColor] = useState();
+
+  // useEffect(() => {
+  //   if (!_.isEqual(color, { r: 0, g: 0, b: 0, a: 1 })) {
+  //     setCorrectColor(correctAndFormattedColor);
+  //   }
+  // }, []);
+  // console.log(correctAndFormattedColor);
+
+  const refOfFocusStatusOfPicker = useRef(null);
+  useClickAway(refOfFocusStatusOfPicker, () => setFocusStatusOfPicker(false));
+  const setFocusStatusOfPickerIsTrue = () => setFocusStatusOfPicker(true);
+
+  useEffect(() => setFocusStatusOfPicker(true), []);
+
   return (
     <Box
       className={classes.containerOfCustomColor}
-      mb={isExtended ? 0 : -1.1}
-      mx={isExtended ? 1.8 : 1.4}
+      mb={statusState.gradient ? 0 : isExtended ? 0 : -1.1}
+      mx={statusState.gradient ? 0 : isExtended ? 1.8 : 1.4}
       mt={isExtended ? -0.4 : 1.4}
     >
       {statusState.gradient && (
-        <Box mt={1.4} mx={1.4} mr={4}>
+        <Box mt={2.8} px={2.8}>
           <GradientPreviewer
             gradientColor={gradientColor}
             gradientColorState={gradientColorState}
             setGradientColorState={setGradientColorState}
-            gradientFocusedElementState={gradientFocusedElementState}
-            setGradientFocusedElementState={setGradientFocusedElementState}
+            keyOfGradientFocusedElement={keyOfGradientFocusedElement}
+            setKeyOfGradientFocusedElement={setKeyOfGradientFocusedElement}
           />
         </Box>
       )}
-      <Grid container>
+      <Grid container className={statusState.gradient && classes.containerOfMainGradientUtils}>
         <Grid item>
-          <Box>
-            <RgbaColorPicker color={correctAndFormattedColor} onChange={setColor} />
+          <Box pr={statusState.gradient && 2.8} pb={statusState.gradient && 1.8} pl={statusState.gradient && 1.8}>
+            <Box ref={refOfFocusStatusOfPicker} onClick={setFocusStatusOfPickerIsTrue}>
+              <RgbaColorPicker color={correctAndFormattedColor} onChange={setColor} />
+            </Box>
             {isExtended && (
-              <Box pb={0.8}>
+              <Box>
                 <InputsColorUtilsOfCustomColorPicker
                   color={color}
                   setColor={setColor}
+                  focusOfPicker={statusState.focusOfPicker}
                   customColorsInHexFormat={customColorsInHexFormat}
                   customFormatName={customFormatName}
+                  setFocusStatusOfPicker={setFocusStatusOfPicker}
+                  gradientStatus={statusState.gradient}
                 />
               </Box>
             )}
           </Box>
         </Grid>
-        {statusState.gradient  && (
+        {statusState.gradient && (
           <Grid item className={classes.containerOfGradientUtils}>
-            <Grid container direction={'column'} justify={'space-between'} style={{ height: '100%' }}>
-              <Grid item>
+            <Grid container direction={'column'} justify={'space-between'} className={classes.wrapperOfGradientUtils}>
+              <Box item ml={1.8}>
                 <CustomGradient
                   setColor={setColor}
                   setGradientColor={setGradientColor}
+                  focusOfPicker={statusState.focusOfPicker}
                   customColorsInHexFormat={customColorsInHexFormat}
                   color={color}
                   nullityColor={nullityColor}
                   gradientColorState={gradientColorState}
                   setGradientColorState={setGradientColorState}
-                  gradientFocusedElementState={gradientFocusedElementState}
-                  setGradientFocusedElementState={setGradientFocusedElementState}
+                  keyOfGradientFocusedElement={keyOfGradientFocusedElement}
+                  setKeyOfGradientFocusedElement={setKeyOfGradientFocusedElement}
                 />
-              </Grid>
-              <Grid>
+              </Box>
+              <Grid className={classes.containerOfButtonUtilsOfCustomGradient}>
                 <ButtonUtilsOfCustomGradient
                   color={customColorsInHexFormat}
+                  colorPreview={statusState.colorPreview}
                   gradientDirection={gradientDirection}
                   setGradientDirection={setGradientDirection}
                   gradientAngle={gradientAngle}

@@ -7,6 +7,7 @@ import { useState } from 'react';
 import CircularSlider from '@fseehawer/react-circular-slider';
 import CenteredGrid from 'components/CenteredGrid';
 import NumberAdornment from 'components/ColorPicker/components/CustomColor/components/NumberAdornment';
+import { themeColors } from 'components/theme';
 
 const useStyles = makeStyles(theme => ({
   containerOfGradientDirectionButtons: {
@@ -30,7 +31,8 @@ const useStyles = makeStyles(theme => ({
   inputOfGradientAngle: {
     width: theme.spacing(10 + 0.8),
     '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
-      borderColor: ({ color }) => color
+      borderColor: ({ color, colorPreview }) =>
+        colorPreview ? color : themeColors.whiteRgbaColorWith0dot96valueOfAlfaCanal
     }
   }
 }));
@@ -40,9 +42,10 @@ const ButtonUtilsOfCustomGradient = ({
   gradientDirection,
   setGradientDirection,
   gradientAngle,
-  setGradientAngle
+  setGradientAngle,
+  colorPreview
 }) => {
-  const classes = useStyles({ color });
+  const classes = useStyles({ color, colorPreview });
 
   const [hoverStatusOFCircleSlider, setHoverStatusOFCircleSlider] = useState(false);
 
@@ -70,7 +73,7 @@ const ButtonUtilsOfCustomGradient = ({
     direction: 1,
     label: '',
     appendToValue: '°',
-    knobColor: color,
+    knobColor: colorPreview ? color : themeColors.whiteRgbaColorWith0dot96valueOfAlfaCanal,
     trackSize: 2,
     knobSize: 24,
     dataIndex: gradientAngle,
@@ -88,32 +91,34 @@ const ButtonUtilsOfCustomGradient = ({
           exclusive
           value={gradientDirection}
         >
-          <ToggleButton value={'linear-gradient'}>
+          <ToggleButton value={'radial-gradient'}>
             <BlurCircularOutlinedIcon />
           </ToggleButton>
 
-          <ToggleButton value={'radial-gradient'}>
+          <ToggleButton value={'linear-gradient'}>
             <ViewDayOutlinedIcon />
           </ToggleButton>
         </ToggleButtonGroup>
       </Grid>
-      <Box ml={1.8}>
-        <Grid container className={classes.containerOfCircleSlider}>
-          <Box
-            className={classes.containerOfCircleSlider}
-            onMouseEnter={setHoverStatusOFCircleSliderIsTrue}
-            onMouseLeave={setHoverStatusOFCircleSliderIsFalse}
-            mr={2.8}
-          >
-            <CenteredGrid>
-              <CircularSlider {...circleSliderProps}>0</CircularSlider>
-            </CenteredGrid>
-          </Box>
-          <FormControl variant={'outlined'} className={classes.inputOfGradientAngle}>
-            <OutlinedInput {...gradientAngleInputProps} />
-          </FormControl>
-        </Grid>
-      </Box>
+      {gradientDirection === 'linear-gradient' && (
+        <Box ml={1.8}>
+          <Grid container className={classes.containerOfCircleSlider}>
+            <Box
+              className={classes.containerOfCircleSlider}
+              onMouseEnter={setHoverStatusOFCircleSliderIsTrue}
+              onMouseLeave={setHoverStatusOFCircleSliderIsFalse}
+              mr={2.8}
+            >
+              <CenteredGrid>
+                <CircularSlider {...circleSliderProps}>0</CircularSlider>
+              </CenteredGrid>
+            </Box>
+            <FormControl variant={'outlined'} className={classes.inputOfGradientAngle}>
+              <OutlinedInput {...gradientAngleInputProps} />
+            </FormControl>
+          </Grid>
+        </Box>
+      )}
     </Grid>
   );
 };

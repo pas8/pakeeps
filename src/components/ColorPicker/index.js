@@ -1,7 +1,18 @@
 import { useEffect, useState } from 'react';
 import { HexColorPicker, RgbaColorPicker } from 'react-colorful';
 import UnfoldMoreOutlinedIcon from '@material-ui/icons/UnfoldMoreOutlined';
-import { Box, Button, ButtonGroup, colors, Grid, IconButton, makeStyles, Paper, Typography } from '@material-ui/core';
+import {
+  Box,
+  Button,
+  ButtonGroup,
+  colors,
+  Dialog,
+  Grid,
+  IconButton,
+  makeStyles,
+  Paper,
+  Typography
+} from '@material-ui/core';
 import { themeColors } from 'components/theme';
 import ColorLensOutlinedIcon from '@material-ui/icons/ColorLensOutlined';
 import PlaylistAddOutlinedIcon from '@material-ui/icons/PlaylistAddOutlined';
@@ -19,6 +30,8 @@ import TextureOutlinedIcon from '@material-ui/icons/TextureOutlined';
 import ColorFormatIcon from 'components/Icons/components/ColorFormatIcon';
 import IconUtilsOfColorPicker from './components/IconsUtils';
 import _ from 'lodash';
+import { useCopyToClipboard } from 'react-use';
+import compareFunc from 'compare-func';
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -26,7 +39,11 @@ const useStyles = makeStyles(theme => ({
       easing: theme.transitions.easing.easeIn,
       duration: theme.transitions.duration.complex
     }),
-    paddingBottom: theme.spacing(0.4)
+    paddingBottom: theme.spacing(0.4),
+    '& .MuiDialog-paperWidthSm': {
+      maxWidth: '80vw'
+    },
+    overflowX: 'hidden'
   },
   elementOfGridColorPicker: {
     width: theme.spacing(16 * 0.42),
@@ -76,20 +93,22 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const ColorPickerByPas = () => {
-  const nullityColor = themeColors.whiteRgbaColorWith0dot8valueOfAlfaCanal;
+  const nullityColor = colord(themeColors.whiteRgbaColorWith0dot8valueOfAlfaCanal).toRgb();
+  const [copyToClipboardState, copyToClipboardFunc] = useCopyToClipboard();
 
   const [color, setColor] = useState(nullityColor);
   const customColorsInHexFormat = colord(color).toHex();
-
   const [statusState, setStatusState] = useState({
     saved: false,
     extended: false,
     customization: false,
     customFormats: false,
     customColor: false,
-    gradient: false
+    gradient: false,
+    copy: false,
+    colorPreview: !false,
+    focusOfPicker: true
   });
-
   const [gradientColor, setGradientColor] = useState(customColorsInHexFormat);
   const [gradientAngle, setGradientAngle] = useState(90);
   const [gradientDirection, setGradientDirection] = useState('linear-gradient');
@@ -99,21 +118,36 @@ const ColorPickerByPas = () => {
     { color: '#00d4ff', stopDeg: 80, key: '2' },
     { color: '#0024ff', stopDeg: 100, key: '3' }
   ]);
-  const [gradientFocusedElementState, setGradientFocusedElementState] = useState({
-    color: gradientColorState[0].color,
-    key: gradientColorState[0].key,
-    stopDeg: gradientColorState[0].stopDeg
-  });
+
+  const [keyOfGradientFocusedElement, setKeyOfGradientFocusedElement] = useState(gradientColorState[0].key);
+
+  const setFocusStatusOfPicker = value => setStatusState(state => ({ ...state, focusOfPicker: value }));
 
   const onClickOfPalletteButton = () => {
-    setStatusState(state => ({ ...state, customColor: !state.customColor, gradient: false }));
+    setStatusState(state => ({
+      ...state,
+      customColor: !state.customColor,
+      gradient: false,
+      colorPreview: !state.colorPreview
+    }));
   };
 
   const onClickOfGradientButton = () => {
     setStatusState(state => ({ ...state, gradient: !state.gradient, extended: true }));
   };
   const onClickOfExtendButton = () => {
-    setStatusState(state => ({ ...state, extended: !state.extended }));
+    setStatusState(state => ({ ...state, extended: !state.extended, gradient: false }));
+  };
+
+  const onClickOfColorPreviewButton = () => {
+    setStatusState(state => ({ ...state, colorPreview: !state.colorPreview }));
+  };
+
+  const onClickOfCopyButton = () => {
+    setStatusState(state => ({ ...state, copy: true }));
+    copyToClipboardFunc(gradientColor);
+
+    setTimeout(() => setStatusState(state => ({ ...state, copy: false })), 10000);
   };
 
   const setCustomizationsStatus = value => setStatusState(state => ({ ...state, customization: value }));
@@ -150,24 +184,51 @@ const ColorPickerByPas = () => {
     setGradientColor(gradientColor);
   }, [gradientColorState, gradientDirection, gradientAngle, gradientAngle]);
 
-  useEffect(() => {
-    if (color !== nullityColor)
-      _.debounce(() => setGradientFocusedElementState(state => ({ ...state, color: customColorsInHexFormat })), 160);
-  }, [customColorsInHexFormat]);
+  // useEffect(() => {
+  //   if (statusState.gradient) setColor(gradientFocusedElementState.color);
+  // }, []);
 
-  // console.log(gradientsStatus);
+
+  useEffect(() => {
+    if (color === nullityColor) return;
+    if (!statusState.focusOfPicker) return;
+
+    const filteredArr = _.filter(
+      gradientColorState,
+      ({ key: gradientColorKey }) => gradientColorKey !== keyOfGradientFocusedElement
+    );
+    const focusedElement = _.find(gradientColorState, ({ key }) => keyOfGradientFocusedElement === key);
+
+    filteredArr.push({ ...focusedElement, color: customColorsInHexFormat });
+    const sortedArr = filteredArr.sort(compareFunc('stopDeg'));
+
+    // _.debounce(() => setGradientColorState(sortedArr), 100);
+    // setGradientColorState(sortedArr);
+
+    return _.throttle(() => setGradientColorState(sortedArr), 420);
+  }, [customColorsInHexFormat, keyOfGradientFocusedElement]);
+
+  useEffect(() => {
+    if (
+      !(
+        (_.isString(color) && color.startsWith('#') || !statusState.extended && !statusState.gradient && statusState.customColor && color?.a < 1) ||
+        color === nullityColor
+      )
+    )
+      return _.debounce(() => setColor(state => ({ ...state, a: 1 })), 160);
+  }, [color]);
+
   const handlePopoverAndMenuState = value => setPopoverAndMenuState(value);
 
   const customizationButtonProps = {
     nullityColor,
     customColorsInHexFormat,
-    setCustomizationsStatus,
     color
   };
 
   const handleSetColor = value => setColor(value);
 
-  const onSave = () => console.log('onSave');
+  const onSave = () => console.log(color);
 
   const customColorProps = {
     setColor,
@@ -182,9 +243,11 @@ const ColorPickerByPas = () => {
     setGradientDirection,
     gradientAngle,
     setGradientAngle,
-    gradientFocusedElementState,
-    setGradientFocusedElementState,
-    statusState
+    keyOfGradientFocusedElement,
+    setKeyOfGradientFocusedElement,
+    statusState,
+    setFocusStatusOfPicker,
+    setCustomizationsStatus
   };
 
   const iconUtilsProps = {
@@ -199,12 +262,13 @@ const ColorPickerByPas = () => {
     customFormatName,
     onClickOfGradientButton,
     onClickOfExtendButton,
-    onClickOfPalletteButton
+    onClickOfPalletteButton,
+    onClickOfColorPreviewButton,
+    onClickOfCopyButton
   };
-
-  console.log(statusState);
+  const Container = statusState.gradient ? Dialog : Grid;
   return (
-    <Grid className={classes.container}>
+    <Container open={statusState.gradient} maxWidth={'lg'} className={classes.container}>
       <Grid container direction={statusState.gradient ? 'row' : 'column'}>
         {statusState.customColor ? (
           <CustomColor {...customColorProps} />
@@ -299,13 +363,13 @@ const ColorPickerByPas = () => {
         )}
       </Grid>
       {!statusState.gradient && (
-        <Box m={0.4} mb={0} mt={0.8} className={classes.iconUtilsContainer}>
+        <Box mt={statusState.extended ? 100.4 : 0.8} className={classes.iconUtilsContainer}>
           <Grid container justify={'space-between'} alignItems={'center'}>
             <IconUtilsOfColorPicker {...iconUtilsProps} />
           </Grid>
         </Box>
       )}
-    </Grid>
+    </Container>
   );
 };
 
