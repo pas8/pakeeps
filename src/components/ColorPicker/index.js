@@ -93,7 +93,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const ColorPickerByPas = () => {
-  const nullityColor = themeColors.whiteRgbaColorWith0dot8valueOfAlfaCanal;
+  const nullityColor = colord(themeColors.whiteRgbaColorWith0dot8valueOfAlfaCanal).toRgb();
   const [copyToClipboardState, copyToClipboardFunc] = useCopyToClipboard();
 
   const [color, setColor] = useState(nullityColor);
@@ -109,9 +109,6 @@ const ColorPickerByPas = () => {
     colorPreview: !false,
     focusOfPicker: true
   });
-
-  console.log(statusState.focusOfPicker);
-
   const [gradientColor, setGradientColor] = useState(customColorsInHexFormat);
   const [gradientAngle, setGradientAngle] = useState(90);
   const [gradientDirection, setGradientDirection] = useState('linear-gradient');
@@ -125,7 +122,6 @@ const ColorPickerByPas = () => {
   const [keyOfGradientFocusedElement, setKeyOfGradientFocusedElement] = useState(gradientColorState[0].key);
 
   const setFocusStatusOfPicker = value => setStatusState(state => ({ ...state, focusOfPicker: value }));
-  console.log(keyOfGradientFocusedElement);
 
   const onClickOfPalletteButton = () => {
     setStatusState(state => ({
@@ -192,7 +188,6 @@ const ColorPickerByPas = () => {
   //   if (statusState.gradient) setColor(gradientFocusedElementState.color);
   // }, []);
 
-  // console.log(gradientsStatus);
 
   useEffect(() => {
     if (color === nullityColor) return;
@@ -210,8 +205,18 @@ const ColorPickerByPas = () => {
     // _.debounce(() => setGradientColorState(sortedArr), 100);
     // setGradientColorState(sortedArr);
 
-    return _.debounce(() => setGradientColorState(sortedArr), 96);
+    return _.throttle(() => setGradientColorState(sortedArr), 420);
   }, [customColorsInHexFormat, keyOfGradientFocusedElement]);
+
+  useEffect(() => {
+    if (
+      !(
+        (_.isString(color) && color.startsWith('#') || !statusState.extended && !statusState.gradient && statusState.customColor && color?.a < 1) ||
+        color === nullityColor
+      )
+    )
+      return _.debounce(() => setColor(state => ({ ...state, a: 1 })), 160);
+  }, [color]);
 
   const handlePopoverAndMenuState = value => setPopoverAndMenuState(value);
 
@@ -223,7 +228,7 @@ const ColorPickerByPas = () => {
 
   const handleSetColor = value => setColor(value);
 
-  const onSave = () => console.log('onSave');
+  const onSave = () => console.log(color);
 
   const customColorProps = {
     setColor,
@@ -261,7 +266,6 @@ const ColorPickerByPas = () => {
     onClickOfColorPreviewButton,
     onClickOfCopyButton
   };
-
   const Container = statusState.gradient ? Dialog : Grid;
   return (
     <Container open={statusState.gradient} maxWidth={'lg'} className={classes.container}>
@@ -359,7 +363,7 @@ const ColorPickerByPas = () => {
         )}
       </Grid>
       {!statusState.gradient && (
-        <Box m={0.4} mb={0} mt={0.8} className={classes.iconUtilsContainer}>
+        <Box mt={statusState.extended ? 100.4 : 0.8} className={classes.iconUtilsContainer}>
           <Grid container justify={'space-between'} alignItems={'center'}>
             <IconUtilsOfColorPicker {...iconUtilsProps} />
           </Grid>

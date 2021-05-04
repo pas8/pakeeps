@@ -148,18 +148,17 @@ const CustomColor = ({
   useClickAway(refOfFocusStatusOfPicker, () => setFocusStatusOfPicker(false));
   const setFocusStatusOfPickerIsTrue = () => setFocusStatusOfPicker(true);
 
-
-useEffect(() =>setFocusStatusOfPicker(true), [])
+  useEffect(() => setFocusStatusOfPicker(true), []);
 
   return (
     <Box
       className={classes.containerOfCustomColor}
       mb={statusState.gradient ? 0 : isExtended ? 0 : -1.1}
-      mx={isExtended ? 1.8 : 1.4}
+      mx={statusState.gradient ? 0 : isExtended ? 1.8 : 1.4}
       mt={isExtended ? -0.4 : 1.4}
-    >   
+    >
       {statusState.gradient && (
-        <Box mt={1.4}>
+        <Box mt={2.8} px={2.8}>
           <GradientPreviewer
             gradientColor={gradientColor}
             gradientColorState={gradientColorState}
@@ -171,8 +170,8 @@ useEffect(() =>setFocusStatusOfPicker(true), [])
       )}
       <Grid container className={statusState.gradient && classes.containerOfMainGradientUtils}>
         <Grid item>
-          <Box pr={statusState.gradient && 2.8} pb={statusState.gradient && 1.8} >
-            <Box ref={refOfFocusStatusOfPicker} onClick={setFocusStatusOfPickerIsTrue} >
+          <Box pr={statusState.gradient && 2.8} pb={statusState.gradient && 1.8} pl={statusState.gradient && 1.8}>
+            <Box ref={refOfFocusStatusOfPicker} onClick={setFocusStatusOfPickerIsTrue}>
               <RgbaColorPicker color={correctAndFormattedColor} onChange={setColor} />
             </Box>
             {isExtended && (
@@ -183,6 +182,7 @@ useEffect(() =>setFocusStatusOfPicker(true), [])
                   focusOfPicker={statusState.focusOfPicker}
                   customColorsInHexFormat={customColorsInHexFormat}
                   customFormatName={customFormatName}
+                  setFocusStatusOfPicker={setFocusStatusOfPicker}
                   gradientStatus={statusState.gradient}
                 />
               </Box>
@@ -192,12 +192,11 @@ useEffect(() =>setFocusStatusOfPicker(true), [])
         {statusState.gradient && (
           <Grid item className={classes.containerOfGradientUtils}>
             <Grid container direction={'column'} justify={'space-between'} className={classes.wrapperOfGradientUtils}>
-              <Grid item>
+              <Box item ml={1.8}>
                 <CustomGradient
                   setColor={setColor}
                   setGradientColor={setGradientColor}
                   focusOfPicker={statusState.focusOfPicker}
-
                   customColorsInHexFormat={customColorsInHexFormat}
                   color={color}
                   nullityColor={nullityColor}
@@ -206,7 +205,7 @@ useEffect(() =>setFocusStatusOfPicker(true), [])
                   keyOfGradientFocusedElement={keyOfGradientFocusedElement}
                   setKeyOfGradientFocusedElement={setKeyOfGradientFocusedElement}
                 />
-              </Grid>
+              </Box>
               <Grid className={classes.containerOfButtonUtilsOfCustomGradient}>
                 <ButtonUtilsOfCustomGradient
                   color={customColorsInHexFormat}

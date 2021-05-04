@@ -83,6 +83,7 @@ const InputsColorUtilsOfCustomColorPicker = ({
   customColorsInHexFormat,
   customFormatName,
   gradientStatus,
+  setFocusStatusOfPicker,
   focusOfPicker
 }) => {
   extend([lchPlugin]);
@@ -136,10 +137,13 @@ const InputsColorUtilsOfCustomColorPicker = ({
   }, [customColorsInHexFormat]);
 
   useEffect(() => {
-    // if (!_.isEqual(colorInHexFormat, '#000000')) {
-    !focusOfPicker && setColor(colorInHexFormat);
-    // }
-  }, [colorInHexFormat]);
+    !gradientStatus && setFocusStatusOfPicker(false);
+    // !focusOfPicker && setColor(colorInHexFormat);
+    // !focusOfPicker && console.log(colorInHexFormat,color);
+     focusOfPicker && console.log('focusOfPicker is' +  focusOfPicker)
+     !focusOfPicker && console.log('focusOfPicker is' +  focusOfPicker)
+
+  }, [colorInHexFormat,gradientStatus,color]);
 
   useEffect(() => {
     const correctFormatObj = {
@@ -170,7 +174,7 @@ const InputsColorUtilsOfCustomColorPicker = ({
       labelWidth: 3 * 9.6,
       name: 'hex',
       onFocus: onInputFocus,
-      onBlur: onInputBlur
+      onBlur: onInputBlur,
     }),
     [customColorsInHexFormat, onChangeOfColorInHexFormat, customFormatElementFocusStatus]
   );
@@ -187,7 +191,7 @@ const InputsColorUtilsOfCustomColorPicker = ({
           )}
         >
           <InputLabel>Hex</InputLabel>
-          <OutlinedInput {...inputInHexFormatProps} />
+          <OutlinedInput  {...inputInHexFormatProps} />
         </FormControl>
       </Grid>
 

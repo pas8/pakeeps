@@ -91,32 +91,34 @@ const ButtonUtilsOfCustomGradient = ({
           exclusive
           value={gradientDirection}
         >
-          <ToggleButton value={'linear-gradient'}>
+          <ToggleButton value={'radial-gradient'}>
             <BlurCircularOutlinedIcon />
           </ToggleButton>
 
-          <ToggleButton value={'radial-gradient'}>
+          <ToggleButton value={'linear-gradient'}>
             <ViewDayOutlinedIcon />
           </ToggleButton>
         </ToggleButtonGroup>
       </Grid>
-      <Box ml={1.8}>
-        <Grid container className={classes.containerOfCircleSlider}>
-          <Box
-            className={classes.containerOfCircleSlider}
-            onMouseEnter={setHoverStatusOFCircleSliderIsTrue}
-            onMouseLeave={setHoverStatusOFCircleSliderIsFalse}
-            mr={2.8}
-          >
-            <CenteredGrid>
-              <CircularSlider {...circleSliderProps}>0</CircularSlider>
-            </CenteredGrid>
-          </Box>
-          <FormControl variant={'outlined'} className={classes.inputOfGradientAngle}>
-            <OutlinedInput {...gradientAngleInputProps} />
-          </FormControl>
-        </Grid>
-      </Box>
+      {gradientDirection === 'linear-gradient' && (
+        <Box ml={1.8}>
+          <Grid container className={classes.containerOfCircleSlider}>
+            <Box
+              className={classes.containerOfCircleSlider}
+              onMouseEnter={setHoverStatusOFCircleSliderIsTrue}
+              onMouseLeave={setHoverStatusOFCircleSliderIsFalse}
+              mr={2.8}
+            >
+              <CenteredGrid>
+                <CircularSlider {...circleSliderProps}>0</CircularSlider>
+              </CenteredGrid>
+            </Box>
+            <FormControl variant={'outlined'} className={classes.inputOfGradientAngle}>
+              <OutlinedInput {...gradientAngleInputProps} />
+            </FormControl>
+          </Grid>
+        </Box>
+      )}
     </Grid>
   );
 };

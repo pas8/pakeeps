@@ -54,7 +54,7 @@ const useStyles = makeStyles(theme => ({
     }
   },
   leftFloating: {
-    marginLeft: theme.spacing(0)
+    marginLeft: theme.spacing(-0.4)
   },
   rightFloating: {
     marginLeft: theme.spacing(-4)
