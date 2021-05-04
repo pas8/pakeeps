@@ -147,13 +147,17 @@ const CustomColor = ({
   const refOfFocusStatusOfPicker = useRef(null);
   useClickAway(refOfFocusStatusOfPicker, () => setFocusStatusOfPicker(false));
   const setFocusStatusOfPickerIsTrue = () => setFocusStatusOfPicker(true);
+
+
+useEffect(() =>setFocusStatusOfPicker(true), [])
+
   return (
     <Box
       className={classes.containerOfCustomColor}
       mb={statusState.gradient ? 0 : isExtended ? 0 : -1.1}
       mx={isExtended ? 1.8 : 1.4}
       mt={isExtended ? -0.4 : 1.4}
-    >
+    >   
       {statusState.gradient && (
         <Box mt={1.4}>
           <GradientPreviewer

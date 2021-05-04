@@ -107,8 +107,11 @@ const ColorPickerByPas = () => {
     gradient: false,
     copy: false,
     colorPreview: !false,
-    focusOfPicker:false
+    focusOfPicker: true
   });
+
+  console.log(statusState.focusOfPicker);
+
   const [gradientColor, setGradientColor] = useState(customColorsInHexFormat);
   const [gradientAngle, setGradientAngle] = useState(90);
   const [gradientDirection, setGradientDirection] = useState('linear-gradient');
@@ -193,6 +196,8 @@ const ColorPickerByPas = () => {
 
   useEffect(() => {
     if (color === nullityColor) return;
+    if (!statusState.focusOfPicker) return;
+
     const filteredArr = _.filter(
       gradientColorState,
       ({ key: gradientColorKey }) => gradientColorKey !== keyOfGradientFocusedElement
@@ -237,8 +242,7 @@ const ColorPickerByPas = () => {
     setKeyOfGradientFocusedElement,
     statusState,
     setFocusStatusOfPicker,
-    setCustomizationsStatus,
-
+    setCustomizationsStatus
   };
 
   const iconUtilsProps = {
