@@ -150,6 +150,45 @@ const CustomColor = ({
 
   useEffect(() => setFocusStatusOfPicker(true), []);
 
+  const gradientPreviewerProps = {
+    gradientColor,
+    gradientColorState,
+    setGradientColorState,
+    keyOfGradientFocusedElement,
+    setKeyOfGradientFocusedElement
+  };
+  const inputsColorUtilsOfCustomColorPickerProps = {
+    color,
+    setColor,
+    focusOfPicker: statusState.focusOfPicker,
+    customColorsInHexFormat,
+    customFormatName,
+    setFocusStatusOfPicker,
+    gradientStatus: statusState.gradient
+  };
+
+  const customGradientProps = {
+    setColor,
+    setGradientColor,
+    focusOfPicker: statusState.focusOfPicker,
+    customColorsInHexFormat,
+    color,
+    nullityColor,
+    gradientColorState,
+    setGradientColorState,
+    keyOfGradientFocusedElement,
+    setKeyOfGradientFocusedElement
+  };
+
+  const buttonUtilsOfCustomGradientProps = {
+    color: customColorsInHexFormat,
+    colorPreview: statusState.colorPreview,
+    gradientDirection,
+    setGradientDirection,
+    gradientAngle,
+    setGradientAngle
+  };
+
   return (
     <Box
       className={classes.containerOfCustomColor}
@@ -159,13 +198,7 @@ const CustomColor = ({
     >
       {statusState.gradient && (
         <Box mt={2.8} px={2.8}>
-          <GradientPreviewer
-            gradientColor={gradientColor}
-            gradientColorState={gradientColorState}
-            setGradientColorState={setGradientColorState}
-            keyOfGradientFocusedElement={keyOfGradientFocusedElement}
-            setKeyOfGradientFocusedElement={setKeyOfGradientFocusedElement}
-          />
+          <GradientPreviewer {...gradientPreviewerProps} />
         </Box>
       )}
       <Grid container className={statusState.gradient && classes.containerOfMainGradientUtils}>
@@ -176,15 +209,7 @@ const CustomColor = ({
             </Box>
             {isExtended && (
               <Box>
-                <InputsColorUtilsOfCustomColorPicker
-                  color={color}
-                  setColor={setColor}
-                  focusOfPicker={statusState.focusOfPicker}
-                  customColorsInHexFormat={customColorsInHexFormat}
-                  customFormatName={customFormatName}
-                  setFocusStatusOfPicker={setFocusStatusOfPicker}
-                  gradientStatus={statusState.gradient}
-                />
+                <InputsColorUtilsOfCustomColorPicker {...inputsColorUtilsOfCustomColorPickerProps} />
               </Box>
             )}
           </Box>
@@ -193,28 +218,10 @@ const CustomColor = ({
           <Grid item className={classes.containerOfGradientUtils}>
             <Grid container direction={'column'} justify={'space-between'} className={classes.wrapperOfGradientUtils}>
               <Box item ml={1.8}>
-                <CustomGradient
-                  setColor={setColor}
-                  setGradientColor={setGradientColor}
-                  focusOfPicker={statusState.focusOfPicker}
-                  customColorsInHexFormat={customColorsInHexFormat}
-                  color={color}
-                  nullityColor={nullityColor}
-                  gradientColorState={gradientColorState}
-                  setGradientColorState={setGradientColorState}
-                  keyOfGradientFocusedElement={keyOfGradientFocusedElement}
-                  setKeyOfGradientFocusedElement={setKeyOfGradientFocusedElement}
-                />
+                <CustomGradient {...customGradientProps} />
               </Box>
               <Grid className={classes.containerOfButtonUtilsOfCustomGradient}>
-                <ButtonUtilsOfCustomGradient
-                  color={customColorsInHexFormat}
-                  colorPreview={statusState.colorPreview}
-                  gradientDirection={gradientDirection}
-                  setGradientDirection={setGradientDirection}
-                  gradientAngle={gradientAngle}
-                  setGradientAngle={setGradientAngle}
-                />
+                <ButtonUtilsOfCustomGradient {...buttonUtilsOfCustomGradientProps} />
               </Grid>
             </Grid>
           </Grid>

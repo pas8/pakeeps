@@ -132,18 +132,17 @@ const InputsColorUtilsOfCustomColorPicker = ({
     setCustomFormatState(state => ({ ...state, [customFormatElementNames[idx]]: currentValue }));
   };
 
-  useEffect(() => {
-    !gradientStatus && _.debounce(() => setColorInHexFormat(customColorsInHexFormat), 160);
-  }, [customColorsInHexFormat]);
+  // useEffect(() => {
+  //   !gradientStatus && _.debounce(() => setColorInHexFormat(customColorsInHexFormat), 160);
+  // }, [customColorsInHexFormat]);
 
   useEffect(() => {
     !gradientStatus && setFocusStatusOfPicker(false);
     // !focusOfPicker && setColor(colorInHexFormat);
     // !focusOfPicker && console.log(colorInHexFormat,color);
-     focusOfPicker && console.log('focusOfPicker is' +  focusOfPicker)
-     !focusOfPicker && console.log('focusOfPicker is' +  focusOfPicker)
-
-  }, [colorInHexFormat,gradientStatus,color]);
+    focusOfPicker && console.log('focusOfPicker is' + focusOfPicker);
+    !focusOfPicker && console.log('focusOfPicker is' + focusOfPicker);
+  }, [colorInHexFormat, gradientStatus, color]);
 
   useEffect(() => {
     const correctFormatObj = {
@@ -153,7 +152,7 @@ const InputsColorUtilsOfCustomColorPicker = ({
       [customFormatName[2]]: customFormatState[customFormatElementNames[2]],
       a: customFormatState[customFormatElementNames[3]] / 100
     };
-    setColorInHexFormat(colord(correctFormatObj).toHex());
+    // setColorInHexFormat(colord(correctFormatObj).toHex());
     setColor(colord(correctFormatObj).toRgb());
   }, [customFormatName, customFormatState]);
 
@@ -174,7 +173,7 @@ const InputsColorUtilsOfCustomColorPicker = ({
       labelWidth: 3 * 9.6,
       name: 'hex',
       onFocus: onInputFocus,
-      onBlur: onInputBlur,
+      onBlur: onInputBlur
     }),
     [customColorsInHexFormat, onChangeOfColorInHexFormat, customFormatElementFocusStatus]
   );
@@ -191,7 +190,7 @@ const InputsColorUtilsOfCustomColorPicker = ({
           )}
         >
           <InputLabel>Hex</InputLabel>
-          <OutlinedInput  {...inputInHexFormatProps} />
+          <OutlinedInput {...inputInHexFormatProps} />
         </FormControl>
       </Grid>
 

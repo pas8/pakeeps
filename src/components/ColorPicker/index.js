@@ -32,6 +32,7 @@ import IconUtilsOfColorPicker from './components/IconsUtils';
 import _ from 'lodash';
 import { useCopyToClipboard } from 'react-use';
 import compareFunc from 'compare-func';
+import PreparedColorExamples from './components/PreparedColorExamples';
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -156,12 +157,6 @@ const ColorPickerByPas = () => {
 
   const classes = useStyles();
 
-  const colorsArr = [
-    [{ colorName: 'deepOrange' }, { colorName: 'orange' }, { colorName: 'amber' }, { colorName: 'yellow' }],
-    [{ colorName: 'lime' }, { colorName: 'lightGreen' }, { colorName: 'green' }, { colorName: 'teal' }],
-    [{ colorName: 'cyan' }, { colorName: 'lightBlue' }, { colorName: 'blue' }, { colorName: 'indigo' }],
-    [{ colorName: 'deepPurple' }, { colorName: 'purple' }, { colorName: 'pink' }, { colorName: 'red' }]
-  ];
   // const arr = colorsArr.map(el => console.log(colors[el.colorName]));
   const [popoverAndMenuState, setPopoverAndMenuState] = useState({
     name: 'null',
@@ -188,7 +183,6 @@ const ColorPickerByPas = () => {
   //   if (statusState.gradient) setColor(gradientFocusedElementState.color);
   // }, []);
 
-
   useEffect(() => {
     if (color === nullityColor) return;
     if (!statusState.focusOfPicker) return;
@@ -208,15 +202,15 @@ const ColorPickerByPas = () => {
     return _.throttle(() => setGradientColorState(sortedArr), 420);
   }, [customColorsInHexFormat, keyOfGradientFocusedElement]);
 
-  useEffect(() => {
-    if (
-      !(
-        (_.isString(color) && color.startsWith('#') || !statusState.extended && !statusState.gradient && statusState.customColor && color?.a < 1) ||
-        color === nullityColor
-      )
-    )
-      return _.debounce(() => setColor(state => ({ ...state, a: 1 })), 160);
-  }, [color]);
+  // useEffect(() => {
+  //   if (
+  //     !(
+  //       (_.isString(color) && color.startsWith('#') || !statusState.extended && !statusState.gradient && statusState.customColor && color?.a < 1) ||
+  //       color === nullityColor
+  //     )
+  //   )
+  //     return _.debounce(() => setColor(state => ({ ...state, a: 1 })), 160);
+  // }, [color]);
 
   const handlePopoverAndMenuState = value => setPopoverAndMenuState(value);
 
@@ -266,6 +260,14 @@ const ColorPickerByPas = () => {
     onClickOfColorPreviewButton,
     onClickOfCopyButton
   };
+
+  const preparedColorExamplesProps = {
+    isExtended: statusState.extended,
+    color,
+
+    handleSetColor
+  };
+
   const Container = statusState.gradient ? Dialog : Grid;
   return (
     <Container open={statusState.gradient} maxWidth={'lg'} className={classes.container}>
@@ -273,81 +275,9 @@ const ColorPickerByPas = () => {
         {statusState.customColor ? (
           <CustomColor {...customColorProps} />
         ) : (
-          colorsArr.map(arr => {
-            const gridRow = arr.map(({ colorName }) => {
-              // console.log(colors[colorName.500])
-
-              const namesOfPartsOfGridElement = [
-                ['A100', 'A200'],
-                ['A400', 'A700']
-              ];
-              // console.log(namesOfPartsOfGridElement.some(el => colors[colorName][el] === color));
-              const correctNamesOfPartsOfGridElementArr = _.flattenDeep(namesOfPartsOfGridElement);
-              const isExtendedElementColorCorrect = correctNamesOfPartsOfGridElementArr.some(
-                name => colors[colorName][name] === color
-              );
-
-              const staticExtendedElement = (
-                <Paper className={classes.elementOfGridColorPicker}>
-                  {namesOfPartsOfGridElement.map(row => (
-                    <Grid container>
-                      {row.map(name => {
-                        const colorOfElementOfPartsOfGridElementProps = colors[colorName][name];
-                        const onClick = () => handleSetColor(colorOfElementOfPartsOfGridElementProps);
-
-                        const elementOfPartsOfGridElementProps = {
-                          onClick: onClick,
-                          style: { background: colorOfElementOfPartsOfGridElementProps },
-                          className: classes.extendedElementOfGridColorPicker
-                        };
-
-                        return <Grid {...elementOfPartsOfGridElementProps} />;
-                      })}
-                    </Grid>
-                  ))}
-                </Paper>
-              );
-              const selectedElement = (correctStatus, color, onClickOfSelectElement) => {
-                const defaultOnClick = () => handleSetColor(color);
-                const onClick = onClickOfSelectElement ?? defaultOnClick;
-
-                const selectedElementPaperContainerProps = {
-                  style: { backgroundColor: color },
-                  className: clsx(
-                    classes.elementOfGridColorPicker,
-                    correctStatus ? classes.elementOfGridColorPickerWithBorder : null
-                  ),
-                  elevation: 8,
-                  onClick
-                };
-                return (
-                  <Paper {...selectedElementPaperContainerProps}>
-                    <CenteredGrid>{correctStatus && <DoneOutlineOutlinedIcon />}</CenteredGrid>
-                  </Paper>
-                );
-              };
-
-              const nonExtendedElementColor = colors[colorName][500];
-              const isNonExtendedElementColorCorrect = color === nonExtendedElementColor;
-
-              const nonExtendedElement = selectedElement(isNonExtendedElementColorCorrect, nonExtendedElementColor);
-
-              const extendedElement = isExtendedElementColorCorrect
-                ? selectedElement(true, color, () => handleSetColor(false))
-                : staticExtendedElement;
-
-              const elementOfGridColorPicker = statusState.extended ? extendedElement : nonExtendedElement;
-
-              return elementOfGridColorPicker;
-            });
-
-            return (
-              <Grid item>
-                <Grid container>{gridRow}</Grid>
-              </Grid>
-            );
-          })
+          <PreparedColorExamples {...preparedColorExamplesProps} />
         )}
+
         {statusState.gradient && (
           <Box className={classes.iconUtilsContainerGradientStatusIsTrue}>
             <Grid
@@ -363,7 +293,7 @@ const ColorPickerByPas = () => {
         )}
       </Grid>
       {!statusState.gradient && (
-        <Box mt={statusState.extended ? 100.4 : 0.8} className={classes.iconUtilsContainer}>
+        <Box mt={statusState.customColor && statusState.extended ? 1.4 : 0.4} className={classes.iconUtilsContainer}>
           <Grid container justify={'space-between'} alignItems={'center'}>
             <IconUtilsOfColorPicker {...iconUtilsProps} />
           </Grid>

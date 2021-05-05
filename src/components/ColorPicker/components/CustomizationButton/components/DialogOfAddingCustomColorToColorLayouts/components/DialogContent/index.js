@@ -1,67 +1,101 @@
-import {
-  TimelineItem,
-  Timeline,
-  TimelineSeparator,
-  TimelineConnector,
-  TimelineContent,
-  TimelineOppositeContent,
-  TimelineDot
-} from '@material-ui/lab';
-import { makeStyles, Typography, Paper, Grid } from '@material-ui/core';
-import CustomColor from 'components/ColorPicker/components/CustomColor';
-import { useState } from 'react';
-import CenteredGrid from 'components/CenteredGrid';
+import React from 'react';
+import { makeStyles } from '@material-ui/core/styles';
+import Stepper from '@material-ui/core/Stepper';
+import Step from '@material-ui/core/Step';
+import StepLabel from '@material-ui/core/StepLabel';
+import StepContent from '@material-ui/core/StepContent';
+import Button from '@material-ui/core/Button';
+import Paper from '@material-ui/core/Paper';
+import Typography from '@material-ui/core/Typography';
 
 const useStyles = makeStyles(theme => ({
-  container: {
-    '& .MuiTimelineItem-missingOppositeContent:before': { flex: 0 }
+  root: {
+    width: '100%',
+    '& .MuiStep-vertical:nth-child(5)  .MuiStepLabel-iconContainer .MuiStepIcon-root': {
+      color: 'red'
+    }
   },
-  paper: {
-    padding: '6px 16px'
+  button: {
+    marginTop: theme.spacing(1),
+    marginRight: theme.spacing(1)
   },
-  secondaryTail: {
-    backgroundColor: theme.palette.secondary.main
+  actionsContainer: {
+    marginBottom: theme.spacing(2)
+  },
+  resetContainer: {
+    padding: theme.spacing(3)
   }
 }));
 
-const DialogContentOfAddingCustomColorToColorLayouts = ({ customColorsInHexFormat }) => {
-  const [lastSelectedColor, setLastSelectedColor] = useState(customColorsInHexFormat);
-  const [transparencyStatus, setTransparencyStatus] = useState(false);
+function getSteps() {
+  return ['Select campaign settings', 'Create an ad group', 'Create an ad'];
+}
 
-  const [colorPatterState, setColorPatterState] = useState();
+function getStepContent(step) {
+  switch (step) {
+    case 0:
+      return `For each ad campaign that you create, you can control how much
+              you're willing to spend on clicks and conversions, which networks
+              and geographical locations you want your ads to show on, and more.`;
+    case 1:
+      return 'An ad group contains one or more ads which target a shared set of keywords.';
+    case 2:
+      return `Try out different ad text to see what brings in the most customers,
+              and learn how to enhance your ads using features like ad extensions.
+              If you run into any problems with your ads, find out how to tell if
+              they're running and how to resolve approval issues.`;
+    default:
+      return 'Unknown step';
+  }
+}
 
+export default function VerticalLinearStepper() {
   const classes = useStyles();
-  const customColorProps = { setColor: setLastSelectedColor, color: lastSelectedColor, transparencyStatus };
+  const [activeStep, setActiveStep] = React.useState(0);
+  const steps = getSteps();
 
-  const dialogContentColorsArr = [{ title: 'Main color', prevueColor: customColorsInHexFormat }];
+  const handleNext = () => {
+    setActiveStep(prevActiveStep => prevActiveStep + 1);
+  };
+
+  const handleBack = () => {
+    setActiveStep(prevActiveStep => prevActiveStep - 1);
+  };
+
+  const handleReset = () => {
+    setActiveStep(0);
+  };
 
   return (
-    <Grid className={classes.container} container>
-      <Grid item>
-        <Timeline>
-          <TimelineItem>
-            <TimelineSeparator>
-              <TimelineDot></TimelineDot>
-              <TimelineConnector />
-            </TimelineSeparator>
-            <TimelineContent>
-              <Paper elevation={3} className={classes.paper}>
-                <Typography variant="h6" component="h1">
-                  Eat
-                </Typography>
-                <Typography>Because you need strength</Typography>
-              </Paper>
-            </TimelineContent>
-          </TimelineItem>
-        </Timeline>
-      </Grid>
-      <Paper item elevation={8} >
-        <CenteredGrid>
-          <CustomColor {...customColorProps} />
-        </CenteredGrid>
-      </Paper>
-    </Grid>
+    <div className={classes.root}>
+      <Stepper activeStep={activeStep} orientation="vertical">
+        {steps.map((label, index) => (
+          <Step key={label}>
+            <StepLabel>{label}</StepLabel>
+            <StepContent>
+              <Typography>{getStepContent(index)}</Typography>
+              <div className={classes.actionsContainer}>
+                <div>
+                  <Button disabled={activeStep === 0} onClick={handleBack} className={classes.button}>
+                    Back
+                  </Button>
+                  <Button variant="contained" color="primary" onClick={handleNext} className={classes.button}>
+                    {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
+                  </Button>
+                </div>
+              </div>
+            </StepContent>
+          </Step>
+        ))}
+      </Stepper>
+      {activeStep === steps.length && (
+        <Paper square elevation={0} className={classes.resetContainer}>
+          <Typography>All steps completed - you&apos;re finished</Typography>
+          <Button onClick={handleReset} className={classes.button}>
+            Reset
+          </Button>
+        </Paper>
+      )}
+    </div>
   );
-};
-
-export default DialogContentOfAddingCustomColorToColorLayouts;
+}

@@ -42,10 +42,10 @@ const DialogActionsOfAddingCustomColorToColorLayouts = () => {
         </ToggleButton>
       </StyledToggleButtonGroup>
       <Button>
-        <Typography variant={'subtitle1'}> Disagree</Typography>
+        <Typography variant={'subtitle1'} >Previous</Typography>
       </Button>
-      <Button color={'primary'} autoFocus>
-        <Typography variant={'subtitle1'}> Agree</Typography>
+      <Button color={'primary'} autoFocus >
+        <Typography variant={'subtitle1'} >Next</Typography>
       </Button>
     </DialogActions>
   );

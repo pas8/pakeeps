@@ -2,6 +2,7 @@ import {
   Badge,
   colors,
   Dialog,
+  FormControl,
   FormControlLabel,
   Grid,
   IconButton,
@@ -42,16 +43,17 @@ const SelectColorFormat = ({ color, customFormatName, setCustomFormatName }) => 
     { shortName: 'lch', tooltipName: 'Lightness Chroma Hue' }
   ];
 
-  const handleChangeRadioGroup = ({ target: { value } }) => setCustomFormatName(value);
-
+  const handleChangeRadioGroup = ({ target: { value } }) =>   setCustomFormatName(value);
+  
   return (
-    <Grid className={classes.container}>
+    <FormControl className={classes.container}>
       <RadioGroup
         column
         aria-label={'SelectColorFormat'}
         name={'SelectColorFormat'}
         value={customFormatName}
         onChange={handleChangeRadioGroup}
+
       >
         {colorFormatNamesArr.map(({ shortName, tooltipName }) => {
           return (
@@ -61,11 +63,8 @@ const SelectColorFormat = ({ color, customFormatName, setCustomFormatName }) => 
               control={<Radio />}
               label={
                 <Grid container>
-                  {/* <Badge color="secondary" badgeContent={name}> */}
                   <Tooltip title={tooltipName} placement="right" arrow enterDelay={160} leaveDelay={80}>
                     <Typography> {shortName} </Typography>
-
-                    {/* </Badge> */}
                   </Tooltip>
                 </Grid>
               }
@@ -73,7 +72,7 @@ const SelectColorFormat = ({ color, customFormatName, setCustomFormatName }) => 
           );
         })}
       </RadioGroup>
-    </Grid>
+    </FormControl>
   );
 };
 
