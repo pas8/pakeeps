@@ -14,15 +14,22 @@ const ColumnOfPreparedColorExamples = ({ columnElements, columnElementProps, dro
       <Droppable droppableId={droppableId} direction={'vertical'}>
         {provided => (
           <Grid innerRef={provided.innerRef} {...provided.droppableProps}>
-            {columnElements.map((el, idx) => (
-              <Draggable key={el.id} draggableId={el.id} index={idx}>
-                {(provided, snapshot) => (
-                  <Grid {...provided.draggableProps} {...provided.dragHandleProps} innerRef={provided.innerRef}>
-                    <ColumnElementOfPreparedColorExamples {...el} {...columnElementProps} isDragging={snapshot.isDragging} />
-                  </Grid>
-                )}
-              </Draggable>
-            ))}
+            {columnElements.map((el, idx) => {
+              const draggableId = `${droppableId}-${idx}`;
+              return (
+                <Draggable key={el.id} draggableId={draggableId} index={idx}>
+                  {(provided, snapshot) => (
+                    <Grid {...provided.draggableProps} {...provided.dragHandleProps} innerRef={provided.innerRef}>
+                      <ColumnElementOfPreparedColorExamples
+                        {...el}
+                        {...columnElementProps}
+                        isDragging={snapshot.isDragging}
+                      />
+                    </Grid>
+                  )}
+                </Draggable>
+              );
+            })}
             {provided.placeholder}
           </Grid>
         )}

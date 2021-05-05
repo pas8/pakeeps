@@ -113,7 +113,7 @@ const ColumnElementOfPreparedColorExamples = ({ handleSetColor, isExtended, colo
             const onClick = () => handleSetColor(colorOfElementOfPartsOfGridElementProps);
 
             const elementOfPartsOfGridElementProps = {
-              // onClick,
+              onClick,
               style: { background: colorOfElementOfPartsOfGridElementProps },
               className: classes.extendedElementOfGridColorPicker
             };
@@ -136,7 +136,7 @@ const ColumnElementOfPreparedColorExamples = ({ handleSetColor, isExtended, colo
         correctStatus ? classes.elementOfGridColorPickerWithBorder : null
       ),
       elevation: 8,
-      // onClick
+      onClick
     };
     return (
       <Paper {...selectedElementPaperContainerProps}>

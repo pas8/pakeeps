@@ -61,7 +61,7 @@ const PakeepList = ({
   };
 
   return (
-    <DragDropContext onDragEnd={onDragEnd}>
+    <DragDropContext onDragEnd={onDragEnd} >
       <Grid container display={'flex'} className={classes.container}>
         {responsiveColumnOrder?.map((columnId, idx) => {
           const column = responsiveColumns[columnId];

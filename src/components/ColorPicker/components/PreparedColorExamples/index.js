@@ -4,32 +4,27 @@ import { connect } from 'react-redux';
 import { DragDropContext } from 'react-beautiful-dnd';
 import { nanoid } from 'nanoid';
 import ColumnOfPreparedColorExamples from './components/Column';
+import { changeOneColorColumnThunk } from 'store/ColorReducer';
 
-const PreparedColorExamples = ({ color, isExtended, handleSetColor, colorsArr }) => {
-
+const PreparedColorExamples = ({ color, isExtended, handleSetColor, colorsArr, changeOneColorColumnThunk }) => {
   const columnOrder = ['column-1', 'column-2', 'column-3', 'column-4'];
 
   const onDragEnd = ({ destination, source, draggableId }) => {
     console.log(destination, source, draggableId);
-    // if (!destination) return;
-    // if (!destination.id === source.draggableId && destination.index === source.index) return;
+    if (!destination) return;
+    if (!destination.id === source.draggableId && destination.index === source.index) return;
 
-    // const columnStart = responsiveColumns[source.droppableId];
-    // const columnFinish = responsiveColumns[destination.droppableId];
+    const columnStart = colorsArr[source.droppableId];
+    const columnFinish = colorsArr[destination.droppableId];
 
-    // if (columnStart === columnFinish) {
-    //   let newPaKeepIds = Array.from(columnStart.pakeepIds);
+    if (columnStart === columnFinish) {
+      const newArr = _.filter(columnStart, (placeholder, idx) => source.index !== idx);
+      const itemWhichShouldBeAdded = columnStart[source.index];
 
-    //   newPaKeepIds.splice(source.index, 1);
-    //   newPaKeepIds.splice(destination.index, 0, draggableId);
+      newArr.splice(destination.index, 0, itemWhichShouldBeAdded);
 
-    //   const newColumn = {
-    //     ...columnStart,
-    //     pakeepIds: newPaKeepIds
-    //   };
-    //   changePakeepColumnsDataThunk(newColumn, breakpointNames);
-    //   return;
-    // }
+      return changeOneColorColumnThunk(source.droppableId, newArr);
+    }
 
     // let startPaKeepIds = Array.from(columnStart.pakeepIds);
     // let finishPaKeepIds = Array.from(columnFinish.pakeepIds);
@@ -40,16 +35,32 @@ const PreparedColorExamples = ({ color, isExtended, handleSetColor, colorsArr })
     // const newColumnStart = { ...columnStart, pakeepIds: startPaKeepIds };
     // const newColumnFinish = { ...columnFinish, pakeepIds: finishPaKeepIds };
 
-    // changeTwoPakeepColumnsDataThunk(newColumnStart, newColumnFinish, breakpointNames);
+    // console.log(newColumnStart, newColumnFinish);
   };
   const columnElementProps = {
     handleSetColor,
     isExtended,
     color
   };
+  const onBeforeCapture = () => {
+    console.log('onBeforeCapture');
+  };
 
+  const onBeforeDragStart = () => {
+    console.log('onBeforeDragStart');
+  };
+
+  const onDragStart = () => {
+    console.log('onDragStart');
+  };
+
+  const onDragUpdate = () => {
+    console.log('onDragUpdate');
+  };
+
+  const dragDropContextProps = { onDragEnd, onBeforeCapture, onBeforeDragStart, onDragStart, onDragUpdate };
   return (
-    <DragDropContext onDragEnd={onDragEnd}>
+    <DragDropContext {...dragDropContextProps}>
       <Grid container display={'flex'}>
         {columnOrder?.map((columnId, idx) => {
           const columnElements = colorsArr[columnId];
@@ -73,6 +84,8 @@ PreparedColorExamples.propTypes = {};
 
 const mapStateToProps = ({ color: { colorsArr } }) => ({ colorsArr });
 
-// const mapDispatchToProps = dispatch => ({ setData: data => dispatch(setData(data)) });
+const mapDispatchToProps = dispatch => ({
+  changeOneColorColumnThunk: (columnId, newArr) => dispatch(changeOneColorColumnThunk(columnId, newArr))
+});
 
-export default connect(mapStateToProps, null)(PreparedColorExamples);
+export default connect(mapStateToProps, mapDispatchToProps)(PreparedColorExamples);

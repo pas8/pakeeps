@@ -1,7 +1,4 @@
-const ADD_NEW_PAKEEP = 'ADD_NEW_PAKEEP';
-const CHANGE_PAKEEP_COLUMNS = 'CHANGE_PAKEEP_COLUMNS';
-const CHANGE_TWO_PAKEEP_COLUMNS = 'CHANGE_TWO_PAKEEP_COLUMNS';
-const ADD_DATE_TO_PAKEEP = 'ADD_DATE_TO_PAKEEP';
+const CHANGE_ONE_COLOR_COLUMN = 'CHANGE_ONE_COLOR_COLUMN';
 
 const initialState = {
   colorsArr: {
@@ -14,30 +11,13 @@ const initialState = {
 
 const ColorReducer = (state = initialState, action) => {
   switch (action.type) {
-    case ADD_NEW_PAKEEP:
-      return { ...state, pakeeps: { ...state.pakeeps, [action.newPaKeep.id]: action.newPaKeep } };
 
-    case CHANGE_PAKEEP_COLUMNS:
+    case CHANGE_ONE_COLOR_COLUMN:
       return {
         ...state,
-        columns: {
-          ...state.columns,
-          [action.breakpointName]: {
-            ...state.columns[action.breakpointName],
-            [action.columnValue.id]: action.columnValue
-          }
-        }
-      };
-    case CHANGE_TWO_PAKEEP_COLUMNS:
-      return {
-        ...state,
-        columns: {
-          ...state.columns,
-          [action.breakpointName]: {
-            ...state.columns[action.breakpointName],
-            [action.startColumn.id]: action.startColumn,
-            [action.finishColumn.id]: action.finishColumn
-          }
+        colorsArr: {
+          ...state.colorsArr,
+          [action.columnId]:action.newArr
         }
       };
 
@@ -46,24 +26,10 @@ const ColorReducer = (state = initialState, action) => {
   }
 };
 
-const addNewPakeep = data => ({ type: ADD_NEW_PAKEEP, newPaKeep: data });
-const changeColumns = (columnValue, breakpointName) => ({ type: CHANGE_PAKEEP_COLUMNS, columnValue, breakpointName });
-const changeTwoColumns = (startColumn, finishColumn, breakpointName) => ({
-  type: CHANGE_TWO_PAKEEP_COLUMNS,
-  startColumn,
-  finishColumn,
-  breakpointName
-});
+const changeOneColorColumn = (columnId,newArr) => ({ type: CHANGE_ONE_COLOR_COLUMN, columnId,newArr });
 
-export const addNewPaKeepThunk = data => dispatch => {
-  dispatch(addNewPakeep(data));
-};
-
-export const changePakeepColumnsDataThunk = (columnValue, breakpointName) => dispatch => {
-  dispatch(changeColumns(columnValue, breakpointName));
-};
-export const changeTwoPakeepColumnsDataThunk = (startColumn, finishColumn, breakpointName) => dispatch => {
-  dispatch(changeTwoColumns(startColumn, finishColumn, breakpointName));
+export const changeOneColorColumnThunk = (columnId,newArr) => dispatch => {
+  dispatch(changeOneColorColumn(columnId,newArr));
 };
 
 export default ColorReducer;
