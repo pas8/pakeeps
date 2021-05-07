@@ -9,21 +9,25 @@ import InputsColorUtilsOfCustomColorPicker from './components/InputsColorUtils';
 import PreparedColorExamples from '../PreparedColorExamples';
 import PickerByPas from './components/Picker';
 import { useCopyToClipboard } from 'react-use';
+import { useSnackbar } from 'notistack';
 
 const useStyles = makeStyles(theme => ({
   customColorContainer: {
     margin: ({ isExtended, isCustomColor }) =>
-      isExtended && isCustomColor ? theme.spacing(0, 0, 1, 0) : theme.spacing(0.8, 1, 0)
+      isExtended && isCustomColor ? theme.spacing(0, 2, 2, 2) : theme.spacing(0.8, 1, 0)
   },
 
   container: {
-    margin: ({ isExtended, isCustomColor }) => isExtended && isCustomColor && theme.spacing(0, 2, 0.4)
+    margin: ({ isExtended, isCustomColor }) => isExtended && isCustomColor && theme.spacing(0, 0, 0.4)
+  },
+  containerOfIconsUtils: {
+    padding: ({ isExtended, isCustomColor }) => isExtended && isCustomColor && theme.spacing(0, 1)
   }
 }));
 
 const CustomColor = ({ gradientStatus, setGradientStatus }) => {
   const [copyState, copyToClipboardFunc] = useCopyToClipboard();
-
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const nullityColor = colord(themeColors.whiteRgbaColorWith0dot8valueOfAlfaCanal).toRgb();
   const [color, setColor] = useState(nullityColor);
   const customColorsInHexFormat = colord(color).toHex();
@@ -35,7 +39,8 @@ const CustomColor = ({ gradientStatus, setGradientStatus }) => {
     customFormats: false,
     customColor: false,
     copy: false,
-    colorPreview: true
+    colorPreview: true,
+    pattern: false
   });
   const { extended: isExtended, customColor: isCustomColor } = statusState;
 
@@ -49,11 +54,22 @@ const CustomColor = ({ gradientStatus, setGradientStatus }) => {
 
   const onClickOfCopyButton = () => {
     setStatusState(state => ({ ...state, copy: true }));
-    copyToClipboardFunc(gradientColor);
-  };
-  useEffect(() => statusState.copy && setStatusState(state => ({ ...state, copy: false })), [color, statusState.copy]);
 
-  const setCustomizationsStatus = value => setStatusState(state => ({ ...state, customization: value }));
+    try {
+      copyToClipboardFunc(customColorsInHexFormat);
+      enqueueSnackbar({ message: 'Color was success copied' });
+    } catch (error) {
+      enqueueSnackbar({ message: 'Something went wrong', severity: 'error' });
+    }
+  };
+
+  useEffect(() => {
+    copyState.value !== customColorsInHexFormat &&
+      statusState.copy &&
+      setStatusState(state => ({ ...state, copy: false }));
+  }, [color, statusState.copy]);
+
+  const onClickCustomizationButton = () => setStatusState(state => ({ ...state, customization: !state.customization }));
 
   const customizationButtonProps = {
     nullityColor,
@@ -79,6 +95,7 @@ const CustomColor = ({ gradientStatus, setGradientStatus }) => {
     onSave,
     customizationButtonProps,
     color,
+    onClickCustomizationButton,
     customColorsInHexFormat,
     setCustomFormatName,
     customFormatName,

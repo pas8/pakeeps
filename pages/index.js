@@ -13,8 +13,8 @@ const Pakeeps = ({ data }) => {
         vertical: 'bottom',
         horizontal: 'right'
       }}
-      content={(key, message) => (
-        <Alert variant={'outlined'} severity={'success'}>
+      content={(key,{message,severity = 'success'}) => (
+        <Alert variant={'outlined'} severity={severity}>
           {message}
         </Alert>
       )}

@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import { useState } from 'react';
 import UnfoldMoreOutlinedIcon from '@material-ui/icons/UnfoldMoreOutlined';
 import ColorLensOutlinedIcon from '@material-ui/icons/ColorLensOutlined';
 import WrapperOfPopoverAndMenu from 'components/IconsUtils/components/WrapperOfPopoverAndMenu';
@@ -13,12 +14,15 @@ import InvertColorsOutlinedIcon from '@material-ui/icons/InvertColorsOutlined';
 import InvertColorsOffOutlinedIcon from '@material-ui/icons/InvertColorsOffOutlined';
 import ExtensionOutlinedIcon from '@material-ui/icons/ExtensionOutlined';
 import ExtensionIcon from '@material-ui/icons/Extension';
-import { themeColors } from 'components/theme';
 import FileCopyOutlinedIcon from '@material-ui/icons/FileCopyOutlined';
-import FilterNoneOutlinedIcon from '@material-ui/icons/FilterNoneOutlined';;
+import FilterNoneOutlinedIcon from '@material-ui/icons/FilterNoneOutlined';
 import LibraryAddCheckOutlinedIcon from '@material-ui/icons/LibraryAddCheckOutlined';
 import LibraryAddOutlinedIcon from '@material-ui/icons/LibraryAddOutlined';
-import { useState } from 'react'
+import SettingsInputComponentOutlinedIcon from '@material-ui/icons/SettingsInputComponentOutlined';
+import PlaylistAddOutlinedIcon from '@material-ui/icons/PlaylistAddOutlined';
+import AddBoxOutlinedIcon from '@material-ui/icons/AddBoxOutlined';
+import { themeColors } from 'components/theme';
+
 
 const IconUtilsOfCustomColor = ({
   statusState,
@@ -32,7 +36,8 @@ const IconUtilsOfCustomColor = ({
   onClickOfExtendButton,
   onClickOfPalletteButton,
   onClickOfColorPreviewButton,
-  onClickOfCopyButton
+  onClickOfCopyButton,
+  onClickCustomizationButton
 }) => {
   const [popoverAndMenuState, setPopoverAndMenuState] = useState({
     name: 'null',
@@ -53,7 +58,7 @@ const IconUtilsOfCustomColor = ({
 
   const whiteColor = themeColors.whiteRgbaColorWith0dot96valueOfAlfaCanal;
   const customColor = statusState.colorPreview ? customColorsInHexFormat : whiteColor;
-  
+
   const buttonUtilsArr = [
     {
       icon: !statusState.extended ? UnfoldMoreOutlinedIcon : UnfoldLessOutlinedIcon,
@@ -87,17 +92,35 @@ const IconUtilsOfCustomColor = ({
       customColor: statusState.gradient && customColor
     },
     {
-      icon:!statusState.copy ? LibraryAddOutlinedIcon : LibraryAddCheckOutlinedIcon,
+      icon: LibraryAddOutlinedIcon,
       popoverText: 'Copy to clipboard',
-      name: 'CopyToClipboard',
+      name: 'copyToClipboard',
       activeIcon: false,
       onlyPopover: true,
-      hidden: !statusState.customColor,
+      hidden: !statusState.extended || !statusState.customColor,
       onClick: onClickOfCopyButton,
       customColor: statusState.copy && customColor,
-      rotateDeg:90
+      rotateDeg: 90
     },
-
+    {
+      icon: !statusState.colorPreview ? InvertColorsOutlinedIcon : InvertColorsOffOutlinedIcon,
+      popoverText: 'Preview color status',
+      name: 'previewColorStatus',
+      activeIcon: false,
+      onlyPopover: true,
+      hidden: !statusState.extended || !statusState.customColor,
+      onClick: onClickOfColorPreviewButton,
+      customColor: statusState.colorPreview && customColor
+    },
+    {
+      icon: AddBoxOutlinedIcon,
+      popoverText: 'Add this color to your color pattern',
+      name: 'addColorToColorPattern',
+      activeIcon: false,
+      hidden:  !statusState.customColor,
+      customColor: statusState.pattern && customColor,
+      menuLocation: 'center'
+    },
     {
       icon: ExtensionIcon,
       popoverText: 'Chose color format which u like',
@@ -111,6 +134,17 @@ const IconUtilsOfCustomColor = ({
     {
       hidden: statusState.customColor,
       customElementComponentOfIconGroup: <CustomizationButton {...customizationButtonProps} />
+    },
+
+    {
+      icon: SettingsInputComponentOutlinedIcon,
+      popoverText: 'Customization',
+      name: 'customizationIconButton',
+      activeIcon: false,
+      onlyPopover: true,
+      hidden:  !statusState.customColor,
+      onClick: onClickCustomizationButton,
+      customColor: statusState.customization && customColor
     },
     {
       icon: SaveRoundedIcon,
