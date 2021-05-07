@@ -126,12 +126,11 @@ const CustomGradient = () => {
     setGradientColor(gradientColor);
   }, [gradientColorState, gradientDirection, gradientAngle, gradientAngle]);
 
-  const [popoverAndMenuState, setPopoverAndMenuState] = useState({
-    name: 'null',
-    menuIsOpen: false,
-    popoverIsOpen: true,
-    onMenuClose: null
-  });
+  const [customFormatName, setCustomFormatName] = useState('rgb');
+
+
+  const setFocusStatusOfPicker = value => setStatusState(state => ({ ...state, focusOfPicker: value }));
+
 
   const gradientPreviewerProps = {
     gradientColor,

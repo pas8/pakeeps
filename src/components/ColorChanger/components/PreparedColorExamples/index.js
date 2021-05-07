@@ -9,7 +9,7 @@ import { useState } from 'react';
 
 const useStyles = makeStyles(theme => ({
   container: {
-    margin: theme.spacing(0.4)
+    margin: theme.spacing(0.4,0,0.4,0.2)
   }
 }));
 
@@ -42,15 +42,15 @@ const PreparedColorExamples = ({
 
     const newStartArr = _.filter(columnStart, (placeholder, idx) => source.index !== idx);
     const itemWhichShouldBeAdded = columnStart[source.index];
-
-    const newFinishArr = [...columnFinish, itemWhichShouldBeAdded];
+    const newFinishArr = columnFinish;
+    newFinishArr.splice(destination.index, 0, itemWhichShouldBeAdded);
 
     changeTwoColorColumnThunk(
       { id: destination.droppableId, newArr: newFinishArr },
       { id: source.droppableId, newArr: newStartArr }
     );
   };
-  const onBeforeDragStart = ({source}) => {
+  const onBeforeDragStart = ({ source }) => {
     if (colorsArr[source.droppableId].length <= 1) return;
   };
   const columnElementProps = {

@@ -83,7 +83,6 @@ const InputsColorUtilsOfCustomColorPicker = ({
   customColorsInHexFormat,
   customFormatName,
   gradientStatus,
-  setFocusStatusOfPicker,
   focusOfPicker
 }) => {
   extend([lchPlugin]);
@@ -131,13 +130,14 @@ const InputsColorUtilsOfCustomColorPicker = ({
     const currentValue = isValid ? value : currentCustomFormatInputsGroupArr[idx].maxLength.toString();
     setCustomFormatState(state => ({ ...state, [customFormatElementNames[idx]]: currentValue }));
   };
+  console.log(currentCustomFormatInputsGroupArr)
 
   // useEffect(() => {
   //   !gradientStatus && _.debounce(() => setColorInHexFormat(customColorsInHexFormat), 160);
   // }, [customColorsInHexFormat]);
 
   useEffect(() => {
-    !gradientStatus && setFocusStatusOfPicker(false);
+    // !gradientStatus && setFocusStatusOfPicker(false);
     // !focusOfPicker && setColor(colorInHexFormat);
     // !focusOfPicker && console.log(colorInHexFormat,color);
     focusOfPicker && console.log('focusOfPicker is' + focusOfPicker);

@@ -15,23 +15,34 @@ import ExtensionOutlinedIcon from '@material-ui/icons/ExtensionOutlined';
 import ExtensionIcon from '@material-ui/icons/Extension';
 import { themeColors } from 'components/theme';
 import FileCopyOutlinedIcon from '@material-ui/icons/FileCopyOutlined';
+import FilterNoneOutlinedIcon from '@material-ui/icons/FilterNoneOutlined';;
+import LibraryAddCheckOutlinedIcon from '@material-ui/icons/LibraryAddCheckOutlined';
+import LibraryAddOutlinedIcon from '@material-ui/icons/LibraryAddOutlined';
+import { useState } from 'react'
 
-const IconUtilsOfColorPicker = ({
+const IconUtilsOfCustomColor = ({
   statusState,
-  handlePopoverAndMenuState,
   onSave,
   customizationButtonProps,
   color,
-  customColorsInHexFormat,
-  popoverAndMenuState,
   setCustomFormatName,
   customFormatName,
+  customColorsInHexFormat,
   onClickOfGradientButton,
   onClickOfExtendButton,
   onClickOfPalletteButton,
   onClickOfColorPreviewButton,
   onClickOfCopyButton
 }) => {
+  const [popoverAndMenuState, setPopoverAndMenuState] = useState({
+    name: 'null',
+    menuIsOpen: false,
+    popoverIsOpen: true,
+    onMenuClose: null
+  });
+
+  const handlePopoverAndMenuState = value => setPopoverAndMenuState(value);
+
   const ColorFormatMenuComponent = () => (
     <SelectColorFormat
       customFormatName={customFormatName}
@@ -40,6 +51,9 @@ const IconUtilsOfColorPicker = ({
     />
   );
 
+  const whiteColor = themeColors.whiteRgbaColorWith0dot96valueOfAlfaCanal;
+  const customColor = statusState.colorPreview ? customColorsInHexFormat : whiteColor;
+  
   const buttonUtilsArr = [
     {
       icon: !statusState.extended ? UnfoldMoreOutlinedIcon : UnfoldLessOutlinedIcon,
@@ -49,11 +63,7 @@ const IconUtilsOfColorPicker = ({
       onlyPopover: true,
       onClick: onClickOfExtendButton,
       hidden: false,
-      customColor: statusState.extended
-        ? statusState.colorPreview
-          ? customColorsInHexFormat
-          : themeColors.whiteRgbaColorWith0dot96valueOfAlfaCanal
-        : null
+      customColor: statusState.extended && customColor
     },
 
     {
@@ -63,11 +73,7 @@ const IconUtilsOfColorPicker = ({
       activeIcon: false,
       onlyPopover: true,
       onClick: onClickOfPalletteButton,
-      customColor: statusState.customColor
-        ? statusState.colorPreview
-          ? customColorsInHexFormat
-          : themeColors.whiteRgbaColorWith0dot96valueOfAlfaCanal
-        : null
+      customColor: statusState.customColor && customColor
     },
 
     {
@@ -78,25 +84,18 @@ const IconUtilsOfColorPicker = ({
       onlyPopover: true,
       onClick: onClickOfGradientButton,
       hidden: !statusState.customColor,
-      customColor: statusState.gradient
-        ? statusState.colorPreview
-          ? customColorsInHexFormat
-          : themeColors.whiteRgbaColorWith0dot96valueOfAlfaCanal
-        : null
+      customColor: statusState.gradient && customColor
     },
     {
-      icon: FileCopyOutlinedIcon,
+      icon:!statusState.copy ? LibraryAddOutlinedIcon : LibraryAddCheckOutlinedIcon,
       popoverText: 'Copy to clipboard',
       name: 'CopyToClipboard',
       activeIcon: false,
       onlyPopover: true,
-      hidden: !statusState.gradient,
+      hidden: !statusState.customColor,
       onClick: onClickOfCopyButton,
-      customColor: statusState.copy
-        ? statusState.colorPreview
-          ? customColorsInHexFormat
-          : themeColors.whiteRgbaColorWith0dot96valueOfAlfaCanal
-        : null
+      customColor: statusState.copy && customColor,
+      rotateDeg:90
     },
 
     {
@@ -104,33 +103,13 @@ const IconUtilsOfColorPicker = ({
       popoverText: 'Chose color format which u like',
       name: 'choseColorFormatWhichULike',
       activeIcon: false,
-      hidden: !statusState.customColor,
-      customColor: statusState.customFormats
-        ? statusState.colorPreview
-          ? customColorsInHexFormat
-          : themeColors.whiteRgbaColorWith0dot96valueOfAlfaCanal
-        : null,
+      hidden: !statusState.extended || !statusState.customColor,
+      customColor: statusState.customFormats && customColor,
       menuComponents: ColorFormatMenuComponent,
       menuLocation: 'center'
     },
-
     {
-      icon: InvertColorsOutlinedIcon,
-      popoverText: 'Set preview color',
-      name: 'colorPreview',
-      activeIcon: false,
-      // hidden: (!statusState.customColor && !statusState.extended) || (statusState.customColor && !statusState.extended) || statusState.gradient,
-      hidden: !statusState.gradient,
-      onlyPopover: true,
-      onClick: onClickOfColorPreviewButton,
-      customColor: statusState.colorPreview
-        ? statusState.colorPreview
-          ? customColorsInHexFormat
-          : themeColors.whiteRgbaColorWith0dot96valueOfAlfaCanal
-        : null
-    },
-    {
-      hidden: statusState.gradient,
+      hidden: statusState.customColor,
       customElementComponentOfIconGroup: <CustomizationButton {...customizationButtonProps} />
     },
     {
@@ -140,7 +119,7 @@ const IconUtilsOfColorPicker = ({
       activeIcon: false,
       onlyPopover: true,
       onClick: onSave,
-      customColor: color ? customColorsInHexFormat : null
+      customColor: statusState.save && customColor
     }
   ];
 
@@ -153,7 +132,7 @@ const IconUtilsOfColorPicker = ({
   return <WrapperOfPopoverAndMenu {...wrapperOfPopoverAndMenuProps} />;
 };
 
-IconUtilsOfColorPicker.propTypes = {
+IconUtilsOfCustomColor.propTypes = {
   color: PropTypes.object,
   customColorsInHexFormat: PropTypes.string,
   customColorsStatus: PropTypes.bool,
@@ -169,4 +148,4 @@ IconUtilsOfColorPicker.propTypes = {
   transparencyStatus: PropTypes.bool
 };
 
-export default IconUtilsOfColorPicker;
+export default IconUtilsOfCustomColor;

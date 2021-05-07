@@ -8,7 +8,7 @@ const useStyles = makeStyles(theme => ({
   containerOfPickerByPas: ({ isExtended, gradientColorStateLength, gradientStatus }) => ({
     '& .react-colorful': {
       width: 'auto',
-      minWidth: theme.spacing(42 - 1.8),
+      minWidth: theme.spacing(42 - 10 - 1.4),
       minHeight: gradientColorStateLength ? theme.spacing(4 * 9.6) : 'auto',
       height: gradientStatus
         ? theme.spacing(gradientColorStateLength * (8 + 1))

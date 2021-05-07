@@ -6,10 +6,10 @@ import ColumnElementOfPreparedColorExamples from './components/ColumnElement';
 
 const useStyles = makeStyles(theme => ({
   containerOfElement: {
-    margin: theme.spacing(0.4, 0, 1.4)
+    margin: theme.spacing(0.4, 0,1.24)
   },
   container: {
-    margin: theme.spacing(0.4)
+    margin: theme.spacing(0.24)
   }
 }));
 
