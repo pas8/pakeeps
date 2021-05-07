@@ -34,21 +34,11 @@ import { connect } from 'react-redux';
 import { DragDropContext } from 'react-beautiful-dnd';
 
 const useStyles = makeStyles(theme => ({
-  container: {
-    transition: theme.transitions.create('all', {
-      easing: theme.transitions.easing.easeIn,
-      duration: theme.transitions.duration.complex
-    }),
-    paddingBottom: theme.spacing(0.4),
-    '& .MuiDialog-paperWidthSm': {
-      maxWidth: '80vw'
-    },
-    overflowX: 'hidden'
-  },
+
   elementOfGridColorPicker: {
     width: theme.spacing(16 * 0.42),
     height: theme.spacing(16 * 0.42),
-    margin: theme.spacing(0.8),
+    margin: theme.spacing(0.4),
     overflow: 'hidden',
     border: '1px solid rgba(255,255,255,0)',
     transition: theme.transitions.create('border', {
@@ -56,9 +46,6 @@ const useStyles = makeStyles(theme => ({
       duration: theme.transitions.duration.leavingScreen
     }),
     cursor: 'pointer'
-  },
-  containerOfElementOfGridColorPicker: {
-    margin: theme.spacing(1.8)
   },
   extendedElementOfGridColorPicker: {
     width: theme.spacing((8 * 0.8) / 2),

@@ -125,7 +125,7 @@ const CustomColor = ({
   const isExtended = statusState.customColor && statusState.extended;
   const gradientColorStateLength = gradientColorState.length;
   const classes = useStyles({ isExtended, gradientColorStateLength, gradientStatus: statusState.gradient });
-  const isColorInHexFormat = _.isString(color, nullityColor) && color.startsWith('#');
+  const isColorInHexFormat = _.isString(color) && color.startsWith('#');
   const colorToRgbFormat = colord(color).toRgb();
 
   const correctAndFormattedColor = isColorInHexFormat
@@ -210,7 +210,7 @@ const CustomColor = ({
             {isExtended && (
               <Box>
                 <InputsColorUtilsOfCustomColorPicker {...inputsColorUtilsOfCustomColorPickerProps} />
-              </Box>
+              </Box> 
             )}
           </Box>
         </Grid>

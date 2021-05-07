@@ -1,10 +1,15 @@
 import { Button, Dialog, DialogActions, DialogTitle, Typography } from '@material-ui/core';
 import ColorPickerByPas from 'components/ColorPicker';
+import CustomColor from 'components/ColorPicker/components/CustomColor';
 import React from 'react';
 import DialogActionsOfAddingCustomColorToColorLayouts from './components/DialogActions';
 import DialogContentOfAddingCustomColorToColorLayouts from './components/DialogContent';
 
 const DialogOfAddingCustomColorToColorLayouts = ({ open, onSave, customColorsInHexFormat, onClose }) => {
+
+
+
+  
   return (
     <Dialog
       aria-labelledby={'dialog-of-adding-custom-color-to-color-layouts'}
@@ -15,6 +20,7 @@ const DialogOfAddingCustomColorToColorLayouts = ({ open, onSave, customColorsInH
 
       <DialogContentOfAddingCustomColorToColorLayouts customColorsInHexFormat={customColorsInHexFormat} />
       {/* <ColorPickerByPas/> */}
+      <CustomColor/>
       <DialogActionsOfAddingCustomColorToColorLayouts />
     </Dialog>
   );

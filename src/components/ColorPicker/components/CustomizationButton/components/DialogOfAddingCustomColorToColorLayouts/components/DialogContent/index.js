@@ -11,7 +11,7 @@ import Typography from '@material-ui/core/Typography';
 const useStyles = makeStyles(theme => ({
   root: {
     width: '100%',
-    '& .MuiStep-vertical:nth-child(5)  .MuiStepLabel-iconContainer .MuiStepIcon-root': {
+    '& .MuiStep-vertical:nth-child(1)  .MuiStepLabel-iconContainer .MuiStepIcon-root': {
       color: 'red'
     }
   },
@@ -27,11 +27,15 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-function getSteps() {
-  return ['Select campaign settings', 'Create an ad group', 'Create an ad'];
-}
+const getSteps = () => [
+  'Select main color',
+  'Select left-top extended color',
+  'Select right-top extended color',
+  'Select right-bottom extended color',
+  'Select left-bottom extended color'
+];
 
-function getStepContent(step) {
+const getStepContent = step => {
   switch (step) {
     case 0:
       return `For each ad campaign that you create, you can control how much
@@ -47,9 +51,9 @@ function getStepContent(step) {
     default:
       return 'Unknown step';
   }
-}
+};
 
-export default function VerticalLinearStepper() {
+const DialogContentOfAddingCustomColorToColorLayouts = () => {
   const classes = useStyles();
   const [activeStep, setActiveStep] = React.useState(0);
   const steps = getSteps();
@@ -73,7 +77,7 @@ export default function VerticalLinearStepper() {
           <Step key={label}>
             <StepLabel>{label}</StepLabel>
             <StepContent>
-              <Typography>{getStepContent(index)}</Typography>
+              {/* <Typography>{getStepContent(index)}</Typography> */}
               <div className={classes.actionsContainer}>
                 <div>
                   <Button disabled={activeStep === 0} onClick={handleBack} className={classes.button}>
@@ -98,4 +102,6 @@ export default function VerticalLinearStepper() {
       )}
     </div>
   );
-}
+};
+
+export default DialogContentOfAddingCustomColorToColorLayouts;

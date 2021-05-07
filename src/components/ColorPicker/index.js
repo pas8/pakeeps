@@ -33,6 +33,7 @@ import _ from 'lodash';
 import { useCopyToClipboard } from 'react-use';
 import compareFunc from 'compare-func';
 import PreparedColorExamples from './components/PreparedColorExamples';
+import PickerByPas from './components/CustomColor/components/Picker';
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -110,15 +111,6 @@ const ColorPickerByPas = () => {
     colorPreview: !false,
     focusOfPicker: true
   });
-  const [gradientColor, setGradientColor] = useState(customColorsInHexFormat);
-  const [gradientAngle, setGradientAngle] = useState(90);
-  const [gradientDirection, setGradientDirection] = useState('linear-gradient');
-  const [gradientColorState, setGradientColorState] = useState([
-    { color: '#090979', stopDeg: 0, key: '0' },
-    { color: '#1f13e5', stopDeg: 42, key: '1' },
-    { color: '#00d4ff', stopDeg: 80, key: '2' },
-    { color: '#0024ff', stopDeg: 100, key: '3' }
-  ]);
 
   const [keyOfGradientFocusedElement, setKeyOfGradientFocusedElement] = useState(gradientColorState[0].key);
 
@@ -165,42 +157,13 @@ const ColorPickerByPas = () => {
     onMenuClose: null
   });
 
-  useEffect(() => {
-    const reduceFunc = (sum, { color, stopDeg }, idx) =>
-      `${sum} ${color} ${stopDeg}${gradientColorState.length - 1 === idx ? '%' : '%,'}`;
 
-    const mainPart = _.reduce(gradientColorState, reduceFunc, '');
-
-    const gradientPosition = gradientDirection === 'radial-gradient' ? 'circle' : gradientAngle + 'deg,';
-    const gradientRoute = `${gradientDirection}(${gradientPosition}`;
-
-    const gradientColor = `${gradientRoute} ${mainPart})`;
-
-    setGradientColor(gradientColor);
-  }, [gradientColorState, gradientDirection, gradientAngle, gradientAngle]);
 
   // useEffect(() => {
   //   if (statusState.gradient) setColor(gradientFocusedElementState.color);
   // }, []);
 
-  useEffect(() => {
-    if (color === nullityColor) return;
-    if (!statusState.focusOfPicker) return;
 
-    const filteredArr = _.filter(
-      gradientColorState,
-      ({ key: gradientColorKey }) => gradientColorKey !== keyOfGradientFocusedElement
-    );
-    const focusedElement = _.find(gradientColorState, ({ key }) => keyOfGradientFocusedElement === key);
-
-    filteredArr.push({ ...focusedElement, color: customColorsInHexFormat });
-    const sortedArr = filteredArr.sort(compareFunc('stopDeg'));
-
-    // _.debounce(() => setGradientColorState(sortedArr), 100);
-    // setGradientColorState(sortedArr);
-
-    return _.throttle(() => setGradientColorState(sortedArr), 420);
-  }, [customColorsInHexFormat, keyOfGradientFocusedElement]);
 
   // useEffect(() => {
   //   if (
@@ -275,7 +238,8 @@ const ColorPickerByPas = () => {
         {statusState.customColor ? (
           <CustomColor {...customColorProps} />
         ) : (
-          <PreparedColorExamples {...preparedColorExamplesProps} />
+          // <PreparedColorExamples {...preparedColorExamplesProps} />
+          <PickerByPas setPickerColor={setColor} color={color} />
         )}
 
         {statusState.gradient && (

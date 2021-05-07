@@ -1,213 +1,211 @@
-import { Box, FormControl, Grid, InputLabel, makeStyles, OutlinedInput, Paper } from '@material-ui/core';
-import { ToggleButton } from '@material-ui/lab';
-import _ from 'lodash';
 import PropTypes from 'prop-types';
-import { useEffect, useState } from 'react';
-import compareFunc from 'compare-func';
-import NumberAdornment from '../CustomColor/components/NumberAdornment';
-import CloseIcon from '@material-ui/icons/Close';
-import clsx from 'clsx';
-const useStyles = makeStyles(theme => ({
-  container: {
-    margin: theme.spacing(2.16, 4, 0.8, 1.2),
+import {
+  Box,
+  FilledInput,
+  FormControl,
+  Grid,
+  InputAdornment,
+  InputLabel,
+  makeStyles,
+  OutlinedInput,
+  Paper,
+  TextField
+} from '@material-ui/core';
+import { colord } from 'colord';
+import { RgbaColorPicker } from 'react-colorful';
+import { themeColors } from 'components/theme';
+import PlayArrowOutlinedIcon from '@material-ui/icons/PlayArrowOutlined';
+import KeyboardArrowDownOutlinedIcon from '@material-ui/icons/KeyboardArrowDownOutlined';
+import KeyboardArrowUpOutlinedIcon from '@material-ui/icons/KeyboardArrowUpOutlined';
+import IndeterminateCheckBoxOutlinedIcon from '@material-ui/icons/IndeterminateCheckBoxOutlined';
+import { useEffect, useRef, useState } from 'react';
+import _ from 'lodash';
+import { useClickAway } from 'react-use';
+import PickerByPas from '../CustomColor/components/Picker';
+import GradientPreviewer from './components/GradientPreviewer';
+import MainUtilsOfCustomGradient from './components/MainUtils';
 
-    '& > div': {
-      // width: '20ch',
-      ' & input[type=number]::-webkit-inner-spin-button': {
-        '-webkit-appearance': 'none'
-      }
-    }
+const useStyles = makeStyles(theme => ({
+  containerOfGradientUtils: {
+    padding: theme.spacing(0, 0, 0, 0),
+    borderLeft: '2px solid rgba(255, 255, 255,0.4)'
   },
-  colorPreviewer: {
-    width: theme.spacing(8 * 0.8),
-    height: theme.spacing(8 * 0.8),
-    cursor: 'pointer',
-    border: '2px solid rgba(255, 255, 255,0)'
-  },
-  textFieldInHexFormat: {
-    margin: theme.spacing(0.08, 2, 0, 2),
-    width: theme.spacing(8 + 4 + 2),
-    '& .MuiFormLabel-root.Mui-focused ': { color: ({ customColorsInHexFormat }) => customColorsInHexFormat },
-    '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
-      borderColor: ({ customColorsInHexFormat }) => customColorsInHexFormat
+  containerOfMainGradientUtils: {
+    '& >  div': {
+      paddingTop: theme.spacing(2.4)
     },
-    '& input': {
-      height: theme.spacing(1.8)
-    },
-    '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
-      borderColor: ({ borderColorOfFocusedInput }) => borderColorOfFocusedInput
-    }
+    borderTop: '2px solid rgba(255, 255, 255,0.4)'
   },
-  numberFieldOfDegValue: {
-    width: theme.spacing(10),
-    marginTop: theme.spacing(0.1),
-    '& div': {
-      height: theme.spacing(8 * 0.8)
-    },
-    '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
-      borderColor: ({ borderColorOfFocusedInput }) => borderColorOfFocusedInput
-    }
+  containerOfButtonUtilsOfCustomGradient: {
+    paddingTop: theme.spacing(2),
+    paddingLeft: theme.spacing(1.4),
+    borderTop: '2px solid rgba(255, 255, 255,0.4)'
   },
-  closeButton: {
-    width: theme.spacing(8 * 0.8),
-    height: theme.spacing(8 * 0.8),
-    marginLeft: theme.spacing(1.8)
-  },
-  numberAdornment: {
-    paddingTop: theme.spacing(1.4),
-    marginRight: theme.spacing(-0.4)
-  },
-  colorPreviewerFocused: {
-    borderColor: ' rgba(255, 255, 255,1)'
+  wrapperOfGradientUtils: {
+    height: '100%',
+    paddingBottom: theme.spacing(1.8)
   }
 }));
 
 const CustomGradient = ({
-  setColor,
-  setGradientColor,
-  customColorsInHexFormat,
   color,
-  nullityColor,
+  statusState,
+  setColor,
+  nullityColor = '#fff',
+  customColorsInHexFormat,
+  customFormatName,
+  gradientColor,
+  keyOfGradientFocusedElement,
+  setKeyOfGradientFocusedElement,
+  setGradientColor,
   gradientColorState,
   setGradientColorState,
-  focusOfPicker,
-  keyOfGradientFocusedElement,
-  setKeyOfGradientFocusedElement
+  gradientDirection,
+  setGradientDirection,
+  gradientAngle,
+  setGradientAngle,
+  setFocusStatusOfPicker
 }) => {
-  const [hoverStatusOfCloseButton, setHoverStatusOfCloseButton] = useState(false);
-  const [gradientHoveredElementName, setGradientHoveredElementName] = useState(false);
+  const isExtended = statusState.customColor && statusState.extended;
+  const gradientColorStateLength = gradientColorState.length;
+  const classes = useStyles();
 
-  // console.log(gradientFocusedElementState);
+  const [gradientColor, setGradientColor] = useState(customColorsInHexFormat);
+  const [gradientAngle, setGradientAngle] = useState(90);
+  const [gradientDirection, setGradientDirection] = useState('linear-gradient');
+  const [gradientColorState, setGradientColorState] = useState([
+    { color: '#090979', stopDeg: 0, key: '0' },
+    { color: '#1f13e5', stopDeg: 42, key: '1' },
+    { color: '#00d4ff', stopDeg: 80, key: '2' },
+    { color: '#0024ff', stopDeg: 100, key: '3' }
+  ]);
 
-  // const sumReduceFunc = (sum, { color, name }) => ({ ...sum, [name]: color });
-  // const nullityValueOfCustomFormatState = _.reduce(testColorPlaceholder, sumReduceFunc, 1);
-  // console.log(nullityValueOfCustomFormatState);
 
-  const onHoverOfCloseButton = () => setHoverStatusOfCloseButton(true);
-  const onUnHoverOfCloseButton = () => setHoverStatusOfCloseButton(false);
 
-  // console.log(customColorsInHexFormat);
-  const focusedElement = _.find(gradientColorState, ({ key }) => keyOfGradientFocusedElement === key);
-  const classes = useStyles({ borderColorOfFocusedInput: focusedElement?.color });
+  const refOfFocusStatusOfPicker = useRef(null);
+  useClickAway(refOfFocusStatusOfPicker, () => setFocusStatusOfPicker(false));
 
-  // useEffect(() => setColor(gradientFocusedElementState.color), [gradientFocusedElementState]);
+  const setFocusStatusOfPickerIsTrue = () => setFocusStatusOfPicker(true);
+  useEffect(() => setFocusStatusOfPicker(true), []);
 
-  useEffect(() => !focusOfPicker && setColor(focusedElement?.color), [focusedElement]);
+
+  useEffect(() => {
+    if (color === nullityColor) return;
+    if (!statusState.focusOfPicker) return;
+
+    const filteredArr = _.filter(
+      gradientColorState,
+      ({ key: gradientColorKey }) => gradientColorKey !== keyOfGradientFocusedElement
+    );
+    const focusedElement = _.find(gradientColorState, ({ key }) => keyOfGradientFocusedElement === key);
+
+    filteredArr.push({ ...focusedElement, color: customColorsInHexFormat });
+    const sortedArr = filteredArr.sort(compareFunc('stopDeg'));
+
+    // _.debounce(() => setGradientColorState(sortedArr), 100);
+    // setGradientColorState(sortedArr);
+
+    return _.throttle(() => setGradientColorState(sortedArr), 420);
+  }, [customColorsInHexFormat, keyOfGradientFocusedElement]);
+
+
+  useEffect(() => {
+    const reduceFunc = (sum, { color, stopDeg }, idx) =>
+      `${sum} ${color} ${stopDeg}${gradientColorState.length - 1 === idx ? '%' : '%,'}`;
+
+    const mainPart = _.reduce(gradientColorState, reduceFunc, '');
+
+    const gradientPosition = gradientDirection === 'radial-gradient' ? 'circle' : gradientAngle + 'deg,';
+    const gradientRoute = `${gradientDirection}(${gradientPosition}`;
+
+    const gradientColor = `${gradientRoute} ${mainPart})`;
+
+    setGradientColor(gradientColor);
+  }, [gradientColorState, gradientDirection, gradientAngle, gradientAngle]);
+
+
+  const gradientPreviewerProps = {
+    gradientColor,
+    gradientColorState,
+    setGradientColorState,
+    keyOfGradientFocusedElement,
+    setKeyOfGradientFocusedElement
+  };
+  const inputsColorUtilsOfCustomColorPickerProps = {
+    color,
+    setColor,
+    focusOfPicker: statusState.focusOfPicker,
+    customColorsInHexFormat,
+    customFormatName,
+    setFocusStatusOfPicker,
+    gradientStatus: statusState.gradient
+  };
+
+  const mainUtilsOfCustomGradientProps = {
+    setColor,
+    setGradientColor,
+    focusOfPicker: statusState.focusOfPicker,
+    customColorsInHexFormat,
+    color,
+    nullityColor,
+    gradientColorState,
+    setGradientColorState,
+    keyOfGradientFocusedElement,
+    setKeyOfGradientFocusedElement
+  };
+
+  const buttonUtilsOfCustomGradientProps = {
+    color: customColorsInHexFormat,
+    colorPreview: statusState.colorPreview,
+    gradientDirection,
+    setGradientDirection,
+    gradientAngle,
+    setGradientAngle
+  };
+
   return (
-    <Grid container direction={'column'} className={classes.container}>
-      {gradientColorState.map(({ color, stopDeg, key }) => {
-        const isHovered = gradientHoveredElementName === key;
-        const isFocused = keyOfGradientFocusedElement === key;
-
-        const setGradientHoveredElementNameIsFalse = () => setGradientHoveredElementName(false);
-        const handleGradientHoveredElementName = () => setGradientHoveredElementName(key);
-
-        const handleGradientFocusedElementColor = () => setKeyOfGradientFocusedElement(key);
-
-        const onChangeOfHexInput = ({ target: { value } }) => {
-          // console.log(value);
-
-          const filteredArr = _.filter(gradientColorState, ({ key: gradientColorKey }) => gradientColorKey !== key);
-          filteredArr.push({ color: value, stopDeg, key });
-          const sortedArr = filteredArr.sort(compareFunc('stopDeg'));
-          setGradientColorState(sortedArr);
-        };
-
-        const onChangeOfNumberInput = ({ target: { value } }) => {
-          // console.log(value);
-
-          const filteredArr = _.filter(gradientColorState, ({ key: gradientColorKey }) => gradientColorKey !== key);
-          filteredArr.push({ color, stopDeg: value > 100 ? 100 : value, key });
-          const sortedArr = filteredArr.sort(compareFunc('stopDeg'));
-          setGradientColorState(sortedArr);
-        };
-
-        const deleteGradientItem = () => {
-          const filteredArr = _.filter(gradientColorState, ({ key: currentKey }) => currentKey !== key);
-          setGradientColorState(filteredArr);
-        };
-
-        const hexInputProps = {
-          type: 'text',
-          // onChange: onChangeOfCustomFormatState,
-          // name: idx,
-          onChange: onChangeOfHexInput,
-          // labelWidth: currentLabelName * 9.6,
-          value: color
-        };
-
-        const numberInputProps = {
-          type: 'number',
-          onChange: onChangeOfNumberInput,
-          // name: idx,
-          // labelWidth: currentLabelName * 9.6,
-          value: stopDeg,
-          endAdornment: (
-            <Grid className={classes.numberAdornment}>
-              {' '}
-              <NumberAdornment />
-            </Grid>
-          )
-        };
-        return (
-          <Box
-            item
-            mb={1.4}
-            onFocus={handleGradientFocusedElementColor}
-            onMouseEnter={handleGradientHoveredElementName}
-            onMouseLeave={setGradientHoveredElementNameIsFalse}
-          >
-            {/* <Paper elevation={0}> */}
-            <Grid container>
-              <Paper
-                style={{ background: color }}
-                className={clsx(classes.colorPreviewer, isFocused && classes.colorPreviewerFocused)}
-                elevation={4}
-                onClick={null}
-                onClick={handleGradientFocusedElementColor}
-              />
-              <FormControl
-                variant={'outlined'}
-                // onFocus={onInputFocus}
-                // onBlur={onInputBlur}
-
-                className={classes.textFieldInHexFormat}
-              >
-                {/* <InputLabel>{color}</InputLabel> */}
-                <OutlinedInput {...hexInputProps} />
-              </FormControl>
-              <FormControl
-                variant={'outlined'}
-                // onFocus={onInputFocus}
-                // onBlur={onInputBlur}
-
-                className={classes.numberFieldOfDegValue}
-              >
-                {/* <InputLabel>{color}</InputLabel> */}
-                <OutlinedInput {...numberInputProps} />
-              </FormControl>
-              <ToggleButton
-                value={'close'}
-                selected={isHovered && hoverStatusOfCloseButton}
-                onMouseEnter={onHoverOfCloseButton}
-                onMouseLeave={onUnHoverOfCloseButton}
-                onClick={deleteGradientItem}
-                // onChange={() => {
-                //   setSelected(!selected);
-                // }}
-                className={classes.closeButton}
-              >
-                <CloseIcon />
-              </ToggleButton>
-            </Grid>
-            {/* </Paper> */}
+    <Box className={classes.containerOfCustomColor} mb={0} mx={0} mt={-0.4}>
+      <Box mt={2.8} px={2.8}>
+        <GradientPreviewer {...gradientPreviewerProps} />
+      </Box>
+      <Grid container className={statusState.gradient && classes.containerOfMainGradientUtils}>
+        <Grid item>
+          <Box pr={2.8} pb={1.8} pl={1.8}>
+            <Box ref={refOfFocusStatusOfPicker} onClick={setFocusStatusOfPickerIsTrue}>
+              <PickerByPas color={color} setPickerColor={setPickerColor} />
+            </Box>
+            {isExtended && (
+              <Box>
+                <InputsColorUtilsOfCustomColorPicker {...inputsColorUtilsOfCustomColorPickerProps} />
+              </Box>
+            )}
           </Box>
-        );
-      })}
-    </Grid>
+        </Grid>
+        {statusState.gradient && (
+          <Grid item className={classes.containerOfGradientUtils}>
+            <Grid container direction={'column'} justify={'space-between'} className={classes.wrapperOfGradientUtils}>
+              <Box item ml={1.8}>
+                <MainUtilsOfCustomGradient {...mainUtilsOfCustomGradientProps} />
+              </Box>
+              <Grid className={classes.containerOfButtonUtilsOfCustomGradient}>
+                <ButtonUtilsOfCustomGradient {...buttonUtilsOfCustomGradientProps} />
+              </Grid>
+            </Grid>
+          </Grid>
+        )}
+      </Grid>
+    </Box>
   );
 };
 
-CustomGradient.propTypes = {};
+CustomGradient.propTypes = {
+  color: PropTypes.shape({
+    startsWith: PropTypes.func
+  }),
+  nullityColor: PropTypes.string,
+  setColor: PropTypes.func,
+  setTransparencyStatus: PropTypes.func,
+  transparencyStatus: PropTypes.bool
+};
 
 export default CustomGradient;
