@@ -6,7 +6,7 @@ import ViewDayOutlinedIcon from '@material-ui/icons/ViewDayOutlined';
 import { useState } from 'react';
 import CircularSlider from '@fseehawer/react-circular-slider';
 import CenteredGrid from 'components/CenteredGrid';
-import NumberAdornment from 'components/ColorPicker/components/CustomColor/components/NumberAdornment';
+import NumberAdornment from 'components/ColorChanger/components/CustomColor/components/NumberAdornment';
 import { themeColors } from 'components/theme';
 
 const useStyles = makeStyles(theme => ({

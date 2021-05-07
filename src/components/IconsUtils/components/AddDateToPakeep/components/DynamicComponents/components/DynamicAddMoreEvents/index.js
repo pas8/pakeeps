@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import DynamicInputDateAndTimePickers from '../DynamicInputDateAndTimePickers';
 import _ from 'lodash';
 import compareFunc from 'compare-func';
-import ColorPickerByPs from 'components/ColorPicker';
+import ColorPickerByPs from 'components/ColorChanger';
 import TextRotationNoneOutlinedIcon from '@material-ui/icons/TextRotationNoneOutlined';
 import PaletteOutlinedIcon from '@material-ui/icons/PaletteOutlined';
 import ButtonGroupUtilsOfDynamicAddMoreEvents from './components/ButtonGroup';

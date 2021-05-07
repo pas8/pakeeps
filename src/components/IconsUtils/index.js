@@ -26,7 +26,7 @@ import MouseOverPopover from './components/PopoverAndMenu';
 import PopoverAndMenu from './components/PopoverAndMenu';
 import AddDateToPakeep from './components/AddDateToPakeep';
 import IconButtonByPas from 'components/IconButton';
-import ColorPickerByPas from 'components/ColorPicker';
+import ColorPickerByPas from 'components/ColorChanger';
 
 const useStyles = makeStyles(theme => ({
   popover: { padding: theme.spacing(0.4, 0.8) },

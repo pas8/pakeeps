@@ -28,7 +28,7 @@ import CustomizationButton from './components/CustomizationButton';
 import FilterVintageOutlinedIcon from '@material-ui/icons/FilterVintageOutlined';
 import TextureOutlinedIcon from '@material-ui/icons/TextureOutlined';
 import ColorFormatIcon from 'components/Icons/components/ColorFormatIcon';
-import IconUtilsOfColorPicker from './components/IconsUtils';
+import IconUtilsOfColorPicker from './components/CustomColor/components/IconsUtils';
 import _ from 'lodash';
 import { useCopyToClipboard } from 'react-use';
 import compareFunc from 'compare-func';
@@ -82,16 +82,7 @@ const useStyles = makeStyles(theme => ({
   iconUtilsContainer: {
     '& .MuiSvgIcon-root': { width: theme.spacing(2 / (0.8 - 0.1)) }
   },
-  iconUtilsContainerGradientStatusIsTrue: {
-    '& button': { transform: 'scale(1.1)' },
-    // padding:theme.spacing(0.8),
 
-    padding: theme.spacing(1.4, 0.8),
-    borderLeft: '2px solid rgba(255, 255, 255,0.4)'
-    // '& .MuiSvgIcon-root': { width: theme.spacing(10) },
-
-    // '& .MuiSvgIcon-root': { width: theme.spacing(4) }
-  }
 }));
 
 const ColorPickerByPas = () => {
@@ -112,7 +103,6 @@ const ColorPickerByPas = () => {
     focusOfPicker: true
   });
 
-  const [keyOfGradientFocusedElement, setKeyOfGradientFocusedElement] = useState(gradientColorState[0].key);
 
   const setFocusStatusOfPicker = value => setStatusState(state => ({ ...state, focusOfPicker: value }));
 
@@ -150,12 +140,7 @@ const ColorPickerByPas = () => {
   const classes = useStyles();
 
   // const arr = colorsArr.map(el => console.log(colors[el.colorName]));
-  const [popoverAndMenuState, setPopoverAndMenuState] = useState({
-    name: 'null',
-    menuIsOpen: false,
-    popoverIsOpen: true,
-    onMenuClose: null
-  });
+
 
 
 

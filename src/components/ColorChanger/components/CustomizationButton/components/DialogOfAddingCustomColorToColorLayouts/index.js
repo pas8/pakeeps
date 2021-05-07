@@ -1,6 +1,6 @@
 import { Button, Dialog, DialogActions, DialogTitle, Typography } from '@material-ui/core';
-import ColorPickerByPas from 'components/ColorPicker';
-import CustomColor from 'components/ColorPicker/components/CustomColor';
+import ColorPickerByPas from 'components/ColorChanger';
+import CustomColor from 'components/ColorChanger/components/CustomColor';
 import React from 'react';
 import DialogActionsOfAddingCustomColorToColorLayouts from './components/DialogActions';
 import DialogContentOfAddingCustomColorToColorLayouts from './components/DialogContent';

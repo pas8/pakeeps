@@ -4,7 +4,7 @@ import TextRotationNoneOutlinedIcon from '@material-ui/icons/TextRotationNoneOut
 import PaletteOutlinedIcon from '@material-ui/icons/PaletteOutlined';
 import AddLocationOutlinedIcon from '@material-ui/icons/AddLocationOutlined';
 import IconButtonByPas from 'components/IconButton';
-import ColorPickerByPas from 'components/ColorPicker';
+import ColorPickerByPas from 'components/ColorChanger';
 import PopoverAndMenu from 'components/IconsUtils/components/PopoverAndMenu';
 import AlarmAddOutlinedIcon from '@material-ui/icons/AlarmAddOutlined';
 import CategoryOutlinedIcon from '@material-ui/icons/CategoryOutlined';

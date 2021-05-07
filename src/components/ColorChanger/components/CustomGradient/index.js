@@ -24,6 +24,7 @@ import { useClickAway } from 'react-use';
 import PickerByPas from '../CustomColor/components/Picker';
 import GradientPreviewer from './components/GradientPreviewer';
 import MainUtilsOfCustomGradient from './components/MainUtils';
+import ToggleButtonUtilsOfCustomGradient from './components/ToggleButtonUtils';
 
 const useStyles = makeStyles(theme => ({
   containerOfGradientUtils: {
@@ -44,28 +45,20 @@ const useStyles = makeStyles(theme => ({
   wrapperOfGradientUtils: {
     height: '100%',
     paddingBottom: theme.spacing(1.8)
+  },
+  containerOfToggleButtonUtils: {
+    '& button': { transform: 'scale(1.1)' },
+    // padding:theme.spacing(0.8),
+
+    padding: theme.spacing(1.4, 0.8),
+    borderLeft: '2px solid rgba(255, 255, 255,0.4)'
+    // '& .MuiSvgIcon-root': { width: theme.spacing(10) },
+
+    // '& .MuiSvgIcon-root': { width: theme.spacing(4) }
   }
 }));
 
-const CustomGradient = ({
-  color,
-  statusState,
-  setColor,
-  nullityColor = '#fff',
-  customColorsInHexFormat,
-  customFormatName,
-  gradientColor,
-  keyOfGradientFocusedElement,
-  setKeyOfGradientFocusedElement,
-  setGradientColor,
-  gradientColorState,
-  setGradientColorState,
-  gradientDirection,
-  setGradientDirection,
-  gradientAngle,
-  setGradientAngle,
-  setFocusStatusOfPicker
-}) => {
+const CustomGradient = () => {
   const isExtended = statusState.customColor && statusState.extended;
   const gradientColorStateLength = gradientColorState.length;
   const classes = useStyles();
@@ -80,14 +73,25 @@ const CustomGradient = ({
     { color: '#0024ff', stopDeg: 100, key: '3' }
   ]);
 
+  const [keyOfGradientFocusedElement, setKeyOfGradientFocusedElement] = useState(gradientColorState[0].key);
 
+  const [statusState, setStatusState] = useState({
+    saved: false,
+    extended: false,
+    customization: false,
+    customFormats: false,
+    customColor: false,
+    gradient: false,
+    copy: false,
+    colorPreview: !false,
+    focusOfPicker: true
+  });
 
   const refOfFocusStatusOfPicker = useRef(null);
   useClickAway(refOfFocusStatusOfPicker, () => setFocusStatusOfPicker(false));
 
   const setFocusStatusOfPickerIsTrue = () => setFocusStatusOfPicker(true);
   useEffect(() => setFocusStatusOfPicker(true), []);
-
 
   useEffect(() => {
     if (color === nullityColor) return;
@@ -108,7 +112,6 @@ const CustomGradient = ({
     return _.throttle(() => setGradientColorState(sortedArr), 420);
   }, [customColorsInHexFormat, keyOfGradientFocusedElement]);
 
-
   useEffect(() => {
     const reduceFunc = (sum, { color, stopDeg }, idx) =>
       `${sum} ${color} ${stopDeg}${gradientColorState.length - 1 === idx ? '%' : '%,'}`;
@@ -123,6 +126,12 @@ const CustomGradient = ({
     setGradientColor(gradientColor);
   }, [gradientColorState, gradientDirection, gradientAngle, gradientAngle]);
 
+  const [popoverAndMenuState, setPopoverAndMenuState] = useState({
+    name: 'null',
+    menuIsOpen: false,
+    popoverIsOpen: true,
+    onMenuClose: null
+  });
 
   const gradientPreviewerProps = {
     gradientColor,
@@ -164,24 +173,22 @@ const CustomGradient = ({
   };
 
   return (
-    <Box className={classes.containerOfCustomColor} mb={0} mx={0} mt={-0.4}>
-      <Box mt={2.8} px={2.8}>
-        <GradientPreviewer {...gradientPreviewerProps} />
-      </Box>
-      <Grid container className={statusState.gradient && classes.containerOfMainGradientUtils}>
-        <Grid item>
-          <Box pr={2.8} pb={1.8} pl={1.8}>
-            <Box ref={refOfFocusStatusOfPicker} onClick={setFocusStatusOfPickerIsTrue}>
-              <PickerByPas color={color} setPickerColor={setPickerColor} />
-            </Box>
-            {isExtended && (
+    <Box>
+      <Box className={classes.containerOfCustomColor} mb={0} mx={0} mt={-0.4}>
+        <Box mt={2.8} px={2.8}>
+          <GradientPreviewer {...gradientPreviewerProps} />
+        </Box>
+        <Grid container className={statusState.gradient && classes.containerOfMainGradientUtils}>
+          <Grid item>
+            <Box pr={2.8} pb={1.8} pl={1.8}>
+              <Box ref={refOfFocusStatusOfPicker} onClick={setFocusStatusOfPickerIsTrue}>
+                <PickerByPas color={color} setPickerColor={setPickerColor} />
+              </Box>
               <Box>
                 <InputsColorUtilsOfCustomColorPicker {...inputsColorUtilsOfCustomColorPickerProps} />
               </Box>
-            )}
-          </Box>
-        </Grid>
-        {statusState.gradient && (
+            </Box>
+          </Grid>
           <Grid item className={classes.containerOfGradientUtils}>
             <Grid container direction={'column'} justify={'space-between'} className={classes.wrapperOfGradientUtils}>
               <Box item ml={1.8}>
@@ -192,8 +199,14 @@ const CustomGradient = ({
               </Grid>
             </Grid>
           </Grid>
-        )}
-      </Grid>
+        </Grid>
+      </Box>
+
+      <Box className={classes.containerOfToggleButtonUtils}>
+        <Grid container justify={'space-between'} alignItems={'center'} direction={'column'} style={{ height: '100%' }}>
+          <ToggleButtonUtilsOfCustomGradient {...toggleButtonUtilsProps} />
+        </Grid>
+      </Box>
     </Box>
   );
 };
