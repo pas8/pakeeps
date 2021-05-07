@@ -18,7 +18,7 @@ import lchPlugin from 'colord/plugins/lch';
 import { colord, extend } from 'colord';
 import _, { sum } from 'lodash';
 import NumberAdornment from '../NumberAdornment';
-import ButtonUtilsOfCustomGradient from 'components/ColorChanger/components/CustomGradient/components/ButtonUtils';
+import { useDebounce, useUpdateEffect } from 'react-use';
 
 const useStyles = makeStyles(theme => ({
   textFieldInHexFormat: {
@@ -77,6 +77,28 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
+const toCorrectFormat = (colorToFormatted, format) => {
+  const color = colord(colorToFormatted);
+  extend([lchPlugin]);
+
+  switch (format) {
+    case 'rgb':
+      return color.toRgb();
+
+    case 'hsl':
+      return color.toHsl();
+
+    case 'hsv':
+      return color.toHsl();
+
+    case 'lch':
+      return color.toLch();
+
+    default:
+      return format;
+  }
+};
+
 const InputsColorUtilsOfCustomColorPicker = ({
   color,
   setColor,
@@ -85,8 +107,10 @@ const InputsColorUtilsOfCustomColorPicker = ({
   gradientStatus,
   focusOfPicker
 }) => {
-  extend([lchPlugin]);
   const classes = useStyles({ customColorsInHexFormat });
+  const colorInCorrectFormat = toCorrectFormat(color, customFormatName);
+
+  const colorInCorrectFormatArr = _.valuesIn(colorInCorrectFormat);
 
   const formatPropertiesArr = {
     rgb: [
@@ -110,14 +134,13 @@ const InputsColorUtilsOfCustomColorPicker = ({
       { maxLength: 360, shotName: 'H', name: 'Hue' }
     ]
   };
-  const alphaColorCanalProperty = { maxLength: 100, shotName: 'A', name: 'Alpha' };
+  const correctFormatName = `${customFormatName}a`;
+
+  const alphaColorCanalProperty = { maxLength: 1, shotName: 'A', name: 'Alpha' };
   const currentCustomFormatInputsGroupArr = _.concat(formatPropertiesArr[customFormatName], alphaColorCanalProperty);
-  const customFormatElementNames = ['first', 'second', 'third', 'alpha'];
-  const sumReduceFunc = (sum, name) => ({ ...sum, [name]: '' });
-  const nullityValueOfCustomFormatState = _.reduce(customFormatElementNames, sumReduceFunc, '');
 
   const [colorInHexFormat, setColorInHexFormat] = useState(customColorsInHexFormat);
-  const [customFormatState, setCustomFormatState] = useState(nullityValueOfCustomFormatState);
+  const [customFormatState, setCustomFormatState] = useState(colorInCorrectFormatArr);
   const [customFormatElementFocusStatus, setCustomFormatElementFocus] = useState(false);
 
   const onChangeOfColorInHexFormat = ({ target: { value } }) => {
@@ -126,34 +149,44 @@ const InputsColorUtilsOfCustomColorPicker = ({
   };
   // console.log(customColorsInHexFormat)
   const onChangeOfCustomFormatState = ({ target: { value, name: idx } }) => {
-    const isValid = currentCustomFormatInputsGroupArr[idx].maxLength >= +value;
-    const currentValue = isValid ? value : currentCustomFormatInputsGroupArr[idx].maxLength.toString();
-    setCustomFormatState(state => ({ ...state, [customFormatElementNames[idx]]: currentValue }));
-  };
-  console.log(currentCustomFormatInputsGroupArr)
+    const maxLength = currentCustomFormatInputsGroupArr[idx].maxLength;
+    const isValid = maxLength >= +value;
 
+    const currentValue = isValid ? value : maxLength;
+    const clonedCustomFormatState = _.clone(customFormatState);
+    clonedCustomFormatState.splice(idx, 1, currentValue);
+
+    setCustomFormatState(clonedCustomFormatState);
+  };
+
+
+  const [, cancel] = useDebounce(
+    () => {
+      setCustomFormatState(colorInCorrectFormatArr);
+    },
+    96,
+    [color]
+  );
+
+  // useEffect(() => {
+  //   setCustomFormatState(colorInCorrectFormatArr);
+  // }, []);
   // useEffect(() => {
   //   !gradientStatus && _.debounce(() => setColorInHexFormat(customColorsInHexFormat), 160);
   // }, [customColorsInHexFormat]);
 
-  useEffect(() => {
-    // !gradientStatus && setFocusStatusOfPicker(false);
-    // !focusOfPicker && setColor(colorInHexFormat);
-    // !focusOfPicker && console.log(colorInHexFormat,color);
-    focusOfPicker && console.log('focusOfPicker is' + focusOfPicker);
-    !focusOfPicker && console.log('focusOfPicker is' + focusOfPicker);
-  }, [colorInHexFormat, gradientStatus, color]);
+  // useEffect(() => {
+  //   !gradientStatus && setFocusStatusOfPicker(false);
+  //   // !focusOfPicker && setColor(colorInHexFormat);
+  //   // !focusOfPicker && console.log(colorInHexFormat,color);
+  //   focusOfPicker && console.log('focusOfPicker is' + focusOfPicker);
+  //   !focusOfPicker && console.log('focusOfPicker is' + focusOfPicker);
+  // }, [colorInHexFormat, gradientStatus, color]);
 
   useEffect(() => {
-    const correctFormatObj = {
-      //! to make  better logic
-      [customFormatName[0]]: customFormatState[customFormatElementNames[0]],
-      [customFormatName[1]]: customFormatState[customFormatElementNames[1]],
-      [customFormatName[2]]: customFormatState[customFormatElementNames[2]],
-      a: customFormatState[customFormatElementNames[3]] / 100
-    };
-    // setColorInHexFormat(colord(correctFormatObj).toHex());
-    setColor(colord(correctFormatObj).toRgb());
+    const colorIsCorrectFormatObj = _.mapKeys(customFormatState, (el, idx) => correctFormatName[idx]);
+    const colordWhichShouldBeSet = colord(colorIsCorrectFormatObj).toRgb();
+    setColor(colordWhichShouldBeSet);
   }, [customFormatName, customFormatState]);
 
   const onInputFocus = ({ target: { name } }) => setCustomFormatElementFocus(name);
@@ -200,13 +233,14 @@ const InputsColorUtilsOfCustomColorPicker = ({
             const isFocused = customFormatElementFocusStatus === `${idx}`;
             const currentLabelName = isFocused ? name : shotName;
             const onClick = () => onButtonClick(name);
+            const labelWidth = currentLabelName.length * 9.6;
 
             const outlinedInputProps = {
               type: 'number',
               onChange: onChangeOfCustomFormatState,
               name: idx,
-              labelWidth: currentLabelName.length * 9.6,
-              value: customFormatState[customFormatElementNames[idx]],
+              labelWidth,
+              value: customFormatState[idx],
               endAdornment: isFocused ? <NumberAdornment /> : null
             };
 
