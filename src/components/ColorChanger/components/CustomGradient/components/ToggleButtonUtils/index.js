@@ -21,6 +21,31 @@ import PlaylistAddOutlinedIcon from '@material-ui/icons/PlaylistAddOutlined';
 import AddBoxOutlinedIcon from '@material-ui/icons/AddBoxOutlined';
 import { themeColors } from 'components/theme';
 import { ToggleButton, ToggleButtonGroup } from '@material-ui/lab';
+import { Grid, makeStyles } from '@material-ui/core';
+import _ from 'lodash';
+
+const useStyles = makeStyles(theme => ({
+  container: {
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    height: '100%',
+
+    '& button': {
+      flex: 1,
+      borderRadius: 0,
+      borderLeftWidth: 0,
+      borderRightWidth: 0,
+      '&:last-child': {
+        borderBottom: 0
+      },
+      '&:first-child': {
+        borderTop: 0
+      },
+    },
+    
+
+  }
+}));
 
 const ToggleButtonUtilsOfCustomGradient = ({
   statusState,
@@ -45,14 +70,13 @@ const ToggleButtonUtilsOfCustomGradient = ({
   // );
 
   const toggleButtonUtilsArr = [
-
     {
       icon: FilterVintageOutlinedIcon,
       popoverText: 'Gradient',
       value: 'changeGradientStatus',
       active: false,
       onlyPopover: true,
-      onClick: onClickOfGradientButton,
+      onClick: onClickOfGradientButton
     },
     {
       icon: LibraryAddOutlinedIcon,
@@ -60,35 +84,35 @@ const ToggleButtonUtilsOfCustomGradient = ({
       value: 'copyToClipboard',
       onClick: onClickOfCopyButton,
       rotateDeg: 90,
-      active: false,
+      active: false
     },
     {
-      icon:  InvertColorsOutlinedIcon,
+      icon: InvertColorsOutlinedIcon,
       popoverText: 'Preview color status',
       value: 'previewColorStatus',
       active: false,
-      onClick: onClickOfColorPreviewButton,
+      onClick: onClickOfColorPreviewButton
     },
     {
       icon: AddBoxOutlinedIcon,
       popoverText: 'Add this color to your color pattern',
       value: 'addColorToColorPattern',
       activeIcon: false,
-      onClick:onClickOfAddToPatternButton
+      onClick: onClickOfAddToPatternButton
     },
     {
       icon: ExtensionIcon,
       popoverText: 'Chose color format which u like',
       value: 'choseColorFormatWhichULike',
       activeIcon: false,
-      onClick:onClickOfColorFormatButton
+      onClick: onClickOfColorFormatButton
     },
     {
       icon: SettingsInputComponentOutlinedIcon,
       popoverText: 'Customization',
       value: 'customizationIconButton',
       active: false,
-      onClick: onClickOfCustomizationButton,
+      onClick: onClickOfCustomizationButton
     },
     {
       icon: SaveRoundedIcon,
@@ -96,23 +120,30 @@ const ToggleButtonUtilsOfCustomGradient = ({
       value: 'save',
       active: false,
       onlyPopover: true,
-      onClick: onClickOfSaveButton,
+      onClick: onClickOfSaveButton
     }
   ];
 
-  const handleChange = (event, nextView) =>   setView(nextView);
-  
+  const classes = useStyles();
+  const [state, setState] = useState(['save']);
 
+  const handleChange = (placeholder, value) => {
+    console.log(_);
+    setState(value);
+    // setStatusState(state => ({ ...state, [value]: !state[value] }));
+  };
 
-  return <Grid container>
-
-<ToggleButtonGroup orientation="vertical" value={view} exclusive onChange={handleChange}>
-      <ToggleButton value="list" aria-label="list">
-        <ViewListIcon />
-      </ToggleButton>
-</ToggleButtonGroup>
-
-  </Grid>;
+  return (
+    <ToggleButtonGroup orientation={'vertical'} value={state} onChange={handleChange} className={classes.container} size={'large'}>
+      {toggleButtonUtilsArr.map(({ icon: Icon, value }) => {
+        return (
+          <ToggleButton value={value} aria-label={value}>
+            <Icon />
+          </ToggleButton>
+        );
+      })}
+    </ToggleButtonGroup>
+  );
 };
 
 ToggleButtonUtilsOfCustomGradient.propTypes = {

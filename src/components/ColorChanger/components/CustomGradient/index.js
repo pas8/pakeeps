@@ -53,10 +53,6 @@ const useStyles = makeStyles(theme => ({
     paddingBottom: theme.spacing(1.8)
   },
   containerOfToggleButtonUtils: {
-    '& button': { transform: 'scale(1.1)' },
-    // padding:theme.spacing(0.8),
-
-    padding: theme.spacing(1.4, 0.8),
     borderLeft: '1px solid rgba(255, 255, 255,0.16)'
   }
 }));
@@ -268,9 +264,7 @@ const CustomGradient = ({ gradientStatus, setGradientStatus }) => {
       </Box>
 
       <Box className={classes.containerOfToggleButtonUtils}>
-        <Grid container justify={'space-between'} alignItems={'center'} direction={'column'} style={{ height: '100%' }}>
-          <ToggleButtonUtilsOfCustomGradient {...toggleButtonUtilsProps} />
-        </Grid>
+        <ToggleButtonUtilsOfCustomGradient {...toggleButtonUtilsProps} />
       </Box>
     </Grid>
   );
