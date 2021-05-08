@@ -80,7 +80,6 @@ const IconUtilsOfCustomColor = ({
       onClick: onClickOfPalletteButton,
       customColor: statusState.customColor && customColor
     },
-
     {
       icon: FilterVintageOutlinedIcon,
       popoverText: 'Gradient',

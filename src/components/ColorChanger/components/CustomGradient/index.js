@@ -52,18 +52,17 @@ const useStyles = makeStyles(theme => ({
 
     padding: theme.spacing(1.4, 0.8),
     borderLeft: '2px solid rgba(255, 255, 255,0.4)'
-    // '& .MuiSvgIcon-root': { width: theme.spacing(10) },
-
-    // '& .MuiSvgIcon-root': { width: theme.spacing(4) }
   }
 }));
 
 const CustomGradient = () => {
-  const isExtended = statusState.customColor && statusState.extended;
-  const gradientColorStateLength = gradientColorState.length;
+  // const isExtended = statusState.customColor && statusState.extended;
+  // const gradientColorStateLength = gradientColorState.length;
   const classes = useStyles();
 
-  const [gradientColor, setGradientColor] = useState(customColorsInHexFormat);
+  const [customFormatName, setCustomFormatName] = useState('rgb');
+
+  const [gradientColor, setGradientColor] = useState('null');
   const [gradientAngle, setGradientAngle] = useState(90);
   const [gradientDirection, setGradientDirection] = useState('linear-gradient');
   const [gradientColorState, setGradientColorState] = useState([
@@ -73,15 +72,17 @@ const CustomGradient = () => {
     { color: '#0024ff', stopDeg: 100, key: '3' }
   ]);
 
+  const [currentColor, setCurrentColor] = useState(gradientColorState[0].color);
+const currentColorInHexFormat =  colord(currentColor).toHex();
+
   const [keyOfGradientFocusedElement, setKeyOfGradientFocusedElement] = useState(gradientColorState[0].key);
 
   const [statusState, setStatusState] = useState({
     saved: false,
-    extended: false,
     customization: false,
     customFormats: false,
-    customColor: false,
     gradient: false,
+    pattern: false,
     copy: false,
     colorPreview: !false,
     focusOfPicker: true
@@ -110,7 +111,7 @@ const CustomGradient = () => {
     // setGradientColorState(sortedArr);
 
     return _.throttle(() => setGradientColorState(sortedArr), 420);
-  }, [customColorsInHexFormat, keyOfGradientFocusedElement]);
+  }, [currentColorInHexFormat, keyOfGradientFocusedElement]);
 
   useEffect(() => {
     const reduceFunc = (sum, { color, stopDeg }, idx) =>
@@ -126,12 +127,9 @@ const CustomGradient = () => {
     setGradientColor(gradientColor);
   }, [gradientColorState, gradientDirection, gradientAngle, gradientAngle]);
 
-  const [customFormatName, setCustomFormatName] = useState('rgb');
-
-
   const setFocusStatusOfPicker = value => setStatusState(state => ({ ...state, focusOfPicker: value }));
 
-
+  
   const gradientPreviewerProps = {
     gradientColor,
     gradientColorState,
@@ -140,10 +138,10 @@ const CustomGradient = () => {
     setKeyOfGradientFocusedElement
   };
   const inputsColorUtilsOfCustomColorPickerProps = {
-    color,
-    setColor,
+    color:currentColor,
+    setColor:setCurrentColor,
     focusOfPicker: statusState.focusOfPicker,
-    customColorsInHexFormat,
+    customColorsInHexFormat:currentColorInHexFormat,
     customFormatName,
     setFocusStatusOfPicker,
     gradientStatus: statusState.gradient

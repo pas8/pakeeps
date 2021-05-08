@@ -3,10 +3,10 @@ import ColorLensOutlinedIcon from '@material-ui/icons/ColorLensOutlined';
 import WrapperOfPopoverAndMenu from 'components/IconsUtils/components/WrapperOfPopoverAndMenu';
 import SaveRoundedIcon from '@material-ui/icons/SaveRounded';
 import FilterVintageOutlinedIcon from '@material-ui/icons/FilterVintageOutlined';
-import SelectColorFormat from '../SelectColorFormat';
 import InvertColorsOutlinedIcon from '@material-ui/icons/InvertColorsOutlined';
 import ExtensionIcon from '@material-ui/icons/Extension';
 import FileCopyOutlinedIcon from '@material-ui/icons/FileCopyOutlined';
+import SelectColorFormat from 'components/ColorChanger/components/CustomColor/components/SelectColorFormat';
 
 const ToggleButtonUtilsOfCustomGradient = ({
   onSave,

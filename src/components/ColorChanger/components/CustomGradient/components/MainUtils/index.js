@@ -4,9 +4,9 @@ import _ from 'lodash';
 import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
 import compareFunc from 'compare-func';
-import NumberAdornment from '../CustomColor/components/NumberAdornment';
 import CloseIcon from '@material-ui/icons/Close';
 import clsx from 'clsx';
+import NumberAdornment from 'components/ColorChanger/components/CustomColor/components/NumberAdornment';
 const useStyles = makeStyles(theme => ({
   container: {
     margin: theme.spacing(2.16, 4, 0.8, 1.2),
