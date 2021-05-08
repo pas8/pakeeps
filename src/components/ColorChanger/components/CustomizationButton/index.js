@@ -8,8 +8,8 @@ import DialogOfAddingCustomColorToColorLayouts from './components/DialogOfAdding
 const useStyles = makeStyles(theme => ({
   // buttonGroupContainer: {
   //   '&  .MuiBadge-badge': {
-  //     backgroundColor: ({ customColorsInHexFormat, hoverStatusOfButtonOfAddingCustomColorToColorLayouts }) =>
-  //       hoverStatusOfButtonOfAddingCustomColorToColorLayouts ? customColorsInHexFormat : '#424242',
+  //     backgroundColor: ({ colorInHexFormat, hoverStatusOfButtonOfAddingCustomColorToColorLayouts }) =>
+  //       hoverStatusOfButtonOfAddingCustomColorToColorLayouts ? colorInHexFormat : '#424242',
   //     fontSize: theme.spacing(2.42),
   //     fontWeight: 900,
   //     color: themeColors.whiteRgbaColorWith0dot8valueOfAlfaCanal,
@@ -46,7 +46,7 @@ const useStyles = makeStyles(theme => ({
 
 const CustomizationButton = ({
   nullityColor,
-  customColorsInHexFormat,
+  colorInHexFormat,
   setCustomizationsStatus,
   color,
 }) => {
@@ -56,8 +56,8 @@ const CustomizationButton = ({
   // ] = useState(false);
   const [openStatusOfDialog, setOpenStatusOfDialog] = useState(false);
 
-  const classes = useStyles({ customColorsInHexFormat,  });
-  // const classes = useStyles({ customColorsInHexFormat, hoverStatusOfButtonOfAddingCustomColorToColorLayouts });
+  const classes = useStyles({ colorInHexFormat,  });
+  // const classes = useStyles({ colorInHexFormat, hoverStatusOfButtonOfAddingCustomColorToColorLayouts });
 
   // const setHoverStatusOfButtonOfAddingCustomColorToColorLayoutsIsTrue = () =>
   //   setHoverStatusOfButtonOfAddingCustomColorToColorLayouts(true);
@@ -77,7 +77,7 @@ const CustomizationButton = ({
   const dialogOfAddingCustomColorToColorLayoutsProps = {
     open: openStatusOfDialog,
     onClose: setOpenStatusOfDialogIsFalse,
-    customColorsInHexFormat,
+    colorInHexFormat,
     onSave:setOpenStatusOfDialogIsFalse
 
   };
@@ -119,7 +119,7 @@ const CustomizationButton = ({
       // onMouseEnter={onMouseEnter}
       className={classes.buttonGroupContainer}
       size={'small'}
-      style={{ border: '1px solid', borderColor: color === nullityColor ? 'transparent' : customColorsInHexFormat }}
+      style={{ border: '1px solid', borderColor: color === nullityColor ? 'transparent' : colorInHexFormat }}
     >
       {buttonGroupChildren}
       <DialogOfAddingCustomColorToColorLayouts {...dialogOfAddingCustomColorToColorLayoutsProps} />

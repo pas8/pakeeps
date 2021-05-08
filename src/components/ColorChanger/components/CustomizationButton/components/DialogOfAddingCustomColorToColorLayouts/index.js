@@ -5,7 +5,7 @@ import React from 'react';
 import DialogActionsOfAddingCustomColorToColorLayouts from './components/DialogActions';
 import DialogContentOfAddingCustomColorToColorLayouts from './components/DialogContent';
 
-const DialogOfAddingCustomColorToColorLayouts = ({ open, onSave, customColorsInHexFormat, onClose }) => {
+const DialogOfAddingCustomColorToColorLayouts = ({ open, onSave, colorInHexFormat, onClose }) => {
 
 
 
@@ -18,7 +18,7 @@ const DialogOfAddingCustomColorToColorLayouts = ({ open, onSave, customColorsInH
     >
       <DialogTitle>{'Chose any color pattern which you want and add this pattern to your color layouts'}</DialogTitle>
 
-      <DialogContentOfAddingCustomColorToColorLayouts customColorsInHexFormat={customColorsInHexFormat} />
+      <DialogContentOfAddingCustomColorToColorLayouts colorInHexFormat={colorInHexFormat} />
       {/* <ColorPickerByPas/> */}
       <CustomColor/>
       <DialogActionsOfAddingCustomColorToColorLayouts />

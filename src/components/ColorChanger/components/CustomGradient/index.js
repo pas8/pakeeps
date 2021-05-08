@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import {
   Box,
+  Button,
   FilledInput,
   FormControl,
   Grid,
@@ -18,29 +19,34 @@ import PlayArrowOutlinedIcon from '@material-ui/icons/PlayArrowOutlined';
 import KeyboardArrowDownOutlinedIcon from '@material-ui/icons/KeyboardArrowDownOutlined';
 import KeyboardArrowUpOutlinedIcon from '@material-ui/icons/KeyboardArrowUpOutlined';
 import IndeterminateCheckBoxOutlinedIcon from '@material-ui/icons/IndeterminateCheckBoxOutlined';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import _ from 'lodash';
 import { useClickAway } from 'react-use';
+import ButtonUtilsOfCustomGradient from './components/ButtonUtils';
 import PickerByPas from '../CustomColor/components/Picker';
+import InputsColorUtils from '../CustomColor/components/InputsColorUtils';
 import GradientPreviewer from './components/GradientPreviewer';
 import MainUtilsOfCustomGradient from './components/MainUtils';
 import ToggleButtonUtilsOfCustomGradient from './components/ToggleButtonUtils';
+import compareFunc from 'compare-func';
+import { useSnackbar } from 'notistack';
+import RestoreOutlinedIcon from '@material-ui/icons/RestoreOutlined';
 
 const useStyles = makeStyles(theme => ({
   containerOfGradientUtils: {
     padding: theme.spacing(0, 0, 0, 0),
-    borderLeft: '2px solid rgba(255, 255, 255,0.4)'
+    borderLeft: '1px solid rgba(255, 255, 255,0.16)'
   },
   containerOfMainGradientUtils: {
     '& >  div': {
-      paddingTop: theme.spacing(2.4)
+      paddingTop: theme.spacing(2.8)
     },
-    borderTop: '2px solid rgba(255, 255, 255,0.4)'
+    borderTop: '1px solid rgba(255, 255, 255,0.16)'
   },
   containerOfButtonUtilsOfCustomGradient: {
-    paddingTop: theme.spacing(2),
+    paddingTop: theme.spacing(1.8),
     paddingLeft: theme.spacing(1.4),
-    borderTop: '2px solid rgba(255, 255, 255,0.4)'
+    borderTop: '1px solid rgba(255, 255, 255,0.16)'
   },
   wrapperOfGradientUtils: {
     height: '100%',
@@ -51,16 +57,19 @@ const useStyles = makeStyles(theme => ({
     // padding:theme.spacing(0.8),
 
     padding: theme.spacing(1.4, 0.8),
-    borderLeft: '2px solid rgba(255, 255, 255,0.4)'
+    borderLeft: '1px solid rgba(255, 255, 255,0.16)'
   }
 }));
 
-const CustomGradient = () => {
+const CustomGradient = ({ gradientStatus, setGradientStatus }) => {
   // const isExtended = statusState.customColor && statusState.extended;
   // const gradientColorStateLength = gradientColorState.length;
   const classes = useStyles();
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
   const [customFormatName, setCustomFormatName] = useState('rgb');
+
+  const [lastDeletedGradientColorItem, setLastDeletedGradientColorItem] = useState(null);
 
   const [gradientColor, setGradientColor] = useState('null');
   const [gradientAngle, setGradientAngle] = useState(90);
@@ -73,7 +82,7 @@ const CustomGradient = () => {
   ]);
 
   const [currentColor, setCurrentColor] = useState(gradientColorState[0].color);
-const currentColorInHexFormat =  colord(currentColor).toHex();
+  const currentColorInHexFormat = colord(currentColor).toHex();
 
   const [keyOfGradientFocusedElement, setKeyOfGradientFocusedElement] = useState(gradientColorState[0].key);
 
@@ -88,6 +97,45 @@ const currentColorInHexFormat =  colord(currentColor).toHex();
     focusOfPicker: true
   });
 
+  const deleteGradientColorItem = key => {
+    const minGradientColorElement = 2;
+    if (gradientColorState.length <= minGradientColorElement)
+      return enqueueSnackbar({ message: 'Min count of gradient colors is 2', severity: 'error' });
+
+    const filteredArr = _.filter(gradientColorState, ({ key: currentKey }) => currentKey !== key);
+    const deletedItem = _.differenceWith(gradientColorState, filteredArr, _.isEqual);
+    console.log(deletedItem);
+
+    setGradientColorState(filteredArr);
+    setLastDeletedGradientColorItem(deletedItem);
+
+    useRestore();
+  };
+
+  const useRestore = useCallback(() => {
+    enqueueSnackbar({
+      message: 'You delete one color item',
+      severity: 'warning',
+      buttonText: 'Restore',
+      onClick: restoreDeletedItem,
+      icon: RestoreOutlinedIcon
+    });
+  }, [lastDeletedGradientColorItem]);
+
+  const restoreDeletedItem = () => {
+    console.log(gradientColorState, lastDeletedGradientColorItem);
+    setGradientColorState(state => _.concat(state, lastDeletedGradientColorItem).sort(compareFunc('stopDeg')));
+    closeSnackbar();
+  };
+
+  const onClickOfGradientButton = () => setGradientStatus(false);
+  const onClickOfCustomizationButton = () => console.log(onClickOfCustomizationButton);
+  const onClickOfColorPreviewButton = () => console.log(onClickOfColorFormatButton);
+  const onClickOfCopyButton = () => console.log(onClickOfColorFormatButton);
+  const onClickOfSaveButton = () => console.log(onClickOfColorFormatButton);
+  const onClickOfColorFormatButton = () => console.log(onClickOfColorFormatButton);
+  const onClickOfAddToPatternButton = () => console.log(onClickOfAddToPatternButton);
+
   const refOfFocusStatusOfPicker = useRef(null);
   useClickAway(refOfFocusStatusOfPicker, () => setFocusStatusOfPicker(false));
 
@@ -95,7 +143,6 @@ const currentColorInHexFormat =  colord(currentColor).toHex();
   useEffect(() => setFocusStatusOfPicker(true), []);
 
   useEffect(() => {
-    if (color === nullityColor) return;
     if (!statusState.focusOfPicker) return;
 
     const filteredArr = _.filter(
@@ -104,13 +151,13 @@ const currentColorInHexFormat =  colord(currentColor).toHex();
     );
     const focusedElement = _.find(gradientColorState, ({ key }) => keyOfGradientFocusedElement === key);
 
-    filteredArr.push({ ...focusedElement, color: customColorsInHexFormat });
+    filteredArr.push({ ...focusedElement, color: currentColorInHexFormat });
     const sortedArr = filteredArr.sort(compareFunc('stopDeg'));
 
     // _.debounce(() => setGradientColorState(sortedArr), 100);
     // setGradientColorState(sortedArr);
 
-    return _.throttle(() => setGradientColorState(sortedArr), 420);
+    return _.debounce(() => setGradientColorState(sortedArr), 80);
   }, [currentColorInHexFormat, keyOfGradientFocusedElement]);
 
   useEffect(() => {
@@ -129,39 +176,39 @@ const currentColorInHexFormat =  colord(currentColor).toHex();
 
   const setFocusStatusOfPicker = value => setStatusState(state => ({ ...state, focusOfPicker: value }));
 
-  
   const gradientPreviewerProps = {
     gradientColor,
     gradientColorState,
     setGradientColorState,
     keyOfGradientFocusedElement,
-    setKeyOfGradientFocusedElement
+    setKeyOfGradientFocusedElement,
+    deleteGradientColorItem
   };
   const inputsColorUtilsOfCustomColorPickerProps = {
-    color:currentColor,
-    setColor:setCurrentColor,
+    color: currentColor,
+    setColor: setCurrentColor,
     focusOfPicker: statusState.focusOfPicker,
-    customColorsInHexFormat:currentColorInHexFormat,
+    colorInHexFormat: currentColorInHexFormat,
     customFormatName,
     setFocusStatusOfPicker,
     gradientStatus: statusState.gradient
   };
 
   const mainUtilsOfCustomGradientProps = {
-    setColor,
+    setColor: setCurrentColor,
     setGradientColor,
     focusOfPicker: statusState.focusOfPicker,
-    customColorsInHexFormat,
-    color,
-    nullityColor,
+    colorInHexFormat: currentColorInHexFormat,
+    color: currentColor,
     gradientColorState,
     setGradientColorState,
     keyOfGradientFocusedElement,
-    setKeyOfGradientFocusedElement
+    setKeyOfGradientFocusedElement,
+    deleteGradientColorItem
   };
 
   const buttonUtilsOfCustomGradientProps = {
-    color: customColorsInHexFormat,
+    color: currentColorInHexFormat,
     colorPreview: statusState.colorPreview,
     gradientDirection,
     setGradientDirection,
@@ -169,20 +216,41 @@ const currentColorInHexFormat =  colord(currentColor).toHex();
     setGradientAngle
   };
 
+  const toggleButtonUtilsProps = {
+    statusState,
+    setStatusState,
+    colorInHexFormat: currentColorInHexFormat,
+    onClickOfGradientButton,
+    onClickOfCustomizationButton,
+    onClickOfColorPreviewButton,
+    onClickOfCopyButton,
+    onClickOfSaveButton,
+    onClickOfColorFormatButton,
+    onClickOfAddToPatternButton
+  };
+
+  const pickerByPasProps = {
+    color: currentColorInHexFormat,
+    setPickerColor: setCurrentColor,
+    isExtended: true,
+    gradientColorStateLength: gradientColorState.length,
+    gradientStatus: true
+  };
+
   return (
-    <Box>
+    <Grid direction={'row'} container>
       <Box className={classes.containerOfCustomColor} mb={0} mx={0} mt={-0.4}>
         <Box mt={2.8} px={2.8}>
           <GradientPreviewer {...gradientPreviewerProps} />
         </Box>
-        <Grid container className={statusState.gradient && classes.containerOfMainGradientUtils}>
+        <Grid container className={classes.containerOfMainGradientUtils}>
           <Grid item>
             <Box pr={2.8} pb={1.8} pl={1.8}>
               <Box ref={refOfFocusStatusOfPicker} onClick={setFocusStatusOfPickerIsTrue}>
-                <PickerByPas color={color} setPickerColor={setPickerColor} />
+                <PickerByPas {...pickerByPasProps} />
               </Box>
               <Box>
-                <InputsColorUtilsOfCustomColorPicker {...inputsColorUtilsOfCustomColorPickerProps} />
+                <InputsColorUtils {...inputsColorUtilsOfCustomColorPickerProps} />
               </Box>
             </Box>
           </Grid>
@@ -204,7 +272,7 @@ const currentColorInHexFormat =  colord(currentColor).toHex();
           <ToggleButtonUtilsOfCustomGradient {...toggleButtonUtilsProps} />
         </Grid>
       </Box>
-    </Box>
+    </Grid>
   );
 };
 

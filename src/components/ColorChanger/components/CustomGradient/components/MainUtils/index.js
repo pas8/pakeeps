@@ -27,9 +27,9 @@ const useStyles = makeStyles(theme => ({
   textFieldInHexFormat: {
     margin: theme.spacing(0.08, 2, 0, 2),
     width: theme.spacing(8 + 4 + 2),
-    '& .MuiFormLabel-root.Mui-focused ': { color: ({ customColorsInHexFormat }) => customColorsInHexFormat },
+    '& .MuiFormLabel-root.Mui-focused ': { color: ({ colorInHexFormat }) => colorInHexFormat },
     '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
-      borderColor: ({ customColorsInHexFormat }) => customColorsInHexFormat
+      borderColor: ({ colorInHexFormat }) => colorInHexFormat
     },
     '& input': {
       height: theme.spacing(1.8)
@@ -65,34 +65,27 @@ const useStyles = makeStyles(theme => ({
 const MainUtilsOfCustomGradient = ({
   setColor,
   setGradientColor,
-  customColorsInHexFormat,
+  colorInHexFormat,
   color,
   nullityColor,
   gradientColorState,
   setGradientColorState,
   focusOfPicker,
   keyOfGradientFocusedElement,
-  setKeyOfGradientFocusedElement
+  setKeyOfGradientFocusedElement,
+  deleteGradientColorItem
 }) => {
   const [hoverStatusOfCloseButton, setHoverStatusOfCloseButton] = useState(false);
   const [gradientHoveredElementName, setGradientHoveredElementName] = useState(false);
 
-  // console.log(gradientFocusedElementState);
-
-  // const sumReduceFunc = (sum, { color, name }) => ({ ...sum, [name]: color });
-  // const nullityValueOfCustomFormatState = _.reduce(testColorPlaceholder, sumReduceFunc, 1);
-  // console.log(nullityValueOfCustomFormatState);
-
   const onHoverOfCloseButton = () => setHoverStatusOfCloseButton(true);
   const onUnHoverOfCloseButton = () => setHoverStatusOfCloseButton(false);
 
-  // console.log(customColorsInHexFormat);
   const focusedElement = _.find(gradientColorState, ({ key }) => keyOfGradientFocusedElement === key);
   const classes = useStyles({ borderColorOfFocusedInput: focusedElement?.color });
 
-  // useEffect(() => setColor(gradientFocusedElementState.color), [gradientFocusedElementState]);
-
   useEffect(() => !focusOfPicker && setColor(focusedElement?.color), [focusedElement]);
+
   return (
     <Grid container direction={'column'} className={classes.container}>
       {gradientColorState.map(({ color, stopDeg, key }) => {
@@ -122,10 +115,7 @@ const MainUtilsOfCustomGradient = ({
           setGradientColorState(sortedArr);
         };
 
-        const deleteGradientItem = () => {
-          const filteredArr = _.filter(gradientColorState, ({ key: currentKey }) => currentKey !== key);
-          setGradientColorState(filteredArr);
-        };
+        const onDelete = () => deleteGradientColorItem(key);
 
         const hexInputProps = {
           type: 'text',
@@ -191,7 +181,7 @@ const MainUtilsOfCustomGradient = ({
                 selected={isHovered && hoverStatusOfCloseButton}
                 onMouseEnter={onHoverOfCloseButton}
                 onMouseLeave={onUnHoverOfCloseButton}
-                onClick={deleteGradientItem}
+                onClick={onDelete}
                 // onChange={() => {
                 //   setSelected(!selected);
                 // }}

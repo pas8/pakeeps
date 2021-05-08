@@ -24,13 +24,11 @@ const ColorPickerByPas = () => {
   const Container = gradientStatus ? Dialog : Grid;
   return (
     <Container open={gradientStatus} maxWidth={'lg'} className={classes.container}>
-      <Grid container direction={gradientStatus ? 'row' : 'column'}>
-        {!gradientStatus ? (
-          <CustomColor gradientStatus={gradientStatus} setGradientStatus={setGradientStatus} />
-        ) : (
-          <CustomGradient gradientStatus={gradientStatus} setGradientStatus={setGradientStatus} />
-        )}
-      </Grid>
+      {!gradientStatus ? (
+        <CustomColor gradientStatus={gradientStatus} setGradientStatus={setGradientStatus} />
+      ) : (
+        <CustomGradient gradientStatus={gradientStatus} setGradientStatus={setGradientStatus} />
+      )}
     </Container>
   );
 };

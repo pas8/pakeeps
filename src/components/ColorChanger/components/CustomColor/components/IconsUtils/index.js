@@ -31,7 +31,7 @@ const IconUtilsOfCustomColor = ({
   color,
   setCustomFormatName,
   customFormatName,
-  customColorsInHexFormat,
+  colorInHexFormat,
   onClickOfGradientButton,
   onClickOfExtendButton,
   onClickOfPalletteButton,
@@ -52,12 +52,12 @@ const IconUtilsOfCustomColor = ({
     <SelectColorFormat
       customFormatName={customFormatName}
       setCustomFormatName={setCustomFormatName}
-      color={customColorsInHexFormat}
+      color={colorInHexFormat}
     />
   );
 
   const whiteColor = themeColors.whiteRgbaColorWith0dot96valueOfAlfaCanal;
-  const customColor = statusState.colorPreview ? customColorsInHexFormat : whiteColor;
+  const customColor = statusState.colorPreview ? colorInHexFormat : whiteColor;
 
   const buttonUtilsArr = [
     {
@@ -167,7 +167,7 @@ const IconUtilsOfCustomColor = ({
 
 IconUtilsOfCustomColor.propTypes = {
   color: PropTypes.object,
-  customColorsInHexFormat: PropTypes.string,
+  colorInHexFormat: PropTypes.string,
   customColorsStatus: PropTypes.bool,
   customizationButtonProps: PropTypes.object,
   extendMoreColorsStatus: PropTypes.bool,

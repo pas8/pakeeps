@@ -8,6 +8,7 @@ import compareFunc from 'compare-func';
 import { colord, extend } from 'colord';
 import mixPlugin from 'colord/plugins/mix';
 import { nanoid } from 'nanoid';
+import { useIsomorphicLayoutEffect, useMeasure } from 'react-use';
 
 const useStyles = makeStyles(theme => ({
   previewer: {
@@ -66,29 +67,31 @@ const GradientPreviewer = ({
   gradientColorState,
   setGradientColorState,
   keyOfGradientFocusedElement,
-  setKeyOfGradientFocusedElement
+  setKeyOfGradientFocusedElement,
+  deleteGradientColorItem
 }) => {
-  console.log(gradientColorState)
   const focusedColor = _.find(gradientColorState, ({ key }) => key === keyOfGradientFocusedElement)?.color;
   const classes = useStyles({ gradientColor, focusedColor });
 
   const [hoverNameOfDraggingElement, setHoverNameOfDraggingElement] = useState(false);
+  const [refOfGradientPreviewer, { width: widthOfGradientPreviewer }] = useMeasure();
 
-  const i = document.querySelector('#GradientPreviewer');
-  const widthOfPreviewContainer = i?.clientWidth;
   const heightOfDraggableElement = 96 + 1.4;
   const widthOfDraggableElement = 10;
   extend([mixPlugin]);
 
-  const unitOfDraggable = !widthOfPreviewContainer ? 8 : (widthOfPreviewContainer - widthOfDraggableElement) / 100;
-  // console.log(gradientColorState)
+  const unitOfDraggable = !widthOfGradientPreviewer ? 8 : (~~widthOfGradientPreviewer - widthOfDraggableElement) / 100;
+
+  useIsomorphicLayoutEffect(() => {
+    document.onkeydown = evt =>
+      hoverNameOfDraggingElement && evt.code === 'Backspace' && deleteGradientColorItem(hoverNameOfDraggingElement);
+  }, [hoverNameOfDraggingElement]);
 
   const onClickOfGradientPreviewer = ({ nativeEvent: { layerX } }) => {
-    console.log(hoverNameOfDraggingElement);
-
     if (Boolean(hoverNameOfDraggingElement)) return;
 
-    const clickedStopDeg = ~~((layerX / widthOfPreviewContainer) * 100);
+    const targetLayerXValue = ~~((layerX / widthOfGradientPreviewer) * 100);
+    const clickedStopDeg = targetLayerXValue <= 100 ? targetLayerXValue : 100;
 
     const neighborMore = _.find(gradientColorState, ({ stopDeg }) => stopDeg > clickedStopDeg);
     const neighborLess = _.findLast(gradientColorState, ({ stopDeg }) => stopDeg < clickedStopDeg);
@@ -104,8 +107,22 @@ const GradientPreviewer = ({
     // console.log(colorRatio);
   };
   // console.log(gradientColorState);
+  const deleteGradientItem = key => {
+    const minGradientColorElement = 2
+    if (gradientColorState.length <= minGradientColorElement)
+      return enqueueSnackbar({ message: 'Min count of gradient colors is 2', severity: 'error' });
+
+    const filteredArr = _.filter(gradientColorState, ({ key: currentKey }) => currentKey !== key);
+    setGradientColorState(filteredArr);
+    setHoverNameOfDraggingElement(false);
+  };
   return (
-    <Paper className={classes.previewer} id="GradientPreviewer" elevation={0} onClick={onClickOfGradientPreviewer}>
+    <Paper
+      className={classes.previewer}
+      ref={refOfGradientPreviewer}
+      elevation={0}
+      onClick={onClickOfGradientPreviewer}
+    >
       {gradientColorState.map(({ color, stopDeg, key }, idx) => {
         const positionX = unitOfDraggable * stopDeg;
 
@@ -133,17 +150,15 @@ const GradientPreviewer = ({
         };
         const onDrag = (placeholder, { lastX }) => {
           placeholder.preventDefault();
-
+          console.log(lastX);
           // const newStopDegValue = ~~(lastX / unitOfDraggable);
           // const filteredArr = _.filter(gradientColorState, ({ key: gradientColorKey }) => gradientColorKey !== key)
           // filteredArr.push({ color, stopDeg: newStopDegValue, key });
           // const sortedArr =  filteredArr.sort(compareFunc('stopDeg'))
           // setGradientColorState(sortedArr);
         };
-        const deleteGradientItem = () => {
-          const filteredArr = _.filter(gradientColorState, ({ key: currentKey }) => currentKey !== key);
-          console.log(filteredArr)
-          setGradientColorState(filteredArr);
+        const onDoubleClick = () => {
+          deleteGradientItem(key);
         };
 
         const onFocus = () => setKeyOfGradientFocusedElement(key);
@@ -163,7 +178,7 @@ const GradientPreviewer = ({
                 className={classes.draggableElement}
                 item
                 style={{ background: color }}
-                onDoubleClick={deleteGradientItem}
+                onDoubleClick={onDoubleClick}
                 onMouseEnter={() => setHoverNameOfDraggingElement(key)}
                 onMouseLeave={() => setHoverNameOfDraggingElement(false)}
               />

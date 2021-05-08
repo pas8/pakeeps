@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { useEffect, useState } from 'react';
+import { memo, useEffect, useState } from 'react';
 import { Box, Grid, makeStyles } from '@material-ui/core';
 import { themeColors } from 'components/theme';
 import { colord } from 'colord';
@@ -30,7 +30,7 @@ const CustomColor = ({ gradientStatus, setGradientStatus }) => {
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const nullityColor = colord(themeColors.whiteRgbaColorWith0dot8valueOfAlfaCanal).toRgb();
   const [color, setColor] = useState(nullityColor);
-  const customColorsInHexFormat = colord(color).toHex();
+  const colorInHexFormat = colord(color).toHex();
 
   const [statusState, setStatusState] = useState({
     saved: false,
@@ -56,24 +56,22 @@ const CustomColor = ({ gradientStatus, setGradientStatus }) => {
     setStatusState(state => ({ ...state, copy: true }));
 
     try {
-      copyToClipboardFunc(customColorsInHexFormat);
+      copyToClipboardFunc(colorInHexFormat);
       enqueueSnackbar({ message: 'Color was success copied' });
     } catch (error) {
       enqueueSnackbar({ message: 'Something went wrong', severity: 'error' });
     }
   };
-
+  
   useEffect(() => {
-    copyState.value !== customColorsInHexFormat &&
-      statusState.copy &&
-      setStatusState(state => ({ ...state, copy: false }));
+    copyState.value !== colorInHexFormat && statusState.copy && setStatusState(state => ({ ...state, copy: false }));
   }, [color, statusState.copy]);
 
   const onClickCustomizationButton = () => setStatusState(state => ({ ...state, customization: !state.customization }));
 
   const customizationButtonProps = {
     nullityColor,
-    customColorsInHexFormat,
+    colorInHexFormat,
     color
   };
 
@@ -84,7 +82,7 @@ const CustomColor = ({ gradientStatus, setGradientStatus }) => {
     color,
     setColor,
     focusOfPicker: statusState.focusOfPicker,
-    customColorsInHexFormat,
+    colorInHexFormat,
     customFormatName,
     // setFocusStatusOfPicker,
     gradientStatus: statusState.gradient
@@ -96,7 +94,7 @@ const CustomColor = ({ gradientStatus, setGradientStatus }) => {
     customizationButtonProps,
     color,
     onClickCustomizationButton,
-    customColorsInHexFormat,
+    colorInHexFormat,
     setCustomFormatName,
     customFormatName,
     onClickOfGradientButton,
@@ -136,4 +134,4 @@ CustomColor.propTypes = {
   setGradientStatus: PropTypes.func
 };
 
-export default CustomColor;
+export default memo(CustomColor);
