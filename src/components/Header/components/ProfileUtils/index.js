@@ -1,7 +1,10 @@
-import { Badge, IconButton, makeStyles } from '@material-ui/core';
+import { Badge, IconButton, makeStyles, Grid, Typography } from '@material-ui/core';
 import NotificationsNoneOutlinedIcon from '@material-ui/icons/NotificationsNoneOutlined';
 import AccountCircleOutlinedIcon from '@material-ui/icons/AccountCircleOutlined';
-
+import Switch from 'react-switch';
+import { useState } from 'react';
+import Brightness4OutlinedIcon from '@material-ui/icons/Brightness4Outlined';
+import ThemeChangerButton from './components/ThemeChangerButton';
 const useStyles = makeStyles(theme => ({
   profileUtils: {
     // justifySelf: 'flex-end',
@@ -15,11 +18,14 @@ const HeaderProfileUtils = () => {
 
   return (
     <div className={classNames.profileUtils}>
+        <ThemeChangerButton />
+
       <IconButton aria-label={'Notifications'} color={'inherit'}>
         <Badge badgeContent={17} color={'secondary'}>
           <NotificationsNoneOutlinedIcon />
         </Badge>
       </IconButton>
+
       <IconButton
         edge={'end'}
         aria-label={'account of current user'}
