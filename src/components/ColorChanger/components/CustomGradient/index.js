@@ -64,6 +64,8 @@ const CustomGradient = ({ gradientStatus, setGradientStatus }) => {
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
   const [customFormatName, setCustomFormatName] = useState('rgb');
+  const [timeoutDeleteStatus, setTimeoutDeleteStatus] = useState(false);
+  const [timeoutRestoreStatus, setTimeoutRestoreStatus] = useState(false);
 
   const [lastDeletedGradientColorItem, setLastDeletedGradientColorItem] = useState(null);
 
@@ -81,7 +83,7 @@ const CustomGradient = ({ gradientStatus, setGradientStatus }) => {
   const currentColorInHexFormat = colord(currentColor).toHex();
 
   const [keyOfGradientFocusedElement, setKeyOfGradientFocusedElement] = useState(gradientColorState[0].key);
-
+  console.log(keyOfGradientFocusedElement);
   const [statusState, setStatusState] = useState({
     saved: false,
     customization: false,
@@ -94,32 +96,42 @@ const CustomGradient = ({ gradientStatus, setGradientStatus }) => {
   });
 
   const deleteGradientColorItem = key => {
+    setTimeoutDeleteStatus(true);
+    const deletedIndexOfFocusedElement = _.findIndex(gradientColorState, ({ key: findingKey }) => findingKey === key);
+
+    const indexOfFocusedElementAfterDeleted = deletedIndexOfFocusedElement === 0 ? 1 : deletedIndexOfFocusedElement - 1;
+    const forceFocusForPreviousItem = gradientColorState[indexOfFocusedElementAfterDeleted].key;
+
     const minGradientColorElement = 2;
     if (gradientColorState.length <= minGradientColorElement)
       return enqueueSnackbar({ message: 'Min count of gradient colors is 2', severity: 'error' });
 
     const filteredArr = _.filter(gradientColorState, ({ key: currentKey }) => currentKey !== key);
     const deletedItem = _.differenceWith(gradientColorState, filteredArr, _.isEqual);
-    console.log(deletedItem);
 
     setGradientColorState(filteredArr);
     setLastDeletedGradientColorItem(deletedItem);
 
-    useRestore();
-  };
-
-  const useRestore = useCallback(() => {
+    const setTimeoutRestoreStatusIsTrue = () => setTimeoutRestoreStatus(true);
     enqueueSnackbar({
       message: 'You delete one color item',
       severity: 'warning',
       buttonText: 'Restore',
-      onClick: restoreDeletedItem,
+      onClick: setTimeoutRestoreStatusIsTrue,
       icon: RestoreOutlinedIcon
     });
-  }, [lastDeletedGradientColorItem]);
+
+
+    setKeyOfGradientFocusedElement(forceFocusForPreviousItem);
+  };
+
+  useEffect(() => {
+    timeoutRestoreStatus && restoreDeletedItem();
+    setTimeoutRestoreStatus(false);
+    setTimeoutDeleteStatus(false);
+  }, [timeoutRestoreStatus]);
 
   const restoreDeletedItem = () => {
-    console.log(gradientColorState, lastDeletedGradientColorItem);
     setGradientColorState(state => _.concat(state, lastDeletedGradientColorItem).sort(compareFunc('stopDeg')));
     closeSnackbar();
   };
@@ -140,7 +152,7 @@ const CustomGradient = ({ gradientStatus, setGradientStatus }) => {
 
   useEffect(() => {
     if (!statusState.focusOfPicker) return;
-
+    // if (!timeoutDeleteStatus) return;
     const filteredArr = _.filter(
       gradientColorState,
       ({ key: gradientColorKey }) => gradientColorKey !== keyOfGradientFocusedElement
@@ -152,7 +164,6 @@ const CustomGradient = ({ gradientStatus, setGradientStatus }) => {
 
     // _.debounce(() => setGradientColorState(sortedArr), 100);
     // setGradientColorState(sortedArr);
-
     return _.debounce(() => setGradientColorState(sortedArr), 80);
   }, [currentColorInHexFormat, keyOfGradientFocusedElement]);
 

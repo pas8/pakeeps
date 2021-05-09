@@ -17,9 +17,9 @@ const useStyles = makeStyles(theme => ({
     // overflowX: 'hidden'
   }
 }));
-
+  
 const ColorPickerByPas = () => {
-  const [gradientStatus, setGradientStatus] = useState(!false);
+  const [gradientStatus, setGradientStatus] = useState(false);
   const classes = useStyles();
   const Container = gradientStatus ? Dialog : Grid;
   return (

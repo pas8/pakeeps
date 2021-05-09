@@ -9,7 +9,7 @@ import clsx from 'clsx';
 import NumberAdornment from 'components/ColorChanger/components/CustomColor/components/NumberAdornment';
 const useStyles = makeStyles(theme => ({
   container: {
-    margin: theme.spacing(2.16, 4, 0.8, 1.2),
+    margin: theme.spacing(2.16, 2.4, 0.8, 1.2),
 
     '& > div': {
       // width: '20ch',
@@ -88,6 +88,7 @@ const MainUtilsOfCustomGradient = ({
 
   return (
     <Grid container direction={'column'} className={classes.container}>
+
       {gradientColorState.map(({ color, stopDeg, key }) => {
         const isHovered = gradientHoveredElementName === key;
         const isFocused = keyOfGradientFocusedElement === key;
@@ -134,7 +135,6 @@ const MainUtilsOfCustomGradient = ({
           value: stopDeg,
           endAdornment: (
             <Grid className={classes.numberAdornment}>
-              {' '}
               <NumberAdornment />
             </Grid>
           )

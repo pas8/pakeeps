@@ -1,4 +1,4 @@
-import { Box, FormControl, Grid, InputLabel, makeStyles, OutlinedInput } from '@material-ui/core';
+import { Box, FormControl, Grid, InputLabel, makeStyles, OutlinedInput, Typography } from '@material-ui/core';
 import { ToggleButton, ToggleButtonGroup } from '@material-ui/lab';
 import PropTypes from 'prop-types';
 import BlurCircularOutlinedIcon from '@material-ui/icons/BlurCircularOutlined';
@@ -8,7 +8,7 @@ import CircularSlider from '@fseehawer/react-circular-slider';
 import CenteredGrid from 'components/CenteredGrid';
 import NumberAdornment from 'components/ColorChanger/components/CustomColor/components/NumberAdornment';
 import { themeColors } from 'components/theme';
-
+import ExposurePlus1OutlinedIcon from '@material-ui/icons/ExposurePlus1Outlined';
 const useStyles = makeStyles(theme => ({
   containerOfGradientDirectionButtons: {
     marginLeft: theme.spacing(1.6),
@@ -29,7 +29,8 @@ const useStyles = makeStyles(theme => ({
     }
   },
   inputOfGradientAngle: {
-    width: theme.spacing(10 + 0.8),
+    marginLeft: theme.spacing(-0.4),
+    width: theme.spacing(10),
     '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
       borderColor: ({ color, colorPreview }) =>
         colorPreview ? color : themeColors.whiteRgbaColorWith0dot96valueOfAlfaCanal
@@ -56,7 +57,9 @@ const ButtonUtilsOfCustomGradient = ({
   // console.log(hoverStatusOFCircleSlider);
 
   const handleChangeOfCircleSlider = value => setGradientAngle(value);
-  const handleChangeOfGradientAngleInput = ({ target: { value } }) => setGradientAngle(value);
+  const handleChangeOfGradientAngleInput = ({ target: { value } }) => {
+    setGradientAngle(value);
+  };
 
   const gradientAngleInputProps = {
     type: 'number',
@@ -81,7 +84,6 @@ const ButtonUtilsOfCustomGradient = ({
     width: 42 + 8,
     trackColor: `rgba(255,255,255,0.${hoverStatusOFCircleSlider ? 8 : 2})`
   };
-
   return (
     <Grid container>
       <Grid item>
@@ -119,6 +121,17 @@ const ButtonUtilsOfCustomGradient = ({
           </Grid>
         </Box>
       )}
+      <ToggleButtonGroup
+        className={classes.containerOfGradientDirectionButtons}
+        exclusive
+      >
+        <ToggleButton value={'linear-gradient'}>
+          {/* <ExposurePlus1OutlinedIcon /> */}
+          <Box fontWeight={900}>
+            <Typography variant={'h5'}> +1</Typography>
+          </Box>
+        </ToggleButton>
+      </ToggleButtonGroup>
     </Grid>
   );
 };

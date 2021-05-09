@@ -107,15 +107,8 @@ const GradientPreviewer = ({
     // console.log(colorRatio);
   };
   // console.log(gradientColorState);
-  const deleteGradientItem = key => {
-    const minGradientColorElement = 2
-    if (gradientColorState.length <= minGradientColorElement)
-      return enqueueSnackbar({ message: 'Min count of gradient colors is 2', severity: 'error' });
 
-    const filteredArr = _.filter(gradientColorState, ({ key: currentKey }) => currentKey !== key);
-    setGradientColorState(filteredArr);
-    setHoverNameOfDraggingElement(false);
-  };
+
   return (
     <Paper
       className={classes.previewer}
@@ -132,8 +125,13 @@ const GradientPreviewer = ({
         const onStop = (placeholder, { lastX }) => {
           placeholder.preventDefault();
 
-          const newStopDegValue = ~~(lastX / unitOfDraggable);
+          let newStopDegValue = ~~(lastX / unitOfDraggable);
           const filteredArr = _.filter(gradientColorState, ({ key: gradientColorKey }) => gradientColorKey !== key);
+
+          const isMin = lastX < 0;
+          const isMax = lastX > widthOfGradientPreviewer;
+          if (isMin || isMax) newStopDegValue = stopDeg;
+
           filteredArr.push({ color, stopDeg: newStopDegValue, key });
           const sortedArr = filteredArr.sort(compareFunc('stopDeg'));
           setGradientColorState(sortedArr);
@@ -149,8 +147,10 @@ const GradientPreviewer = ({
           // setGradientColorState(sortedArr);
         };
         const onDrag = (placeholder, { lastX }) => {
-          placeholder.preventDefault();
-          console.log(lastX);
+          const isMin = lastX < 0;
+          const isMax = lastX > widthOfGradientPreviewer;
+
+          // if (isMin || isMax) 
           // const newStopDegValue = ~~(lastX / unitOfDraggable);
           // const filteredArr = _.filter(gradientColorState, ({ key: gradientColorKey }) => gradientColorKey !== key)
           // filteredArr.push({ color, stopDeg: newStopDegValue, key });
@@ -158,16 +158,17 @@ const GradientPreviewer = ({
           // setGradientColorState(sortedArr);
         };
         const onDoubleClick = () => {
-          deleteGradientItem(key);
+          deleteGradientColorItem(key);
         };
-
         const onFocus = () => setKeyOfGradientFocusedElement(key);
+
+        const handle = '.handle';
         const draggableProps = {
           onStart,
           onDrag,
           onStop,
           axis: 'x',
-          handle: '.handle',
+          handle,
           position: { x: positionX, y: positionY }
         };
 
