@@ -1,7 +1,7 @@
 const CHANGE_VIEW_OF_THEME_CHANGER_BUTTON = 'CHANGE_VIEW_OF_THEME_CHANGER_BUTTON';
 const CHANGE_MAX_SNACK_VALUE = 'CHANGE_MAX_SNACK_VALUE';
 
-const initialState = { viewOfThemeChangerButton: 'iconButton', maxSnack: 4 };
+const initialState = { viewOfThemeChangerButton: 'iconButton', maxSnack: 4, };
 
 const settingsReducer = (state = initialState, action) => {
   switch (action.type) {
@@ -23,6 +23,9 @@ const changeMaxSnackValue = snackNumber => ({
   type: CHANGE_MAX_SNACK_VALUE,
   snackNumber
 });
+
+
+
 export const changeMaxSnackValueThunk = snackNumber => dispatch => {
   dispatch(changeMaxSnackValue(snackNumber));
 };

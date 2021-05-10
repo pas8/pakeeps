@@ -1,43 +1,36 @@
-import { Badge, IconButton, makeStyles, Grid, Typography } from '@material-ui/core';
-import NotificationsNoneOutlinedIcon from '@material-ui/icons/NotificationsNoneOutlined';
-import AccountCircleOutlinedIcon from '@material-ui/icons/AccountCircleOutlined';
-import Switch from 'react-switch';
-import { useState } from 'react';
-import Brightness4OutlinedIcon from '@material-ui/icons/Brightness4Outlined';
+import { makeStyles, Tooltip, Grid } from '@material-ui/core';
 import ThemeChangerButton from './components/ThemeChangerButton';
+import NoticationButton from './components/NoticationButton';
+import AvatarButtor from './components/AvatarButtor';
+
 const useStyles = makeStyles(theme => ({
   profileUtils: {
-    // justifySelf: 'flex-end',
     display: 'flex'
-    // justifyItems: 'flex-end'
   }
 }));
 
 const HeaderProfileUtils = () => {
-  const classNames = useStyles();
+  const classes = useStyles();
+
+  const iconButtonUtilsArr = [
+    { component: ThemeChangerButton, toolTipText: 'Change theme' },
+    { component: NoticationButton, toolTipText: 'Number of notifications' },
+    { component: AvatarButtor, toolTipText: 'Open your profile' }
+  ];
 
   return (
-    <div className={classNames.profileUtils}>
-        <ThemeChangerButton />
-
-      <IconButton aria-label={'Notifications'} color={'inherit'}>
-        <Badge badgeContent={17} color={'secondary'}>
-          <NotificationsNoneOutlinedIcon />
-        </Badge>
-      </IconButton>
-
-      <IconButton
-        edge={'end'}
-        aria-label={'account of current user'}
-        // aria-controls={menuId}
-        aria-haspopup={'true'}
-        // onClick={handleProfileMenuOpen}
-        color={'inherit'}
-      >
-        <AccountCircleOutlinedIcon />
-      </IconButton>
+    <div className={classes.profileUtils}>
+      {iconButtonUtilsArr.map(({ component: Component, toolTipText }) => (
+        <Tooltip title={toolTipText} >
+          <Grid container>
+            <Component />
+          </Grid>
+        </Tooltip>
+      ))}
     </div>
   );
 };
+
+HeaderProfileUtils.propTypes = {};
 
 export default HeaderProfileUtils;

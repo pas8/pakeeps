@@ -2,6 +2,7 @@ const ADD_NEW_PAKEEP = 'ADD_NEW_PAKEEP';
 const CHANGE_PAKEEP_COLUMNS = 'CHANGE_PAKEEP_COLUMNS';
 const CHANGE_TWO_PAKEEP_COLUMNS = 'CHANGE_TWO_PAKEEP_COLUMNS';
 const ADD_DATE_TO_PAKEEP = 'ADD_DATE_TO_PAKEEP';
+const IS_MENU_OPEN = 'IS_MENU_OPEN';
 
 const initialState = {
   data: 1,
@@ -83,7 +84,7 @@ const initialState = {
       color: 'default',
       labels: [{ color: 'secondary', title: 'Hobby', icon: 'alarm', key: 4 }],
       id: 'pakeep6',
-      events:[{ color: 'secondary', title: 'Hobby', icon: 'alarm', key: 4 }]
+      events: [{ color: 'secondary', title: 'Hobby', icon: 'alarm', key: 4 }]
     }
   },
 
@@ -179,13 +180,17 @@ const initialState = {
       }
     }
   },
-  columnOrder: ['column-1', 'column-2', 'column-3', 'column-4', 'column-5', 'column-6']
+  columnOrder: ['column-1', 'column-2', 'column-3', 'column-4', 'column-5', 'column-6'],
+  notifinationCounter: 8,
+  isMenuOpen: false
 };
 
 const AppReducer = (state = initialState, action) => {
   switch (action.type) {
     case ADD_NEW_PAKEEP:
       return { ...state, pakeeps: { ...state.pakeeps, [action.newPaKeep.id]: action.newPaKeep } };
+    case IS_MENU_OPEN:
+      return { ...state, isMenuOpen: action.boolStatus };
 
     case CHANGE_PAKEEP_COLUMNS:
       return {
@@ -213,7 +218,13 @@ const AppReducer = (state = initialState, action) => {
     case ADD_DATE_TO_PAKEEP:
       return {
         ...state,
-        pakeeps: { ...state.pakeeps, [action.pakeepId]: { ...state.pakeeps[action.pakeepId], date: [...state.pakeeps[action.pakeepId].date, action.event] } }
+        pakeeps: {
+          ...state.pakeeps,
+          [action.pakeepId]: {
+            ...state.pakeeps[action.pakeepId],
+            date: [...state.pakeeps[action.pakeepId].date, action.event]
+          }
+        }
       };
 
     default:
@@ -222,6 +233,7 @@ const AppReducer = (state = initialState, action) => {
 };
 
 const addNewPakeep = data => ({ type: ADD_NEW_PAKEEP, newPaKeep: data });
+const setMenuOpenStatus = boolStatus => ({ type: IS_MENU_OPEN, boolStatus });
 const changeColumns = (columnValue, breakpointName) => ({ type: CHANGE_PAKEEP_COLUMNS, columnValue, breakpointName });
 const addDateToPakeep = (pakeepId, event) => ({ type: ADD_DATE_TO_PAKEEP, pakeepId, event });
 const changeTwoColumns = (startColumn, finishColumn, breakpointName) => ({
@@ -233,6 +245,10 @@ const changeTwoColumns = (startColumn, finishColumn, breakpointName) => ({
 
 export const addNewPaKeepThunk = data => dispatch => {
   dispatch(addNewPakeep(data));
+};
+
+export const setMenuOpenStatusThunk = boolStatus => dispatch => {
+  dispatch(setMenuOpenStatus(boolStatus));
 };
 
 export const addDateToPakeepThunk = (pakeepId, event) => dispatch => {

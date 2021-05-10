@@ -16,26 +16,29 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const MainBar = ({open,handleOpenStatusOFDrawer}) => {
+const MainBar = ({ handleDrawerOpen, isMenuOpen }) => {
   const classes = useStyles();
 
   return (
     <>
       <IconButton
         aria-label={'open drawer'}
-        onClick={handleOpenStatusOFDrawer}
+        onClick={handleDrawerOpen}
         edge={'start'}
-        className={clsx(classes.menuButton, open && classes.hide)}
+        className={clsx(classes.menuButton, isMenuOpen && classes.hide)}
       >
         <MenuIcon />
       </IconButton>
       <Typography variant={'h6'} className={classes.typography}>
-        Pakeeps  
+        Pakeeps
       </Typography>
     </>
   );
 };
 
-MainBar.propTypes = {};
+MainBar.propTypes = {
+  handleDrawerOpen: PropTypes.func,
+  isMenuOpen: PropTypes.bool
+};
 
 export default MainBar;

@@ -22,17 +22,18 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const HeaderDrawer = ({ open, handleDrawerClose }) => {
+const HeaderDrawer = ({ isMenuOpen, handleDrawerClose }) => {
   // const drawerWidth = takePercentage();
 
   const classes = useStyles();
   const theme = useTheme();
+
   return (
     <Drawer
       className={classes.drawer}
       variant={'persistent'}
       anchor={'right'}
-      open={open}
+      open={isMenuOpen}
       classes={{
         paper: classes.drawerPaper
       }}
@@ -49,7 +50,7 @@ const HeaderDrawer = ({ open, handleDrawerClose }) => {
 
 HeaderDrawer.propTypes = {
   handleDrawerClose: PropTypes.func,
-  open: PropTypes.bool
+  isMenuOpen: PropTypes.bool
 };
 
 export default HeaderDrawer;

@@ -1,20 +1,15 @@
 import PropTypes from 'prop-types';
-import { Badge, IconButton, makeStyles, Grid, Typography } from '@material-ui/core';
-import NotificationsNoneOutlinedIcon from '@material-ui/icons/NotificationsNoneOutlined';
-import AccountCircleOutlinedIcon from '@material-ui/icons/AccountCircleOutlined';
+import { IconButton, Grid, Typography } from '@material-ui/core';
 import Switch from 'react-switch';
-import { useState } from 'react';
 import Brightness4OutlinedIcon from '@material-ui/icons/Brightness4Outlined';
 import { useSnackbar } from 'notistack';
+import { connect } from 'react-redux';
 
-const useStyles = makeStyles(theme => ({}));
-
-const ThemeChangerButton = () => {
-  const classes = useStyles();
-  const [state, setState] = useState(true);
+const ThemeChangerButton = ({ viewOfThemeChangerButton }) => {
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
-  const themeOlaceholderFunc = () => enqueueSnackbar({ message: 'White theme sucks, unluckky', severity: 'info' });
+  const themeOlaceholderFunc = () =>
+    enqueueSnackbar({ message: 'White theme sucks, I am sr, just unluckky 😅', severity: 'info' });
 
   const handleDiameter = 24;
   const circleColor = '#d8d8d8';
@@ -39,16 +34,26 @@ const ThemeChangerButton = () => {
 
   return (
     <>
-      <IconButton aria-label={'Notifications'} color={'inherit'}>
-        <Brightness4OutlinedIcon />
-      </IconButton>
-      <Grid container alignItems={'center'}>
-        <Switch {...switchProps}/>
-      </Grid>
+      {viewOfThemeChangerButton && (
+        <>
+          {viewOfThemeChangerButton === 'iconButton' && (
+            <IconButton aria-label={'Notifications'} color={'inherit'} onClick={themeOlaceholderFunc}>
+              <Brightness4OutlinedIcon />
+            </IconButton>
+          )}
+          {viewOfThemeChangerButton === 'switch' && (
+            <Grid container alignItems={'center'}>
+              <Switch {...switchProps} />
+            </Grid>
+          )}
+        </>
+      )}
     </>
   );
 };
 
-ThemeChangerButton.propTypes = {};
+ThemeChangerButton.propTypes = { viewOfThemeChangerButton: PropTypes.oneOf(['string', 'bool']) };
 
-export default ThemeChangerButton;
+const mapStateToProps = ({ settings: { viewOfThemeChangerButton } }) => ({ viewOfThemeChangerButton });
+
+export default connect(mapStateToProps, null)(ThemeChangerButton);

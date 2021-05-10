@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 import clsx from 'clsx';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
@@ -21,6 +22,8 @@ import HeaderDrawer from './components/Drawer';
 import HeaderProfileUtils from './components/ProfileUtils';
 import { Box } from '@material-ui/core';
 import MainBar from './components/MainBar';
+import { setMenuOpenStatusThunk } from 'store/AppReducer';
+import { connect } from 'react-redux';
 
 const drawerWidth = 240;
 
@@ -56,32 +59,36 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const HeaderByPas = ({ children }) => {
+const HeaderByPas = ({ setMenuOpenStatusThunk, isMenuOpen }) => {
   const classes = useStyles();
-  const theme = useTheme();
-  const [open, setOpen] = useState(false);
 
-  const handleOpenStatusOFDrawer = () => setOpen(true);
+  const handleDrawerOpen = () => setMenuOpenStatusThunk(true);
+  const handleDrawerClose = () => setMenuOpenStatusThunk(false);
 
   return (
     <div className={classes.root}>
       <CssBaseline />
-      <AppBar
-        // component={' div'}
-        // position="fixed"
-        className={clsx(classes.appBar, {
-          [classes.appBarShift]: open
-        })}
-        // color={'secondary'}
-      >
+      <AppBar className={clsx(classes.appBar, { [classes.appBarShift]: isMenuOpen })}>
         <Toolbar className={classes.toolBar}>
-          <MainBar handleOpenStatusOFDrawer={handleOpenStatusOFDrawer} open={open} />
+          <MainBar handleDrawerOpen={handleDrawerOpen} isMenuOpen={isMenuOpen} />
           <HeaderSearch />
           <HeaderProfileUtils />
         </Toolbar>
       </AppBar>
-      <HeaderDrawer open={open} handleDrawerClose={handleOpenStatusOFDrawer} />
+      <HeaderDrawer isMenuOpen={isMenuOpen} handleDrawerClose={handleDrawerClose} />
     </div>
   );
 };
-export default HeaderByPas;
+
+HeaderByPas.propTypes = {
+  isMenuOpen: PropTypes.bool,
+  setMenuOpenStatusThunk: PropTypes.func
+};
+
+const mapStateToProps = ({ app: { isMenuOpen } }) => ({ isMenuOpen });
+
+const mapDispatchToProps = dispatch => ({
+  setMenuOpenStatusThunk: boolStatus => dispatch(setMenuOpenStatusThunk(boolStatus))
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(HeaderByPas);
