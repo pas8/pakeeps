@@ -31,7 +31,7 @@ const HeaderLayout = ({ children }) => {
       <HeaderByPas />
       <main
         className={clsx(classes.content, {
-          [classes.contentShift]: open
+          [classes.contentShift]: !false
         })}
       >
         {children}

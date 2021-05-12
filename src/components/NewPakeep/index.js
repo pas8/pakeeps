@@ -79,12 +79,12 @@ const NewPaKeep = ({ pakeeps, addNewPaKeepThunk }) => {
     setWritingText(false);
     setState({ title: '', text: '', bookmark: false, favorite: false, color: 'transparent', labels: false });
   };
-  document.onkeydown = evt => {
-    if (evt.key === 'Enter' && enter === false) setEnter(true);
-    else if (enter === true && evt.key !== 'Enter') setEnter(false);
+  // document.onkeydown = evt => {
+  //   if (evt.key === 'Enter' && enter === false) setEnter(true);
+  //   else if (enter === true && evt.key !== 'Enter') setEnter(false);
 
-    if (evt.key === 'Enter' && changingTitle === true) setChangingTitle(false);
-  };
+  //   if (evt.key === 'Enter' && changingTitle === true) setChangingTitle(false);
+  // };
   const handleSetWidthInNewPakeep = () => setFullWidthOfNewPakeepContainer(!fullWidthOfNewPakeepContainer);
 
   return (
