@@ -14,7 +14,6 @@ export default class MyDocument extends Document {
           />
         </Head>
         <body>
-          fuck
           <Main />
           <NextScript />
         </body>

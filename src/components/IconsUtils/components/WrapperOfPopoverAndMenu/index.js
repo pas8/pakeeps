@@ -8,7 +8,8 @@ const WrapperOfPopoverAndMenu = ({
   popoverAndMenuState,
   keyName,
   isIconNameExtended = false,
-  iconSize = 'default'
+  iconSize = 'default',
+  handleAverageMainComponentWidth
 }) => {
   return (
     <>
@@ -42,7 +43,8 @@ const WrapperOfPopoverAndMenu = ({
             size: iconSize,
             activeIcon,
             activeIconName: popoverAndMenuState.name,
-            activeProperty: popoverAndMenuState.popoverIsOpen
+            activeProperty: popoverAndMenuState.popoverIsOpen,
+            handleAverageMainComponentWidth
           };
 
           const menuComponents = !onlyPopover && MenuComponents && (
@@ -70,7 +72,7 @@ const WrapperOfPopoverAndMenu = ({
 };
 
 WrapperOfPopoverAndMenu.propTypes = {
-  CustomElementComponentOfIconGroup: PropTypes.oneOf(['bool', 'node']),
+  CustomElementComponentOfIconGroup: PropTypes.oneOf(["bool", "node"]),
   buttonUtilsArr: PropTypes.shape({
     map: PropTypes.func
   }),
@@ -84,6 +86,6 @@ WrapperOfPopoverAndMenu.propTypes = {
     onMenuClose: PropTypes.func,
     popoverIsOpen: PropTypes.bool
   })
-};
+}
 
 export default WrapperOfPopoverAndMenu;

@@ -4,6 +4,7 @@ import { useSnackbar } from 'notistack';
 import { makeStyles, Box, Button } from '@material-ui/core';
 import SaveIcon from '@material-ui/icons/Save';
 import IconsUtils from 'components/IconsUtils';
+import { useMeasure } from 'react-use';
 
 // import SaveOutlinedIcon from '@material-ui/icons/SaveOutlined';
 const useStyles = makeStyles(theme => ({
@@ -20,21 +21,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const NewPakeepUtils = ({
-  open = !true,
-  setEditTitleIsTrue,
-  favorite = true,
-  handleSetFavoritePakeep,
-  changingTitle,
-  bookmark,
-  labels,
-  checkbox,
-  handleSetBookmarkPakeep,
-  handleSetColorPakeep,
-  handleNewPakeepSave,
-  handleSetWidth,
-  fullWidthOfNewPakeepContainer
-}) => {
+const NewPakeepUtils = ({ open = !true, handleNewPakeepSave, widthOfContainer,...newPakeepUtilsProps }) => {
   const classes = useStyles();
 
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
@@ -43,22 +30,21 @@ const NewPakeepUtils = ({
     enqueueSnackbar('Processing...');
     handleNewPakeepSave();
   };
+
+
+  const [ref, { width:widthOfCButtonConatiner }] = useMeasure();
+
+
+  const correctWidthOfContainer = widthOfContainer - widthOfCButtonConatiner
+  const iconUtilsProps = {
+    ...newPakeepUtilsProps,
+    widthOfContainer:correctWidthOfContainer
+  };
+console.log(correctWidthOfContainer)
   return (
     <Box className={clsx(classes.container, !open ? classes.hidden : null)}>
-      <IconsUtils
-        setEditTitleIsTrue={setEditTitleIsTrue}
-        favorite={favorite}
-        handleSetFavoritePakeep={handleSetFavoritePakeep}
-        changingTitle={changingTitle}
-        bookmark={bookmark}
-        labels={labels}
-        checkbox={checkbox}
-        handleSetBookmarkPakeep={handleSetBookmarkPakeep}
-        handleSetColorPakeep={handleSetColorPakeep}
-        handleSetWidth={handleSetWidth}
-        fullWidth={fullWidthOfNewPakeepContainer}
-      />
-      <Box className={classes.buttonGroupWrapper}>
+      <IconsUtils {...iconUtilsProps} />
+      <Box className={classes.buttonGroupWrapper} ref={ref}>
         <Box className={classes.buttonWrapper}>
           <Button color={'success'} style={{ color: 'rgba(255,255,255,0.4)' }}>
             Close
