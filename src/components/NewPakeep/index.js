@@ -10,7 +10,7 @@ import BookmarkIcon from '@material-ui/icons/Bookmark';
 import { connect } from 'react-redux';
 import { addNewPaKeepThunk } from 'store/AppReducer';
 import wordcount from 'wordcount';
-import { useCookie, useMeasure } from 'react-use';
+import { useCookie, useMeasure, usePageLeave } from 'react-use';
 import _ from 'lodash';
 
 const useStyles = makeStyles(theme => ({
@@ -50,7 +50,8 @@ const NewPaKeep = ({ pakeeps, addNewPaKeepThunk }) => {
   const [value, updateCookie, deleteCookie] = useCookie(state);
 
   useEffect(() => _.isEqual(state, nulittyState) && setState(JSON.parse(value)), []);
-  useEffect(() => updateCookie(state), [state]);
+
+  usePageLeave(() =>  updateCookie(state));
 
   const [focus, setFocus] = useState(false);
   const [placeholder, setPlaceholder] = useState('Write a title or press ctrl + Alt + 8 to skip a title');
@@ -96,7 +97,7 @@ const NewPaKeep = ({ pakeeps, addNewPaKeepThunk }) => {
   // };
   const handleSetWidthInNewPakeep = () => setFullWidthOfNewPakeepContainer(!fullWidthOfNewPakeepContainer);
 
-  const [ref, { width:widthOfContainer }] = useMeasure();
+  const [ref, { width: widthOfContainer }] = useMeasure();
 
   const newPakeepUtils = {
     ...state,
@@ -108,10 +109,9 @@ const NewPaKeep = ({ pakeeps, addNewPaKeepThunk }) => {
     handleSetColorPakeep,
     handleNewPakeepSave,
     handleSetWidth: handleSetWidthInNewPakeep,
-    fullWidthStatus:fullWidthOfNewPakeepContainer,
+    fullWidthStatus: fullWidthOfNewPakeepContainer,
     widthOfContainer
   };
-
 
   return (
     <Grid

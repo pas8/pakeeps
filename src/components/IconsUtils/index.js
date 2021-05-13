@@ -16,7 +16,12 @@ import UnfoldLessOutlinedIcon from '@material-ui/icons/UnfoldLessOutlined';
 import AddDateToPakeep from './components/AddDateToPakeep';
 import ColorPickerByPas from 'components/ColorChanger';
 import WrapperOfPopoverAndMenu from './components/WrapperOfPopoverAndMenu';
+import MoreVertOutlinedIcon from '@material-ui/icons/MoreVertOutlined';
 import { useSliced } from 'hooks/useSliced';
+import ArrowDropDownCircleOutlinedIcon from '@material-ui/icons/ArrowDropDownCircleOutlined';
+import _ from 'lodash';
+import MoreUtils from './components/MoreUtils';
+import PlayCircleOutlineOutlinedIcon from '@material-ui/icons/PlayCircleOutlineOutlined';
 
 const useStyles = makeStyles(theme => ({
   popover: { padding: theme.spacing(0.4, 0.8) },
@@ -129,7 +134,6 @@ const IconsUtils = ({
     widthOfContainer,
     buttonUtilsNewPakeepArray
   );
-  console.log(buttonUtilsNewPakeepArray, slicedArr, isShouldBeSliced);
 
   const nonSlicedwrapperOfPopoverAndMenuProps = {
     buttonUtilsArr: buttonUtilsNewPakeepArray,
@@ -139,16 +143,16 @@ const IconsUtils = ({
   };
 
   const buttonMoreOfItemOfArrWhichWasSliced = {
-    icon: EventAvailableOutlinedIcon,
-    popoverText: 'Add date to pakeep',
-    name: 'date',
+    icon: PlayCircleOutlineOutlinedIcon,
+    rotateDeg: 90,
+    popoverText: 'Open more utils',
+    name: 'moreUtils',
     onClick: handleClick,
-    menuComponents: AddDateToPakeep,
-    // menuComponentsProps
+    menuComponents: MoreUtils,
+    menuComponentsProps:{slicedArrAfter:slicedArr.after}
   };
 
-  const buttonUtilsSlicedAndConcatedWithMoreButtonArr = _.concat(slicedArr, buttonMoreOfItemOfArrWhichWasSliced);
-
+  const buttonUtilsSlicedAndConcatedWithMoreButtonArr = _.concat(slicedArr.before, buttonMoreOfItemOfArrWhichWasSliced);
   const slicedWrapperOfPopoverAndMenuProps = {
     buttonUtilsArr: buttonUtilsSlicedAndConcatedWithMoreButtonArr,
     handlePopoverAndMenuState,
