@@ -1,16 +1,16 @@
 import NextAuth from 'next-auth';
 import Providers from 'next-auth/providers';
-
+require('dotenv').config()
 import config from 'config';
 
   console.log(); 
 
 const options = {
   providers: [
-    Providers.GitHub({
-      clientId: config.get('github.id'),
-      clientSecret: config.get('github.secret'),
-    }),
+    // Providers.GitHub({
+    //   clientId: config.get('github.id'),
+    //   clientSecret: config.get('github.secret'),
+    // }),
     // Providers.Email({
     //   server: {
     //     host: '',
