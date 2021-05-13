@@ -15,10 +15,13 @@ export const themeColors = {
   secondaryMain: '#00b0ff',
   whiteRgbaColorWith0dot8valueOfAlfaCanal: 'rgba(255,255,255,0.8)',
   whiteRgbaColorWith0dot42valueOfAlfaCanal: 'rgba(255,255,255,0.42)',
-  whiteRgbaColorWith0dot96valueOfAlfaCanal: 'rgba(255,255,255,0.96)',
+  whiteRgbaColorWith0dot96valueOfAlfaCanal: 'rgba(255,255,255,0.96)'
 };
 
-export const breakpoints = [1920, 1280, 960, 600, 400, 0];
+export const breakpointsObj = { xs: 0, sm: 600, md: 960, lg: 1280, xl: 1920 };
+
+const { xs, sm, md, lg, xl } = breakpointsObj;
+export const breakpoints = [xl, lg, md, sm, xs];
 
 export const theme = responsiveFontSizes(
   createMuiTheme({
