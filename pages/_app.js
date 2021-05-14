@@ -27,7 +27,7 @@ const MyApp = ({ Component, pageProps }) => {
       jssStyles.parentElement.removeChild(jssStyles);
     }
   }, []);
-
+console.log(store)
   return (
     <ThemeProvider theme={theme}>
       <MuiPickersUtilsProvider utils={DateFnsUtils}>

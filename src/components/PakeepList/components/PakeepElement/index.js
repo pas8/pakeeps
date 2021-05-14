@@ -12,6 +12,7 @@ import { takeValueFromBreakpoints } from 'hooks/takeValueFromBreakpoints.hook';
 import { useMeasure } from 'react-use';
 import { themeColors } from 'components/theme';
 import AttributeGroup from './components/AttributeGroup';
+import { connect } from 'react-redux';
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -51,7 +52,7 @@ const useStyles = makeStyles(theme => ({
   title: { textOverflow: 'ellipsis', overflow: 'hidden' },
   isDragging: { borderColor: themeColors.primaryMain }
 }));
-const PakeepElement = ({ title, text, bookmark, favorite, color, labels, isDragging, id, events }) => {
+const PakeepElement = ({ title, text, bookmark, favorite, color, labels, isDragging, id, events ,utilsViewLikeInGoogleKeep}) => {
   const classes = useStyles(color);
   const [hover, setHover] = useState(false);
   const [labelHover, setLabelHover] = useState(!false);
@@ -121,6 +122,6 @@ PakeepElement.propTypes = {
   title: PropTypes.string
 };
 
-const mapStateToProps = ({ setting: { utilsViewLikeInGoogleKeep } }) => ({ utilsViewLikeInGoogleKeep });
+const mapStateToProps = ({ settings: { utilsViewLikeInGoogleKeep } }) => ({ utilsViewLikeInGoogleKeep });
 
-export default connect(mapStateToProps, mapDispatchToProps)(PakeepElement);
+export default connect(mapStateToProps)(PakeepElement);

@@ -165,7 +165,7 @@ const initialState = {
     },
     xs: {
       'column-1': {
-        id: 'xs-column-1',
+        id: 'column-1',
         title: 'Column 1',
         pakeepIds: ['pakeep1', 'pakeep2', 'pakeep3', 'pakeep4', 'pakeep5', 'pakeep6']
       }

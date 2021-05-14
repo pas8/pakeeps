@@ -1,7 +1,7 @@
 import { createReducer } from 'store/utils';
 import * as types from './types';
 
-const settingsInitialState = { viewOfThemeChangerButton: 'iconButton', maxSnack: 4 };
+const settingsInitialState = { viewOfThemeChangerButton: 'iconButton', maxSnack: 4, utilsViewLikeInGoogleKeep: false };
 
 const settingsReducer = createReducer(settingsInitialState)({
   [types.VIEW_OF_THEME_CHANGER_BUTTON]: (state, { data }) => ({ ...state, viewOfThemeChangerButton: data }),

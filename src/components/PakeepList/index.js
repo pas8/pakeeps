@@ -7,7 +7,7 @@ import { useMeasure } from 'react-use';
 import { useState } from 'react';
 import Column from './components/Column';
 import { DragDropContext } from 'react-beautiful-dnd';
-import { changePakeepColumnsDataThunk, changeTwoPakeepColumnsDataThunk } from 'store/AppReducer/index';
+import { changePakeepColumnsDataThunk, changeTwoPakeepColumnsDataThunk } from 'store/modules/App/operations';
 import { takeValueFromBreakpoints } from 'hooks/takeValueFromBreakpoints.hook';
 const useStyles = makeStyles(theme => ({
   container: { margin: theme.spacing(8, 0, 0, 0) }
@@ -21,6 +21,7 @@ const PakeepList = ({
   changePakeepColumnsDataThunk,
   changeTwoPakeepColumnsDataThunk
 }) => {
+
   const classes = useStyles();
   let breakpointNames = takeValueFromBreakpoints();
 
@@ -34,7 +35,9 @@ const PakeepList = ({
     const columnStart = responsiveColumns[source.droppableId];
     const columnFinish = responsiveColumns[destination.droppableId];
 
+console.log(source.droppableId,destination.droppableId,responsiveColumns)
     if (columnStart === columnFinish) {
+      console.log(columnStart)
       let newPaKeepIds = Array.from(columnStart.pakeepIds);
 
       newPaKeepIds.splice(source.index, 1);
