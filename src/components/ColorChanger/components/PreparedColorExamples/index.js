@@ -4,8 +4,8 @@ import { connect } from 'react-redux';
 import { DragDropContext } from 'react-beautiful-dnd';
 import { nanoid } from 'nanoid';
 import ColumnOfPreparedColorExamples from './components/Column';
-import { changeOneColorColumnThunk, changeTwoColorColumnThunk } from 'store/ColorReducer';
 import { useState } from 'react';
+import { changeOneColorColumnThunk, changeTwoColorColumnThunk } from 'store/modules/Color/operations';
 
 const useStyles = makeStyles(theme => ({
   container: {

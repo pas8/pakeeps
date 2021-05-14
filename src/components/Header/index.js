@@ -22,8 +22,8 @@ import HeaderDrawer from './components/Drawer';
 import HeaderProfileUtils from './components/ProfileUtils';
 import { Box } from '@material-ui/core';
 import MainBar from './components/MainBar';
-import { setMenuOpenStatusThunk } from 'store/AppReducer';
 import { connect } from 'react-redux';
+import { setMenuOpenStatusThunk } from 'store/modules/App/operations';
 
 const drawerWidth = 240;
 

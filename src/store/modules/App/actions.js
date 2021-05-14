@@ -1,0 +1,19 @@
+import * as types from './types';
+
+export const toAddNewPakeep = data => ({ type: types.ADD_NEW_PAKEEP, newPaKeep: data });
+
+export const toSetMenuOpenStatus = boolStatus => ({ type: types.IS_MENU_OPEN, boolStatus });
+
+export const toChangeColumns = (columnValue, breakpointName) => ({
+  type: types.CHANGE_PAKEEP_COLUMNS,
+  columnValue,
+  breakpointName
+});
+export const toAddDateToPakeep = (pakeepId, event) => ({ type: types.ADD_DATE_TO_PAKEEP, pakeepId, event });
+
+export const toChangeTwoColumns = (startColumn, finishColumn, breakpointName) => ({
+  type: types.CHANGE_TWO_PAKEEP_COLUMNS,
+  startColumn,
+  finishColumn,
+  breakpointName
+});
