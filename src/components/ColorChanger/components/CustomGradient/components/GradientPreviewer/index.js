@@ -173,7 +173,7 @@ const GradientPreviewer = ({
         };
 
         return (
-          <Draggable {...draggableProps}>
+          <Draggable {...draggableProps} key={idx}>
             <Grid className={'handle'} item>
               <Grid
                 className={classes.draggableElement}

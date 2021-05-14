@@ -23,6 +23,7 @@ import { themeColors } from 'components/theme';
 import { ToggleButton, ToggleButtonGroup } from '@material-ui/lab';
 import { Grid, makeStyles } from '@material-ui/core';
 import _ from 'lodash';
+import { nanoid } from 'nanoid';
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -137,7 +138,7 @@ const ToggleButtonUtilsOfCustomGradient = ({
     <ToggleButtonGroup orientation={'vertical'} value={state} onChange={handleChange} className={classes.container} size={'large'}>
       {toggleButtonUtilsArr.map(({ icon: Icon, value }) => {
         return (
-          <ToggleButton value={value} aria-label={value}>
+          <ToggleButton value={value} aria-label={value} key={nanoid()}>
             <Icon />
           </ToggleButton>
         );

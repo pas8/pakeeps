@@ -19,6 +19,7 @@ import { colord, extend } from 'colord';
 import _, { sum } from 'lodash';
 import NumberAdornment from '../NumberAdornment';
 import { useClickAway, useCustomCompareEffect, useDebounce, useUpdateEffect } from 'react-use';
+import { nanoid } from 'nanoid';
 
 const useStyles = makeStyles(theme => ({
   textFieldInHexFormat: {
@@ -252,6 +253,7 @@ const InputsColorUtilsOfCustomColorPicker = ({
             return (
               <FormControl
                 variant={'outlined'}
+                key={nanoid()}
                 className={clsx(isFocused ? classes.textField : classes.textFieldUnfocused)}
                 onFocus={onInputFocus}
                 onBlur={onInputBlur}

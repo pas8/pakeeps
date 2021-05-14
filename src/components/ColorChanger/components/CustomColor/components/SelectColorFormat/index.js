@@ -13,6 +13,7 @@ import {
   Typography
 } from '@material-ui/core';
 import { colord } from 'colord';
+import { nanoid } from 'nanoid';
 import PropTypes from 'prop-types';
 
 const useStyles = makeStyles(theme => ({
@@ -60,6 +61,7 @@ const SelectColorFormat = ({ color, customFormatName, setCustomFormatName }) => 
             <FormControlLabel
               className={classes.selectedElement}
               value={shortName}
+              key={nanoid()}
               control={<Radio />}
               label={
                 <Grid container>

@@ -29,7 +29,7 @@ const ColumnOfPreparedColorExamples = ({ columnElements, columnElementProps, dro
             {columnElements.map((el, idx) => {
               const draggableId = `${droppableId}-${idx}`;
               return (
-                <Draggable key={el.id} draggableId={draggableId} index={idx}>
+                <Draggable key={el.id} draggableId={draggableId} index={idx} >
                   {(provided, snapshot) => (
                     <Grid
                       {...provided.draggableProps}

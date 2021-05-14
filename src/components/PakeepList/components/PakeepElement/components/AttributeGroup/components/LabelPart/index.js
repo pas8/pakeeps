@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import DeleteForeverOutlinedIcon from '@material-ui/icons/DeleteForeverOutlined';
 import { iconsArr } from 'components/Icons';
 import { Grid, Chip, makeStyles } from '@material-ui/core';
+import { nanoid } from 'nanoid';
 
 const LabelPart = ({ labels }) => {
   const [labelHover, setLabelHover] = useState(!false);
@@ -35,7 +36,7 @@ const LabelPart = ({ labels }) => {
         };
 
         return (
-          <Grid item>
+          <Grid item key={nanoid()}>
             <Chip {...labelChipProps} />
           </Grid>
         );
