@@ -1,16 +1,18 @@
 import PropTypes from 'prop-types';
-import { Grid, makeStyles, useTheme } from '@material-ui/core';
+import { Grid, makeStyles } from '@material-ui/core';
 import { connect } from 'react-redux';
-import PakeepElement from './components/PakeepElement';
-
-import { useMeasure } from 'react-use';
-import { useState } from 'react';
-import Column from './components/Column';
 import { DragDropContext } from 'react-beautiful-dnd';
 import { changePakeepColumnsDataThunk, changeTwoPakeepColumnsDataThunk } from 'store/modules/App/operations';
 import { takeValueFromBreakpoints } from 'hooks/takeValueFromBreakpoints.hook';
+import Column from './components/Column';
+
 const useStyles = makeStyles(theme => ({
-  container: { margin: theme.spacing(8, 0, 0, 0) }
+  container: {
+    margin: theme.spacing(8, 0, 0, 0),
+    [theme.breakpoints.down('xs')]: {
+      margin: theme.spacing(4, 0, 0, 0)
+    }
+  }
 }));
 
 const PakeepList = ({
@@ -21,7 +23,6 @@ const PakeepList = ({
   changePakeepColumnsDataThunk,
   changeTwoPakeepColumnsDataThunk
 }) => {
-
   const classes = useStyles();
   let breakpointNames = takeValueFromBreakpoints();
 
@@ -35,9 +36,7 @@ const PakeepList = ({
     const columnStart = responsiveColumns[source.droppableId];
     const columnFinish = responsiveColumns[destination.droppableId];
 
-console.log(source.droppableId,destination.droppableId,responsiveColumns)
     if (columnStart === columnFinish) {
-      console.log(columnStart)
       let newPaKeepIds = Array.from(columnStart.pakeepIds);
 
       newPaKeepIds.splice(source.index, 1);
@@ -64,8 +63,8 @@ console.log(source.droppableId,destination.droppableId,responsiveColumns)
   };
 
   return (
-    <DragDropContext onDragEnd={onDragEnd} >
-      <Grid container display={'flex'} className={classes.container}>
+    <DragDropContext onDragEnd={onDragEnd}>
+      <Grid container className={classes.container}>
         {responsiveColumnOrder?.map((columnId, idx) => {
           const column = responsiveColumns[columnId];
           if (!column) return;

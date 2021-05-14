@@ -115,9 +115,7 @@ PakeepElement.propTypes = {
   color: PropTypes.string,
   favorite: PropTypes.any,
   isDragging: PropTypes.bool,
-  labels: PropTypes.shape({
-    map: PropTypes.func
-  }),
+  labels: PropTypes.array,
   text: PropTypes.string,
   title: PropTypes.string
 };

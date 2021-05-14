@@ -19,15 +19,12 @@ const DynamicComponentWithNoSSR = dynamic(() => import('../src/layouts/HeaderLay
 // LogRocket.init('b6se1p/pakeeps');
 
 const MyApp = ({ Component, pageProps }) => {
+  
   useEffect(() => {
-    // Remove the server-side injected CSS.
     const jssStyles = document.querySelector('#jss-server-side');
-
-    if (jssStyles) {
-      jssStyles.parentElement.removeChild(jssStyles);
-    }
+    if (jssStyles)   jssStyles.parentElement.removeChild(jssStyles);
   }, []);
-console.log(store)
+
   return (
     <ThemeProvider theme={theme}>
       <MuiPickersUtilsProvider utils={DateFnsUtils}>

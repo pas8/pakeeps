@@ -27,7 +27,7 @@ const MoreUtils = ({ slicedArrAfter }) => {
 
           return (
             <MenuItem disableGutters 
-            // key={nanoid()}
+            key={nanoid()}
             >
               <Grid className={clsx(classes.itemGrid)} container>
                 <Icon style={{ color: iconColor }} />
