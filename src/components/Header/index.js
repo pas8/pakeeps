@@ -17,9 +17,10 @@ import ViewLikeInTelegram from './components/ViewLikeInTelegram';
 const drawerWidth = 240;
 
 const useStyles = makeStyles(theme => ({
-  root: {
-    display: 'flex'
-  },
+  root: ({ headerXsViewLikeIn }) => ({
+    display: 'flex',
+    marginBottom:headerXsViewLikeIn === 'telegram' && theme.spacing(4)
+  }),
   appBar: {
     backgroundColor: '#424242',
     color: 'white',
@@ -49,7 +50,6 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const HeaderByPas = ({ setMenuOpenStatusThunk, isMenuOpen }) => {
-  const classes = useStyles();
   const [breakpoint] = useCustomBreakpoint();
 
   const handleDrawerOpen = () => setMenuOpenStatusThunk(true);
@@ -57,6 +57,8 @@ const HeaderByPas = ({ setMenuOpenStatusThunk, isMenuOpen }) => {
 
   const isSmallSize = breakpoint === 'xs';
   const headerXsViewLikeIn = 'telegram';
+
+  const classes = useStyles({ headerXsViewLikeIn });
 
   return (
     <Grid className={classes.root} container>
@@ -73,7 +75,6 @@ const HeaderByPas = ({ setMenuOpenStatusThunk, isMenuOpen }) => {
           {headerXsViewLikeIn === 'telegram' && (
             <ViewLikeInTelegram handleDrawerOpen={handleDrawerOpen} isMenuOpen={isMenuOpen} />
           )}
-          
         </Toolbar>
       </AppBar>
       <HeaderDrawer isMenuOpen={isMenuOpen} handleDrawerClose={handleDrawerClose} />

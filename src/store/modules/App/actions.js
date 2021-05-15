@@ -4,7 +4,7 @@ export const toAddNewPakeep = data => ({ type: types.ADD_NEW_PAKEEP, newPaKeep: 
 
 export const toSetMenuOpenStatus = boolStatus => ({ type: types.IS_MENU_OPEN, boolStatus });
 
-export const toChangeColumns = (columnValue, breakpointName) => ({
+export const toChangeColumns = (columnVvalue, breakpointName) => ({
   type: types.CHANGE_PAKEEP_COLUMNS,
   columnValue,
   breakpointName
@@ -17,3 +17,5 @@ export const toChangeTwoColumns = (startColumn, finishColumn, breakpointName) =>
   finishColumn,
   breakpointName
 });
+
+export const toScroll = scrollDirectionName => ({ type: types.SCROLL_DIRECTION, scrollDirectionName });

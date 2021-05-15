@@ -6,7 +6,7 @@ const useStyles = makeStyles(theme => ({
   lockContainer: {
     margin: theme.spacing(-0.2, 0.6, 0.2, 0.6),
     perspective: '1000px',
-    position: 'relative'
+    position: 'relative',
   },
   animate: {
     animation: '$mui-ripple-enter 400ms cubic-bezier(0.4, 0, 0.2, 1)'
@@ -22,7 +22,7 @@ const useStyles = makeStyles(theme => ({
   },
   animateBox: {
     animation: '$box 400ms cubic-bezier(0.4, 0, 0.2, 1)',
-    height: 14 + 1,
+    height: 14,
     width: 18,
 
   },
@@ -46,7 +46,7 @@ const useStyles = makeStyles(theme => ({
 
   arch: {
     transform: 'translate(92%)',
-    height: 10,
+    height: 10 - 1,
     width: 12,
     borderWidth: 2.8,
     borderRadius: theme.spacing(0.8),
@@ -62,9 +62,9 @@ const useStyles = makeStyles(theme => ({
   },
   archAnimate: {
     transformStyle: 'preserve-3d',
-    height: 10 - 1,
+    height: 8,
 
-    transform: 'translateX(24%) rotateY(180deg)',
+    transform: 'translateX(24%) rotateY(180deg) ',
     transition: theme.transitions.create('all', {
       easing: theme.transitions.easing.easeInOut,
       duration: theme.transitions.duration.complex,

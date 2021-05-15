@@ -12,6 +12,7 @@ import SnackBarLayout from 'layouts/SnackBarLayout';
 import { useEffect } from 'react';
 import { CssBaseline } from '@material-ui/core';
 import store from 'store';
+import ScrollLayout from 'layouts/ScrollLayout';
 
 const DynamicComponentWithNoSSR = dynamic(() => import('../src/layouts/HeaderLayout/index'), {
   ssr: !false
@@ -19,10 +20,9 @@ const DynamicComponentWithNoSSR = dynamic(() => import('../src/layouts/HeaderLay
 // LogRocket.init('b6se1p/pakeeps');
 
 const MyApp = ({ Component, pageProps }) => {
-  
   useEffect(() => {
     const jssStyles = document.querySelector('#jss-server-side');
-    if (jssStyles)   jssStyles.parentElement.removeChild(jssStyles);
+    if (jssStyles) jssStyles.parentElement.removeChild(jssStyles);
   }, []);
 
   return (
@@ -30,12 +30,14 @@ const MyApp = ({ Component, pageProps }) => {
       <MuiPickersUtilsProvider utils={DateFnsUtils}>
         <ReduxProvider store={store}>
           <AuthProvider session={pageProps.session}>
-            <SnackBarLayout>
-              <DynamicComponentWithNoSSR>
-                <CssBaseline />
-                <Component {...pageProps} />
-              </DynamicComponentWithNoSSR>
-            </SnackBarLayout>
+            <ScrollLayout>
+              <SnackBarLayout>
+                <DynamicComponentWithNoSSR>
+                  <CssBaseline />
+                  <Component {...pageProps} />
+                </DynamicComponentWithNoSSR>
+              </SnackBarLayout>
+            </ScrollLayout>
           </AuthProvider>
         </ReduxProvider>
       </MuiPickersUtilsProvider>

@@ -1,4 +1,11 @@
-import { toAddDateToPakeep, toAddNewPakeep, toChangeColumns, toChangeTwoColumns, toSetMenuOpenStatus } from './actions';
+import {
+  toAddDateToPakeep,
+  toAddNewPakeep,
+  toChangeColumns,
+  toChangeTwoColumns,
+  toScroll,
+  toSetMenuOpenStatus
+} from './actions';
 
 export const addNewPaKeepThunk = data => dispatch => {
   dispatch(toAddNewPakeep(data));
@@ -17,4 +24,8 @@ export const changePakeepColumnsDataThunk = (columnValue, breakpointName) => dis
 };
 export const changeTwoPakeepColumnsDataThunk = (startColumn, finishColumn, breakpointName) => dispatch => {
   dispatch(toChangeTwoColumns(startColumn, finishColumn, breakpointName));
+};
+
+export const handleScrollDirectionName = scrollDirectionName => dispatch => {
+  dispatch(toScroll(scrollDirectionName));
 };

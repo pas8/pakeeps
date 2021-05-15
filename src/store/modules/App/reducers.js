@@ -10,6 +10,11 @@ const initialState = {
     { color: 'primary', title: 'Year plans', icon: '', key: 3 },
     { color: 'primary', title: 'Hobby Placeholders', icon: '', key: 4 }
   ],
+
+  folders: [
+    { title: 'All pakeeps', iconName: '', key: 1 },
+    { title: 'Pined', iconName: 'pin', key: 2 }
+  ],
   pakeeps: {
     pakeep1: {
       title: 'Placeholder 1',
@@ -173,7 +178,8 @@ const initialState = {
   },
   columnOrder: ['column-1', 'column-2', 'column-3', 'column-4', 'column-5', 'column-6'],
   notifinationCounter: 8,
-  isMenuOpen: false
+  isMenuOpen: false,
+  scrollDirectionName: 'up'
 };
 
 const AppReducer = createReducer(initialState)({
@@ -181,6 +187,12 @@ const AppReducer = createReducer(initialState)({
     ...state,
     pakeeps: { ...state.pakeeps, [newPaKeep.id]: newPaKeep }
   }),
+
+  [types.SCROLL_DIRECTION]: (state, { scrollDirectionName }) => ({
+    ...state,
+    scrollDirectionName
+  }),
+
   [types.IS_MENU_OPEN]: (state, { boolStatus }) => ({ ...state, isMenuOpen: boolStatus }),
   [types.CHANGE_PAKEEP_COLUMNS]: (state, { breakpointName, columnValue }) => ({
     ...state,
