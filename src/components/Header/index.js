@@ -12,7 +12,8 @@ import MainBar from './components/MainBar';
 import { connect } from 'react-redux';
 import { setMenuOpenStatusThunk } from 'store/modules/App/operations';
 import { useCustomBreakpoint } from 'hooks/useCustomBreakpoint';
-
+import { Grid } from '@material-ui/core';
+import ViewLikeInTelegram from './components/ViewLikeInTelegram';
 const drawerWidth = 240;
 
 const useStyles = makeStyles(theme => ({
@@ -55,19 +56,28 @@ const HeaderByPas = ({ setMenuOpenStatusThunk, isMenuOpen }) => {
   const handleDrawerClose = () => setMenuOpenStatusThunk(false);
 
   const isSmallSize = breakpoint === 'xs';
+  const headerXsViewLikeIn = 'telegram';
 
   return (
-    <div className={classes.root}>
+    <Grid className={classes.root} container>
       <CssBaseline />
       <AppBar className={clsx(classes.appBar, { [classes.appBarShift]: isMenuOpen })}>
         <Toolbar className={classes.toolBar}>
-          <MainBar handleDrawerOpen={handleDrawerOpen} isMenuOpen={isMenuOpen}  isSmallSize={isSmallSize}/>
-          <HeaderSearch isSmallSize={isSmallSize} />
-          <HeaderProfileUtils isSmallSize={isSmallSize} />
+          {headerXsViewLikeIn === 'pakeeps' && (
+            <>
+              <MainBar handleDrawerOpen={handleDrawerOpen} isMenuOpen={isMenuOpen} isSmallSize={isSmallSize} />
+              <HeaderSearch isSmallSize={isSmallSize} />
+              <HeaderProfileUtils isSmallSize={isSmallSize} />
+            </>
+          )}
+          {headerXsViewLikeIn === 'telegram' && (
+            <ViewLikeInTelegram handleDrawerOpen={handleDrawerOpen} isMenuOpen={isMenuOpen} />
+          )}
+          
         </Toolbar>
       </AppBar>
       <HeaderDrawer isMenuOpen={isMenuOpen} handleDrawerClose={handleDrawerClose} />
-    </div>
+    </Grid>
   );
 };
 
@@ -76,7 +86,10 @@ HeaderByPas.propTypes = {
   setMenuOpenStatusThunk: PropTypes.func
 };
 
-const mapStateToProps = ({ app: { isMenuOpen } }) => ({ isMenuOpen });
+const mapStateToProps = ({ app: { isMenuOpen }, settings: { headerXsViewLikeIn } }) => ({
+  isMenuOpen,
+  headerXsViewLikeIn
+});
 
 const mapDispatchToProps = dispatch => ({
   setMenuOpenStatusThunk: boolStatus => dispatch(setMenuOpenStatusThunk(boolStatus))
