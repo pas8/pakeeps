@@ -44,35 +44,46 @@ const PakeepList = ({
     if (!destination) return;
     if (!destination.id === source.draggableId && destination.index === source.index) return;
 
-    // if (columnStart === columnFinish) {
-    //   let newPaKeepIds = Array.from(columnStart.pakeepIds);
-
-    //   newPaKeepIds.splice(source.index, 1);
-    //   newPaKeepIds.splice(destination.index, 0, draggableId);
-
-    //   const newColumn = {
-    //     ...columnStart,
-    //     pakeepIds: newPaKeepIds
-    //   };
-    //   changePakeepColumnsDataThunk(newColumn, breakpointNames);
-    //   return;
-    // }
     const destinationIdx = destination.index * responsiveColumnOrder.length + +destination.droppableId;
     const sourceIdx = source.index * responsiveColumnOrder.length + +source.droppableId;
-    // let startPaKeepIds = Array.from(columnStart.pakeepIds);
-    // let finishPaKeepIds = Array.from(columnFinish.pakeepIds);
-    const newOrderNames = _.clone(pakeepsOrderNames);
-    newOrderNames.splice(sourceIdx, 1);
-    newOrderNames.splice(destinationIdx, 0, draggableId);
-    // console.log(newOrderNames,destinationIdx, sourceIdx);
-    console.log(pakeepsOrderNames)
+    // const newOrderNames = _.clone(pakeepsOrderNames);
+    const sourceDroppableNumber = +source.droppableId;
 
-    handlePakeepsOrderNamesThunk(newOrderNames);
-    // const newColumnStart = { ...columnStart, pakeepIds: startPaKeepIds };
-    // const newColumnFinish = { ...columnFinish, pakeepIds: finishPaKeepIds };
-    // changeTwoPakeepColumnsDataThunk(newColumnStart, newColumnFinish, breakpointNames);
+    const columnOrderLenght = responsiveColumnOrder.length;
+    const sourceArrFilterFunc = (el, idx) =>
+      (idx + columnOrderLenght) % columnOrderLenght === source.droppableId % columnOrderLenght && el;
+
+    const sourceArr = pakeepsOrderNames.filter(sourceArrFilterFunc);
+    const clonedSourceArr = _.clone(sourceArr);
+    _.fill(clonedSourceArr, sourceArr[source.index], destination.index, destination.index + 1);
+    _.fill(clonedSourceArr, sourceArr[destination.index], source.index, source.index + 1);
+
+    const sumLengthOfAllPakeeps = pakeepsOrderNames.length;
+
+    if (source.droppableId === destination.droppableId) {
+      const newOrderNamesReduceFunc = (sum, el, idx) => {
+        const correntIdx = Math.ceil(((sumLengthOfAllPakeeps / columnOrderLenght) * idx) / sumLengthOfAllPakeeps) - 1;
+        const isItemShoulBePasted =
+          (idx + columnOrderLenght) % columnOrderLenght === sourceDroppableNumber % columnOrderLenght;
+
+        const newOrderNamesPakeepsElementId = isItemShoulBePasted ? clonedSourceArr[correntIdx] : el;
+        return [...sum, newOrderNamesPakeepsElementId];
+      };
+      const newOrderNames = pakeepsOrderNames.reduce(newOrderNamesReduceFunc, []);
+
+      handlePakeepsOrderNamesThunk(newOrderNames);
+    }
+
+    const filterFunc = (el, idx) =>
+    (idx + columnOrderLenght) % columnOrderLenght === source.droppableId % columnOrderLenght && el;
+
+  // const destinationArr = pakeepsOrderNames.filter(filterFunc);
+    // newOrderNames.splice(sourceIdx, 1);
+    // newOrderNames.splice(destinationIdx, 0, draggableId);
+
+    // handlePakeepsOrderNamesThunk(newOrderNames);
   };
-console.log(pakeepsOrderNames)
+
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       <Grid container className={classes.container}>

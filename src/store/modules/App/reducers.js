@@ -88,7 +88,33 @@ const initialState = {
       id: 'pakeep6',
       isPinned: true,
       events: [{ color: 'secondary', title: 'Hobby', icon: 'alarm', key: 4 }]
-    }
+    },
+    {
+      title: 'Placeholder 7',
+      text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. At imperdiet dui accumsan sit amet nulla facilisi morbi. Aliquam sem et tortor consequat id porta nibh. Enim praesent elementum facilisis leo vel fringilla est. Cras adipiscing enim eu turpis egestas pretium aenean. Sed libero enim sed faucibus turpis in eu mi bibendum. Vestibulum lorem sed risus ultricies. Neque egestas congue quisque egestas diam.',
+      bookmark: false,
+      favorite: false,
+      color: 'default',
+      labels: [{ color: 'primary', title: 'Day plans', icon: '', key: 0 }],
+      id: 'pakeep7',
+      isPinned: false
+    },
+    {
+      title: 'Placeholder 8',
+      text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Vulputate dignissim suspendisse in est ante in nibh mauris cursus. Duis convallis convallis tellus id interdum. Eu augue ut lectus arcu bibendum at varius.      ',
+      bookmark: false,
+      favorite: false,
+      color: 'default',
+      labels: [
+        { color: 'secondary', title: 'Plans', icon: '', key: 0 },
+        { color: 'default', title: 'Week plans', icon: '', key: 1 },
+        { color: 'primary', title: 'Mouth plans', icon: '', key: 2 },
+        { color: 'primary', title: 'Year plans', icon: '', key: 3 },
+        { color: 'secondary', title: 'Hobby Placeholders', icon: '', key: 4 }
+      ],
+      isPinned: true,
+      id: 'pakeep8'
+    },
   ],
   pakeepsOrderNames: ['pakeep1','pakeep2','pakeep3','pakeep4','pakeep5','pakeep6',],
   notifinationCounter: 8,

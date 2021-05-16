@@ -1,5 +1,6 @@
 import compareFunc from 'compare-func';
 import { useEffect, useState } from 'react';
+import { usePrevious } from 'react-use';
 import { takeValueFromBreakpoints } from './takeValueFromBreakpoints.hook';
 
 export const useMakeDraggableArr = (
@@ -11,6 +12,7 @@ export const useMakeDraggableArr = (
 ) => {
   // const [columns, setColumns] = useState({});
 
+  
   useEffect(() => handlePakeepsOrderNames(pakeeps.map(({ id }) => id)), [pakeeps]);
 
   const orderReduceFunc = (sum, placeholder, idx) => [...sum, `${idx}`];
@@ -38,6 +40,8 @@ export const useMakeDraggableArr = (
   };
 
   const columns = pakeepsOrderNames.reduce(pakeepsReduceFunc, {});
-  
+
+
+
   return [columns, responsiveColumnOrder];
 };
