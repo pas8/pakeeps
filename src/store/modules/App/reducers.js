@@ -1,3 +1,4 @@
+import { pickBy } from 'lodash';
 import { createReducer } from 'store/utils';
 import * as types from './types';
 
@@ -12,8 +13,8 @@ const initialState = {
   ],
 
   folders: [
-    { title: 'All pakeeps', iconName: '', key: 1 },
-    { title: 'Pined', iconName: 'pin', key: 2 }
+    { title: 'All pakeeps', iconName: '', key: 1, property: 'ALL' },
+    { title: 'Pined', iconName: 'pin', key: 2, property: 'isPinned' }
   ],
   pakeeps: [
     {
@@ -30,7 +31,7 @@ const initialState = {
         { color: 'secondary', title: 'Hobby Placeholders', icon: '', key: 4 }
       ],
       id: 'pakeep1',
-      idx:1,
+      isPinned: true
     },
     {
       title: 'Placeholder 2',
@@ -40,7 +41,7 @@ const initialState = {
       color: 'default',
       labels: [{ color: 'primary', title: 'Day plans', icon: '', key: 0 }],
       id: 'pakeep2',
-      idx:2,
+      isPinned: false
     },
     {
       title: 'Placeholder 3',
@@ -49,8 +50,8 @@ const initialState = {
       favorite: false,
       color: 'default',
       labels: [],
-      id: 'pakeep3',
-      idx:3
+      isPinned: true,
+      id: 'pakeep3'
     },
     {
       title: 'Placeholder 4',
@@ -65,7 +66,7 @@ const initialState = {
         { color: 'secondary', title: 'Year plans', icon: '', key: 3 }
       ],
       id: 'pakeep4',
-      idx:4
+      isPinned: true
     },
     {
       title: 'Placeholder 5',
@@ -73,9 +74,9 @@ const initialState = {
       bookmark: false,
       favorite: false,
       color: 'default',
+      isPinned: false,
       labels: [{ color: 'default', title: 'Hobby Placeholders', icon: 'alarm', key: 4 }],
-      id: 'pakeep5',
-      idx:5
+      id: 'pakeep5'
     },
     {
       title: 'Placeholder 6',
@@ -85,11 +86,11 @@ const initialState = {
       color: 'default',
       labels: [{ color: 'secondary', title: 'Hobby', icon: 'alarm', key: 4 }],
       id: 'pakeep6',
-      idx:2,
-      
+      isPinned: true,
       events: [{ color: 'secondary', title: 'Hobby', icon: 'alarm', key: 4 }]
     }
   ],
+  pakeepsOrderNames: ['pakeep1','pakeep2','pakeep3','pakeep4','pakeep5','pakeep6',],
   notifinationCounter: 8,
   isMenuOpen: false,
   scrollDirectionName: 'up'
@@ -98,12 +99,15 @@ const initialState = {
 const AppReducer = createReducer(initialState)({
   [types.ADD_NEW_PAKEEP]: (state, { newPaKeep }) => ({
     ...state,
-    pakeeps: [...state.pakeeps, newPaKeep]
+    pakeeps: { ...state.pakeeps, [newPaKeep.id]: newPaKeep }
   }),
-
+  [types.SET_NEW_ORDER_NAMES]: (state, { newOrder }) => ({
+    ...state,
+    pakeepsOrderNames: newOrder
+  }),
   [types.DELETE_PAKEEP]: (state, { id }) => ({
     ...state,
-    pakeeps: state.pakeeps.filter(({ id: pakeepId }) => id !== pakeepId)
+    pakeeps: pickBy(state.pakeeps, ({ id: pakeepsId }) => id !== pakeepsId)
   }),
 
   [types.SCROLL_DIRECTION]: (state, { scrollDirectionName }) => ({

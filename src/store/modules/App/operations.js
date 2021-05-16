@@ -5,7 +5,8 @@ import {
   toChangeTwoColumns,
   toDeletePakeep,
   toScroll,
-  toSetMenuOpenStatus
+  toSetMenuOpenStatus,
+  toSetNewOrderNames
 } from './actions';
 
 export const addNewPaKeepThunk = data => dispatch => {
@@ -34,3 +35,8 @@ export const changeTwoPakeepColumnsDataThunk = (startColumn, finishColumn, break
 export const handleScrollDirectionName = scrollDirectionName => dispatch => {
   dispatch(toScroll(scrollDirectionName));
 };
+export const handlePakeepsOrderNamesThunk = newOrder => dispatch => {
+  dispatch(toSetNewOrderNames(newOrder));
+};
+
+

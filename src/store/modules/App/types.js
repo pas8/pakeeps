@@ -6,6 +6,7 @@ export const ADD_DATE_TO_PAKEEP = 'ADD_DATE_TO_PAKEEP';
 export const IS_MENU_OPEN = 'IS_MENU_OPEN';
 export const SCROLL_DIRECTION = 'SCROLL_DIRECTION';
 export const DELETE_PAKEEP = 'DELETE_PAKEEP';
+export const SET_NEW_ORDER_NAMES = 'SET_NEW_ORDER_NAMES';
 
 
 
