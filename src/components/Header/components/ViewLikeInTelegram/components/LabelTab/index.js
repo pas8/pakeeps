@@ -1,9 +1,11 @@
-import SearchIcon from '@material-ui/icons/Search';import { Button, Grid, makeStyles, Tab, Tabs, withStyles } from '@material-ui/core';
+import SearchIcon from '@material-ui/icons/Search';
+import { Button, Grid, makeStyles, Tab, Tabs, withStyles } from '@material-ui/core';
 import PinIcon from 'components/Icons/components/PinIcon';
 import { themeColors } from 'components/theme';
 import PropTypes from 'prop-types';
 import { useState } from 'react';
 import { connect } from 'react-redux';
+import { useTakeIcon } from 'hooks/useTakeIcon.hook';
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -68,7 +70,8 @@ const LabelTab = ({ folders }) => {
         aria-label={'scrollable auto tabs example'}
       >
         {folders.map(({ title, iconName, key }) => {
-          return <Tab key={key} label={title} wrapper icon={<PinIcon />} />;
+          const [icon] = useTakeIcon(iconName);
+          return <Tab key={key} label={title} wrapper icon={icon} />;
         })}
       </StyledTabs>
     </Grid>

@@ -10,7 +10,7 @@ const ScrollLayout = ({ children, scrollDirectionName, handleScrollDirectionName
   const classes = useStyles();
 
   useSetScrollName(handleScrollDirectionName);
-console.log(scrollDirectionName)
+
   return <Grid container>{children}</Grid>;
 };
 

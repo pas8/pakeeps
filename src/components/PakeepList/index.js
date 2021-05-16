@@ -2,9 +2,15 @@ import PropTypes from 'prop-types';
 import { Grid, makeStyles } from '@material-ui/core';
 import { connect } from 'react-redux';
 import { DragDropContext } from 'react-beautiful-dnd';
-import { changePakeepColumnsDataThunk, changeTwoPakeepColumnsDataThunk } from 'store/modules/App/operations';
+import {
+  addNewPaKeepThunk,
+  changePakeepColumnsDataThunk,
+  changeTwoPakeepColumnsDataThunk,
+  deletePakeepThunk
+} from 'store/modules/App/operations';
 import { takeValueFromBreakpoints } from 'hooks/takeValueFromBreakpoints.hook';
 import Column from './components/Column';
+import { useMakeDraggableArr } from 'hooks/useMakeDraggableArr.hook';
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -15,61 +21,29 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const PakeepList = ({
-  pakeeps,
-  labels,
-  columns,
-  columnOrder,
-  changePakeepColumnsDataThunk,
-  changeTwoPakeepColumnsDataThunk
-}) => {
+const PakeepList = ({ pakeeps, labels, deletePakeepThunk, addNewPakeepThunk }) => {
   const classes = useStyles();
-  let breakpointNames = takeValueFromBreakpoints();
 
-  const responsiveColumns = columns[breakpointNames];
-  const responsiveColumnOrder = columnOrder.slice(0, takeValueFromBreakpoints([6, 4, 3, 2, 1]));
+  const [columns, responsiveColumnOrder] = useMakeDraggableArr(pakeeps);
 
   const onDragEnd = ({ destination, source, draggableId }) => {
     if (!destination) return;
     if (!destination.id === source.draggableId && destination.index === source.index) return;
-
-    const columnStart = responsiveColumns[source.droppableId];
-    const columnFinish = responsiveColumns[destination.droppableId];
-
-    if (columnStart === columnFinish) {
-      let newPaKeepIds = Array.from(columnStart.pakeepIds);
-
-      newPaKeepIds.splice(source.index, 1);
-      newPaKeepIds.splice(destination.index, 0, draggableId);
-
-      const newColumn = {
-        ...columnStart,
-        pakeepIds: newPaKeepIds
-      };
-      changePakeepColumnsDataThunk(newColumn, breakpointNames);
-      return;
-    }
-
-    let startPaKeepIds = Array.from(columnStart.pakeepIds);
-    let finishPaKeepIds = Array.from(columnFinish.pakeepIds);
-
-    startPaKeepIds.splice(source.index, 1);
-    finishPaKeepIds.splice(destination.index, 0, draggableId);
-
-    const newColumnStart = { ...columnStart, pakeepIds: startPaKeepIds };
-    const newColumnFinish = { ...columnFinish, pakeepIds: finishPaKeepIds };
-
-    changeTwoPakeepColumnsDataThunk(newColumnStart, newColumnFinish, breakpointNames);
+console.log(!destination, !destination.id === source.draggableId && destination.index === source.index)
+    const pakeepsWhichShouldBeMoved = pakeeps.find(({ id }) => id === draggableId);
+    const numberOfPakeepsIdx = destination.index * responsiveColumnOrder.length + +destination.droppableId;
+    deletePakeepThunk(draggableId);
+    addNewPakeepThunk({ ...pakeepsWhichShouldBeMoved, idx: numberOfPakeepsIdx,date:Date.now() });
   };
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       <Grid container className={classes.container}>
         {responsiveColumnOrder?.map((columnId, idx) => {
-          const column = responsiveColumns[columnId];
+          const column = columns[columnId];
           if (!column) return;
 
-          const pakeepsInColumn = column.pakeepIds.map(pakeepId => pakeeps[pakeepId]);
+          const pakeepsInColumn = column.pakeeps;
           return (
             <Column
               key={column?.id}
@@ -103,11 +77,8 @@ const mapStateToProps = ({ app: { pakeeps, labels, columns, columnOrder } }) => 
   columnOrder
 });
 const mapDispatchToProps = dispatch => ({
-  changePakeepColumnsDataThunk: (newColumn, breakpointNames) =>
-    dispatch(changePakeepColumnsDataThunk(newColumn, breakpointNames)),
-
-  changeTwoPakeepColumnsDataThunk: (newColumnStart, newColumnFinish, breakpointNames) =>
-    dispatch(changeTwoPakeepColumnsDataThunk(newColumnStart, newColumnFinish, breakpointNames))
+  deletePakeepThunk: id => dispatch(deletePakeepThunk(id)),
+  addNewPakeepThunk: data => dispatch(addNewPaKeepThunk(data))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(PakeepList);

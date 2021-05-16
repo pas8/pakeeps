@@ -3,14 +3,19 @@ import {
   toAddNewPakeep,
   toChangeColumns,
   toChangeTwoColumns,
+  toDeletePakeep,
   toScroll,
   toSetMenuOpenStatus
 } from './actions';
 
 export const addNewPaKeepThunk = data => dispatch => {
+  console.log(data)
   dispatch(toAddNewPakeep(data));
 };
 
+export const deletePakeepThunk = id => dispatch => {
+  dispatch(toDeletePakeep(id));
+};
 export const setMenuOpenStatusThunk = boolStatus => dispatch => {
   dispatch(toSetMenuOpenStatus(boolStatus));
 };

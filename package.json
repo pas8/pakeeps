@@ -14,7 +14,6 @@
     "@material-ui/icons": "^4.11.2",
     "@material-ui/lab": "^4.0.0-alpha.57",
     "@material-ui/pickers": "^3.3.10",
-    "@mdi/react": "^1.5.0",
     "axios": "^0.21.1",
     "colord": "^1.4.0",
     "compare-func": "^2.0.0",
@@ -45,8 +44,7 @@
     "redux": "^4.0.5",
     "redux-thunk": "^2.3.0",
     "reselect": "^4.0.0",
-    "sass": "^1.32.11",
-    "wordcount": "^1.1.1"
+    "sass": "^1.32.11"
   },
   "devDependencies": {
     "redux-devtools-extension": "^2.13.9"
