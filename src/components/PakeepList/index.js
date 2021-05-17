@@ -61,7 +61,7 @@ const PakeepList = ({
 
     const sumLengthOfAllPakeeps = pakeepsOrderNames.length;
 
-    const toCorrect =  +(sourceDroppableNumber !== 0)   
+    const toCorrect =  +(destinationDroppableNumber !== 0)   
 
     if (source.droppableId === destination.droppableId) {
       _.fill(clonedSourceArr, sourceArr[source.index], destination.index, destination.index + 1);
@@ -109,26 +109,28 @@ const PakeepList = ({
         (isItemWhichShouldBePastedIsInDestinationArr && concatedDestinationArr[correntIdx]) ?? placeholderName;
 
       const newOrderNamesPakeepsElementId = sourceArrItem || destinationArrItem || el;
+      // console.log(newOrderNamesPakeepsElementId,correntIdx,toCorrect)
       if(!newOrderNamesPakeepsElementId) return sum
       return [...sum, newOrderNamesPakeepsElementId];
     };
 
-    const isLengthOfColumnMoreThanAverage = destinationArr.length > sumLengthOfAllPakeeps / columnOrderLenght;
-    const fillValue = (destinationArr.length + 1) * columnOrderLenght - sumLengthOfAllPakeeps;
+    const isLengthOfColumnMoreThanAverage = concatedDestinationArr.length > sumLengthOfAllPakeeps / columnOrderLenght;
+    const fillValue = concatedDestinationArr.length  * columnOrderLenght - sumLengthOfAllPakeeps;
 
     const placholderArrWhichShouldBeConcated =
       isLengthOfColumnMoreThanAverage && Array(fillValue).fill(placeholderName);
 
     const newPakeepsOrderNames = _.concat(pakeepsOrderNames, placholderArrWhichShouldBeConcated);
-    const newOrderNames = newPakeepsOrderNames.reduce(newOrderNamesReduceFunc, []);
-console.log(newOrderNames)
-    return handlePakeepsOrderNamesThunk(newOrderNames);
+    const reducedOrderNames = _.reduce(newPakeepsOrderNames,newOrderNamesReduceFunc, []);
 
-    // const destinationArr = pakeepsOrderNames.filter(filterFunc);
-    // newOrderNames.splice(sourceIdx, 1);
-    // newOrderNames.splice(destinationIdx, 0, draggableId);
+    const stringNewOrderNames = _.join(reducedOrderNames,'_')
+    const placeholderPattern = _.join(Array(columnOrderLenght).fill(placeholderName),'_')
+    const filteredy = stringNewOrderNames.replaceAll(placeholderPattern, '')
 
-    // handlePakeepsOrderNamesThunk(newOrderNames);
+    const newOrderNames = _.split(filteredy,'_')
+
+    return handlePakeepsOrderNamesThunk(reducedOrderNames);
+
   };
 
   const placeholder = {
