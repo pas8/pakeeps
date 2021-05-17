@@ -40,6 +40,8 @@ const PakeepList = ({
     handlePakeepsOrderNamesThunk
   );
 
+  const placeholderName = 'placeholder';
+
   const onDragEnd = ({ destination, source, draggableId }) => {
     if (!destination) return;
     if (!destination.id === source.draggableId && destination.index === source.index) return;
@@ -48,27 +50,30 @@ const PakeepList = ({
     const sourceIdx = source.index * responsiveColumnOrder.length + +source.droppableId;
     // const newOrderNames = _.clone(pakeepsOrderNames);
     const sourceDroppableNumber = +source.droppableId;
-    const destinationDroppableNumber = +source.droppableId;
+    const destinationDroppableNumber = +destination.droppableId;
 
     const columnOrderLenght = responsiveColumnOrder.length;
     const sourceArrFilterFunc = (el, idx) =>
-      (idx + columnOrderLenght) % columnOrderLenght === source.droppableId % columnOrderLenght && el;
+      (idx + columnOrderLenght) % columnOrderLenght === sourceDroppableNumber % columnOrderLenght && el;
 
     const sourceArr = pakeepsOrderNames.filter(sourceArrFilterFunc);
     const clonedSourceArr = _.clone(sourceArr);
 
     const sumLengthOfAllPakeeps = pakeepsOrderNames.length;
 
+    const toCorrect =  +(sourceDroppableNumber !== 0)   
+
     if (source.droppableId === destination.droppableId) {
       _.fill(clonedSourceArr, sourceArr[source.index], destination.index, destination.index + 1);
       _.fill(clonedSourceArr, sourceArr[destination.index], source.index, source.index + 1);
 
       const newOrderNamesReduceFunc = (sum, el, idx) => {
-        const correntIdx = Math.ceil(((sumLengthOfAllPakeeps / columnOrderLenght) * idx) / sumLengthOfAllPakeeps) - 1;
+        const correntIdx = Math.ceil(((sumLengthOfAllPakeeps / columnOrderLenght) * idx) / sumLengthOfAllPakeeps) - toCorrect;
         const isItemShoulBePasted =
           (idx + columnOrderLenght) % columnOrderLenght === sourceDroppableNumber % columnOrderLenght;
 
         const newOrderNamesPakeepsElementId = isItemShoulBePasted ? clonedSourceArr[correntIdx] : el;
+
         return [...sum, newOrderNamesPakeepsElementId];
       };
       const newOrderNames = pakeepsOrderNames.reduce(newOrderNamesReduceFunc, []);
@@ -89,25 +94,34 @@ const PakeepList = ({
 
     const partOfDestinationArrWhichWillBeConcated = destinationArr.filter((el, idx) => idx >= destination.index);
     const concatedDestinationArr = _.concat(clonedDestinationArr, partOfDestinationArrWhichWillBeConcated);
-    // _.fill(clonedDestinationArr, ...destinationArr.filter((el, idx) => idx >= destination.index), destination.index + 1);
+
 
     const newOrderNamesReduceFunc = (sum, el, idx) => {
-      const correntIdx = Math.ceil(((sumLengthOfAllPakeeps / columnOrderLenght) * idx) / sumLengthOfAllPakeeps) - 1;
 
+      const correntIdx = Math.ceil(((sumLengthOfAllPakeeps / columnOrderLenght) * idx) / sumLengthOfAllPakeeps) - toCorrect;
       const remainderValue = (idx + columnOrderLenght) % columnOrderLenght;
       const isItemWhichShouldBePastedIsInSourceArr = remainderValue === sourceDroppableNumber % columnOrderLenght;
       const isItemWhichShouldBePastedIsInDestinationArr =
         remainderValue === destinationDroppableNumber % columnOrderLenght;
 
-      const sourceArrItem = isItemWhichShouldBePastedIsInSourceArr && clonedSourceArr[correntIdx];
-      const destinationArrItem = isItemWhichShouldBePastedIsInDestinationArr && concatedDestinationArr[correntIdx];
+      const sourceArrItem = (isItemWhichShouldBePastedIsInSourceArr && clonedSourceArr[correntIdx]) ?? placeholderName;
+      const destinationArrItem =
+        (isItemWhichShouldBePastedIsInDestinationArr && concatedDestinationArr[correntIdx]) ?? placeholderName;
 
       const newOrderNamesPakeepsElementId = sourceArrItem || destinationArrItem || el;
+      if(!newOrderNamesPakeepsElementId) return sum
       return [...sum, newOrderNamesPakeepsElementId];
     };
-    const newOrderNames = pakeepsOrderNames.reduce(newOrderNamesReduceFunc, []);
 
-    console.log(newOrderNames);
+    const isLengthOfColumnMoreThanAverage = destinationArr.length > sumLengthOfAllPakeeps / columnOrderLenght;
+    const fillValue = (destinationArr.length + 1) * columnOrderLenght - sumLengthOfAllPakeeps;
+
+    const placholderArrWhichShouldBeConcated =
+      isLengthOfColumnMoreThanAverage && Array(fillValue).fill(placeholderName);
+
+    const newPakeepsOrderNames = _.concat(pakeepsOrderNames, placholderArrWhichShouldBeConcated);
+    const newOrderNames = newPakeepsOrderNames.reduce(newOrderNamesReduceFunc, []);
+console.log(newOrderNames)
     return handlePakeepsOrderNamesThunk(newOrderNames);
 
     // const destinationArr = pakeepsOrderNames.filter(filterFunc);
@@ -117,14 +131,26 @@ const PakeepList = ({
     // handlePakeepsOrderNamesThunk(newOrderNames);
   };
 
+  const placeholder = {
+    title: 'Placeholder',
+    text: '',
+    bookmark: false,
+    favorite: false,
+    color: 'default',
+    isPinned: true,
+    id: 'placeholder'
+  };
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       <Grid container className={classes.container}>
         {responsiveColumnOrder?.map((columnId, idx) => {
           const column = columns[columnId];
-          if (!column) return;
+          if (!column?.pakeepsId ) return;
 
-          const pakeepsInColumn = column.pakeepsId.map(pakeepId => _.find(pakeeps, ({ id }) => id === pakeepId));
+          const filterArrToMap = column.pakeepsId.filter(id=> id !==placeholderName )
+          const pakeepsInColumn = filterArrToMap.map(pakeepId => {
+            return  _.find(pakeeps, ({ id }) => id === pakeepId);
+          });
           return (
             <Column
               key={column?.id}
