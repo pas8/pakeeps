@@ -11,6 +11,8 @@ import DeleteForeverOutlinedIcon from '@material-ui/icons/DeleteForeverOutlined'
 import { takeValueFromBreakpoints } from 'hooks/takeValueFromBreakpoints.hook';
 import { useMeasure } from 'react-use';
 import { themeColors } from 'components/theme';
+import AttributeGroup from './components/AttributeGroup';
+import { connect } from 'react-redux';
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -50,7 +52,7 @@ const useStyles = makeStyles(theme => ({
   title: { textOverflow: 'ellipsis', overflow: 'hidden' },
   isDragging: { borderColor: themeColors.primaryMain }
 }));
-const PakeepElement = ({ title, text, bookmark, favorite, color, labels, isDragging, id }) => {
+const PakeepElement = ({ title, text, bookmark, favorite, color, labels, isDragging, id, events ,utilsViewLikeInGoogleKeep}) => {
   const classes = useStyles(color);
   const [hover, setHover] = useState(false);
   const [labelHover, setLabelHover] = useState(!false);
@@ -62,12 +64,11 @@ const PakeepElement = ({ title, text, bookmark, favorite, color, labels, isDragg
   const handleSetColorPakeep = () => {};
   const handleSetBookmarkPakeep = () => {};
   const handleDeleteLabel = () => {};
-  const [ref, { x, y, width, height, top, right, bottom, left }] = useMeasure();
-  const sliceArrayTo = takeValueFromBreakpoints([5, 5, 4, 4, 6, 4]);
+  const [ref, { width: widthOfContainer }] = useMeasure();
 
   const iconsUtilsProps = {
     isAllIconsIsShown: false,
-    sliceArrayTo,
+    widthOfContainer,
     setEditTitleIsTrue,
     favorite,
     handleSetFavoritePakeep: handleSetFavoritePakeep,
@@ -98,36 +99,7 @@ const PakeepElement = ({ title, text, bookmark, favorite, color, labels, isDragg
           </Typography>
         </Grid>
         <Grid item>{text}</Grid>
-        <Grid display={'flex'} spacing={1} container className={classes.labelsContainer}>
-          
-          {labels?.map(({ title, icon: labelIcon, key, color }) => {
-            const onDeleteOfLabelItem = () =>
-              (labelHover?.isHovering && labelHover?.title === title) || !labelIcon
-                ? () => handleDeleteLabel(key)
-                : null;
-
-            const labelChipProps = {
-              onMouseEnter: setLabelHoverStatus,
-              onMouseLeave: setLabelHoverStatusIsFalse,
-              icon: !(labelHover?.isHovering && labelHover?.title === title)
-                ? iconsArr.find(({ iconName }) => iconName === labelIcon)?.icon
-                : null,
-              label: title,
-              onDelete: onDeleteOfLabelItem,
-              className: classes.chip,
-              variant: 'outlined',
-              color,
-              size: 'small',
-              deleteIcon: <DeleteForeverOutlinedIcon />
-            };
-
-            return (
-              <Grid className={classes.label} item>
-                <Chip {...labelChipProps} />
-              </Grid>
-            );
-          })}
-        </Grid>
+        <AttributeGroup labels={labels} events={events} />
         <Grow in={hover}>
           <Grid className={classes.iconsUtils}>
             <IconsUtils {...iconsUtilsProps} />
@@ -143,11 +115,11 @@ PakeepElement.propTypes = {
   color: PropTypes.string,
   favorite: PropTypes.any,
   isDragging: PropTypes.bool,
-  labels: PropTypes.shape({
-    map: PropTypes.func
-  }),
+  labels: PropTypes.array,
   text: PropTypes.string,
   title: PropTypes.string
 };
 
-export default PakeepElement;
+const mapStateToProps = ({ settings: { utilsViewLikeInGoogleKeep } }) => ({ utilsViewLikeInGoogleKeep });
+
+export default connect(mapStateToProps)(PakeepElement);

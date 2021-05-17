@@ -31,7 +31,6 @@ const useStyles = makeStyles(theme => ({
 
 const IconsUtils = ({
   isAllIconsIsShown = true,
-  sliceArrayTo = 4,
   setEditTitleIsTrue,
   favorite = true,
   handleSetFavoritePakeep,
@@ -43,7 +42,6 @@ const IconsUtils = ({
   handleSetColorPakeep,
   handleSetWidth,
   fullWidthStatus = false,
-  id,
   widthOfContainer
 }) => {
   const classes = useStyles();

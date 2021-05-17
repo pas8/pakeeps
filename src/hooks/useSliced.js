@@ -5,7 +5,7 @@ export const useSliced = (widthOfContainer, arrWhichShouldBeSliced) => {
   const [averageWidth, lengthOfUtilsArr, handleConcatAverageWidth] = useFindAverageWidthOfUtils();
   const [slicedArr, setSlicedArr] = useState({ before: [], after: [] });
 
-  const slicedCoefficient = widthOfContainer / (averageWidth * lengthOfUtilsArr + averageWidth);
+  const slicedCoefficient = widthOfContainer / (averageWidth * lengthOfUtilsArr + averageWidth +  averageWidth);
   const sliceArrayTo = lengthOfUtilsArr * slicedCoefficient;
   const isShouldBeSliced = slicedCoefficient < 1;
 

@@ -7,6 +7,7 @@ import StepContent from '@material-ui/core/StepContent';
 import Button from '@material-ui/core/Button';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
+import { nanoid } from 'nanoid';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -74,7 +75,9 @@ const DialogContentOfAddingCustomColorToColorLayouts = () => {
     <div className={classes.root}>
       <Stepper activeStep={activeStep} orientation="vertical">
         {steps.map((label, index) => (
-          <Step key={label}>
+          <Step key={label} 
+          // key={nanoid()}
+          >
             <StepLabel>{label}</StepLabel>
             <StepContent>
               {/* <Typography>{getStepContent(index)}</Typography> */}

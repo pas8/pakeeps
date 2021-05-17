@@ -43,8 +43,8 @@
     "react-use": "^17.2.3",
     "redux": "^4.0.5",
     "redux-thunk": "^2.3.0",
-    "sass": "^1.32.11",
-    "wordcount": "^1.1.1"
+    "reselect": "^4.0.0",
+    "sass": "^1.32.11"
   },
   "devDependencies": {
     "redux-devtools-extension": "^2.13.9"

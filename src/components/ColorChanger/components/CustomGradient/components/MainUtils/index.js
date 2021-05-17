@@ -7,6 +7,7 @@ import compareFunc from 'compare-func';
 import CloseIcon from '@material-ui/icons/Close';
 import clsx from 'clsx';
 import NumberAdornment from 'components/ColorChanger/components/CustomColor/components/NumberAdornment';
+import { nanoid } from 'nanoid';
 const useStyles = makeStyles(theme => ({
   container: {
     margin: theme.spacing(2.16, 2.4, 0.8, 1.2),
@@ -141,6 +142,7 @@ const MainUtilsOfCustomGradient = ({
         };
         return (
           <Box
+          key={nanoid()}
             item
             mb={1.4}
             onFocus={handleGradientFocusedElementColor}

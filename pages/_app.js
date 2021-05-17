@@ -3,8 +3,6 @@ import '../styles/globals.css';
 import { theme } from 'components/theme/index';
 import { ThemeProvider } from '@material-ui/core/styles';
 import { Provider as ReduxProvider } from 'react-redux';
-import store from '../src/store/index';
-// import HeaderLayout from '';
 import { Provider as AuthProvider } from 'next-auth/client';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import DateFnsUtils from '@date-io/date-fns';
@@ -13,6 +11,8 @@ import LogRocket from 'logrocket';
 import SnackBarLayout from 'layouts/SnackBarLayout';
 import { useEffect } from 'react';
 import { CssBaseline } from '@material-ui/core';
+import store from 'store';
+import ScrollLayout from 'layouts/ScrollLayout';
 
 const DynamicComponentWithNoSSR = dynamic(() => import('../src/layouts/HeaderLayout/index'), {
   ssr: !false
@@ -21,12 +21,8 @@ const DynamicComponentWithNoSSR = dynamic(() => import('../src/layouts/HeaderLay
 
 const MyApp = ({ Component, pageProps }) => {
   useEffect(() => {
-    // Remove the server-side injected CSS.
     const jssStyles = document.querySelector('#jss-server-side');
-
-    if (jssStyles) {
-      jssStyles.parentElement.removeChild(jssStyles);
-    }
+    if (jssStyles) jssStyles.parentElement.removeChild(jssStyles);
   }, []);
 
   return (
@@ -34,12 +30,14 @@ const MyApp = ({ Component, pageProps }) => {
       <MuiPickersUtilsProvider utils={DateFnsUtils}>
         <ReduxProvider store={store}>
           <AuthProvider session={pageProps.session}>
-            <SnackBarLayout>
-              <DynamicComponentWithNoSSR>
-                <CssBaseline />
-                <Component {...pageProps} />
-              </DynamicComponentWithNoSSR>
-            </SnackBarLayout>
+            <ScrollLayout>
+              <SnackBarLayout>
+                <DynamicComponentWithNoSSR>
+                  <CssBaseline />
+                  <Component {...pageProps} />
+                </DynamicComponentWithNoSSR>
+              </SnackBarLayout>
+            </ScrollLayout>
           </AuthProvider>
         </ReduxProvider>
       </MuiPickersUtilsProvider>

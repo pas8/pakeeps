@@ -14,10 +14,8 @@ const useStyles = makeStyles(theme => ({
 
 const Column = ({ column, pakeepsInColumn, lastColumn, firstColumn }) => {
   const classes = useStyles();
-
   const [breakpoint] = useCustomBreakpoint();
-
-  console.log(breakpoint);
+  
   return (
     <Grid
       className={

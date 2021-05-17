@@ -1,12 +1,12 @@
 import { Typography } from '@material-ui/core';
-import { Grid, IconButton, makeStyles } from '@material-ui/core';
+import { Grid, IconButton, makeStyles,Tooltip } from '@material-ui/core';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import MenuIcon from '@material-ui/icons/Menu';
 
 const useStyles = makeStyles(theme => ({
   menuButton: {
-    marginRight: theme.spacing(2)
+    marginRight: theme.spacing(1)
   },
   hide: {
     display: 'none'
@@ -16,11 +16,12 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const MainBar = ({ handleDrawerOpen, isMenuOpen }) => {
+const MainBar = ({ handleDrawerOpen, isMenuOpen,isSmallSize }) => {
   const classes = useStyles();
 
   return (
     <>
+        <Tooltip title={'Open Menu'} >
       <IconButton
         aria-label={'open drawer'}
         onClick={handleDrawerOpen}
@@ -29,16 +30,20 @@ const MainBar = ({ handleDrawerOpen, isMenuOpen }) => {
       >
         <MenuIcon />
       </IconButton>
-      <Typography variant={'h6'} className={classes.typography}>
-        Pakeeps
-      </Typography>
+      </Tooltip>
+      {!isSmallSize && (
+        <Typography variant={'h6'} className={classes.typography}>
+          Pakeeps
+        </Typography>
+      )}
     </>
   );
 };
 
 MainBar.propTypes = {
   handleDrawerOpen: PropTypes.func,
-  isMenuOpen: PropTypes.bool
-};
+  isMenuOpen: PropTypes.bool,
+  isSmallSize: PropTypes.bool
+}
 
 export default MainBar;

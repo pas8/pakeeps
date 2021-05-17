@@ -13,7 +13,7 @@ const classes = useStyles();
   return (
     <Grid spacing={1} container className={classes.labelsContainer}>
       <LabelPart labels={labels} />
-      <EventsPart events={events}/>
+      {/* <EventsPart events={events}/> */}
     </Grid>
   );
 };

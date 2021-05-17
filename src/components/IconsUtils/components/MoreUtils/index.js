@@ -4,6 +4,7 @@ import clsx from 'clsx';
 import { useState } from 'react';
 import { useHover, useKeyPressEvent, usePageLeave } from 'react-use';
 import { themeColors } from 'components/theme';
+import { nanoid } from 'nanoid';
 
 const useStyles = makeStyles(theme => ({
   itemGrid: { margin: theme.spacing(0.4, 0.8 * 4, 0, 1.4), padding: theme.spacing(0.8, 0) },
@@ -25,7 +26,9 @@ const MoreUtils = ({ slicedArrAfter }) => {
           const textColor = activeColor || textHoveredColor || themeColors.whiteRgbaColorWith0dot8valueOfAlfaCanal;
 
           return (
-            <MenuItem disableGutters>
+            <MenuItem disableGutters 
+            key={nanoid()}
+            >
               <Grid className={clsx(classes.itemGrid)} container>
                 <Icon style={{ color: iconColor }} />
                 <Grid item className={classes.menuText}>

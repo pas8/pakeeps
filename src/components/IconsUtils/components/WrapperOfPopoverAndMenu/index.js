@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import IconButtonByPas from 'components/IconButton';
 import PopoverAndMenu from '../PopoverAndMenu';
+import { nanoid } from 'nanoid';
 
 const WrapperOfPopoverAndMenu = ({
   buttonUtilsArr,
@@ -29,7 +30,7 @@ const WrapperOfPopoverAndMenu = ({
           menuLocation,
           popoverLocation,
           rotateDeg = false
-        }) => {
+        },idx) => {
           if (hidden) return;
           if (customElementComponentOfIconGroup) return customElementComponentOfIconGroup;
 
@@ -55,6 +56,7 @@ const WrapperOfPopoverAndMenu = ({
 
           const popoverAndMenuProps = {
             name: iconName,
+            key:idx,
             menuLocation,
             popoverLocation,
             popoverText,
@@ -64,7 +66,7 @@ const WrapperOfPopoverAndMenu = ({
             mainComponent
           };
 
-          return <PopoverAndMenu {...popoverAndMenuProps} />;
+          return <PopoverAndMenu {...popoverAndMenuProps}  />;
         }
       )}
     </>

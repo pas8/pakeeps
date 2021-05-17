@@ -1,36 +1,26 @@
 import PropTypes from 'prop-types';
-import React, { useState } from 'react';
+import React from 'react';
 import clsx from 'clsx';
-import { makeStyles, useTheme } from '@material-ui/core/styles';
-import Drawer from '@material-ui/core/Drawer';
+import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
-import List from '@material-ui/core/List';
-import Typography from '@material-ui/core/Typography';
-import Divider from '@material-ui/core/Divider';
-import IconButton from '@material-ui/core/IconButton';
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import ChevronRightIcon from '@material-ui/icons/ChevronRight';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
-import MailIcon from '@material-ui/icons/Mail';
 import HeaderSearch from './components/Search';
 import HeaderDrawer from './components/Drawer';
 import HeaderProfileUtils from './components/ProfileUtils';
-import { Box } from '@material-ui/core';
 import MainBar from './components/MainBar';
-import { setMenuOpenStatusThunk } from 'store/AppReducer';
 import { connect } from 'react-redux';
-
+import { setMenuOpenStatusThunk } from 'store/modules/App/operations';
+import { useCustomBreakpoint } from 'hooks/useCustomBreakpoint';
+import { Grid } from '@material-ui/core';
+import ViewLikeInTelegram from './components/ViewLikeInTelegram';
 const drawerWidth = 240;
 
 const useStyles = makeStyles(theme => ({
-  root: {
-    display: 'flex'
-  },
+  root: ({ headerXsViewLikeIn }) => ({
+    display: 'flex',
+    marginBottom:headerXsViewLikeIn === 'telegram' && theme.spacing(4)
+  }),
   appBar: {
     backgroundColor: '#424242',
     color: 'white',
@@ -60,23 +50,35 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const HeaderByPas = ({ setMenuOpenStatusThunk, isMenuOpen }) => {
-  const classes = useStyles();
+  const [breakpoint] = useCustomBreakpoint();
 
   const handleDrawerOpen = () => setMenuOpenStatusThunk(true);
   const handleDrawerClose = () => setMenuOpenStatusThunk(false);
 
+  const isSmallSize = breakpoint === 'xs';
+  const headerXsViewLikeIn = 'telegram';
+
+  const classes = useStyles({ headerXsViewLikeIn });
+
   return (
-    <div className={classes.root}>
+    <Grid className={classes.root} container>
       <CssBaseline />
       <AppBar className={clsx(classes.appBar, { [classes.appBarShift]: isMenuOpen })}>
         <Toolbar className={classes.toolBar}>
-          <MainBar handleDrawerOpen={handleDrawerOpen} isMenuOpen={isMenuOpen} />
-          <HeaderSearch />
-          <HeaderProfileUtils />
+          {headerXsViewLikeIn === 'pakeeps' && (
+            <>
+              <MainBar handleDrawerOpen={handleDrawerOpen} isMenuOpen={isMenuOpen} isSmallSize={isSmallSize} />
+              <HeaderSearch isSmallSize={isSmallSize} />
+              <HeaderProfileUtils isSmallSize={isSmallSize} />
+            </>
+          )}
+          {headerXsViewLikeIn === 'telegram' && (
+            <ViewLikeInTelegram handleDrawerOpen={handleDrawerOpen} isMenuOpen={isMenuOpen} />
+          )}
         </Toolbar>
       </AppBar>
       <HeaderDrawer isMenuOpen={isMenuOpen} handleDrawerClose={handleDrawerClose} />
-    </div>
+    </Grid>
   );
 };
 
@@ -85,7 +87,10 @@ HeaderByPas.propTypes = {
   setMenuOpenStatusThunk: PropTypes.func
 };
 
-const mapStateToProps = ({ app: { isMenuOpen } }) => ({ isMenuOpen });
+const mapStateToProps = ({ app: { isMenuOpen }, settings: { headerXsViewLikeIn } }) => ({
+  isMenuOpen,
+  headerXsViewLikeIn
+});
 
 const mapDispatchToProps = dispatch => ({
   setMenuOpenStatusThunk: boolStatus => dispatch(setMenuOpenStatusThunk(boolStatus))

@@ -1,86 +1,165 @@
 import PropTypes from 'prop-types';
-import { Grid, makeStyles, useTheme } from '@material-ui/core';
+import { Grid, makeStyles ,CircularProgress} from '@material-ui/core';
 import { connect } from 'react-redux';
-import PakeepElement from './components/PakeepElement';
-
-import { useMeasure } from 'react-use';
-import { useState } from 'react';
-import Column from './components/Column';
-import { DragDropContext } from 'react-beautiful-dnd';
-import { changePakeepColumnsDataThunk, changeTwoPakeepColumnsDataThunk } from 'store/AppReducer/index';
-import { takeValueFromBreakpoints } from 'hooks/takeValueFromBreakpoints.hook';
-const useStyles = makeStyles(theme => ({
-  container: { margin: theme.spacing(8, 0, 0, 0) }
-}));
-
-const PakeepList = ({
-  pakeeps,
-  labels,
-  columns,
-  columnOrder,
+import {
+  addNewPaKeepThunk,
   changePakeepColumnsDataThunk,
-  changeTwoPakeepColumnsDataThunk
-}) => {
-  const classes = useStyles();
-  let breakpointNames = takeValueFromBreakpoints();
+  changeTwoPakeepColumnsDataThunk,
+  deletePakeepThunk,
+  handlePakeepsOrderNamesThunk
+} from 'store/modules/App/operations';
+import { useMakeDraggableArr } from 'hooks/useMakeDraggableArr.hook';
+import _ from 'lodash';
+import dynamic from 'next/dynamic';
+import CenteredGrid from 'components/CenteredGrid';
 
-  const responsiveColumns = columns[breakpointNames];
-  const responsiveColumnOrder = columnOrder.slice(0, takeValueFromBreakpoints([6, 4, 3, 2, 1]));
+const useStyles = makeStyles(theme => ({}));
+
+const PakeepListContainer = dynamic(() => import('./components/Container'), {
+  loading: () => <Grid style={{ height: '80vh', width: '100%' }} container alignItems={'center'} justify={'center'}><CircularProgress /></Grid>,
+  ssr: false
+});
+
+const PakeepList = ({ pakeeps, isDraggableOptimizate, pakeepsOrderNames, handlePakeepsOrderNamesThunk }) => {
+  const classes = useStyles();
+
+  const [columns, responsiveColumnOrder] = useMakeDraggableArr(
+    pakeeps,
+    pakeepsOrderNames,
+    handlePakeepsOrderNamesThunk
+  );
+  // const [value, updateCookie, deleteCookie] = useCookie(state);
+
+  // useEffect(() => _.isEqual(state, nulittyState) && setState(JSON.parse(value)), []);
+
+  // usePageLeave(() =>  updateCookie(state));
+
+  const placeholderName = 'placeholder';
 
   const onDragEnd = ({ destination, source, draggableId }) => {
     if (!destination) return;
     if (!destination.id === source.draggableId && destination.index === source.index) return;
 
-    const columnStart = responsiveColumns[source.droppableId];
-    const columnFinish = responsiveColumns[destination.droppableId];
+    // const destinationIdx = destination.index * responsiveColumnOrder.length + +destination.droppableId;
+    // const sourceIdx = source.index * responsiveColumnOrder.length + +source.droppableId;
+    // const newOrderNames = _.clone(pakeepsOrderNames);
+    const sourceDroppableNumber = +source.droppableId;
+    const destinationDroppableNumber = +destination.droppableId;
 
-    if (columnStart === columnFinish) {
-      let newPaKeepIds = Array.from(columnStart.pakeepIds);
+    const columnOrderLenght = responsiveColumnOrder.length;
+    const sourceArrFilterFunc = (el, idx) =>
+      (idx + columnOrderLenght) % columnOrderLenght === sourceDroppableNumber % columnOrderLenght && el;
 
-      newPaKeepIds.splice(source.index, 1);
-      newPaKeepIds.splice(destination.index, 0, draggableId);
+    const sourceArr = pakeepsOrderNames.filter(sourceArrFilterFunc);
+    const clonedSourceArr = _.clone(sourceArr);
 
-      const newColumn = {
-        ...columnStart,
-        pakeepIds: newPaKeepIds
+    const sumLengthOfAllPakeeps = pakeepsOrderNames.length;
+
+    const toCorrect = +(destination.droppableId !== 0);
+
+    if (source.droppableId === destination.droppableId) {
+      _.fill(clonedSourceArr, sourceArr[source.index], destination.index, destination.index + 1);
+      _.fill(clonedSourceArr, sourceArr[destination.index], source.index, source.index + 1);
+
+      const newOrderNamesReduceFunc = (sum, el, idx) => {
+        const correntIdx =
+          Math.ceil(((sumLengthOfAllPakeeps / columnOrderLenght) * idx) / sumLengthOfAllPakeeps) - toCorrect;
+        const isItemShoulBePasted =
+          (idx + columnOrderLenght) % columnOrderLenght === sourceDroppableNumber % columnOrderLenght;
+
+        const newOrderNamesPakeepsElementId = isItemShoulBePasted ? clonedSourceArr[correntIdx] : el;
+
+        return [...sum, newOrderNamesPakeepsElementId];
       };
-      changePakeepColumnsDataThunk(newColumn, breakpointNames);
-      return;
+      const newOrderNames = pakeepsOrderNames.reduce(newOrderNamesReduceFunc, []);
+
+      return handlePakeepsOrderNamesThunk(newOrderNames);
     }
 
-    let startPaKeepIds = Array.from(columnStart.pakeepIds);
-    let finishPaKeepIds = Array.from(columnFinish.pakeepIds);
+    const destinationArrFilterFunc = (el, idx) => {
+      // console.log(el,(idx+ columnOrderLenght)  % columnOrderLenght === destination)
+      return (idx + columnOrderLenght) % columnOrderLenght === destinationDroppableNumber % columnOrderLenght && el;
+    };
+    const destinationArr = pakeepsOrderNames.filter(destinationArrFilterFunc);
+    // console.log(sourceArr.length);
+    const clonedDestinationArr = _.clone(destinationArr);
 
-    startPaKeepIds.splice(source.index, 1);
-    finishPaKeepIds.splice(destination.index, 0, draggableId);
+    _.remove(clonedSourceArr, sourceIdx => sourceIdx === sourceArr[source.index]);
 
-    const newColumnStart = { ...columnStart, pakeepIds: startPaKeepIds };
-    const newColumnFinish = { ...columnFinish, pakeepIds: finishPaKeepIds };
+    // if (clonedDestinationArr.length === 1) clonedDestinationArr.push('placeholder');
+    clonedDestinationArr.push('placeholder');
+    _.fill(clonedDestinationArr, sourceArr[source.index], destination.index, destination.index + 1);
+    _.remove(clonedDestinationArr, (el, idx) => idx > destination.index);
 
-    changeTwoPakeepColumnsDataThunk(newColumnStart, newColumnFinish, breakpointNames);
+    const partOfDestinationArrWhichWillBeConcated = destinationArr.filter((el, idx) => idx >= destination.index);
+    const concatedDestinationArr = _.concat(clonedDestinationArr, partOfDestinationArrWhichWillBeConcated);
+
+    // console.log(
+    //   sourceArr[source.index],
+    //   destination.index,
+    //   concatedDestinationArr,
+    //   clonedDestinationArr,
+    //   partOfDestinationArrWhichWillBeConcated,
+    //   destinationArr,
+    //   destination.index
+    // );
+
+    const newOrderNamesReduceFunc = (sum, el, idx) => {
+      const correntIdx = Math.floor(((sumLengthOfAllPakeeps / columnOrderLenght) * idx) / sumLengthOfAllPakeeps);
+      const remainderValue = (idx + columnOrderLenght) % columnOrderLenght;
+      const isItemWhichShouldBePastedIsInSourceArr = remainderValue === sourceDroppableNumber % columnOrderLenght;
+      const isItemWhichShouldBePastedIsInDestinationArr =
+        remainderValue === destinationDroppableNumber % columnOrderLenght;
+
+      const sourceArrItem = (isItemWhichShouldBePastedIsInSourceArr && clonedSourceArr[correntIdx]) ?? placeholderName;
+      const destinationArrItem =
+        (isItemWhichShouldBePastedIsInDestinationArr && concatedDestinationArr[correntIdx]) ?? placeholderName;
+
+      const newOrderNamesPakeepsElementId = destinationArrItem || sourceArrItem || el;
+
+      // console.log(destinationDroppableNumber, sourceDroppableNumber, newOrderNamesPakeepsElementId);
+
+      if (!newOrderNamesPakeepsElementId) return sum;
+      return [...sum, newOrderNamesPakeepsElementId];
+    };
+
+    const isLengthOfColumnMoreThanAverage = concatedDestinationArr.length > sumLengthOfAllPakeeps / columnOrderLenght;
+    const fillValue = concatedDestinationArr.length * columnOrderLenght - sumLengthOfAllPakeeps;
+
+    const placholderArrWhichShouldBeConcated =
+      isLengthOfColumnMoreThanAverage && Array(fillValue).fill(placeholderName);
+
+    const newPakeepsOrderNames = _.concat(pakeepsOrderNames, placholderArrWhichShouldBeConcated);
+    const reducedOrderNames = _.reduce(newPakeepsOrderNames, newOrderNamesReduceFunc, []);
+
+    const stringNewOrderNames = _.join(reducedOrderNames, '_');
+    const placeholderPattern = _.join(Array(columnOrderLenght).fill(placeholderName), '_');
+
+    const toRemoveNameString = 'toRemove';
+    const toSplitNewOrderString = stringNewOrderNames.replaceAll(placeholderPattern, toRemoveNameString);
+    const filteredNewOrderArr = _.split(toSplitNewOrderString, '_');
+
+    const newOrderNames = _.filter(filteredNewOrderArr, string => string !== toRemoveNameString);
+    return handlePakeepsOrderNamesThunk(newOrderNames);
   };
+  // const placeholder = {
+  //   title: 'Placeholder',
+  //   text: '',
+  //   bookmark: false,
+  //   favorite: false,
+  //   color: 'default',
+  //   isPinned: true,
+  //   id: 'placeholder'
 
-  return (
-    <DragDropContext onDragEnd={onDragEnd} >
-      <Grid container display={'flex'} className={classes.container}>
-        {responsiveColumnOrder?.map((columnId, idx) => {
-          const column = responsiveColumns[columnId];
-          if (!column) return;
-
-          const pakeepsInColumn = column.pakeepIds.map(pakeepId => pakeeps[pakeepId]);
-          return (
-            <Column
-              key={column?.id}
-              column={column}
-              pakeepsInColumn={pakeepsInColumn}
-              lastColumn={idx + 1 === responsiveColumnOrder.length ? true : false}
-              firstColumn={idx === 0 ? true : false}
-            />
-          );
-        })}
-      </Grid>
-    </DragDropContext>
-  );
+  // };
+  const pakeepListContainerProps = {
+    pakeeps,
+    responsiveColumnOrder,
+    columns,
+    onDragEnd,
+    placeholderName
+  };
+  return <PakeepListContainer {...pakeepListContainerProps} />;
 };
 
 PakeepList.propTypes = {
@@ -94,18 +173,24 @@ PakeepList.propTypes = {
   pakeeps: PropTypes.any
 };
 
-const mapStateToProps = ({ app: { pakeeps, labels, columns, columnOrder } }) => ({
+const mapStateToProps = ({
+  app: { pakeeps, labels, columns, columnOrder, pakeepsOrderNames },
+  settings: { isDraggableOptimizate = true }
+}) => ({
   pakeeps,
   labels,
   columns,
-  columnOrder
+  columnOrder,
+  pakeepsOrderNames,
+  isDraggableOptimizate
 });
 const mapDispatchToProps = dispatch => ({
   changePakeepColumnsDataThunk: (newColumn, breakpointNames) =>
     dispatch(changePakeepColumnsDataThunk(newColumn, breakpointNames)),
 
   changeTwoPakeepColumnsDataThunk: (newColumnStart, newColumnFinish, breakpointNames) =>
-    dispatch(changeTwoPakeepColumnsDataThunk(newColumnStart, newColumnFinish, breakpointNames))
+    dispatch(changeTwoPakeepColumnsDataThunk(newColumnStart, newColumnFinish, breakpointNames)),
+  handlePakeepsOrderNamesThunk: newOrder => dispatch(handlePakeepsOrderNamesThunk(newOrder))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(PakeepList);

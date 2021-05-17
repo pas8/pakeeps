@@ -5,6 +5,7 @@ import clsx from 'clsx';
 import _ from 'lodash';
 import CenteredGrid from 'components/CenteredGrid';
 import { colord } from 'colord';
+import { nanoid } from 'nanoid';
 
 const useStyles = makeStyles(theme => ({
   elementOfGridColorPicker: {
@@ -45,7 +46,7 @@ const useStyles = makeStyles(theme => ({
   //   '& .MuiSvgIcon-root': { width: theme.spacing(2 / (0.8 - 0.1)) }
   // },
 }));
-const ColumnElementOfPreparedColorExamples = ({ handleSetColor, isExtended, color, colorName }) => {
+const ColumnElementOfPreparedColorExamples = ({ handleSetColor, isExtended, color, colorName },idx) => {
   const isColorLight = colord(color).brightness() >= 0.8;
   const classes = useStyles({ isColorLight });
 
@@ -70,7 +71,8 @@ const ColumnElementOfPreparedColorExamples = ({ handleSetColor, isExtended, colo
             const elementOfPartsOfGridElementProps = {
               onClick,
               style: { background: colorOfElementOfPartsOfGridElementProps },
-              className: classes.extendedElementOfGridColorPicker
+              className: classes.extendedElementOfGridColorPicker,
+              key:idx
             };
 
             return <Grid {...elementOfPartsOfGridElementProps} />;

@@ -40,7 +40,7 @@ const NewPakeepUtils = ({ open = !true, handleNewPakeepSave, widthOfContainer,..
     ...newPakeepUtilsProps,
     widthOfContainer:correctWidthOfContainer
   };
-console.log(correctWidthOfContainer)
+
   return (
     <Box className={clsx(classes.container, !open ? classes.hidden : null)}>
       <IconsUtils {...iconUtilsProps} />

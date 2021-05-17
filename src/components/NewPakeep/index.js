@@ -8,10 +8,10 @@ import VisibilityOffOutlinedIcon from '@material-ui/icons/VisibilityOffOutlined'
 import BookmarkBorderIcon from '@material-ui/icons/BookmarkBorder';
 import BookmarkIcon from '@material-ui/icons/Bookmark';
 import { connect } from 'react-redux';
-import { addNewPaKeepThunk } from 'store/AppReducer';
 import wordcount from 'wordcount';
 import { useCookie, useMeasure, usePageLeave } from 'react-use';
 import _ from 'lodash';
+import { addNewPaKeepThunk } from 'store/modules/App/operations';
 
 const useStyles = makeStyles(theme => ({
   container: { marginTop: theme.spacing(8) },
