@@ -1,32 +1,19 @@
-import { Container, Grid, makeStyles, Typography } from '@material-ui/core';
-import { connect } from 'react-redux';
-import dynamic from 'next/dynamic';
-import { SnackbarProvider } from 'notistack';
-import { Alert } from '@material-ui/lab';
-import PakeepList from 'components/PakeepList';
+import { Grid } from '@material-ui/core';
 import NewPakeep from 'components/NewPakeep';
+import dynamic from 'next/dynamic';
 
-const Pakeeps = ({ data }) => {
-  return (
-    <SnackbarProvider
-      anchorOrigin={{
-        vertical: 'bottom',
-        horizontal: 'right'
-      }}
-      content={(key, message) => (
-        <Alert variant={'outlined'} severity={'success'}>
-          {message}
-        </Alert>
-      )}
-    >
-      <Grid container justify={'center'} alignItems={'center'}>
-        <NewPakeep />
-      </Grid>
-      <PakeepList />
-    </SnackbarProvider>
-  );
-};
+const PakeepList = dynamic(() => import('components/PakeepList'), {
+  loading: () => <p style={{ height: '100vh', width: '100vw' }}>Load</p>,
+  // ssr: false
+});
 
-const mapStateToProps = ({ app: { data } }) => ({ data });
+const Pakeeps = () => (
+  <>
+    <Grid container justify={'center'} alignItems={'center'}>
+      <NewPakeep />
+    </Grid>
+    <PakeepList />
+  </>
+);
 
-export default connect(mapStateToProps, null)(Pakeeps);
+export default Pakeeps;

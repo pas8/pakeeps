@@ -214,7 +214,8 @@ const AddDateToPakeep = ({ ampm = false, onMenuClose, id, events }) => {
         dynamicTitle={menuItemState.dynamicTitle}
       />
       {dateListArr.map(({ title, icon: Icon, onClick, hidden, dynamicComponent = false, name }, idx) => {
-        const DynamicComponent = dynamicComponent.component;
+        const DynamicComponent = dynamicComponent.component ?? Grid;
+        
         const correctName = name === menuItemState.name;
         const activeIcon = correctName && menuItemState.hoverStatus;
 

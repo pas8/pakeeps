@@ -1,37 +1,44 @@
-import { Badge, IconButton, makeStyles } from '@material-ui/core';
-import NotificationsNoneOutlinedIcon from '@material-ui/icons/NotificationsNoneOutlined';
-import AccountCircleOutlinedIcon from '@material-ui/icons/AccountCircleOutlined';
+import PropTypes from 'prop-types';
+import { makeStyles, Tooltip, Grid } from '@material-ui/core';
+import ThemeChangerButton from './components/ThemeChangerButton';
+import NoticationButton from './components/NoticationButton';
+import AvatarButtor from './components/AvatarButtor';
+import { nanoid } from 'nanoid';
 
 const useStyles = makeStyles(theme => ({
   profileUtils: {
-    // justifySelf: 'flex-end',
     display: 'flex'
-    // justifyItems: 'flex-end'
   }
 }));
 
-const HeaderProfileUtils = () => {
-  const classNames = useStyles();
+const HeaderProfileUtils = ({ isSmallSize }) => {
+  const classes = useStyles();
+
+  const iconButtonUtilsArr = [
+    { component: ThemeChangerButton, toolTipText: 'Change theme', hideInSmallSize: true },
+    { component: NoticationButton, toolTipText: 'Number of notifications' ,hideInSmallSize: true },
+    { component: AvatarButtor, toolTipText: 'Open your profile' }
+  ];
 
   return (
-    <div className={classNames.profileUtils}>
-      <IconButton aria-label={'Notifications'} color={'inherit'}>
-        <Badge badgeContent={17} color={'secondary'}>
-          <NotificationsNoneOutlinedIcon />
-        </Badge>
-      </IconButton>
-      <IconButton
-        edge={'end'}
-        aria-label={'account of current user'}
-        // aria-controls={menuId}
-        aria-haspopup={'true'}
-        // onClick={handleProfileMenuOpen}
-        color={'inherit'}
-      >
-        <AccountCircleOutlinedIcon />
-      </IconButton>
+    <div className={classes.profileUtils}>
+      {iconButtonUtilsArr.map(({ component: Component, toolTipText, hideInSmallSize }) => {
+        if (hideInSmallSize && isSmallSize) return;
+
+        return (
+          <Tooltip title={toolTipText} key={nanoid()}>
+            <Grid container>
+              <Component />
+            </Grid>
+          </Tooltip>
+        );
+      })}
     </div>
   );
+};
+
+HeaderProfileUtils.propTypes = {
+  isSmallSize: PropTypes.bool
 };
 
 export default HeaderProfileUtils;

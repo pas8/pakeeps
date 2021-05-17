@@ -8,8 +8,10 @@ import VisibilityOffOutlinedIcon from '@material-ui/icons/VisibilityOffOutlined'
 import BookmarkBorderIcon from '@material-ui/icons/BookmarkBorder';
 import BookmarkIcon from '@material-ui/icons/Bookmark';
 import { connect } from 'react-redux';
-import { addNewPaKeepThunk } from 'store/AppReducer';
 import wordcount from 'wordcount';
+import { useCookie, useMeasure, usePageLeave } from 'react-use';
+import _ from 'lodash';
+import { addNewPaKeepThunk } from 'store/modules/App/operations';
 
 const useStyles = makeStyles(theme => ({
   container: { marginTop: theme.spacing(8) },
@@ -35,14 +37,22 @@ const useStyles = makeStyles(theme => ({
 const NewPaKeep = ({ pakeeps, addNewPaKeepThunk }) => {
   const classes = useStyles();
 
-  const [state, setState] = useState({
+  const nulittyState = {
     title: '',
     text: '',
     bookmark: false,
     favorite: false,
     color: 'transparent',
     labels: []
-  });
+  };
+
+  const [state, setState] = useState(nulittyState);
+  const [value, updateCookie, deleteCookie] = useCookie(state);
+
+  useEffect(() => _.isEqual(state, nulittyState) && setState(JSON.parse(value)), []);
+
+  usePageLeave(() =>  updateCookie(state));
+
   const [focus, setFocus] = useState(false);
   const [placeholder, setPlaceholder] = useState('Write a title or press ctrl + Alt + 8 to skip a title');
   const [enter, setEnter] = useState(false);
@@ -71,21 +81,37 @@ const NewPaKeep = ({ pakeeps, addNewPaKeepThunk }) => {
       setWritingText(true);
       setShowUtils(true);
     }
-  }, [focus, enter]);   
+  }, [focus, enter]);
 
   const handleNewPakeepSave = () => {
-    console.log( wordcount(state.title) / state.title.length  );
-    addNewPaKeepThunk({...state,wordsCoefficient : 1});
+    console.log(wordcount(state.title) / state.title.length);
+    addNewPaKeepThunk({ ...state, wordsCoefficient: 1 });
     setWritingText(false);
-    setState({ title: '', text: '', bookmark: false, favorite: false, color: 'transparent', labels: false });
+    setState(nulittyState);
   };
-  document.onkeydown = evt => {
-    if (evt.key === 'Enter' && enter === false) setEnter(true);
-    else if (enter === true && evt.key !== 'Enter') setEnter(false);
+  // document.onkeydown = evt => {
+  //   if (evt.key === 'Enter' && enter === false) setEnter(true);
+  //   else if (enter === true && evt.key !== 'Enter') setEnter(false);
 
-    if (evt.key === 'Enter' && changingTitle === true) setChangingTitle(false);
-  };
+  //   if (evt.key === 'Enter' && changingTitle === true) setChangingTitle(false);
+  // };
   const handleSetWidthInNewPakeep = () => setFullWidthOfNewPakeepContainer(!fullWidthOfNewPakeepContainer);
+
+  const [ref, { width: widthOfContainer }] = useMeasure();
+
+  const newPakeepUtils = {
+    ...state,
+    open: showUtils,
+    setEditTitleIsTrue,
+    changingTitle,
+    handleSetFavoritePakeep,
+    handleSetBookmarkPakeep,
+    handleSetColorPakeep,
+    handleNewPakeepSave,
+    handleSetWidth: handleSetWidthInNewPakeep,
+    fullWidthStatus: fullWidthOfNewPakeepContainer,
+    widthOfContainer
+  };
 
   return (
     <Grid
@@ -95,6 +121,7 @@ const NewPaKeep = ({ pakeeps, addNewPaKeepThunk }) => {
       md={fullWidthOfNewPakeepContainer ? 12 : 9}
       lg={fullWidthOfNewPakeepContainer ? 12 : 7}
       xl={fullWidthOfNewPakeepContainer ? 12 : 5}
+      ref={ref}
     >
       <Paper variant={'elevation'} className={classes.wrapper}>
         <Box>
@@ -114,19 +141,9 @@ const NewPaKeep = ({ pakeeps, addNewPaKeepThunk }) => {
             onBlur={setFocusIsFalse}
           />
         </Box>
+
         {/* </form> */}
-        <NewPakeepUtils
-          open={showUtils}
-          setEditTitleIsTrue={setEditTitleIsTrue}
-          changingTitle={changingTitle}
-          handleSetFavoritePakeep={handleSetFavoritePakeep}
-          handleSetBookmarkPakeep={handleSetBookmarkPakeep}
-          handleSetColorPakeep={handleSetColorPakeep}
-          handleNewPakeepSave={handleNewPakeepSave}
-          handleSetWidth={handleSetWidthInNewPakeep}
-          {...state}
-          fullWidthOfNewPakeepContainer={fullWidthOfNewPakeepContainer}
-        />
+        <NewPakeepUtils {...newPakeepUtils} />
         <Box className={classes.showUtils} onClick={setUtilsIsVisible}>
           <IconButton>
             {!showUtils ? (

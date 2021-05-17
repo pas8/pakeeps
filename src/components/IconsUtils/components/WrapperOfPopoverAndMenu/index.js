@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import IconButtonByPas from 'components/IconButton';
 import PopoverAndMenu from '../PopoverAndMenu';
+import { nanoid } from 'nanoid';
 
 const WrapperOfPopoverAndMenu = ({
   buttonUtilsArr,
@@ -8,7 +9,8 @@ const WrapperOfPopoverAndMenu = ({
   popoverAndMenuState,
   keyName,
   isIconNameExtended = false,
-  iconSize = 'default'
+  iconSize = 'default',
+  handleAverageMainComponentWidth
 }) => {
   return (
     <>
@@ -26,8 +28,9 @@ const WrapperOfPopoverAndMenu = ({
           customColor,
           customElementComponentOfIconGroup = false,
           menuLocation,
-          popoverLocation
-        }) => {
+          popoverLocation,
+          rotateDeg = false
+        },idx) => {
           if (hidden) return;
           if (customElementComponentOfIconGroup) return customElementComponentOfIconGroup;
 
@@ -37,11 +40,12 @@ const WrapperOfPopoverAndMenu = ({
             customColor,
             onClick: onClick,
             iconName,
+            rotateDeg,
             size: iconSize,
             activeIcon,
             activeIconName: popoverAndMenuState.name,
             activeProperty: popoverAndMenuState.popoverIsOpen,
-           
+            handleAverageMainComponentWidth
           };
 
           const menuComponents = !onlyPopover && MenuComponents && (
@@ -52,6 +56,7 @@ const WrapperOfPopoverAndMenu = ({
 
           const popoverAndMenuProps = {
             name: iconName,
+            key:idx,
             menuLocation,
             popoverLocation,
             popoverText,
@@ -61,7 +66,7 @@ const WrapperOfPopoverAndMenu = ({
             mainComponent
           };
 
-          return <PopoverAndMenu {...popoverAndMenuProps} />;
+          return <PopoverAndMenu {...popoverAndMenuProps}  />;
         }
       )}
     </>
@@ -69,7 +74,7 @@ const WrapperOfPopoverAndMenu = ({
 };
 
 WrapperOfPopoverAndMenu.propTypes = {
-  CustomElementComponentOfIconGroup: PropTypes.oneOf(['bool', 'node']),
+  CustomElementComponentOfIconGroup: PropTypes.oneOf(["bool", "node"]),
   buttonUtilsArr: PropTypes.shape({
     map: PropTypes.func
   }),
@@ -83,6 +88,6 @@ WrapperOfPopoverAndMenu.propTypes = {
     onMenuClose: PropTypes.func,
     popoverIsOpen: PropTypes.bool
   })
-};
+}
 
 export default WrapperOfPopoverAndMenu;
