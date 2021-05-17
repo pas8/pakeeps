@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types';
-import { Grid, makeStyles } from '@material-ui/core';
+import { Grid, makeStyles ,CircularProgress} from '@material-ui/core';
 import { connect } from 'react-redux';
-import { DragDropContext } from 'react-beautiful-dnd';
 import {
   addNewPaKeepThunk,
   changePakeepColumnsDataThunk,
@@ -9,29 +8,19 @@ import {
   deletePakeepThunk,
   handlePakeepsOrderNamesThunk
 } from 'store/modules/App/operations';
-import { takeValueFromBreakpoints } from 'hooks/takeValueFromBreakpoints.hook';
-import Column from './components/Column';
 import { useMakeDraggableArr } from 'hooks/useMakeDraggableArr.hook';
 import _ from 'lodash';
+import dynamic from 'next/dynamic';
+import CenteredGrid from 'components/CenteredGrid';
 
-const useStyles = makeStyles(theme => ({
-  container: {
-    margin: theme.spacing(8, 0, 0, 0),
-    [theme.breakpoints.down('xs')]: {
-      margin: theme.spacing(4, 0, 0, 0)
-    }
-  }
-}));
+const useStyles = makeStyles(theme => ({}));
 
-const PakeepList = ({
-  pakeeps,
-  labels,
-  changePakeepColumnsDataThunk,
-  changeTwoPakeepColumnsDataThunk,
-  isDraggableOptimizate,
-  pakeepsOrderNames,
-  handlePakeepsOrderNamesThunk
-}) => {
+const PakeepListContainer = dynamic(() => import('./components/Container'), {
+  loading: () => <Grid style={{ height: '80vh', width: '100%' }} container alignItems={'center'} justify={'center'}><CircularProgress /></Grid>,
+  ssr: false
+});
+
+const PakeepList = ({ pakeeps, isDraggableOptimizate, pakeepsOrderNames, handlePakeepsOrderNamesThunk }) => {
   const classes = useStyles();
 
   const [columns, responsiveColumnOrder] = useMakeDraggableArr(
@@ -161,31 +150,16 @@ const PakeepList = ({
   //   color: 'default',
   //   isPinned: true,
   //   id: 'placeholder'
-  // };
-  return (
-    <DragDropContext onDragEnd={onDragEnd}>
-      <Grid container className={classes.container}>
-        {responsiveColumnOrder?.map((columnId, idx) => {
-          const column = columns[columnId];
-          if (!column?.pakeepsId) return;
 
-          const filterArrToMap = column.pakeepsId.filter(id => id !== placeholderName);
-          const pakeepsInColumn = filterArrToMap.map(pakeepId => {
-            return _.find(pakeeps, ({ id }) => id === pakeepId);
-          });
-          return (
-            <Column
-              key={column?.id}
-              column={column}
-              pakeepsInColumn={pakeepsInColumn}
-              lastColumn={idx + 1 === responsiveColumnOrder.length ? true : false}
-              firstColumn={idx === 0 ? true : false}
-            />
-          );
-        })}
-      </Grid>
-    </DragDropContext>
-  );
+  // };
+  const pakeepListContainerProps = {
+    pakeeps,
+    responsiveColumnOrder,
+    columns,
+    onDragEnd,
+    placeholderName
+  };
+  return <PakeepListContainer {...pakeepListContainerProps} />;
 };
 
 PakeepList.propTypes = {

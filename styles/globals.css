@@ -1,5 +1,6 @@
 html,
 body {
+  /* min-height: 100vh; */
 }
 
 a {
@@ -32,25 +33,16 @@ ul {
   background-color: rgba(255, 255, 255, 0.8);
 }
 
-
-.MuiDialog-paper{
-
-/* overflow-x: hidden  ; */
-
+.MuiDialog-paper {
+  /* overflow-x: hidden  ; */
 }
-.MuiBackdrop-root{
-
-
+.MuiBackdrop-root {
   backdrop-filter: blur(4px);
 }
 
-.MuiPickersCalendarHeader-switchHeader svg{
-
-transform: rotate(180deg);
-
+.MuiPickersCalendarHeader-switchHeader svg {
+  transform: rotate(180deg);
 }
 .MuiPickersModal-dialogRoot {
-
-transform: scale(1.08);
-
+  transform: scale(1.08);
 }
