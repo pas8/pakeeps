@@ -6,7 +6,8 @@ import {
   toDeletePakeep,
   toScroll,
   toSetMenuOpenStatus,
-  toSetNewOrderNames
+  toSetNewOrderNames,
+  toSetCurrentFolderPropertyIdx
 } from './actions';
 
 export const addNewPaKeepThunk = data => dispatch => {
@@ -38,5 +39,12 @@ export const handleScrollDirectionName = scrollDirectionName => dispatch => {
 export const handlePakeepsOrderNamesThunk = newOrder => dispatch => {
   dispatch(toSetNewOrderNames(newOrder));
 };
+
+
+export const handleCurrentFolderPropertyIdxThunk = folderIdx => dispatch => {
+  dispatch(toSetCurrentFolderPropertyIdx(folderIdx));
+};
+
+
 
 

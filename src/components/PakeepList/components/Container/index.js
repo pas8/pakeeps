@@ -8,27 +8,50 @@ import { find } from 'lodash';
 const useStyles = makeStyles(theme => ({
   container: {
     margin: theme.spacing(8, 0, 0, 0),
-    [theme.breakpoints.down('xs')]: {
+    [theme.breakpoints.between('xs', 'sm')]: {
       margin: theme.spacing(4, 0, 0, 0)
+    },
+    [theme.breakpoints.down('md')]: {
+      margin: theme.spacing(6, 0, 0, 0)
     }
   }
 }));
 
-const PakeepListContainer = ({ pakeeps, responsiveColumnOrder, columns, onDragEnd,placeholderName }) => {
+const PakeepListContainer = ({
+  pakeeps,
+  responsiveColumnOrder,
+  columns,
+  onDragEnd,
+  placeholderName,
+  forderProperty
+}) => {
   const classes = useStyles();
+  const placeholder = {
+    title: 'Placeholder',
+    text: '',
+    bookmark: false,
+    favorite: false,
+    color: 'default',
+    isPinned: true,
+    id: 'placeholder'
+  };
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       <Grid container className={classes.container}>
         {responsiveColumnOrder?.map((columnId, idx) => {
           const column = columns[columnId];
           if (!column?.pakeepsId) return;
+          // console.log(column?.pakeepsId)
+          const filteredArrToMap = column.pakeepsId.filter(id => id !== placeholderName);
 
-          const filterArrToMap = column.pakeepsId.filter(id => id !== placeholderName);
-          const pakeepsInColumn = filterArrToMap.map(pakeepId => {
-            return find(pakeeps, ({ id }) => id === pakeepId);
+          const pakeepsInColumn = filteredArrToMap.map(pakeepId => {
+            const currentEl = find(pakeeps, ({ id }) => id === pakeepId);
+            return currentEl;
           });
+
           return (
             <Column
+              forderProperty={forderProperty}
               key={column?.id}
               column={column}
               pakeepsInColumn={pakeepsInColumn}
@@ -51,6 +74,6 @@ PakeepListContainer.propTypes = {
     length: PropTypes.any,
     map: PropTypes.func
   })
-}
+};
 
 export default PakeepListContainer;

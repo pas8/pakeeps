@@ -5,17 +5,39 @@ import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
 import clsx from 'clsx';
 import { useCustomBreakpoint } from 'hooks/useCustomBreakpoint';
 
-const useStyles = makeStyles(theme => ({
-  column: { padding: theme.spacing(0, 0.8) },
-  columnFirst: { padding: theme.spacing(0, 0.8 * 2, 0, 0) },
-  columnLast: { padding: theme.spacing(0, 0, 0, 0.8 * 2) },
-  columnElement: { margin: theme.spacing(0, 0, 3 * 0.8, 0) }
+const paddingValue = 0.8;
+const paddingValueX = 0.8 * 2;
+const paddingValueOfElement = 0.8 * (2 + 1);
+
+const useStyles = makeStyles(({ spacing, breakpoints }) => ({
+  column: { padding: spacing(0, paddingValue) },
+  columnFirst: {
+    padding: spacing(0),
+    paddingRight: spacing(paddingValueX),
+    [breakpoints.down('sm')]: {
+      paddingRight: spacing(paddingValueX / 1.8)
+    }
+  },
+  columnLast: {
+    padding: spacing(0),
+    paddingLeft: spacing(paddingValueX),
+    [breakpoints.down('sm')]: {
+      paddingLeft: spacing(paddingValueX / 1.8)
+    }
+  },
+  columnElement: {
+    margin: spacing(0),
+    marginBottom: spacing(paddingValueOfElement),
+    [breakpoints.down('sm')]: {
+      marginBottom: spacing(paddingValueOfElement / 1.2)
+    }
+  }
 }));
 
-const Column = ({ column, pakeepsInColumn, lastColumn, firstColumn }) => {
+const Column = ({ column, pakeepsInColumn, lastColumn, firstColumn, forderProperty }) => {
   const classes = useStyles();
   const [breakpoint] = useCustomBreakpoint();
-  
+
   return (
     <Grid
       className={
@@ -32,20 +54,26 @@ const Column = ({ column, pakeepsInColumn, lastColumn, firstColumn }) => {
       <Droppable droppableId={column.id} direction={'vertical'}>
         {provided => (
           <Grid innerRef={provided.innerRef} {...provided.droppableProps}>
-            {pakeepsInColumn.map((el, idx) => (
-              <Draggable key={el.id} draggableId={el.id} index={idx}>
-                {(provided, snapshot) => (
-                  <Grid
-                    {...provided.draggableProps}
-                    {...provided.dragHandleProps}
-                    innerRef={provided.innerRef}
-                    className={classes.columnElement}
-                  >
-                    <PakeepElement {...el} isDragging={snapshot.isDragging} />
-                  </Grid>
-                )}
-              </Draggable>
-            ))}
+            {pakeepsInColumn.map((el, idx) => {
+              const draggableEl = (
+                <Draggable key={el.id} draggableId={el.id} index={idx}>
+                  {(provided, snapshot) => (
+                    <Grid
+                      {...provided.draggableProps}
+                      {...provided.dragHandleProps}
+                      innerRef={provided.innerRef}
+                      className={classes.columnElement}
+                    >
+                      <PakeepElement {...el} isDragging={snapshot.isDragging} idx={idx} />
+                    </Grid>
+                  )}
+                </Draggable>
+              );
+              if (forderProperty === 'ALL') return draggableEl;
+              if (!el[forderProperty]) return;
+
+              return draggableEl;
+            })}
             {provided.placeholder}
           </Grid>
         )}

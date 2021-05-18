@@ -6,6 +6,7 @@ import PropTypes from 'prop-types';
 import { useState } from 'react';
 import { connect } from 'react-redux';
 import { useTakeIcon } from 'hooks/useTakeIcon.hook';
+import { handleCurrentFolderPropertyIdxThunk } from 'store/modules/App/operations';
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -51,18 +52,23 @@ const StyledTabs = withStyles(theme => ({
   }
 }))(props => <Tabs {...props} TabIndicatorProps={{ children: <span /> }} />);
 
-const LabelTab = ({ folders }) => {
-  const [value, setValue] = useState(0);
+const LabelTab = ({ folders, handleCurrentFolderPropertyIdxThunk, currentFolderPropertyIdx }) => {
 
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
+  const handleTabIdxChange = (placeholder, folderName) => {
+    handleCurrentFolderPropertyIdxThunk(folderName)
   };
+
   const classes = useStyles();
+
+  // const styledTabsProps = {
+  //   value,
+  //   onChange:handleTabIdxChange,
+  // }
   return (
     <Grid className={classes.container}>
       <StyledTabs
-        value={value}
-        onChange={handleChange}
+        value={currentFolderPropertyIdx}
+        onChange={handleTabIdxChange}
         indicatorColor={'primary'}
         textColor={'primary'}
         variant={'scrollable'}
@@ -80,7 +86,9 @@ const LabelTab = ({ folders }) => {
 
 LabelTab.propTypes = {};
 
-const mapStateToProps = ({ app: { folders } }) => ({ folders });
-// const mapDispatchToProps = dispatch => ({ setData: data => dispatch(setData(data)) });
+const mapStateToProps = ({ app: { folders, currentFolderPropertyIdx } }) => ({ folders, currentFolderPropertyIdx });
+const mapDispatchToProps = dispatch => ({
+  handleCurrentFolderPropertyIdxThunk: folderIdx => dispatch(handleCurrentFolderPropertyIdxThunk(folderIdx))
+});
 
-export default connect(mapStateToProps, null)(LabelTab);
+export default connect(mapStateToProps, mapDispatchToProps)(LabelTab);

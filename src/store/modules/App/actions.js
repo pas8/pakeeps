@@ -22,4 +22,7 @@ export const toChangeTwoColumns = (startColumn, finishColumn, breakpointName) =>
 export const toScroll = scrollDirectionName => ({ type: types.SCROLL_DIRECTION, scrollDirectionName });
 
 export const toSetNewOrderNames = newOrder => ({ type: types.SET_NEW_ORDER_NAMES, newOrder });
-
+export const toSetCurrentFolderPropertyIdx = folderIdx => ({
+  type: types.HANDLE_CURRENT_FOLDER_PROPERTY_IDX,
+  folderIdx
+});

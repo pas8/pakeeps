@@ -67,7 +67,7 @@ const initialState = {
       ],
       id: 'pakeep4',
       isPinned: true
-    },
+    }
     // {
     //   title: 'Placeholder 5',
     //   text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
@@ -214,16 +214,21 @@ const initialState = {
     //   id: 'pakeep16'
     // },
   ],
-  pakeepsOrderNames: ['pakeep1','pakeep2','pakeep3','pakeep4','pakeep5','pakeep6',],
+  pakeepsOrderNames: ['pakeep1', 'pakeep2', 'pakeep3', 'pakeep4', 'pakeep5', 'pakeep6'],
   notifinationCounter: 8,
   isMenuOpen: false,
-  scrollDirectionName: 'up'
+  scrollDirectionName: 'up',
+  currentFolderPropertyIdx: 0
 };
 
 const AppReducer = createReducer(initialState)({
   [types.ADD_NEW_PAKEEP]: (state, { newPaKeep }) => ({
     ...state,
     pakeeps: { ...state.pakeeps, [newPaKeep.id]: newPaKeep }
+  }),
+  [types.HANDLE_CURRENT_FOLDER_PROPERTY_IDX]: (state, { folderIdx }) => ({
+    ...state,
+    currentFolderPropertyIdx: folderIdx
   }),
   [types.SET_NEW_ORDER_NAMES]: (state, { newOrder }) => ({
     ...state,
