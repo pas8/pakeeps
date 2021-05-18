@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { Grid, makeStyles ,CircularProgress} from '@material-ui/core';
+import { Grid, makeStyles, CircularProgress } from '@material-ui/core';
 import { connect } from 'react-redux';
 import {
   addNewPaKeepThunk,
@@ -12,22 +12,35 @@ import { useMakeDraggableArr } from 'hooks/useMakeDraggableArr.hook';
 import _ from 'lodash';
 import dynamic from 'next/dynamic';
 import CenteredGrid from 'components/CenteredGrid';
-
+  
 const useStyles = makeStyles(theme => ({}));
 
 const PakeepListContainer = dynamic(() => import('./components/Container'), {
-  loading: () => <Grid style={{ height: '80vh', width: '100%' }} container alignItems={'center'} justify={'center'}><CircularProgress /></Grid>,
+  loading: () => (
+    <Grid style={{ height: '80vh', width: '100%' }} container alignItems={'center'} justify={'center'}>
+      <CircularProgress />
+    </Grid>
+  ),
   ssr: false
 });
 
-const PakeepList = ({ pakeeps, isDraggableOptimizate, pakeepsOrderNames, handlePakeepsOrderNamesThunk }) => {
+const PakeepList = ({
+  pakeeps,
+  isDraggableOptimizate,
+  pakeepsOrderNames,
+  handlePakeepsOrderNamesThunk,
+  currentFolderPropertyIdx,
+  folders
+}) => {
   const classes = useStyles();
 
+  // console.log(currentPakeeps)
   const [columns, responsiveColumnOrder] = useMakeDraggableArr(
     pakeeps,
     pakeepsOrderNames,
     handlePakeepsOrderNamesThunk
   );
+
   // const [value, updateCookie, deleteCookie] = useCookie(state);
 
   // useEffect(() => _.isEqual(state, nulittyState) && setState(JSON.parse(value)), []);
@@ -38,8 +51,10 @@ const PakeepList = ({ pakeeps, isDraggableOptimizate, pakeepsOrderNames, handleP
 
   const onDragEnd = ({ destination, source, draggableId }) => {
     if (!destination) return;
-    if (!destination.id === source.draggableId && destination.index === source.index) return;
+    if (!destination.id === source.index && destination.index === source.index) return;
 
+    const isSameColumn = source.droppableId === destination.droppableId;
+    if (source.index === destination.index && isSameColumn) return;
     // const destinationIdx = destination.index * responsiveColumnOrder.length + +destination.droppableId;
     // const sourceIdx = source.index * responsiveColumnOrder.length + +source.droppableId;
     // const newOrderNames = _.clone(pakeepsOrderNames);
@@ -55,9 +70,9 @@ const PakeepList = ({ pakeeps, isDraggableOptimizate, pakeepsOrderNames, handleP
 
     const sumLengthOfAllPakeeps = pakeepsOrderNames.length;
 
-    const toCorrect = +(destination.droppableId !== 0);
-
-    if (source.droppableId === destination.droppableId) {
+    const toCorrect = +destinationDroppableNumber;
+    // console.log(+(destination.droppableId !== '0'));
+    if (isSameColumn) {
       _.fill(clonedSourceArr, sourceArr[source.index], destination.index, destination.index + 1);
       _.fill(clonedSourceArr, sourceArr[destination.index], source.index, source.index + 1);
 
@@ -72,7 +87,7 @@ const PakeepList = ({ pakeeps, isDraggableOptimizate, pakeepsOrderNames, handleP
         return [...sum, newOrderNamesPakeepsElementId];
       };
       const newOrderNames = pakeepsOrderNames.reduce(newOrderNamesReduceFunc, []);
-
+      // console.log(newOrderNames);
       return handlePakeepsOrderNamesThunk(newOrderNames);
     }
 
@@ -152,12 +167,15 @@ const PakeepList = ({ pakeeps, isDraggableOptimizate, pakeepsOrderNames, handleP
   //   id: 'placeholder'
 
   // };
+  const forderProperty = folders[currentFolderPropertyIdx]?.property;
+
   const pakeepListContainerProps = {
     pakeeps,
     responsiveColumnOrder,
     columns,
     onDragEnd,
-    placeholderName
+    placeholderName,
+    forderProperty
   };
   return <PakeepListContainer {...pakeepListContainerProps} />;
 };
@@ -174,22 +192,19 @@ PakeepList.propTypes = {
 };
 
 const mapStateToProps = ({
-  app: { pakeeps, labels, columns, columnOrder, pakeepsOrderNames },
+  app: { pakeeps, labels, columns, columnOrder, pakeepsOrderNames, currentFolderPropertyIdx, folders },
   settings: { isDraggableOptimizate = true }
 }) => ({
   pakeeps,
   labels,
+  folders,
   columns,
   columnOrder,
+  currentFolderPropertyIdx,
   pakeepsOrderNames,
   isDraggableOptimizate
 });
 const mapDispatchToProps = dispatch => ({
-  changePakeepColumnsDataThunk: (newColumn, breakpointNames) =>
-    dispatch(changePakeepColumnsDataThunk(newColumn, breakpointNames)),
-
-  changeTwoPakeepColumnsDataThunk: (newColumnStart, newColumnFinish, breakpointNames) =>
-    dispatch(changeTwoPakeepColumnsDataThunk(newColumnStart, newColumnFinish, breakpointNames)),
   handlePakeepsOrderNamesThunk: newOrder => dispatch(handlePakeepsOrderNamesThunk(newOrder))
 });
 
