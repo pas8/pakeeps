@@ -5,17 +5,25 @@ import * as types from './types';
 const initialState = {
   data: 1,
   labels: [
-    { color: 'primary', title: 'Day plans', icon: '', key: 0 },
-    { color: 'primary', title: 'Week plans', icon: '', key: 1 },
-    { color: 'primary', title: 'Mouth plans', icon: '', key: 2 },
-    { color: 'primary', title: 'Year plans', icon: '', key: 3 },
-    { color: 'primary', title: 'Hobby Placeholders', icon: '', key: 4 }
+    { color: 'primary', title: 'Day plans', iconName: '', id: 'label0' },
+    { color: 'secondary', title: 'Week plans', iconName: '', id: 'label1' },
+    { color: 'primary', title: 'Mouth plans', iconName: 'keyboard', id: 'label2' },
+    { color: 'secondary', title: 'Year plans', iconName: '', id: 'label3' },
+    { color: '', title: 'Hobby Placeholders', iconName: '', id: 'label4' }
   ],
 
   folders: [
-    { title: 'All pakeeps', iconName: '', key: 1, property: 'ALL' },
-    { title: 'Pined', iconName: 'pin', key: 2, property: 'isPinned' }
+    { title: 'All pakeeps', iconName: '', id: 1, property: 'ALL' },
+    { title: 'Pined', iconName: 'pin', id: 2, property: 'isPinned' }
+    // { title: 'Pined', iconName: 'pin', key: 2, property: 'isPinned' },
   ],
+  folderPropertyies: {
+    all: true,
+    isPinned: true,
+    label: true,
+    date: true
+  },
+
   pakeeps: [
     {
       title: 'Placeholder 1',
@@ -23,13 +31,8 @@ const initialState = {
       bookmark: false,
       favorite: false,
       color: 'default',
-      labels: [
-        { color: 'secondary', title: 'Plans', icon: '', key: 0 },
-        { color: 'default', title: 'Week plans', icon: '', key: 1 },
-        { color: 'primary', title: 'Mouth plans', icon: '', key: 2 },
-        { color: 'primary', title: 'Year plans', icon: '', key: 3 },
-        { color: 'secondary', title: 'Hobby Placeholders', icon: '', key: 4 }
-      ],
+      labels: ['label3','label1','label0','label2'],
+
       id: 'pakeep1',
       isPinned: true
     },
@@ -39,7 +42,7 @@ const initialState = {
       bookmark: false,
       favorite: false,
       color: 'default',
-      labels: [{ color: 'primary', title: 'Day plans', icon: '', key: 0 }],
+      labels: ['label4','label0','label1','label2'],
       id: 'pakeep2',
       isPinned: false
     },
@@ -49,7 +52,8 @@ const initialState = {
       bookmark: false,
       favorite: false,
       color: 'default',
-      labels: [],
+      labels: ['label0','label2'],
+
       isPinned: true,
       id: 'pakeep3'
     },
@@ -59,12 +63,8 @@ const initialState = {
       bookmark: false,
       favorite: false,
       color: 'transparent',
-      labels: [
-        { color: 'default', title: 'Day plans', icon: '', key: 0 },
-        { color: 'default', title: 'Week plans', icon: '', key: 1 },
-        { color: 'primary', title: 'Mouth plans', icon: 'keyboard', key: 2 },
-        { color: 'secondary', title: 'Year plans', icon: '', key: 3 }
-      ],
+      labels: ['label1','label2','label0','label2'],
+      
       id: 'pakeep4',
       isPinned: true
     }
@@ -218,7 +218,8 @@ const initialState = {
   notifinationCounter: 8,
   isMenuOpen: false,
   scrollDirectionName: 'up',
-  currentFolderPropertyIdx: 0
+  currentFolderPropertyIdx: 0,
+  drawerWidth: 240
 };
 
 const AppReducer = createReducer(initialState)({
@@ -226,6 +227,11 @@ const AppReducer = createReducer(initialState)({
     ...state,
     pakeeps: { ...state.pakeeps, [newPaKeep.id]: newPaKeep }
   }),
+  [types.HANDLE_FOLDERS]: (state, { foldersArr }) => ({
+    ...state,
+    folders: foldersArr
+  }),
+
   [types.HANDLE_CURRENT_FOLDER_PROPERTY_IDX]: (state, { folderIdx }) => ({
     ...state,
     currentFolderPropertyIdx: folderIdx

@@ -55,6 +55,7 @@ const Column = ({ column, pakeepsInColumn, lastColumn, firstColumn, forderProper
         {provided => (
           <Grid innerRef={provided.innerRef} {...provided.droppableProps}>
             {pakeepsInColumn.map((el, idx) => {
+              // if(!el) return;
               const draggableEl = (
                 <Draggable key={el.id} draggableId={el.id} index={idx}>
                   {(provided, snapshot) => (

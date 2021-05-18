@@ -70,15 +70,16 @@ const PakeepList = ({
 
     const sumLengthOfAllPakeeps = pakeepsOrderNames.length;
 
-    const toCorrect = +destinationDroppableNumber;
+    const toCorrect = +destinationDroppableNumber !== 0;
     // console.log(+(destination.droppableId !== '0'));
     if (isSameColumn) {
+      // clonedSourceArr.push('placeholder');
       _.fill(clonedSourceArr, sourceArr[source.index], destination.index, destination.index + 1);
       _.fill(clonedSourceArr, sourceArr[destination.index], source.index, source.index + 1);
 
       const newOrderNamesReduceFunc = (sum, el, idx) => {
         const correntIdx =
-          Math.ceil(((sumLengthOfAllPakeeps / columnOrderLenght) * idx) / sumLengthOfAllPakeeps) - toCorrect;
+          Math.ceil(((sumLengthOfAllPakeeps / columnOrderLenght) * idx) / sumLengthOfAllPakeeps) - +toCorrect;
         const isItemShoulBePasted =
           (idx + columnOrderLenght) % columnOrderLenght === sourceDroppableNumber % columnOrderLenght;
 
@@ -87,7 +88,8 @@ const PakeepList = ({
         return [...sum, newOrderNamesPakeepsElementId];
       };
       const newOrderNames = pakeepsOrderNames.reduce(newOrderNamesReduceFunc, []);
-      // console.log(newOrderNames);
+      // console.log(newOrderNames,+toCorrect);
+      // return;
       return handlePakeepsOrderNamesThunk(newOrderNames);
     }
 

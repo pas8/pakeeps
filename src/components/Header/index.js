@@ -14,12 +14,11 @@ import { setMenuOpenStatusThunk } from 'store/modules/App/operations';
 import { useCustomBreakpoint } from 'hooks/useCustomBreakpoint';
 import { Grid } from '@material-ui/core';
 import ViewLikeInTelegram from './components/ViewLikeInTelegram';
-const drawerWidth = 240;
 
 const useStyles = makeStyles(theme => ({
   root: ({ headerXsViewLikeIn }) => ({
     display: 'flex',
-    marginBottom:headerXsViewLikeIn === 'telegram' && theme.spacing(4)
+    marginBottom: headerXsViewLikeIn === 'telegram' && theme.spacing(4)
   }),
   appBar: {
     backgroundColor: '#424242',
@@ -34,8 +33,9 @@ const useStyles = makeStyles(theme => ({
     flexGrow: 1
   },
   appBarShift: {
-    width: `calc(100% - ${drawerWidth}px)`,
-    marginLeft: drawerWidth,
+    width: ({ drawerWidth, isMenuNavigationHasDialogView }) =>
+      isMenuNavigationHasDialogView && `calc(100% - ${drawerWidth}px)`,
+    // marginLeft: drawerWidth,
     transition: theme.transitions.create(['margin', 'width'], {
       easing: theme.transitions.easing.easeOut,
       duration: theme.transitions.duration.enteringScreen
@@ -49,16 +49,15 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const HeaderByPas = ({ setMenuOpenStatusThunk, isMenuOpen }) => {
+const HeaderByPas = ({ setMenuOpenStatusThunk, isMenuOpen, isMenuNavigationHasDialogView, drawerWidth }) => {
   const [breakpoint] = useCustomBreakpoint();
 
   const handleDrawerOpen = () => setMenuOpenStatusThunk(true);
   const handleDrawerClose = () => setMenuOpenStatusThunk(false);
 
   const isSmallSize = breakpoint === 'xs';
-  const headerXsViewLikeIn = 'telegram';
-
-  const classes = useStyles({ headerXsViewLikeIn });
+  const headerXsViewLikeIn = 'pakeeps';
+  const classes = useStyles({ isMenuNavigationHasDialogView, drawerWidth, headerXsViewLikeIn });
 
   return (
     <Grid className={classes.root} container>
@@ -77,7 +76,11 @@ const HeaderByPas = ({ setMenuOpenStatusThunk, isMenuOpen }) => {
           )}
         </Toolbar>
       </AppBar>
-      <HeaderDrawer isMenuOpen={isMenuOpen} handleDrawerClose={handleDrawerClose} />
+      <HeaderDrawer
+        isMenuOpen={isMenuOpen}
+        handleDrawerClose={handleDrawerClose}
+        isMenuNavigationHasDialogView={isMenuNavigationHasDialogView}
+      />
     </Grid>
   );
 };
@@ -87,9 +90,14 @@ HeaderByPas.propTypes = {
   setMenuOpenStatusThunk: PropTypes.func
 };
 
-const mapStateToProps = ({ app: { isMenuOpen }, settings: { headerXsViewLikeIn } }) => ({
+const mapStateToProps = ({
+  app: { isMenuOpen, drawerWidth },
+  settings: { headerXsViewLikeIn, isMenuNavigationHasDialogView }
+}) => ({
   isMenuOpen,
-  headerXsViewLikeIn
+  drawerWidth,
+  headerXsViewLikeIn,
+  isMenuNavigationHasDialogView
 });
 
 const mapDispatchToProps = dispatch => ({

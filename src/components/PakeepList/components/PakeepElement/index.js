@@ -69,7 +69,8 @@ const PakeepElement = ({
   id,
   events,
   utilsViewLikeInGoogleKeep,
-  idx
+  idx,
+  globalLabels
 }) => {
   const classes = useStyles(color);
   const [hover, setHover] = useState(false);
@@ -108,13 +109,24 @@ const PakeepElement = ({
   if (!loaded)
     return (
       <>
-        {/* <Paper variant={'outlined'} style={{ backgroundColor: 'transparent' }} className={classes.paper}> */}
-        <Skeleton height={60} animation={'wave'} variant="text" width={`${_.random(42, 80)}%`} />
-        <Skeleton animation={'wave'} variant="rect" height={_.random(96, 240)} width={'92%'} />
-
-        <Skeleton animation={'wave'} variant="text" height={24} width={`${_.random(42, 80)}%`} />
-        <Skeleton animation={'wave'} variant="text" height={24} width={`${_.random(42, 80)}%`} />
-        {/* </Paper> */}
+        <Skeleton height={92} variant="text" width={`${_.random(60, 80)}%`} animation="wave" />
+        <Skeleton variant="rect" height={_.random(96, 240)} width={'92%'} animation="wave" />
+        <Grid container>
+          <Box width={`${_.random(24, 42)}%`}>
+            <Skeleton variant="text" height={42} animation="wave" />
+          </Box>
+          <Box width={`${_.random(32, 42)}%`} ml={1.8}>
+            <Skeleton variant="text" height={42} animation="wave" />
+          </Box>
+        </Grid>
+        <Box display={'flex'} mt={-0.8}>
+          <Box width={`${_.random(16, 24)}%`}>
+            <Skeleton variant="text" height={42} animation="wave" />
+          </Box>
+          <Box width={`${_.random(42, 60)}%`} ml={1.8}>
+            <Skeleton variant="text" height={42} animation="wave" />
+          </Box>
+        </Box>
       </>
     );
 
@@ -129,7 +141,7 @@ const PakeepElement = ({
           <Typography variant={'h5'}>{title}</Typography>
         </Grid>
         <Grid item>{text}</Grid>
-        <AttributeGroup labels={labels} events={events} />
+        <AttributeGroup labels={labels} events={events} globalLabels={globalLabels} />
         <Grow in={hover}>
           <Grid className={classes.iconsUtils}>
             <IconsUtils {...iconsUtilsProps} />
@@ -150,6 +162,9 @@ PakeepElement.propTypes = {
   title: PropTypes.string
 };
 
-const mapStateToProps = ({ settings: { utilsViewLikeInGoogleKeep } }) => ({ utilsViewLikeInGoogleKeep });
+const mapStateToProps = ({ settings: { utilsViewLikeInGoogleKeep }, app: { labels } }) => ({
+  utilsViewLikeInGoogleKeep,
+  globalLabels: labels
+});
 
 export default connect(mapStateToProps)(PakeepElement);

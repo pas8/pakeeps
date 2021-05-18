@@ -7,7 +7,8 @@ import {
   toScroll,
   toSetMenuOpenStatus,
   toSetNewOrderNames,
-  toSetCurrentFolderPropertyIdx
+  toSetCurrentFolderPropertyIdx,
+  toChangeFolders
 } from './actions';
 
 export const addNewPaKeepThunk = data => dispatch => {
@@ -43,6 +44,10 @@ export const handlePakeepsOrderNamesThunk = newOrder => dispatch => {
 
 export const handleCurrentFolderPropertyIdxThunk = folderIdx => dispatch => {
   dispatch(toSetCurrentFolderPropertyIdx(folderIdx));
+};
+
+export const handleFoldersThunk = foldersArr => dispatch => {
+  dispatch(toChangeFolders(foldersArr));
 };
 
 

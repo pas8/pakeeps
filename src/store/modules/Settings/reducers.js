@@ -5,7 +5,8 @@ const settingsInitialState = {
   viewOfThemeChangerButton: 'iconButton',
   maxSnack: 4,
   utilsViewLikeInGoogleKeep: false,
-  headerXsViewLikeIn: 'pakeeps'
+  headerXsViewLikeIn: 'pakeeps',
+  isMenuNavigationHasDialogView:!false, //!reverseValue
 };
 
 const settingsReducer = createReducer(settingsInitialState)({
