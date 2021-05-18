@@ -1,20 +1,14 @@
-import { Grid, Paper, makeStyles, Typography, Chip, Box, Container, Zoom, Grow } from '@material-ui/core';
+import { Grid, Paper, makeStyles, Typography, Grow } from '@material-ui/core';
 import PropTypes from 'prop-types';
-import { useState, React, useEffect, useCallback } from 'react';
+import { useState, React, useEffect } from 'react';
 import clsx from 'clsx';
 import IconsUtils from 'components/IconsUtils';
-import FavoriteBorderOutlinedIcon from '@material-ui/icons/FavoriteBorderOutlined';
-import { iconsArr } from 'components/Icons';
-import HighlightOffOutlinedIcon from '@material-ui/icons/HighlightOffOutlined';
-import ClearOutlinedIcon from '@material-ui/icons/ClearOutlined';
-import DeleteForeverOutlinedIcon from '@material-ui/icons/DeleteForeverOutlined';
-import { takeValueFromBreakpoints } from 'hooks/takeValueFromBreakpoints.hook';
 import { useMeasure, useToggle } from 'react-use';
 import { themeColors } from 'components/theme';
 import AttributeGroup from './components/AttributeGroup';
 import { connect } from 'react-redux';
-import { Skeleton } from '@material-ui/lab';
 import _ from 'lodash';
+import SkeletonView from './components/SkeletonView';
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -70,7 +64,8 @@ const PakeepElement = ({
   events,
   utilsViewLikeInGoogleKeep,
   idx,
-  globalLabels
+  globalLabels,
+  handleDeleteLabelFromPakeepThunk
 }) => {
   const classes = useStyles(color);
   const [hover, setHover] = useState(false);
@@ -106,29 +101,7 @@ const PakeepElement = ({
   const setLabelHoverStatus = () => setLabelHover({ title, isHovering: true });
   useEffect(() => setLoaded(true), []);
 
-  if (!loaded)
-    return (
-      <>
-        <Skeleton height={92} variant="text" width={`${_.random(60, 80)}%`} animation="wave" />
-        <Skeleton variant="rect" height={_.random(96, 240)} width={'92%'} animation="wave" />
-        <Grid container>
-          <Box width={`${_.random(24, 42)}%`}>
-            <Skeleton variant="text" height={42} animation="wave" />
-          </Box>
-          <Box width={`${_.random(32, 42)}%`} ml={1.8}>
-            <Skeleton variant="text" height={42} animation="wave" />
-          </Box>
-        </Grid>
-        <Box display={'flex'} mt={-0.8}>
-          <Box width={`${_.random(16, 24)}%`}>
-            <Skeleton variant="text" height={42} animation="wave" />
-          </Box>
-          <Box width={`${_.random(42, 60)}%`} ml={1.8}>
-            <Skeleton variant="text" height={42} animation="wave" />
-          </Box>
-        </Box>
-      </>
-    );
+  if (!loaded) return <SkeletonView />;
 
   return (
     <Grid item onMouseEnter={setHoverIsTrue} onMouseLeave={setHoverIsFalse} ref={ref}>
@@ -141,7 +114,7 @@ const PakeepElement = ({
           <Typography variant={'h5'}>{title}</Typography>
         </Grid>
         <Grid item>{text}</Grid>
-        <AttributeGroup labels={labels} events={events} globalLabels={globalLabels} />
+        <AttributeGroup labels={labels} events={events} globalLabels={globalLabels} handleDeleteLabelFromPakeepThunk={handleDeleteLabelFromPakeepThunk}/>
         <Grow in={hover}>
           <Grid className={classes.iconsUtils}>
             <IconsUtils {...iconsUtilsProps} />
@@ -165,6 +138,9 @@ PakeepElement.propTypes = {
 const mapStateToProps = ({ settings: { utilsViewLikeInGoogleKeep }, app: { labels } }) => ({
   utilsViewLikeInGoogleKeep,
   globalLabels: labels
+});
+const mapDispatchToProps = dispatch => ({
+  handleDeleteLabelFromPakeepThunk: id => dispatch(handleDeleteLabelFromPakeepThunk(id))
 });
 
 export default connect(mapStateToProps)(PakeepElement);

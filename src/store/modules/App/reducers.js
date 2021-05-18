@@ -5,11 +5,12 @@ import * as types from './types';
 const initialState = {
   data: 1,
   labels: [
-    { color: 'primary', title: 'Day plans', iconName: '', id: 'label0' },
-    { color: 'secondary', title: 'Week plans', iconName: '', id: 'label1' },
-    { color: 'primary', title: 'Mouth plans', iconName: 'keyboard', id: 'label2' },
-    { color: 'secondary', title: 'Year plans', iconName: '', id: 'label3' },
-    { color: '', title: 'Hobby Placeholders', iconName: '', id: 'label4' }
+    { color: '', title: 'Day plans', iconName: 'category', id: 'label0', variant: 'outlined' },
+    { color: '#dd6b2a', title: 'Week plans', iconName: 'star', id: 'label1', variant: 'outlined' },
+    { color: 'primary', title: 'Mouth plans', iconName: 'keyboard', id: 'label2', variant: 'outlined' },
+    { color: 'secondary', title: 'Year plans', iconName: '', id: 'label3', variant: 'outlined' },
+    { color: '#6e9f47', title: 'Your plans', iconName: 'star', id: 'label6', variant: 'default' },
+    { color: '', title: 'Hobby Placeholders', iconName: '', id: 'label4', variant: 'default' }
   ],
 
   folders: [
@@ -31,7 +32,7 @@ const initialState = {
       bookmark: false,
       favorite: false,
       color: 'default',
-      labels: ['label3','label1','label0','label2'],
+      labels: ['label3', 'label1', 'label0', 'label2'],
 
       id: 'pakeep1',
       isPinned: true
@@ -42,7 +43,7 @@ const initialState = {
       bookmark: false,
       favorite: false,
       color: 'default',
-      labels: ['label4','label0','label1','label2'],
+      labels: ['label4', 'label0', 'label1', 'label2','label3',],
       id: 'pakeep2',
       isPinned: false
     },
@@ -52,7 +53,7 @@ const initialState = {
       bookmark: false,
       favorite: false,
       color: 'default',
-      labels: ['label0','label2'],
+      labels: ['label0', 'label2', 'label6'],
 
       isPinned: true,
       id: 'pakeep3'
@@ -63,8 +64,8 @@ const initialState = {
       bookmark: false,
       favorite: false,
       color: 'transparent',
-      labels: ['label1','label2','label0','label2'],
-      
+      labels: ['label1', 'label2', 'label0',  'label6'],
+
       id: 'pakeep4',
       isPinned: true
     }

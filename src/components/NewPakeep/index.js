@@ -8,7 +8,6 @@ import VisibilityOffOutlinedIcon from '@material-ui/icons/VisibilityOffOutlined'
 import BookmarkBorderIcon from '@material-ui/icons/BookmarkBorder';
 import BookmarkIcon from '@material-ui/icons/Bookmark';
 import { connect } from 'react-redux';
-import wordcount from 'wordcount';
 import { useCookie, useMeasure, usePageLeave } from 'react-use';
 import _ from 'lodash';
 import { addNewPaKeepThunk } from 'store/modules/App/operations';
@@ -84,7 +83,6 @@ const NewPaKeep = ({ pakeeps, addNewPaKeepThunk }) => {
   }, [focus, enter]);
 
   const handleNewPakeepSave = () => {
-    console.log(wordcount(state.title) / state.title.length);
     addNewPaKeepThunk({ ...state, wordsCoefficient: 1 });
     setWritingText(false);
     setState(nulittyState);

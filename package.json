@@ -39,6 +39,7 @@
     "react-google-login": "^5.2.2",
     "react-redux": "^7.2.3",
     "react-sizeme": "^3.0.1",
+    "react-swipeable": "^6.1.2",
     "react-switch": "^6.0.0",
     "react-use": "^17.2.3",
     "redux": "^4.0.5",
