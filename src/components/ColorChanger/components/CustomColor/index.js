@@ -25,7 +25,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const CustomColor = ({ gradientStatus, setGradientStatus }) => {
+const CustomColor = ({ gradientStatus, setGradientStatus, handleSave }) => {
   const [copyState, copyToClipboardFunc] = useCopyToClipboard();
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const nullityColor = colord(themeColors.whiteRgbaColorWith0dot8valueOfAlfaCanal).toRgb();
@@ -62,7 +62,7 @@ const CustomColor = ({ gradientStatus, setGradientStatus }) => {
       enqueueSnackbar({ message: 'Something went wrong', severity: 'error' });
     }
   };
-  
+
   useEffect(() => {
     copyState.value !== colorInHexFormat && statusState.copy && setStatusState(state => ({ ...state, copy: false }));
   }, [color, statusState.copy]);
@@ -77,7 +77,7 @@ const CustomColor = ({ gradientStatus, setGradientStatus }) => {
 
   const handleSetColor = value => setColor(value);
 
-  const onSave = () => console.log(color);
+  const onSave = () => handleSave(colorInHexFormat);
   const inputsColorUtilsOfCustomColorPickerProps = {
     color,
     setColor,

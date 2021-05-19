@@ -9,6 +9,7 @@ import AttributeGroup from './components/AttributeGroup';
 import { connect } from 'react-redux';
 import _ from 'lodash';
 import SkeletonView from './components/SkeletonView';
+import { getFilteredLabels } from 'store/modules/App/selectors';
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -65,6 +66,7 @@ const PakeepElement = ({
   utilsViewLikeInGoogleKeep,
   idx,
   globalLabels,
+  filteredLabels,
   handleDeleteLabelFromPakeepThunk
 }) => {
   const classes = useStyles(color);
@@ -114,7 +116,12 @@ const PakeepElement = ({
           <Typography variant={'h5'}>{title}</Typography>
         </Grid>
         <Grid item>{text}</Grid>
-        <AttributeGroup labels={labels} events={events} globalLabels={globalLabels} handleDeleteLabelFromPakeepThunk={handleDeleteLabelFromPakeepThunk}/>
+        <AttributeGroup
+          labels={filteredLabels}
+          events={events}
+          globalLabels={globalLabels}
+          handleDeleteLabelFromPakeepThunk={handleDeleteLabelFromPakeepThunk}
+        />
         <Grow in={hover}>
           <Grid className={classes.iconsUtils}>
             <IconsUtils {...iconsUtilsProps} />
@@ -126,21 +133,28 @@ const PakeepElement = ({
 };
 
 PakeepElement.propTypes = {
-  bookmark: PropTypes.any,
+  bookmark: PropTypes.bool,
   color: PropTypes.string,
+  events: PropTypes.any,
   favorite: PropTypes.any,
+  filteredLabels: PropTypes.any,
+  globalLabels: PropTypes.any,
+  handleDeleteLabelFromPakeepThunk: PropTypes.any,
+  id: PropTypes.any,
+  idx: PropTypes.any,
   isDragging: PropTypes.bool,
   labels: PropTypes.array,
   text: PropTypes.string,
-  title: PropTypes.string
-};
+  title: PropTypes.string,
+  utilsViewLikeInGoogleKeep: PropTypes.any
+}
 
-const mapStateToProps = ({ settings: { utilsViewLikeInGoogleKeep }, app: { labels } }) => ({
+const mapStateToProps = ({ settings: { utilsViewLikeInGoogleKeep }, app: { labels:globalLabels } }, { labels }) => ({
   utilsViewLikeInGoogleKeep,
-  globalLabels: labels
+  filteredLabels: getFilteredLabels(labels,globalLabels)
 });
 const mapDispatchToProps = dispatch => ({
   handleDeleteLabelFromPakeepThunk: id => dispatch(handleDeleteLabelFromPakeepThunk(id))
 });
 
-export default connect(mapStateToProps)(PakeepElement);
+export default connect(mapStateToProps, mapDispatchToProps)(PakeepElement);

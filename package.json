@@ -30,6 +30,7 @@
     "next-auth": "^3.21.0",
     "notistack": "^1.0.6",
     "prop-types": "^15.7.2",
+    "re-reselect": "^4.0.0",
     "react": "17.0.2",
     "react-beautiful-dnd": "^13.1.0",
     "react-colorful": "^5.1.4",
@@ -45,6 +46,7 @@
     "redux": "^4.0.5",
     "redux-thunk": "^2.3.0",
     "reselect": "^4.0.0",
+    "reselect-map": "^1.0.6",
     "sass": "^1.32.11"
   },
   "devDependencies": {

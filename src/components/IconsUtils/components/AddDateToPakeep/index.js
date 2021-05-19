@@ -22,30 +22,20 @@ import EventNoteOutlinedIcon from '@material-ui/icons/EventNoteOutlined';
 import DateRangeOutlinedIcon from '@material-ui/icons/DateRangeOutlined';
 import DoneOutlineOutlinedIcon from '@material-ui/icons/DoneOutlineOutlined';
 import clsx from 'clsx';
-import { nanoid } from 'nanoid'
+import { nanoid } from 'nanoid';
 import HeaderOfAddDateToPakeep from './components/HeaderOfAddDateToPakeep';
 import DynamicInputDateAndTimePickers from './components/DynamicComponents/components/DynamicInputDateAndTimePickers';
 import { addDays, isValid } from 'date-fns';
 import { connect } from 'react-redux';
 import DynamicAddMoreEvents from './components/DynamicComponents/components/DynamicAddMoreEvents';
+import DynamicMenuItem from './components/DynamicMenuItem';
 
 const useStyles = makeStyles(theme => ({
   dateContainer: { padding: theme.spacing(0, 0) },
   // scale:{transform:'scale(0.88)'}
-  itemGrid: { margin: theme.spacing(0.4, 0.8 * 4, 0, 1.4), padding: theme.spacing(0.8, 0) },
-  menuText: { marginLeft: theme.spacing(1.4) },
-  marginTop: {
-    marginRight: theme.spacing(1.4),
-    marginLeft: theme.spacing(1.0 * 2),
-    transition: theme.transitions.create('all', {
-      easing: theme.transitions.easing.easeIn,
-      duration: theme.transitions.duration.complex
-    })
-  },
   box: { borderBottom: '1px solid rgba(255,255,255,0.4)' },
   menuItemButton: { outline: 'none', background: 'none', border: 'none' },
-  timePickerWrapper: { '& input': { width: theme.spacing(16) } },
-  preventClickOfMenuItem: { '& .MuiTouchRipple-root': { display: 'none' } }
+  timePickerWrapper: { '& input': { width: theme.spacing(16) } }
 }));
 
 const AddDateToPakeep = ({ ampm = false, onMenuClose, id, events }) => {
@@ -126,7 +116,7 @@ const AddDateToPakeep = ({ ampm = false, onMenuClose, id, events }) => {
   const [dateAndTimeInputsState, setDateAndTimeInputsState] = useState(nullifyDateAndTimeInputsState);
 
   const classes = useStyles();
-  const placeholderFunc = value => ({ value });
+  const placeholderFunc = value => console.log(';');
   const handleDateAndTimeInputsState = (name, value) => {
     setDateAndTimeInputsState(state => ({
       ...state,
@@ -145,7 +135,6 @@ const AddDateToPakeep = ({ ampm = false, onMenuClose, id, events }) => {
     {
       title: 'Later today',
       icon: TodayOutlinedIcon,
-      onClick: placeholderFunc,
       name: 'laterToday',
       dynamicComponent: {
         component: DynamicInputDateAndTimePickers,
@@ -156,7 +145,6 @@ const AddDateToPakeep = ({ ampm = false, onMenuClose, id, events }) => {
     {
       title: 'Tomorrow',
       icon: CalendarTodayOutlinedIcon,
-      onClick: placeholderFunc,
       name: 'tomorrow',
       dynamicComponent: {
         component: DynamicInputDateAndTimePickers,
@@ -167,7 +155,6 @@ const AddDateToPakeep = ({ ampm = false, onMenuClose, id, events }) => {
     {
       title: 'Next week',
       icon: ViewWeekOutlinedIcon,
-      onClick: placeholderFunc,
       name: 'nextWeek',
       dynamicComponent: {
         component: DynamicInputDateAndTimePickers,
@@ -187,7 +174,6 @@ const AddDateToPakeep = ({ ampm = false, onMenuClose, id, events }) => {
     {
       title: 'Add More Events',
       icon: DateRangeOutlinedIcon,
-      onClick: placeholderFunc,
       hidden: !true,
       name: 'addMoreEvents',
       dynamicComponent: {
@@ -215,15 +201,14 @@ const AddDateToPakeep = ({ ampm = false, onMenuClose, id, events }) => {
       />
       {dateListArr.map(({ title, icon: Icon, onClick, hidden, dynamicComponent = false, name }, idx) => {
         const DynamicComponent = dynamicComponent.component ?? Grid;
-        
+
         const correctName = name === menuItemState.name;
-        const activeIcon = correctName && menuItemState.hoverStatus;
+        const isActiveIcon = correctName && menuItemState.hoverStatus;
 
         const isItemShouldBeOfFullWidth = dynamicComponent?.props?.onlyTime;
         const isDynamicComponentShouldBeShown =
           (Boolean(dynamicComponent) && correctName && currentClickStatus) || dateAndTimeInputsState[name].isChosen;
-        const ItemOfMenu = isDynamicComponentShouldBeShown ? Grid : MenuItem;
-        
+
         const onMouseEnterOfMenuItem = () => (currentClickStatus ? null : setHoverOfMenuItemIsTrue(name));
         const onMouseLeaveOfMenuItem = () => (currentClickStatus ? null : setHoverOfMenuItemIsFalse(name));
         const onClickOfMenuItem = () => setClickStatusOfMenuItemIsTrue(name, title);
@@ -231,11 +216,14 @@ const AddDateToPakeep = ({ ampm = false, onMenuClose, id, events }) => {
         let menuItemProps = {
           disableGutters: true,
           key: nanoid(),
-          className: correctName && currentClickStatus ? classes.preventClickOfMenuItem : null,
+
           onMouseEnter: onMouseEnterOfMenuItem,
           onMouseLeave: onMouseLeaveOfMenuItem,
-          onClick:
-            (currentClickStatus || dateAndTimeInputsState[name].isChosen) && correctName ? null : onClickOfMenuItem
+          onClick: onClick
+            ? onClick
+            : (currentClickStatus || dateAndTimeInputsState[name].isChosen) && correctName
+            ? null
+            : onClickOfMenuItem
         };
         let dynamicComponentProps = {
           ...dynamicComponent.props,
@@ -251,35 +239,18 @@ const AddDateToPakeep = ({ ampm = false, onMenuClose, id, events }) => {
 
         if (hidden) return;
 
-        const dynamicMenuItem = (
-          <Grid
-            item
-            className={clsx(
-              classes.marginTop,
-              classes.itemGrid
-              // !menuItemState.isItemShouldBeOfFullWidth && classes.timePickerWrapper
-            )}
-          >
-            <DynamicComponent {...dynamicComponentProps} />
-          </Grid>
-        );
+        const dynamicMenuListProps = {
+          DynamicComponent,
+          dynamicComponentProps,
+          title,
+          isActiveIcon,
+          isDynamicComponentShouldBeShown,
+          menuItemProps,
+          Icon,
+          isPreventClickOfMenuItem: correctName && currentClickStatus
+        };
 
-        const staticMenuItem = (
-          <Grid className={clsx(classes.itemGrid)} container>
-            <Icon style={{ color: `rgba(255,255,255,${activeIcon ? 0.8 : 0.42})` }} />
-            <Grid item className={classes.menuText}>
-              <Typography variant={'subtitle2'} style={{ color: `rgba(255,255,255,${activeIcon ? 1 : 0.8})` }}>
-                {title}
-              </Typography>
-            </Grid>
-          </Grid>
-        );
-
-        return (
-          <ItemOfMenu {...menuItemProps}>
-            {isDynamicComponentShouldBeShown ? dynamicMenuItem : staticMenuItem}
-          </ItemOfMenu>
-        );
+        return <DynamicMenuItem {...dynamicMenuListProps} />;
       })}
     </>
   );

@@ -1,3 +1,4 @@
+import PropTypes from "prop-types";
 import { useState } from 'react';
 import { Dialog, Grid, makeStyles } from '@material-ui/core';
 import _ from 'lodash';
@@ -18,19 +19,23 @@ const useStyles = makeStyles(theme => ({
   }
 }));
   
-const ColorPickerByPas = () => {
+const ColorPickerByPas = ({handleSave = null}) => {
   const [gradientStatus, setGradientStatus] = useState(false);
   const classes = useStyles();
   const Container = gradientStatus ? Dialog : Grid;
   return (
     <Container open={gradientStatus} maxWidth={'lg'} className={classes.container}>
       {!gradientStatus ? (
-        <CustomColor gradientStatus={gradientStatus} setGradientStatus={setGradientStatus} />
+        <CustomColor gradientStatus={gradientStatus} setGradientStatus={setGradientStatus} handleSave={handleSave} />
       ) : (
         <CustomGradient gradientStatus={gradientStatus} setGradientStatus={setGradientStatus} />
       )}
     </Container>
   );
 };
+
+ColorPickerByPas.propTypes = {
+  handleSave: PropTypes.func
+}
 
 export default ColorPickerByPas;
