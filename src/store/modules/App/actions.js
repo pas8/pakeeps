@@ -28,5 +28,9 @@ export const toSetCurrentFolderPropertyIdx = folderIdx => ({
 });
 
 export const toChangeFolders = foldersArr => ({ type: types.HANDLE_FOLDERS, foldersArr });
-export const toChangeLabelItem = (id,changedLabel) => ({ type: types.CHANGE_LABEL_ITEM, id,changedLabel });
+export const toChangeLabelItem = (labelId,changedLabel) => ({ type: types.CHANGE_LABEL_ITEM, labelId,changedLabel });
+
+export const toMovePakeepToArchive = (id,changedLabel) => ({ type: types.MOVE_PAKEEP_TO_ARCHIVE, id,changedLabel });
+export const toDeleteLabelFromPakeep = (pakeepId,labelId) => ({ type: types.DELETE_LABEL_FROM_PAKEEP, pakeepId,labelId });
+export const toHandleUsePreviuos = (boolValue) => ({ type: types.HANDLE_USE_PREVIUOS, boolValue });
 

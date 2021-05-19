@@ -6,13 +6,16 @@ import {
   changePakeepColumnsDataThunk,
   changeTwoPakeepColumnsDataThunk,
   deletePakeepThunk,
-  handlePakeepsOrderNamesThunk
+  handlePakeepsOrderNamesThunk,
+  handleUsePreviuosValue
 } from 'store/modules/App/operations';
 import { useMakeDraggableArr } from 'hooks/useMakeDraggableArr.hook';
 import _ from 'lodash';
 import dynamic from 'next/dynamic';
 import CenteredGrid from 'components/CenteredGrid';
-  
+import { usePrevious } from 'react-use';
+import { useState } from 'react';
+
 const useStyles = makeStyles(theme => ({}));
 
 const PakeepListContainer = dynamic(() => import('./components/Container'), {
@@ -27,27 +30,42 @@ const PakeepListContainer = dynamic(() => import('./components/Container'), {
 const PakeepList = ({
   pakeeps,
   isDraggableOptimizate,
-  pakeepsOrderNames,
+  pakeepsOrderNames: orderNames,
   handlePakeepsOrderNamesThunk,
   currentFolderPropertyIdx,
-  folders
+  folders,
+  handleUsePreviuosValue,
+  isUsePreviuos
 }) => {
+  const [draggingStatus, setDraggingStatus] = useState(false);
+
+  const placeholderName = 'placeholder';
+
   const classes = useStyles();
 
   // console.log(currentPakeeps)
+  const previousPakeeps = usePrevious(pakeeps);
+  const previousPakeepsOrderNames = usePrevious(orderNames);
+
+  const pakeepsOrderNames = isUsePreviuos ? previousPakeepsOrderNames : orderNames;
+
   const [columns, responsiveColumnOrder] = useMakeDraggableArr(
     pakeeps,
     pakeepsOrderNames,
     handlePakeepsOrderNamesThunk
   );
-
+  console.log(
+    isUsePreviuos,
+    previousPakeepsOrderNames,
+    pakeepsOrderNames
+  );
   // const [value, updateCookie, deleteCookie] = useCookie(state);
 
   // useEffect(() => _.isEqual(state, nulittyState) && setState(JSON.parse(value)), []);
 
   // usePageLeave(() =>  updateCookie(state));
 
-  const placeholderName = 'placeholder';
+  const onDragStart = () => null;
 
   const onDragEnd = ({ destination, source, draggableId }) => {
     if (!destination) return;
@@ -90,7 +108,8 @@ const PakeepList = ({
       const newOrderNames = pakeepsOrderNames.reduce(newOrderNamesReduceFunc, []);
       // console.log(newOrderNames,+toCorrect);
       // return;
-      return handlePakeepsOrderNamesThunk(newOrderNames);
+      handlePakeepsOrderNamesThunk(newOrderNames);
+      return handleUsePreviuosValue(false);
     }
 
     const destinationArrFilterFunc = (el, idx) => {
@@ -157,7 +176,8 @@ const PakeepList = ({
     const filteredNewOrderArr = _.split(toSplitNewOrderString, '_');
 
     const newOrderNames = _.filter(filteredNewOrderArr, string => string !== toRemoveNameString);
-    return handlePakeepsOrderNamesThunk(newOrderNames);
+    handlePakeepsOrderNamesThunk(newOrderNames);
+    return handleUsePreviuosValue(false);
   };
   // const placeholder = {
   //   title: 'Placeholder',
@@ -176,6 +196,7 @@ const PakeepList = ({
     responsiveColumnOrder,
     columns,
     onDragEnd,
+    onDragStart,
     placeholderName,
     forderProperty
   };
@@ -194,19 +215,19 @@ PakeepList.propTypes = {
 };
 
 const mapStateToProps = ({
-  app: { pakeeps, labels, columns, columnOrder, pakeepsOrderNames, currentFolderPropertyIdx, folders },
+  app: { pakeeps, pakeepsOrderNames, currentFolderPropertyIdx, folders, isUsePreviuos },
   settings: { isDraggableOptimizate = true }
 }) => ({
   pakeeps,
-  labels,
-  folders,
-  columns,
-  columnOrder,
-  currentFolderPropertyIdx,
+  isDraggableOptimizate,
   pakeepsOrderNames,
-  isDraggableOptimizate
+  handlePakeepsOrderNamesThunk,
+  currentFolderPropertyIdx,
+  isUsePreviuos,
+  folders
 });
 const mapDispatchToProps = dispatch => ({
+  handleUsePreviuosValue: boolValue => dispatch(handleUsePreviuosValue(boolValue)),
   handlePakeepsOrderNamesThunk: newOrder => dispatch(handlePakeepsOrderNamesThunk(newOrder))
 });
 

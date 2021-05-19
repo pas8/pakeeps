@@ -10,8 +10,8 @@ import { connect } from 'react-redux';
 import _, { property } from 'lodash';
 import SkeletonView from './components/SkeletonView';
 import { getFilteredLabels } from 'store/modules/App/selectors';
-import { changeLabelItemThunk } from 'store/modules/App/operations';
-
+import { changeLabelItemThunk, handleDeleteLabelFromPakeepThunk } from 'store/modules/App/operations';
+import {useSwipeable} from 'react-swipeable'
 const useStyles = makeStyles(theme => ({
   paper: {
     padding: theme.spacing(1.96),
@@ -100,17 +100,22 @@ const PakeepElement = ({
     handleSetColorPakeep: handleSetColorPakeep,
     iconsCloser: true
   };
+ 
+  const handlers = useSwipeable({
+    onSwiped: (eventData) => console.log("User Swiped!", eventData),
+  });
 
   const setLabelHoverStatusIsFalse = () => setLabelHover(false);
   const setLabelHoverStatus = () => setLabelHover({ title, isHovering: true });
   useEffect(() => setLoaded(true), []);
 
   if (!loaded) return <SkeletonView />;
-
+ 
   return (
-    <Grid item onMouseEnter={setHoverIsTrue} onMouseLeave={setHoverIsFalse} ref={ref}>
+    <Grid item onMouseEnter={setHoverIsTrue} onMouseLeave={setHoverIsFalse} ref={ref} >
       <Paper
         variant={'outlined'}
+        {...handlers}
         style={{ backgroundColor: color === 'default' ? '#303030' : color }}
         className={clsx(hover ? classes.hover : classes.unHover, classes.paper, isDragging ? classes.isDragging : null)}
       >
@@ -124,6 +129,7 @@ const PakeepElement = ({
           globalLabels={globalLabels}
           handleDeleteLabelFromPakeepThunk={handleDeleteLabelFromPakeepThunk}
           changeLabelItemThunk={changeLabelItemThunk}
+          pakeepId={id}
         />
         <Grow in={hover}>
           <Grid className={classes.iconsUtils}>
@@ -157,7 +163,7 @@ const mapStateToProps = ({ settings: { utilsViewLikeInGoogleKeep }, app: { label
   filteredLabels: getFilteredLabels(labels,globalLabels)
 });
 const mapDispatchToProps = dispatch => ({
-  handleDeleteLabelFromPakeepThunk: id => dispatch(handleDeleteLabelFromPakeepThunk(id)),
+  handleDeleteLabelFromPakeepThunk: (pakeepId,labelId) => dispatch(handleDeleteLabelFromPakeepThunk(pakeepId,labelId)),
   changeLabelItemThunk:property => dispatch(changeLabelItemThunk(property))
 });
 

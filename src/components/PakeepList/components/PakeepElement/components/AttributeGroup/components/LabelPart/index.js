@@ -5,14 +5,14 @@ import { colord } from 'colord';
 import LabelItem from './components/LabelItem';
 import MenuOfLabelPart from './components/Menu';
 
-const LabelPart = ({ labels, handleDeleteLabelFromPakeepThunk, changeLabelItemThunk}) => {
+const LabelPart = ({ labels, handleDeleteLabelFromPakeepThunk, changeLabelItemThunk,pakeepId}) => {
   const nullityOfMenuState = { mouseX: null, mouseY: null, id: null };
   const [menuState, setMenuState] = useState(nullityOfMenuState);
 
   const setLabelHoverStatusIsFalse = () => setLabelHover(false);
 
   const handleClose = () => setMenuState(nullityOfMenuState);
-  const handleDeleteLabel = () => handleDeleteLabelFromPakeepThunk(id);
+  const handleDeleteLabel = () => handleDeleteLabelFromPakeepThunk(pakeepId,menuState.id);
   const handleChangeLabelColor = color => changeLabelItemThunk({ color });
   return (
     <>
