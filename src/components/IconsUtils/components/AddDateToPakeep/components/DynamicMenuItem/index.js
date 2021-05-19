@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { Grid, makeStyles, Typography,MenuItem } from '@material-ui/core';
+import { Grid, makeStyles, Typography, MenuItem } from '@material-ui/core';
 import clsx from 'clsx';
 
 const useStyles = makeStyles(theme => ({
@@ -13,6 +13,7 @@ const useStyles = makeStyles(theme => ({
       duration: theme.transitions.duration.complex
     })
   },
+  
   preventClickOfMenuItem: { '& .MuiTouchRipple-root': { display: 'none' } }
 }));
 
@@ -24,9 +25,8 @@ const DynamicMenuItem = ({
   isDynamicComponentShouldBeShown,
   menuItemProps,
   isPreventClickOfMenuItem = false,
-  Icon
+  Icon,
 }) => {
-  
   const classes = useStyles();
 
   const dynamicMenuItem = (
@@ -46,11 +46,11 @@ const DynamicMenuItem = ({
     </Grid>
   );
 
-
   const ItemOfMenu = isDynamicComponentShouldBeShown ? Grid : MenuItem;
 
   const itemOfMenuProps = {
     ...menuItemProps,
+    disableGutters: true,
     className: isPreventClickOfMenuItem ? classes.preventClickOfMenuItem : null
   };
 
@@ -68,6 +68,6 @@ DynamicMenuItem.propTypes = {
   isPreventClickOfMenuItem: PropTypes.bool,
   menuItemProps: PropTypes.object,
   title: PropTypes.string
-}
+};
 
 export default DynamicMenuItem;

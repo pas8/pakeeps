@@ -1,4 +1,4 @@
-import { pickBy } from 'lodash';
+import { filter, find, pickBy } from 'lodash';
 import { createReducer } from 'store/utils';
 import * as types from './types';
 
@@ -43,7 +43,7 @@ const initialState = {
       bookmark: false,
       favorite: false,
       color: 'default',
-      labels: ['label4', 'label0', 'label1', 'label2','label3',],
+      labels: ['label4', 'label0', 'label1', 'label2', 'label3'],
       id: 'pakeep2',
       isPinned: false
     },
@@ -64,7 +64,7 @@ const initialState = {
       bookmark: false,
       favorite: false,
       color: 'transparent',
-      labels: ['label1', 'label2', 'label0',  'label6'],
+      labels: ['label1', 'label2', 'label0', 'label6'],
 
       id: 'pakeep4',
       isPinned: true
@@ -231,6 +231,10 @@ const AppReducer = createReducer(initialState)({
   [types.HANDLE_FOLDERS]: (state, { foldersArr }) => ({
     ...state,
     folders: foldersArr
+  }),
+  [types.CHANGE_LABEL_ITEM]: (state, { id, changedLabel }) => ({
+    ...state,
+    labels: [...filter(state.labels, ({ id: labelId }) => id !== labelId), changedLabel]
   }),
 
   [types.HANDLE_CURRENT_FOLDER_PROPERTY_IDX]: (state, { folderIdx }) => ({

@@ -34,7 +34,6 @@ const useStyles = makeStyles(theme => ({
   dateContainer: { padding: theme.spacing(0, 0) },
   // scale:{transform:'scale(0.88)'}
   box: { borderBottom: '1px solid rgba(255,255,255,0.4)' },
-  menuItemButton: { outline: 'none', background: 'none', border: 'none' },
   timePickerWrapper: { '& input': { width: theme.spacing(16) } }
 }));
 
@@ -214,7 +213,7 @@ const AddDateToPakeep = ({ ampm = false, onMenuClose, id, events }) => {
         const onClickOfMenuItem = () => setClickStatusOfMenuItemIsTrue(name, title);
 
         let menuItemProps = {
-          disableGutters: true,
+          
           key: nanoid(),
 
           onMouseEnter: onMouseEnterOfMenuItem,

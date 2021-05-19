@@ -8,7 +8,8 @@ import {
   toSetMenuOpenStatus,
   toSetNewOrderNames,
   toSetCurrentFolderPropertyIdx,
-  toChangeFolders
+  toChangeFolders,
+  toChangeLabelItem,
 } from './actions';
 
 export const addNewPaKeepThunk = data => dispatch => {
@@ -51,5 +52,13 @@ export const handleFoldersThunk = foldersArr => dispatch => {
 };
 
 
+// export const addNewLabelItemThunk = (id,changedLabel) => dispatch => {
+//   dispatch(toChangeLabelItem(id,changedLabel));
+// };
+
+export const  changeLabelItemThunk = (id,property) => (dispatch,getState) => {
+  console.log(getState)
+  dispatch(toChangeLabelItem(id,property));
+};
 
 

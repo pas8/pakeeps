@@ -7,9 +7,10 @@ import { useMeasure, useToggle } from 'react-use';
 import { themeColors } from 'components/theme';
 import AttributeGroup from './components/AttributeGroup';
 import { connect } from 'react-redux';
-import _ from 'lodash';
+import _, { property } from 'lodash';
 import SkeletonView from './components/SkeletonView';
 import { getFilteredLabels } from 'store/modules/App/selectors';
+import { changeLabelItemThunk } from 'store/modules/App/operations';
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -67,7 +68,8 @@ const PakeepElement = ({
   idx,
   globalLabels,
   filteredLabels,
-  handleDeleteLabelFromPakeepThunk
+  handleDeleteLabelFromPakeepThunk,
+  changeLabelItemThunk
 }) => {
   const classes = useStyles(color);
   const [hover, setHover] = useState(false);
@@ -121,6 +123,7 @@ const PakeepElement = ({
           events={events}
           globalLabels={globalLabels}
           handleDeleteLabelFromPakeepThunk={handleDeleteLabelFromPakeepThunk}
+          changeLabelItemThunk={changeLabelItemThunk}
         />
         <Grow in={hover}>
           <Grid className={classes.iconsUtils}>
@@ -154,7 +157,8 @@ const mapStateToProps = ({ settings: { utilsViewLikeInGoogleKeep }, app: { label
   filteredLabels: getFilteredLabels(labels,globalLabels)
 });
 const mapDispatchToProps = dispatch => ({
-  handleDeleteLabelFromPakeepThunk: id => dispatch(handleDeleteLabelFromPakeepThunk(id))
+  handleDeleteLabelFromPakeepThunk: id => dispatch(handleDeleteLabelFromPakeepThunk(id)),
+  changeLabelItemThunk:property => dispatch(changeLabelItemThunk(property))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(PakeepElement);
