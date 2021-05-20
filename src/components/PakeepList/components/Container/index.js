@@ -23,7 +23,8 @@ const PakeepListContainer = ({
   columns,
   onDragEnd,
   placeholderName,
-  forderProperty
+  forderProperty,
+  onDragStart
 }) => {
   const classes = useStyles();
   const placeholder = {
@@ -36,7 +37,7 @@ const PakeepListContainer = ({
     id: 'placeholder'
   };
   return (
-    <DragDropContext onDragEnd={onDragEnd}>
+    <DragDropContext onDragEnd={onDragEnd} onDragStart={onDragStart}>
       <Grid container className={classes.container}>
         {responsiveColumnOrder?.map((columnId, idx) => {
           const column = columns[columnId];

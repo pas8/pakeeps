@@ -1,3 +1,4 @@
+import { find ,filter} from 'lodash';
 import {
   toAddDateToPakeep,
   toAddNewPakeep,
@@ -8,11 +9,14 @@ import {
   toSetMenuOpenStatus,
   toSetNewOrderNames,
   toSetCurrentFolderPropertyIdx,
-  toChangeFolders
+  toChangeFolders,
+  toChangeLabelItem,
+  toDeleteLabelFromPakeep,
+  toHandleUsePreviuos
 } from './actions';
 
 export const addNewPaKeepThunk = data => dispatch => {
-  console.log(data)
+  console.log(data);
   dispatch(toAddNewPakeep(data));
 };
 
@@ -41,7 +45,6 @@ export const handlePakeepsOrderNamesThunk = newOrder => dispatch => {
   dispatch(toSetNewOrderNames(newOrder));
 };
 
-
 export const handleCurrentFolderPropertyIdxThunk = folderIdx => dispatch => {
   dispatch(toSetCurrentFolderPropertyIdx(folderIdx));
 };
@@ -50,6 +53,25 @@ export const handleFoldersThunk = foldersArr => dispatch => {
   dispatch(toChangeFolders(foldersArr));
 };
 
+// export const addNewLabelItemThunk = (id,changedLabel) => dispatch => {
+//   dispatch(toChangeLabelItem(id,changedLabel));
+// };
 
+export const changeLabelItemThunk = (labelId, property) => (dispatch, getState) => {
+  const {
+    app: { labels }
+  } = getState();
 
+  const findedLabel = find(labels, ({ id }) => id === labelId);
+  const filteredLabels = filter(labels, ({ id }) => id !== labelId);
+  const newLabels = [...filteredLabels, { ...findedLabel, ...property }];
 
+  dispatch(toChangeLabelItem(newLabels));
+};
+
+export const handleDeleteLabelFromPakeepThunk = (pakeepId, labelId) => dispatch => {
+  dispatch(toDeleteLabelFromPakeep(pakeepId, labelId));
+};
+export const handleUsePreviuosValue = boolValue => dispatch => {
+  dispatch(toHandleUsePreviuos(boolValue));
+};

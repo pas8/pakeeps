@@ -1,15 +1,17 @@
-import { pickBy } from 'lodash';
+import { filter, find, pickBy } from 'lodash';
 import { createReducer } from 'store/utils';
 import * as types from './types';
 
 const initialState = {
   data: 1,
+  archive: [],
   labels: [
-    { color: 'primary', title: 'Day plans', iconName: '', id: 'label0' },
-    { color: 'secondary', title: 'Week plans', iconName: '', id: 'label1' },
-    { color: 'primary', title: 'Mouth plans', iconName: 'keyboard', id: 'label2' },
-    { color: 'secondary', title: 'Year plans', iconName: '', id: 'label3' },
-    { color: '', title: 'Hobby Placeholders', iconName: '', id: 'label4' }
+    { color: '', title: 'Day plans', iconName: 'category', id: 'label0', variant: 'outlined' },
+    { color: '#dd6b2a', title: 'Week plans', iconName: 'star', id: 'label1', variant: 'outlined' },
+    { color: 'primary', title: 'Mouth plans', iconName: 'keyboard', id: 'label2', variant: 'outlined' },
+    { color: 'secondary', title: 'Year plans', iconName: '', id: 'label3', variant: 'outlined' },
+    { color: '#6e9f47', title: 'Your plans', iconName: 'star', id: 'label6', variant: 'default' },
+    { color: '', title: 'Hobby Placeholders', iconName: '', id: 'label4', variant: 'default' }
   ],
 
   folders: [
@@ -31,7 +33,7 @@ const initialState = {
       bookmark: false,
       favorite: false,
       color: 'default',
-      labels: ['label3','label1','label0','label2'],
+      labels: ['label3', 'label1', 'label0', 'label2'],
 
       id: 'pakeep1',
       isPinned: true
@@ -42,7 +44,7 @@ const initialState = {
       bookmark: false,
       favorite: false,
       color: 'default',
-      labels: ['label4','label0','label1','label2'],
+      labels: ['label4', 'label0', 'label1', 'label2', 'label3'],
       id: 'pakeep2',
       isPinned: false
     },
@@ -52,7 +54,7 @@ const initialState = {
       bookmark: false,
       favorite: false,
       color: 'default',
-      labels: ['label0','label2'],
+      labels: ['label0', 'label2', 'label6'],
 
       isPinned: true,
       id: 'pakeep3'
@@ -63,8 +65,8 @@ const initialState = {
       bookmark: false,
       favorite: false,
       color: 'transparent',
-      labels: ['label1','label2','label0','label2'],
-      
+      labels: ['label1', 'label2', 'label0', 'label6'],
+
       id: 'pakeep4',
       isPinned: true
     }
@@ -219,18 +221,33 @@ const initialState = {
   isMenuOpen: false,
   scrollDirectionName: 'up',
   currentFolderPropertyIdx: 0,
-  drawerWidth: 240
+  drawerWidth: 240,
+  isUsePreviuos: false
 };
 
 const AppReducer = createReducer(initialState)({
   [types.ADD_NEW_PAKEEP]: (state, { newPaKeep }) => ({
     ...state,
-    pakeeps: { ...state.pakeeps, [newPaKeep.id]: newPaKeep }
+    pakeeps: [...state.pakeeps, newPaKeep]
   }),
   [types.HANDLE_FOLDERS]: (state, { foldersArr }) => ({
     ...state,
     folders: foldersArr
   }),
+  [types.CHANGE_LABEL_ITEM]: (state, { labels }) => ({
+    ...state,
+    labels
+  }),
+  [types.DELETE_LABEL_FROM_PAKEEP]: (state, { pakeepId, labelId }) => {
+    const currentPakeep = find(state.pakeeps, ({ id }) => pakeepId === id);
+    const labels = filter(currentPakeep.labels, id => labelId !== id);
+    console.log(labels, labelId);
+    return {
+      ...state,
+      isUsePreviuos: true,
+      pakeeps: [...filter(state.pakeeps, ({ id }) => pakeepId !== id), { ...currentPakeep, labels }]
+    };
+  },
 
   [types.HANDLE_CURRENT_FOLDER_PROPERTY_IDX]: (state, { folderIdx }) => ({
     ...state,
@@ -238,13 +255,28 @@ const AppReducer = createReducer(initialState)({
   }),
   [types.SET_NEW_ORDER_NAMES]: (state, { newOrder }) => ({
     ...state,
+    // isUsePreviuos:false,
     pakeepsOrderNames: newOrder
   }),
+  [types.HANDLE_USE_PREVIUOS]: (state, { boolValue }) => ({
+    ...state,
+    // isUsePreviuos:false,
+    isUsePreviuos: boolValue
+  }),
+
   [types.DELETE_PAKEEP]: (state, { id }) => ({
     ...state,
     pakeeps: pickBy(state.pakeeps, ({ id: pakeepsId }) => id !== pakeepsId)
   }),
-
+  [types.MOVE_PAKEEP_TO_ARCHIVE]: (state, { newArchiveItem }) => ({
+    ...state,
+    archive: [...state.archive, newArchiveItem]
+  }),
+  [types.UNARCHIVETE_PAKEEP]: (state, { idOfArchiveItem }) => ({
+    ...state,
+    archive: [...filter(state.archive, ({ id }) => id !== idOfArchiveItem)],
+    pakeeps: [...state.pakeeps, find(state.archive, ({ id }) => id === idOfArchiveItem)]
+  }),
   [types.SCROLL_DIRECTION]: (state, { scrollDirectionName }) => ({
     ...state,
     scrollDirectionName

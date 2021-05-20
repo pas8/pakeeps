@@ -1,46 +1,68 @@
-import React, { useState } from 'react';
-import DeleteForeverOutlinedIcon from '@material-ui/icons/DeleteForeverOutlined';
+import React, { useState, Fragment } from 'react';
 import { iconsArr } from 'components/Icons';
-import { Grid, Chip, makeStyles } from '@material-ui/core';
 import { nanoid } from 'nanoid';
+import { colord } from 'colord';
+import LabelItem from './components/LabelItem';
+import MenuOfLabelPart from './components/Menu';
 
-const LabelPart = ({ labels }) => {
-  const [labelHover, setLabelHover] = useState(!false);
+const LabelPart = ({ labels, handleDeleteLabelFromPakeepThunk, changeLabelItemThunk, pakeepId }) => {
+  const nullityOfMenuState = { mouseX: null, mouseY: null, id: null, variant: '' ,labelIconName:''};
+  const [menuState, setMenuState] = useState(nullityOfMenuState);
 
   const setLabelHoverStatusIsFalse = () => setLabelHover(false);
 
-  const handleDeleteLabel = () => {};
+  const handleClose = () => setMenuState(nullityOfMenuState);
 
+  const handleDeleteLabel = () => {
+    handleDeleteLabelFromPakeepThunk(pakeepId, menuState.id);
+    handleClose();
+  };
+  const handleChangeLabelColor = color => changeLabelItemThunk(menuState.id, { color });
+  const handleChangeLabelIconName = iconName => changeLabelItemThunk(menuState.id, { iconName });
+  const handleChangeLabelVariant = () => {
+    const variant = menuState.variant === 'default' ? 'outlined' : 'default';
+    changeLabelItemThunk(menuState.id, { variant });
+    setMenuState(state => ({ ...state, variant }));
+  };
+  // console.log(menuState.variant !== 'default' ? 'outlined' : 'default')
   return (
     <>
-      {labels?.map(({ title, icon: labelIcon, key, color }) => {
-        const canLabelBeDeleted = (labelHover?.isHovering && labelHover?.title === title) || !labelIcon;
-        const onDeleteOfLabelItem = () => (canLabelBeDeleted ? () => handleDeleteLabel(key) : null);
+      {labels.map(({ title, iconName: labelIconName, id, color, variant }) => {
+        const icon = iconsArr.find(({ iconName }) => iconName === labelIconName)?.icon;
 
-        const isLabelHaveIcon = !(labelHover?.isHovering && labelHover?.title === title);
-        const icon = isLabelHaveIcon ? iconsArr.find(({ iconName }) => iconName === labelIcon)?.icon : null;
-        
-        const onMouseEnter = (title) => setLabelHover({ title, isHovering: true })
+        const currentColor = color === 'primary' || color === 'secondary' ? null : color;
+        const isDark = colord(color).brightness() >= 0.48;
 
         const labelChipProps = {
-          onMouseEnter,
-          onMouseLeave: setLabelHoverStatusIsFalse,
           icon,
           label: title,
-          onDelete: onDeleteOfLabelItem,
           className: null,
-          variant: 'outlined',
+          variant,
           color,
-          size: 'small',
-          deleteIcon: <DeleteForeverOutlinedIcon />
+          size: 'small'
         };
 
+        const handleOpen = e => {
+          e.preventDefault();
+          setMenuState({ mouseX: e.clientX, mouseY: e.clientY, id, variant ,labelIconName});
+        };
+
+        const labelItemProps = { isDark, currentColor, handleOpen, labelChipProps };
+
         return (
-          <Grid item key={nanoid()}>
-            <Chip {...labelChipProps} />
-          </Grid>
+          <Fragment key={nanoid()}>
+            <LabelItem {...labelItemProps} />
+          </Fragment>
         );
       })}
+      <MenuOfLabelPart
+        menuState={menuState}
+        handleDeleteLabel={handleDeleteLabel}
+        handleClose={handleClose}
+        handleChangeLabelColor={handleChangeLabelColor}
+        handleChangeLabelVariant={handleChangeLabelVariant}
+        handleChangeLabelIconName={handleChangeLabelIconName}
+      />
     </>
   );
 };

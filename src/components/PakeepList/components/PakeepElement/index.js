@@ -1,21 +1,17 @@
-import { Grid, Paper, makeStyles, Typography, Chip, Box, Container, Zoom, Grow } from '@material-ui/core';
+import { Grid, Paper, makeStyles, Typography, Grow } from '@material-ui/core';
 import PropTypes from 'prop-types';
-import { useState, React, useEffect, useCallback } from 'react';
+import { useState, React, useEffect } from 'react';
 import clsx from 'clsx';
 import IconsUtils from 'components/IconsUtils';
-import FavoriteBorderOutlinedIcon from '@material-ui/icons/FavoriteBorderOutlined';
-import { iconsArr } from 'components/Icons';
-import HighlightOffOutlinedIcon from '@material-ui/icons/HighlightOffOutlined';
-import ClearOutlinedIcon from '@material-ui/icons/ClearOutlined';
-import DeleteForeverOutlinedIcon from '@material-ui/icons/DeleteForeverOutlined';
-import { takeValueFromBreakpoints } from 'hooks/takeValueFromBreakpoints.hook';
 import { useMeasure, useToggle } from 'react-use';
 import { themeColors } from 'components/theme';
 import AttributeGroup from './components/AttributeGroup';
 import { connect } from 'react-redux';
-import { Skeleton } from '@material-ui/lab';
-import _ from 'lodash';
-
+import _, { property } from 'lodash';
+import SkeletonView from './components/SkeletonView';
+import { getFilteredLabels } from 'store/modules/App/selectors';
+import { changeLabelItemThunk, handleDeleteLabelFromPakeepThunk } from 'store/modules/App/operations';
+import {useSwipeable} from 'react-swipeable'
 const useStyles = makeStyles(theme => ({
   paper: {
     padding: theme.spacing(1.96),
@@ -70,7 +66,10 @@ const PakeepElement = ({
   events,
   utilsViewLikeInGoogleKeep,
   idx,
-  globalLabels
+  globalLabels,
+  filteredLabels,
+  handleDeleteLabelFromPakeepThunk,
+  changeLabelItemThunk
 }) => {
   const classes = useStyles(color);
   const [hover, setHover] = useState(false);
@@ -101,39 +100,22 @@ const PakeepElement = ({
     handleSetColorPakeep: handleSetColorPakeep,
     iconsCloser: true
   };
+ 
+  const handlers = useSwipeable({
+    onSwiped: (eventData) => console.log("User Swiped!", eventData),
+  });
 
   const setLabelHoverStatusIsFalse = () => setLabelHover(false);
   const setLabelHoverStatus = () => setLabelHover({ title, isHovering: true });
   useEffect(() => setLoaded(true), []);
 
-  if (!loaded)
-    return (
-      <>
-        <Skeleton height={92} variant="text" width={`${_.random(60, 80)}%`} animation="wave" />
-        <Skeleton variant="rect" height={_.random(96, 240)} width={'92%'} animation="wave" />
-        <Grid container>
-          <Box width={`${_.random(24, 42)}%`}>
-            <Skeleton variant="text" height={42} animation="wave" />
-          </Box>
-          <Box width={`${_.random(32, 42)}%`} ml={1.8}>
-            <Skeleton variant="text" height={42} animation="wave" />
-          </Box>
-        </Grid>
-        <Box display={'flex'} mt={-0.8}>
-          <Box width={`${_.random(16, 24)}%`}>
-            <Skeleton variant="text" height={42} animation="wave" />
-          </Box>
-          <Box width={`${_.random(42, 60)}%`} ml={1.8}>
-            <Skeleton variant="text" height={42} animation="wave" />
-          </Box>
-        </Box>
-      </>
-    );
-
+  if (!loaded) return <SkeletonView />;
+ 
   return (
-    <Grid item onMouseEnter={setHoverIsTrue} onMouseLeave={setHoverIsFalse} ref={ref}>
+    <Grid item onMouseEnter={setHoverIsTrue} onMouseLeave={setHoverIsFalse} ref={ref} >
       <Paper
         variant={'outlined'}
+        {...handlers}
         style={{ backgroundColor: color === 'default' ? '#303030' : color }}
         className={clsx(hover ? classes.hover : classes.unHover, classes.paper, isDragging ? classes.isDragging : null)}
       >
@@ -141,7 +123,14 @@ const PakeepElement = ({
           <Typography variant={'h5'}>{title}</Typography>
         </Grid>
         <Grid item>{text}</Grid>
-        <AttributeGroup labels={labels} events={events} globalLabels={globalLabels} />
+        <AttributeGroup
+          labels={filteredLabels}
+          events={events}
+          globalLabels={globalLabels}
+          handleDeleteLabelFromPakeepThunk={handleDeleteLabelFromPakeepThunk}
+          changeLabelItemThunk={changeLabelItemThunk}
+          pakeepId={id}
+        />
         <Grow in={hover}>
           <Grid className={classes.iconsUtils}>
             <IconsUtils {...iconsUtilsProps} />
@@ -153,18 +142,29 @@ const PakeepElement = ({
 };
 
 PakeepElement.propTypes = {
-  bookmark: PropTypes.any,
+  bookmark: PropTypes.bool,
   color: PropTypes.string,
+  events: PropTypes.any,
   favorite: PropTypes.any,
+  filteredLabels: PropTypes.any,
+  globalLabels: PropTypes.any,
+  handleDeleteLabelFromPakeepThunk: PropTypes.any,
+  id: PropTypes.any,
+  idx: PropTypes.any,
   isDragging: PropTypes.bool,
   labels: PropTypes.array,
   text: PropTypes.string,
-  title: PropTypes.string
-};
+  title: PropTypes.string,
+  utilsViewLikeInGoogleKeep: PropTypes.any
+}
 
-const mapStateToProps = ({ settings: { utilsViewLikeInGoogleKeep }, app: { labels } }) => ({
+const mapStateToProps = ({ settings: { utilsViewLikeInGoogleKeep }, app: { labels:globalLabels } }, { labels }) => ({
   utilsViewLikeInGoogleKeep,
-  globalLabels: labels
+  filteredLabels: getFilteredLabels(labels,globalLabels)
+});
+const mapDispatchToProps = dispatch => ({
+  handleDeleteLabelFromPakeepThunk: (pakeepId,labelId) => dispatch(handleDeleteLabelFromPakeepThunk(pakeepId,labelId)),
+  changeLabelItemThunk:(labelId,property) => dispatch(changeLabelItemThunk(labelId,property))
 });
 
-export default connect(mapStateToProps)(PakeepElement);
+export default connect(mapStateToProps, mapDispatchToProps)(PakeepElement);

@@ -8,17 +8,24 @@ const useStyles = makeStyles(theme => ({
   label: { marginTop: theme.spacing(0) },
   labelsContainer: { marginTop: theme.spacing(0.8) }
 }));
-const AttributeGroup = ({ events, labels, globalLabels }) => {
+const AttributeGroup = ({
+  events,
+  labels,
+  globalLabels,
+  handleDeleteLabelFromPakeepThunk,
+  pakeepId,
+  changeLabelItemThunk
+}) => {
   const classes = useStyles();
-
-  const pakeepLabels = _.map(labels, id => {
-    const findedLabel = _.find(globalLabels, ({ id: globalId }) => id === globalId);
-    return findedLabel;
-  });
 
   return (
     <Grid spacing={1} container className={classes.labelsContainer}>
-      <LabelPart labels={pakeepLabels} />
+      <LabelPart
+        labels={labels}
+        handleDeleteLabelFromPakeepThunk={handleDeleteLabelFromPakeepThunk}
+        pakeepId={pakeepId}
+        changeLabelItemThunk={changeLabelItemThunk}
+      />
       {/* <EventsPart events={events}/> */}
     </Grid>
   );

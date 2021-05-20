@@ -20,10 +20,17 @@ export const toChangeTwoColumns = (startColumn, finishColumn, breakpointName) =>
 });
 
 export const toScroll = scrollDirectionName => ({ type: types.SCROLL_DIRECTION, scrollDirectionName });
-export const toChangeFolders = foldersArr => ({ type: types.HANDLE_FOLDERS, foldersArr });
 
 export const toSetNewOrderNames = newOrder => ({ type: types.SET_NEW_ORDER_NAMES, newOrder });
 export const toSetCurrentFolderPropertyIdx = folderIdx => ({
   type: types.HANDLE_CURRENT_FOLDER_PROPERTY_IDX,
   folderIdx
 });
+
+export const toChangeFolders = foldersArr => ({ type: types.HANDLE_FOLDERS, foldersArr });
+export const toChangeLabelItem = (labels) => ({ type: types.CHANGE_LABEL_ITEM, labels });
+
+export const toMovePakeepToArchive = (id,changedLabel) => ({ type: types.MOVE_PAKEEP_TO_ARCHIVE, id,changedLabel });
+export const toDeleteLabelFromPakeep = (pakeepId,labelId) => ({ type: types.DELETE_LABEL_FROM_PAKEEP, pakeepId,labelId });
+export const toHandleUsePreviuos = (boolValue) => ({ type: types.HANDLE_USE_PREVIUOS, boolValue });
+
