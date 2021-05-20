@@ -1,9 +1,39 @@
-import { Grid, makeStyles, Tabs, Tab, Drawer } from '@material-ui/core';
+import { Grid, makeStyles, Tabs, Tab, Drawer, Typography } from '@material-ui/core';
 import { useTakeIcon } from 'hooks/useTakeIcon.hook';
 import PropTypes from 'prop-types';
-import { useMeasure } from 'react-use';
+import { useMeasure, usePrevious } from 'react-use';
 import { useEffect } from 'react';
+import _ from 'lodash';
+import { ToggleButton, ToggleButtonGroup } from '@material-ui/lab';
+import { colord } from 'colord';
+import { themeColors } from 'components/theme';
 const useStyles = makeStyles(theme => ({
+  containerOfFolderWithPakeepsView: {
+    margin: theme.spacing(10.8, 0, 0, 0),
+    padding: ({ isMenuOpen }) => theme.spacing(0, isMenuOpen ? 0 : 0, 0, 2.4),
+
+    '& button': {
+      display: 'flex',
+
+      flexWrap: 'nowrap',
+      whiteSpace: ' pre',
+      justifyContent: ({ isMenuOpen }) => (!isMenuOpen ? 'center' : 'flex-start'),
+      '& svg': {
+        fontSize: '2.28em'
+      }
+    },
+    '& .Mui-selected': {
+      background: colord(themeColors.primaryMain).alpha(0.16).toHex(),
+      color: themeColors.primaryMain,
+      '&:hover': { background: colord(themeColors.primaryMain).alpha(0.16).toHex() },
+      '& svg': {
+        color: themeColors.primaryMain
+      }
+    }
+  },
+  textOfFolderWithPakeepsView: {
+    padding: theme.spacing(0, 0, 0, 0)
+  },
   container: {
     margin: theme.spacing(10.32, 0, 0, 0),
     height: '100vh',
@@ -46,18 +76,22 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const Folders = ({ value, handleChange, folders, setMinWidthOfNav, isMenuOpen }) => {
-  const classes = useStyles();
+const Folders = ({ value, handleChange, folders, handleDrawerWidthThunk, isMenuOpen, navigationViewLike }) => {
+  const classes = useStyles({ isMenuOpen });
   const [ref, { width }] = useMeasure();
 
-  useEffect(() => setMinWidthOfNav(width), [width]);
+  const g = usePrevious(width);
+  const o = !isMenuOpen && _.min([g, width]);
+  useEffect(() => handleDrawerWidthThunk(o), [width]);
   console.log(width);
-
   const FoldersContainer = isMenuOpen ? Drawer : Grid;
-  
+
   return (
-    <FoldersContainer className={classes.container} open variant={'persistent'} anchor={'right'}>
-      <Grid ref={ref}>
+    <Grid
+      ref={ref}
+      className={navigationViewLike === 'googleKeep' ? classes.container : classes.containerOfFolderWithPakeepsView}
+    >
+      {navigationViewLike === 'googleKeep' && (
         <Tabs
           orientation={'vertical'}
           variant={'scrollable'}
@@ -75,8 +109,21 @@ const Folders = ({ value, handleChange, folders, setMinWidthOfNav, isMenuOpen })
             // return <Tab icon={icon} aria-label={title} />;
           })}
         </Tabs>
-      </Grid>
-    </FoldersContainer>
+      )}
+
+      {navigationViewLike === 'pakeeps' && (
+        <ToggleButtonGroup orientation="vertical" value={value} exclusive onChange={handleChange} exclusive>
+          {folders.map(({ title, iconName }, idx) => {
+            const [icon] = useTakeIcon(iconName || 'infinity');
+            return (
+              <ToggleButton value={idx} aria-label="list">
+                {icon} {isMenuOpen && <Grid className={classes.textOfFolderWithPakeepsView}> {title} </Grid>}
+              </ToggleButton>
+            );
+          })}
+        </ToggleButtonGroup>
+      )}
+    </Grid>
   );
 };
 

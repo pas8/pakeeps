@@ -264,6 +264,7 @@ const AppReducer = createReducer(initialState)({
     isUsePreviuos: boolValue
   }),
 
+  [types.HANDLE_DRAWER_WIDTH]: (state, { drawerWidth }) => ({ ...state, drawerWidth }),
   [types.DELETE_PAKEEP]: (state, { id }) => ({
     ...state,
     pakeeps: pickBy(state.pakeeps, ({ id: pakeepsId }) => id !== pakeepsId)

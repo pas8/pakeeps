@@ -2,11 +2,10 @@ import { createReducer } from 'store/utils';
 import * as types from './types';
 
 const settingsInitialState = {
-  viewOfThemeChangerButton: 'iconButton',
+  viewOfThemeChangerButton: 'iconButton', // 'iconButton' ||  'switch'
   maxSnack: 4,
   utilsViewLikeInGoogleKeep: false,
-  headerXsViewLikeIn: 'pakeeps',
-  isMenuNavigationHasDialogView:!false, //!reverseValue
+  navigationViewLike:'pakeeps'  //'telegram' || 'googleKeep' || 'pakeeps'
 };
 
 const settingsReducer = createReducer(settingsInitialState)({

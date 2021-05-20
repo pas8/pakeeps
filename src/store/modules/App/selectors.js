@@ -22,3 +22,4 @@ export const getCurrentFolderPropertyIdx = createSelector(
 export const getFolders = createSelector([folders => folders], folders => folders);
 
 export const getMenuOpenStatus = createSelector([isMenuOpen => isMenuOpen], isMenuOpen => isMenuOpen);
+export const getDrawerWidth  = createSelector([drawerWidth => drawerWidth], drawerWidth => drawerWidth);

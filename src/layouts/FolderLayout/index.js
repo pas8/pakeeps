@@ -4,13 +4,19 @@ import { useFolders } from 'hooks/useFolders.hook';
 import PropTypes from 'prop-types';
 import { useCallback, useState } from 'react';
 import { connect } from 'react-redux';
-import { handleFoldersThunk, handleCurrentFolderPropertyIdxThunk } from 'store/modules/App/operations';
+import {
+  handleFoldersThunk,
+  handleCurrentFolderPropertyIdxThunk,
+  handleDrawerWidthThunk
+} from 'store/modules/App/operations';
 import {
   getFolderPropertyies,
   getCurrentFolderPropertyIdx,
   getFolders,
-  getMenuOpenStatus
+  getMenuOpenStatus,
+  getDrawerWidth
 } from 'store/modules/App/selectors';
+import { getNavigationViewLike } from 'store/modules/Settings/selectors';
 
 const useStyles = makeStyles(theme => ({}));
 
@@ -21,10 +27,12 @@ const FolderLayout = ({
   currentFolderPropertyIdx,
   handleCurrentFolderPropertyIdxThunk,
   folders,
-  isMenuOpen
+  isMenuOpen,
+  handleDrawerWidthThunk,
+  drawerWidth,
+  navigationViewLike
 }) => {
   const classes = useStyles();
-  const [minWidthOfNav, setMinWidthOfNav] = useState(0);
 
   const foldersArr = useFolders(folderPropertyies);
   useCallback(() => console.log(';'), [currentFolderPropertyIdx, folderPropertyies]);
@@ -35,13 +43,14 @@ const FolderLayout = ({
     handleChange,
     folders,
     value: currentFolderPropertyIdx,
-    setMinWidthOfNav,
-    isMenuOpen
+    handleDrawerWidthThunk,
+    isMenuOpen,
+    navigationViewLike
   };
 
   return (
     <Grid container wrap={'nowrap'}>
-      <nav style={{ minWidth: minWidthOfNav }}>
+      <nav style={{ minWidth: drawerWidth }}>
         <Folders {...foldersProps} />
       </nav>
       <Grid item style={{ width: '100%' }}>
@@ -60,15 +69,21 @@ FolderLayout.propTypes = {
   handleCurrentFolderPropertyIdxThunk: PropTypes.func
 };
 
-const mapStateToProps = ({ app: { folderPropertyies, currentFolderPropertyIdx, folders, isMenuOpen } }) => ({
+const mapStateToProps = ({
+  app: { folderPropertyies, currentFolderPropertyIdx, folders, isMenuOpen, drawerWidth },
+  settings: { navigationViewLike }
+}) => ({
   folderPropertyies: getFolderPropertyies(folderPropertyies),
   currentFolderPropertyIdx: getCurrentFolderPropertyIdx(currentFolderPropertyIdx),
   folders: getFolders(folders),
-  isMenuOpen: getMenuOpenStatus(isMenuOpen)
+  isMenuOpen: getMenuOpenStatus(isMenuOpen),
+  drawerWidth: getDrawerWidth(drawerWidth),
+  navigationViewLike: getNavigationViewLike(navigationViewLike)
 });
 
 const mapDispatchToProps = dispatch => ({
   handleFoldersThunk: foldersArr => dispatch(handleFoldersThunk(foldersArr)),
+  handleDrawerWidthThunk: width => dispatch(handleDrawerWidthThunk(width)),
   handleCurrentFolderPropertyIdxThunk: idx => dispatch(handleCurrentFolderPropertyIdxThunk(idx))
 });
 

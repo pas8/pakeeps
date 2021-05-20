@@ -14,11 +14,12 @@ import { setMenuOpenStatusThunk } from 'store/modules/App/operations';
 import { useCustomBreakpoint } from 'hooks/useCustomBreakpoint';
 import { Grid } from '@material-ui/core';
 import ViewLikeInTelegram from './components/ViewLikeInTelegram';
+import { getNavigationViewLike } from 'store/modules/Settings/selectors';
 
 const useStyles = makeStyles(theme => ({
-  root: ({ headerXsViewLikeIn }) => ({
+  root: ({ navigationViewLikeTelegram }) => ({
     display: 'flex',
-    marginBottom: headerXsViewLikeIn === 'telegram' && theme.spacing(4)
+    marginBottom: navigationViewLikeTelegram && theme.spacing(4)
   }),
   appBar: {
     backgroundColor: '#424242',
@@ -33,8 +34,8 @@ const useStyles = makeStyles(theme => ({
     flexGrow: 1
   },
   appBarShift: {
-    width: ({ drawerWidth, isMenuNavigationHasDialogView }) =>
-      isMenuNavigationHasDialogView && `calc(100% - ${drawerWidth}px)`,
+    width: ({ isMenuOpen, drawerWidth, navigationViewLikeTelegram }) =>
+      navigationViewLikeTelegram && isMenuOpen && `calc(100% - ${drawerWidth}px)`,
     // marginLeft: drawerWidth,
     transition: theme.transitions.create(['margin', 'width'], {
       easing: theme.transitions.easing.easeOut,
@@ -49,38 +50,46 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const HeaderByPas = ({ setMenuOpenStatusThunk, isMenuOpen, isMenuNavigationHasDialogView, drawerWidth }) => {
+const HeaderByPas = ({
+  setMenuOpenStatusThunk,
+  isMenuOpen,
+
+  drawerWidth,
+  navigationViewLikeGoogleKeep,
+  navigationViewLikeTelegram,
+  navigationViewLikePakeeps
+}) => {
   const [breakpoint] = useCustomBreakpoint();
 
-  const handleDrawerOpen = () => setMenuOpenStatusThunk(true);
+  const handleDrawerOpen = () => setMenuOpenStatusThunk(!isMenuOpen);
   const handleDrawerClose = () => setMenuOpenStatusThunk(false);
 
   const isSmallSize = breakpoint === 'xs';
-  const headerXsViewLikeIn = 'pakeeps';
-  const classes = useStyles({ isMenuNavigationHasDialogView, drawerWidth, headerXsViewLikeIn });
+
+  const classes = useStyles({ drawerWidth, navigationViewLikeTelegram, navigationViewLikePakeeps, isMenuOpen });
 
   return (
     <Grid className={classes.root} container>
       <CssBaseline />
       <AppBar className={clsx(classes.appBar, { [classes.appBarShift]: isMenuOpen })}>
         <Toolbar className={classes.toolBar}>
-          {headerXsViewLikeIn === 'pakeeps' && (
+          {(navigationViewLikePakeeps || navigationViewLikeGoogleKeep) && (
             <>
-              <MainBar handleDrawerOpen={handleDrawerOpen} isMenuOpen={isMenuOpen} isSmallSize={isSmallSize} />
+              <MainBar
+                handleDrawerOpen={handleDrawerOpen}
+                isMenuOpen={navigationViewLikePakeeps ? false : isMenuOpen}
+                isSmallSize={isSmallSize}
+              />
               <HeaderSearch isSmallSize={isSmallSize} />
               <HeaderProfileUtils isSmallSize={isSmallSize} />
             </>
           )}
-          {headerXsViewLikeIn === 'telegram' && (
+          {navigationViewLikeTelegram && (
             <ViewLikeInTelegram handleDrawerOpen={handleDrawerOpen} isMenuOpen={isMenuOpen} />
           )}
         </Toolbar>
       </AppBar>
-      <HeaderDrawer
-        isMenuOpen={isMenuOpen}
-        handleDrawerClose={handleDrawerClose}
-        isMenuNavigationHasDialogView={isMenuNavigationHasDialogView}
-      />
+      {navigationViewLikeTelegram && <HeaderDrawer isMenuOpen={isMenuOpen} handleDrawerClose={handleDrawerClose} />}
     </Grid>
   );
 };
@@ -90,18 +99,8 @@ HeaderByPas.propTypes = {
   setMenuOpenStatusThunk: PropTypes.func
 };
 
-const mapStateToProps = ({
-  app: { isMenuOpen, drawerWidth },
-  settings: { headerXsViewLikeIn, isMenuNavigationHasDialogView }
-}) => ({
-  isMenuOpen,
-  drawerWidth,
-  headerXsViewLikeIn,
-  isMenuNavigationHasDialogView
-});
-
 const mapDispatchToProps = dispatch => ({
   setMenuOpenStatusThunk: boolStatus => dispatch(setMenuOpenStatusThunk(boolStatus))
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(HeaderByPas);
+export default connect(null, mapDispatchToProps)(HeaderByPas);

@@ -29,7 +29,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const HeaderDrawer = ({ isMenuOpen, handleDrawerClose, isMenuNavigationHasDialogView }) => {
+const HeaderDrawer = ({ isMenuOpen, handleDrawerClose }) => {
   // const drawerWidth = takePercentage();
 
   const classes = useStyles();
@@ -38,7 +38,7 @@ const HeaderDrawer = ({ isMenuOpen, handleDrawerClose, isMenuNavigationHasDialog
   const drawer = (
     <Drawer
       className={classes.drawer}
-      variant={'persistent'}
+      // variant={'persistent'}
       anchor={'right'}
       open={isMenuOpen}
       classes={{
@@ -53,12 +53,12 @@ const HeaderDrawer = ({ isMenuOpen, handleDrawerClose, isMenuNavigationHasDialog
     </Drawer>
   );
 
-  if (!isMenuNavigationHasDialogView)
-    return (
-      <Modal open={isMenuOpen} className={classes.modal}>
-        {drawer}
-      </Modal>
-    );
+  // if (!isMenuNavigationHasDialogView)
+  //   return (
+  //     <Modal open={isMenuOpen} className={classes.modal}>
+  //       {drawer}
+  //     </Modal>
+  //   );
   return drawer;
 };
 

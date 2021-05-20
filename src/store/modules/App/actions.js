@@ -32,5 +32,7 @@ export const toChangeLabelItem = (labels) => ({ type: types.CHANGE_LABEL_ITEM, l
 
 export const toMovePakeepToArchive = (id,changedLabel) => ({ type: types.MOVE_PAKEEP_TO_ARCHIVE, id,changedLabel });
 export const toDeleteLabelFromPakeep = (pakeepId,labelId) => ({ type: types.DELETE_LABEL_FROM_PAKEEP, pakeepId,labelId });
+
 export const toHandleUsePreviuos = (boolValue) => ({ type: types.HANDLE_USE_PREVIUOS, boolValue });
+export const toHandleDrawerWidth = (drawerWidth) => ({ type: types.HANDLE_DRAWER_WIDTH, drawerWidth });
 
