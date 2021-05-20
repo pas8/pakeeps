@@ -14,6 +14,8 @@ import LanguageOutlinedIcon from '@material-ui/icons/LanguageOutlined';
 import LandscapeOutlinedIcon from '@material-ui/icons/LandscapeOutlined';
 import LocalPostOfficeOutlinedIcon from '@material-ui/icons/LocalPostOfficeOutlined';
 import WidgetsOutlinedIcon from '@material-ui/icons/WidgetsOutlined';
+import PinIcon from './components/PinIcon';
+import InfinityIcon from './components/Infinity';
 
 export const iconsArr = [
   { icon: <AlarmOutlinedIcon />, iconName: 'alarm', id: '1' },
@@ -32,4 +34,6 @@ export const iconsArr = [
   { icon: <HttpsOutlinedIcon />, iconName: 'lock', id: '14' },
   { icon: <LanguageOutlinedIcon />, iconName: 'world', id: '15' },
   { icon: <LandscapeOutlinedIcon />, iconName: 'mountains', id: '16' },
+  { icon: <PinIcon />, iconName: 'pin', id: '96' },
+  { icon: <InfinityIcon />, iconName: 'infinity', id: '92' },
 ];

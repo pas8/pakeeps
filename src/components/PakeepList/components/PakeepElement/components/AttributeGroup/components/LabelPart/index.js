@@ -58,7 +58,7 @@ const LabelPart = ({ labels, handleDeleteLabelFromPakeepThunk, changeLabelItemTh
         };
 
         const labelItemProps = { isDark, currentColor, handleOpen, labelChipProps };
-        
+
         return <LabelItem {...labelItemProps} />;
       })}
       <MenuOfLabelPart

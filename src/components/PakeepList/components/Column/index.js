@@ -70,8 +70,14 @@ const Column = ({ column, pakeepsInColumn, lastColumn, firstColumn, forderProper
                   )}
                 </Draggable>
               );
-              if (forderProperty === 'ALL') return draggableEl;
-              if (!el[forderProperty]) return;
+console.log(el,forderProperty === forderProperty[0])
+
+              if (forderProperty.toString() === 'ALL') return draggableEl;
+
+// if(forderProperty === 'date' || 'label' && )
+
+              if (!el[forderProperty.toString()]) return;
+              
 
               return draggableEl;
             })}
