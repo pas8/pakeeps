@@ -11,7 +11,7 @@ const useStyles = makeStyles(theme => ({
   wrapperOfSaveButton: { marginRight: theme.spacing(1 * 0.8) }
 }));
 
-const HeaderOfAddDateToPakeep = ({ buttonSaveState, arrowButtonFunc, dynamicTitle, activeProperty }) => {
+const HeaderOfAddDateToPakeep = ({ buttonSaveState, arrowButtonFunc, dynamicTitle, isSaveButtonHidden = false }) => {
   const classes = useStyles();
 
   return (
@@ -34,18 +34,20 @@ const HeaderOfAddDateToPakeep = ({ buttonSaveState, arrowButtonFunc, dynamicTitl
           </Typography>
         </Grid>
       </Grid>
-      <Grid item className={classes.wrapperOfSaveButton}>
-        <IconButton>
-          <SaveRoundedIcon
-            style={{
-              color:
-                buttonSaveState === 'saved'
-                  ? themeColors.primaryMain
-                  : `rgba(255,255,255,${buttonSaveState ? 0.8 : 0.42}`
-            }}
-          />
-        </IconButton>
-      </Grid>
+      {!isSaveButtonHidden && (
+        <Grid item className={classes.wrapperOfSaveButton}>
+          <IconButton>
+            <SaveRoundedIcon
+              style={{
+                color:
+                  buttonSaveState === 'saved'
+                    ? themeColors.primaryMain
+                    : `rgba(255,255,255,${buttonSaveState ? 0.8 : 0.42}`
+              }}
+            />
+          </IconButton>
+        </Grid>
+      )}
     </Grid>
   );
 };

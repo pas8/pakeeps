@@ -5,15 +5,25 @@ import { colord } from 'colord';
 import LabelItem from './components/LabelItem';
 import MenuOfLabelPart from './components/Menu';
 
-const LabelPart = ({ labels, handleDeleteLabelFromPakeepThunk, changeLabelItemThunk,pakeepId}) => {
-  const nullityOfMenuState = { mouseX: null, mouseY: null, id: null };
+const LabelPart = ({ labels, handleDeleteLabelFromPakeepThunk, changeLabelItemThunk, pakeepId }) => {
+  const nullityOfMenuState = { mouseX: null, mouseY: null, id: null, variant: '' };
   const [menuState, setMenuState] = useState(nullityOfMenuState);
 
   const setLabelHoverStatusIsFalse = () => setLabelHover(false);
 
   const handleClose = () => setMenuState(nullityOfMenuState);
-  const handleDeleteLabel = () => handleDeleteLabelFromPakeepThunk(pakeepId,menuState.id);
-  const handleChangeLabelColor = color => changeLabelItemThunk({ color });
+
+  const handleDeleteLabel = () => {
+    handleDeleteLabelFromPakeepThunk(pakeepId, menuState.id);
+    handleClose();
+  };
+  const handleChangeLabelColor = color => changeLabelItemThunk(menuState.id, { color });
+  const handleChangeLabelVariant = () => {
+    const variant = menuState.variant === 'default' ? 'outlined' : 'default';
+    changeLabelItemThunk(menuState.id, { variant });
+    setMenuState(state => ({ ...state, variant }));
+  };
+  // console.log(menuState.variant !== 'default' ? 'outlined' : 'default')
   return (
     <>
       {labels.map(({ title, iconName: labelIconName, id, color, variant }) => {
@@ -33,14 +43,14 @@ const LabelPart = ({ labels, handleDeleteLabelFromPakeepThunk, changeLabelItemTh
 
         const handleOpen = e => {
           e.preventDefault();
-          setMenuState({ mouseX: e.clientX, mouseY: e.clientY, id });
+          setMenuState({ mouseX: e.clientX, mouseY: e.clientY, id, variant });
         };
 
         const labelItemProps = { isDark, currentColor, handleOpen, labelChipProps };
 
         return (
           <Fragment key={nanoid()}>
-              <LabelItem {...labelItemProps} />
+            <LabelItem {...labelItemProps} />
           </Fragment>
         );
       })}
@@ -49,6 +59,7 @@ const LabelPart = ({ labels, handleDeleteLabelFromPakeepThunk, changeLabelItemTh
         handleDeleteLabel={handleDeleteLabel}
         handleClose={handleClose}
         handleChangeLabelColor={handleChangeLabelColor}
+        handleChangeLabelVariant={handleChangeLabelVariant}
       />
     </>
   );

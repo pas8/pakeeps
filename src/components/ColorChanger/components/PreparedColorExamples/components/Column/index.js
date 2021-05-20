@@ -13,9 +13,9 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const ColumnOfPreparedColorExamples = ({ columnElements, columnElementProps, droppableId }) => {
+const ColumnOfPreparedColorExamples = ({ columnElements, columnElementProps, droppableId,isColor,CustomColumnElement }) => {
   const classes = useStyles();
-
+const  ColumnElement= isColor ? ColumnElementOfPreparedColorExamples :  CustomColumnElement
   return (
     <Grid>
       <Droppable droppableId={droppableId} direction={'vertical'}>
@@ -37,7 +37,7 @@ const ColumnOfPreparedColorExamples = ({ columnElements, columnElementProps, dro
                       innerRef={provided.innerRef}
                       className={classes.containerOfElement}
                     >
-                      <ColumnElementOfPreparedColorExamples
+                      <ColumnElement
                         {...el}
                         {...columnElementProps}
                         isDragging={snapshot.isDragging}

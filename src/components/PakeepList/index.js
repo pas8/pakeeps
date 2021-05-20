@@ -54,11 +54,11 @@ const PakeepList = ({
     pakeepsOrderNames,
     handlePakeepsOrderNamesThunk
   );
-  console.log(
-    isUsePreviuos,
-    previousPakeepsOrderNames,
-    pakeepsOrderNames
-  );
+  // console.log(
+  //   isUsePreviuos,
+  //   previousPakeepsOrderNames,
+  //   pakeepsOrderNames
+  // );
   // const [value, updateCookie, deleteCookie] = useCookie(state);
 
   // useEffect(() => _.isEqual(state, nulittyState) && setState(JSON.parse(value)), []);

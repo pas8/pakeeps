@@ -1,3 +1,4 @@
+import { find ,filter} from 'lodash';
 import {
   toAddDateToPakeep,
   toAddNewPakeep,
@@ -57,12 +58,18 @@ export const handleFoldersThunk = foldersArr => dispatch => {
 // };
 
 export const changeLabelItemThunk = (labelId, property) => (dispatch, getState) => {
-  console.log(getState, property, property);
-  dispatch(toChangeLabelItem(id, property));
+  const {
+    app: { labels }
+  } = getState();
+
+  const findedLabel = find(labels, ({ id }) => id === labelId);
+  const filteredLabels = filter(labels, ({ id }) => id !== labelId);
+  const newLabels = [...filteredLabels, { ...findedLabel, ...property }];
+
+  dispatch(toChangeLabelItem(newLabels));
 };
 
 export const handleDeleteLabelFromPakeepThunk = (pakeepId, labelId) => dispatch => {
-  console.log((pakeepId, labelId));
   dispatch(toDeleteLabelFromPakeep(pakeepId, labelId));
 };
 export const handleUsePreviuosValue = boolValue => dispatch => {

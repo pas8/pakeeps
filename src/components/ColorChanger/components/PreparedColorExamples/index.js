@@ -9,7 +9,7 @@ import { changeOneColorColumnThunk, changeTwoColorColumnThunk } from 'store/modu
 
 const useStyles = makeStyles(theme => ({
   container: {
-    margin: theme.spacing(0.4,0,0.4,0.2)
+    margin: theme.spacing(0.4, 0, 0.4, 0.2)
   }
 }));
 
@@ -19,7 +19,10 @@ const PreparedColorExamples = ({
   handleSetColor,
   colorsArr,
   changeOneColorColumnThunk,
-  changeTwoColorColumnThunk
+  changeTwoColorColumnThunk,
+  isColor = true,
+  customColumnElementProps,
+  CustomColumnElement
 }) => {
   const columnOrder = ['column-1', 'column-2', 'column-3', 'column-4'];
   const classes = useStyles();
@@ -53,11 +56,9 @@ const PreparedColorExamples = ({
   const onBeforeDragStart = ({ source }) => {
     if (colorsArr[source.droppableId].length <= 1) return;
   };
-  const columnElementProps = {
-    handleSetColor,
-    isExtended,
-    color
-  };
+
+  const colorColumnElementProps = { handleSetColor, isExtended, color };
+  const columnElementProps = isColor ? colorColumnElementProps : customColumnElementProps;
 
   const dragDropContextProps = { onDragEnd, onBeforeDragStart };
   return (
@@ -68,6 +69,7 @@ const PreparedColorExamples = ({
           if (!columnElements) return;
 
           const columnProps = {
+            CustomColumnElement: isColor ? Grid : CustomColumnElement,
             columnElementProps,
             key: nanoid(),
             droppableId: columnId,

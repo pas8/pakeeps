@@ -222,7 +222,7 @@ const initialState = {
   scrollDirectionName: 'up',
   currentFolderPropertyIdx: 0,
   drawerWidth: 240,
-  isUsePreviuos:false,
+  isUsePreviuos: false
 };
 
 const AppReducer = createReducer(initialState)({
@@ -234,22 +234,18 @@ const AppReducer = createReducer(initialState)({
     ...state,
     folders: foldersArr
   }),
-  [types.CHANGE_LABEL_ITEM]: (state, { labelId, changedLabel }) => ({
+  [types.CHANGE_LABEL_ITEM]: (state, { labels }) => ({
     ...state,
-    labels: [...filter(state.labels, ({ id }) => id !== labelId), changedLabel]
+    labels
   }),
   [types.DELETE_LABEL_FROM_PAKEEP]: (state, { pakeepId, labelId }) => {
-
     const currentPakeep = find(state.pakeeps, ({ id }) => pakeepId === id);
-    const labels = filter(currentPakeep.labels, ( id ) => labelId !== id)
-    console.log(labels,labelId)
+    const labels = filter(currentPakeep.labels, id => labelId !== id);
+    console.log(labels, labelId);
     return {
       ...state,
-      isUsePreviuos:true,
-      pakeeps: [
-        ...filter(state.pakeeps,({id})=> pakeepId !== id),
-        { ...currentPakeep, labels }
-      ]
+      isUsePreviuos: true,
+      pakeeps: [...filter(state.pakeeps, ({ id }) => pakeepId !== id), { ...currentPakeep, labels }]
     };
   },
 
@@ -267,7 +263,7 @@ const AppReducer = createReducer(initialState)({
     // isUsePreviuos:false,
     isUsePreviuos: boolValue
   }),
-  
+
   [types.DELETE_PAKEEP]: (state, { id }) => ({
     ...state,
     pakeeps: pickBy(state.pakeeps, ({ id: pakeepsId }) => id !== pakeepsId)

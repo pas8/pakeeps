@@ -6,12 +6,23 @@ import ColorPickerByPas from 'components/ColorChanger';
 import HeaderOfAddDateToPakeep from 'components/IconsUtils/components/AddDateToPakeep/components/HeaderOfAddDateToPakeep';
 import DynamicMenuItem from 'components/IconsUtils/components/AddDateToPakeep/components/DynamicMenuItem';
 import ViewOfOutlineLabelIcon from 'components/Icons/components/ViewOfOutlineLabel';
-
+import { useState } from 'react';
+import CategoryOutlinedIcon from '@material-ui/icons/CategoryOutlined';
+import PreparedColorExamples from 'components/ColorChanger/components/PreparedColorExamples';
 const useStyles = makeStyles(theme => ({}));
 
-const MenuOfLabelPart = ({ menuState, handleDeleteLabel, handleClose, handleChangeLabelColor: handleSave }) => {
+const MenuOfLabelPart = ({
+  menuState,
+  handleDeleteLabel,
+  handleClose,
+  handleChangeLabelColor: handleSave,
+  handleChangeLabelVariant
+}) => {
   const classes = useStyles();
-
+  const nullifyOfMenuItemState = {
+    name: ''
+  };
+  const [menuItemState, setMenuItemState] = useState(nullifyOfMenuItemState);
   const menuLabelListArr = [
     {
       title: 'Delete label',
@@ -29,19 +40,22 @@ const MenuOfLabelPart = ({ menuState, handleDeleteLabel, handleClose, handleChan
       }
     },
     {
-      title: 'Next week',
+      title: 'Change view',
       icon: ViewOfOutlineLabelIcon,
-      name: 'nextWeek',
-      onClick:()=> console.log(';')
+      name: 'changeLabelView',
+      onClick: handleChangeLabelVariant
     },
-    // { title: 'Add to dashboard', icon: DashboardOutlinedIcon, onClick: placeholderFunc, name: 'addToDashboard' },
-    // {
-    //   title: 'Add Date & Time',
-    //   icon: EventNoteOutlinedIcon,
-    //   onClick: placeholderFunc,
-    //   dynamicComponent: { component: DynamicInputDateAndTimePickers, className: null, props: { onlyTime: false } },
-    //   name: 'addDateAndTime'
-    // },
+    {
+      title: 'Change icon',
+      icon: CategoryOutlinedIcon,
+      dynamicComponent: {
+        component: PreparedColorExamples,
+        className: null,
+        props: { isColor: false, customColumnElementProps:null, CustomColumnElement: Grid }
+      },
+      name: 'changeLabelIcon'
+    }
+
     // { title: 'Add Location', icon: AddLocationOutlinedIcon, onClick: placeholderFunc, name: 'addLocation' },
     // {
     //   title: 'Add More Events',
@@ -77,26 +91,37 @@ const MenuOfLabelPart = ({ menuState, handleDeleteLabel, handleClose, handleChan
           : undefined
       }
     >
-      <HeaderOfAddDateToPakeep buttonSaveState={false} arrowButtonFunc={handleClose} dynamicTitle={'Label'} />
-      {menuLabelListArr.map(({ title, icon: Icon, onClick, hidden, dynamicComponent = false, name }, idx) => {
-        const DynamicComponent = dynamicComponent.component ?? Grid;
+      <HeaderOfAddDateToPakeep
+        buttonSaveState={false}
+        arrowButtonFunc={handleClose}
+        dynamicTitle={'Label'}
+        isSaveButtonHidden
+      />
+      {menuLabelListArr.map(
+        ({ title, icon: Icon, onClick: onMenuItemClick, hidden, dynamicComponent = false, name }, idx) => {
+          const DynamicComponent = dynamicComponent?.component ?? Grid;
 
-        const dynamicComponentProps = { ...dynamicComponent.props };
-
-        const menuItemProps = {
-          onClick
-        };
-        const DynamicMenuItemProps = {
-          DynamicComponent,
-          dynamicComponentProps,
-          isActiveIcon:false, title,
-          isDynamicComponentShouldBeShown: false,
-          menuItemProps,
-          isPreventClickOfMenuItem: false,
-          Icon
-        };
-        return <DynamicMenuItem {...DynamicMenuItemProps} />;
-      })}
+          const correctName = name === menuItemState.name;
+          const isDynamicComponentShouldBeShown = correctName && dynamicComponent.component;
+          const dynamicComponentProps = { ...dynamicComponent.props };
+          const onClick = () => (onMenuItemClick ? onMenuItemClick() : setMenuItemState(state => ({ ...state, name })));
+          const menuItemProps = {
+            onClick
+          };
+          const DynamicMenuItemProps = {
+            DynamicComponent,
+            dynamicComponentProps,
+            isActiveIcon: false,
+            title,
+            isDynamicItemGridMarginIsZero: true,
+            isDynamicComponentShouldBeShown,
+            menuItemProps,
+            isPreventClickOfMenuItem: false,
+            Icon
+          };
+          return <DynamicMenuItem {...DynamicMenuItemProps} />;
+        }
+      )}
     </Menu>
   );
 };

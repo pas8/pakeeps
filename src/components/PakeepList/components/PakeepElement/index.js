@@ -164,7 +164,7 @@ const mapStateToProps = ({ settings: { utilsViewLikeInGoogleKeep }, app: { label
 });
 const mapDispatchToProps = dispatch => ({
   handleDeleteLabelFromPakeepThunk: (pakeepId,labelId) => dispatch(handleDeleteLabelFromPakeepThunk(pakeepId,labelId)),
-  changeLabelItemThunk:property => dispatch(changeLabelItemThunk(property))
+  changeLabelItemThunk:(labelId,property) => dispatch(changeLabelItemThunk(labelId,property))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(PakeepElement);

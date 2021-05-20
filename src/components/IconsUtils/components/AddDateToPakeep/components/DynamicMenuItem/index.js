@@ -26,11 +26,12 @@ const DynamicMenuItem = ({
   menuItemProps,
   isPreventClickOfMenuItem = false,
   Icon,
+  isDynamicItemGridMarginIsZero = false
 }) => {
   const classes = useStyles();
 
   const dynamicMenuItem = (
-    <Grid item className={clsx(classes.marginTop, classes.itemGrid)}>
+    <Grid item className={!isDynamicItemGridMarginIsZero && clsx(classes.marginTop, classes.itemGrid)}>
       <DynamicComponent {...dynamicComponentProps} />
     </Grid>
   );
