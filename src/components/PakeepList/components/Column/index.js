@@ -34,7 +34,7 @@ const useStyles = makeStyles(({ spacing, breakpoints }) => ({
   }
 }));
 
-const Column = ({ column, pakeepsInColumn, lastColumn, firstColumn, forderProperty }) => {
+const Column = ({ column, pakeepsInColumn, lastColumn, firstColumn, folderProperty, folderId }) => {
   const classes = useStyles();
   const [breakpoint] = useCustomBreakpoint();
 
@@ -70,16 +70,15 @@ const Column = ({ column, pakeepsInColumn, lastColumn, firstColumn, forderProper
                   )}
                 </Draggable>
               );
-console.log(el,forderProperty === forderProperty[0])
+         
+              console.log(folderProperty === 'label' && !!_.find(el?.labels, (id)=> id === folderId))
 
-              if (forderProperty.toString() === 'ALL') return draggableEl;
+              if (folderProperty === 'ALL') return draggableEl;
 
-// if(forderProperty === 'date' || 'label' && )
+              if (!el[folderProperty] && folderProperty !== 'label') return;
+              if (folderProperty === 'label' && !!_.find(el?.labels, (id)=> id === folderId)) return draggableEl;
 
-              if (!el[forderProperty.toString()]) return;
-              
-
-              return draggableEl;
+              return;
             })}
             {provided.placeholder}
           </Grid>

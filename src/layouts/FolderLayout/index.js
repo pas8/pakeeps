@@ -2,7 +2,7 @@ import { Grid, makeStyles } from '@material-ui/core';
 import Folders from 'components/Folders';
 import { useFolders } from 'hooks/useFolders.hook';
 import PropTypes from 'prop-types';
-import { useCallback, useState } from 'react';
+import { useCallback, useState,useEffect } from 'react';
 import { connect } from 'react-redux';
 import {
   handleFoldersThunk,
@@ -30,12 +30,14 @@ const FolderLayout = ({
   isMenuOpen,
   handleDrawerWidthThunk,
   drawerWidth,
-  navigationViewLike
+  navigationViewLike,
+  labels
 }) => {
   const classes = useStyles();
 
-  const foldersArr = useFolders(folderPropertyies);
-  useCallback(() => console.log(';'), [currentFolderPropertyIdx, folderPropertyies]);
+  const foldersArr = useFolders(folderPropertyies, { labels });
+  console.log(folders);
+  useEffect(() => handleFoldersThunk(foldersArr), [folderPropertyies]);
 
   const handleChange = (e, idx) => handleCurrentFolderPropertyIdxThunk(idx);
 
@@ -70,12 +72,13 @@ FolderLayout.propTypes = {
 };
 
 const mapStateToProps = ({
-  app: { folderPropertyies, currentFolderPropertyIdx, folders, isMenuOpen, drawerWidth },
+  app: { folderPropertyies, currentFolderPropertyIdx, folders, isMenuOpen, drawerWidth, labels },
   settings: { navigationViewLike }
 }) => ({
   folderPropertyies: getFolderPropertyies(folderPropertyies),
   currentFolderPropertyIdx: getCurrentFolderPropertyIdx(currentFolderPropertyIdx),
   folders: getFolders(folders),
+  labels,
   isMenuOpen: getMenuOpenStatus(isMenuOpen),
   drawerWidth: getDrawerWidth(drawerWidth),
   navigationViewLike: getNavigationViewLike(navigationViewLike)

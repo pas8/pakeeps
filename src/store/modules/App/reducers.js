@@ -15,14 +15,14 @@ const initialState = {
   ],
 
   folders: [
-    { title: 'All pakeeps', iconName: '', id: 1, property: 'ALL' },
-    { title: 'Pined', iconName: 'pin', id: 2, property: 'isPinned' }
+    { title: 'All pakeeps', iconName: '', id: "folder-1", property: 'ALL' },
+    { title: 'Pined', iconName: 'pin', id: "folder-2", property: 'isPinned' }
     // { title: 'Pined', iconName: 'pin', key: 2, property: 'isPinned' },
   ],
   folderPropertyies: {
     all: true,
     isPinned: true,
-    label: true,
+    labels: true,
     date: true
   },
 

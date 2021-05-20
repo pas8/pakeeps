@@ -177,7 +177,8 @@ const PakeepList = ({
   //   id: 'placeholder'
 
   // };
-  const forderProperty = [folders[currentFolderPropertyIdx]?.property];
+  const folderProperty = folders[currentFolderPropertyIdx]?.property;
+  const folderId = folders[currentFolderPropertyIdx]?.id;
 
   const pakeepListContainerProps = {
     pakeeps,
@@ -186,7 +187,8 @@ const PakeepList = ({
     onDragEnd,
     onDragStart,
     placeholderName,
-    forderProperty
+    folderProperty,
+    folderId
   };
   return <PakeepListContainer {...pakeepListContainerProps} />;
 };
