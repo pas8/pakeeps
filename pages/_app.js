@@ -13,6 +13,7 @@ import { useEffect } from 'react';
 import { CssBaseline } from '@material-ui/core';
 import store from 'store';
 import ScrollLayout from 'layouts/ScrollLayout';
+import FolderLayout from 'layouts/FolderLayout';
 
 const DynamicComponentWithNoSSR = dynamic(() => import('../src/layouts/HeaderLayout/index'), {
   ssr: !false
@@ -32,10 +33,13 @@ const MyApp = ({ Component, pageProps }) => {
           <AuthProvider session={pageProps.session}>
             <ScrollLayout>
               <SnackBarLayout>
+              <FolderLayout>
                 <DynamicComponentWithNoSSR>
                   <CssBaseline />
                   <Component {...pageProps} />
                 </DynamicComponentWithNoSSR>
+                </FolderLayout>
+
               </SnackBarLayout>
             </ScrollLayout>
           </AuthProvider>

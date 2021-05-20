@@ -3,6 +3,8 @@ import { makeStyles } from '@material-ui/core';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { connect } from 'react-redux';
+import { getNavigationViewLike } from 'store/modules/Settings/selectors';
+import { getDrawerWidth } from 'store/modules/App/selectors';
 
 const useStyles = makeStyles(theme => ({
   content: {
@@ -29,17 +31,27 @@ const useStyles = makeStyles(theme => ({
       easing: theme.transitions.easing.easeOut,
       duration: theme.transitions.duration.enteringScreen
     }),
-    marginLeft: ({ isMenuNavigationHasDialogView, drawerWidth }) => isMenuNavigationHasDialogView && drawerWidth,
-    
+    marginLeft: ({ drawerWidth, navigationViewLikeTelegram }) => navigationViewLikeTelegram && drawerWidth
   }
 }));
 
-const HeaderLayout = ({ children, isMenuOpen, isMenuNavigationHasDialogView ,drawerWidth}) => {
-  const classes = useStyles({ isMenuNavigationHasDialogView, drawerWidth });
+const HeaderLayout = ({ children, isMenuOpen, drawerWidth, navigationViewLike }) => {
+  const navigationViewLikeTelegram = navigationViewLike === 'telegram';
+  const navigationViewLikeGoogleKeep = navigationViewLike === 'googleKeep';
+  const navigationViewLikePakeeps = navigationViewLike === 'pakeeps';
 
+  const classes = useStyles({ drawerWidth, navigationViewLikeTelegram });
+
+  const headerByPasProps = {
+    navigationViewLikeGoogleKeep,
+    navigationViewLikeTelegram,
+    navigationViewLikePakeeps,
+    isMenuOpen,
+    drawerWidth
+  };
   return (
     <>
-      <HeaderByPas />
+      <HeaderByPas {...headerByPasProps} />
       <main
         className={clsx(classes.content, {
           [classes.contentShift]: isMenuOpen
@@ -54,10 +66,10 @@ const HeaderLayout = ({ children, isMenuOpen, isMenuNavigationHasDialogView ,dra
 HeaderLayout.propTypes = {
   children: PropTypes.node
 };
-const mapStateToProps = ({ app: { isMenuOpen, drawerWidth }, settings: { isMenuNavigationHasDialogView } }) => ({
+const mapStateToProps = ({ app: { isMenuOpen, drawerWidth }, settings: { navigationViewLike } }) => ({
   isMenuOpen,
-  drawerWidth,
-  isMenuNavigationHasDialogView
+  drawerWidth: getDrawerWidth(drawerWidth),
+  navigationViewLike: getNavigationViewLike(navigationViewLike)
 });
 
 export default connect(mapStateToProps, null)(HeaderLayout);

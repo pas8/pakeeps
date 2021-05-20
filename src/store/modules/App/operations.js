@@ -12,7 +12,8 @@ import {
   toChangeFolders,
   toChangeLabelItem,
   toDeleteLabelFromPakeep,
-  toHandleUsePreviuos
+  toHandleUsePreviuos,
+  toHandleDrawerWidth
 } from './actions';
 
 export const addNewPaKeepThunk = data => dispatch => {
@@ -74,4 +75,8 @@ export const handleDeleteLabelFromPakeepThunk = (pakeepId, labelId) => dispatch 
 };
 export const handleUsePreviuosValue = boolValue => dispatch => {
   dispatch(toHandleUsePreviuos(boolValue));
+};
+
+export const handleDrawerWidthThunk = drawerWidth => dispatch => {
+  dispatch(toHandleDrawerWidth(drawerWidth));
 };

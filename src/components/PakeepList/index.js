@@ -37,14 +37,11 @@ const PakeepList = ({
   handleUsePreviuosValue,
   isUsePreviuos
 }) => {
-  const [draggingStatus, setDraggingStatus] = useState(false);
 
   const placeholderName = 'placeholder';
 
   const classes = useStyles();
 
-  // console.log(currentPakeeps)
-  const previousPakeeps = usePrevious(pakeeps);
   const previousPakeepsOrderNames = usePrevious(orderNames);
 
   const pakeepsOrderNames = isUsePreviuos ? previousPakeepsOrderNames : orderNames;
@@ -54,16 +51,7 @@ const PakeepList = ({
     pakeepsOrderNames,
     handlePakeepsOrderNamesThunk
   );
-  // console.log(
-  //   isUsePreviuos,
-  //   previousPakeepsOrderNames,
-  //   pakeepsOrderNames
-  // );
-  // const [value, updateCookie, deleteCookie] = useCookie(state);
 
-  // useEffect(() => _.isEqual(state, nulittyState) && setState(JSON.parse(value)), []);
-
-  // usePageLeave(() =>  updateCookie(state));
 
   const onDragStart = () => null;
 
@@ -189,7 +177,8 @@ const PakeepList = ({
   //   id: 'placeholder'
 
   // };
-  const forderProperty = folders[currentFolderPropertyIdx]?.property;
+  const folderProperty = folders[currentFolderPropertyIdx]?.property;
+  const folderId = folders[currentFolderPropertyIdx]?.id;
 
   const pakeepListContainerProps = {
     pakeeps,
@@ -198,7 +187,8 @@ const PakeepList = ({
     onDragEnd,
     onDragStart,
     placeholderName,
-    forderProperty
+    folderProperty,
+    folderId
   };
   return <PakeepListContainer {...pakeepListContainerProps} />;
 };

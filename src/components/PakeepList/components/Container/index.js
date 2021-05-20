@@ -23,8 +23,9 @@ const PakeepListContainer = ({
   columns,
   onDragEnd,
   placeholderName,
-  forderProperty,
-  onDragStart
+  folderProperty,
+  onDragStart,
+  folderId
 }) => {
   const classes = useStyles();
   const placeholder = {
@@ -52,8 +53,9 @@ const PakeepListContainer = ({
 
           return (
             <Column
-              forderProperty={forderProperty}
+            folderProperty={folderProperty}
               key={column?.id}
+              folderId={folderId}
               column={column}
               pakeepsInColumn={pakeepsInColumn}
               lastColumn={idx + 1 === responsiveColumnOrder.length ? true : false}
