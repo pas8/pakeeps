@@ -6,16 +6,23 @@ import ColumnElementOfPreparedColorExamples from './components/ColumnElement';
 
 const useStyles = makeStyles(theme => ({
   containerOfElement: {
-    margin: theme.spacing(0.4, 0,1.24)
+    margin: theme.spacing(0.4, 0, 1.24)
   },
   container: {
     margin: theme.spacing(0.24)
   }
 }));
 
-const ColumnOfPreparedColorExamples = ({ columnElements, columnElementProps, droppableId,isColor,CustomColumnElement }) => {
+const ColumnOfPreparedColorExamples = ({
+  columnElements,
+  columnElementProps,
+  droppableId,
+  isColor = true,
+  CustomColumnElement
+}) => {
   const classes = useStyles();
-const  ColumnElement= isColor ? ColumnElementOfPreparedColorExamples :  CustomColumnElement
+  const ColumnElement = isColor ? ColumnElementOfPreparedColorExamples : CustomColumnElement;
+  // const ColumnElement = Grid;
   return (
     <Grid>
       <Droppable droppableId={droppableId} direction={'vertical'}>
@@ -29,7 +36,7 @@ const  ColumnElement= isColor ? ColumnElementOfPreparedColorExamples :  CustomCo
             {columnElements.map((el, idx) => {
               const draggableId = `${droppableId}-${idx}`;
               return (
-                <Draggable key={el.id} draggableId={draggableId} index={idx} >
+                <Draggable key={el.id} draggableId={draggableId} index={idx}>
                   {(provided, snapshot) => (
                     <Grid
                       {...provided.draggableProps}
@@ -37,11 +44,7 @@ const  ColumnElement= isColor ? ColumnElementOfPreparedColorExamples :  CustomCo
                       innerRef={provided.innerRef}
                       className={classes.containerOfElement}
                     >
-                      <ColumnElement
-                        {...el}
-                        {...columnElementProps}
-                        isDragging={snapshot.isDragging}
-                      />
+                      <ColumnElement {...el} {...columnElementProps} isDragging={snapshot.isDragging} />
                     </Grid>
                   )}
                 </Draggable>

@@ -2,26 +2,26 @@ import { createReducer } from 'store/utils';
 import * as types from './types';
 
 const colorInitialState = {
-  colorsArr: {
-    'column-1': [{ colorName: 'deepOrange' }, { colorName: 'orange' }, { colorName: 'amber' }, { colorName: 'yellow' }],
-    'column-2': [{ colorName: 'lime' }, { colorName: 'lightGreen' }, { colorName: 'green' }, { colorName: 'teal' }],
-    'column-3': [{ colorName: 'cyan' }, { colorName: 'lightBlue' }, { colorName: 'blue' }, { colorName: 'indigo' }],
-    'column-4': [{ colorName: 'deepPurple' }, { colorName: 'purple' }, { colorName: 'pink' }, { colorName: 'red' }]
+  idColumnArr: {
+    'column-1': ['1', '2', '3', '4'],
+    'column-2': ['5', '6', '7', '8'],
+    'column-3': ['9', '10', '11', '12'],
+    'column-4': ['13', '14', '15', '16']
   }
 };
 
 const colorReducer = createReducer(colorInitialState)({
   [types.CHANGE_ONE_COLOR_COLUMN]: (state, { columnId, newArr }) => ({
     ...state,
-    colorsArr: {
-      ...state.colorsArr,
+    idColumnArr: {
+      ...state.idColumnArr,
       [columnId]: newArr
     }
   }),
   [types.CHANGE_TWO_COLOR_COLUMN]: (state, { startColumn, finishColumn }) => ({
     ...state,
-    colorsArr: {
-      ...state.colorsArr,
+    idColumnArr: {
+      ...state.idColumnArr,
       [startColumn.id]: startColumn.newArr,
       [finishColumn.id]: finishColumn.newArr
     }

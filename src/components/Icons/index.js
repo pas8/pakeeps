@@ -6,17 +6,30 @@ import KeyboardVoiceOutlinedIcon from '@material-ui/icons/KeyboardVoiceOutlined'
 import BookOutlinedIcon from '@material-ui/icons/BookOutlined';
 import StarBorderOutlinedIcon from '@material-ui/icons/StarBorderOutlined';
 import CategoryOutlinedIcon from '@material-ui/icons/CategoryOutlined';
-import PinIcon from './components/PinIcon';
+import AlternateEmailOutlinedIcon from '@material-ui/icons/AlternateEmailOutlined';
+import DetailsOutlinedIcon from '@material-ui/icons/DetailsOutlined';
+import EcoOutlinedIcon from '@material-ui/icons/EcoOutlined';
+import HttpsOutlinedIcon from '@material-ui/icons/HttpsOutlined';
+import LanguageOutlinedIcon from '@material-ui/icons/LanguageOutlined';
+import LandscapeOutlinedIcon from '@material-ui/icons/LandscapeOutlined';
+import LocalPostOfficeOutlinedIcon from '@material-ui/icons/LocalPostOfficeOutlined';
+import WidgetsOutlinedIcon from '@material-ui/icons/WidgetsOutlined';
 
 export const iconsArr = [
-  { icon: <AlarmOutlinedIcon/>, iconName: 'alarm' },
-  { icon: <FingerprintOutlinedIcon/>, iconName: 'fingerprint' },
-  { icon: <CheckBoxOutlinedIcon/>, iconName: 'checkbox' },
-  { icon: <DoneOutlineOutlinedIcon/>, iconName: 'done' },
-  { icon: <KeyboardVoiceOutlinedIcon/>, iconName: 'keyboard' },
-  { icon: <BookOutlinedIcon/>, iconName: 'book' },
-  { icon: <StarBorderOutlinedIcon/>, iconName: 'star' },
-  { icon: <CategoryOutlinedIcon/>, iconName: 'category' },
-  { icon: <PinIcon/>, iconName: 'pin' },
+  { icon: <AlarmOutlinedIcon />, iconName: 'alarm', id: '1' },
+  { icon: <FingerprintOutlinedIcon />, iconName: 'fingerprint', id: '2' },
+  { icon: <CheckBoxOutlinedIcon />, iconName: 'checkbox', id: '3' },
+  { icon: <DoneOutlineOutlinedIcon />, iconName: 'done', id: '4' },
+  { icon: <KeyboardVoiceOutlinedIcon />, iconName: 'keyboard', id: '5' },
+  { icon: <BookOutlinedIcon />, iconName: 'book', id: '6' },
+  { icon: <LocalPostOfficeOutlinedIcon />, iconName: 'mail', id: '7' },
+  { icon: <StarBorderOutlinedIcon />, iconName: 'star', id: '8' },
+  { icon: <CategoryOutlinedIcon />, iconName: 'category', id: '9' },
+  { icon: <WidgetsOutlinedIcon />, iconName: 'widget', id: '10' },
+  { icon: <AlternateEmailOutlinedIcon />, iconName: 'email', id: '11' },
+  { icon: <DetailsOutlinedIcon />, iconName: 'details', id: '12' },
+  { icon: <EcoOutlinedIcon />, iconName: 'eco', id: '13' },
+  { icon: <HttpsOutlinedIcon />, iconName: 'lock', id: '14' },
+  { icon: <LanguageOutlinedIcon />, iconName: 'world', id: '15' },
+  { icon: <LandscapeOutlinedIcon />, iconName: 'mountains', id: '16' },
 ];
-

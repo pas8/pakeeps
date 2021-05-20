@@ -104,10 +104,30 @@ const CustomColor = ({ gradientStatus, setGradientStatus, handleSave }) => {
     onClickOfCopyButton
   };
 
+  const colorColumnArr = [
+    { colorName: 'deepOrange', id: '1' },
+    { colorName: 'orange', id: '2' },
+    { colorName: 'amber', id: '3' },
+    { colorName: 'yellow', id: '4' },
+    { colorName: 'lime', id: '5' },
+    { colorName: 'lightGreen', id: '6' },
+    { colorName: 'green', id: '7' },
+    { colorName: 'teal', id: '8' },
+    { colorName: 'cyan', id: '9' },
+    { colorName: 'lightBlue', id: '10' },
+    { colorName: 'blue', id: '11' },
+    { colorName: 'indigo', id: '12' },
+    { colorName: 'deepPurple', id: '13' },
+    { colorName: 'purple', id: '14' },
+    { colorName: 'pink', id: '15' },
+    { colorName: 'red', id: '16' }
+  ];
+
   const preparedColorExamplesProps = {
     isExtended,
     color,
-    handleSetColor
+    handleSetColor,
+    columnArr: colorColumnArr
   };
 
   const classes = useStyles({ isExtended, isCustomColor });

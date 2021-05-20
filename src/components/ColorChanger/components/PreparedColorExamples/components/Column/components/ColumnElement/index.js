@@ -47,6 +47,7 @@ const useStyles = makeStyles(theme => ({
   // },
 }));
 const ColumnElementOfPreparedColorExamples = ({ handleSetColor, isExtended, color, colorName },idx) => {
+
   const isColorLight = colord(color).brightness() >= 0.8;
   const classes = useStyles({ isColorLight });
 

@@ -9,6 +9,8 @@ import ViewOfOutlineLabelIcon from 'components/Icons/components/ViewOfOutlineLab
 import { useState } from 'react';
 import CategoryOutlinedIcon from '@material-ui/icons/CategoryOutlined';
 import PreparedColorExamples from 'components/ColorChanger/components/PreparedColorExamples';
+import PreparedIconSelectingList from './components/PreparedIconSelectingList';
+import { iconsArr } from 'components/Icons';
 const useStyles = makeStyles(theme => ({}));
 
 const MenuOfLabelPart = ({
@@ -16,13 +18,15 @@ const MenuOfLabelPart = ({
   handleDeleteLabel,
   handleClose,
   handleChangeLabelColor: handleSave,
-  handleChangeLabelVariant
+  handleChangeLabelVariant,
+  handleChangeLabelIconName
 }) => {
   const classes = useStyles();
   const nullifyOfMenuItemState = {
     name: ''
   };
   const [menuItemState, setMenuItemState] = useState(nullifyOfMenuItemState);
+
   const menuLabelListArr = [
     {
       title: 'Delete label',
@@ -46,12 +50,17 @@ const MenuOfLabelPart = ({
       onClick: handleChangeLabelVariant
     },
     {
-      title: 'Change icon',
+      title: menuState.labelIconName ?  'Change icon' : 'Add icon',
       icon: CategoryOutlinedIcon,
       dynamicComponent: {
         component: PreparedColorExamples,
         className: null,
-        props: { isColor: false, customColumnElementProps:null, CustomColumnElement: Grid }
+        props: {
+          isColor: false,
+          customColumnElementProps: { handleChangeLabelIconName },
+          CustomColumnElement: PreparedIconSelectingList,
+          columnArr: iconsArr
+        }
       },
       name: 'changeLabelIcon'
     }

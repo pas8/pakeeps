@@ -6,7 +6,7 @@ import LabelItem from './components/LabelItem';
 import MenuOfLabelPart from './components/Menu';
 
 const LabelPart = ({ labels, handleDeleteLabelFromPakeepThunk, changeLabelItemThunk, pakeepId }) => {
-  const nullityOfMenuState = { mouseX: null, mouseY: null, id: null, variant: '' };
+  const nullityOfMenuState = { mouseX: null, mouseY: null, id: null, variant: '' ,labelIconName:''};
   const [menuState, setMenuState] = useState(nullityOfMenuState);
 
   const setLabelHoverStatusIsFalse = () => setLabelHover(false);
@@ -18,6 +18,7 @@ const LabelPart = ({ labels, handleDeleteLabelFromPakeepThunk, changeLabelItemTh
     handleClose();
   };
   const handleChangeLabelColor = color => changeLabelItemThunk(menuState.id, { color });
+  const handleChangeLabelIconName = iconName => changeLabelItemThunk(menuState.id, { iconName });
   const handleChangeLabelVariant = () => {
     const variant = menuState.variant === 'default' ? 'outlined' : 'default';
     changeLabelItemThunk(menuState.id, { variant });
@@ -43,7 +44,7 @@ const LabelPart = ({ labels, handleDeleteLabelFromPakeepThunk, changeLabelItemTh
 
         const handleOpen = e => {
           e.preventDefault();
-          setMenuState({ mouseX: e.clientX, mouseY: e.clientY, id, variant });
+          setMenuState({ mouseX: e.clientX, mouseY: e.clientY, id, variant ,labelIconName});
         };
 
         const labelItemProps = { isDark, currentColor, handleOpen, labelChipProps };
@@ -60,6 +61,7 @@ const LabelPart = ({ labels, handleDeleteLabelFromPakeepThunk, changeLabelItemTh
         handleClose={handleClose}
         handleChangeLabelColor={handleChangeLabelColor}
         handleChangeLabelVariant={handleChangeLabelVariant}
+        handleChangeLabelIconName={handleChangeLabelIconName}
       />
     </>
   );
