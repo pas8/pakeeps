@@ -57,7 +57,7 @@ const MenuOfLabelPart = ({
         className: null,
         props: {
           isColor: false,
-          customColumnElementProps: { handleChangeLabelIconName },
+          customColumnElementProps: { handleChangeLabelIconName ,labelIconName:menuState.labelIconName},
           CustomColumnElement: PreparedIconSelectingList,
           columnArr: iconsArr
         }
