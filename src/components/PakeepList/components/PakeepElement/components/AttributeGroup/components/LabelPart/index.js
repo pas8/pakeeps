@@ -1,12 +1,14 @@
-import React, { useState, Fragment } from 'react';
-import { iconsArr } from 'components/Icons';
+import PropTypes from 'prop-types';
+import React, { useState, useEffect } from 'react';
 import { nanoid } from 'nanoid';
 import { colord } from 'colord';
+import { find } from 'lodash';
+import { iconsArr } from 'components/Icons';
 import LabelItem from './components/LabelItem';
 import MenuOfLabelPart from './components/Menu';
 
 const LabelPart = ({ labels, handleDeleteLabelFromPakeepThunk, changeLabelItemThunk, pakeepId }) => {
-  const nullityOfMenuState = { mouseX: null, mouseY: null, id: null, variant: '' ,labelIconName:''};
+  const nullityOfMenuState = { mouseX: null, mouseY: null, id: null, variant: '', labelIconName: '' };
   const [menuState, setMenuState] = useState(nullityOfMenuState);
 
   const setLabelHoverStatusIsFalse = () => setLabelHover(false);
@@ -24,7 +26,14 @@ const LabelPart = ({ labels, handleDeleteLabelFromPakeepThunk, changeLabelItemTh
     changeLabelItemThunk(menuState.id, { variant });
     setMenuState(state => ({ ...state, variant }));
   };
-  // console.log(menuState.variant !== 'default' ? 'outlined' : 'default')
+  useEffect(() => {
+    const { variant, iconName: labelIconName } = find(labels, ({ id }) => menuState.id === id) ?? {
+      variant: '',
+      labelIconName: ''
+    };
+    setMenuState(state => ({ ...state, labelIconName, variant }));
+  }, [labels]);
+
   return (
     <>
       {labels.map(({ title, iconName: labelIconName, id, color, variant }) => {
@@ -39,21 +48,18 @@ const LabelPart = ({ labels, handleDeleteLabelFromPakeepThunk, changeLabelItemTh
           className: null,
           variant,
           color,
-          size: 'small'
+          size: 'small',
+          key: nanoid()
         };
 
         const handleOpen = e => {
           e.preventDefault();
-          setMenuState({ mouseX: e.clientX, mouseY: e.clientY, id, variant ,labelIconName});
+          setMenuState({ mouseX: e.clientX, mouseY: e.clientY, id, variant, labelIconName });
         };
 
         const labelItemProps = { isDark, currentColor, handleOpen, labelChipProps };
-
-        return (
-          <Fragment key={nanoid()}>
-            <LabelItem {...labelItemProps} />
-          </Fragment>
-        );
+        
+        return <LabelItem {...labelItemProps} />;
       })}
       <MenuOfLabelPart
         menuState={menuState}
@@ -65,6 +71,15 @@ const LabelPart = ({ labels, handleDeleteLabelFromPakeepThunk, changeLabelItemTh
       />
     </>
   );
+};
+
+LabelPart.propTypes = {
+  changeLabelItemThunk: PropTypes.func,
+  handleDeleteLabelFromPakeepThunk: PropTypes.func,
+  labels: PropTypes.shape({
+    map: PropTypes.func
+  }),
+  pakeepId: PropTypes.string
 };
 
 export default LabelPart;
