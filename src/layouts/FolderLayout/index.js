@@ -2,7 +2,7 @@ import { Grid, makeStyles } from '@material-ui/core';
 import Folders from 'components/Folders';
 import { useFolders } from 'hooks/useFolders.hook';
 import PropTypes from 'prop-types';
-import { useCallback, useState,useEffect } from 'react';
+import { useCallback, useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import {
   handleFoldersThunk,
@@ -14,11 +14,22 @@ import {
   getCurrentFolderPropertyIdx,
   getFolders,
   getMenuOpenStatus,
-  getDrawerWidth
+  getDrawerWidth,
+  getLabels
 } from 'store/modules/App/selectors';
-import { getNavigationViewLike } from 'store/modules/Settings/selectors';
+import { getNavigationViewLike, getPositionOfFolderViewWithPakeepView } from 'store/modules/Settings/selectors';
 
-const useStyles = makeStyles(theme => ({}));
+const useStyles = makeStyles(theme => ({
+  container: {
+    '& nav': ({ positionOfFolderViewWithPakeepViewIsBottom }) =>
+      !positionOfFolderViewWithPakeepViewIsBottom && {
+        position: null,
+        bottom: 0,
+        left: 0,
+        right: 0
+      }
+  }
+}));
 
 const FolderLayout = ({
   children,
@@ -31,15 +42,18 @@ const FolderLayout = ({
   handleDrawerWidthThunk,
   drawerWidth,
   navigationViewLike,
-  labels
+  labels,
+  positionOfFolderViewWithPakeepView
 }) => {
-  const classes = useStyles();
-
+  const positionOfFolderViewWithPakeepViewIsBottom = positionOfFolderViewWithPakeepView === 'center';
+  const positionOfFolderViewWithPakeepViewIsRight = positionOfFolderViewWithPakeepView === 'right';
   const foldersArr = useFolders(folderPropertyies, { labels });
   console.log(folders);
   useEffect(() => handleFoldersThunk(foldersArr), [folderPropertyies]);
 
   const handleChange = (e, idx) => handleCurrentFolderPropertyIdxThunk(idx);
+
+  const classes = useStyles({ positionOfFolderViewWithPakeepViewIsBottom });
 
   const foldersProps = {
     handleChange,
@@ -47,11 +61,22 @@ const FolderLayout = ({
     value: currentFolderPropertyIdx,
     handleDrawerWidthThunk,
     isMenuOpen,
-    navigationViewLike
+    navigationViewLike,
+    positionOfFolderViewWithPakeepViewIsBottom
   };
-
   return (
-    <Grid container wrap={'nowrap'}>
+    <Grid
+      container
+      className={classes.container}
+      wrap={'nowrap'}
+      direction={
+        positionOfFolderViewWithPakeepViewIsRight
+          ? 'row-reverse'
+          : positionOfFolderViewWithPakeepViewIsBottom
+          ? 'column-reverse'
+          : 'row'
+      }
+    >
       <nav style={{ minWidth: drawerWidth }}>
         <Folders {...foldersProps} />
       </nav>
@@ -73,15 +98,16 @@ FolderLayout.propTypes = {
 
 const mapStateToProps = ({
   app: { folderPropertyies, currentFolderPropertyIdx, folders, isMenuOpen, drawerWidth, labels },
-  settings: { navigationViewLike }
+  settings: { navigationViewLike, positionOfFolderViewWithPakeepView }
 }) => ({
   folderPropertyies: getFolderPropertyies(folderPropertyies),
   currentFolderPropertyIdx: getCurrentFolderPropertyIdx(currentFolderPropertyIdx),
   folders: getFolders(folders),
-  labels,
+  labels: getLabels(labels),
   isMenuOpen: getMenuOpenStatus(isMenuOpen),
   drawerWidth: getDrawerWidth(drawerWidth),
-  navigationViewLike: getNavigationViewLike(navigationViewLike)
+  navigationViewLike: getNavigationViewLike(navigationViewLike),
+  positionOfFolderViewWithPakeepView: getPositionOfFolderViewWithPakeepView(positionOfFolderViewWithPakeepView)
 });
 
 const mapDispatchToProps = dispatch => ({

@@ -5,7 +5,8 @@ const settingsInitialState = {
   viewOfThemeChangerButton: 'iconButton', // 'iconButton' ||  'switch'
   maxSnack: 4,
   utilsViewLikeInGoogleKeep: false,
-  navigationViewLike:'pakeeps'  //'telegram' || 'googleKeep' || 'pakeeps'
+  navigationViewLike:'pakeeps',  //'telegram' || 'googleKeep' || 'pakeeps'
+  positionOfFolderViewWithPakeepView:'left'  //'left' || 'center' || 'right'
 };
 
 const settingsReducer = createReducer(settingsInitialState)({

@@ -177,8 +177,11 @@ const PakeepList = ({
   //   id: 'placeholder'
 
   // };
-  const folderProperty = folders[currentFolderPropertyIdx]?.property;
-  const folderId = folders[currentFolderPropertyIdx]?.id;
+
+  const flattenFolder = _.flatten(folders)
+
+  const folderProperty = flattenFolder[currentFolderPropertyIdx]?.property;
+  const folderId = flattenFolder[currentFolderPropertyIdx]?.id;
 
   const pakeepListContainerProps = {
     pakeeps,

@@ -7,12 +7,12 @@ import { find } from 'lodash';
 
 const useStyles = makeStyles(theme => ({
   container: {
-    margin: theme.spacing(8, 0, 0, 0),
+    margin: theme.spacing(4, 0, 0, 0),
     [theme.breakpoints.between('xs', 'sm')]: {
-      margin: theme.spacing(4, 0, 0, 0)
+      margin: theme.spacing(2, 0, 0, 0)
     },
     [theme.breakpoints.down('md')]: {
-      margin: theme.spacing(6, 0, 0, 0)
+      margin: theme.spacing(4, 0, 0, 0)
     }
   }
 }));

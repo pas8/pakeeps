@@ -1,4 +1,4 @@
-import { makeStyles, Grid } from '@material-ui/core';
+import { makeStyles, Grid,Zoom } from '@material-ui/core';
 import React from 'react';
 import PakeepElement from '../PakeepElement';
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
@@ -65,18 +65,20 @@ const Column = ({ column, pakeepsInColumn, lastColumn, firstColumn, folderProper
                       innerRef={provided.innerRef}
                       className={classes.columnElement}
                     >
+                      <Zoom in={true}>
                       <PakeepElement {...el} isDragging={snapshot.isDragging} idx={idx} />
+                      </Zoom>
                     </Grid>
                   )}
                 </Draggable>
               );
-         
-              console.log(folderProperty === 'label' && !!_.find(el?.labels, (id)=> id === folderId))
+
 
               if (folderProperty === 'ALL') return draggableEl;
 
-              if (!el[folderProperty] && folderProperty !== 'label') return;
-              if (folderProperty === 'label' && !!_.find(el?.labels, (id)=> id === folderId)) return draggableEl;
+              console.log(!el[folderProperty] && folderProperty !== 'label')
+              if (el[folderProperty] && folderProperty !== 'label') return draggableEl;
+              if (folderProperty === 'label' && !!_.find(el?.labels, id => id === folderId)) return draggableEl;
 
               return;
             })}

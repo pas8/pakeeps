@@ -8,16 +8,23 @@ import { ToggleButton, ToggleButtonGroup } from '@material-ui/lab';
 import { colord } from 'colord';
 import { themeColors } from 'components/theme';
 const useStyles = makeStyles(theme => ({
-  containerOfFolderWithPakeepsView: {
+  containerOfFolderWithPakeepsView: ({ positionOfFolderViewWithPakeepViewIsBottom }) => ({
     margin: theme.spacing(10.8, 0, 0, 0),
     padding: ({ isMenuOpen }) => theme.spacing(0, isMenuOpen ? 0 : 0, 0, 2.4),
 
+    // width:'20px',
+    '& .MuiToggleButtonGroup-root': {
+      margin: ({ positionOfFolderViewWithPakeepViewIsBottom }) =>
+        theme.spacing(0, positionOfFolderViewWithPakeepViewIsBottom ? 2.8 : 0, 2.8, 0)
+    },
     '& button': {
       display: 'flex',
-
       flexWrap: 'nowrap',
-      whiteSpace: ' pre',
+      // height:'100%',
+      display: positionOfFolderViewWithPakeepViewIsBottom ? 'block' : 'flex',
+      whiteSpace: 'pre',
       justifyContent: ({ isMenuOpen }) => (!isMenuOpen ? 'center' : 'flex-start'),
+      flexDirection: 'column',
       '& svg': {
         fontSize: '2.28em'
       }
@@ -30,10 +37,17 @@ const useStyles = makeStyles(theme => ({
         color: themeColors.primaryMain
       }
     }
-  },
-  textOfFolderWithPakeepsView: {
-    padding: theme.spacing(0, 0, 0, 0)
-  },
+  }),
+  textOfFolderWithPakeepsView: ({ positionOfFolderViewWithPakeepViewIsBottom }) => ({
+    writingMode: 'vertical-rl',
+    textOrientation: 'upright',
+    flexWrap: positionOfFolderViewWithPakeepViewIsBottom ? 'wrap' : 'nowrap',
+    justifyContent:'flex-end',
+    // width:'100%',
+    // height:'100%',
+alignItems:'center',
+    padding: theme.spacing(0, 0, 0, positionOfFolderViewWithPakeepViewIsBottom ? 0 : 0.8),
+  }),
   container: {
     margin: theme.spacing(10.32, 0, 0, 0),
     height: '100vh',
@@ -76,19 +90,29 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const Folders = ({ value, handleChange, folders, handleDrawerWidthThunk, isMenuOpen, navigationViewLike }) => {
-  const classes = useStyles({ isMenuOpen });
+const Folders = ({
+  value,
+  handleChange,
+  folders,
+  handleDrawerWidthThunk,
+  isMenuOpen,
+  navigationViewLike,
+  positionOfFolderViewWithPakeepViewIsBottom
+}) => {
+  const classes = useStyles({ isMenuOpen, positionOfFolderViewWithPakeepViewIsBottom });
   const [ref, { width }] = useMeasure();
 
-  const g = usePrevious(width);
-  const o = !isMenuOpen && _.min([g, width]);
-  useEffect(() => handleDrawerWidthThunk(o), [width]);
-  console.log(width);
-  const FoldersContainer = isMenuOpen ? Drawer : Grid;
+  const previousWidth = usePrevious(width);
+  const correctAndOptimizatedWidth = !isMenuOpen && _.min([previousWidth, width]);
+  useEffect(() => handleDrawerWidthThunk(correctAndOptimizatedWidth), [width]);
+
+  const flattenFolders = _.flatten(folders);
 
   return (
     <Grid
       ref={ref}
+      container
+      direction={positionOfFolderViewWithPakeepViewIsBottom ? 'row' : 'column'}
       className={navigationViewLike === 'googleKeep' ? classes.container : classes.containerOfFolderWithPakeepsView}
     >
       {navigationViewLike === 'googleKeep' && (
@@ -103,7 +127,7 @@ const Folders = ({ value, handleChange, folders, handleDrawerWidthThunk, isMenuO
           aria-label={'Vertical folders'}
           // className={classes.tabs}
         >
-          {folders.map(({ title, iconName }) => {
+          {flattenFolders.map(({ title, iconName }) => {
             const [icon] = useTakeIcon(iconName || 'infinity');
             return <Tab aria-label={title} icon={icon} />;
             // return <Tab icon={icon} aria-label={title} />;
@@ -111,22 +135,48 @@ const Folders = ({ value, handleChange, folders, handleDrawerWidthThunk, isMenuO
         </Tabs>
       )}
 
-      {navigationViewLike === 'pakeeps' && (
-        <ToggleButtonGroup orientation="vertical" value={value} exclusive onChange={handleChange} exclusive>
-          {folders.map(({ title, iconName }, idx) => {
-            const [icon] = useTakeIcon(iconName || 'infinity');
-            return (
-              <ToggleButton value={idx} aria-label="list">
-                {icon} {isMenuOpen && <Grid className={classes.textOfFolderWithPakeepsView}> {title} </Grid>}
-              </ToggleButton>
-            );
-          })}
-        </ToggleButtonGroup>
-      )}
+      {navigationViewLike === 'pakeeps' &&
+        folders.map(arr => {
+          return (
+            <ToggleButtonGroup
+              orientation={positionOfFolderViewWithPakeepViewIsBottom ? 'horizontal' : 'vertical'}
+              value={value}
+              exclusive
+              onChange={handleChange}
+              exclusive
+            >
+              {arr?.map(({ title, iconName, property, id }) => {
+                const findedEl = _.findIndex(flattenFolders, ({ id: folderId }) => folderId === id);
+                // console.log(findedEl)
+                const [icon] = useTakeIcon(iconName ? iconName : (property === 'label' && 'label') || 'infinity');
+                return (
+                  <ToggleButton value={findedEl} aria-label={title}>
+                    {icon}
+                    {isMenuOpen && (
+                      <Grid className={classes.textOfFolderWithPakeepsView} container>
+                        {title}
+                      </Grid>
+                    )}
+                  </ToggleButton>
+                );
+              })}
+            </ToggleButtonGroup>
+          );
+        })}
     </Grid>
   );
 };
 
-Folders.propTypes = {};
+Folders.propTypes = {
+  folders: PropTypes.shape({
+    map: PropTypes.func
+  }),
+  handleChange: PropTypes.func,
+  handleDrawerWidthThunk: PropTypes.func,
+  isMenuOpen: PropTypes.bool,
+  navigationViewLike: PropTypes.string,
+  positionOfFolderViewWithPakeepViewIsBottom: PropTypes.bool,
+  value: PropTypes.any
+};
 
 export default Folders;
