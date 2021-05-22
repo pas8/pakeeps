@@ -18,6 +18,7 @@ import PinIcon from './components/PinIcon';
 import SettingsOutlinedIcon from '@material-ui/icons/SettingsOutlined';
 import InfinityIcon from './components/Infinity';
 import LabelOutlinedIcon from '@material-ui/icons/LabelOutlined';
+import VisibilityOutlinedIcon from '@material-ui/icons/VisibilityOutlined';
 
 export const iconsArr = [
   { icon: <AlarmOutlinedIcon />, iconName: 'alarm', id: '1' },
@@ -40,4 +41,5 @@ export const iconsArr = [
   { icon: <InfinityIcon />, iconName: 'infinity', id: '92' },
   { icon: <SettingsOutlinedIcon />, iconName: 'settings', id: '80' },
   { icon: <LabelOutlinedIcon />, iconName: 'label', id: '100' },
+  { icon: <VisibilityOutlinedIcon />, iconName: 'visibility', id: '104' }
 ];

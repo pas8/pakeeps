@@ -221,7 +221,7 @@ const initialState = {
   isMenuOpen: false,
   scrollDirectionName: 'up',
   currentFolderPropertyIdx: 0,
-  drawerWidth: 240,
+  drawerWidth: 0,
   isUsePreviuos: false
 };
 
