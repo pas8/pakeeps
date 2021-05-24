@@ -1,4 +1,4 @@
-import { Grid, makeStyles, Tabs, Tab, Drawer, Typography, Collapse, Slide, useTheme } from '@material-ui/core';
+import { Grid, makeStyles, Tabs, Tab, Drawer, Typography, Collapse, Slide, useTheme, Menu } from '@material-ui/core';
 import { useTakeIcon } from 'hooks/useTakeIcon.hook';
 import PropTypes from 'prop-types';
 import { useMeasure, usePrevious, useSize, useWindowSize, useCounter } from 'react-use';
@@ -9,6 +9,7 @@ import { colord } from 'colord';
 import { themeColors } from 'components/theme';
 import { nanoid } from 'nanoid';
 import ButtonItem from './components/ButtonItem';
+import MoreMenuOfFolders from './components/MoreMenu';
 const useStyles = makeStyles(theme => ({
   containerOfFolderWithPakeepsView: ({
     isMenuOpen,
@@ -34,7 +35,7 @@ const useStyles = makeStyles(theme => ({
     '& button': {
       flexWrap: 'nowrap',
       height: '100%',
-      padding: theme.spacing(1.4),
+      padding: theme.spacing(1.4, positionOfFolderViewWithPakeepViewIsBottom ? 1.4 : 1),
 
       display: positionOfFolderViewWithPakeepViewIsBottom && isMenuOpen ? 'block' : 'flex',
       whiteSpace: 'pre',
@@ -140,11 +141,11 @@ const Folders = ({
       { title: 'Open settings', iconName: 'settings', id: 'folder-96', property: 'settings' },
       { title: 'Hide folders', iconName: 'visibility', onClick: handleHideFolder },
       { title: 'Open settings', iconName: 'settings', id: 'folder-97', property: 'settings' },
-      { title: 'Open settings', iconName: 'settings', id: 'folder-98', property: 'settings' },
-      { title: 'Open settings', iconName: 'settings', id: 'folder-99', property: 'settings' },
-      { title: 'Open settings', iconName: 'settings', id: 'folder-100', property: 'settings' },
-      { title: 'Open settings', iconName: 'settings', id: 'folder-101', property: 'settings' },
-      { title: 'Open settings', iconName: 'settings', id: 'folder-102', property: 'settings' },
+      { title: 'Open settings1', iconName: 'settings', id: 'folder-98', property: 'settings' },
+      { title: 'Open settings2', iconName: 'settings', id: 'folder-99', property: 'settings' },
+      { title: 'Open settings3', iconName: 'settings', id: 'folder-100', property: 'settings' },
+      { title: 'Open settings4', iconName: 'settings', id: 'folder-101', property: 'settings' },
+      { title: 'Open settings5', iconName: 'settings', id: 'folder-102', property: 'settings' },
       { title: 'Open settings', iconName: 'settings', id: 'folder-912', property: 'settings' },
       { title: 'Open settings', iconName: 'settings', id: 'folder-922', property: 'settings' },
       { title: 'Open settings', iconName: 'settings', id: 'folder-932', property: 'settings' },
@@ -158,6 +159,8 @@ const Folders = ({
       { title: 'Open settings', iconName: 'pin', id: 'folder-951r22', property: 'settings' }
     ]
   ];
+  const valueToAdd = positionOfFolderViewWithPakeepViewIsBottom ? 1 : 3;
+
   const allFolders = [...folders, ...utilsFolders];
 
   const flattenAllFolders = _.flatten(allFolders);
@@ -174,10 +177,32 @@ const Folders = ({
   const idxOfFolderItemWhichShouldBeInMenu =
     flattenAllFolders.length - ~~((foldersSize - windowSize) / avarageButtonSize);
 
-console.log(idxOfFolderItemWhichShouldBeInMenu,buttonHeight)
+  const [menuAnchorEl, setMenuAnchorEl] = useState(null);
+  const isMoreMenuopen = Boolean(menuAnchorEl);
+
+  const handleOpenMenu = ({ currentTarget }) => setMenuAnchorEl(currentTarget);
+  const handleCloseMenu = () => setMenuAnchorEl(null);
+
+  const arrToMapOfMoreMenu = _.filter(
+    flattenAllFolders,
+    (el, idx) => idxOfFolderItemWhichShouldBeInMenu - valueToAdd <= idx
+  );
+  const moreMenuOfFoldersProps = {
+    arrToMap: arrToMapOfMoreMenu,
+    isMoreMenuopen,
+    handleCloseMenu,
+    menuAnchorEl,
+    flattenAllFolders,
+    handleChange,
+    value
+  };
 
   const [f, { width }] = useSize(() => (
-    <Grid  style={{   marginLeft: positionOfFolderViewWithPakeepViewIsBottom &&  foldersSize - windowSize - theme.spacing(4 + 1) }}>
+    <Grid
+      style={{
+        marginLeft: positionOfFolderViewWithPakeepViewIsBottom && foldersSize - windowSize - theme.spacing(4 + 1)
+      }}
+    >
       <Grid
         container
         ref={ref}
@@ -213,68 +238,69 @@ console.log(idxOfFolderItemWhichShouldBeInMenu,buttonHeight)
                   {arr?.map(({ title, iconName, property, id, onClick = null }, idx) => {
                     const findedIdx = _.findIndex(flattenAllFolders, ({ id: folderId }) => folderId === id);
 
-                    const isShouldBeHidden = idxOfFolderItemWhichShouldBeInMenu < findedIdx + 2;
-                    const isButtonIsMore = findedIdx + 1 === idxOfFolderItemWhichShouldBeInMenu;
-
+                    const isShouldBeHidden = idxOfFolderItemWhichShouldBeInMenu < findedIdx + valueToAdd + 1;
+                    const isButtonIsMore = findedIdx + valueToAdd === idxOfFolderItemWhichShouldBeInMenu;
+                    console.log(isShouldBeHidden);
                     const [icon] = useTakeIcon(
                       isButtonIsMore ? 'more' : iconName ? iconName : (property === 'label' && 'label') || 'infinity'
                     );
+                    const moreButtonTitle = 'Open more';
 
-                    // if (isShouldBeHidden  ) return;
-                    // const buttonItemProps = {
-                    //   title,
-                    //   id,
-                    //   onClick,
-                    //   findedIdx,
-                    //   icon,
-                    //   isMenuOpen,
-                    //   isShouldBeHidden,
-                    //   positionOfFolderViewWithPakeepViewIsBottom
-                    // };
-                    // return <ButtonItem  {...buttonItemProps}/>;
-                    const moreButtonTitle = 'Open settings';
-
-                    const onClickOfToggleButton = isButtonIsMore ? () => console.log(moreButtonTitle) : onClick;
+                    const onClickOfToggleButton = isButtonIsMore ? handleOpenMenu : onClick;
 
                     return (
                       <ToggleButton
                         //  ref={ref}
                         style={{
                           opacity: isButtonIsMore ? 1 : isShouldBeHidden ? 0 : 1,
-                          marginLeft: isButtonIsMore && theme.spacing(2.8),
+                          marginLeft:
+                            positionOfFolderViewWithPakeepViewIsBottom && isButtonIsMore && theme.spacing(2.8),
                           borderLeft: isButtonIsMore && '1px solid rgba(255, 255, 255, 0.12)',
+                          borderTop: isButtonIsMore && '1px solid rgba(255, 255, 255, 0.12)',
                           borderTopRightRadius:
                             (isButtonIsMore && theme.spacing(0.6)) ||
-                            (findedIdx + 2 === idxOfFolderItemWhichShouldBeInMenu && theme.spacing(0.6)),
+                            (positionOfFolderViewWithPakeepViewIsBottom &&
+                              findedIdx + valueToAdd + 1 === idxOfFolderItemWhichShouldBeInMenu &&
+                              theme.spacing(0.6)),
                           borderBottomRightRadius:
                             (isButtonIsMore && theme.spacing(0.6)) ||
-                            (findedIdx + 2 === idxOfFolderItemWhichShouldBeInMenu && theme.spacing(0.6)),
+                            (findedIdx + valueToAdd + 1 === idxOfFolderItemWhichShouldBeInMenu && theme.spacing(0.6)),
 
-                          borderTopLeftRadius: isButtonIsMore && theme.spacing(0.6),
-                          borderBottomLeftRadius: isButtonIsMore && theme.spacing(0.6)
+                          borderTopLeftRadius:
+                            (isButtonIsMore && theme.spacing(0.6)) ||
+                            (!positionOfFolderViewWithPakeepViewIsBottom &&
+                              findedIdx + valueToAdd + 1 === idxOfFolderItemWhichShouldBeInMenu &&
+                              theme.spacing(0.6)),
+                          borderBottomLeftRadius:
+                            (isButtonIsMore && theme.spacing(0.6)) ||
+                            (!positionOfFolderViewWithPakeepViewIsBottom &&
+                              findedIdx + valueToAdd + 1 === idxOfFolderItemWhichShouldBeInMenu &&
+                              theme.spacing(0.6)),
+
+                          marginTop: isButtonIsMore && !positionOfFolderViewWithPakeepViewIsBottom && theme.spacing(1.4)
                         }}
                         value={findedIdx}
                         aria-label={isButtonIsMore ? moreButtonTitle : title}
                         onClick={e => {
                           onClickOfToggleButton && e.preventDefault();
-                          onClickOfToggleButton && onClickOfToggleButton();
+                          onClickOfToggleButton && onClickOfToggleButton(e);
                         }}
                         key={id}
                       >
                         {icon}
                         {isMenuOpen && (
                           <Grid className={classes.textOfFolderWithPakeepsView} container>
-                            {title}
+                            {isButtonIsMore ? moreButtonTitle : title}
                           </Grid>
                         )}
                       </ToggleButton>
                     );
                   })}
                 </ToggleButtonGroup>
-                {/* </Grid> */}
               </Slide>
             );
           })}
+        <MoreMenuOfFolders {...moreMenuOfFoldersProps} />
       </Grid>
     </Grid>
   ));

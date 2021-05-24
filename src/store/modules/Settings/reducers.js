@@ -7,7 +7,7 @@ const settingsInitialState = {
   utilsViewLikeInGoogleKeep: false,
 
   navigationViewLike:'pakeeps',  //'telegram' || 'googleKeep' || 'pakeeps'
-  positionOfFolderViewWithPakeepView:'bottom',  //'left' || 'bottom' || 'right'
+  positionOfFolderViewWithPakeepView:'left',  //'left' || 'bottom' || 'right'
   isFolderViewWithPakeepViewAlignToCenter:true,
 };
 
