@@ -2,7 +2,7 @@ import { Grid, makeStyles, Tabs, Tab, Drawer, Typography, Collapse, Slide, useTh
 import { useTakeIcon } from 'hooks/useTakeIcon.hook';
 import PropTypes from 'prop-types';
 import { useMeasure, usePrevious, useSize, useWindowSize, useCounter } from 'react-use';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import _ from 'lodash';
 import { ToggleButton, ToggleButtonGroup } from '@material-ui/lab';
 import { colord } from 'colord';
@@ -119,7 +119,10 @@ const Folders = ({
   positionOfFolderViewWithPakeepViewIsRight,
   isFolderOpen,
   handleHideFolder,
-  isFolderViewWithPakeepViewAlignToCenter
+  isFolderViewWithPakeepViewAlignToCenter,
+  setMargin,
+  isSizeOfFoldersMoreThanSize,
+  setIsSizeOfFoldersMoreThanSize
 }) => {
   const classes = useStyles({
     isMenuOpen,
@@ -130,39 +133,39 @@ const Folders = ({
   const theme = useTheme();
   const { width: windowWidth, height: windowHeight } = useWindowSize();
 
-  const utilsFolders = [
-    [
-      { title: 'Open settings', iconName: 'settings', id: 'folder-92', property: 'settings' },
-      { title: 'Hide folders', iconName: 'visibility', onClick: handleHideFolder, id: 'folder-93' },
-      { title: 'Open settings', iconName: 'settings', id: 'folder-94', property: 'settings' },
-      { title: 'Hide folders', iconName: 'visibility', onClick: handleHideFolder },
-      { title: 'Open settings', iconName: 'settings', id: 'folder-95', property: 'settings' },
-      { title: 'Hide folders', iconName: 'visibility', onClick: handleHideFolder },
-      { title: 'Open settings', iconName: 'settings', id: 'folder-96', property: 'settings' },
-      { title: 'Hide folders', iconName: 'visibility', onClick: handleHideFolder },
-      { title: 'Open settings', iconName: 'settings', id: 'folder-97', property: 'settings' },
-      { title: 'Open settings1', iconName: 'settings', id: 'folder-98', property: 'settings' },
-      { title: 'Open settings2', iconName: 'settings', id: 'folder-99', property: 'settings' },
-      { title: 'Open settings3', iconName: 'settings', id: 'folder-100', property: 'settings' },
-      { title: 'Open settings4', iconName: 'settings', id: 'folder-101', property: 'settings' },
-      { title: 'Open settings5', iconName: 'settings', id: 'folder-102', property: 'settings' },
-      { title: 'Open settings', iconName: 'settings', id: 'folder-912', property: 'settings' },
-      { title: 'Open settings', iconName: 'settings', id: 'folder-922', property: 'settings' },
-      { title: 'Open settings', iconName: 'settings', id: 'folder-932', property: 'settings' },
-      { title: 'Open settings', iconName: 'settings', id: 'folder-942', property: 'settings' },
-      { title: 'Open settings', iconName: 'settings', id: 'folder-952', property: 'settings' },
-      { title: 'Open settings', iconName: 'settings', id: 'folder-9512', property: 'settings' },
-      { title: 'Open settings', iconName: 'settings', id: 'folder-91252', property: 'settings' },
-      { title: 'Open settings', iconName: 'settings', id: 'folder-9512', property: 'settings' },
-      { title: 'Open settings', iconName: 'settings', id: 'folder-91252', property: 'settings' },
-      { title: 'Open settings', iconName: 'settings', id: 'folder-95122', property: 'settings' },
-      { title: 'Open settings', iconName: 'pin', id: 'folder-951r22', property: 'settings' }
-    ]
-  ];
+  // const utilsFolders = [
+  //   [
+  //     { title: 'Open settings', iconName: 'settings', id: 'folder-92', property: 'settings' },
+  //     { title: 'Hide folders', iconName: 'visibility', onClick: handleHideFolder, id: 'folder-93' },
+  //     { title: 'Open settings', iconName: 'settings', id: 'folder-94', property: 'settings' },
+  //     { title: 'Hide folders', iconName: 'visibility', onClick: handleHideFolder },
+  //     { title: 'Open settings', iconName: 'settings', id: 'folder-95', property: 'settings' },
+  //     { title: 'Hide folders', iconName: 'visibility', onClick: handleHideFolder },
+  //     { title: 'Open settings', iconName: 'settings', id: 'folder-96', property: 'settings' },
+  //     { title: 'Hide folders', iconName: 'visibility', onClick: handleHideFolder },
+  //     { title: 'Open settings', iconName: 'settings', id: 'folder-97', property: 'settings' },
+  //     { title: 'Open settings1', iconName: 'settings', id: 'folder-98', property: 'settings' },
+  //     { title: 'Open settings2', iconName: 'settings', id: 'folder-99', property: 'settings' },
+  //     { title: 'Open settings3', iconName: 'settings', id: 'folder-100', property: 'settings' },
+  //     { title: 'Open settings4', iconName: 'settings', id: 'folder-101', property: 'settings' },
+  //     { title: 'Open settings5', iconName: 'settings', id: 'folder-102', property: 'settings' },
+  //     { title: 'Open settings', iconName: 'settings', id: 'folder-912', property: 'settings' },
+  //     { title: 'Open settings', iconName: 'settings', id: 'folder-922', property: 'settings' },
+  //     { title: 'Open settings', iconName: 'settings', id: 'folder-932', property: 'settings' },
+  //     { title: 'Open settings', iconName: 'settings', id: 'folder-942', property: 'settings' },
+  //     { title: 'Open settings', iconName: 'settings', id: 'folder-952', property: 'settings' },
+  //     { title: 'Open settings', iconName: 'settings', id: 'folder-9512', property: 'settings' },
+  //     { title: 'Open settings', iconName: 'settings', id: 'folder-91252', property: 'settings' },
+  //     { title: 'Open settings', iconName: 'settings', id: 'folder-9512', property: 'settings' },
+  //     { title: 'Open settings', iconName: 'settings', id: 'folder-91252', property: 'settings' },
+  //     { title: 'Open settings', iconName: 'settings', id: 'folder-95122', property: 'settings' },
+  //     { title: 'Open settings', iconName: 'pin', id: 'folder-951r22', property: 'settings' }
+  //   ]
+  // ];
   const valueToAdd = positionOfFolderViewWithPakeepViewIsBottom ? 1 : 3;
 
-  const allFolders = [...folders, ...utilsFolders];
-
+  const allFolders = [...folders];
+  // const allFolders = [...folders,...utilsFolders ];
   const flattenAllFolders = _.flatten(allFolders);
 
   const [ref, { width: buttonWidth, height: buttonHeight }] = useMeasure();
@@ -173,7 +176,6 @@ const Folders = ({
   const foldersSize = buttonSize + avarageButtonSize;
   const windowSize = positionOfFolderViewWithPakeepViewIsBottom ? windowWidth : windowHeight;
 
-  // const isSizeOfFoldersMoreThanSize = foldersSize - avarageButtonSize * 2 > windowSize;
   const idxOfFolderItemWhichShouldBeInMenu =
     flattenAllFolders.length - ~~((foldersSize - windowSize) / avarageButtonSize);
 
@@ -196,18 +198,24 @@ const Folders = ({
     handleChange,
     value
   };
+  console.log(buttonSize);
+  // console.log(isSizeOfFoldersMoreThanSize)
+  useEffect(() => {
+    setMargin(positionOfFolderViewWithPakeepViewIsBottom && foldersSize - windowSize - theme.spacing(4 + 1));
+  }, [buttonSize]);
+  
+  useEffect(() => {
+    setIsSizeOfFoldersMoreThanSize(foldersSize - avarageButtonSize * 2 > windowSize);
+  }, [foldersSize, avarageButtonSize, windowSize]);
 
   const [f, { width }] = useSize(() => (
-    <Grid
-      style={{
-        marginLeft: positionOfFolderViewWithPakeepViewIsBottom && foldersSize - windowSize - theme.spacing(4 + 1)
-      }}
-    >
+    <Grid container>
       <Grid
         container
         ref={ref}
+        justify={'center'}
+        // ref={!positionOfFolderViewWithPakeepViewIsBottom ? ref : placeholderRef}
         wrap={'nowrap'}
-        // justify={'center'}
         direction={positionOfFolderViewWithPakeepViewIsBottom ? 'row' : 'column'}
         className={navigationViewLike === 'googleKeep' ? classes.container : classes.containerOfFolderWithPakeepsView}
       >
@@ -238,9 +246,10 @@ const Folders = ({
                   {arr?.map(({ title, iconName, property, id, onClick = null }, idx) => {
                     const findedIdx = _.findIndex(flattenAllFolders, ({ id: folderId }) => folderId === id);
 
-                    const isShouldBeHidden = idxOfFolderItemWhichShouldBeInMenu < findedIdx + valueToAdd + 1;
-                    const isButtonIsMore = findedIdx + valueToAdd === idxOfFolderItemWhichShouldBeInMenu;
-                    console.log(isShouldBeHidden);
+                    const isShouldBeHidden =
+                      isSizeOfFoldersMoreThanSize && idxOfFolderItemWhichShouldBeInMenu < findedIdx + valueToAdd + 1;
+                    const isButtonIsMore =
+                      isSizeOfFoldersMoreThanSize && findedIdx + valueToAdd === idxOfFolderItemWhichShouldBeInMenu;
                     const [icon] = useTakeIcon(
                       isButtonIsMore ? 'more' : iconName ? iconName : (property === 'label' && 'label') || 'infinity'
                     );

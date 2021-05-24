@@ -30,9 +30,9 @@ const useStyles = makeStyles(theme => ({
     // justifyContent: positionOfFolderViewWithPakeepViewIsBottom && 'center',
     '& nav': positionOfFolderViewWithPakeepViewIsBottom
       ? {
-          zIndex: 92 * 92,
+          zIndex: 92,
           position: 'fixed',
-          bottom: 0,
+          bottom: 0
         }
       : {
           position: 'fixed',
@@ -42,7 +42,7 @@ const useStyles = makeStyles(theme => ({
         }
   }),
   arrowButton: ({ positionOfFolderViewWithPakeepViewIsBottom, positionOfFolderViewWithPakeepViewIsRight }) => ({
-    zIndex: 96 * 96,
+    zIndex: 96,
     position: 'fixed',
     bottom: positionOfFolderViewWithPakeepViewIsBottom ? 0 : '50%',
     [positionOfFolderViewWithPakeepViewIsRight ? 'right' : 'left']: positionOfFolderViewWithPakeepViewIsBottom
@@ -54,7 +54,7 @@ const useStyles = makeStyles(theme => ({
     '& svg': {
       color: themeColors.whiteRgbaColorWith0dot42valueOfAlfaCanal,
       '&:hover': {
-        color: themeColors.whiteRgbaColorWith0dot8valueOfAlfaCanal,
+        color: themeColors.whiteRgbaColorWith0dot8valueOfAlfaCanal
       }
     }
   })
@@ -87,6 +87,9 @@ const FolderLayout = ({
   const handleChange = (e, idx) => handleCurrentFolderPropertyIdxThunk(idx);
   const handleHideFolder = () => setIsFolderOpen(false);
 
+  const [margin, setMargin] = useState(0);
+  const [isSizeOfFoldersMoreThanSize, setIsSizeOfFoldersMoreThanSize] = useState(false);
+
   const foldersProps = {
     handleChange,
     folders,
@@ -98,7 +101,10 @@ const FolderLayout = ({
     navigationViewLike,
     positionOfFolderViewWithPakeepViewIsBottom,
     positionOfFolderViewWithPakeepViewIsRight,
-    isFolderViewWithPakeepViewAlignToCenter
+    isFolderViewWithPakeepViewAlignToCenter,
+    setMargin,
+    isSizeOfFoldersMoreThanSize,
+    setIsSizeOfFoldersMoreThanSize
   };
 
   useEffect(() => handleFoldersThunk(foldersArr), [folderPropertyies]);
@@ -124,7 +130,9 @@ const FolderLayout = ({
       <nav
         style={{
           minWidth: drawerWidth,
-          display: isFolderViewWithPakeepViewAlignToCenter ? 'flex' : 'block',
+          marginLeft: isSizeOfFoldersMoreThanSize && positionOfFolderViewWithPakeepViewIsBottom && margin,
+          display:  'flex',
+          // width:'100%',
           marginRight: positionOfFolderViewWithPakeepViewIsRight ? marginValue : 0
         }}
       >

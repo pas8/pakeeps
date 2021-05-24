@@ -1,6 +1,9 @@
 html,
 body {
   min-height: 116vh;
+  overflow: visible !important;
+  overflow-x: hidden !important;
+  padding: 0 !important;
 }
 
 a {
