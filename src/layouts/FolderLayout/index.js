@@ -23,15 +23,16 @@ import {
   getPositionOfFolderViewWithPakeepView
 } from 'store/modules/Settings/selectors';
 import ArrowForwardIosOutlinedIcon from '@material-ui/icons/ArrowForwardIosOutlined';
+import { themeColors } from 'components/theme';
 
 const useStyles = makeStyles(theme => ({
   container: ({ positionOfFolderViewWithPakeepViewIsBottom, positionOfFolderViewWithPakeepViewIsRight }) => ({
+    // justifyContent: positionOfFolderViewWithPakeepViewIsBottom && 'center',
     '& nav': positionOfFolderViewWithPakeepViewIsBottom
       ? {
+          zIndex: 92 * 92,
           position: 'fixed',
           bottom: 0,
-          left: 0,
-          right: 0
         }
       : {
           position: 'fixed',
@@ -40,12 +41,23 @@ const useStyles = makeStyles(theme => ({
           [positionOfFolderViewWithPakeepViewIsRight ? 'right' : 'left']: 0
         }
   }),
-  arrowButton: {
-    zIndex: 10000000000,
+  arrowButton: ({ positionOfFolderViewWithPakeepViewIsBottom, positionOfFolderViewWithPakeepViewIsRight }) => ({
+    zIndex: 96 * 96,
     position: 'fixed',
-    bottom: '50%',
-    left: 0
-  }
+    bottom: positionOfFolderViewWithPakeepViewIsBottom ? 0 : '50%',
+    [positionOfFolderViewWithPakeepViewIsRight ? 'right' : 'left']: positionOfFolderViewWithPakeepViewIsBottom
+      ? '50%'
+      : 0,
+    transform: `rotate(${
+      positionOfFolderViewWithPakeepViewIsBottom ? 270 : positionOfFolderViewWithPakeepViewIsRight ? 180 : 0
+    }deg)`,
+    '& svg': {
+      color: themeColors.whiteRgbaColorWith0dot42valueOfAlfaCanal,
+      '&:hover': {
+        color: themeColors.whiteRgbaColorWith0dot8valueOfAlfaCanal,
+      }
+    }
+  })
 }));
 
 const FolderLayout = ({
@@ -66,17 +78,13 @@ const FolderLayout = ({
   const positionOfFolderViewWithPakeepViewIsBottom = positionOfFolderViewWithPakeepView === 'bottom';
   const positionOfFolderViewWithPakeepViewIsRight = positionOfFolderViewWithPakeepView === 'right';
   const positionOfFolderViewWithPakeepViewIsLeft = positionOfFolderViewWithPakeepView === 'left';
+
   const foldersArr = useFolders(folderPropertyies, { labels });
-  console.log(drawerWidth);
-  useEffect(() => handleFoldersThunk(foldersArr), [folderPropertyies]);
+
+  const [isFolderOpen, setIsFolderOpen] = useState(false);
+  const marginValue = 8;
 
   const handleChange = (e, idx) => handleCurrentFolderPropertyIdxThunk(idx);
-  const [isFolderOpen, setIsFolderOpen] = useState(false);
-
-  useEffect(() => !isFolderOpen && drawerWidth !== 0 && handleDrawerWidthThunk(0), [isFolderOpen, drawerWidth]);
-
-  const classes = useStyles({ positionOfFolderViewWithPakeepViewIsBottom, positionOfFolderViewWithPakeepViewIsRight });
-
   const handleHideFolder = () => setIsFolderOpen(false);
 
   const foldersProps = {
@@ -93,13 +101,17 @@ const FolderLayout = ({
     isFolderViewWithPakeepViewAlignToCenter
   };
 
-  const marginValue = 8;
-  
+  useEffect(() => handleFoldersThunk(foldersArr), [folderPropertyies]);
+  useEffect(() => !isFolderOpen && drawerWidth !== 0 && handleDrawerWidthThunk(0), [isFolderOpen, drawerWidth]);
+
+  const classes = useStyles({ positionOfFolderViewWithPakeepViewIsBottom, positionOfFolderViewWithPakeepViewIsRight });
+
   return (
     <Grid
       container
       className={classes.container}
       wrap={'nowrap'}
+      alignItems={'center'}
       direction={positionOfFolderViewWithPakeepViewIsBottom ? 'column-reverse' : 'row'}
     >
       {!isFolderOpen && (
@@ -109,7 +121,13 @@ const FolderLayout = ({
           </IconButton>
         </Grid>
       )}
-      <nav style={{ minWidth: drawerWidth, display: isFolderViewWithPakeepViewAlignToCenter ? 'flex' : 'block' }}>
+      <nav
+        style={{
+          minWidth: drawerWidth,
+          display: isFolderViewWithPakeepViewAlignToCenter ? 'flex' : 'block',
+          marginRight: positionOfFolderViewWithPakeepViewIsRight ? marginValue : 0
+        }}
+      >
         <Folders {...foldersProps} />
       </nav>
       <Grid
