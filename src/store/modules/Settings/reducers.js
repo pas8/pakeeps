@@ -8,7 +8,7 @@ const settingsInitialState = {
 
   navigationViewLike:'pakeeps',  //'telegram' || 'googleKeep' || 'pakeeps'
   positionOfFolderViewWithPakeepView:'left',  //'left' || 'bottom' || 'right'
-  isFolderViewWithPakeepViewAlignToCenter:true,
+  isFolderViewWithPakeepViewAlignToCenter:!true,
 };
 
 const settingsReducer = createReducer(settingsInitialState)({

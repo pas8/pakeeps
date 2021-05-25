@@ -213,7 +213,7 @@ const Folders = ({
       <Grid
         container
         ref={ref}
-        justify={'center'}
+        justify={isFolderViewWithPakeepViewAlignToCenter ?'center' : 'flex-start'}
         // ref={!positionOfFolderViewWithPakeepViewIsBottom ? ref : placeholderRef}
         wrap={'nowrap'}
         direction={positionOfFolderViewWithPakeepViewIsBottom ? 'row' : 'column'}

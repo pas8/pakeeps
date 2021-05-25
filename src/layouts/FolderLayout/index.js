@@ -15,7 +15,8 @@ import {
   getFolders,
   getMenuOpenStatus,
   getDrawerWidth,
-  getLabels
+  getLabels,
+  getDefaultFolderArr
 } from 'store/modules/App/selectors';
 import {
   getIsFolderViewWithPakeepViewAlignToCenter,
@@ -73,13 +74,14 @@ const FolderLayout = ({
   navigationViewLike,
   labels,
   positionOfFolderViewWithPakeepView,
-  isFolderViewWithPakeepViewAlignToCenter
+  isFolderViewWithPakeepViewAlignToCenter,
+  defaultFolderArr
 }) => {
   const positionOfFolderViewWithPakeepViewIsBottom = positionOfFolderViewWithPakeepView === 'bottom';
   const positionOfFolderViewWithPakeepViewIsRight = positionOfFolderViewWithPakeepView === 'right';
   const positionOfFolderViewWithPakeepViewIsLeft = positionOfFolderViewWithPakeepView === 'left';
 
-  const foldersArr = useFolders(folderPropertyies, { labels });
+  const foldersArr = useFolders(folderPropertyies, { labels, defaultFolderArr });
 
   const [isFolderOpen, setIsFolderOpen] = useState(false);
   const marginValue = 8;
@@ -131,7 +133,7 @@ const FolderLayout = ({
         style={{
           minWidth: drawerWidth,
           marginLeft: isSizeOfFoldersMoreThanSize && positionOfFolderViewWithPakeepViewIsBottom && margin,
-          display:  'flex',
+          display: 'flex',
           // width:'100%',
           marginRight: positionOfFolderViewWithPakeepViewIsRight ? marginValue : 0
         }}
@@ -163,15 +165,17 @@ FolderLayout.propTypes = {
 };
 
 const mapStateToProps = ({
-  app: { folderPropertyies, currentFolderPropertyIdx, folders, isMenuOpen, drawerWidth, labels },
+  app: { folderPropertyies, currentFolderPropertyIdx, folders, isMenuOpen, drawerWidth, labels, defaultFolderArr },
   settings: { navigationViewLike, positionOfFolderViewWithPakeepView, isFolderViewWithPakeepViewAlignToCenter }
 }) => ({
   folderPropertyies: getFolderPropertyies(folderPropertyies),
   currentFolderPropertyIdx: getCurrentFolderPropertyIdx(currentFolderPropertyIdx),
   folders: getFolders(folders),
+  defaultFolderArr: getDefaultFolderArr(defaultFolderArr),
   labels: getLabels(labels),
   isMenuOpen: getMenuOpenStatus(isMenuOpen),
   drawerWidth: getDrawerWidth(drawerWidth),
+
   navigationViewLike: getNavigationViewLike(navigationViewLike),
   positionOfFolderViewWithPakeepView: getPositionOfFolderViewWithPakeepView(positionOfFolderViewWithPakeepView),
   isFolderViewWithPakeepViewAlignToCenter: getIsFolderViewWithPakeepViewAlignToCenter(

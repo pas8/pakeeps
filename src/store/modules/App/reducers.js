@@ -5,6 +5,13 @@ import * as types from './types';
 const initialState = {
   data: 1,
   archive: [],
+  defaultFolderArr: [
+    { title: 'All pakeeps', iconName: '', id: 'folder-ALL', property: 'ALL' },
+    { title: 'Pined', iconName: 'pin', id: 'folder-isPinned', property: 'isPinned' },
+    { title: 'Bookmark', iconName: 'bookmark', id: 'folder-isInBookmark', property: 'isInBookmark' },
+    { title: 'Favorite', iconName: 'favorite', id: 'folder-isFavorite', property: 'isFavorite' },
+  ],
+
   labels: [
     { color: '', title: 'Day plans', iconName: 'category', id: 'label0', variant: 'outlined' },
     { color: '#dd6b2a', title: 'Week plans', iconName: 'star', id: 'label1', variant: 'outlined' },
@@ -15,8 +22,10 @@ const initialState = {
   ],
 
   folders: [
- [   { title: 'All pakeeps', iconName: '', id: "folder-1", property: 'ALL' },
-    { title: 'Pined', iconName: 'pin', id: "folder-2", property: 'isPinned' }]
+    [
+      { title: 'All pakeeps', iconName: '', id: 'folder-1', property: 'ALL' },
+      { title: 'Pined', iconName: 'pin', id: 'folder-2', property: 'isPinned' }
+    ]
     // { title: 'Pined', iconName: 'pin', key: 2, property: 'isPinned' },
   ],
   folderPropertyies: {
@@ -30,8 +39,8 @@ const initialState = {
     {
       title: 'Placeholder 1',
       text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-      bookmark: false,
-      favorite: false,
+      isInBookmark: true,
+      isFavorite: true,
       color: 'default',
       labels: ['label3', 'label1', 'label0', 'label2'],
 
@@ -41,8 +50,8 @@ const initialState = {
     {
       title: 'Placeholder 2',
       text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. At imperdiet dui accumsan sit amet nulla facilisi morbi. Aliquam sem et tortor consequat id porta nibh. Enim praesent elementum facilisis leo vel fringilla est. Cras adipiscing enim eu turpis egestas pretium aenean. Sed libero enim sed faucibus turpis in eu mi bibendum. Vestibulum lorem sed risus ultricies. Neque egestas congue quisque egestas diam.',
-      bookmark: false,
-      favorite: false,
+      isInBookmark: false,
+      isFavorite: true,
       color: 'default',
       labels: ['label4', 'label0', 'label1', 'label2', 'label3'],
       id: 'pakeep2',
@@ -51,8 +60,8 @@ const initialState = {
     {
       title: 'Placeholder 3',
       text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Vulputate dignissim suspendisse in est ante in nibh mauris cursus. Duis convallis convallis tellus id interdum. Eu augue ut lectus arcu bibendum at varius.      ',
-      bookmark: false,
-      favorite: false,
+      isInBookmark: true,
+      isFavorite: false,
       color: 'default',
       labels: ['label0', 'label2', 'label6'],
 
@@ -62,8 +71,8 @@ const initialState = {
     {
       title: 'Placeholder 4',
       text: 'ultricies mi eget mauris pharetra et ultrices neque ornare aenean euismod elementum nisi quis eleifend quam',
-      bookmark: false,
-      favorite: false,
+      isInBookmark: false,
+      isFavorite: true,
       color: 'transparent',
       labels: ['label1', 'label2', 'label0', 'label6'],
 
@@ -73,8 +82,8 @@ const initialState = {
     // {
     //   title: 'Placeholder 5',
     //   text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-    //   bookmark: false,
-    //   favorite: false,
+    //   isInBookmark: false,
+    //   isFavorite: false,
     //   color: 'default',
     //   isPinned: false,
     //   labels: [{ color: 'default', title: 'Hobby Placeholders', icon: 'alarm', key: 4 }],
@@ -83,8 +92,8 @@ const initialState = {
     // {
     //   title: 'Placeholder 6',
     //   text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Enim nec dui nunc mattis enim ut tellus elementum. Ipsum consequat nisl vel pretium lectus quam id leo. Lacinia quis vel eros donec ac odio tempor orci. Risus nullam eget felis eget nunc lobortis mattis aliquam faucibus. Ac odio tempor orci dapibus. Pellentesque habitant morbi tristique senectus et netus. Et netus et malesuada fames ac. Est velit egestas dui id ornare. Mi quis hendrerit dolor magna eget est lorem ipsum dolor.',
-    //   bookmark: false,
-    //   favorite: false,
+    //   isInBookmark: false,
+    //   isFavorite: false,
     //   color: 'default',
     //   labels: [{ color: 'secondary', title: 'Hobby', icon: 'alarm', key: 4 }],
     //   id: 'pakeep6',
@@ -94,8 +103,8 @@ const initialState = {
     // {
     //   title: 'Placeholder 7',
     //   text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. At imperdiet dui accumsan sit amet nulla facilisi morbi. Aliquam sem et tortor consequat id porta nibh. Enim praesent elementum facilisis leo vel fringilla est. Cras adipiscing enim eu turpis egestas pretium aenean. Sed libero enim sed faucibus turpis in eu mi bibendum. Vestibulum lorem sed risus ultricies. Neque egestas congue quisque egestas diam.',
-    //   bookmark: false,
-    //   favorite: false,
+    //   isInBookmark: false,
+    //   isFavorite: false,
     //   color: 'default',
     //   labels: [{ color: 'primary', title: 'Day plans', icon: '', key: 0 }],
     //   id: 'pakeep7',
@@ -104,8 +113,8 @@ const initialState = {
     // {
     //   title: 'Placeholder 8',
     //   text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Vulputate dignissim suspendisse in est ante in nibh mauris cursus. Duis convallis convallis tellus id interdum. Eu augue ut lectus arcu bibendum at varius.      ',
-    //   bookmark: false,
-    //   favorite: false,
+    //   isInBookmark: false,
+    //   isFavorite: false,
     //   color: 'default',
     //   labels: [
     //     { color: 'secondary', title: 'Plans', icon: '', key: 0 },
@@ -120,8 +129,8 @@ const initialState = {
     // {
     //   title: 'Placeholder 9',
     //   text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-    //   bookmark: false,
-    //   favorite: false,
+    //   isInBookmark: false,
+    //   isFavorite: false,
     //   color: 'default',
     //   labels: [
     //     { color: 'secondary', title: 'Plans', icon: '', key: 0 },
@@ -136,8 +145,8 @@ const initialState = {
     // {
     //   title: 'Placeholder 10',
     //   text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. At imperdiet dui accumsan sit amet nulla facilisi morbi. Aliquam sem et tortor consequat id porta nibh. Enim praesent elementum facilisis leo vel fringilla est. Cras adipiscing enim eu turpis egestas pretium aenean. Sed libero enim sed faucibus turpis in eu mi bibendum. Vestibulum lorem sed risus ultricies. Neque egestas congue quisque egestas diam.',
-    //   bookmark: false,
-    //   favorite: false,
+    //   isInBookmark: false,
+    //   isFavorite: false,
     //   color: 'default',
     //   labels: [{ color: 'primary', title: 'Day plans', icon: '', key: 0 }],
     //   id: 'pakeep10',
@@ -146,8 +155,8 @@ const initialState = {
     // {
     //   title: 'Placeholder 11',
     //   text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Vulputate dignissim suspendisse in est ante in nibh mauris cursus. Duis convallis convallis tellus id interdum. Eu augue ut lectus arcu bibendum at varius.      ',
-    //   bookmark: false,
-    //   favorite: false,
+    //   isInBookmark: false,
+    //   isFavorite: false,
     //   color: 'default',
     //   labels: [],
     //   isPinned: true,
@@ -156,8 +165,8 @@ const initialState = {
     // {
     //   title: 'Placeholder 12',
     //   text: 'ultricies mi eget mauris pharetra et ultrices neque ornare aenean euismod elementum nisi quis eleifend quam',
-    //   bookmark: false,
-    //   favorite: false,
+    //   isInBookmark: false,
+    //   isFavorite: false,
     //   color: 'transparent',
     //   labels: [
     //     { color: 'default', title: 'Day plans', icon: '', key: 0 },
@@ -171,8 +180,8 @@ const initialState = {
     // {
     //   title: 'Placeholder 13',
     //   text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-    //   bookmark: false,
-    //   favorite: false,
+    //   isInBookmark: false,
+    //   isFavorite: false,
     //   color: 'default',
     //   isPinned: false,
     //   labels: [{ color: 'default', title: 'Hobby Placeholders', icon: 'alarm', key: 4 }],
@@ -181,8 +190,8 @@ const initialState = {
     // {
     //   title: 'Placeholder 14',
     //   text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Enim nec dui nunc mattis enim ut tellus elementum. Ipsum consequat nisl vel pretium lectus quam id leo. Lacinia quis vel eros donec ac odio tempor orci. Risus nullam eget felis eget nunc lobortis mattis aliquam faucibus. Ac odio tempor orci dapibus. Pellentesque habitant morbi tristique senectus et netus. Et netus et malesuada fames ac. Est velit egestas dui id ornare. Mi quis hendrerit dolor magna eget est lorem ipsum dolor.',
-    //   bookmark: false,
-    //   favorite: false,
+    //   isInBookmark: false,
+    //   isFavorite: false,
     //   color: 'default',
     //   labels: [{ color: 'secondary', title: 'Hobby', icon: 'alarm', key: 4 }],
     //   id: 'pakeep14',
@@ -192,8 +201,8 @@ const initialState = {
     // {
     //   title: 'Placeholder 15',
     //   text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. At imperdiet dui accumsan sit amet nulla facilisi morbi. Aliquam sem et tortor consequat id porta nibh. Enim praesent elementum facilisis leo vel fringilla est. Cras adipiscing enim eu turpis egestas pretium aenean. Sed libero enim sed faucibus turpis in eu mi bibendum. Vestibulum lorem sed risus ultricies. Neque egestas congue quisque egestas diam.',
-    //   bookmark: false,
-    //   favorite: false,
+    //   isInBookmark: false,
+    //   isFavorite: false,
     //   color: 'default',
     //   labels: [{ color: 'primary', title: 'Day plans', icon: '', key: 0 }],
     //   id: 'pakeep15',
@@ -202,8 +211,8 @@ const initialState = {
     // {
     //   title: 'Placeholder 16',
     //   text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Vulputate dignissim suspendisse in est ante in nibh mauris cursus. Duis convallis convallis tellus id interdum. Eu augue ut lectus arcu bibendum at varius.      ',
-    //   bookmark: false,
-    //   favorite: false,
+    //   isInBookmark: false,
+    //   isFavorite: false,
     //   color: 'default',
     //   labels: [
     //     { color: 'secondary', title: 'Plans', icon: '', key: 0 },
