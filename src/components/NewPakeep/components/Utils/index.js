@@ -42,7 +42,7 @@ const NewPakeepUtils = ({ handleNewPakeepSave, widthOfContainer, ...newPakeepUti
       <IconsUtils {...iconUtilsProps} />
       <Box className={classes.buttonGroupWrapper} ref={ref}>
         <Box className={classes.buttonWrapper}>
-          <Button color={'success'} style={{ color: themeColors.whiteRgbaColorWith0dot42valueOfAlfaCanal }}>
+          <Button  style={{ color: themeColors.whiteRgbaColorWith0dot42valueOfAlfaCanal }}>
             Close
           </Button>
         </Box>
