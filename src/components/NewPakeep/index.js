@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import _ from 'lodash';
 import clsx from 'clsx';
-import { useCookie, useMeasure, usePageLeave } from 'react-use';
+import { useCookie, useKeyPressEvent, useMeasure, usePageLeave } from 'react-use';
 import { nanoid } from 'nanoid';
 import { Box, Grid, IconButton, makeStyles, Paper, TextField } from '@material-ui/core';
 import VisibilityOutlinedIcon from '@material-ui/icons/VisibilityOutlined';
@@ -67,12 +67,25 @@ const NewPaKeep = ({ addNewPaKeepThunk }) => {
   usePageLeave(() => updateCookie(state));
 
   const [focus, setFocus] = useState(false);
-  const [placeholder, setPlaceholder] = useState('Write a title or press ctrl + Alt + 8 to skip a title');
   const [enter, setEnter] = useState(false);
   const [writingText, setWritingText] = useState(false);
   const [changingTitle, setChangingTitle] = useState(false);
   const [showUtils, setShowUtils] = useState(false);
   const [fullWidthOfNewPakeepContainer, setFullWidthOfNewPakeepContainer] = useState(!false);
+
+const [statusState, setStatusState] = useState({
+
+
+isFocus:false,
+placeholder:'Write a title or press ctrl + Alt + 8 to skip a title',
+isEnter:false,
+isWritingText:false,
+isChangingTitle:false,
+isUtilsShouldBe
+
+})
+
+
 
   const handleState = ({ target: { name, value } }) => setState(state => ({ ...state, [name]: value }));
 
@@ -109,20 +122,19 @@ const NewPaKeep = ({ addNewPaKeepThunk }) => {
     setState(nulittyState);
   };
   // document.onkeydown = evt => {
-  //   if (evt.key === 'Enter' && enter === false) setEnter(true);
-  //   else if (enter === true && evt.key !== 'Enter') setEnter(false);
 
-  //   if (evt.key === 'Enter' && changingTitle === true) setChangingTitle(false);
   // };
+  // console.log({...state})
+  // useKeyPressEvent('Enter', () => {
+  //   if (enter === false) setEnter(true);
+  //   if (changingTitle === true) setChangingTitle(false);
+  // });
+
+
+
   const handleSetWidthInNewPakeep = () => setFullWidthOfNewPakeepContainer(!fullWidthOfNewPakeepContainer);
 
-  const handleDeleteLabelFromPakeepFunc = (u, y) => {
-    console.log(u, y);
-  };
-
-  const changeLabelItemFunc = (u, y) => {
-    console.log(u, y);
-  };
+  const handleDeleteLabelFromPakeepFunc = (placeholder, labelId) => handleDeleteNewLabel(labelId);
 
   const [ref, { width: widthOfContainer }] = useMeasure();
 
@@ -145,7 +157,6 @@ const NewPaKeep = ({ addNewPaKeepThunk }) => {
   const attributesOfNewPakeepProps = {
     pakeepId: state.id,
     handleDeleteLabelFromPakeepFunc,
-    changeLabelItemFunc,
     labels: state.labels
   };
 
@@ -168,7 +179,7 @@ const NewPaKeep = ({ addNewPaKeepThunk }) => {
             value={writingText ? state.text : state.title}
             onChange={handleState}
             name={writingText ? 'text' : 'title'}
-            rows={showUtils ? 6 : 1}
+            rows={writingText ? 6 : showUtils ? 8 : 1}
             multiline={writingText ? true : showUtils ? true : false}
             fullWidth
             autoFocus={true}
