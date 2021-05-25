@@ -10,6 +10,9 @@ const useStyles = makeStyles(theme => ({
       color: isDark ? '#080808' : null,
       '& svg': {
         color: isDark ? '#080808' : null
+      },
+      '&:hover': {
+        boxShadow: `0px 0px 4px 1px ${color} `
       }
     },
     '& .MuiChip-outlined': {
@@ -27,11 +30,9 @@ const LabelItem = ({ isDark, currentColor, handleOpen, labelChipProps }) => {
   const classes = useStyles({ color: currentColor, isDark });
 
   return (
-    <Tooltip title={'Click to change'} placement={'right'} TransitionComponent={Zoom} arrow>
-      <Grid item className={classes.container} onContextMenu={handleOpen} onClick={handleOpen}>
-        <Chip {...labelChipProps} />
-      </Grid>
-    </Tooltip>
+    <Grid item className={classes.container} onContextMenu={handleOpen} onClick={handleOpen}>
+      <Chip {...labelChipProps} />
+    </Grid>
   );
 };
 

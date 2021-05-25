@@ -6,6 +6,8 @@ import { find } from 'lodash';
 import { iconsArr } from 'components/Icons';
 import LabelItem from './components/LabelItem';
 import MenuOfLabelPart from './components/Menu';
+import { themeColors } from 'components/theme';
+import { useFindIcon } from 'hooks/useFindIcon.hook';
 
 const LabelPart = ({ labels, handleDeleteLabelFromPakeepThunk, changeLabelItemThunk, pakeepId }) => {
   const nullityOfMenuState = { mouseX: null, mouseY: null, id: null, variant: '', labelIconName: '' };
@@ -34,12 +36,22 @@ const LabelPart = ({ labels, handleDeleteLabelFromPakeepThunk, changeLabelItemTh
     setMenuState(state => ({ ...state, labelIconName, variant }));
   }, [labels]);
 
+  const menuOfLabelPartProps = {
+    menuState,
+    handleDeleteLabel,
+    handleClose,
+    handleChangeLabelColor,
+    handleChangeLabelVariant,
+    handleChangeLabelIconName
+  };
+
   return (
     <>
       {labels.map(({ title, iconName: labelIconName, id, color, variant }) => {
-        const icon = iconsArr.find(({ iconName }) => iconName === labelIconName)?.icon;
+        const icon = useFindIcon(labelIconName);
 
-        const currentColor = color === 'primary' || color === 'secondary' ? null : color;
+        const currentColor =
+          color === 'primary' ? themeColors.primaryMain : color === 'secondary' ? themeColors.secondaryMain : color;
         const isDark = colord(color).brightness() >= 0.48;
 
         const labelChipProps = {
@@ -61,14 +73,7 @@ const LabelPart = ({ labels, handleDeleteLabelFromPakeepThunk, changeLabelItemTh
 
         return <LabelItem {...labelItemProps} />;
       })}
-      <MenuOfLabelPart
-        menuState={menuState}
-        handleDeleteLabel={handleDeleteLabel}
-        handleClose={handleClose}
-        handleChangeLabelColor={handleChangeLabelColor}
-        handleChangeLabelVariant={handleChangeLabelVariant}
-        handleChangeLabelIconName={handleChangeLabelIconName}
-      />
+      <MenuOfLabelPart {...menuOfLabelPartProps} />
     </>
   );
 };

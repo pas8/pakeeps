@@ -22,6 +22,7 @@ import ArrowDropDownCircleOutlinedIcon from '@material-ui/icons/ArrowDropDownCir
 import _ from 'lodash';
 import MoreUtils from './components/MoreUtils';
 import PlayCircleOutlineOutlinedIcon from '@material-ui/icons/PlayCircleOutlineOutlined';
+import LabelsList from './components/LabelsList';
 
 const useStyles = makeStyles(theme => ({
   popover: { padding: theme.spacing(0.4, 0.8) },
@@ -42,7 +43,9 @@ const IconsUtils = ({
   handleSetColorPakeep,
   handleSetWidth,
   fullWidthStatus = false,
-  widthOfContainer
+  widthOfContainer,
+  handleAddNewLabel,handleDeleteNewLabel,
+  selectedLabels= [] 
 }) => {
   const classes = useStyles();
 
@@ -92,8 +95,9 @@ const IconsUtils = ({
       icon: LabelOutlinedIcon,
       popoverText: 'Add labels',
       name: 'labels',
-      onClick: setEditTitleIsTrue,
-      activeIcon: labels
+      activeIcon: labels,
+      menuComponents: LabelsList,
+      menuComponentsProps: { selectedLabels,handleAddNewLabel,handleDeleteNewLabel, }
     },
     {
       icon: FavoriteBorderOutlinedIcon,
@@ -115,7 +119,8 @@ const IconsUtils = ({
       name: 'width',
       onClick: handleSetWidth,
       activeIcon: fullWidthStatus,
-      rotateDeg: 90
+      rotateDeg: 90,
+      onlyPopover: true
     }
   ];
 
@@ -143,24 +148,25 @@ const IconsUtils = ({
   const buttonMoreOfItemOfArrWhichWasSliced = {
     icon: PlayCircleOutlineOutlinedIcon,
     rotateDeg: 90,
+    hidden: slicedArr?.after?.length === 0 ? true : false,
     popoverText: 'Open more utils',
     name: 'moreUtils',
     onClick: handleClick,
     menuComponents: MoreUtils,
-    menuComponentsProps:{slicedArrAfter:slicedArr.after}
+    menuComponentsProps: { slicedArrAfter: slicedArr.after }
   };
 
   const buttonUtilsSlicedAndConcatedWithMoreButtonArr = _.concat(slicedArr.before, buttonMoreOfItemOfArrWhichWasSliced);
   const slicedWrapperOfPopoverAndMenuProps = {
     buttonUtilsArr: buttonUtilsSlicedAndConcatedWithMoreButtonArr,
     handlePopoverAndMenuState,
-    popoverAndMenuState,
+    popoverAndMenuState
   };
 
   const wrapperOfPopoverAndMenuProps = isShouldBeSliced
     ? slicedWrapperOfPopoverAndMenuProps
     : nonSlicedwrapperOfPopoverAndMenuProps;
-
+  // console.log(isShouldBeSliced)
   return (
     <Grid container display={'flex'} wrap={'nowrap'} justify={isAllIconsIsShown ? 'flex-start' : 'space-between'}>
       <WrapperOfPopoverAndMenu {...wrapperOfPopoverAndMenuProps} />

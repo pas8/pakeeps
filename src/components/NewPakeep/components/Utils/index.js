@@ -1,9 +1,9 @@
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { useSnackbar } from 'notistack';
-import { makeStyles, Box, Button } from '@material-ui/core';
-import SaveIcon from '@material-ui/icons/Save';
+import { makeStyles, Box, Button, Grid } from '@material-ui/core';
 import IconsUtils from 'components/IconsUtils';
+import SaveRoundedIcon from '@material-ui/icons/SaveRounded';
 import { useMeasure } from 'react-use';
 
 // import SaveOutlinedIcon from '@material-ui/icons/SaveOutlined';
@@ -21,7 +21,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const NewPakeepUtils = ({ open = !true, handleNewPakeepSave, widthOfContainer,...newPakeepUtilsProps }) => {
+const NewPakeepUtils = ({ open = !true, handleNewPakeepSave, widthOfContainer, ...newPakeepUtilsProps }) => {
   const classes = useStyles();
 
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
@@ -31,14 +31,12 @@ const NewPakeepUtils = ({ open = !true, handleNewPakeepSave, widthOfContainer,..
     handleNewPakeepSave();
   };
 
+  const [ref, { width: widthOfCButtonConatiner }] = useMeasure();
 
-  const [ref, { width:widthOfCButtonConatiner }] = useMeasure();
-
-
-  const correctWidthOfContainer = widthOfContainer - widthOfCButtonConatiner
+  const correctWidthOfContainer = widthOfContainer - widthOfCButtonConatiner;
   const iconUtilsProps = {
     ...newPakeepUtilsProps,
-    widthOfContainer:correctWidthOfContainer
+    widthOfContainer: correctWidthOfContainer
   };
 
   return (
@@ -51,7 +49,7 @@ const NewPakeepUtils = ({ open = !true, handleNewPakeepSave, widthOfContainer,..
           </Button>
         </Box>
         <Box className={clsx(classes.buttonWrapper, classes.button)}>
-          <Button color={'primary'} startIcon={<SaveIcon />} onClick={handleNewPakeepSubmit}>
+          <Button color={'primary'} startIcon={<SaveRoundedIcon />} onClick={handleNewPakeepSubmit}>
             Save
           </Button>
         </Box>
