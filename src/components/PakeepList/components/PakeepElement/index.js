@@ -129,7 +129,6 @@ const PakeepElement = ({
           events={events}
           pakeepId={id}
           handleDeleteLabelFromPakeepFunc={handleDeleteLabelFromPakeepThunk}
-          changeLabelItemFunc={changeLabelItemThunk}
         />
 
         <Grow in={hover}>
@@ -167,7 +166,6 @@ const mapStateToProps = ({ settings: { utilsViewLikeInGoogleKeep }, app: { label
 const mapDispatchToProps = dispatch => ({
   handleDeleteLabelFromPakeepThunk: (pakeepId, labelId) =>
     dispatch(handleDeleteLabelFromPakeepThunk(pakeepId, labelId)),
-  changeLabelItemThunk: (labelId, property) => dispatch(changeLabelItemThunk(labelId, property))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(PakeepElement);

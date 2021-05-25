@@ -2,17 +2,13 @@ import PropTypes from 'prop-types';
 import { Grid, makeStyles } from '@material-ui/core';
 import LabelPart from './components/LabelPart';
 import EventsPart from './components/EventsPart';
+import { changeLabelItemThunk } from 'store/modules/App/operations';
+import {connect} from 'react-redux'
 
 const useStyles = makeStyles(theme => ({
   labelsContainer: { marginTop: theme.spacing(0.8) }
 }));
-const AttributeGroup = ({
-  events =[],
-  labels,
-  handleDeleteLabelFromPakeepFunc,
-  pakeepId,
-  changeLabelItemFunc
-}) => {
+const AttributeGroup = ({ events = [], labels, handleDeleteLabelFromPakeepFunc, pakeepId, changeLabelItemThunk }) => {
   const classes = useStyles();
 
   return (
@@ -21,7 +17,7 @@ const AttributeGroup = ({
         labels={labels}
         handleDeleteLabelFromPakeepFunc={handleDeleteLabelFromPakeepFunc}
         pakeepId={pakeepId}
-        changeLabelItemFunc={changeLabelItemFunc}
+        changeLabelItemFunc={changeLabelItemThunk}
       />
       {/* <EventsPart events={events}/> */}
     </Grid>
@@ -29,14 +25,15 @@ const AttributeGroup = ({
 };
 
 AttributeGroup.propTypes = {
-  changeLabelItemFunc: PropTypes.func,
+  changeLabelItemThunk: PropTypes.func,
   events: PropTypes.array,
   handleDeleteLabelFromPakeepFunc: PropTypes.func,
   labels: PropTypes.array,
   pakeepId: PropTypes.string
-}
+};
 
+const mapDispatchToProps = dispatch => ({
+  changeLabelItemThunk: (labelId, property) => dispatch(changeLabelItemThunk(labelId, property))
+});
 
-export default AttributeGroup;
-
-
+export default connect(null, mapDispatchToProps)(AttributeGroup);
