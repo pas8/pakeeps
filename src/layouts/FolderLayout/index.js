@@ -1,4 +1,4 @@
-import { Grid, makeStyles } from '@material-ui/core';
+import { Grid, IconButton, makeStyles } from '@material-ui/core';
 import Folders from 'components/Folders';
 import { useFolders } from 'hooks/useFolders.hook';
 import PropTypes from 'prop-types';
@@ -15,20 +15,50 @@ import {
   getFolders,
   getMenuOpenStatus,
   getDrawerWidth,
-  getLabels
+  getLabels,
+  getDefaultFolderArr
 } from 'store/modules/App/selectors';
-import { getNavigationViewLike, getPositionOfFolderViewWithPakeepView } from 'store/modules/Settings/selectors';
+import {
+  getIsFolderViewWithPakeepViewAlignToCenter,
+  getNavigationViewLike,
+  getPositionOfFolderViewWithPakeepView
+} from 'store/modules/Settings/selectors';
+import ArrowForwardIosOutlinedIcon from '@material-ui/icons/ArrowForwardIosOutlined';
+import { themeColors } from 'components/theme';
 
 const useStyles = makeStyles(theme => ({
-  container: {
-    '& nav': ({ positionOfFolderViewWithPakeepViewIsBottom }) =>
-      !positionOfFolderViewWithPakeepViewIsBottom && {
-        position: null,
-        bottom: 0,
-        left: 0,
-        right: 0
+  container: ({ positionOfFolderViewWithPakeepViewIsBottom, positionOfFolderViewWithPakeepViewIsRight }) => ({
+    // justifyContent: positionOfFolderViewWithPakeepViewIsBottom && 'center',
+    '& nav': positionOfFolderViewWithPakeepViewIsBottom
+      ? {
+          zIndex: 92,
+          position: 'fixed',
+          bottom: 0
+        }
+      : {
+          position: 'fixed',
+          bottom: 0,
+          top: 0,
+          [positionOfFolderViewWithPakeepViewIsRight ? 'right' : 'left']: 0
+        }
+  }),
+  arrowButton: ({ positionOfFolderViewWithPakeepViewIsBottom, positionOfFolderViewWithPakeepViewIsRight }) => ({
+    zIndex: 96,
+    position: 'fixed',
+    bottom: positionOfFolderViewWithPakeepViewIsBottom ? 0 : '50%',
+    [positionOfFolderViewWithPakeepViewIsRight ? 'right' : 'left']: positionOfFolderViewWithPakeepViewIsBottom
+      ? '50%'
+      : 0,
+    transform: `rotate(${
+      positionOfFolderViewWithPakeepViewIsBottom ? 270 : positionOfFolderViewWithPakeepViewIsRight ? 180 : 0
+    }deg)`,
+    '& svg': {
+      color: themeColors.whiteRgbaColorWith0dot42valueOfAlfaCanal,
+      '&:hover': {
+        color: themeColors.whiteRgbaColorWith0dot8valueOfAlfaCanal
       }
-  }
+    }
+  })
 }));
 
 const FolderLayout = ({
@@ -43,17 +73,24 @@ const FolderLayout = ({
   drawerWidth,
   navigationViewLike,
   labels,
-  positionOfFolderViewWithPakeepView
+  positionOfFolderViewWithPakeepView,
+  isFolderViewWithPakeepViewAlignToCenter,
+  defaultFolderArr
 }) => {
-  const positionOfFolderViewWithPakeepViewIsBottom = positionOfFolderViewWithPakeepView === 'center';
+  const positionOfFolderViewWithPakeepViewIsBottom = positionOfFolderViewWithPakeepView === 'bottom';
   const positionOfFolderViewWithPakeepViewIsRight = positionOfFolderViewWithPakeepView === 'right';
-  const foldersArr = useFolders(folderPropertyies, { labels });
-  console.log(folders);
-  useEffect(() => handleFoldersThunk(foldersArr), [folderPropertyies]);
+  const positionOfFolderViewWithPakeepViewIsLeft = positionOfFolderViewWithPakeepView === 'left';
+
+  const foldersArr = useFolders(folderPropertyies, { labels, defaultFolderArr });
+
+  const [isFolderOpen, setIsFolderOpen] = useState(false);
+  const marginValue = 8;
 
   const handleChange = (e, idx) => handleCurrentFolderPropertyIdxThunk(idx);
+  const handleHideFolder = () => setIsFolderOpen(false);
 
-  const classes = useStyles({ positionOfFolderViewWithPakeepViewIsBottom });
+  const [margin, setMargin] = useState(0);
+  const [isSizeOfFoldersMoreThanSize, setIsSizeOfFoldersMoreThanSize] = useState(false);
 
   const foldersProps = {
     handleChange,
@@ -61,26 +98,57 @@ const FolderLayout = ({
     value: currentFolderPropertyIdx,
     handleDrawerWidthThunk,
     isMenuOpen,
+    isFolderOpen,
+    handleHideFolder,
     navigationViewLike,
-    positionOfFolderViewWithPakeepViewIsBottom
+    positionOfFolderViewWithPakeepViewIsBottom,
+    positionOfFolderViewWithPakeepViewIsRight,
+    isFolderViewWithPakeepViewAlignToCenter,
+    setMargin,
+    isSizeOfFoldersMoreThanSize,
+    setIsSizeOfFoldersMoreThanSize
   };
+
+  useEffect(() => handleFoldersThunk(foldersArr), [folderPropertyies]);
+  useEffect(() => !isFolderOpen && drawerWidth !== 0 && handleDrawerWidthThunk(0), [isFolderOpen, drawerWidth]);
+
+  const classes = useStyles({ positionOfFolderViewWithPakeepViewIsBottom, positionOfFolderViewWithPakeepViewIsRight });
+
   return (
     <Grid
       container
       className={classes.container}
       wrap={'nowrap'}
-      direction={
-        positionOfFolderViewWithPakeepViewIsRight
-          ? 'row-reverse'
-          : positionOfFolderViewWithPakeepViewIsBottom
-          ? 'column-reverse'
-          : 'row'
-      }
+      alignItems={'center'}
+      direction={positionOfFolderViewWithPakeepViewIsBottom ? 'column-reverse' : 'row'}
     >
-      <nav style={{ minWidth: drawerWidth }}>
+      {!isFolderOpen && (
+        <Grid className={classes.arrowButton}>
+          <IconButton onClick={() => setIsFolderOpen(true)} size={'small'}>
+            <ArrowForwardIosOutlinedIcon />
+          </IconButton>
+        </Grid>
+      )}
+      <nav
+        style={{
+          minWidth: drawerWidth,
+          marginLeft: isSizeOfFoldersMoreThanSize && positionOfFolderViewWithPakeepViewIsBottom && margin,
+          display: 'flex',
+          // width:'100%',
+          marginRight: positionOfFolderViewWithPakeepViewIsRight ? marginValue : 0
+        }}
+      >
         <Folders {...foldersProps} />
       </nav>
-      <Grid item style={{ width: '100%' }}>
+      <Grid
+        item
+        style={{
+          width: '100%',
+          marginLeft: positionOfFolderViewWithPakeepViewIsLeft && drawerWidth + marginValue,
+          marginRight: positionOfFolderViewWithPakeepViewIsRight && drawerWidth + marginValue,
+          transition: 'all 0.4s ease 0s'
+        }}
+      >
         {children}
       </Grid>
     </Grid>
@@ -97,17 +165,22 @@ FolderLayout.propTypes = {
 };
 
 const mapStateToProps = ({
-  app: { folderPropertyies, currentFolderPropertyIdx, folders, isMenuOpen, drawerWidth, labels },
-  settings: { navigationViewLike, positionOfFolderViewWithPakeepView }
+  app: { folderPropertyies, currentFolderPropertyIdx, folders, isMenuOpen, drawerWidth, labels, defaultFolderArr },
+  settings: { navigationViewLike, positionOfFolderViewWithPakeepView, isFolderViewWithPakeepViewAlignToCenter }
 }) => ({
   folderPropertyies: getFolderPropertyies(folderPropertyies),
   currentFolderPropertyIdx: getCurrentFolderPropertyIdx(currentFolderPropertyIdx),
   folders: getFolders(folders),
+  defaultFolderArr: getDefaultFolderArr(defaultFolderArr),
   labels: getLabels(labels),
   isMenuOpen: getMenuOpenStatus(isMenuOpen),
   drawerWidth: getDrawerWidth(drawerWidth),
+
   navigationViewLike: getNavigationViewLike(navigationViewLike),
-  positionOfFolderViewWithPakeepView: getPositionOfFolderViewWithPakeepView(positionOfFolderViewWithPakeepView)
+  positionOfFolderViewWithPakeepView: getPositionOfFolderViewWithPakeepView(positionOfFolderViewWithPakeepView),
+  isFolderViewWithPakeepViewAlignToCenter: getIsFolderViewWithPakeepViewAlignToCenter(
+    isFolderViewWithPakeepViewAlignToCenter
+  )
 });
 
 const mapDispatchToProps = dispatch => ({

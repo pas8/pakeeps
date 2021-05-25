@@ -5,8 +5,10 @@ const settingsInitialState = {
   viewOfThemeChangerButton: 'iconButton', // 'iconButton' ||  'switch'
   maxSnack: 4,
   utilsViewLikeInGoogleKeep: false,
+
   navigationViewLike:'pakeeps',  //'telegram' || 'googleKeep' || 'pakeeps'
-  positionOfFolderViewWithPakeepView:'left'  //'left' || 'center' || 'right'
+  positionOfFolderViewWithPakeepView:'left',  //'left' || 'bottom' || 'right'
+  isFolderViewWithPakeepViewAlignToCenter:!true,
 };
 
 const settingsReducer = createReducer(settingsInitialState)({

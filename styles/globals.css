@@ -1,6 +1,9 @@
 html,
 body {
   min-height: 116vh;
+  overflow: visible !important;
+  overflow-x: hidden !important;
+  padding: 0 !important;
 }
 
 a {
@@ -19,9 +22,11 @@ ul {
 
 *::-webkit-scrollbar {
   width: 0.42em;
+  height: 0.42em;
 }
 *::-webkit-scrollbar-track {
   /* border-left: 1px solid rgba(255, 255, 255, 0.2); */
+  border: none;
   background: transparent;
 }
 *::-webkit-scrollbar-thumb {

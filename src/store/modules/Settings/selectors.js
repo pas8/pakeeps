@@ -5,3 +5,4 @@ export const getNavigationViewLike = createSelector(
   navigationViewLike => navigationViewLike
 );
 export const getPositionOfFolderViewWithPakeepView = createSelector([position => position], position => position);
+export const getIsFolderViewWithPakeepViewAlignToCenter = createSelector([bool => bool], bool => bool);
