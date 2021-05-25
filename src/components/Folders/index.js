@@ -198,7 +198,6 @@ const Folders = ({
     handleChange,
     value
   };
-  console.log(buttonSize);
   // console.log(isSizeOfFoldersMoreThanSize)
   useEffect(() => {
     setMargin(positionOfFolderViewWithPakeepViewIsBottom && foldersSize - windowSize - theme.spacing(4 + 1));

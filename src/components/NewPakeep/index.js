@@ -11,9 +11,24 @@ import { connect } from 'react-redux';
 import { useCookie, useMeasure, usePageLeave } from 'react-use';
 import _ from 'lodash';
 import { addNewPaKeepThunk } from 'store/modules/App/operations';
+import { themeColors } from 'components/theme';
 
 const useStyles = makeStyles(theme => ({
-  container: { marginTop: theme.spacing(8) },
+  container: {
+    marginTop: theme.spacing(8),
+
+    '& .MuiInputBase-root': {
+      paddingRight: theme.spacing(4.8)
+    },
+
+    '& .MuiOutlinedInput-multiline': {
+      padding: theme.spacing(2, 6, 6, 1.4)
+    },
+    '& input,textarea': {
+      caretColor: themeColors.primaryMain
+    }
+  },
+
   wrapper: { padding: theme.spacing(0), backgroundColor: 'transparent', position: 'relative' },
   hidden: { display: 'none' },
   inputTitle: { padding: 0 },
@@ -42,7 +57,7 @@ const NewPaKeep = ({ pakeeps, addNewPaKeepThunk }) => {
     bookmark: false,
     favorite: false,
     color: 'transparent',
-    labels: []
+    labels: ['label3', 'label1', 'label0']
   };
 
   const [state, setState] = useState(nulittyState);
@@ -50,7 +65,7 @@ const NewPaKeep = ({ pakeeps, addNewPaKeepThunk }) => {
 
   useEffect(() => _.isEqual(state, nulittyState) && setState(JSON.parse(value)), []);
 
-  usePageLeave(() =>  updateCookie(state));
+  usePageLeave(() => updateCookie(state));
 
   const [focus, setFocus] = useState(false);
   const [placeholder, setPlaceholder] = useState('Write a title or press ctrl + Alt + 8 to skip a title');
@@ -73,6 +88,13 @@ const NewPaKeep = ({ pakeeps, addNewPaKeepThunk }) => {
   const handleSetFavoritePakeep = () => setState(state => ({ ...state, favorite: !state.favorite }));
   const handleSetBookmarkPakeep = () => setState(state => ({ ...state, bookmark: !state.bookmark }));
   const handleSetColorPakeep = () => setState(state => ({ ...state, color: !state.color }));
+
+  const handleAddNewLabel = idWhichShouldBeAdded => {
+    setState(state => ({ ...state, labels: [...state.labels, idWhichShouldBeAdded] }));
+  };
+  const handleDeleteNewLabel = idWhichShouldBeDeleted => {
+    setState(state => ({ ...state, labels: _.filter(state.labels, id => id !== idWhichShouldBeDeleted) }));
+  };
 
   useEffect(() => {
     if (focus && state.title !== '') setPlaceholder('Press enter to end  writing the  title');
@@ -108,7 +130,10 @@ const NewPaKeep = ({ pakeeps, addNewPaKeepThunk }) => {
     handleNewPakeepSave,
     handleSetWidth: handleSetWidthInNewPakeep,
     fullWidthStatus: fullWidthOfNewPakeepContainer,
-    widthOfContainer
+    widthOfContainer,
+    handleAddNewLabel,
+    handleDeleteNewLabel,
+    selectedLabels: state.labels
   };
 
   return (
@@ -134,13 +159,13 @@ const NewPaKeep = ({ pakeeps, addNewPaKeepThunk }) => {
             multiline={writingText ? true : showUtils ? true : false}
             fullWidth
             autoFocus={true}
+            autoComplete={false}
             rowsMax={42}
             onFocus={setFocusIsTrue}
             onBlur={setFocusIsFalse}
           />
         </Box>
 
-        {/* </form> */}
         <NewPakeepUtils {...newPakeepUtils} />
         <Box className={classes.showUtils} onClick={setUtilsIsVisible}>
           <IconButton>

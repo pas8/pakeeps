@@ -9,6 +9,9 @@ export const getFilteredLabels = createArraySelector([getPakeeplLabels, getGloba
   _.find(globalLabels, ({ id }) => id === pakeepId)
 );
 
+
+
+
 export const getFolderPropertyies = createSelector(
   [folderPropertyies => folderPropertyies],
   folderPropertyies => folderPropertyies
