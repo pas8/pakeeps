@@ -21,7 +21,7 @@ const LabelsList = ({ handleAddNewLabel, handleDeleteNewLabel, globalLabels, sel
 
         const onClick = () => (isChecked ? handleDeleteNewLabel(id) : handleAddNewLabel(id));
         return (
-          <MenuItem disableGutters onClick={onClick}>
+          <MenuItem disableGutters onClick={onClick} key={`newPakeep-label-${id}`}>
             <Checkbox checked={isChecked} /> <ListItemText primary={title} />
           </MenuItem>
         );

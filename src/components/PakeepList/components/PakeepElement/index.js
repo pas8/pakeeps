@@ -11,7 +11,7 @@ import _, { property } from 'lodash';
 import SkeletonView from './components/SkeletonView';
 import { getFilteredLabels } from 'store/modules/App/selectors';
 import { changeLabelItemThunk, handleDeleteLabelFromPakeepThunk } from 'store/modules/App/operations';
-import {useSwipeable} from 'react-swipeable'
+import { useSwipeable } from 'react-swipeable';
 const useStyles = makeStyles(theme => ({
   paper: {
     padding: theme.spacing(1.96),
@@ -100,9 +100,9 @@ const PakeepElement = ({
     handleSetColorPakeep: handleSetColorPakeep,
     iconsCloser: true
   };
- 
+
   const handlers = useSwipeable({
-    onSwiped: (eventData) => console.log("User Swiped!", eventData),
+    onSwiped: eventData => console.log('User Swiped!', eventData)
   });
 
   const setLabelHoverStatusIsFalse = () => setLabelHover(false);
@@ -110,9 +110,9 @@ const PakeepElement = ({
   useEffect(() => setLoaded(true), []);
 
   if (!loaded) return <SkeletonView />;
- 
+
   return (
-    <Grid item onMouseEnter={setHoverIsTrue} onMouseLeave={setHoverIsFalse} ref={ref} >
+    <Grid item onMouseEnter={setHoverIsTrue} onMouseLeave={setHoverIsFalse} ref={ref}>
       <Paper
         variant={'outlined'}
         {...handlers}
@@ -123,14 +123,15 @@ const PakeepElement = ({
           <Typography variant={'h5'}>{title}</Typography>
         </Grid>
         <Grid item>{text}</Grid>
+
         <AttributeGroup
           labels={filteredLabels}
           events={events}
-          globalLabels={globalLabels}
-          handleDeleteLabelFromPakeepThunk={handleDeleteLabelFromPakeepThunk}
-          changeLabelItemThunk={changeLabelItemThunk}
           pakeepId={id}
+          handleDeleteLabelFromPakeepFunc={handleDeleteLabelFromPakeepThunk}
+          changeLabelItemFunc={changeLabelItemThunk}
         />
+
         <Grow in={hover}>
           <Grid className={classes.iconsUtils}>
             <IconsUtils {...iconsUtilsProps} />
@@ -156,15 +157,17 @@ PakeepElement.propTypes = {
   text: PropTypes.string,
   title: PropTypes.string,
   utilsViewLikeInGoogleKeep: PropTypes.any
-}
+};
 
-const mapStateToProps = ({ settings: { utilsViewLikeInGoogleKeep }, app: { labels:globalLabels } }, { labels }) => ({
+const mapStateToProps = ({ settings: { utilsViewLikeInGoogleKeep }, app: { labels: globalLabels } }, { labels }) => ({
   utilsViewLikeInGoogleKeep,
-  filteredLabels: getFilteredLabels(labels,globalLabels)
+  filteredLabels: getFilteredLabels(labels, globalLabels)
 });
+// const mapDispatchToProps = dispatch => ({  })
 const mapDispatchToProps = dispatch => ({
-  handleDeleteLabelFromPakeepThunk: (pakeepId,labelId) => dispatch(handleDeleteLabelFromPakeepThunk(pakeepId,labelId)),
-  changeLabelItemThunk:(labelId,property) => dispatch(changeLabelItemThunk(labelId,property))
+  handleDeleteLabelFromPakeepThunk: (pakeepId, labelId) =>
+    dispatch(handleDeleteLabelFromPakeepThunk(pakeepId, labelId)),
+  changeLabelItemThunk: (labelId, property) => dispatch(changeLabelItemThunk(labelId, property))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(PakeepElement);

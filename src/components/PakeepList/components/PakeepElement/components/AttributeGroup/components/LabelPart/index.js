@@ -9,7 +9,7 @@ import MenuOfLabelPart from './components/Menu';
 import { themeColors } from 'components/theme';
 import { useFindIcon } from 'hooks/useFindIcon.hook';
 
-const LabelPart = ({ labels, handleDeleteLabelFromPakeepThunk, changeLabelItemThunk, pakeepId }) => {
+const LabelPart = ({ labels, handleDeleteLabelFromPakeepFunc, changeLabelItemFunc, pakeepId }) => {
   const nullityOfMenuState = { mouseX: null, mouseY: null, id: null, variant: '', labelIconName: '' };
   const [menuState, setMenuState] = useState(nullityOfMenuState);
 
@@ -18,14 +18,14 @@ const LabelPart = ({ labels, handleDeleteLabelFromPakeepThunk, changeLabelItemTh
   const handleClose = () => setMenuState(nullityOfMenuState);
 
   const handleDeleteLabel = () => {
-    handleDeleteLabelFromPakeepThunk(pakeepId, menuState.id);
+    handleDeleteLabelFromPakeepFunc(pakeepId, menuState.id);
     handleClose();
   };
-  const handleChangeLabelColor = color => changeLabelItemThunk(menuState.id, { color });
-  const handleChangeLabelIconName = iconName => changeLabelItemThunk(menuState.id, { iconName });
+  const handleChangeLabelColor = color => changeLabelItemFunc(menuState.id, { color });
+  const handleChangeLabelIconName = iconName => changeLabelItemFunc(menuState.id, { iconName });
   const handleChangeLabelVariant = () => {
     const variant = menuState.variant === 'default' ? 'outlined' : 'default';
-    changeLabelItemThunk(menuState.id, { variant });
+    changeLabelItemFunc(menuState.id, { variant });
     setMenuState(state => ({ ...state, variant }));
   };
   useEffect(() => {
@@ -79,8 +79,8 @@ const LabelPart = ({ labels, handleDeleteLabelFromPakeepThunk, changeLabelItemTh
 };
 
 LabelPart.propTypes = {
-  changeLabelItemThunk: PropTypes.func,
-  handleDeleteLabelFromPakeepThunk: PropTypes.func,
+  changeLabelItemFunc: PropTypes.func,
+  handleDeleteLabelFromPakeepFunc: PropTypes.func,
   labels: PropTypes.shape({
     map: PropTypes.func
   }),

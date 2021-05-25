@@ -2,19 +2,16 @@ import PropTypes from 'prop-types';
 import { Grid, makeStyles } from '@material-ui/core';
 import LabelPart from './components/LabelPart';
 import EventsPart from './components/EventsPart';
-import _ from 'lodash';
 
 const useStyles = makeStyles(theme => ({
-  label: { marginTop: theme.spacing(0) },
   labelsContainer: { marginTop: theme.spacing(0.8) }
 }));
 const AttributeGroup = ({
-  events,
+  events =[],
   labels,
-  globalLabels,
-  handleDeleteLabelFromPakeepThunk,
+  handleDeleteLabelFromPakeepFunc,
   pakeepId,
-  changeLabelItemThunk
+  changeLabelItemFunc
 }) => {
   const classes = useStyles();
 
@@ -22,9 +19,9 @@ const AttributeGroup = ({
     <Grid spacing={1} container className={classes.labelsContainer}>
       <LabelPart
         labels={labels}
-        handleDeleteLabelFromPakeepThunk={handleDeleteLabelFromPakeepThunk}
+        handleDeleteLabelFromPakeepFunc={handleDeleteLabelFromPakeepFunc}
         pakeepId={pakeepId}
-        changeLabelItemThunk={changeLabelItemThunk}
+        changeLabelItemFunc={changeLabelItemFunc}
       />
       {/* <EventsPart events={events}/> */}
     </Grid>
@@ -32,8 +29,14 @@ const AttributeGroup = ({
 };
 
 AttributeGroup.propTypes = {
+  changeLabelItemFunc: PropTypes.func,
   events: PropTypes.array,
-  labels: PropTypes.array
-};
+  handleDeleteLabelFromPakeepFunc: PropTypes.func,
+  labels: PropTypes.array,
+  pakeepId: PropTypes.string
+}
+
 
 export default AttributeGroup;
+
+

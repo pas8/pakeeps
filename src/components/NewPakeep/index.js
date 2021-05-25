@@ -1,17 +1,16 @@
-import { Box, Grid, IconButton, makeStyles, Paper, TextField } from '@material-ui/core';
 import { useEffect, useState } from 'react';
+import { connect } from 'react-redux';
+import _ from 'lodash';
 import clsx from 'clsx';
-import CheckBoxOutlinedIcon from '@material-ui/icons/CheckBoxOutlined';
-import NewPakeepUtils from './components/Utils';
+import { useCookie, useMeasure, usePageLeave } from 'react-use';
+import { nanoid } from 'nanoid';
+import { Box, Grid, IconButton, makeStyles, Paper, TextField } from '@material-ui/core';
 import VisibilityOutlinedIcon from '@material-ui/icons/VisibilityOutlined';
 import VisibilityOffOutlinedIcon from '@material-ui/icons/VisibilityOffOutlined';
-import BookmarkBorderIcon from '@material-ui/icons/BookmarkBorder';
-import BookmarkIcon from '@material-ui/icons/Bookmark';
-import { connect } from 'react-redux';
-import { useCookie, useMeasure, usePageLeave } from 'react-use';
-import _ from 'lodash';
 import { addNewPaKeepThunk } from 'store/modules/App/operations';
 import { themeColors } from 'components/theme';
+import NewPakeepUtils from './components/Utils';
+import AttributesOfNewPakeep from './components/Attributes';
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -28,7 +27,6 @@ const useStyles = makeStyles(theme => ({
       caretColor: themeColors.primaryMain
     }
   },
-
   wrapper: { padding: theme.spacing(0), backgroundColor: 'transparent', position: 'relative' },
   hidden: { display: 'none' },
   inputTitle: { padding: 0 },
@@ -48,7 +46,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const NewPaKeep = ({ pakeeps, addNewPaKeepThunk }) => {
+const NewPaKeep = ({ addNewPaKeepThunk }) => {
   const classes = useStyles();
 
   const nulittyState = {
@@ -56,6 +54,7 @@ const NewPaKeep = ({ pakeeps, addNewPaKeepThunk }) => {
     text: '',
     bookmark: false,
     favorite: false,
+    id: nanoid(),
     color: 'transparent',
     labels: ['label3', 'label1', 'label0']
   };
@@ -117,6 +116,14 @@ const NewPaKeep = ({ pakeeps, addNewPaKeepThunk }) => {
   // };
   const handleSetWidthInNewPakeep = () => setFullWidthOfNewPakeepContainer(!fullWidthOfNewPakeepContainer);
 
+  const handleDeleteLabelFromPakeepFunc = (u, y) => {
+    console.log(u, y);
+  };
+
+  const changeLabelItemFunc = (u, y) => {
+    console.log(u, y);
+  };
+
   const [ref, { width: widthOfContainer }] = useMeasure();
 
   const newPakeepUtils = {
@@ -134,6 +141,12 @@ const NewPaKeep = ({ pakeeps, addNewPaKeepThunk }) => {
     handleAddNewLabel,
     handleDeleteNewLabel,
     selectedLabels: state.labels
+  };
+  const attributesOfNewPakeepProps = {
+    pakeepId: state.id,
+    handleDeleteLabelFromPakeepFunc,
+    changeLabelItemFunc,
+    labels: state.labels
   };
 
   return (
@@ -155,7 +168,7 @@ const NewPaKeep = ({ pakeeps, addNewPaKeepThunk }) => {
             value={writingText ? state.text : state.title}
             onChange={handleState}
             name={writingText ? 'text' : 'title'}
-            rows={writingText ? 8 : showUtils ? 4 : 1}
+            rows={showUtils ? 6 : 1}
             multiline={writingText ? true : showUtils ? true : false}
             fullWidth
             autoFocus={true}
@@ -166,7 +179,9 @@ const NewPaKeep = ({ pakeeps, addNewPaKeepThunk }) => {
           />
         </Box>
 
+        {showUtils && <AttributesOfNewPakeep {...attributesOfNewPakeepProps} />}
         <NewPakeepUtils {...newPakeepUtils} />
+
         <Box className={classes.showUtils} onClick={setUtilsIsVisible}>
           <IconButton>
             {!showUtils ? (
@@ -181,7 +196,6 @@ const NewPaKeep = ({ pakeeps, addNewPaKeepThunk }) => {
   );
 };
 
-const mapStateToProps = ({ app: { pakeeps } }) => ({ pakeeps });
 const mapDispatchToProps = dispatch => ({ addNewPaKeepThunk: data => dispatch(addNewPaKeepThunk(data)) });
 
-export default connect(mapStateToProps, mapDispatchToProps)(NewPaKeep);
+export default connect(null, mapDispatchToProps)(NewPaKeep);
