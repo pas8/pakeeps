@@ -42,10 +42,10 @@ const IconsUtils = ({
   handleSetBookmarkPakeep,
   handleSetColorPakeep,
   handleSetWidth,
-  fullWidthStatus = false,
+  isNewPakeepContainerHaveFullWidth ,
   widthOfContainer,
-  handleAddNewLabel,handleDeleteNewLabel,
-  selectedLabels= [] 
+  labelsListProps,
+  labelBargeNumber
 }) => {
   const classes = useStyles();
 
@@ -95,9 +95,10 @@ const IconsUtils = ({
       icon: LabelOutlinedIcon,
       popoverText: 'Add labels',
       name: 'labels',
-      activeIcon: labels,
+      activeIcon: !!labels.length,
       menuComponents: LabelsList,
-      menuComponentsProps: { selectedLabels,handleAddNewLabel,handleDeleteNewLabel, }
+      badgeContent:labelBargeNumber,
+      menuComponentsProps: { ...labelsListProps }
     },
     {
       icon: FavoriteBorderOutlinedIcon,
@@ -114,11 +115,11 @@ const IconsUtils = ({
       activeIcon: bookmark
     },
     {
-      icon: !fullWidthStatus ? UnfoldMoreOutlinedIcon : UnfoldLessOutlinedIcon,
-      popoverText: 'To full width',
+      icon: !isNewPakeepContainerHaveFullWidth ? UnfoldMoreOutlinedIcon : UnfoldLessOutlinedIcon,
+      popoverText: !isNewPakeepContainerHaveFullWidth ? 'To full width' : 'To smaller width',
       name: 'width',
       onClick: handleSetWidth,
-      activeIcon: fullWidthStatus,
+      activeIcon: isNewPakeepContainerHaveFullWidth,
       rotateDeg: 90,
       onlyPopover: true
     }

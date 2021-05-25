@@ -3,6 +3,7 @@ import includes from 'lodash.includes';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { getLabels } from 'store/modules/App/selectors';
+
 const useStyles = makeStyles(theme => ({
   container: {
     '& li': {
@@ -11,12 +12,19 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const LabelsList = ({ handleAddNewLabel, handleDeleteNewLabel, globalLabels, selectedLabels }) => {
+const LabelsList = ({
+  handleAddNewLabel,
+  handleDeleteNewLabel,
+  globalLabels,
+  selectedLabels,
+  handleStatusOfHideLabelView,
+  isLabelViewHidden
+}) => {
   const classes = useStyles();
 
   return (
     <Grid className={classes.container}>
-      {globalLabels.map(({ title, id }) => {
+      { globalLabels.map(({ title, id }) => {
         const isChecked = includes(selectedLabels, id);
 
         const onClick = () => (isChecked ? handleDeleteNewLabel(id) : handleAddNewLabel(id));
@@ -26,6 +34,9 @@ const LabelsList = ({ handleAddNewLabel, handleDeleteNewLabel, globalLabels, sel
           </MenuItem>
         );
       })}
+      <MenuItem disableGutters onClick={handleStatusOfHideLabelView}>
+        <ListItemText primary={isLabelViewHidden ? 'Show label view' : 'Hide label view '} />
+      </MenuItem>
     </Grid>
   );
 };
@@ -34,13 +45,13 @@ LabelsList.propTypes = {
   globalLabels: PropTypes.array,
   handleAddNewLabel: PropTypes.func,
   handleDeleteNewLabel: PropTypes.func,
+  handleStatusOfHideLabelView: PropTypes.func,
+  isLabelViewHidden: PropTypes.bool,
   selectedLabels: PropTypes.array
-}
+};
 
 const mapStateToProps = ({ app: { labels } }) => ({
   globalLabels: getLabels(labels)
 });
-
-// const mapDispatchToProps = dispatch => ({ setData: data => dispatch(setData(data)) });
 
 export default connect(mapStateToProps, null)(LabelsList);
