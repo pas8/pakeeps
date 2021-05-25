@@ -22,6 +22,7 @@ import VisibilityOutlinedIcon from '@material-ui/icons/VisibilityOutlined';
 import MoreVertOutlinedIcon from '@material-ui/icons/MoreVertOutlined';
 import FavoriteBorderOutlinedIcon from '@material-ui/icons/FavoriteBorderOutlined';
 import BookmarkBorderOutlinedIcon from '@material-ui/icons/BookmarkBorderOutlined';
+import ArchiveOutlinedIcon from '@material-ui/icons/ArchiveOutlined';
 
 export const iconsArr = [
   { icon: <AlarmOutlinedIcon />, iconName: 'alarm', id: '1' },
@@ -48,4 +49,5 @@ export const iconsArr = [
   { icon: <MoreVertOutlinedIcon />, iconName: 'more', id: '104' },
   { icon: <BookmarkBorderOutlinedIcon />, iconName: 'bookmark', id: '964' },
   { icon: <FavoriteBorderOutlinedIcon />, iconName: 'favorite', id: '968' },
+  { icon: <ArchiveOutlinedIcon />, iconName: 'archive', id: '928' },
 ];

@@ -11,12 +11,6 @@ export const getFilteredLabels = createArraySelector([getPakeeplLabels, getGloba
 
 
 
-
-export const getFolderPropertyies = createSelector(
-  [folderPropertyies => folderPropertyies],
-  folderPropertyies => folderPropertyies
-);
-
 export const getCurrentFolderPropertyIdx = createSelector(
   [currentFolderPropertyIdx => currentFolderPropertyIdx],
   currentFolderPropertyIdx => currentFolderPropertyIdx

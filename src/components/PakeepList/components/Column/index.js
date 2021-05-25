@@ -1,4 +1,4 @@
-import { makeStyles, Grid,Zoom } from '@material-ui/core';
+import { makeStyles, Grid, Zoom } from '@material-ui/core';
 import React from 'react';
 import PakeepElement from '../PakeepElement';
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
@@ -38,19 +38,17 @@ const Column = ({ column, pakeepsInColumn, lastColumn, firstColumn, folderProper
   const classes = useStyles();
   const [breakpoint] = useCustomBreakpoint();
 
+  const breakpointValues = { xs: 12, sm: 6, md: 4, lg: 3, xl: 2 };
+  const gridContainerProps = {
+    className:
+      breakpoint !== 'xs' && clsx(classes.column, lastColumn ? classes.columnLast : firstColumn && classes.columnFirst),
+
+    [breakpoint]: breakpointValues[breakpoint],
+    spacing: 8
+  };
+
   return (
-    <Grid
-      className={
-        breakpoint !== 'xs' &&
-        clsx(classes.column, lastColumn ? classes.columnLast : firstColumn && classes.columnFirst)
-      }
-      sm={6}
-      xs={12}
-      md={4}
-      lg={3}
-      xl={2}
-      spacing={8}
-    >
+    <Grid {...gridContainerProps}>
       <Droppable droppableId={column.id} direction={'vertical'}>
         {provided => (
           <Grid innerRef={provided.innerRef} {...provided.droppableProps}>
@@ -66,17 +64,16 @@ const Column = ({ column, pakeepsInColumn, lastColumn, firstColumn, folderProper
                       className={classes.columnElement}
                     >
                       <Zoom in={true}>
-                      <PakeepElement {...el} isDragging={snapshot.isDragging} idx={idx} />
+                        <PakeepElement {...el} isDragging={snapshot.isDragging} idx={idx} />
                       </Zoom>
                     </Grid>
                   )}
                 </Draggable>
               );
-
-
+              if (folderProperty === 'isArchived' && el[folderProperty]) return draggableEl;
+              if(el.isArchived) return;
               if (folderProperty === 'ALL') return draggableEl;
 
-              console.log(!el[folderProperty] && folderProperty !== 'label')
               if (el[folderProperty] && folderProperty !== 'label') return draggableEl;
               if (folderProperty === 'label' && !!_.find(el?.labels, id => id === folderId)) return draggableEl;
 

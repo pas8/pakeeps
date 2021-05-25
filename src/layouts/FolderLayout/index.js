@@ -10,7 +10,6 @@ import {
   handleDrawerWidthThunk
 } from 'store/modules/App/operations';
 import {
-  getFolderPropertyies,
   getCurrentFolderPropertyIdx,
   getFolders,
   getMenuOpenStatus,
@@ -64,7 +63,6 @@ const useStyles = makeStyles(theme => ({
 const FolderLayout = ({
   children,
   handleFoldersThunk,
-  folderPropertyies,
   currentFolderPropertyIdx,
   handleCurrentFolderPropertyIdxThunk,
   folders,
@@ -81,7 +79,7 @@ const FolderLayout = ({
   const positionOfFolderViewWithPakeepViewIsRight = positionOfFolderViewWithPakeepView === 'right';
   const positionOfFolderViewWithPakeepViewIsLeft = positionOfFolderViewWithPakeepView === 'left';
 
-  const foldersArr = useFolders(folderPropertyies, { labels, defaultFolderArr });
+  const foldersArr = useFolders( { labels, defaultFolderArr });
 
   const [isFolderOpen, setIsFolderOpen] = useState(false);
   const marginValue = 8;
@@ -109,7 +107,7 @@ const FolderLayout = ({
     setIsSizeOfFoldersMoreThanSize
   };
 
-  useEffect(() => handleFoldersThunk(foldersArr), [folderPropertyies]);
+  useEffect(() => handleFoldersThunk(foldersArr), []);
   useEffect(() => !isFolderOpen && drawerWidth !== 0 && handleDrawerWidthThunk(0), [isFolderOpen, drawerWidth]);
 
   const classes = useStyles({ positionOfFolderViewWithPakeepViewIsBottom, positionOfFolderViewWithPakeepViewIsRight });
@@ -158,17 +156,23 @@ const FolderLayout = ({
 FolderLayout.propTypes = {
   children: PropTypes.any,
   currentFolderPropertyIdx: PropTypes.number,
-  folderPropertyies: PropTypes.object,
+  defaultFolderArr: PropTypes.array,
+  drawerWidth: PropTypes.number,
   folders: PropTypes.array,
+  handleCurrentFolderPropertyIdxThunk: PropTypes.func,
+  handleDrawerWidthThunk: PropTypes.func,
   handleFoldersThunk: PropTypes.func,
-  handleCurrentFolderPropertyIdxThunk: PropTypes.func
-};
+  isFolderViewWithPakeepViewAlignToCenter: PropTypes.bool,
+  isMenuOpen: PropTypes.bool,
+  labels: PropTypes.array,
+  navigationViewLike: PropTypes.any,
+  positionOfFolderViewWithPakeepView: PropTypes.string
+}
 
 const mapStateToProps = ({
-  app: { folderPropertyies, currentFolderPropertyIdx, folders, isMenuOpen, drawerWidth, labels, defaultFolderArr },
+  app: {  currentFolderPropertyIdx, folders, isMenuOpen, drawerWidth, labels, defaultFolderArr },
   settings: { navigationViewLike, positionOfFolderViewWithPakeepView, isFolderViewWithPakeepViewAlignToCenter }
 }) => ({
-  folderPropertyies: getFolderPropertyies(folderPropertyies),
   currentFolderPropertyIdx: getCurrentFolderPropertyIdx(currentFolderPropertyIdx),
   folders: getFolders(folders),
   defaultFolderArr: getDefaultFolderArr(defaultFolderArr),
