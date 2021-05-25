@@ -37,5 +37,5 @@ export const toDeleteLabelFromPakeep = (currentPakeep, labels) => ({
   labels
 });
 
-export const toHandleUsePreviuos = boolValue => ({ type: types.HANDLE_USE_PREVIUOS, boolValue });
+export const toSetPreviusOrderNames = orderNames => ({ type: types.HANDLE_SET_PREVIUOS_ORDER_NAMES, orderNames });
 export const toHandleDrawerWidth = drawerWidth => ({ type: types.HANDLE_DRAWER_WIDTH, drawerWidth });

@@ -12,7 +12,7 @@ import {
   toChangeFolders,
   toChangeLabelItem,
   toDeleteLabelFromPakeep,
-  toHandleUsePreviuos,
+  toSetPreviusOrderNames,
   toHandleDrawerWidth
 } from './actions';
 
@@ -77,13 +77,14 @@ export const handleDeleteLabelFromPakeepThunk = (pakeepId, labelId) => (dispatch
 
   const currentPakeep = find(pakeeps, ({ id }) => pakeepId === id);
   const labels = filter(currentPakeep.labels, id => labelId !== id);
-  
+
   dispatch(toDeleteLabelFromPakeep(currentPakeep, labels));
-};
-export const handleUsePreviuosValue = boolValue => dispatch => {
-  dispatch(toHandleUsePreviuos(boolValue));
 };
 
 export const handleDrawerWidthThunk = drawerWidth => dispatch => {
   dispatch(toHandleDrawerWidth(drawerWidth));
+};
+
+export const handleSetPreviusOrderNames = orderNames => dispatch => {
+  dispatch(toSetPreviusOrderNames(orderNames));
 };

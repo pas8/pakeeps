@@ -221,7 +221,7 @@ const initialState = {
   scrollDirectionName: 'up',
   currentFolderPropertyIdx: 0,
   drawerWidth: 0,
-  isUsePreviuos: false
+  isUsePreviuosOrder: false
 };
 
 const AppReducer = createReducer(initialState)({
@@ -245,7 +245,7 @@ const AppReducer = createReducer(initialState)({
   }),
   [types.DELETE_LABEL_FROM_PAKEEP]: (state, { currentPakeep, labels }) => ({
     ...state,
-    isUsePreviuos: true,
+    isUsePreviuosOrder: true,
     pakeeps: [...filter(state.pakeeps, ({ id }) => currentPakeep.id !== id), { ...currentPakeep, labels }]
   }),
 
@@ -255,13 +255,12 @@ const AppReducer = createReducer(initialState)({
   }),
   [types.SET_NEW_ORDER_NAMES]: (state, { newOrder }) => ({
     ...state,
-    // isUsePreviuos:false,
     pakeepsOrderNames: newOrder
   }),
-  [types.HANDLE_USE_PREVIUOS]: (state, { boolValue }) => ({
+  [types.HANDLE_SET_PREVIUOS_ORDER_NAMES]: (state, { orderNames }) => ({
     ...state,
-    // isUsePreviuos:false,
-    isUsePreviuos: boolValue
+    isUsePreviuosOrder: false,
+    pakeepsOrderNames: orderNames
   }),
 
   [types.HANDLE_DRAWER_WIDTH]: (state, { drawerWidth }) => ({ ...state, drawerWidth }),

@@ -1,20 +1,20 @@
 import PropTypes from 'prop-types';
 import { Grid, makeStyles, CircularProgress } from '@material-ui/core';
 import { connect } from 'react-redux';
-import {
-  addNewPaKeepThunk,
-  changePakeepColumnsDataThunk,
-  changeTwoPakeepColumnsDataThunk,
-  deletePakeepThunk,
-  handlePakeepsOrderNamesThunk,
-  handleUsePreviuosValue
-} from 'store/modules/App/operations';
+import { handleSetPreviusOrderNames, handlePakeepsOrderNamesThunk } from 'store/modules/App/operations';
 import { useMakeDraggableArr } from 'hooks/useMakeDraggableArr.hook';
 import _ from 'lodash';
 import dynamic from 'next/dynamic';
 import CenteredGrid from 'components/CenteredGrid';
 import { usePrevious } from 'react-use';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import {
+  getCurrentFolderPropertyIdx,
+  getFolders,
+  getIsUsePreviuosOrder,
+  getPakeeps,
+  getPakeepsOrderNames
+} from 'store/modules/App/selectors';
 
 const useStyles = makeStyles(theme => ({}));
 
@@ -29,29 +29,30 @@ const PakeepListContainer = dynamic(() => import('./components/Container'), {
 
 const PakeepList = ({
   pakeeps,
-  isDraggableOptimizate,
   pakeepsOrderNames: orderNames,
   handlePakeepsOrderNamesThunk,
   currentFolderPropertyIdx,
   folders,
-  handleUsePreviuosValue,
-  isUsePreviuos
+  handleSetPreviusOrderNames,
+  isUsePreviuosOrder = false
 }) => {
-
   const placeholderName = 'placeholder';
 
   const classes = useStyles();
 
   const previousPakeepsOrderNames = usePrevious(orderNames);
 
-  const pakeepsOrderNames = isUsePreviuos ? previousPakeepsOrderNames : orderNames;
+  useEffect(() => {
+    handleSetPreviusOrderNames(previousPakeepsOrderNames);
+  }, [isUsePreviuosOrder]);
+
+  const pakeepsOrderNames = orderNames;
 
   const [columns, responsiveColumnOrder] = useMakeDraggableArr(
     pakeeps,
     pakeepsOrderNames,
     handlePakeepsOrderNamesThunk
   );
-
 
   const onDragStart = () => null;
 
@@ -96,8 +97,7 @@ const PakeepList = ({
       const newOrderNames = pakeepsOrderNames.reduce(newOrderNamesReduceFunc, []);
       // console.log(newOrderNames,+toCorrect);
       // return;
-      handlePakeepsOrderNamesThunk(newOrderNames);
-      return handleUsePreviuosValue(false);
+      return handleSetPreviusOrderNames(newOrderNames);
     }
 
     const destinationArrFilterFunc = (el, idx) => {
@@ -164,8 +164,7 @@ const PakeepList = ({
     const filteredNewOrderArr = _.split(toSplitNewOrderString, '_');
 
     const newOrderNames = _.filter(filteredNewOrderArr, string => string !== toRemoveNameString);
-    handlePakeepsOrderNamesThunk(newOrderNames);
-    return handleUsePreviuosValue(false);
+    return handleSetPreviusOrderNames(newOrderNames);
   };
   // const placeholder = {
   //   title: 'Placeholder',
@@ -178,7 +177,7 @@ const PakeepList = ({
 
   // };
 
-  const flattenFolder = _.flatten(folders)
+  const flattenFolder = _.flatten(folders);
 
   const folderProperty = flattenFolder[currentFolderPropertyIdx]?.property;
   const folderId = flattenFolder[currentFolderPropertyIdx]?.id;
@@ -208,19 +207,16 @@ PakeepList.propTypes = {
 };
 
 const mapStateToProps = ({
-  app: { pakeeps, pakeepsOrderNames, currentFolderPropertyIdx, folders, isUsePreviuos },
-  settings: { isDraggableOptimizate = true }
+  app: { pakeeps, pakeepsOrderNames, currentFolderPropertyIdx, folders, isUsePreviuosOrder }
 }) => ({
-  pakeeps,
-  isDraggableOptimizate,
-  pakeepsOrderNames,
-  handlePakeepsOrderNamesThunk,
-  currentFolderPropertyIdx,
-  isUsePreviuos,
-  folders
+  pakeeps: getPakeeps(pakeeps),
+  pakeepsOrderNames: getPakeepsOrderNames(pakeepsOrderNames),
+  currentFolderPropertyIdx: getCurrentFolderPropertyIdx(currentFolderPropertyIdx),
+  isUsePreviuosOrder: getIsUsePreviuosOrder(isUsePreviuosOrder),
+  folders: getFolders(folders)
 });
 const mapDispatchToProps = dispatch => ({
-  handleUsePreviuosValue: boolValue => dispatch(handleUsePreviuosValue(boolValue)),
+  handleSetPreviusOrderNames: orderNames => dispatch(handleSetPreviusOrderNames(orderNames)),
   handlePakeepsOrderNamesThunk: newOrder => dispatch(handlePakeepsOrderNamesThunk(newOrder))
 });
 
