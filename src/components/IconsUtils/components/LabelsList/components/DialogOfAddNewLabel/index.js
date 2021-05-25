@@ -22,6 +22,10 @@ import SaveRoundedIcon from '@material-ui/icons/SaveRounded';
 import { handleAddNewGlobalLabelThunk } from 'store/modules/App/operations';
 import SteperOfDialogOfAddNewLabel from './components/Steper';
 import { Switch } from '@material-ui/core';
+import FirstStepOfSteperOfDialogOfAddNewLabel from './components/Steper/components/First';
+import SecondStepOfSteperOfDialogOfAddNewLabel from './components/Steper/components/Second';
+import ThirdStepOfSteperOfDialogOfAddNewLabel from './components/Steper/components/Third';
+import { nanoid } from 'nanoid';
 
 const useStyles = makeStyles(theme => ({}));
 
@@ -32,12 +36,13 @@ const DialogOfAddNewLabel = ({ isDialogOpen, handleCloseAddNewLabelDialog, handl
 
   const nullityOfNewLabelState = {
     title: '',
-    variant: labelVariants[0]
+    variant: labelVariants[0],
+    id:nanoid(),
+    color:''
   };
   const [newLabelState, setNewLabelState] = useState(nullityOfNewLabelState);
 
   const isLabelOutlined = newLabelState.variant === labelVariants[0];
-
 
   const handleCloseDialog = () => {
     console.log('log');
@@ -51,31 +56,24 @@ const DialogOfAddNewLabel = ({ isDialogOpen, handleCloseAddNewLabelDialog, handl
   const onChangeOfLabelVariantSwitch = () => {
     setNewLabelState(state => ({ ...state, variant: isLabelOutlined ? labelVariants[1] : labelVariants[0] }));
   };
+  const onChangeOfLabelColorRadio = ({ target: { value } }) => setNewLabelState(state => ({ ...state, color: value }));
 
   const stepsArrOfDialogOfAddNewLabel = [
     {
       title: 'Enter the title',
-      component: (
-        <TextField
-          required
-          label={'Required'}
-          variant={'outlined'}
-          color={'secondary'}
-          value={newLabelState.title}
-          onChange={onChangeOfLabelTitleInput}
-        />
-      )
+      component: FirstStepOfSteperOfDialogOfAddNewLabel,
+      componentProps: { value: newLabelState.title, onChange: onChangeOfLabelTitleInput }
     },
     {
       title: 'Chose a variant',
-      component: (
-        <FormControlLabel
-          control={<Switch checked={isLabelOutlined} onChange={onChangeOfLabelVariantSwitch} />}
-          label={'Is variant Outlined? '}
-        />
-      )
+      component: SecondStepOfSteperOfDialogOfAddNewLabel,
+      componentProps: { checked: isLabelOutlined, onChange: onChangeOfLabelVariantSwitch }
     },
-    { title: 'Chose a color', component: <div>Chose a color</div> }
+    {
+      title: 'Chose a color',
+      component: ThirdStepOfSteperOfDialogOfAddNewLabel,
+      componentProps: { value: newLabelState.color, onChange: onChangeOfLabelColorRadio }
+    }
   ];
 
   const steperOfDialogOfAddNewLabelProps = {

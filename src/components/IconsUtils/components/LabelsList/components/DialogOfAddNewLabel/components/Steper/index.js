@@ -27,12 +27,12 @@ const SteperOfDialogOfAddNewLabel = ({ stepsArrOfDialogOfAddNewLabel }) => {
   return (
     <Grid className={classes.container}>
       <Stepper activeStep={activeStep} orientation={'vertical'}>
-        {stepsArrOfDialogOfAddNewLabel.map(({ title, component }) => (
+        {stepsArrOfDialogOfAddNewLabel.map(({ title, component: Component, componentProps }) => (
           <Step key={title}>
             <StepLabel>{title} </StepLabel>
             <StepContent>
               <Grid container className={classes.componentContainer}>
-                {component}
+                <Component {...componentProps} />
               </Grid>
               <Grid container direction={'column'} className={classes.buttonContainer}>
                 <Grid>
