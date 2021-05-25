@@ -51,8 +51,8 @@ const NewPaKeep = ({ addNewPaKeepThunk }) => {
   const nulittyState = {
     title: '',
     text: '',
-    bookmark: false,
-    favorite: false,
+    isInBookmark: false,
+    isFavorite: false,
     id: nanoid(),
     color: 'transparent',
     labels: ['label3', 'label1', 'label0']
@@ -121,7 +121,10 @@ const NewPaKeep = ({ addNewPaKeepThunk }) => {
   // });
 
   const handleSetWidthInNewPakeep = () => {
-    setStatusState(state => ({ ...state, isNewPakeepContainerHaveFullWidth: !state.isNewPakeepContainerHaveFullWidth }));
+    setStatusState(state => ({
+      ...state,
+      isNewPakeepContainerHaveFullWidth: !state.isNewPakeepContainerHaveFullWidth
+    }));
   };
 
   const handleDeleteLabelFromPakeepFunc = (placeholder, labelId) => handleDeleteNewLabel(labelId);
@@ -166,7 +169,7 @@ const NewPaKeep = ({ addNewPaKeepThunk }) => {
   const fullWidthValue = statusState.isNewPakeepContainerHaveFullWidth && 12;
 
   const breakpoint = useCustomBreakpoint();
-const breakpointsValues = { xs: 12, sm: 10 + 1, md: 8 + 1, lg: 6 + 1, xl: 4 + 1 };
+  const breakpointsValues = { xs: 12, sm: 10 + 1, md: 8 + 1, lg: 6 + 1, xl: 4 + 1 };
 
   const gridContainerProps = {
     className: clsx(classes.container, statusState.isNewPakeepContainerHaveFullWidth ? classes.full : classes.unFull),
