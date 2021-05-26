@@ -42,7 +42,7 @@ const SteperOfDialogOfAddNewLabel = ({ stepsArrOfDialogOfAddNewLabel }) => {
             <Step key={title}>
               <StepLabel>{title} </StepLabel>
               <StepContent>
-                <Grid container>
+                <Grid container alignItems={'center'}>
                   <Grid>
                     <Grid direction={'column'}>
                       <Grid container className={classes.componentContainer} alignItems={'center'}>

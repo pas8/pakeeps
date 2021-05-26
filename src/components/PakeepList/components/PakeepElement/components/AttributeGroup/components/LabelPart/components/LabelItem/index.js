@@ -1,5 +1,7 @@
-import { Chip, Grid, makeStyles, Tooltip, Zoom } from '@material-ui/core';
+import { Chip, Grid, makeStyles } from '@material-ui/core';
+import { colord } from 'colord';
 import PropTypes from 'prop-types';
+import { themeColors } from 'components/theme';
 
 const useStyles = makeStyles(theme => ({
   container: ({ color, isDark }) => ({
@@ -26,8 +28,17 @@ const useStyles = makeStyles(theme => ({
   })
 }));
 
-const LabelItem = ({ isDark, currentColor, handleOpen, labelChipProps }) => {
-  const classes = useStyles({ color: currentColor, isDark });
+const LabelItem = ({ currentColor, handleOpen, labelChipProps }) => {
+  const isDark = colord(currentColor).brightness() >= 0.48;
+
+  const color =
+    currentColor === 'primary'
+      ? themeColors.primaryMain
+      : currentColor === 'secondary'
+      ? themeColors.secondaryMain
+      : currentColor;
+
+  const classes = useStyles({ color, isDark });
 
   return (
     <Grid item className={classes.container} onContextMenu={handleOpen} onClick={handleOpen}>
@@ -39,7 +50,6 @@ const LabelItem = ({ isDark, currentColor, handleOpen, labelChipProps }) => {
 LabelItem.propTypes = {
   currentColor: PropTypes.any,
   handleOpen: PropTypes.func,
-  isDark: PropTypes.bool,
   labelChipProps: PropTypes.object
 };
 

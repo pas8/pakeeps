@@ -1,27 +1,10 @@
-import {
-  Dialog,
-  Grid,
-  makeStyles,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  Button,
-  Stepper,
-  StepLabel,
-  StepContent,
-  Step,
-  Typography,
-  TextField,
-  FormControlLabel
-} from '@material-ui/core';
+import { Dialog, makeStyles, DialogActions, DialogTitle, Button, Grid, Chip } from '@material-ui/core';
 import { themeColors } from 'components/theme';
-import PropTypes from 'prop-types';
 import { useState } from 'react';
 import { connect } from 'react-redux';
 import SaveRoundedIcon from '@material-ui/icons/SaveRounded';
 import { handleAddNewGlobalLabelThunk } from 'store/modules/App/operations';
 import SteperOfDialogOfAddNewLabel from './components/Steper';
-import { Switch } from '@material-ui/core';
 import FirstStepOfSteperOfDialogOfAddNewLabel from './components/Steper/components/First';
 import SecondStepOfSteperOfDialogOfAddNewLabel from './components/Steper/components/Second';
 import ThirdStepOfSteperOfDialogOfAddNewLabel from './components/Steper/components/Third';
@@ -32,7 +15,8 @@ import { iconsArr } from 'components/Icons';
 import PreparedColorExamples from 'components/ColorChanger/components/PreparedColorExamples';
 import ColorPickerByPas from 'components/ColorChanger';
 import includes from 'lodash.includes';
-import { dropRight } from 'lodash';
+import LabelItem from 'components/PakeepList/components/PakeepElement/components/AttributeGroup/components/LabelPart/components/LabelItem';
+import { useFindIcon } from 'hooks/useFindIcon.hook';
 
 const useStyles = makeStyles(theme => ({}));
 
@@ -122,11 +106,20 @@ const DialogOfAddNewLabel = ({ isDialogOpen, handleCloseAddNewLabelDialog, handl
 
   const steperOfDialogOfAddNewLabelProps = { stepsArrOfDialogOfAddNewLabel };
 
+  const previewLabelProps = {
+    ...newLabelState,
+    icon: useFindIcon(newLabelState.iconName),
+    label: newLabelState.title,
+    size: 'small'
+  };
+  const labelItemProps = { currentColor: newLabelState.color, handleOpen: null, labelChipProps: previewLabelProps };
+
   return (
     <Dialog open={true} onClose={handleCloseAddNewLabelDialog}>
       <DialogTitle>Add new global label</DialogTitle>
       <SteperOfDialogOfAddNewLabel {...steperOfDialogOfAddNewLabelProps} />
       <DialogActions>
+        <LabelItem {...labelItemProps} />
         <Button onClick={handleCloseDialog} style={{ color: themeColors.whiteRgbaColorWith0dot42valueOfAlfaCanal }}>
           Close
         </Button>
