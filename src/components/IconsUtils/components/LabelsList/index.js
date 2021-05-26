@@ -34,29 +34,27 @@ const LabelsList = ({
 
   const defaultMenuListArr = [
     {
-      title: isLabelViewHidden ? 'Show label view' : 'Hide label view',
-      Icon: isLabelViewHidden ? VisibilityOutlinedIcon : VisibilityOffOutlinedIcon,
-      onClick: handleStatusOfHideLabelView
-    },
-    {
       title: 'Add new labels',
       Icon: AddCircleOutlineOutlinedIcon,
       onClick: handleOpenAddNewLabelDialog
+    },
+    {
+      title: isLabelViewHidden ? 'Show label view' : 'Hide label view',
+      Icon: isLabelViewHidden ? VisibilityOutlinedIcon : VisibilityOffOutlinedIcon,
+      onClick: handleStatusOfHideLabelView
     }
   ];
 
-  const dialogOfAddNewLabelProps = {
-    isDialogOpen,
-    handleCloseAddNewLabelDialog
-  };
+  const dialogOfAddNewLabelProps = { isDialogOpen, handleCloseAddNewLabelDialog, handleOpenAddNewLabelDialog };
 
   const handleChangeNewLabel = (isChecked, id) => (isChecked ? handleDeleteNewLabel(id) : handleAddNewLabel(id));
   const globalLabelListProps = { globalLabels, handleChangeNewLabel, selectedLabels };
 
   return (
     <Grid className={classes.container}>
-      <GlobalLabelListOflabelList {...globalLabelListProps} />
       <DefaultMenuListOflabelList defaultMenuListArr={defaultMenuListArr} />
+
+      <GlobalLabelListOflabelList {...globalLabelListProps} />
       <DialogOfAddNewLabel {...dialogOfAddNewLabelProps} />
     </Grid>
   );

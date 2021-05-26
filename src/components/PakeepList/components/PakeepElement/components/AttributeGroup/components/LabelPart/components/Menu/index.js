@@ -50,14 +50,14 @@ const MenuOfLabelPart = ({
       onClick: handleChangeLabelVariant
     },
     {
-      title: menuState.labelIconName ?  'Change icon' : 'Add icon',
+      title: menuState.labelIconName ? 'Change icon' : 'Add icon',
       icon: CategoryOutlinedIcon,
       dynamicComponent: {
         component: PreparedColorExamples,
         className: null,
         props: {
           isColor: false,
-          customColumnElementProps: { handleChangeLabelIconName ,labelIconName:menuState.labelIconName},
+          customColumnElementProps: { handleChangeLabelIconName, labelIconName: menuState.labelIconName },
           CustomColumnElement: PreparedIconSelectingList,
           columnArr: iconsArr
         }

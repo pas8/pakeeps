@@ -166,11 +166,11 @@ const NewPaKeep = ({ addNewPaKeepThunk }) => {
   const rowsNumber = statusState.isWritingText
     ? statusState.isLabelViewHidden
       ? 4 - 1
-      : 4
+      : 4 
     : !statusState.isUtilsHidden
     ? statusState.isLabelViewHidden
-      ? 6 - 1
-      : 6
+      ? 6 - 2
+      : 6 - 1
     : 1;
 
   const textFieldProps = {
