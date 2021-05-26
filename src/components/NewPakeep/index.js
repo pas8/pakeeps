@@ -72,7 +72,8 @@ const NewPaKeep = ({ addNewPaKeepThunk }) => {
     isWritingText: false,
     isChangingTitle: false,
     isUtilsHidden: true,
-    isNewPakeepContainerHaveFullWidth: true
+    isNewPakeepContainerHaveFullWidth: true,
+    isLabelViewHidden: false
   };
   const [statusState, setStatusState] = useState(nullityStatusState);
 
@@ -120,6 +121,9 @@ const NewPaKeep = ({ addNewPaKeepThunk }) => {
   //   if (changingTitle === true) setChangingTitle(false);
   // });
 
+  const handleStatusOfHideLabelView = () =>
+    setStatusState(state => ({ ...state, isLabelViewHidden: !state.isLabelViewHidden }));
+
   const handleSetWidthInNewPakeep = () => {
     setStatusState(state => ({
       ...state,
@@ -131,24 +135,43 @@ const NewPaKeep = ({ addNewPaKeepThunk }) => {
 
   const [ref, { width: widthOfContainer }] = useMeasure();
 
+  const labelsListProps = {
+    handleStatusOfHideLabelView,
+    selectedLabels: state.labels,
+    handleAddNewLabel,
+    isLabelViewHidden: statusState.isLabelViewHidden,
+
+    handleDeleteNewLabel
+  };
+
+  const labelBargeNumber = statusState.isLabelViewHidden ? state.labels.length : 0;
   const newPakeepUtils = {
     ...state,
     ...statusState,
+    labelBargeNumber,
     handleSetFavoritePakeep,
     handleSetBookmarkPakeep,
     handleSetColorPakeep,
     handleNewPakeepSave,
     handleSetWidth: handleSetWidthInNewPakeep,
     widthOfContainer,
-    handleAddNewLabel,
-    handleDeleteNewLabel,
-    selectedLabels: state.labels
+    labelsListProps
   };
   const attributesOfNewPakeepProps = {
     pakeepId: state.id,
     handleDeleteLabelFromPakeepFunc,
     labels: state.labels
   };
+
+  const rowsNumber = statusState.isWritingText
+    ? statusState.isLabelViewHidden
+      ? 4 - 1
+      : 4 
+    : !statusState.isUtilsHidden
+    ? statusState.isLabelViewHidden
+      ? 6 - 2
+      : 6 - 1
+    : 1;
 
   const textFieldProps = {
     className: classes.textField,
@@ -157,7 +180,7 @@ const NewPaKeep = ({ addNewPaKeepThunk }) => {
     value: statusState.isWritingText ? state.text : state.title,
     onChange: handleState,
     name: statusState.isWritingText ? 'text' : 'title',
-    rows: statusState.isWritingText ? 4 : !statusState.isUtilsHidden ? 6 : 1,
+    rows: rowsNumber,
     multiline: statusState.isWritingText ? true : !statusState.isUtilsHidden ? true : false,
     fullWidth: true,
     autoFocus: true,
@@ -183,7 +206,9 @@ const NewPaKeep = ({ addNewPaKeepThunk }) => {
           <TextField {...textFieldProps} />
         </Box>
 
-        {!statusState.isUtilsHidden && <AttributesOfNewPakeep {...attributesOfNewPakeepProps} />}
+        {!statusState.isUtilsHidden && !statusState.isLabelViewHidden && (
+          <AttributesOfNewPakeep {...attributesOfNewPakeepProps} />
+        )}
 
         {!statusState.isUtilsHidden && <NewPakeepUtils {...newPakeepUtils} />}
 

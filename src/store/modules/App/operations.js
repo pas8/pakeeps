@@ -13,7 +13,8 @@ import {
   toChangeLabelItem,
   toDeleteLabelFromPakeep,
   toSetPreviusOrderNames,
-  toHandleDrawerWidth
+  toHandleDrawerWidth,
+  toAddNewGlobalLabel
 } from './actions';
 
 export const addNewPaKeepThunk = data => dispatch => {
@@ -88,3 +89,9 @@ export const handleDrawerWidthThunk = drawerWidth => dispatch => {
 export const handleSetPreviusOrderNames = orderNames => dispatch => {
   dispatch(toSetPreviusOrderNames(orderNames));
 };
+
+export const handleAddNewGlobalLabelThunk = newLabel => dispatch => {
+  dispatch(toAddNewGlobalLabel(newLabel));
+};
+
+

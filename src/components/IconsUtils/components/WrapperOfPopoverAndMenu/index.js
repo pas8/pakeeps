@@ -15,28 +15,37 @@ const WrapperOfPopoverAndMenu = ({
   return (
     <>
       {buttonUtilsArr.map(
-        ({
-          icon: Icon,
-          popoverText,
-          name: buttonUtilsName,
-          onClick,
-          activeIcon,
-          onlyPopover = false,
-          menuComponents: MenuComponents,
-          menuComponentsProps,
-          hidden = false,
-          customColor,
-          customElementComponentOfIconGroup = false,
-          menuLocation,
-          popoverLocation,
-          rotateDeg = false
-        },idx) => {
+        (
+          {
+            icon: Icon,
+            popoverText,
+            name: buttonUtilsName,
+            onClick,
+            activeIcon,
+            onlyPopover = false,
+            menuComponents: MenuComponents,
+            menuComponentsProps,
+            hidden = false,
+            customColor,
+            customElementComponentOfIconGroup = false,
+            menuLocation,
+            popoverLocation,
+            rotateDeg = false,
+            badgeContent = 0 
+          },
+          idx
+        ) => {
           if (hidden) return;
           if (customElementComponentOfIconGroup) return customElementComponentOfIconGroup;
+
+          const menuComponents = !onlyPopover && MenuComponents && (
+            <MenuComponents {...menuComponentsProps} onMenuClose={popoverAndMenuState.onMenuClose} />
+          );
 
           const iconName = isIconNameExtended ? { keyName, buttonUtilsName } : buttonUtilsName;
           const iconButtonProps = {
             icon: Icon,
+            badgeContent,
             customColor,
             onClick: onClick,
             iconName,
@@ -47,16 +56,11 @@ const WrapperOfPopoverAndMenu = ({
             activeProperty: popoverAndMenuState.popoverIsOpen,
             handleAverageMainComponentWidth
           };
-
-          const menuComponents = !onlyPopover && MenuComponents && (
-            <MenuComponents {...menuComponentsProps} onMenuClose={popoverAndMenuState.onMenuClose} />
-          );
-
           const mainComponent = <IconButtonByPas {...iconButtonProps} />;
 
           const popoverAndMenuProps = {
             name: iconName,
-            key:idx,
+            key: idx,
             menuLocation,
             popoverLocation,
             popoverText,
@@ -66,7 +70,7 @@ const WrapperOfPopoverAndMenu = ({
             mainComponent
           };
 
-          return <PopoverAndMenu {...popoverAndMenuProps}  />;
+          return <PopoverAndMenu {...popoverAndMenuProps} />;
         }
       )}
     </>
@@ -74,7 +78,7 @@ const WrapperOfPopoverAndMenu = ({
 };
 
 WrapperOfPopoverAndMenu.propTypes = {
-  CustomElementComponentOfIconGroup: PropTypes.oneOf(["bool", "node"]),
+  CustomElementComponentOfIconGroup: PropTypes.oneOf(['bool', 'node']),
   buttonUtilsArr: PropTypes.shape({
     map: PropTypes.func
   }),
@@ -88,6 +92,6 @@ WrapperOfPopoverAndMenu.propTypes = {
     onMenuClose: PropTypes.func,
     popoverIsOpen: PropTypes.bool
   })
-}
+};
 
 export default WrapperOfPopoverAndMenu;

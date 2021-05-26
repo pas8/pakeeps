@@ -239,6 +239,11 @@ const AppReducer = createReducer(initialState)({
     ...state,
     folders: foldersArr
   }),
+
+  [types.ADD_NEW_GLOBAL_LABEL]: (state, { newLabel }) => ({
+    ...state,
+    labels: [...state.labels, newLabel]
+  }),
   [types.CHANGE_LABEL_ITEM]: (state, { labels }) => ({
     ...state,
     labels
