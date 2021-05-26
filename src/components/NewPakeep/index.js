@@ -5,12 +5,12 @@ import clsx from 'clsx';
 import { useCookie, useKeyPressEvent, useMeasure, usePageLeave } from 'react-use';
 import { nanoid } from 'nanoid';
 import { Box, Grid, IconButton, makeStyles, Paper, TextField } from '@material-ui/core';
-import VisibilityOutlinedIcon from '@material-ui/icons/VisibilityOutlined';
-import VisibilityOffOutlinedIcon from '@material-ui/icons/VisibilityOffOutlined';
 import { addNewPaKeepThunk } from 'store/modules/App/operations';
 import { themeColors } from 'components/theme';
 import NewPakeepUtils from './components/Utils';
 import AttributesOfNewPakeep from './components/Attributes';
+import { useCustomBreakpoint } from 'hooks/useCustomBreakpoint';
+import EyeIconButton from './components/EyeIconButton';
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -30,7 +30,6 @@ const useStyles = makeStyles(theme => ({
   wrapper: { padding: theme.spacing(0), backgroundColor: 'transparent', position: 'relative' },
   hidden: { display: 'none' },
   inputTitle: { padding: 0 },
-  showUtils: { position: 'absolute', right: 4, top: 4, display: 'grid', placeItems: 'center' },
   textField: { paddingBottom: 0 },
   full: {
     transition: theme.transitions.create('all', {
@@ -52,8 +51,8 @@ const NewPaKeep = ({ addNewPaKeepThunk }) => {
   const nulittyState = {
     title: '',
     text: '',
-    bookmark: false,
-    favorite: false,
+    isInBookmark: false,
+    isFavorite: false,
     id: nanoid(),
     color: 'transparent',
     labels: ['label3', 'label1', 'label0']
@@ -66,37 +65,27 @@ const NewPaKeep = ({ addNewPaKeepThunk }) => {
 
   usePageLeave(() => updateCookie(state));
 
-  const [focus, setFocus] = useState(false);
-  const [enter, setEnter] = useState(false);
-  const [writingText, setWritingText] = useState(false);
-  const [changingTitle, setChangingTitle] = useState(false);
-  const [showUtils, setShowUtils] = useState(false);
-  const [fullWidthOfNewPakeepContainer, setFullWidthOfNewPakeepContainer] = useState(!false);
-
-const [statusState, setStatusState] = useState({
-
-
-isFocus:false,
-placeholder:'Write a title or press ctrl + Alt + 8 to skip a title',
-isEnter:false,
-isWritingText:false,
-isChangingTitle:false,
-isUtilsShouldBe
-
-})
-
-
+  const nullityStatusState = {
+    isFocused: false,
+    placeholder: 'Write a title or press ctrl + Alt + 8 to skip a title',
+    isEnter: false,
+    isWritingText: false,
+    isChangingTitle: false,
+    isUtilsHidden: true,
+    isNewPakeepContainerHaveFullWidth: true,
+    isLabelViewHidden: false
+  };
+  const [statusState, setStatusState] = useState(nullityStatusState);
 
   const handleState = ({ target: { name, value } }) => setState(state => ({ ...state, [name]: value }));
 
-  const setFocusIsTrue = () => setFocus(true);
-  const setFocusIsFalse = () => setFocus(false);
-  const setUtilsIsVisible = () => setShowUtils(!showUtils);
+  const setFocusIsTrue = () => setStatusState(state => ({ ...state, isFocused: true }));
+  const setFocusIsFalse = () => setStatusState(state => ({ ...state, isFocused: false }));
 
-  const setEditTitleIsTrue = () => {
-    setWritingText(false);
-    setChangingTitle(true);
+  const handleChangeUtilsVisibility = () => {
+    setStatusState(state => ({ ...state, isUtilsHidden: !state.isUtilsHidden }));
   };
+
   const handleSetFavoritePakeep = () => setState(state => ({ ...state, favorite: !state.favorite }));
   const handleSetBookmarkPakeep = () => setState(state => ({ ...state, bookmark: !state.bookmark }));
   const handleSetColorPakeep = () => setState(state => ({ ...state, color: !state.color }));
@@ -109,12 +98,14 @@ isUtilsShouldBe
   };
 
   useEffect(() => {
-    if (focus && state.title !== '') setPlaceholder('Press enter to end  writing the  title');
-    if (enter === true && state.title !== '') {
-      setWritingText(true);
-      setShowUtils(true);
+    if (statusState.isFocused && state.title !== '') {
+      setStatusState(state => ({ ...state, placeholder: 'Press statusState.isEnter to end  writing the  title' }));
     }
-  }, [focus, enter]);
+    // if (statusState.isEnter === true && state.title !== '') {
+    //   setWritingText(true);
+    //   setShowUtils(true);
+    // }
+  }, [statusState.isFocused, statusState.isEnter]);
 
   const handleNewPakeepSave = () => {
     addNewPaKeepThunk({ ...state, wordsCoefficient: 1 });
@@ -126,33 +117,45 @@ isUtilsShouldBe
   // };
   // console.log({...state})
   // useKeyPressEvent('Enter', () => {
-  //   if (enter === false) setEnter(true);
+  //   if (statusState.isEnter === false) setEnter(true);
   //   if (changingTitle === true) setChangingTitle(false);
   // });
 
+  const handleStatusOfHideLabelView = () =>
+    setStatusState(state => ({ ...state, isLabelViewHidden: !state.isLabelViewHidden }));
 
-
-  const handleSetWidthInNewPakeep = () => setFullWidthOfNewPakeepContainer(!fullWidthOfNewPakeepContainer);
+  const handleSetWidthInNewPakeep = () => {
+    setStatusState(state => ({
+      ...state,
+      isNewPakeepContainerHaveFullWidth: !state.isNewPakeepContainerHaveFullWidth
+    }));
+  };
 
   const handleDeleteLabelFromPakeepFunc = (placeholder, labelId) => handleDeleteNewLabel(labelId);
 
   const [ref, { width: widthOfContainer }] = useMeasure();
 
+  const labelsListProps = {
+    handleStatusOfHideLabelView,
+    selectedLabels: state.labels,
+    handleAddNewLabel,
+    isLabelViewHidden: statusState.isLabelViewHidden,
+
+    handleDeleteNewLabel
+  };
+
+  const labelBargeNumber = statusState.isLabelViewHidden ? state.labels.length : 0;
   const newPakeepUtils = {
     ...state,
-    open: showUtils,
-    setEditTitleIsTrue,
-    changingTitle,
+    ...statusState,
+    labelBargeNumber,
     handleSetFavoritePakeep,
     handleSetBookmarkPakeep,
     handleSetColorPakeep,
     handleNewPakeepSave,
     handleSetWidth: handleSetWidthInNewPakeep,
-    fullWidthStatus: fullWidthOfNewPakeepContainer,
     widthOfContainer,
-    handleAddNewLabel,
-    handleDeleteNewLabel,
-    selectedLabels: state.labels
+    labelsListProps
   };
   const attributesOfNewPakeepProps = {
     pakeepId: state.id,
@@ -160,48 +163,56 @@ isUtilsShouldBe
     labels: state.labels
   };
 
+  const rowsNumber = statusState.isWritingText
+    ? statusState.isLabelViewHidden
+      ? 4 - 1
+      : 4 
+    : !statusState.isUtilsHidden
+    ? statusState.isLabelViewHidden
+      ? 6 - 2
+      : 6 - 1
+    : 1;
+
+  const textFieldProps = {
+    className: classes.textField,
+    label: statusState.isWritingText ? state.title : statusState.placeholder,
+    variant: 'outlined',
+    value: statusState.isWritingText ? state.text : state.title,
+    onChange: handleState,
+    name: statusState.isWritingText ? 'text' : 'title',
+    rows: rowsNumber,
+    multiline: statusState.isWritingText ? true : !statusState.isUtilsHidden ? true : false,
+    fullWidth: true,
+    autoFocus: true,
+    autoComplete: false,
+    rowsMax: 42,
+    onFocus: setFocusIsTrue,
+    onBlur: setFocusIsFalse
+  };
+  const fullWidthValue = statusState.isNewPakeepContainerHaveFullWidth && 12;
+
+  const breakpoint = useCustomBreakpoint();
+  const breakpointsValues = { xs: 12, sm: 10 + 1, md: 8 + 1, lg: 6 + 1, xl: 4 + 1 };
+
+  const gridContainerProps = {
+    className: clsx(classes.container, statusState.isNewPakeepContainerHaveFullWidth ? classes.full : classes.unFull),
+    [breakpoint]: fullWidthValue || breakpointsValues[breakpoint],
+    ref
+  };
   return (
-    <Grid
-      className={clsx(classes.container, fullWidthOfNewPakeepContainer ? classes.full : classes.unFull)}
-      xs={fullWidthOfNewPakeepContainer ? 12 : 12}
-      sm={fullWidthOfNewPakeepContainer ? 12 : 11}
-      md={fullWidthOfNewPakeepContainer ? 12 : 9}
-      lg={fullWidthOfNewPakeepContainer ? 12 : 7}
-      xl={fullWidthOfNewPakeepContainer ? 12 : 5}
-      ref={ref}
-    >
+    <Grid {...gridContainerProps}>
       <Paper variant={'elevation'} className={classes.wrapper}>
         <Box>
-          <TextField
-            className={classes.textField}
-            label={writingText ? state.title : placeholder}
-            variant={'outlined'}
-            value={writingText ? state.text : state.title}
-            onChange={handleState}
-            name={writingText ? 'text' : 'title'}
-            rows={writingText ? 6 : showUtils ? 8 : 1}
-            multiline={writingText ? true : showUtils ? true : false}
-            fullWidth
-            autoFocus={true}
-            autoComplete={false}
-            rowsMax={42}
-            onFocus={setFocusIsTrue}
-            onBlur={setFocusIsFalse}
-          />
+          <TextField {...textFieldProps} />
         </Box>
 
-        {showUtils && <AttributesOfNewPakeep {...attributesOfNewPakeepProps} />}
-        <NewPakeepUtils {...newPakeepUtils} />
+        {!statusState.isUtilsHidden && !statusState.isLabelViewHidden && (
+          <AttributesOfNewPakeep {...attributesOfNewPakeepProps} />
+        )}
 
-        <Box className={classes.showUtils} onClick={setUtilsIsVisible}>
-          <IconButton>
-            {!showUtils ? (
-              <VisibilityOutlinedIcon style={{ color: 'rgba(255,255,255,0.8)' }} />
-            ) : (
-              <VisibilityOffOutlinedIcon style={{ color: 'rgba(255,255,255,0.4)' }} />
-            )}
-          </IconButton>
-        </Box>
+        {!statusState.isUtilsHidden && <NewPakeepUtils {...newPakeepUtils} />}
+
+        <EyeIconButton onClickOfEyeIconButton={handleChangeUtilsVisibility} isUtilsHidden={statusState.isUtilsHidden} />
       </Paper>
     </Grid>
   );

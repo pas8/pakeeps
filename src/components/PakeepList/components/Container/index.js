@@ -1,9 +1,8 @@
 import PropTypes from 'prop-types';
 import { Grid, makeStyles } from '@material-ui/core';
 import { DragDropContext } from 'react-beautiful-dnd';
-
-import Column from '../Column/index';
 import { find } from 'lodash';
+import Column from '../Column/index';
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -28,15 +27,7 @@ const PakeepListContainer = ({
   folderId
 }) => {
   const classes = useStyles();
-  const placeholder = {
-    title: 'Placeholder',
-    text: '',
-    bookmark: false,
-    favorite: false,
-    color: 'default',
-    isPinned: true,
-    id: 'placeholder'
-  };
+
   return (
     <DragDropContext onDragEnd={onDragEnd} onDragStart={onDragStart}>
       <Grid container className={classes.container}>
@@ -53,13 +44,13 @@ const PakeepListContainer = ({
 
           return (
             <Column
-            folderProperty={folderProperty}
+              folderProperty={folderProperty}
               key={column?.id}
               folderId={folderId}
               column={column}
               pakeepsInColumn={pakeepsInColumn}
-              lastColumn={idx + 1 === responsiveColumnOrder.length ? true : false}
-              firstColumn={idx === 0 ? true : false}
+              lastColumn={!!(idx + 1 === responsiveColumnOrder.length) }
+              firstColumn={!!(idx === 0)}
             />
           );
         })}
@@ -70,7 +61,10 @@ const PakeepListContainer = ({
 
 PakeepListContainer.propTypes = {
   columns: PropTypes.any,
-  onDragEnd: PropTypes.any,
+  folderId: PropTypes.string,
+  folderProperty: PropTypes.any,
+  onDragEnd: PropTypes.func,
+  onDragStart: PropTypes.func,
   pakeeps: PropTypes.any,
   placeholderName: PropTypes.string,
   responsiveColumnOrder: PropTypes.shape({

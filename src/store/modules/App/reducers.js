@@ -4,12 +4,12 @@ import * as types from './types';
 
 const initialState = {
   data: 1,
-  archive: [],
   defaultFolderArr: [
     { title: 'All pakeeps', iconName: '', id: 'folder-ALL', property: 'ALL' },
     { title: 'Pined', iconName: 'pin', id: 'folder-isPinned', property: 'isPinned' },
     { title: 'Bookmark', iconName: 'bookmark', id: 'folder-isInBookmark', property: 'isInBookmark' },
     { title: 'Favorite', iconName: 'favorite', id: 'folder-isFavorite', property: 'isFavorite' },
+    { title: 'Archiveted', iconName: 'archive', id: 'folder-isArchived', property: 'isArchived' }
   ],
 
   labels: [
@@ -21,19 +21,7 @@ const initialState = {
     { color: '', title: 'Hobby Placeholders', iconName: '', id: 'label4', variant: 'default' }
   ],
 
-  folders: [
-    [
-      { title: 'All pakeeps', iconName: '', id: 'folder-1', property: 'ALL' },
-      { title: 'Pined', iconName: 'pin', id: 'folder-2', property: 'isPinned' }
-    ]
-    // { title: 'Pined', iconName: 'pin', key: 2, property: 'isPinned' },
-  ],
-  folderPropertyies: {
-    all: true,
-    isPinned: true,
-    labels: true,
-    date: true
-  },
+  folders: [[]],
 
   pakeeps: [
     {
@@ -43,7 +31,7 @@ const initialState = {
       isFavorite: true,
       color: 'default',
       labels: ['label3', 'label1', 'label0', 'label2'],
-
+      isArchived: false,
       id: 'pakeep1',
       isPinned: true
     },
@@ -55,6 +43,7 @@ const initialState = {
       color: 'default',
       labels: ['label4', 'label0', 'label1', 'label2', 'label3'],
       id: 'pakeep2',
+      isArchived: false,
       isPinned: false
     },
     {
@@ -64,7 +53,7 @@ const initialState = {
       isFavorite: false,
       color: 'default',
       labels: ['label0', 'label2', 'label6'],
-
+      isArchived: false,
       isPinned: true,
       id: 'pakeep3'
     },
@@ -75,31 +64,32 @@ const initialState = {
       isFavorite: true,
       color: 'transparent',
       labels: ['label1', 'label2', 'label0', 'label6'],
-
+      isArchived: false,
       id: 'pakeep4',
       isPinned: true
+    },
+    {
+      title: 'Placeholder 5',
+      text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+      isInBookmark: false,
+      isFavorite: false,
+      color: 'default',
+      isPinned: false,
+      isArchived: true,
+      labels: ['label4', 'label0', 'label1', 'label2'],
+      id: 'pakeep5'
+    },
+    {
+      title: 'Placeholder 6',
+      text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Enim nec dui nunc mattis enim ut tellus elementum. Ipsum consequat nisl vel pretium lectus quam id leo. Lacinia quis vel eros donec ac odio tempor orci. Risus nullam eget felis eget nunc lobortis mattis aliquam faucibus. Ac odio tempor orci dapibus. Pellentesque habitant morbi tristique senectus et netus. Et netus et malesuada fames ac. Est velit egestas dui id ornare. Mi quis hendrerit dolor magna eget est lorem ipsum dolor.',
+      isInBookmark: false,
+      isFavorite: false,
+      color: 'default',
+      labels: ['label0', 'label2', 'label6'],
+      id: 'pakeep6',
+      isPinned: true,
+      isArchived: true
     }
-    // {
-    //   title: 'Placeholder 5',
-    //   text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-    //   isInBookmark: false,
-    //   isFavorite: false,
-    //   color: 'default',
-    //   isPinned: false,
-    //   labels: [{ color: 'default', title: 'Hobby Placeholders', icon: 'alarm', key: 4 }],
-    //   id: 'pakeep5'
-    // },
-    // {
-    //   title: 'Placeholder 6',
-    //   text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Enim nec dui nunc mattis enim ut tellus elementum. Ipsum consequat nisl vel pretium lectus quam id leo. Lacinia quis vel eros donec ac odio tempor orci. Risus nullam eget felis eget nunc lobortis mattis aliquam faucibus. Ac odio tempor orci dapibus. Pellentesque habitant morbi tristique senectus et netus. Et netus et malesuada fames ac. Est velit egestas dui id ornare. Mi quis hendrerit dolor magna eget est lorem ipsum dolor.',
-    //   isInBookmark: false,
-    //   isFavorite: false,
-    //   color: 'default',
-    //   labels: [{ color: 'secondary', title: 'Hobby', icon: 'alarm', key: 4 }],
-    //   id: 'pakeep6',
-    //   isPinned: true,
-    //   events: [{ color: 'secondary', title: 'Hobby', icon: 'alarm', key: 4 }]
-    // },
     // {
     //   title: 'Placeholder 7',
     //   text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. At imperdiet dui accumsan sit amet nulla facilisi morbi. Aliquam sem et tortor consequat id porta nibh. Enim praesent elementum facilisis leo vel fringilla est. Cras adipiscing enim eu turpis egestas pretium aenean. Sed libero enim sed faucibus turpis in eu mi bibendum. Vestibulum lorem sed risus ultricies. Neque egestas congue quisque egestas diam.',
@@ -231,7 +221,7 @@ const initialState = {
   scrollDirectionName: 'up',
   currentFolderPropertyIdx: 0,
   drawerWidth: 0,
-  isUsePreviuos: false
+  isUsePreviuosOrder: false
 };
 
 const AppReducer = createReducer(initialState)({
@@ -239,24 +229,30 @@ const AppReducer = createReducer(initialState)({
     ...state,
     pakeeps: [...state.pakeeps, newPaKeep]
   }),
+  // [types.HANDLE_CHANGE_PAKEEP_PROPERTY]: (state, { newPaKeep }) => ({
+  //   ...state,
+
+  //   pakeeps: [...state.pakeeps, newPaKeep]
+  // }),
+
   [types.HANDLE_FOLDERS]: (state, { foldersArr }) => ({
     ...state,
     folders: foldersArr
+  }),
+
+  [types.ADD_NEW_GLOBAL_LABEL]: (state, { newLabel }) => ({
+    ...state,
+    labels: [...state.labels, newLabel]
   }),
   [types.CHANGE_LABEL_ITEM]: (state, { labels }) => ({
     ...state,
     labels
   }),
-  [types.DELETE_LABEL_FROM_PAKEEP]: (state, { pakeepId, labelId }) => {
-    const currentPakeep = find(state.pakeeps, ({ id }) => pakeepId === id);
-    const labels = filter(currentPakeep.labels, id => labelId !== id);
-    console.log(labels, labelId);
-    return {
-      ...state,
-      isUsePreviuos: true,
-      pakeeps: [...filter(state.pakeeps, ({ id }) => pakeepId !== id), { ...currentPakeep, labels }]
-    };
-  },
+  [types.DELETE_LABEL_FROM_PAKEEP]: (state, { currentPakeep, labels }) => ({
+    ...state,
+    isUsePreviuosOrder: true,
+    pakeeps: [...filter(state.pakeeps, ({ id }) => currentPakeep.id !== id), { ...currentPakeep, labels }]
+  }),
 
   [types.HANDLE_CURRENT_FOLDER_PROPERTY_IDX]: (state, { folderIdx }) => ({
     ...state,
@@ -264,13 +260,12 @@ const AppReducer = createReducer(initialState)({
   }),
   [types.SET_NEW_ORDER_NAMES]: (state, { newOrder }) => ({
     ...state,
-    // isUsePreviuos:false,
     pakeepsOrderNames: newOrder
   }),
-  [types.HANDLE_USE_PREVIUOS]: (state, { boolValue }) => ({
+  [types.HANDLE_SET_PREVIUOS_ORDER_NAMES]: (state, { orderNames }) => ({
     ...state,
-    // isUsePreviuos:false,
-    isUsePreviuos: boolValue
+    isUsePreviuosOrder: false,
+    pakeepsOrderNames: orderNames
   }),
 
   [types.HANDLE_DRAWER_WIDTH]: (state, { drawerWidth }) => ({ ...state, drawerWidth }),
@@ -278,42 +273,12 @@ const AppReducer = createReducer(initialState)({
     ...state,
     pakeeps: pickBy(state.pakeeps, ({ id: pakeepsId }) => id !== pakeepsId)
   }),
-  [types.MOVE_PAKEEP_TO_ARCHIVE]: (state, { newArchiveItem }) => ({
-    ...state,
-    archive: [...state.archive, newArchiveItem]
-  }),
-  [types.UNARCHIVETE_PAKEEP]: (state, { idOfArchiveItem }) => ({
-    ...state,
-    archive: [...filter(state.archive, ({ id }) => id !== idOfArchiveItem)],
-    pakeeps: [...state.pakeeps, find(state.archive, ({ id }) => id === idOfArchiveItem)]
-  }),
   [types.SCROLL_DIRECTION]: (state, { scrollDirectionName }) => ({
     ...state,
     scrollDirectionName
   }),
 
   [types.IS_MENU_OPEN]: (state, { boolStatus }) => ({ ...state, isMenuOpen: boolStatus }),
-  [types.CHANGE_PAKEEP_COLUMNS]: (state, { breakpointName, columnValue }) => ({
-    ...state,
-    columns: {
-      ...state.columns,
-      [breakpointName]: {
-        ...state.columns[breakpointName],
-        [columnValue.id]: columnValue
-      }
-    }
-  }),
-  [types.CHANGE_TWO_PAKEEP_COLUMNS]: (state, { breakpointName, startColumn, finishColumn }) => ({
-    ...state,
-    columns: {
-      ...state.columns,
-      [breakpointName]: {
-        ...state.columns[breakpointName],
-        [startColumn.id]: startColumn,
-        [finishColumn.id]: finishColumn
-      }
-    }
-  }),
   [types.ADD_DATE_TO_PAKEEP]: (state, { pakeepId, event }) => ({
     ...state,
     pakeeps: {

@@ -9,14 +9,6 @@ export const getFilteredLabels = createArraySelector([getPakeeplLabels, getGloba
   _.find(globalLabels, ({ id }) => id === pakeepId)
 );
 
-
-
-
-export const getFolderPropertyies = createSelector(
-  [folderPropertyies => folderPropertyies],
-  folderPropertyies => folderPropertyies
-);
-
 export const getCurrentFolderPropertyIdx = createSelector(
   [currentFolderPropertyIdx => currentFolderPropertyIdx],
   currentFolderPropertyIdx => currentFolderPropertyIdx
@@ -29,3 +21,7 @@ export const getDrawerWidth = createSelector([drawerWidth => drawerWidth], drawe
 export const getLabels = createSelector([labels => labels], labels => labels);
 
 export const getDefaultFolderArr = createSelector([arr => arr], arr => arr);
+
+export const getPakeeps = createSelector([pakeeps => pakeeps], pakeeps => pakeeps);
+export const getPakeepsOrderNames = createSelector([orderNames => orderNames], orderNames => orderNames);
+export const getIsUsePreviuosOrder = createSelector([bool => bool], bool => bool);

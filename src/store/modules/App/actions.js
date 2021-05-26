@@ -28,11 +28,18 @@ export const toSetCurrentFolderPropertyIdx = folderIdx => ({
 });
 
 export const toChangeFolders = foldersArr => ({ type: types.HANDLE_FOLDERS, foldersArr });
-export const toChangeLabelItem = (labels) => ({ type: types.CHANGE_LABEL_ITEM, labels });
+export const toChangeLabelItem = labels => ({ type: types.CHANGE_LABEL_ITEM, labels });
 
-export const toMovePakeepToArchive = (id,changedLabel) => ({ type: types.MOVE_PAKEEP_TO_ARCHIVE, id,changedLabel });
-export const toDeleteLabelFromPakeep = (pakeepId,labelId) => ({ type: types.DELETE_LABEL_FROM_PAKEEP, pakeepId,labelId });
+export const toMovePakeepToArchive = (id, changedLabel) => ({ type: types.MOVE_PAKEEP_TO_ARCHIVE, id, changedLabel });
+export const toDeleteLabelFromPakeep = (currentPakeep, labels) => ({
+  type: types.DELETE_LABEL_FROM_PAKEEP,
+  currentPakeep,
+  labels
+});
 
-export const toHandleUsePreviuos = (boolValue) => ({ type: types.HANDLE_USE_PREVIUOS, boolValue });
-export const toHandleDrawerWidth = (drawerWidth) => ({ type: types.HANDLE_DRAWER_WIDTH, drawerWidth });
+export const toSetPreviusOrderNames = orderNames => ({ type: types.HANDLE_SET_PREVIUOS_ORDER_NAMES, orderNames });
+export const toHandleDrawerWidth = drawerWidth => ({ type: types.HANDLE_DRAWER_WIDTH, drawerWidth });
+
+
+export const toAddNewGlobalLabel = newLabel => ({ type: types.ADD_NEW_GLOBAL_LABEL, newLabel });
 

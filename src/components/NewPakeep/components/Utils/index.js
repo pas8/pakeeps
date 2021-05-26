@@ -5,6 +5,7 @@ import { makeStyles, Box, Button, Grid } from '@material-ui/core';
 import IconsUtils from 'components/IconsUtils';
 import SaveRoundedIcon from '@material-ui/icons/SaveRounded';
 import { useMeasure } from 'react-use';
+import { themeColors } from 'components/theme';
 
 // import SaveOutlinedIcon from '@material-ui/icons/SaveOutlined';
 const useStyles = makeStyles(theme => ({
@@ -15,13 +16,10 @@ const useStyles = makeStyles(theme => ({
     justifyContent: 'flex-end',
     flexGrow: 1
   },
-  button: { justifyContent: 'flex-end' },
-  hidden: {
-    display: 'none'
-  }
+  button: { justifyContent: 'flex-end' }
 }));
 
-const NewPakeepUtils = ({ open = !true, handleNewPakeepSave, widthOfContainer, ...newPakeepUtilsProps }) => {
+const NewPakeepUtils = ({ handleNewPakeepSave, widthOfContainer, ...newPakeepUtilsProps }) => {
   const classes = useStyles();
 
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
@@ -40,11 +38,11 @@ const NewPakeepUtils = ({ open = !true, handleNewPakeepSave, widthOfContainer, .
   };
 
   return (
-    <Box className={clsx(classes.container, !open ? classes.hidden : null)}>
+    <Box className={clsx(classes.container)}>
       <IconsUtils {...iconUtilsProps} />
       <Box className={classes.buttonGroupWrapper} ref={ref}>
         <Box className={classes.buttonWrapper}>
-          <Button color={'success'} style={{ color: 'rgba(255,255,255,0.4)' }}>
+          <Button  style={{ color: themeColors.whiteRgbaColorWith0dot42valueOfAlfaCanal }}>
             Close
           </Button>
         </Box>
@@ -59,17 +57,8 @@ const NewPakeepUtils = ({ open = !true, handleNewPakeepSave, widthOfContainer, .
 };
 
 NewPakeepUtils.propTypes = {
-  bookmark: PropTypes.any,
-  changingTitle: PropTypes.any,
-  checkbox: PropTypes.any,
-  favorite: PropTypes.bool,
   handleNewPakeepSave: PropTypes.func,
-  handleSetBookmarkPakeep: PropTypes.any,
-  handleSetColorPakeep: PropTypes.any,
-  handleSetFavoritePakeep: PropTypes.func,
-  labels: PropTypes.any,
-  open: PropTypes.bool,
-  setEditTitleIsTrue: PropTypes.func
+  widthOfContainer: PropTypes.oneOf(['string', 'number'])
 };
 
 export default NewPakeepUtils;

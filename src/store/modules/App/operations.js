@@ -1,4 +1,4 @@
-import { find ,filter} from 'lodash';
+import { find, filter } from 'lodash';
 import {
   toAddDateToPakeep,
   toAddNewPakeep,
@@ -12,8 +12,9 @@ import {
   toChangeFolders,
   toChangeLabelItem,
   toDeleteLabelFromPakeep,
-  toHandleUsePreviuos,
-  toHandleDrawerWidth
+  toSetPreviusOrderNames,
+  toHandleDrawerWidth,
+  toAddNewGlobalLabel
 } from './actions';
 
 export const addNewPaKeepThunk = data => dispatch => {
@@ -70,13 +71,27 @@ export const changeLabelItemThunk = (labelId, property) => (dispatch, getState) 
   dispatch(toChangeLabelItem(newLabels));
 };
 
-export const handleDeleteLabelFromPakeepThunk = (pakeepId, labelId) => dispatch => {
-  dispatch(toDeleteLabelFromPakeep(pakeepId, labelId));
-};
-export const handleUsePreviuosValue = boolValue => dispatch => {
-  dispatch(toHandleUsePreviuos(boolValue));
+export const handleDeleteLabelFromPakeepThunk = (pakeepId, labelId) => (dispatch, getState) => {
+  const {
+    app: { pakeeps }
+  } = getState();
+
+  const currentPakeep = find(pakeeps, ({ id }) => pakeepId === id);
+  const labels = filter(currentPakeep.labels, id => labelId !== id);
+
+  dispatch(toDeleteLabelFromPakeep(currentPakeep, labels));
 };
 
 export const handleDrawerWidthThunk = drawerWidth => dispatch => {
   dispatch(toHandleDrawerWidth(drawerWidth));
 };
+
+export const handleSetPreviusOrderNames = orderNames => dispatch => {
+  dispatch(toSetPreviusOrderNames(orderNames));
+};
+
+export const handleAddNewGlobalLabelThunk = newLabel => dispatch => {
+  dispatch(toAddNewGlobalLabel(newLabel));
+};
+
+

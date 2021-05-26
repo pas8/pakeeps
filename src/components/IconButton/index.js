@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { Grid, IconButton, makeStyles } from '@material-ui/core';
+import { Grid, IconButton, makeStyles, Badge } from '@material-ui/core';
 import { themeColors } from 'components/theme';
 import _ from 'lodash';
 import { useMeasure } from 'react-use';
@@ -20,7 +20,8 @@ const IconButtonByPas = ({
   activeProperty = false,
   size,
   customColor = null,
-  handleAverageMainComponentWidth = false
+  handleAverageMainComponentWidth = false,
+  badgeContent 
 }) => {
   const currentHoverStatusIsTrue = _.isEqual(activeIconName, iconName) && activeProperty;
   const iconColor = activeIcon
@@ -35,13 +36,15 @@ const IconButtonByPas = ({
   const classes = useStyles({ iconColor, rotate });
 
   const [ref, { width }] = useMeasure();
-  
+
   useEffect(() => width !== 0 && handleAverageMainComponentWidth && handleAverageMainComponentWidth(width), [width]);
 
   return (
     <Grid className={size === 'small' ? classes.smallButtonSize : null} component={'div'} ref={ref}>
       <IconButton onClick={onClick}>
-        <Icon className={classes.icon} />
+        <Badge badgeContent={badgeContent} color={'secondary'}>
+          <Icon className={classes.icon} />
+        </Badge>
       </IconButton>
     </Grid>
   );
@@ -51,10 +54,15 @@ IconButtonByPas.propTypes = {
   Icon: PropTypes.node,
   activeIcon: PropTypes.bool,
   activeIconName: PropTypes.string,
-  activeProperty: PropTypes.any,
+  activeProperty: PropTypes.bool,
+  badgeContent: PropTypes.number,
+  customColor: PropTypes.any,
+  handleAverageMainComponentWidth: PropTypes.bool,
+  icon: PropTypes.any,
   iconName: PropTypes.string,
-  onClick: PropTypes.any,
-  rotateDeg: PropTypes.number
-};
+  onClick: PropTypes.func,
+  rotateDeg: PropTypes.number,
+  size: PropTypes.string
+}
 
 export default IconButtonByPas;
