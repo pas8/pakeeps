@@ -1,12 +1,9 @@
 import PropTypes from 'prop-types';
 import React, { useState, useEffect } from 'react';
 import { nanoid } from 'nanoid';
-import { colord } from 'colord';
 import { find } from 'lodash';
-import { iconsArr } from 'components/Icons';
 import LabelItem from './components/LabelItem';
 import MenuOfLabelPart from './components/Menu';
-import { themeColors } from 'components/theme';
 import { useFindIcon } from 'hooks/useFindIcon.hook';
 
 const LabelPart = ({ labels, handleDeleteLabelFromPakeepFunc, changeLabelItemFunc, pakeepId }) => {
@@ -50,10 +47,6 @@ const LabelPart = ({ labels, handleDeleteLabelFromPakeepFunc, changeLabelItemFun
       {labels.map(({ title, iconName: labelIconName, id, color, variant }) => {
         const icon = useFindIcon(labelIconName);
 
-        const currentColor =
-          color === 'primary' ? themeColors.primaryMain : color === 'secondary' ? themeColors.secondaryMain : color;
-        const isDark = colord(color).brightness() >= 0.48;
-
         const labelChipProps = {
           icon,
           label: title,
@@ -69,7 +62,7 @@ const LabelPart = ({ labels, handleDeleteLabelFromPakeepFunc, changeLabelItemFun
           setMenuState({ mouseX: e.clientX, mouseY: e.clientY, id, variant, labelIconName });
         };
 
-        const labelItemProps = { isDark, currentColor, handleOpen, labelChipProps };
+        const labelItemProps = { currentColor:color, handleOpen, labelChipProps };
 
         return <LabelItem {...labelItemProps} />;
       })}
