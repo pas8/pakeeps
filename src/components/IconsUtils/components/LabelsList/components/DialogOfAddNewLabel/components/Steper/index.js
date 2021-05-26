@@ -11,12 +11,15 @@ const useStyles = makeStyles(({ spacing }) => ({
   },
   buttonContainer: {
     margin: spacing(0, 0, 0, 1),
+    maxWidth: spacing(12),
+    height: '100%',
+
     '& button': {
       float: 'right'
     }
   },
   componentContainer: {
-    minWidth: spacing(32)
+    minWidth: spacing(28)
   }
 }));
 const SteperOfDialogOfAddNewLabel = ({ stepsArrOfDialogOfAddNewLabel }) => {
@@ -27,28 +30,48 @@ const SteperOfDialogOfAddNewLabel = ({ stepsArrOfDialogOfAddNewLabel }) => {
   return (
     <Grid className={classes.container}>
       <Stepper activeStep={activeStep} orientation={'vertical'}>
-        {stepsArrOfDialogOfAddNewLabel.map(({ title, component: Component, componentProps }) => (
-          <Step key={title}>
-            <StepLabel>{title} </StepLabel>
-            <StepContent>
-              <Grid container className={classes.componentContainer}>
-                <Component {...componentProps} />
-              </Grid>
-              <Grid container direction={'column'} className={classes.buttonContainer}>
-                <Grid>
-                  <Button disabled={activeStep === 0} onClick={() => decrimentActiveStep()} size={'small'}>
-                    Back
-                  </Button>
+        {stepsArrOfDialogOfAddNewLabel.map(
+          ({
+            title,
+            Component,
+            componentProps,
+            isAdditionalComponentHidden = true,
+            AdditionalComponent,
+            additionalComponentProps
+          }) => (
+            <Step key={title}>
+              <StepLabel>{title} </StepLabel>
+              <StepContent>
+                <Grid container>
+                  <Grid>
+                    <Grid direction={'column'}>
+                      <Grid container className={classes.componentContainer} alignItems={'center'}>
+                        <Component {...componentProps} />
+                      </Grid> 
+                      <Grid>
+                        {!isAdditionalComponentHidden && <AdditionalComponent {...additionalComponentProps} />}
+                      </Grid>
+                    </Grid>
+                  </Grid>
+                  <Grid>
+                    <Grid container direction={'column'} justify={'center'} className={classes.buttonContainer}>
+                      <Grid>
+                        <Button disabled={activeStep === 0} onClick={() => decrimentActiveStep()} size={'small'}>
+                          Back
+                        </Button>
+                      </Grid>
+                      <Grid>
+                        <Button color={'secondary'} onClick={() => incrementActiveStep()} size={'small'}>
+                          {activeStep === stepsArrOfDialogOfAddNewLabel.length - 1 ? 'Finish' : 'Next'}
+                        </Button>
+                      </Grid>
+                    </Grid>
+                  </Grid>
                 </Grid>
-                <Grid>
-                  <Button color={'secondary'} onClick={() => incrementActiveStep()} size={'small'}>
-                    {activeStep === stepsArrOfDialogOfAddNewLabel.length - 1 ? 'Finish' : 'Next'}
-                  </Button>
-                </Grid>
-              </Grid>
-            </StepContent>
-          </Step>
-        ))}
+              </StepContent>
+            </Step>
+          )
+        )}
       </Stepper>
     </Grid>
   );
