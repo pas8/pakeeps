@@ -1,7 +1,9 @@
 import PropTypes from 'prop-types';
-import { makeStyles, Button, Stepper, StepLabel, StepContent, Step, Grid } from '@material-ui/core';
+import { makeStyles, Button, Stepper, StepLabel, StepContent, Step, Grid, Box, Typography } from '@material-ui/core';
 import { useCounter } from 'react-use';
-
+import SubdirectoryArrowLeftIcon from '@material-ui/icons/SubdirectoryArrowLeft';
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
+import ArrowLeftIcon from '@material-ui/icons/ArrowLeft';
 const useStyles = makeStyles(({ spacing }) => ({
   container: {
     '& .MuiCollapse-wrapperInner': {
@@ -22,32 +24,47 @@ const useStyles = makeStyles(({ spacing }) => ({
     minWidth: spacing(28)
   }
 }));
-const SteperOfDialogOfAddNewLabel = ({ stepsArrOfDialogOfAddNewLabel }) => {
+const SteperOfDialogOfAddNewLabel = ({ stepsArrOfDialogOfAddNewLabel, toNullityNewLabelState }) => {
   const classes = useStyles();
 
-  const [activeStep, { inc: incrementActiveStep, dec: decrimentActiveStep, set, reset }] = useCounter(0);
+  const [activeStep, { inc: incrementActiveStep, dec: decrimentActiveStep, set: setActiveStep, reset }] = useCounter(0);
+
+  const isStepLast = activeStep === stepsArrOfDialogOfAddNewLabel.length - 1;
+  const isFinished = activeStep === stepsArrOfDialogOfAddNewLabel.length;
+
+  const toReset = () => {
+    toNullityNewLabelState();
+    reset();
+  };
 
   return (
-    <Grid className={classes.container}>
+    <Grid className={classes.container} container alignItems={'center'}>
       <Stepper activeStep={activeStep} orientation={'vertical'}>
         {stepsArrOfDialogOfAddNewLabel.map(
-          ({
-            title,
-            Component,
-            componentProps,
-            isAdditionalComponentHidden = true,
-            AdditionalComponent,
-            additionalComponentProps
-          }) => (
+          (
+            {
+              title,
+              Component,
+              componentProps,
+              isAdditionalComponentHidden = true,
+              AdditionalComponent,
+              additionalComponentProps
+            },
+            idx
+          ) => (
             <Step key={title}>
-              <StepLabel>{title} </StepLabel>
+              <StepLabel>
+                <Grid onClick={() => setActiveStep(idx)} style={{ cursor: 'pointer' }}>
+                  {title}
+                </Grid>
+              </StepLabel>
               <StepContent>
                 <Grid container alignItems={'center'}>
                   <Grid>
                     <Grid direction={'column'}>
                       <Grid container className={classes.componentContainer} alignItems={'center'}>
                         <Component {...componentProps} />
-                      </Grid> 
+                      </Grid>
                       <Grid>
                         {!isAdditionalComponentHidden && <AdditionalComponent {...additionalComponentProps} />}
                       </Grid>
@@ -62,7 +79,7 @@ const SteperOfDialogOfAddNewLabel = ({ stepsArrOfDialogOfAddNewLabel }) => {
                       </Grid>
                       <Grid>
                         <Button color={'secondary'} onClick={() => incrementActiveStep()} size={'small'}>
-                          {activeStep === stepsArrOfDialogOfAddNewLabel.length - 1 ? 'Finish' : 'Next'}
+                          {isStepLast ? 'Finish' : 'Next'}
                         </Button>
                       </Grid>
                     </Grid>
@@ -73,6 +90,16 @@ const SteperOfDialogOfAddNewLabel = ({ stepsArrOfDialogOfAddNewLabel }) => {
           )
         )}
       </Stepper>
+      {isFinished && (
+        <Box m={8} display={'flex'} flexDirection={'column'}>
+          <Button onClick={() => decrimentActiveStep()} size={'small'}>
+            Back
+          </Button>
+          <Button onClick={toReset} size={'small'} color={'secondary'}>
+            Reset
+          </Button>
+        </Box>
+      )}
     </Grid>
   );
 };

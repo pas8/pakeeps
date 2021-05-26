@@ -1,3 +1,4 @@
+import PropTypes from "prop-types";
 import { Dialog, makeStyles, DialogActions, DialogTitle, Button, Grid, Chip } from '@material-ui/core';
 import { themeColors } from 'components/theme';
 import { useState } from 'react';
@@ -17,14 +18,15 @@ import ColorPickerByPas from 'components/ColorChanger';
 import includes from 'lodash.includes';
 import LabelItem from 'components/PakeepList/components/PakeepElement/components/AttributeGroup/components/LabelPart/components/LabelItem';
 import { useFindIcon } from 'hooks/useFindIcon.hook';
+import { useSnackbar } from 'notistack';
+import { isEqual } from 'lodash';
+import RestoreOutlinedIcon from '@material-ui/icons/RestoreOutlined';
+import { usePrevious } from 'react-use';
 
-const useStyles = makeStyles(theme => ({}));
-
-const DialogOfAddNewLabel = ({ isDialogOpen, handleCloseAddNewLabelDialog, handleAddNewGlobalLabelThunk }) => {
-  const classes = useStyles();
+const DialogOfAddNewLabel = ({ isDialogOpen, handleCloseAddNewLabelDialog, handleAddNewGlobalLabelThunk ,handleOpenAddNewLabelDialog}) => {
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
   const labelVariants = ['outlined', 'default'];
-
   const iconNameVariants = ['', 'favorite'];
 
   const nullityOfNewLabelState = {
@@ -49,12 +51,40 @@ const DialogOfAddNewLabel = ({ isDialogOpen, handleCloseAddNewLabelDialog, handl
   const isLabelOutlined = newLabelState.variant === labelVariants[0];
   const isLabelHaveIcon = newLabelState.iconName === iconNameVariants[0];
 
+  const previuosNewLabelState = usePrevious(newLabelState);
+
+const toNullityNewLabelState = () => setNewLabelState(nullityOfNewLabelState)
+
+  const handleRestoreLastGlobalLabel = () =>{
+    !isEqual(nullityOfNewLabelState, previuosNewLabelState) && setNewLabelState(previuosNewLabelState);
+    handleOpenAddNewLabelDialog()
+    closeSnackbar()
+  }
+
   const handleCloseDialog = () => {
-    console.log('log');
+    handleCloseAddNewLabelDialog();
+    toNullityNewLabelState()
+    !isEqual(nullityOfNewLabelState, newLabelState) &&
+      enqueueSnackbar({
+        message: 'Dialog of creating label was closed',
+        severity: 'warning',
+        buttonText: 'Restore',
+        onClick: handleRestoreLastGlobalLabel,
+        icon: RestoreOutlinedIcon
+      });
   };
 
   const handleSave = () => {
-    console.log('log');
+    if(!newLabelState.title) return enqueueSnackbar({ message: 'Label should have more than 1 letter', severity: 'error' });
+
+    try {
+      handleAddNewGlobalLabelThunk(newLabelState);
+      enqueueSnackbar({ message: 'Global label was successfully added' });
+      handleCloseAddNewLabelDialog();
+      toNullityNewLabelState()
+    } catch (error) {
+      enqueueSnackbar({ message: 'Something went wrong', severity: 'error' });
+    }
   };
 
   const onChangeOfLabelTitleInput = ({ target: { value } }) => setNewLabelState(state => ({ ...state, title: value }));
@@ -104,7 +134,7 @@ const DialogOfAddNewLabel = ({ isDialogOpen, handleCloseAddNewLabelDialog, handl
     }
   ];
 
-  const steperOfDialogOfAddNewLabelProps = { stepsArrOfDialogOfAddNewLabel };
+  const steperOfDialogOfAddNewLabelProps = { stepsArrOfDialogOfAddNewLabel,toNullityNewLabelState };
 
   const previewLabelProps = {
     ...newLabelState,
@@ -115,7 +145,7 @@ const DialogOfAddNewLabel = ({ isDialogOpen, handleCloseAddNewLabelDialog, handl
   const labelItemProps = { currentColor: newLabelState.color, handleOpen: null, labelChipProps: previewLabelProps };
 
   return (
-    <Dialog open={true} onClose={handleCloseAddNewLabelDialog}>
+    <Dialog open={isDialogOpen} onClose={handleCloseDialog}>
       <DialogTitle>Add new global label</DialogTitle>
       <SteperOfDialogOfAddNewLabel {...steperOfDialogOfAddNewLabelProps} />
       <DialogActions>
@@ -132,7 +162,12 @@ const DialogOfAddNewLabel = ({ isDialogOpen, handleCloseAddNewLabelDialog, handl
   );
 };
 
-DialogOfAddNewLabel.propTypes = {};
+DialogOfAddNewLabel.propTypes = {
+  handleAddNewGlobalLabelThunk: PropTypes.func,
+  handleCloseAddNewLabelDialog: PropTypes.func,
+  handleOpenAddNewLabelDialog: PropTypes.func,
+  isDialogOpen: PropTypes.bool
+}
 
 const mapDispatchToProps = dispatch => ({
   handleAddNewGlobalLabelThunk: newLabel => dispatch(handleAddNewGlobalLabelThunk(newLabel))

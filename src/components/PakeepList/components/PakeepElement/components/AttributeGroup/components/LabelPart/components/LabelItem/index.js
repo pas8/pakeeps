@@ -30,13 +30,13 @@ const useStyles = makeStyles(theme => ({
 
 const LabelItem = ({ currentColor, handleOpen, labelChipProps }) => {
   const isDark = colord(currentColor).brightness() >= 0.48;
-
-  const color =
-    currentColor === 'primary'
-      ? themeColors.primaryMain
-      : currentColor === 'secondary'
-      ? themeColors.secondaryMain
-      : currentColor;
+  const color = !currentColor
+    ? '#969696'
+    : currentColor === 'primary'
+    ? themeColors.primaryMain
+    : currentColor === 'secondary'
+    ? themeColors.secondaryMain
+    : currentColor;
 
   const classes = useStyles({ color, isDark });
 
