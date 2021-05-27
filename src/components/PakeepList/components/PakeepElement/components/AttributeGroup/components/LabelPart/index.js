@@ -5,12 +5,19 @@ import { find } from 'lodash';
 import LabelItem from './components/LabelItem';
 import MenuOfLabelPart from './components/Menu';
 import { useFindIcon } from 'hooks/useFindIcon.hook';
+import WrapperOfMenuOfLabelPart from './components/MenuWrapper';
 
 const LabelPart = ({ labels, handleDeleteLabelFromPakeepFunc, changeLabelItemFunc, pakeepId }) => {
-  const nullityOfMenuState = { mouseX: null, mouseY: null, id: null, variant: '', labelIconName: '' };
+  const nullityOfMenuState = {
+    mouseX: null,
+    mouseY: null,
+    id: null,
+    variant: '',
+    labelIconName: '',
+    title: '',
+    color: ''
+  };
   const [menuState, setMenuState] = useState(nullityOfMenuState);
-
-  const setLabelHoverStatusIsFalse = () => setLabelHover(false);
 
   const handleClose = () => setMenuState(nullityOfMenuState);
 
@@ -18,28 +25,22 @@ const LabelPart = ({ labels, handleDeleteLabelFromPakeepFunc, changeLabelItemFun
     handleDeleteLabelFromPakeepFunc(pakeepId, menuState.id);
     handleClose();
   };
-  const handleChangeLabelColor = color => changeLabelItemFunc(menuState.id, { color });
-  const handleChangeLabelIconName = iconName => changeLabelItemFunc(menuState.id, { iconName });
-  const handleChangeLabelVariant = () => {
-    const variant = menuState.variant === 'default' ? 'outlined' : 'default';
-    changeLabelItemFunc(menuState.id, { variant });
-    setMenuState(state => ({ ...state, variant }));
-  };
-  useEffect(() => {
-    const { variant, iconName: labelIconName } = find(labels, ({ id }) => menuState.id === id) ?? {
-      variant: '',
-      labelIconName: ''
-    };
-    setMenuState(state => ({ ...state, labelIconName, variant }));
-  }, [labels]);
 
-  const menuOfLabelPartProps = {
-    menuState,
-    handleDeleteLabel,
+
+  // useEffect(() => {
+  //   const { variant, iconName: labelIconName } = find(labels, ({ id }) => menuState.id === id) ?? {
+  //     variant: '',
+  //     labelIconName: ''
+  //   };
+  //   setMenuState(state => ({ ...state, labelIconName, variant }));
+  // }, [labels]);
+
+  const wrapperOfMenuOfLabelPartProps = {
     handleClose,
-    handleChangeLabelColor,
-    handleChangeLabelVariant,
-    handleChangeLabelIconName
+    handleDeleteLabel,
+    menuState,
+    changeLabelItemFunc,
+    setMenuState
   };
 
   return (
@@ -59,14 +60,14 @@ const LabelPart = ({ labels, handleDeleteLabelFromPakeepFunc, changeLabelItemFun
 
         const handleOpen = e => {
           e.preventDefault();
-          setMenuState({ mouseX: e.clientX, mouseY: e.clientY, id, variant, labelIconName });
+          setMenuState({ mouseX: e.clientX, mouseY: e.clientY, id, variant, labelIconName, title ,color});
         };
 
-        const labelItemProps = { currentColor:color, handleOpen, labelChipProps };
+        const labelItemProps = { currentColor: color, handleOpen, labelChipProps };
 
         return <LabelItem {...labelItemProps} />;
       })}
-      <MenuOfLabelPart {...menuOfLabelPartProps} />
+      <WrapperOfMenuOfLabelPart {...wrapperOfMenuOfLabelPartProps} />
     </>
   );
 };

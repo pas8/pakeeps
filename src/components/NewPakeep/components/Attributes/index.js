@@ -15,21 +15,16 @@ const useStyles = makeStyles(theme => ({
 const AttributesOfNewPakeep = ({ filteredLabels, ...attributesOfNewPakeepProps }) => {
   const classes = useStyles();
 
-  const attributeGroupProps = {
-    ...attributesOfNewPakeepProps,
-    labels:filteredLabels
-
-  }
+  const attributeGroupProps = { ...attributesOfNewPakeepProps, labels: filteredLabels };
+  
   return (
     <Grid className={classes.attributeContainer}>
-      <AttributeGroup  {...attributeGroupProps}/>
+      <AttributeGroup {...attributeGroupProps} />
     </Grid>
   );
 };
 
-AttributesOfNewPakeep.propTypes = {
-  filteredLabels: PropTypes.array
-}
+AttributesOfNewPakeep.propTypes = { filteredLabels: PropTypes.array };
 
 const mapStateToProps = ({ app: { labels: globalLabels } }, { labels }) => ({
   filteredLabels: getFilteredLabels(labels, globalLabels)

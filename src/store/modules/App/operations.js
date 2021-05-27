@@ -55,19 +55,13 @@ export const handleFoldersThunk = foldersArr => dispatch => {
   dispatch(toChangeFolders(foldersArr));
 };
 
-// export const addNewLabelItemThunk = (id,changedLabel) => dispatch => {
-//   dispatch(toChangeLabelItem(id,changedLabel));
-// };
-
-export const changeLabelItemThunk = (labelId, property) => (dispatch, getState) => {
+export const changeLabelItemThunk = changedLabel => (dispatch, getState) => {
   const {
     app: { labels }
   } = getState();
 
-  const findedLabel = find(labels, ({ id }) => id === labelId);
-  const filteredLabels = filter(labels, ({ id }) => id !== labelId);
-  const newLabels = [...filteredLabels, { ...findedLabel, ...property }];
-
+  const filteredLabels = filter(labels, ({ id }) => id !== changedLabel.id);
+  const newLabels = [...filteredLabels, changedLabel];
   dispatch(toChangeLabelItem(newLabels));
 };
 
@@ -93,5 +87,3 @@ export const handleSetPreviusOrderNames = orderNames => dispatch => {
 export const handleAddNewGlobalLabelThunk = newLabel => dispatch => {
   dispatch(toAddNewGlobalLabel(newLabel));
 };
-
-
