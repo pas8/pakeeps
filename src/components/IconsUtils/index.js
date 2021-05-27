@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles, Grid } from '@material-ui/core';
 import CheckBoxOutlinedIcon from '@material-ui/icons/CheckBoxOutlined';
@@ -23,31 +23,33 @@ import _ from 'lodash';
 import MoreUtils from './components/MoreUtils';
 import PlayCircleOutlineOutlinedIcon from '@material-ui/icons/PlayCircleOutlineOutlined';
 import LabelsList from './components/LabelsList';
-
-const useStyles = makeStyles(theme => ({
-  popover: { padding: theme.spacing(0.4, 0.8) },
-  container: { display: 'flex', position: 'absolute', bottom: 0, left: 0, right: 8 },
-  moreIcon: { margin: theme.spacing(0.4, 1.4, 0, -0.8) }
-}));
+import PinIcon from 'components/Icons/components/PinIcon';
+import FormatColorFillOutlinedIcon from '@material-ui/icons/FormatColorFillOutlined';
+import FormatColorTextOutlinedIcon from '@material-ui/icons/FormatColorTextOutlined';
 
 const IconsUtils = ({
   isAllIconsIsShown = true,
   setEditTitleIsTrue,
-  favorite = true,
   handleSetFavoritePakeep,
   changingTitle,
-  bookmark,
+  isPinned,
+  isFavorite,
+  isInBookmark,
   labels,
+  color,
   checkbox,
   handleSetBookmarkPakeep,
   handleSetColorPakeep,
   handleSetWidth,
-  isNewPakeepContainerHaveFullWidth ,
+  isNewPakeepContainerHaveFullWidth,
   widthOfContainer,
   labelsListProps,
-  labelBargeNumber
+  handleSetIsPinnedPakeep,
+  labelBargeNumber,
+  customColor,
+  handleSetBackgroundColorPakeep,
+  backgroundColor
 }) => {
-  const classes = useStyles();
 
   const handleClick = () => console.log('placeholder');
   const buttonUtilsNewPakeepArray = [
@@ -60,17 +62,33 @@ const IconsUtils = ({
       onlyPopover: true
     },
     {
-      icon: PaletteOutlinedIcon,
+      icon: FormatColorFillOutlinedIcon,
       popoverText: 'Change backgroundColor',
-      name: 'palette',
-      // onClick: handleSetColorPakeep,
+      name: 'backgroundColor',
+      activeIcon: !!backgroundColor,
+
+      menuComponentsProps: { handleSave: handleSetBackgroundColorPakeep },
       menuComponents: ColorPickerByPas
     },
+    {
+      icon: FormatColorTextOutlinedIcon,
+      popoverText: 'Change text color',
+      name: 'textColor',
+      activeIcon: !!color,
+
+      menuComponentsProps: { handleSave: handleSetColorPakeep },
+      menuComponents: ColorPickerByPas
+    },
+
+
+
+
     {
       icon: ArchiveOutlinedIcon,
       popoverText: 'Archive pakeep',
       name: 'archive',
       onClick: handleClick,
+
       onlyPopover: true
     },
     {
@@ -78,6 +96,7 @@ const IconsUtils = ({
       popoverText: 'Add date to pakeep',
       name: 'date',
       onClick: handleClick,
+
       menuComponents: AddDateToPakeep
     },
     { icon: WallpaperOutlinedIcon, popoverText: 'Add picture', name: 'picture', onClick: handleClick },
@@ -97,7 +116,7 @@ const IconsUtils = ({
       name: 'labels',
       activeIcon: !!labels.length,
       menuComponents: LabelsList,
-      badgeContent:labelBargeNumber,
+      badgeContent: labelBargeNumber,
       menuComponentsProps: { ...labelsListProps }
     },
     {
@@ -105,14 +124,24 @@ const IconsUtils = ({
       popoverText: 'Add to favorites',
       name: 'favorite',
       onClick: handleSetFavoritePakeep,
-      activeIcon: favorite
+      activeIcon: isFavorite,
+      onlyPopover: true
     },
     {
       icon: BookmarksOutlinedIcon,
       popoverText: 'Add to bookmark',
       name: 'bookmark',
       onClick: handleSetBookmarkPakeep,
-      activeIcon: bookmark
+      activeIcon: isInBookmark,
+      onlyPopover: true
+    },
+    {
+      icon: PinIcon,
+      popoverText: 'Pin pakeep',
+      name: 'pinned',
+      onClick: handleSetIsPinnedPakeep,
+      activeIcon: isPinned,
+      onlyPopover: true
     },
     {
       icon: !isNewPakeepContainerHaveFullWidth ? UnfoldMoreOutlinedIcon : UnfoldLessOutlinedIcon,
@@ -124,13 +153,14 @@ const IconsUtils = ({
       onlyPopover: true
     }
   ];
-
-  const [popoverAndMenuState, setPopoverAndMenuState] = useState({
+  const nullityOfPopoverAndMenuState = {
     name: 'null',
     menuIsOpen: false,
     popoverIsOpen: true,
     onMenuClose: null
-  });
+  };
+  const [popoverAndMenuState, setPopoverAndMenuState] = useState(nullityOfPopoverAndMenuState);
+  // useEffect(() => setPopoverAndMenuState(nullityOfPopoverAndMenuState), [color]);
 
   const handlePopoverAndMenuState = value => setPopoverAndMenuState(value);
 
@@ -143,7 +173,8 @@ const IconsUtils = ({
     buttonUtilsArr: buttonUtilsNewPakeepArray,
     handlePopoverAndMenuState,
     popoverAndMenuState,
-    handleAverageMainComponentWidth: handleConcatAverageWidth
+    handleAverageMainComponentWidth: handleConcatAverageWidth,
+    customColor
   };
 
   const buttonMoreOfItemOfArrWhichWasSliced = {
@@ -161,7 +192,8 @@ const IconsUtils = ({
   const slicedWrapperOfPopoverAndMenuProps = {
     buttonUtilsArr: buttonUtilsSlicedAndConcatedWithMoreButtonArr,
     handlePopoverAndMenuState,
-    popoverAndMenuState
+    popoverAndMenuState,
+    customColor
   };
 
   const wrapperOfPopoverAndMenuProps = isShouldBeSliced

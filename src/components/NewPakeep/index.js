@@ -12,6 +12,9 @@ import AttributesOfNewPakeep from './components/Attributes';
 import { useCustomBreakpoint } from 'hooks/useCustomBreakpoint';
 import EyeIconButton from './components/EyeIconButton';
 import useKeyboardJs from 'react-use/lib/useKeyboardJs';
+import { colord } from 'colord';
+import { useIsColorDark } from 'hooks/useIsColorDark.hook';
+import { useIsReadableColor } from 'hooks/useIsReadableColor.hook';
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -25,10 +28,15 @@ const useStyles = makeStyles(theme => ({
       padding: ({ isLabelViewHidden }) => theme.spacing(2, 6, isLabelViewHidden ? 6 : 10, 1.4)
     },
     '& input,textarea': {
-      caretColor: themeColors.primaryMain
+      caretColor: ({ customColor }) => (!customColor ? themeColors.primaryMain : customColor.hover),
+      color: ({ customColor }) => customColor.hover
     }
   },
-  wrapper: { padding: theme.spacing(0), backgroundColor: 'transparent', position: 'relative' },
+  wrapper: {
+    padding: theme.spacing(0),
+    backgroundColor: ({ backgroundColor }) => (colord(backgroundColor).isValid() ? backgroundColor : 'transparent'),
+    position: 'relative'
+  },
   hidden: { display: 'none' },
   inputTitle: { padding: 0 },
   textField: { paddingBottom: 0 },
@@ -52,12 +60,14 @@ const NewPaKeep = ({ addNewPaKeepThunk }) => {
     text: '',
     isInBookmark: false,
     isFavorite: false,
+    isPinned: false,
     id: nanoid(),
-    color: 'transparent',
+    color: 'default',
+    backgroundColor: 'default',
     labels: ['label3', 'label1', 'label0']
   };
-
   const [state, setState] = useState(nulittyState);
+
   const [value, updateCookie, deleteCookie] = useCookie(state);
 
   useEffect(() => _.isEqual(state, nulittyState) && setState(JSON.parse(value)), []);
@@ -87,9 +97,11 @@ const NewPaKeep = ({ addNewPaKeepThunk }) => {
     setStatusState(state => ({ ...state, isUtilsHidden: !state.isUtilsHidden }));
   };
 
-  const handleSetFavoritePakeep = () => setState(state => ({ ...state, favorite: !state.favorite }));
-  const handleSetBookmarkPakeep = () => setState(state => ({ ...state, bookmark: !state.bookmark }));
-  const handleSetColorPakeep = () => setState(state => ({ ...state, color: !state.color }));
+  const handleSetFavoritePakeep = () => setState(state => ({ ...state, isFavorite: !state.isFavorite }));
+  const handleSetBookmarkPakeep = () => setState(state => ({ ...state, isInBookmark: !state.isInBookmark }));
+  const handleSetIsPinnedPakeep = () => setState(state => ({ ...state, isPinned: !state.isPinned }));
+  const handleSetColorPakeep = color => setState(state => ({ ...state, color }));
+  const handleSetBackgroundColorPakeep = backgroundColor => setState(state => ({ ...state, backgroundColor }));
 
   const handleAddNewLabel = idWhichShouldBeAdded => {
     setState(state => ({ ...state, labels: [...state.labels, idWhichShouldBeAdded] }));
@@ -98,10 +110,9 @@ const NewPaKeep = ({ addNewPaKeepThunk }) => {
     setState(state => ({ ...state, labels: _.filter(state.labels, id => id !== idWhichShouldBeDeleted) }));
   };
 
-
   const handleNewPakeepSave = () => {
     addNewPaKeepThunk(state);
-    setState(nulittyState); 
+    setState(nulittyState);
   };
 
   const handleStatusOfHideLabelView = () =>
@@ -115,7 +126,6 @@ const NewPaKeep = ({ addNewPaKeepThunk }) => {
   };
 
   const handleDeleteLabelFromPakeepFunc = (placeholder, labelId) => handleDeleteNewLabel(labelId);
-  const classes = useStyles({ isLabelViewHidden: statusState.isLabelViewHidden });
 
   const [ref, { width: widthOfContainer }] = useMeasure();
 
@@ -126,6 +136,18 @@ const NewPaKeep = ({ addNewPaKeepThunk }) => {
     }
   };
 
+  const [isUseDefault, isReadable] = useIsReadableColor(state.backgroundColor, state.color);
+  const [customColor, setCustomColor] = useState(false);
+  console.log(customColor);
+  console.log(customColor);
+  useEffect(() => setCustomColor(isUseDefault ? false : isReadable), [isUseDefault]);
+
+  const classes = useStyles({
+    isLabelViewHidden: statusState.isLabelViewHidden,
+    color: state.color,
+    customColor,
+    backgroundColor: state.backgroundColor
+  });
   const labelsListProps = {
     handleStatusOfHideLabelView,
     selectedLabels: state.labels,
@@ -145,8 +167,11 @@ const NewPaKeep = ({ addNewPaKeepThunk }) => {
     handleSetColorPakeep,
     handleNewPakeepSave,
     handleSetWidth: handleSetWidthInNewPakeep,
+    handleSetBackgroundColorPakeep,
     widthOfContainer,
-    labelsListProps
+    handleSetIsPinnedPakeep,
+    labelsListProps,
+    customColor
   };
   const attributesOfNewPakeepProps = {
     pakeepId: state.id,

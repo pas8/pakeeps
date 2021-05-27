@@ -10,7 +10,8 @@ const WrapperOfPopoverAndMenu = ({
   keyName,
   isIconNameExtended = false,
   iconSize = 'default',
-  handleAverageMainComponentWidth
+  handleAverageMainComponentWidth,
+  customColor
 }) => {
   return (
     <>
@@ -26,7 +27,6 @@ const WrapperOfPopoverAndMenu = ({
             menuComponents: MenuComponents,
             menuComponentsProps,
             hidden = false,
-            customColor,
             customElementComponentOfIconGroup = false,
             menuLocation,
             popoverLocation,

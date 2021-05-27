@@ -4,9 +4,13 @@ import { themeColors } from 'components/theme';
 import _ from 'lodash';
 import { useMeasure } from 'react-use';
 import { useEffect } from 'react';
-
+import { colord } from 'colord';
+// import clsx from 'clsx'
 const useStyles = makeStyles(theme => ({
-  icon: ({ iconColor, rotate }) => ({ color: iconColor, transform: rotate }),
+  icon: ({ iconColor, rotate }) => ({
+    '& svg': { color: iconColor, transform: rotate ,},
+    '&:hover ': { background: colord(iconColor).alpha(0.08).toHex() }
+  }),
   smallButtonSize: { '& button ': { padding: theme.spacing(1) } }
 }));
 
@@ -19,21 +23,24 @@ const IconButtonByPas = ({
   activeIconName = 'icon',
   activeProperty = false,
   size,
-  customColor = null,
+  customColor = false,
   handleAverageMainComponentWidth = false,
-  badgeContent 
+  badgeContent
 }) => {
   const currentHoverStatusIsTrue = _.isEqual(activeIconName, iconName) && activeProperty;
-  const iconColor = activeIcon
+  const customIconColor = !!customColor && currentHoverStatusIsTrue ? customColor?.hover : customColor?.unHover;
+
+  const defaultColor = activeIcon
     ? themeColors.primaryMain
-    : customColor
-    ? customColor
     : currentHoverStatusIsTrue
     ? 'rgba(255,255,255,0.92)'
     : 'rgba(255,255,255,0.42)';
+
+  const iconColor = customColor ? customIconColor : defaultColor;
+
   const rotate = rotateDeg ? `rotate(${rotateDeg}deg)` : 'rotate(0deg)';
 
-  const classes = useStyles({ iconColor, rotate });
+  const classes = useStyles({ iconColor, rotate,activeIcon });
 
   const [ref, { width }] = useMeasure();
 
@@ -41,9 +48,9 @@ const IconButtonByPas = ({
 
   return (
     <Grid className={size === 'small' ? classes.smallButtonSize : null} component={'div'} ref={ref}>
-      <IconButton onClick={onClick}>
+      <IconButton onClick={onClick} className={classes.icon}>
         <Badge badgeContent={badgeContent} color={'secondary'}>
-          <Icon className={classes.icon} />
+          <Icon />
         </Badge>
       </IconButton>
     </Grid>
@@ -63,6 +70,6 @@ IconButtonByPas.propTypes = {
   onClick: PropTypes.func,
   rotateDeg: PropTypes.number,
   size: PropTypes.string
-}
+};
 
 export default IconButtonByPas;

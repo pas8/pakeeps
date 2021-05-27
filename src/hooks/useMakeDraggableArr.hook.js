@@ -1,7 +1,7 @@
 import compareFunc from 'compare-func';
 import { useEffect, useState } from 'react';
 import { usePrevious } from 'react-use';
-import { takeValueFromBreakpoints } from './takeValueFromBreakpoints.hook';
+import { useTakeValueFromBreakpoints } from './useTakeValueFromBreakpoints.hook';
 
 export const useMakeDraggableArr = (
   pakeeps,
@@ -19,7 +19,7 @@ export const useMakeDraggableArr = (
 
   const order = Array(maxColumnNumber).fill(maxColumnNumber).reduce(orderReduceFunc, []);
 
-  const responsiveColumnOrder = order.slice(0, takeValueFromBreakpoints(defaultBreakpointValue));
+  const responsiveColumnOrder = order.slice(0, useTakeValueFromBreakpoints(defaultBreakpointValue));
   const columnArrLenght = responsiveColumnOrder.length;
 
   const pakeepsReduceFunc = (sum, id, idx) => {
