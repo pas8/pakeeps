@@ -1,6 +1,7 @@
 import { Grid, Menu } from '@material-ui/core';
 import PropTypes from 'prop-types';
 import { useState } from 'react';
+import { colord } from 'colord';
 import DeleteOutlinedIcon from '@material-ui/icons/DeleteOutlined';
 import PaletteOutlinedIcon from '@material-ui/icons/PaletteOutlined';
 import ChatOutlinedIcon from '@material-ui/icons/ChatOutlined';
@@ -15,6 +16,7 @@ import PreparedColorExamples from 'components/ColorChanger/components/PreparedCo
 import LabelItem from '../LabelItem';
 import PreparedIconSelectingList from './components/PreparedIconSelectingList';
 import TitleChangerOfLabel from './components/TitleChangerOfLabel';
+import { themeColors } from 'components/theme';
 
 const MenuOfLabelPart = ({
   menuState,
@@ -27,6 +29,8 @@ const MenuOfLabelPart = ({
   onClickOfSaveButton,
   handleChangeLabelTitle
 }) => {
+  const color =  !menuState?.color ? themeColors.primaryMain : menuState.color;
+
   const nullifyOfMenuItemState = { name: '' };
   const [menuItemState, setMenuItemState] = useState(nullifyOfMenuItemState);
 
@@ -37,7 +41,7 @@ const MenuOfLabelPart = ({
       name: 'changeLabelTitle',
       dynamicComponent: {
         component: TitleChangerOfLabel,
-        props: { onChange: handleChangeLabelTitle, value: menuState.title }
+        props: { onChange: handleChangeLabelTitle, value: menuState.title, color }
       }
     },
     {
@@ -63,7 +67,7 @@ const MenuOfLabelPart = ({
         className: null,
         props: {
           isColor: false,
-          customColumnElementProps: { handleChangeLabelIconName, labelIconName: menuState.labelIconName },
+          customColumnElementProps: { handleChangeLabelIconName, labelIconName: menuState.labelIconName, color },
           CustomColumnElement: PreparedIconSelectingList,
           columnArr: iconsArr
         }
