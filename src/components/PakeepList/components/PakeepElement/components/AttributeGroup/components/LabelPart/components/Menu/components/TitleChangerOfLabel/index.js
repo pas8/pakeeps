@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 const useStyles = makeStyles(theme => ({
   container: {
-    margin: theme.spacing(1.4, 0.4, 0.8, 0.8),
+    margin: theme.spacing(1.4, 0.8, 0.8, 0.8),
     '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
       borderColor: ({ color }) => color,
       caretColor:({ color }) => color
@@ -11,7 +11,6 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 const TitleChangerOfLabel = ({ value, onChange, color }) => {
-  console.log(color)
   const classes = useStyles({  color });
 
   const textFieldProps = {

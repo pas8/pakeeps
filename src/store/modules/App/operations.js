@@ -60,10 +60,8 @@ export const changeLabelItemThunk = changedLabel => (dispatch, getState) => {
     app: { labels }
   } = getState();
 
-  const findedLabel = find(labels, ({ id }) => id === changedLabel.id);
   const filteredLabels = filter(labels, ({ id }) => id !== changedLabel.id);
   const newLabels = [...filteredLabels, changedLabel];
-
   dispatch(toChangeLabelItem(newLabels));
 };
 

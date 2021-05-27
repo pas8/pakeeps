@@ -21,7 +21,6 @@ const WrapperOfMenuOfLabelPart = ({ handleClose, handleDeleteLabel, menuState, c
       color: menuState.color,
       variant: menuState.variant
     };
-
     try {
       changeLabelItemFunc(newLabel);
       enqueueSnackbar({ message: 'Label was successfully chnged' });

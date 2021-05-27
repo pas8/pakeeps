@@ -30,6 +30,7 @@ const MenuOfLabelPart = ({
   handleChangeLabelTitle,
   isThisMenuIsSecond
 }) => {
+
   const color = !menuState?.color ? themeColors.primaryMain : menuState.color;
 
   const nullifyOfMenuItemState = { name: '' };

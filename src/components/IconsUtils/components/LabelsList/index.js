@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { Grid, makeStyles, MenuItem, Checkbox, ListItemText } from '@material-ui/core';
 import VisibilityOutlinedIcon from '@material-ui/icons/VisibilityOutlined';
@@ -41,10 +41,6 @@ const LabelsList = ({
   const dialogOfAddNewLabelProps = {isDialogOpen,handleCloseAddNewLabelDialog,    handleOpenAddNewLabelDialog,  };
 
   const handleChangeNewLabel = (isChecked, id) => (isChecked ? handleDeleteNewLabel(id) : handleAddNewLabel(id));
-  const handleSetOldLabelState = labelState => {
-    setOldLabelState(labelState);
-    handleOpenAddNewLabelDialog();
-  };
 
   const nullityOfMenuState = {
     mouseX: null,
@@ -74,6 +70,8 @@ const LabelsList = ({
     isThisMenuIsSecond:true
   };
 
+
+
   return (
     <Grid>
       <DefaultMenuListOflabelList defaultMenuListArr={defaultMenuListArr} />
@@ -99,7 +97,7 @@ const mapStateToProps = ({ app: { labels } }) => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  changeLabelItemThunk: newLabel => dispatch(changeLabelItemThunk(labelId, newLabel))
+  changeLabelItemThunk: newLabel => dispatch(changeLabelItemThunk( newLabel))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(LabelsList);

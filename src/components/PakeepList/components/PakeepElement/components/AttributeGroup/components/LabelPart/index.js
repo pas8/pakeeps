@@ -27,13 +27,13 @@ const LabelPart = ({ labels, handleDeleteLabelFromPakeepFunc, changeLabelItemFun
   };
 
 
-  useEffect(() => {
-    const { variant, iconName: labelIconName } = find(labels, ({ id }) => menuState.id === id) ?? {
-      variant: '',
-      labelIconName: ''
-    };
-    setMenuState(state => ({ ...state, labelIconName, variant }));
-  }, [labels]);
+  // useEffect(() => {
+  //   const { variant, iconName: labelIconName } = find(labels, ({ id }) => menuState.id === id) ?? {
+  //     variant: '',
+  //     labelIconName: ''
+  //   };
+  //   setMenuState(state => ({ ...state, labelIconName, variant }));
+  // }, [labels]);
 
   const wrapperOfMenuOfLabelPartProps = {
     handleClose,
