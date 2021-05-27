@@ -1,33 +1,39 @@
-import PropTypes from "prop-types";
-import { Dialog, makeStyles, DialogActions, DialogTitle, Button, Grid, Chip } from '@material-ui/core';
-import { themeColors } from 'components/theme';
+import PropTypes from 'prop-types';
 import { useState } from 'react';
+import { usePrevious } from 'react-use';
 import { connect } from 'react-redux';
+import includes from 'lodash.includes';
+import { nanoid } from 'nanoid';
+import { isEqual } from 'lodash';
+import { useSnackbar } from 'notistack';
+import { useFindIcon } from 'hooks/useFindIcon.hook';
+import { Dialog, DialogActions, DialogTitle, Button } from '@material-ui/core';
 import SaveRoundedIcon from '@material-ui/icons/SaveRounded';
+import RestoreOutlinedIcon from '@material-ui/icons/RestoreOutlined';
 import { handleAddNewGlobalLabelThunk } from 'store/modules/App/operations';
+import { iconsArr } from 'components/Icons';
+import PreparedColorExamples from 'components/ColorChanger/components/PreparedColorExamples';
+import ColorPickerByPas from 'components/ColorChanger';
+import LabelItem from 'components/PakeepList/components/PakeepElement/components/AttributeGroup/components/LabelPart/components/LabelItem';
+import PreparedIconSelectingList from 'components/PakeepList/components/PakeepElement/components/AttributeGroup/components/LabelPart/components/Menu/components/PreparedIconSelectingList';
+import { themeColors } from 'components/theme';
 import SteperOfDialogOfAddNewLabel from './components/Steper';
 import FirstStepOfSteperOfDialogOfAddNewLabel from './components/Steper/components/First';
 import SecondStepOfSteperOfDialogOfAddNewLabel from './components/Steper/components/Second';
 import ThirdStepOfSteperOfDialogOfAddNewLabel from './components/Steper/components/Third';
-import { nanoid } from 'nanoid';
 import FourthStepOfSteperOfDialogOfAddNewLabel from './components/Steper/components/Fourth';
-import PreparedIconSelectingList from 'components/PakeepList/components/PakeepElement/components/AttributeGroup/components/LabelPart/components/Menu/components/PreparedIconSelectingList';
-import { iconsArr } from 'components/Icons';
-import PreparedColorExamples from 'components/ColorChanger/components/PreparedColorExamples';
-import ColorPickerByPas from 'components/ColorChanger';
-import includes from 'lodash.includes';
-import LabelItem from 'components/PakeepList/components/PakeepElement/components/AttributeGroup/components/LabelPart/components/LabelItem';
-import { useFindIcon } from 'hooks/useFindIcon.hook';
-import { useSnackbar } from 'notistack';
-import { isEqual } from 'lodash';
-import RestoreOutlinedIcon from '@material-ui/icons/RestoreOutlined';
-import { usePrevious } from 'react-use';
 
-const DialogOfAddNewLabel = ({ isDialogOpen, handleCloseAddNewLabelDialog, handleAddNewGlobalLabelThunk ,handleOpenAddNewLabelDialog}) => {
+const DialogOfAddNewLabel = ({
+  isDialogOpen,
+  handleCloseAddNewLabelDialog,
+  handleAddNewGlobalLabelThunk,
+  handleOpenAddNewLabelDialog,
+}) => {
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
   const labelVariants = ['outlined', 'default'];
   const iconNameVariants = ['', 'favorite'];
+
 
   const nullityOfNewLabelState = {
     title: '',
@@ -37,6 +43,7 @@ const DialogOfAddNewLabel = ({ isDialogOpen, handleCloseAddNewLabelDialog, handl
     iconName: ''
   };
   const [newLabelState, setNewLabelState] = useState(nullityOfNewLabelState);
+
 
   const colorVariantsNames = ['', 'primary', 'secondary'];
   const customColorValue = includes(colorVariantsNames, newLabelState.color) ? 'customColor' : newLabelState.color;
@@ -50,20 +57,18 @@ const DialogOfAddNewLabel = ({ isDialogOpen, handleCloseAddNewLabelDialog, handl
 
   const isLabelOutlined = newLabelState.variant === labelVariants[0];
   const isLabelHaveIcon = newLabelState.iconName === iconNameVariants[0];
-
   const previuosNewLabelState = usePrevious(newLabelState);
+  const toNullityNewLabelState = () => setNewLabelState(nullityOfNewLabelState);
 
-const toNullityNewLabelState = () => setNewLabelState(nullityOfNewLabelState)
-
-  const handleRestoreLastGlobalLabel = () =>{
+  const handleRestoreLastGlobalLabel = () => {
     !isEqual(nullityOfNewLabelState, previuosNewLabelState) && setNewLabelState(previuosNewLabelState);
-    handleOpenAddNewLabelDialog()
-    closeSnackbar()
-  }
+    handleOpenAddNewLabelDialog();
+    closeSnackbar();
+  };
 
   const handleCloseDialog = () => {
     handleCloseAddNewLabelDialog();
-    toNullityNewLabelState()
+    toNullityNewLabelState();
     !isEqual(nullityOfNewLabelState, newLabelState) &&
       enqueueSnackbar({
         message: 'Dialog of creating label was closed',
@@ -75,13 +80,14 @@ const toNullityNewLabelState = () => setNewLabelState(nullityOfNewLabelState)
   };
 
   const handleSave = () => {
-    if(!newLabelState.title) return enqueueSnackbar({ message: 'Label should have more than 1 letter', severity: 'error' });
+    if (!newLabelState.title)
+      return enqueueSnackbar({ message: 'Label should have more than 1 letter', severity: 'error' });
 
     try {
       handleAddNewGlobalLabelThunk(newLabelState);
       enqueueSnackbar({ message: 'Global label was successfully added' });
       handleCloseAddNewLabelDialog();
-      toNullityNewLabelState()
+      toNullityNewLabelState();
     } catch (error) {
       enqueueSnackbar({ message: 'Something went wrong', severity: 'error' });
     }
@@ -134,7 +140,7 @@ const toNullityNewLabelState = () => setNewLabelState(nullityOfNewLabelState)
     }
   ];
 
-  const steperOfDialogOfAddNewLabelProps = { stepsArrOfDialogOfAddNewLabel,toNullityNewLabelState };
+  const steperOfDialogOfAddNewLabelProps = { stepsArrOfDialogOfAddNewLabel, toNullityNewLabelState };
 
   const previewLabelProps = {
     ...newLabelState,
@@ -166,8 +172,8 @@ DialogOfAddNewLabel.propTypes = {
   handleAddNewGlobalLabelThunk: PropTypes.func,
   handleCloseAddNewLabelDialog: PropTypes.func,
   handleOpenAddNewLabelDialog: PropTypes.func,
-  isDialogOpen: PropTypes.bool
-}
+  isDialogOpen: PropTypes.bool,
+};
 
 const mapDispatchToProps = dispatch => ({
   handleAddNewGlobalLabelThunk: newLabel => dispatch(handleAddNewGlobalLabelThunk(newLabel))
