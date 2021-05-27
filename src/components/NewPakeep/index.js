@@ -11,6 +11,7 @@ import NewPakeepUtils from './components/Utils';
 import AttributesOfNewPakeep from './components/Attributes';
 import { useCustomBreakpoint } from 'hooks/useCustomBreakpoint';
 import EyeIconButton from './components/EyeIconButton';
+import useKeyboardJs from 'react-use/lib/useKeyboardJs';
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -21,7 +22,7 @@ const useStyles = makeStyles(theme => ({
     },
 
     '& .MuiOutlinedInput-multiline': {
-      padding: theme.spacing(2, 6, 6, 1.4)
+      padding: ({ isLabelViewHidden }) => theme.spacing(2, 6, isLabelViewHidden ? 6 : 10, 1.4)
     },
     '& input,textarea': {
       caretColor: themeColors.primaryMain
@@ -46,8 +47,6 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const NewPaKeep = ({ addNewPaKeepThunk }) => {
-  const classes = useStyles();
-
   const nulittyState = {
     title: '',
     text: '',
@@ -71,13 +70,15 @@ const NewPaKeep = ({ addNewPaKeepThunk }) => {
     isEnter: false,
     isWritingText: false,
     isChangingTitle: false,
-    isUtilsHidden: true,
+    isUtilsHidden: !true,
     isNewPakeepContainerHaveFullWidth: true,
     isLabelViewHidden: false
   };
   const [statusState, setStatusState] = useState(nullityStatusState);
 
-  const handleState = ({ target: { name, value } }) => setState(state => ({ ...state, [name]: value }));
+  const handleState = ({ target: { name, value } }) => {
+    setState(state => ({ ...state, [name]: value }));
+  };
 
   const setFocusIsTrue = () => setStatusState(state => ({ ...state, isFocused: true }));
   const setFocusIsFalse = () => setStatusState(state => ({ ...state, isFocused: false }));
@@ -97,29 +98,11 @@ const NewPaKeep = ({ addNewPaKeepThunk }) => {
     setState(state => ({ ...state, labels: _.filter(state.labels, id => id !== idWhichShouldBeDeleted) }));
   };
 
-  useEffect(() => {
-    if (statusState.isFocused && state.title !== '') {
-      setStatusState(state => ({ ...state, placeholder: 'Press statusState.isEnter to end  writing the  title' }));
-    }
-    // if (statusState.isEnter === true && state.title !== '') {
-    //   setWritingText(true);
-    //   setShowUtils(true);
-    // }
-  }, [statusState.isFocused, statusState.isEnter]);
 
   const handleNewPakeepSave = () => {
-    addNewPaKeepThunk({ ...state, wordsCoefficient: 1 });
-    setWritingText(false);
-    setState(nulittyState);
+    addNewPaKeepThunk(state);
+    setState(nulittyState); 
   };
-  // document.onkeydown = evt => {
-
-  // };
-  // console.log({...state})
-  // useKeyPressEvent('Enter', () => {
-  //   if (statusState.isEnter === false) setEnter(true);
-  //   if (changingTitle === true) setChangingTitle(false);
-  // });
 
   const handleStatusOfHideLabelView = () =>
     setStatusState(state => ({ ...state, isLabelViewHidden: !state.isLabelViewHidden }));
@@ -132,8 +115,16 @@ const NewPaKeep = ({ addNewPaKeepThunk }) => {
   };
 
   const handleDeleteLabelFromPakeepFunc = (placeholder, labelId) => handleDeleteNewLabel(labelId);
+  const classes = useStyles({ isLabelViewHidden: statusState.isLabelViewHidden });
 
   const [ref, { width: widthOfContainer }] = useMeasure();
+
+  const onKeyDown = e => {
+    if (!e?.shiftKey && e?.code === 'Enter') {
+      e?.preventDefault();
+      return setStatusState(state => ({ ...state, isWritingText: !state.isWritingText }));
+    }
+  };
 
   const labelsListProps = {
     handleStatusOfHideLabelView,
@@ -163,15 +154,7 @@ const NewPaKeep = ({ addNewPaKeepThunk }) => {
     labels: state.labels
   };
 
-  const rowsNumber = statusState.isWritingText
-    ? statusState.isLabelViewHidden
-      ? 4 - 1
-      : 4 
-    : !statusState.isUtilsHidden
-    ? statusState.isLabelViewHidden
-      ? 6 - 2
-      : 6 - 1
-    : 1;
+  const rowsNumber = statusState.isWritingText ? 4 : !statusState.isUtilsHidden ? 6 : 1;
 
   const textFieldProps = {
     className: classes.textField,
@@ -187,7 +170,8 @@ const NewPaKeep = ({ addNewPaKeepThunk }) => {
     autoComplete: false,
     rowsMax: 42,
     onFocus: setFocusIsTrue,
-    onBlur: setFocusIsFalse
+    onBlur: setFocusIsFalse,
+    onKeyDown
   };
   const fullWidthValue = statusState.isNewPakeepContainerHaveFullWidth && 12;
 

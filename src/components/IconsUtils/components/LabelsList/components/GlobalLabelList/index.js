@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import includes from 'lodash.includes';
-import { MenuItem, Checkbox, ListItemText, Dialog } from '@material-ui/core';
+import { MenuItem, Checkbox, ListItemText, IconButton,Grid } from '@material-ui/core';
+import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
 
 const GlobalLabelListOflabelList = ({ globalLabels, handleChangeNewLabel, selectedLabels }) => (
   <>
@@ -9,9 +10,14 @@ const GlobalLabelListOflabelList = ({ globalLabels, handleChangeNewLabel, select
       const onClick = () => handleChangeNewLabel(isChecked, id);
 
       return (
+        <Grid >
         <MenuItem disableGutters onClick={onClick} key={`newPakeep-label-${id}`}>
           <Checkbox checked={isChecked} /> <ListItemText primary={title} />
         </MenuItem>
+        {/* < */}
+        {/* <IconButton onClick={(e)=> {e.preventDefault();console.log(';')}}><EditOutlinedIcon/> </IconButton> */}
+
+        </Grid>
       );
     })}
     

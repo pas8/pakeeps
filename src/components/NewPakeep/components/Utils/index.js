@@ -25,8 +25,14 @@ const NewPakeepUtils = ({ handleNewPakeepSave, widthOfContainer, ...newPakeepUti
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
   const handleNewPakeepSubmit = () => {
-    enqueueSnackbar('Processing...');
-    handleNewPakeepSave();
+    try {
+      enqueueSnackbar({ message: 'Processing...', severity: 'info' });
+      handleNewPakeepSave();
+      closeSnackbar();
+      enqueueSnackbar({ message: 'New pakeep was succsesfully added' });
+    } catch (error) {
+      enqueueSnackbar({ message: !!error ? error : 'Something went wrong', severity: 'error' });
+    }
   };
 
   const [ref, { width: widthOfCButtonConatiner }] = useMeasure();
@@ -42,7 +48,7 @@ const NewPakeepUtils = ({ handleNewPakeepSave, widthOfContainer, ...newPakeepUti
       <IconsUtils {...iconUtilsProps} />
       <Box className={classes.buttonGroupWrapper} ref={ref}>
         <Box className={classes.buttonWrapper}>
-          <Button  style={{ color: themeColors.whiteRgbaColorWith0dot42valueOfAlfaCanal }}>
+          <Button color={'success'} style={{ color: themeColors.whiteRgbaColorWith0dot42valueOfAlfaCanal }}>
             Close
           </Button>
         </Box>

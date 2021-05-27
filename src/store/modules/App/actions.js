@@ -1,6 +1,6 @@
 import * as types from './types';
 
-export const toAddNewPakeep = data => ({ type: types.ADD_NEW_PAKEEP, newPaKeep: data });
+export const toAddNewPakeep = newPaKeep => ({ type: types.ADD_NEW_PAKEEP, newPaKeep: newPaKeep });
 export const toDeletePakeep = id => ({ type: types.DELETE_PAKEEP, id });
 
 export const toSetMenuOpenStatus = boolStatus => ({ type: types.IS_MENU_OPEN, boolStatus });
