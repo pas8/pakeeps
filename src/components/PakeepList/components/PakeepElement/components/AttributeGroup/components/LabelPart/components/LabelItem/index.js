@@ -1,7 +1,7 @@
 import { Chip, Grid, makeStyles } from '@material-ui/core';
-import { colord } from 'colord';
 import PropTypes from 'prop-types';
 import { themeColors } from 'components/theme';
+import { useIsColorDark } from 'hooks/useIsColorDark.hook';
 
 const useStyles = makeStyles(theme => ({
   container: ({ color, isDark }) => ({
@@ -29,7 +29,8 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const LabelItem = ({ currentColor, handleOpen, labelChipProps }) => {
-  const isDark = colord(currentColor).brightness() >= 0.48;
+  const isDark = useIsColorDark(currentColor);
+
   const color = !currentColor
     ? '#969696'
     : currentColor === 'primary'

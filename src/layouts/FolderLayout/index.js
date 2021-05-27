@@ -80,7 +80,6 @@ const FolderLayout = ({
   const positionOfFolderViewWithPakeepViewIsLeft = positionOfFolderViewWithPakeepView === 'left';
 
   const foldersArr = useFolders( { labels, defaultFolderArr });
-
   const [isFolderOpen, setIsFolderOpen] = useState(false);
   const marginValue = 8;
 
@@ -107,7 +106,7 @@ const FolderLayout = ({
     setIsSizeOfFoldersMoreThanSize
   };
 
-  useEffect(() => handleFoldersThunk(foldersArr), []);
+  useEffect(() => handleFoldersThunk(foldersArr), [labels,defaultFolderArr]);
   useEffect(() => !isFolderOpen && drawerWidth !== 0 && handleDrawerWidthThunk(0), [isFolderOpen, drawerWidth]);
 
   const classes = useStyles({ positionOfFolderViewWithPakeepViewIsBottom, positionOfFolderViewWithPakeepViewIsRight });

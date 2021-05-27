@@ -1,22 +1,16 @@
 import PropTypes from 'prop-types';
+import { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { Grid, makeStyles, MenuItem, Checkbox, ListItemText } from '@material-ui/core';
 import VisibilityOutlinedIcon from '@material-ui/icons/VisibilityOutlined';
 import VisibilityOffOutlinedIcon from '@material-ui/icons/VisibilityOffOutlined';
 import AddCircleOutlineOutlinedIcon from '@material-ui/icons/AddCircleOutlineOutlined';
 import { getLabels } from 'store/modules/App/selectors';
+import { changeLabelItemThunk } from 'store/modules/App/operations';
+import WrapperOfMenuOfLabelPart from 'components/PakeepList/components/PakeepElement/components/AttributeGroup/components/LabelPart/components/MenuWrapper';
+import DialogOfAddNewLabel from './components/DialogOfAddNewLabel';
 import DefaultMenuListOflabelList from './components/DefaultMenuList';
 import GlobalLabelListOflabelList from './components/GlobalLabelList';
-import { useState } from 'react';
-import DialogOfAddNewLabel from './components/DialogOfAddNewLabel';
-
-const useStyles = makeStyles(({ spacing }) => ({
-  container: {
-    '& li': {
-      paddingRight: spacing(1)
-    }
-  }
-}));
 
 const LabelsList = ({
   handleAddNewLabel,
@@ -24,10 +18,9 @@ const LabelsList = ({
   globalLabels,
   selectedLabels,
   handleStatusOfHideLabelView,
-  isLabelViewHidden
+  isLabelViewHidden,
+  changeLabelItemThunk
 }) => {
-  const classes = useStyles();
-
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const handleOpenAddNewLabelDialog = () => setIsDialogOpen(true);
   const handleCloseAddNewLabelDialog = () => setIsDialogOpen(false);
@@ -45,16 +38,46 @@ const LabelsList = ({
     }
   ];
 
-  const dialogOfAddNewLabelProps = { isDialogOpen, handleCloseAddNewLabelDialog, handleOpenAddNewLabelDialog };
+  const dialogOfAddNewLabelProps = {isDialogOpen,handleCloseAddNewLabelDialog,    handleOpenAddNewLabelDialog,  };
 
   const handleChangeNewLabel = (isChecked, id) => (isChecked ? handleDeleteNewLabel(id) : handleAddNewLabel(id));
-  const globalLabelListProps = { globalLabels, handleChangeNewLabel, selectedLabels };
+
+  const nullityOfMenuState = {
+    mouseX: null,
+    mouseY: null,
+    id: '',
+    variant: '',
+    labelIconName: '',
+    title: '',
+    color: ''
+  };
+  const [menuState, setMenuState] = useState(nullityOfMenuState);
+
+  const handleClose = () => setMenuState(nullityOfMenuState);
+  const handleDeleteLabel = () => {
+    handleDeleteLabelFromPakeepFunc(pakeepId, menuState.id);
+    handleClose();
+  };
+
+  const globalLabelListProps = { globalLabels, handleChangeNewLabel, selectedLabels, setMenuState };
+
+  const wrapperOfMenuOfLabelPartProps = {
+    handleClose,
+    handleDeleteLabel,
+    menuState,
+    changeLabelItemFunc:changeLabelItemThunk,
+    setMenuState,
+    isThisMenuIsSecond:true
+  };
+
+
 
   return (
-    <Grid className={classes.container}>
+    <Grid>
       <DefaultMenuListOflabelList defaultMenuListArr={defaultMenuListArr} />
-
       <GlobalLabelListOflabelList {...globalLabelListProps} />
+
+      <WrapperOfMenuOfLabelPart {...wrapperOfMenuOfLabelPartProps} />
       <DialogOfAddNewLabel {...dialogOfAddNewLabelProps} />
     </Grid>
   );
@@ -73,4 +96,8 @@ const mapStateToProps = ({ app: { labels } }) => ({
   globalLabels: getLabels(labels)
 });
 
-export default connect(mapStateToProps, null)(LabelsList);
+const mapDispatchToProps = dispatch => ({
+  changeLabelItemThunk: newLabel => dispatch(changeLabelItemThunk( newLabel))
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(LabelsList);
