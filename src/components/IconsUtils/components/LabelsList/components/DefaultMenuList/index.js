@@ -5,7 +5,7 @@ import { nanoid } from 'nanoid';
 
 const useStyles = makeStyles(({spacing}) => ({
   defaultMenuListItem: {
-    padding: spacing(1, 1),
+    padding: spacing(1.6, 1),
     '& svg': {
       margin: spacing(0, 1.08, 0, 0.2),
       color: themeColors.whiteRgbaColorWith0dot8valueOfAlfaCanal

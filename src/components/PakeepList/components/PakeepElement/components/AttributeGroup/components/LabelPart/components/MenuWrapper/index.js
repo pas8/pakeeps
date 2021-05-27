@@ -2,7 +2,7 @@ import { useSnackbar } from 'notistack';
 import PropTypes from 'prop-types';
 import MenuOfLabelPart from '../Menu';
 
-const WrapperOfMenuOfLabelPart = ({ handleClose, handleDeleteLabel, menuState, changeLabelItemFunc, setMenuState }) => {
+const WrapperOfMenuOfLabelPart = ({ handleClose, handleDeleteLabel, menuState, changeLabelItemFunc, setMenuState,isThisMenuIsSecond  }) => {
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
   const handleChangeLabelColor = color => setMenuState(state => ({ ...state, color }));
@@ -39,6 +39,7 @@ const WrapperOfMenuOfLabelPart = ({ handleClose, handleDeleteLabel, menuState, c
     handleChangeLabelIconName,
     handleChangeLabelTitle,
     onClickOfSaveButton,
+    isThisMenuIsSecond,
     buttonSaveState: true
   };
 
@@ -49,8 +50,9 @@ WrapperOfMenuOfLabelPart.propTypes = {
   changeLabelItemFunc: PropTypes.func,
   handleClose: PropTypes.func,
   handleDeleteLabel: PropTypes.func,
+  isThisMenuIsSecond: PropTypes.bool,
   menuState: PropTypes.object,
   setMenuState: PropTypes.func
-};
+}
 
 export default WrapperOfMenuOfLabelPart;

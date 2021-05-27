@@ -27,9 +27,10 @@ const MenuOfLabelPart = ({
   handleChangeLabelIconName,
   buttonSaveState,
   onClickOfSaveButton,
-  handleChangeLabelTitle
+  handleChangeLabelTitle,
+  isThisMenuIsSecond
 }) => {
-  const color =  !menuState?.color ? themeColors.primaryMain : menuState.color;
+  const color = !menuState?.color ? themeColors.primaryMain : menuState.color;
 
   const nullifyOfMenuItemState = { name: '' };
   const [menuItemState, setMenuItemState] = useState(nullifyOfMenuItemState);
@@ -110,6 +111,7 @@ const MenuOfLabelPart = ({
     label: menuState.title,
     size: 'small'
   };
+  
   const labelItemProps = { currentColor: menuState.color, handleOpen: null, labelChipProps: previewLabelProps };
 
   const headerOfAddDateToPakeepProps = {
@@ -123,7 +125,7 @@ const MenuOfLabelPart = ({
   return (
     <Menu
       keepMounted
-      open={menuState.id !== null}
+      open={!!menuState.id}
       onClose={handleClose}
       anchorReference={'anchorPosition'}
       anchorPosition={
@@ -132,33 +134,36 @@ const MenuOfLabelPart = ({
           : undefined
       }
     >
-      <HeaderOfAddDateToPakeep {...headerOfAddDateToPakeepProps} />
+      <Grid style={{ background: isThisMenuIsSecond && '#484848' }}>
+        <HeaderOfAddDateToPakeep {...headerOfAddDateToPakeepProps} />
 
-      {menuLabelListArr.map(
-        ({ title, icon: Icon, onClick: onMenuItemClick, hidden, dynamicComponent = false, name }, idx) => {
-          const DynamicComponent = dynamicComponent?.component ?? Grid;
+        {menuLabelListArr.map(
+          ({ title, icon: Icon, onClick: onMenuItemClick, hidden, dynamicComponent = false, name }, idx) => {
+            const DynamicComponent = dynamicComponent?.component ?? Grid;
 
-          const correctName = name === menuItemState.name;
-          const isDynamicComponentShouldBeShown = correctName && dynamicComponent.component;
-          const dynamicComponentProps = { ...dynamicComponent.props };
-          const onClick = () => (onMenuItemClick ? onMenuItemClick() : setMenuItemState(state => ({ ...state, name })));
-          const menuItemProps = {
-            onClick
-          };
-          const DynamicMenuItemProps = {
-            DynamicComponent,
-            dynamicComponentProps,
-            isActiveIcon: false,
-            title,
-            isDynamicItemGridMarginIsZero: true,
-            isDynamicComponentShouldBeShown,
-            menuItemProps,
-            isPreventClickOfMenuItem: false,
-            Icon
-          };
-          return <DynamicMenuItem {...DynamicMenuItemProps} />;
-        }
-      )}
+            const correctName = name === menuItemState.name;
+            const isDynamicComponentShouldBeShown = correctName && dynamicComponent.component;
+            const dynamicComponentProps = { ...dynamicComponent.props };
+            const onClick = () =>
+              onMenuItemClick ? onMenuItemClick() : setMenuItemState(state => ({ ...state, name }));
+            const menuItemProps = {
+              onClick
+            };
+            const DynamicMenuItemProps = {
+              DynamicComponent,
+              dynamicComponentProps,
+              isActiveIcon: false,
+              title,
+              isDynamicItemGridMarginIsZero: true,
+              isDynamicComponentShouldBeShown,
+              menuItemProps,
+              isPreventClickOfMenuItem: false,
+              Icon
+            };
+            return <DynamicMenuItem {...DynamicMenuItemProps} />;
+          }
+        )}
+      </Grid>
     </Menu>
   );
 };
