@@ -1,17 +1,20 @@
-import { Grid, makeStyles, Menu } from '@material-ui/core';
+import { Grid, Menu } from '@material-ui/core';
 import PropTypes from 'prop-types';
+import { useState } from 'react';
 import DeleteOutlinedIcon from '@material-ui/icons/DeleteOutlined';
 import PaletteOutlinedIcon from '@material-ui/icons/PaletteOutlined';
+import ChatOutlinedIcon from '@material-ui/icons/ChatOutlined';
+import CategoryOutlinedIcon from '@material-ui/icons/CategoryOutlined';
+import { iconsArr } from 'components/Icons';
+import { useFindIcon } from 'hooks/useFindIcon.hook';
 import ColorPickerByPas from 'components/ColorChanger';
 import HeaderOfAddDateToPakeep from 'components/IconsUtils/components/AddDateToPakeep/components/HeaderOfAddDateToPakeep';
 import DynamicMenuItem from 'components/IconsUtils/components/AddDateToPakeep/components/DynamicMenuItem';
 import ViewOfOutlineLabelIcon from 'components/Icons/components/ViewOfOutlineLabel';
-import { useState } from 'react';
-import CategoryOutlinedIcon from '@material-ui/icons/CategoryOutlined';
 import PreparedColorExamples from 'components/ColorChanger/components/PreparedColorExamples';
+import LabelItem from '../LabelItem';
 import PreparedIconSelectingList from './components/PreparedIconSelectingList';
-import { iconsArr } from 'components/Icons';
-const useStyles = makeStyles(theme => ({}));
+import TitleChangerOfLabel from './components/TitleChangerOfLabel';
 
 const MenuOfLabelPart = ({
   menuState,
@@ -19,20 +22,23 @@ const MenuOfLabelPart = ({
   handleClose,
   handleChangeLabelColor: handleSave,
   handleChangeLabelVariant,
-  handleChangeLabelIconName
+  handleChangeLabelIconName,
+  buttonSaveState,
+  onClickOfSaveButton,
+  handleChangeLabelTitle
 }) => {
-  const classes = useStyles();
-  const nullifyOfMenuItemState = {
-    name: ''
-  };
+  const nullifyOfMenuItemState = { name: '' };
   const [menuItemState, setMenuItemState] = useState(nullifyOfMenuItemState);
 
   const menuLabelListArr = [
     {
-      title: 'Delete label',
-      icon: DeleteOutlinedIcon,
-      name: 'deletelabel',
-      onClick: handleDeleteLabel
+      title: 'Change title',
+      icon: ChatOutlinedIcon,
+      name: 'changeLabelTitle',
+      dynamicComponent: {
+        component: TitleChangerOfLabel,
+        props: { onChange: handleChangeLabelTitle, value: menuState.title }
+      }
     },
     {
       title: 'Change color',
@@ -63,6 +69,12 @@ const MenuOfLabelPart = ({
         }
       },
       name: 'changeLabelIcon'
+    },
+    {
+      title: 'Delete label',
+      icon: DeleteOutlinedIcon,
+      name: 'deletelabel',
+      onClick: handleDeleteLabel
     }
 
     // { title: 'Add Location', icon: AddLocationOutlinedIcon, onClick: placeholderFunc, name: 'addLocation' },
@@ -88,6 +100,22 @@ const MenuOfLabelPart = ({
   //   (isPreventClickOfMenuItem = false),
   //   Icon;
 
+  const previewLabelProps = {
+    ...menuState,
+    icon: useFindIcon(menuState.labelIconName),
+    label: menuState.title,
+    size: 'small'
+  };
+  const labelItemProps = { currentColor: menuState.color, handleOpen: null, labelChipProps: previewLabelProps };
+
+  const headerOfAddDateToPakeepProps = {
+    buttonSaveState: buttonSaveState,
+    arrowButtonFunc: handleClose,
+    isSaveButtonHidden: false,
+    onClickOfSaveButton,
+    customTitle: <LabelItem {...labelItemProps} />
+  };
+
   return (
     <Menu
       keepMounted
@@ -100,12 +128,8 @@ const MenuOfLabelPart = ({
           : undefined
       }
     >
-      <HeaderOfAddDateToPakeep
-        buttonSaveState={false}
-        arrowButtonFunc={handleClose}
-        dynamicTitle={'Label'}
-        isSaveButtonHidden
-      />
+      <HeaderOfAddDateToPakeep {...headerOfAddDateToPakeepProps} />
+
       {menuLabelListArr.map(
         ({ title, icon: Icon, onClick: onMenuItemClick, hidden, dynamicComponent = false, name }, idx) => {
           const DynamicComponent = dynamicComponent?.component ?? Grid;

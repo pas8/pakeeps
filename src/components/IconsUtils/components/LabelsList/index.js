@@ -9,14 +9,7 @@ import DefaultMenuListOflabelList from './components/DefaultMenuList';
 import GlobalLabelListOflabelList from './components/GlobalLabelList';
 import { useState } from 'react';
 import DialogOfAddNewLabel from './components/DialogOfAddNewLabel';
-
-const useStyles = makeStyles(({ spacing }) => ({
-  container: {
-    '& li': {
-      paddingRight: spacing(1)
-    }
-  }
-}));
+import { changeLabelItemThunk } from 'store/modules/App/operations';
 
 const LabelsList = ({
   handleAddNewLabel,
@@ -26,7 +19,9 @@ const LabelsList = ({
   handleStatusOfHideLabelView,
   isLabelViewHidden
 }) => {
-  const classes = useStyles();
+
+const [oldLabelState, setOldLabelState] = useState(null)
+
 
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const handleOpenAddNewLabelDialog = () => setIsDialogOpen(true);
@@ -45,15 +40,17 @@ const LabelsList = ({
     }
   ];
 
-  const dialogOfAddNewLabelProps = { isDialogOpen, handleCloseAddNewLabelDialog, handleOpenAddNewLabelDialog };
+  const dialogOfAddNewLabelProps = { isDialogOpen, handleCloseAddNewLabelDialog, handleOpenAddNewLabelDialog,oldLabelState };
 
   const handleChangeNewLabel = (isChecked, id) => (isChecked ? handleDeleteNewLabel(id) : handleAddNewLabel(id));
-  const globalLabelListProps = { globalLabels, handleChangeNewLabel, selectedLabels };
+const handleSetOldLabelState = (labelState) => {setOldLabelState(labelState);handleOpenAddNewLabelDialog()}
+
+{/* <MenuOfLabelPart {...menuOfLabelPartProps} /> */}
+  const globalLabelListProps = { globalLabels, handleChangeNewLabel, selectedLabels,handleSetOldLabelState };
 
   return (
-    <Grid className={classes.container}>
+    <Grid>
       <DefaultMenuListOflabelList defaultMenuListArr={defaultMenuListArr} />
-
       <GlobalLabelListOflabelList {...globalLabelListProps} />
       <DialogOfAddNewLabel {...dialogOfAddNewLabelProps} />
     </Grid>
@@ -71,6 +68,11 @@ LabelsList.propTypes = {
 
 const mapStateToProps = ({ app: { labels } }) => ({
   globalLabels: getLabels(labels)
+  
 });
 
-export default connect(mapStateToProps, null)(LabelsList);
+const mapDispatchToProps = dispatch => ({
+  changeLabelItemThunk: (labelId, property) => dispatch(changeLabelItemThunk(labelId, property))
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(LabelsList);

@@ -8,10 +8,17 @@ import SaveRoundedIcon from '@material-ui/icons/SaveRounded';
 
 const useStyles = makeStyles(theme => ({
   container: { borderBottom: '1px solid rgba(255,255,255,0.4)' },
-  wrapperOfSaveButton: { marginRight: theme.spacing(1 * 0.8) }
+  // wrapperOfSaveButton: { marginRight: theme.spacing(1 * 0.8) }
 }));
 
-const HeaderOfAddDateToPakeep = ({ buttonSaveState, arrowButtonFunc, dynamicTitle, isSaveButtonHidden = false }) => {
+const HeaderOfAddDateToPakeep = ({
+  buttonSaveState,
+  arrowButtonFunc,
+  dynamicTitle,
+  isSaveButtonHidden = false,
+  onClickOfSaveButton,
+  customTitle
+}) => {
   const classes = useStyles();
 
   return (
@@ -24,19 +31,23 @@ const HeaderOfAddDateToPakeep = ({ buttonSaveState, arrowButtonFunc, dynamicTitl
             activeProperty={Boolean(!buttonSaveState)}
           />
 
-          <Typography
-            variant={'subtitle1'}
-            style={{
-              color: 'rgba(255,255,255,0.8)'
-            }}
-          >
-            {dynamicTitle ? dynamicTitle : 'Close'}
-          </Typography>
+          {!!customTitle ? (
+            customTitle
+          ) : (
+            <Typography
+              variant={'subtitle1'}
+              style={{
+                color: 'rgba(255,255,255,0.8)'
+              }}
+            >
+              {dynamicTitle ? dynamicTitle : 'Close'}
+            </Typography>
+          )}
         </Grid>
       </Grid>
       {!isSaveButtonHidden && (
         <Grid item className={classes.wrapperOfSaveButton}>
-          <IconButton>
+          <IconButton onClick={onClickOfSaveButton}>
             <SaveRoundedIcon
               style={{
                 color:
@@ -54,8 +65,11 @@ const HeaderOfAddDateToPakeep = ({ buttonSaveState, arrowButtonFunc, dynamicTitl
 
 HeaderOfAddDateToPakeep.propTypes = {
   arrowButtonFunc: PropTypes.func,
-  buttonSaveState: PropTypes.oneOf(['string', 'bool']),
-  dynamicTitle: PropTypes.oneOf(['string', 'bool'])
-};
+  buttonSaveState: PropTypes.oneOf(["string", "bool"]),
+  customTitle: PropTypes.any,
+  dynamicTitle: PropTypes.oneOf(["string", "bool"]),
+  isSaveButtonHidden: PropTypes.bool,
+  onClickOfSaveButton: PropTypes.func
+}
 
 export default HeaderOfAddDateToPakeep;

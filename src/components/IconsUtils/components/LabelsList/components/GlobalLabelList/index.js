@@ -1,26 +1,27 @@
 import PropTypes from 'prop-types';
 import includes from 'lodash.includes';
-import { MenuItem, Checkbox, ListItemText, IconButton,Grid } from '@material-ui/core';
-import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
+import { MenuItem, Checkbox, ListItemText, Grid, makeStyles } from '@material-ui/core';
+import IconsUtilsOfGlobalLabelListOflabelList from './components/IconsUtils';
 
-const GlobalLabelListOflabelList = ({ globalLabels, handleChangeNewLabel, selectedLabels }) => (
+const GlobalLabelListOflabelList = ({ globalLabels, handleChangeNewLabel, selectedLabels, handleSetOldLabelState }) => (
   <>
-    {globalLabels.map(({ title, id }) => {
-      const isChecked = includes(selectedLabels, id);
-      const onClick = () => handleChangeNewLabel(isChecked, id);
+    {globalLabels.map(labelState => {
+      const isChecked = includes(selectedLabels, labelState.id);
+
+      const onClickOfCheckBoxContainer = () => handleChangeNewLabel(isChecked, labelState.id);
+      const onClickOfEditButton = () => {handleSetOldLabelState(labelState);}
+
+      const iconsUtilsOfGlobalLabelListOflabelListProps = { onClickOfEditButton};
 
       return (
-        <Grid >
-        <MenuItem disableGutters onClick={onClick} key={`newPakeep-label-${id}`}>
-          <Checkbox checked={isChecked} /> <ListItemText primary={title} />
+        <MenuItem disableGutters key={`newPakeep-label-${labelState.id}`}>
+          <Grid container alignItems={'center'} onClick={onClickOfCheckBoxContainer}>
+            <Checkbox checked={isChecked} /> <ListItemText primary={labelState.title} />
+          </Grid>
+          <IconsUtilsOfGlobalLabelListOflabelList {...iconsUtilsOfGlobalLabelListOflabelListProps}/>
         </MenuItem>
-        {/* < */}
-        {/* <IconButton onClick={(e)=> {e.preventDefault();console.log(';')}}><EditOutlinedIcon/> </IconButton> */}
-
-        </Grid>
       );
     })}
-    
   </>
 );
 
