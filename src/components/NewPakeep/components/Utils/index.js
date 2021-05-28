@@ -34,7 +34,7 @@ const NewPakeepUtils = ({ customColor, handleNewPakeepSave, widthOfContainer, ..
     try {
       enqueueSnackbar({ message: 'Processing...', severity: 'info' });
       handleNewPakeepSave();
-      closeSnackbar();
+      // closeSnackbar();
       enqueueSnackbar({ message: 'New pakeep was succsesfully added' });
     } catch (error) {
       enqueueSnackbar({ message: !!error ? error : 'Something went wrong', severity: 'error' });

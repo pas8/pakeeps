@@ -4,14 +4,14 @@ import { themeColors } from 'components/theme';
 import { useIsColorDark } from 'hooks/useIsColorDark.hook';
 
 const useStyles = makeStyles(theme => ({
-  container: ({ color, isDark }) => ({
+  container: ({ color, isDark, currentColor, isCustomColor, parentBackgrounColor }) => ({
     cursor: 'pointer',
     '& .MuiChip-root': {
       cursor: 'pointer',
       background: color,
-      color: isDark ? '#080808' : null,
+      color: isCustomColor ? parentBackgrounColor : isDark ? '#080808' : null,
       '& svg': {
-        color: isDark ? '#080808' : null
+        color: isCustomColor ? parentBackgrounColor :  isDark ? '#080808' : null
       },
       '&:hover': {
         boxShadow: `0px 0px 4px 1px ${color} `
@@ -28,10 +28,13 @@ const useStyles = makeStyles(theme => ({
   })
 }));
 
-const LabelItem = ({ currentColor, handleOpen, labelChipProps,customColor }) => {
+const LabelItem = ({ currentColor, handleOpen, labelChipProps, customColor, parentBackgrounColor }) => {
   const isDark = useIsColorDark(currentColor);
+  const isCustomColor = !!customColor;
 
-  const color = !!customColor ? customColor.hover : !currentColor
+  const color = isCustomColor
+    ? customColor.hover
+    : !currentColor
     ? '#969696'
     : currentColor === 'primary'
     ? themeColors.primaryMain
@@ -39,7 +42,7 @@ const LabelItem = ({ currentColor, handleOpen, labelChipProps,customColor }) => 
     ? themeColors.secondaryMain
     : currentColor;
 
-  const classes = useStyles({ color, isDark });
+  const classes = useStyles({ color, isDark, currentColor, isCustomColor, parentBackgrounColor });
 
   return (
     <Grid item className={classes.container} onContextMenu={handleOpen} onClick={handleOpen}>

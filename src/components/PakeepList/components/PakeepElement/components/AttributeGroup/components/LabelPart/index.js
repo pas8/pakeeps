@@ -7,7 +7,14 @@ import MenuOfLabelPart from './components/Menu';
 import { useFindIcon } from 'hooks/useFindIcon.hook';
 import WrapperOfMenuOfLabelPart from './components/MenuWrapper';
 
-const LabelPart = ({ labels, handleDeleteLabelFromPakeepFunc, changeLabelItemFunc, pakeepId, customColor }) => {
+const LabelPart = ({
+  labels,
+  handleDeleteLabelFromPakeepFunc,
+  changeLabelItemFunc,
+  pakeepId,
+  customColor,
+  parentBackgrounColor
+}) => {
   const nullityOfMenuState = {
     mouseX: null,
     mouseY: null,
@@ -62,7 +69,7 @@ const LabelPart = ({ labels, handleDeleteLabelFromPakeepFunc, changeLabelItemFun
           setMenuState({ mouseX: e.clientX, mouseY: e.clientY, id, variant, labelIconName, title, color });
         };
 
-        const labelItemProps = { currentColor: color, handleOpen, labelChipProps, customColor };
+        const labelItemProps = { currentColor: color, handleOpen, labelChipProps, customColor, parentBackgrounColor };
 
         return <LabelItem {...labelItemProps} />;
       })}
@@ -73,11 +80,13 @@ const LabelPart = ({ labels, handleDeleteLabelFromPakeepFunc, changeLabelItemFun
 
 LabelPart.propTypes = {
   changeLabelItemFunc: PropTypes.func,
+  customColor: PropTypes.any,
   handleDeleteLabelFromPakeepFunc: PropTypes.func,
   labels: PropTypes.shape({
     map: PropTypes.func
   }),
-  pakeepId: PropTypes.string
+  pakeepId: PropTypes.string,
+  parentBackgrounColor: PropTypes.any
 };
 
 export default LabelPart;

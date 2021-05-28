@@ -34,7 +34,7 @@ const initialState = {
       isArchived: false,
       id: 'pakeep1',
       isPinned: true,
-      backgroundColor:'default'
+      backgroundColor: 'default'
     },
     {
       title: 'Placeholder 2',
@@ -46,8 +46,7 @@ const initialState = {
       id: 'pakeep2',
       isArchived: false,
       isPinned: false,
-      backgroundColor:'default'
-
+      backgroundColor: 'default'
     },
     {
       title: 'Placeholder 3',
@@ -59,21 +58,19 @@ const initialState = {
       isArchived: false,
       isPinned: true,
       id: 'pakeep3',
-      backgroundColor:'default'
-
+      backgroundColor: 'default'
     },
     {
       title: 'Placeholder 4',
       text: 'ultricies mi eget mauris pharetra et ultrices neque ornare aenean euismod elementum nisi quis eleifend quam',
       isInBookmark: false,
       isFavorite: true,
-      color: 'primary',
+      color: '#312b03',
       labels: ['label1', 'label2', 'label0', 'label6'],
       isArchived: false,
       id: 'pakeep4',
       isPinned: true,
-      backgroundColor:'transparent'
-
+      backgroundColor: '#969696'
     },
     {
       title: 'Placeholder 5',
@@ -85,8 +82,7 @@ const initialState = {
       isArchived: true,
       labels: ['label4', 'label0', 'label1', 'label2'],
       id: 'pakeep5',
-      backgroundColor:'default'
-
+      backgroundColor: 'default'
     },
     {
       title: 'Placeholder 6',
@@ -98,8 +94,7 @@ const initialState = {
       id: 'pakeep6',
       isPinned: true,
       isArchived: true,
-      backgroundColor:'default'
-
+      backgroundColor: 'default'
     }
     // {
     //   title: 'Placeholder 7',
@@ -269,6 +264,8 @@ const AppReducer = createReducer(initialState)({
     ...state,
     currentFolderPropertyIdx: folderIdx
   }),
+
+  [types.HANDLE_PAKEEPS]: (state, { pakeeps }) => ({ ...state,  isUsePreviuosOrder: true,pakeeps }),
   [types.SET_NEW_ORDER_NAMES]: (state, { newOrder }) => ({
     ...state,
     pakeepsOrderNames: newOrder

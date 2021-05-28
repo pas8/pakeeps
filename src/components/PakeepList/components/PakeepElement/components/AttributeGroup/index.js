@@ -14,7 +14,8 @@ const AttributeGroup = ({
   handleDeleteLabelFromPakeepFunc,
   pakeepId,
   changeLabelItemThunk,
-  customColor
+  customColor,
+  parentBackgrounColor
 }) => {
   const classes = useStyles();
 
@@ -23,7 +24,8 @@ const AttributeGroup = ({
     handleDeleteLabelFromPakeepFunc,
     pakeepId,
     changeLabelItemFunc: changeLabelItemThunk,
-    customColor
+    customColor,
+    parentBackgrounColor
   };
   return (
     <Grid spacing={1} container className={classes.labelsContainer}>
@@ -34,6 +36,7 @@ const AttributeGroup = ({
 };
 
 AttributeGroup.propTypes = {
+  parentBackgrounColor: PropTypes.string,
   changeLabelItemThunk: PropTypes.func,
   customColor: PropTypes.any,
   events: PropTypes.array,

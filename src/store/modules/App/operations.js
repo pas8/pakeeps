@@ -14,7 +14,8 @@ import {
   toDeleteLabelFromPakeep,
   toSetPreviusOrderNames,
   toHandleDrawerWidth,
-  toAddNewGlobalLabel
+  toAddNewGlobalLabel,
+  toSetNewPakeepsArr
 } from './actions';
 
 export const addNewPaKeepThunk = data => dispatch => {
@@ -86,4 +87,18 @@ export const handleSetPreviusOrderNames = orderNames => dispatch => {
 
 export const handleAddNewGlobalLabelThunk = newLabel => dispatch => {
   dispatch(toAddNewGlobalLabel(newLabel));
+};
+
+export const handkePakeepPropertyThunk = (pakeepId, property) => (dispatch, getState) => {
+  const {
+    app: { pakeeps }
+  } = getState();
+
+  const currentPakeep = find(pakeeps, ({ id }) => pakeepId === id);
+  const concatedPakeepWithUpdatedProperty = { ...currentPakeep, ...property };
+  const filteredPakeeps = filter(pakeeps, ({ id }) => pakeepId !== id);
+
+  const newPakeeps = [...filteredPakeeps, concatedPakeepWithUpdatedProperty];
+  // console.log(newPakeeps)
+  dispatch(toSetNewPakeepsArr(newPakeeps));
 };
