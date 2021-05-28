@@ -26,7 +26,6 @@ const MoreMenuOfFolders = ({
   flattenAllFolders
 }) => {
   const classes = useStyles();
-
   return (
     <Menu
       anchorEl={menuAnchorEl}
@@ -36,17 +35,19 @@ const MoreMenuOfFolders = ({
       className={classes.container}
     >
       <ToggleButtonGroup orientation={'vertical'} value={value} exclusive onChange={handleChange}>
-        {arrToMap.map(({ title, iconName, property, id }) => {
+        {arrToMap.map(({ title, iconName, property, id ,onClick}) => {
           const findedIdx = findIndex(flattenAllFolders, ({ id: folderId }) => folderId === id);
           const [icon] = useTakeIcon(iconName ? iconName : (property === 'label' && 'label') || 'infinity');
 
           const onClickOfToggleButton = e => {
             onClick && e.preventDefault();
             onClick && onClick(e);
+            handleCloseMenu()
+
           };
 
           const menuItemProps = {
-            onCLick: onClickOfToggleButton,
+            onClick: onClickOfToggleButton,
             key: id,
             value: findedIdx
           };
