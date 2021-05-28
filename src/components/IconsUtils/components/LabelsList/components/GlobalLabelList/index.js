@@ -6,8 +6,8 @@ import IconsUtilsOfGlobalLabelListOflabelList from './components/IconsUtils';
 const GlobalLabelListOflabelList = ({ globalLabels, handleChangeNewLabel, selectedLabels, setMenuState }) => (
   <>
     {globalLabels.map(labelState => {
+      console.log(selectedLabels)
       const isChecked = includes(selectedLabels, labelState.id);
-
       const onClickOfCheckBoxContainer = () => handleChangeNewLabel(isChecked, labelState.id);
       const onClickOfEditButton = e => {
         e.preventDefault();

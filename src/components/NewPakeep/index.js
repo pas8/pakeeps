@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { createContext, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import _ from 'lodash';
 import clsx from 'clsx';
@@ -38,7 +38,7 @@ const useStyles = makeStyles(theme => ({
 
     '& label': {
       color: !customColor ? themeColors.whiteRgbaColorWith0dot42valueOfAlfaCanal : customColor.hover,
- 
+
       background: !customColor ? 'transparent !important' : `${backgroundColor} !important`
     },
     // '& legend': {
@@ -87,6 +87,8 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
+export   const LocaleContext = createContext();
+
 const NewPaKeep = ({ addNewPaKeepThunk }) => {
   const nulittyState = {
     title: '',
@@ -98,7 +100,7 @@ const NewPaKeep = ({ addNewPaKeepThunk }) => {
     id: nanoid(),
     color: 'default',
     backgroundColor: 'default',
-    labels: []
+    labels: ['label1']
   };
   const [state, setState] = useState(nulittyState);
   const [value, updateCookie, deleteCookie] = useCookie(state);
@@ -174,6 +176,7 @@ const NewPaKeep = ({ addNewPaKeepThunk }) => {
     state.color
   );
 
+
   const classes = useStyles({
     isLabelViewHidden: statusState.isLabelViewHidden,
     color: state.color,
@@ -186,7 +189,7 @@ const NewPaKeep = ({ addNewPaKeepThunk }) => {
     selectedLabels: state.labels,
     handleAddNewLabel,
     isLabelViewHidden: statusState.isLabelViewHidden,
-
+    handleDeleteLabelFromPakeepFunc,
     handleDeleteNewLabel
   };
 
@@ -263,7 +266,11 @@ const NewPaKeep = ({ addNewPaKeepThunk }) => {
           <AttributesOfNewPakeep {...attributesOfNewPakeepProps} />
         )}
 
-        {!statusState.isUtilsHidden && <NewPakeepUtils {...newPakeepUtils} />}
+        {!statusState.isUtilsHidden && (
+          <LocaleContext.Provider value={{selectedLabels:state.labels}}>
+            <NewPakeepUtils {...newPakeepUtils} />
+          </LocaleContext.Provider>
+        )}
 
         <EyeIconButton {...eyeIconButtonProps} />
       </Grid>

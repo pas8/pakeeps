@@ -13,7 +13,6 @@ const WrapperOfPopoverAndMenu = ({
   handleAverageMainComponentWidth,
   customColor
 }) => {
-
   const nullityOfAnchorEl = {
     name: '',
     isMenuOpen: false,
@@ -21,10 +20,14 @@ const WrapperOfPopoverAndMenu = ({
     onMenuClose: null,
     currentTarget: null,
     popoverText: '',
-    menuComponents: ''
+    menuComponentsProps:null,
+    MenuComponents:null
   };
+
+  
   const [anchorElState, setAnchorElState] = useState(nullityOfAnchorEl);
 
+  
   const handleMenuClose = () => setAnchorElState(nullityOfAnchorEl);
   const handlePopoverClose = () => setAnchorElState(state => ({ ...state, isPopoverOpen: false }));
 
@@ -43,7 +46,7 @@ const WrapperOfPopoverAndMenu = ({
             ActiveIcon,
             isIconActive,
             menuComponents: MenuComponents,
-            menuComponentsProps,
+            menuComponentsProps: customMenuComponentsProps,
             hidden = false,
             customElementComponentOfIconGroup = false,
             rotateDeg = false,
@@ -53,10 +56,6 @@ const WrapperOfPopoverAndMenu = ({
         ) => {
           if (hidden) return;
           if (customElementComponentOfIconGroup) return customElementComponentOfIconGroup;
-
-          const menuComponents = !!MenuComponents && (
-            <MenuComponents {...menuComponentsProps} onMenuClose={handleMenuClose} />
-          );
 
           const iconName = isIconNameExtended ? { keyName, buttonUtilsName } : buttonUtilsName;
 
@@ -78,6 +77,7 @@ const WrapperOfPopoverAndMenu = ({
             handleAverageMainComponentWidth
           };
           const mainComponent = <IconButtonByPas {...iconButtonProps} />;
+          const menuComponentsProps = { ...customMenuComponentsProps, onMenuClose: handleMenuClose };
 
           const handlePopoverOpen = ({ currentTarget }) =>
             setAnchorElState(state => ({
@@ -92,7 +92,9 @@ const WrapperOfPopoverAndMenu = ({
             setAnchorElState(state => ({
               ...state,
               currentTarget,
-              menuComponents,
+              handleMenuClose,
+              menuComponentsProps,
+              MenuComponents,
               name: buttonUtilsName,
               isMenuOpen: true,
               onMenuClose: null
@@ -134,4 +136,4 @@ WrapperOfPopoverAndMenu.propTypes = {
   })
 };
 
-export default memo(WrapperOfPopoverAndMenu);
+export default WrapperOfPopoverAndMenu;

@@ -21,8 +21,8 @@ const PopoverAndMenu = ({
   handleMenuClose,
   currentTarget,
   popoverText,
-  menuComponents,
-
+  menuComponentsProps,
+  MenuComponents,
   popoverTypographyVariant = 'subtitle2',
   menuLocation = 'default',
   popoverLocation = 'default',
@@ -111,7 +111,11 @@ const PopoverAndMenu = ({
         <Typography variant={popoverTypographyVariant}>{popoverText}</Typography>
       </Popover>
 
-      {!!menuComponents && <Menu {...menuProps}>{menuComponents && menuComponents}</Menu>}
+      {!!MenuComponents && (
+        <Menu {...menuProps}>
+          <MenuComponents {...menuComponentsProps} />
+        </Menu>
+      )}
     </>
   );
 };
