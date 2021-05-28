@@ -124,7 +124,6 @@ const PakeepElement = ({
     onSwiped: eventData => console.log('User Swiped!', eventData)
   });
 
-  console.log(statusState);
   // const setLabelHoverStatusIsFalse = () => setLabelHover(false);
   // const setLabelHoverStatus = () => setLabelHover({ title, isHovering: true });
   useEffect(() => setStatusState(state => ({ ...state, isLoaded: true })), []);

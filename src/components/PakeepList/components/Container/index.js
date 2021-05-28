@@ -3,6 +3,7 @@ import { Grid, makeStyles } from '@material-ui/core';
 import { DragDropContext } from 'react-beautiful-dnd';
 import { find } from 'lodash';
 import Column from '../Column/index';
+import PinColumn from '../PinColumn/index';
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -41,18 +42,44 @@ const PakeepListContainer = ({
             const currentEl = find(pakeeps, ({ id }) => id === pakeepId);
             return currentEl;
           });
+          const lastColumn = !!(idx + 1 === responsiveColumnOrder.length);
+          const firstColumn = !!(idx === 0);
+          const columnProps = {
+            folderProperty,
+            key: column?.id,
+            folderId,
+            column,
+            firstColumn,
+            lastColumn,
+            pakeepsInColumn
+          };
 
-          return (
-            <Column
-              folderProperty={folderProperty}
-              key={column?.id}
-              folderId={folderId}
-              column={column}
-              pakeepsInColumn={pakeepsInColumn}
-              lastColumn={!!(idx + 1 === responsiveColumnOrder.length) }
-              firstColumn={!!(idx === 0)}
-            />
-          );
+          return <PinColumn {...columnProps} />;
+        })}
+
+        {responsiveColumnOrder?.map((columnId, idx) => {
+          const column = columns[columnId];
+          if (!column?.pakeepsId) return;
+          // console.log(column?.pakeepsId)
+          const filteredArrToMap = column.pakeepsId.filter(id => id !== placeholderName);
+
+          const pakeepsInColumn = filteredArrToMap.map(pakeepId => {
+            const currentEl = find(pakeeps, ({ id }) => id === pakeepId);
+            return currentEl;
+          });
+          const lastColumn = !!(idx + 1 === responsiveColumnOrder.length);
+          const firstColumn = !!(idx === 0);
+          const columnProps = {
+            folderProperty,
+            key: column?.id,
+            folderId,
+            column,
+            firstColumn,
+            lastColumn,
+            pakeepsInColumn
+          };
+
+          return <Column {...columnProps} />;
         })}
       </Grid>
     </DragDropContext>
