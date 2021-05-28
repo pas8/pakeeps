@@ -4,36 +4,45 @@ import { themeColors } from 'components/theme';
 import _ from 'lodash';
 import { useMeasure } from 'react-use';
 import { useEffect } from 'react';
-
+import { colord } from 'colord';
+// import clsx from 'clsx'
 const useStyles = makeStyles(theme => ({
-  icon: ({ iconColor, rotate }) => ({ color: iconColor, transform: rotate }),
+  icon: ({ iconColor, rotate, isArctiveIconPresent,isIconActive }) => ({
+    '& svg': { color: iconColor, transform: rotate },
+    '& path': { fillOpacity: !isArctiveIconPresent && isIconActive && 1  },
+    '&:hover ': { background: colord(iconColor).alpha(0.1).toHex() }
+  }),
   smallButtonSize: { '& button ': { padding: theme.spacing(1) } }
 }));
 
 const IconButtonByPas = ({
   onClick = null,
+  isArctiveIconPresent,
   rotateDeg = false,
-  activeIcon = false,
+  isIconActive = false,
   icon: Icon,
   iconName = 'icon',
   activeIconName = 'icon',
   activeProperty = false,
   size,
-  customColor = null,
+  customColor = false,
   handleAverageMainComponentWidth = false,
-  badgeContent 
+  badgeContent
 }) => {
   const currentHoverStatusIsTrue = _.isEqual(activeIconName, iconName) && activeProperty;
-  const iconColor = activeIcon
+  const customIconColor = !!customColor && currentHoverStatusIsTrue ? customColor?.hover : customColor?.unHover;
+
+  const defaultColor = isIconActive
     ? themeColors.primaryMain
-    : customColor
-    ? customColor
     : currentHoverStatusIsTrue
     ? 'rgba(255,255,255,0.92)'
     : 'rgba(255,255,255,0.42)';
+
+  const iconColor = customColor ? customIconColor : defaultColor;
+
   const rotate = rotateDeg ? `rotate(${rotateDeg}deg)` : 'rotate(0deg)';
 
-  const classes = useStyles({ iconColor, rotate });
+  const classes = useStyles({ iconColor, rotate, isIconActive ,isArctiveIconPresent});
 
   const [ref, { width }] = useMeasure();
 
@@ -41,9 +50,9 @@ const IconButtonByPas = ({
 
   return (
     <Grid className={size === 'small' ? classes.smallButtonSize : null} component={'div'} ref={ref}>
-      <IconButton onClick={onClick}>
+      <IconButton onClick={onClick} className={classes.icon}>
         <Badge badgeContent={badgeContent} color={'secondary'}>
-          <Icon className={classes.icon} />
+          <Icon />
         </Badge>
       </IconButton>
     </Grid>
@@ -52,7 +61,7 @@ const IconButtonByPas = ({
 
 IconButtonByPas.propTypes = {
   Icon: PropTypes.node,
-  activeIcon: PropTypes.bool,
+  isIconActive: PropTypes.bool,
   activeIconName: PropTypes.string,
   activeProperty: PropTypes.bool,
   badgeContent: PropTypes.number,
@@ -63,6 +72,6 @@ IconButtonByPas.propTypes = {
   onClick: PropTypes.func,
   rotateDeg: PropTypes.number,
   size: PropTypes.string
-}
+};
 
 export default IconButtonByPas;

@@ -1,17 +1,36 @@
 import PropTypes from 'prop-types';
 import IconButtonByPas from 'components/IconButton';
-import PopoverAndMenu from '../PopoverAndMenu';
+import PopoverAndMenu from './components/PopoverAndMenu';
 import { nanoid } from 'nanoid';
+import { memo, useState, useRef } from 'react';
+import WrapperOfMainComponent from './components/WrapperOfMainComponent';
 
 const WrapperOfPopoverAndMenu = ({
   buttonUtilsArr,
-  handlePopoverAndMenuState,
-  popoverAndMenuState,
   keyName,
   isIconNameExtended = false,
   iconSize = 'default',
-  handleAverageMainComponentWidth
+  handleAverageMainComponentWidth,
+  customColor
 }) => {
+
+  const nullityOfAnchorEl = {
+    name: '',
+    isMenuOpen: false,
+    isPopoverOpen: false,
+    onMenuClose: null,
+    currentTarget: null,
+    popoverText: '',
+    menuComponents: ''
+  };
+  const [anchorElState, setAnchorElState] = useState(nullityOfAnchorEl);
+
+  const handleMenuClose = () => setAnchorElState(nullityOfAnchorEl);
+  const handlePopoverClose = () => setAnchorElState(state => ({ ...state, isPopoverOpen: false }));
+
+  const popoverAndMenuProps = { ...anchorElState, handleMenuClose, handlePopoverClose };
+  const anchorElRef = useRef(null);
+
   return (
     <>
       {buttonUtilsArr.map(
@@ -21,58 +40,79 @@ const WrapperOfPopoverAndMenu = ({
             popoverText,
             name: buttonUtilsName,
             onClick,
-            activeIcon,
-            onlyPopover = false,
+            ActiveIcon,
+            isIconActive,
             menuComponents: MenuComponents,
             menuComponentsProps,
             hidden = false,
-            customColor,
             customElementComponentOfIconGroup = false,
-            menuLocation,
-            popoverLocation,
             rotateDeg = false,
-            badgeContent = 0 
+            badgeContent = 0
           },
           idx
         ) => {
           if (hidden) return;
           if (customElementComponentOfIconGroup) return customElementComponentOfIconGroup;
 
-          const menuComponents = !onlyPopover && MenuComponents && (
-            <MenuComponents {...menuComponentsProps} onMenuClose={popoverAndMenuState.onMenuClose} />
+          const menuComponents = !!MenuComponents && (
+            <MenuComponents {...menuComponentsProps} onMenuClose={handleMenuClose} />
           );
 
           const iconName = isIconNameExtended ? { keyName, buttonUtilsName } : buttonUtilsName;
+
+          const isArctiveIconPresent = customColor && isIconActive && !!ActiveIcon;
+          const icon = isArctiveIconPresent ? ActiveIcon : Icon;
+
           const iconButtonProps = {
-            icon: Icon,
+            icon,
+            isArctiveIconPresent,
             badgeContent,
             customColor,
             onClick: onClick,
             iconName,
             rotateDeg,
             size: iconSize,
-            activeIcon,
-            activeIconName: popoverAndMenuState.name,
-            activeProperty: popoverAndMenuState.popoverIsOpen,
+            isIconActive,
+            activeIconName: anchorElState.name,
+            activeProperty: anchorElState.isPopoverOpen,
             handleAverageMainComponentWidth
           };
           const mainComponent = <IconButtonByPas {...iconButtonProps} />;
 
-          const popoverAndMenuProps = {
-            name: iconName,
-            key: idx,
-            menuLocation,
-            popoverLocation,
-            popoverText,
-            menuComponents,
-            onlyPopover,
-            handlePopoverAndMenuState,
-            mainComponent
+          const handlePopoverOpen = ({ currentTarget }) =>
+            setAnchorElState(state => ({
+              ...state,
+              currentTarget,
+              isPopoverOpen: true,
+              name: buttonUtilsName,
+              popoverText
+            }));
+
+          const handleMenuOpen = ({ currentTarget }) =>
+            setAnchorElState(state => ({
+              ...state,
+              currentTarget,
+              menuComponents,
+              name: buttonUtilsName,
+              isMenuOpen: true,
+              onMenuClose: null
+            }));
+
+
+          const wrapperOfMainComponentProps = {
+            onMouseEnter: handlePopoverOpen,
+            // onMouseLeave: !anchorEl.menu ? handlePopoverClose : null,
+
+            onMouseLeave: handlePopoverClose,
+            ref: anchorElRef,
+            onClick: handleMenuOpen,
+            key: buttonUtilsName
           };
 
-          return <PopoverAndMenu {...popoverAndMenuProps} />;
+          return <WrapperOfMainComponent {...wrapperOfMainComponentProps}>{mainComponent}</WrapperOfMainComponent>;
         }
       )}
+      <PopoverAndMenu {...popoverAndMenuProps} />
     </>
   );
 };
@@ -94,4 +134,4 @@ WrapperOfPopoverAndMenu.propTypes = {
   })
 };
 
-export default WrapperOfPopoverAndMenu;
+export default memo(WrapperOfPopoverAndMenu);

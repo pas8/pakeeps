@@ -1,6 +1,5 @@
 import SearchIcon from '@material-ui/icons/Search';
 import { Button, Grid, makeStyles, Tab, Tabs, withStyles } from '@material-ui/core';
-import PinIcon from 'components/Icons/components/PinIcon';
 import { themeColors } from 'components/theme';
 import PropTypes from 'prop-types';
 import { useState } from 'react';

@@ -28,10 +28,10 @@ const useStyles = makeStyles(theme => ({
   })
 }));
 
-const LabelItem = ({ currentColor, handleOpen, labelChipProps }) => {
+const LabelItem = ({ currentColor, handleOpen, labelChipProps,customColor }) => {
   const isDark = useIsColorDark(currentColor);
 
-  const color = !currentColor
+  const color = !!customColor ? customColor.hover : !currentColor
     ? '#969696'
     : currentColor === 'primary'
     ? themeColors.primaryMain

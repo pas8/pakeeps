@@ -2,7 +2,7 @@ import { breakpoints } from 'components/theme';
 import { useEffect, useState } from 'react';
 import { useMedia, useWindowSize } from 'react-use';
 
-export const takeValueFromBreakpoints = (values = ['xl', 'lg', 'md', 'sm', 'xs']) => {
+export const useTakeValueFromBreakpoints = (values = ['xl', 'lg', 'md', 'sm', 'xs']) => {
   const [state, setState] = useState(values);
   const { width } = useWindowSize();
 

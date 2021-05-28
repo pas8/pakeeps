@@ -5,11 +5,9 @@ import PaletteOutlinedIcon from '@material-ui/icons/PaletteOutlined';
 import AddLocationOutlinedIcon from '@material-ui/icons/AddLocationOutlined';
 import IconButtonByPas from 'components/IconButton';
 import ColorPickerByPas from 'components/ColorChanger';
-import PopoverAndMenu from 'components/IconsUtils/components/PopoverAndMenu';
 import AlarmAddOutlinedIcon from '@material-ui/icons/AlarmAddOutlined';
 import CategoryOutlinedIcon from '@material-ui/icons/CategoryOutlined';
 import { Grid } from '@material-ui/core';
-
 import WrapperOfPopoverAndMenu from 'components/IconsUtils/components/WrapperOfPopoverAndMenu';
 
 const ButtonGroupUtilsOfDynamicAddMoreEvents = ({
@@ -32,7 +30,7 @@ const ButtonGroupUtilsOfDynamicAddMoreEvents = ({
       icon: PaletteOutlinedIcon,
       popoverText: 'Set color',
       name: 'palette',
-      activeIcon: isInPatternList,
+      isIconActive: isInPatternList,
       menuComponents: ColorPickerByPas,
       menuComponentsProps: { color }
     },
@@ -40,7 +38,7 @@ const ButtonGroupUtilsOfDynamicAddMoreEvents = ({
       icon: PlaylistAddOutlinedIcon,
       popoverText: 'Add to pattern',
       name: 'pattern',
-      activeIcon: isInPatternList,
+      isIconActive: isInPatternList,
       onlyPopover: true,
       onClick: addToPatternList
     },
@@ -48,7 +46,7 @@ const ButtonGroupUtilsOfDynamicAddMoreEvents = ({
       icon: AddLocationOutlinedIcon,
       popoverText: 'Add location',
       name: 'location',
-      activeIcon: location,
+      isIconActive: location,
       menuComponents: null,
       menuComponentsProps: { location, handlerOfEventButtonGroupIcon }
     },
@@ -56,7 +54,7 @@ const ButtonGroupUtilsOfDynamicAddMoreEvents = ({
       icon: AlarmAddOutlinedIcon,
       popoverText: 'Add one more event',
       name: 'addOneMoreEvent',
-      activeIcon: false,
+      isIconActive: false,
       onlyPopover: true,
       onClick: addOneMoreEventFunc
     },
@@ -64,7 +62,7 @@ const ButtonGroupUtilsOfDynamicAddMoreEvents = ({
       icon: CategoryOutlinedIcon,
       popoverText: 'Choose an icon',
       name: 'iconName',
-      activeIcon: iconNameOfEventElement,
+      isIconActive: iconNameOfEventElement,
       onlyPopover: true,
       onClick: 'handlerOfEventButtonGroupIcon'
     },
@@ -72,7 +70,7 @@ const ButtonGroupUtilsOfDynamicAddMoreEvents = ({
       icon: writingTitleStatus ? KeyboardIcon : TextRotationNoneOutlinedIcon,
       popoverText: 'Add a title',
       name: 'addTitle',
-      activeIcon: writingTitleStatus,
+      isIconActive: writingTitleStatus,
       onClick: handlerOfTitleButton,
       onlyPopover: true
     }

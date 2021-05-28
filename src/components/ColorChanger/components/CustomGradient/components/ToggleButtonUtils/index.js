@@ -98,14 +98,14 @@ const ToggleButtonUtilsOfCustomGradient = ({
       icon: AddBoxOutlinedIcon,
       popoverText: 'Add this color to your color pattern',
       value: 'addColorToColorPattern',
-      activeIcon: false,
+      isIconActive: false,
       onClick: onClickOfAddToPatternButton
     },
     {
       icon: ExtensionIcon,
       popoverText: 'Chose color format which u like',
       value: 'choseColorFormatWhichULike',
-      activeIcon: false,
+      isIconActive: false,
       onClick: onClickOfColorFormatButton
     },
     {

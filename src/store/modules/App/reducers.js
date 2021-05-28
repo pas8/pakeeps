@@ -33,7 +33,8 @@ const initialState = {
       labels: ['label3', 'label1', 'label0', 'label2'],
       isArchived: false,
       id: 'pakeep1',
-      isPinned: true
+      isPinned: true,
+      backgroundColor:'default'
     },
     {
       title: 'Placeholder 2',
@@ -44,7 +45,9 @@ const initialState = {
       labels: ['label4', 'label0', 'label1', 'label2', 'label3'],
       id: 'pakeep2',
       isArchived: false,
-      isPinned: false
+      isPinned: false,
+      backgroundColor:'default'
+
     },
     {
       title: 'Placeholder 3',
@@ -55,18 +58,22 @@ const initialState = {
       labels: ['label0', 'label2', 'label6'],
       isArchived: false,
       isPinned: true,
-      id: 'pakeep3'
+      id: 'pakeep3',
+      backgroundColor:'default'
+
     },
     {
       title: 'Placeholder 4',
       text: 'ultricies mi eget mauris pharetra et ultrices neque ornare aenean euismod elementum nisi quis eleifend quam',
       isInBookmark: false,
       isFavorite: true,
-      color: 'transparent',
+      color: 'primary',
       labels: ['label1', 'label2', 'label0', 'label6'],
       isArchived: false,
       id: 'pakeep4',
-      isPinned: true
+      isPinned: true,
+      backgroundColor:'transparent'
+
     },
     {
       title: 'Placeholder 5',
@@ -77,7 +84,9 @@ const initialState = {
       isPinned: false,
       isArchived: true,
       labels: ['label4', 'label0', 'label1', 'label2'],
-      id: 'pakeep5'
+      id: 'pakeep5',
+      backgroundColor:'default'
+
     },
     {
       title: 'Placeholder 6',
@@ -88,7 +97,9 @@ const initialState = {
       labels: ['label0', 'label2', 'label6'],
       id: 'pakeep6',
       isPinned: true,
-      isArchived: true
+      isArchived: true,
+      backgroundColor:'default'
+
     }
     // {
     //   title: 'Placeholder 7',
