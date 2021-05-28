@@ -9,7 +9,7 @@ import { colord } from 'colord';
 const useStyles = makeStyles(theme => ({
   icon: ({ iconColor, rotate }) => ({
     '& svg': { color: iconColor, transform: rotate ,},
-    '&:hover ': { background: colord(iconColor).alpha(0.08).toHex() }
+    '&:hover ': { background: colord(iconColor).alpha(0.1).toHex() }
   }),
   smallButtonSize: { '& button ': { padding: theme.spacing(1) } }
 }));

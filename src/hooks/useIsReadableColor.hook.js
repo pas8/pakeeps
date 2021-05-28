@@ -1,7 +1,10 @@
 import { colord } from 'colord';
+import { useEffect, useState } from 'react';
 import { useIsColorDark } from './useIsColorDark.hook';
 
 export const useIsReadableColor = (backgroundColor, color) => {
+  const [colorState, setColorState] = useState([false, {hover:'',unHover:''}]);
+
   const defaultColors = { backgroundColor: '#303030', color: '#ffffff' };
   const isUseDefaultBackgroundColor = backgroundColor === 'default';
   const isUseDefaultColor = color === 'default';
@@ -16,11 +19,15 @@ export const useIsReadableColor = (backgroundColor, color) => {
   const isColorWhite = !useIsColorDark(isUseDefaultColor ? defaultColors.color : color);
 
   const isValid = isBackroundColorDark === isColorWhite;
-console.log( isValid  || isUseDefault)
+  // console.log( isValid  || isUseDefault)
   const newColor =
-    isValid  || isUseDefault
+    isValid || isUseDefault
       ? { hover: defaultColors.color, unHover: colord(defaultColors.color).alpha(0.8).toHex() }
-      : { hover: defaultBlackColor, unHover: colord( defaultColors.backgroundColor ).alpha(0.96).toHex() };
+      : { hover: defaultBlackColor, unHover: colord(defaultColors.backgroundColor).alpha(0.96).toHex() };
 
-  return [isUseDefault,newColor];
+  useEffect(() => {
+    setColorState([isUseDefault, newColor]);
+  }, [backgroundColor, color]);
+
+  return [...colorState];
 };

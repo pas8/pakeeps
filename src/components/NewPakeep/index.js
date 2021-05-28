@@ -4,7 +4,7 @@ import _ from 'lodash';
 import clsx from 'clsx';
 import { useCookie, useKeyPressEvent, useMeasure, usePageLeave } from 'react-use';
 import { nanoid } from 'nanoid';
-import { Box, Grid, IconButton, makeStyles, Paper, TextField } from '@material-ui/core';
+import { Box, Grid, IconButton, makeStyles, Paper, TextField, withStyles } from '@material-ui/core';
 import { addNewPaKeepThunk } from 'store/modules/App/operations';
 import { themeColors } from 'components/theme';
 import NewPakeepUtils from './components/Utils';
@@ -17,25 +17,56 @@ import { useIsColorDark } from 'hooks/useIsColorDark.hook';
 import { useIsReadableColor } from 'hooks/useIsReadableColor.hook';
 
 const useStyles = makeStyles(theme => ({
-  container: {
+  container: ({ customColor, isLabelViewHidden }) => ({
     marginTop: theme.spacing(8),
 
     '& .MuiInputBase-root': {
       paddingRight: theme.spacing(4.8)
     },
 
+    '& .MuiFormLabel-root': customColor && {
+      color: customColor.unHover
+    },
+    '&  .MuiFormLabel-root.Mui-focused': {
+      color: !customColor ? themeColors.primaryMain : customColor.hover,
+      padding: !customColor && theme.spacing(0.4, 1.8),
+      border: !customColor ? 0 : `2px solid ${customColor.hover}`,
+      borderLeft: customColor && 0,
+      borderTopLeftRadius: customColor && '6px',
+      transform: !customColor ? 'translate(4px, -8px) scale(0.75)' : 'translate(0px, 0px) scale(0.75)'
+    },
+
+    '& legend': {
+      transform: !customColor ? 'translate(4px, -8px) scale(0.75)' : 'translate(0px, 0px) scale(0.75)'
+    },
     '& .MuiOutlinedInput-multiline': {
-      padding: ({ isLabelViewHidden }) => theme.spacing(2, 6, isLabelViewHidden ? 6 : 10, 1.4)
+      padding: theme.spacing(!customColor ? 2 : 2.8, 6, isLabelViewHidden ? 6 : 10, 1.4)
     },
     '& input,textarea': {
-      caretColor: ({ customColor }) => (!customColor ? themeColors.primaryMain : customColor.hover),
-      color: ({ customColor }) => customColor.hover
+      caretColor: !customColor ? themeColors.primaryMain : customColor.hover,
+      color: customColor.hover
+    },
+    '& .MuiFormLabel-root.Mui-focused': {
+      color: !customColor ? themeColors.primaryMain : customColor.hover
+    },
+
+    '& fieldset': {
+      borderColor: !customColor
+        ? themeColors.whiteRgbaColorWith0dot42valueOfAlfaCanal
+        : `${customColor.hover} !important`,
+      '&:focus': {
+        borderColor: !customColor ? themeColors.secondaryMain : customColor.hover
+      },
+      '&:hover': {
+        borderColor: !customColor ? themeColors.whiteRgbaColorWith0dot8valueOfAlfaCanal : customColor.unHover
+      }
     }
-  },
+  }),
   wrapper: {
     padding: theme.spacing(0),
     backgroundColor: ({ backgroundColor }) => (colord(backgroundColor).isValid() ? backgroundColor : 'transparent'),
-    position: 'relative'
+    position: 'relative',
+    borderRadius: '4px'
   },
   hidden: { display: 'none' },
   inputTitle: { padding: 0 },
@@ -135,13 +166,13 @@ const NewPaKeep = ({ addNewPaKeepThunk }) => {
       return setStatusState(state => ({ ...state, isWritingText: !state.isWritingText }));
     }
   };
-
   const [isUseDefault, isReadable] = useIsReadableColor(state.backgroundColor, state.color);
-  const [customColor, setCustomColor] = useState(false);
-  console.log(customColor);
-  console.log(customColor);
-  useEffect(() => setCustomColor(isUseDefault ? false : isReadable), [isUseDefault]);
+  // const [customColor, setCustomColor] = useState(false);
+  const customColor = isUseDefault ? false : isReadable;
 
+  // useEffect(() => setCustomColor(isUseDefault ? false : isReadable), [isUseDefault]);
+
+  // console.log(customColor)
   const classes = useStyles({
     isLabelViewHidden: statusState.isLabelViewHidden,
     color: state.color,
@@ -176,7 +207,8 @@ const NewPaKeep = ({ addNewPaKeepThunk }) => {
   const attributesOfNewPakeepProps = {
     pakeepId: state.id,
     handleDeleteLabelFromPakeepFunc,
-    labels: state.labels
+    labels: state.labels,
+    customColor
   };
 
   const rowsNumber = statusState.isWritingText ? 4 : !statusState.isUtilsHidden ? 6 : 1;
@@ -208,9 +240,16 @@ const NewPaKeep = ({ addNewPaKeepThunk }) => {
     [breakpoint]: fullWidthValue || breakpointsValues[breakpoint],
     ref
   };
+
+  const eyeIconButtonProps = {
+    onClickOfEyeIconButton: handleChangeUtilsVisibility,
+    isUtilsHidden: statusState.isUtilsHidden,
+    customColor
+  };
+
   return (
     <Grid {...gridContainerProps}>
-      <Paper variant={'elevation'} className={classes.wrapper}>
+      <Grid className={classes.wrapper}>
         <Box>
           <TextField {...textFieldProps} />
         </Box>
@@ -221,8 +260,8 @@ const NewPaKeep = ({ addNewPaKeepThunk }) => {
 
         {!statusState.isUtilsHidden && <NewPakeepUtils {...newPakeepUtils} />}
 
-        <EyeIconButton onClickOfEyeIconButton={handleChangeUtilsVisibility} isUtilsHidden={statusState.isUtilsHidden} />
-      </Paper>
+        <EyeIconButton {...eyeIconButtonProps} />
+      </Grid>
     </Grid>
   );
 };
