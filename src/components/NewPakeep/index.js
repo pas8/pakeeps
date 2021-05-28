@@ -14,7 +14,7 @@ import EyeIconButton from './components/EyeIconButton';
 import useKeyboardJs from 'react-use/lib/useKeyboardJs';
 import { colord } from 'colord';
 import { useIsColorDark } from 'hooks/useIsColorDark.hook';
-import { useIsReadableColor } from 'hooks/useIsReadableColor.hook';
+import { useGetReadableColor } from 'hooks/useGetReadableColor.hook';
 
 const useStyles = makeStyles(theme => ({
   container: ({ customColor, isLabelViewHidden, backgroundColor }) => ({
@@ -24,9 +24,6 @@ const useStyles = makeStyles(theme => ({
       paddingRight: theme.spacing(4.8)
     },
 
-    '& .MuiFormLabel-root': customColor && {
-      color: customColor.unHover
-    },
     '&  .MuiFormLabel-root.Mui-focused': {
       color: !customColor ? themeColors.primaryMain : customColor.hover,
       padding: customColor && theme.spacing(0.4, 1.8),
@@ -36,10 +33,12 @@ const useStyles = makeStyles(theme => ({
       borderTopLeftRadius: customColor && '6px',
       // background: `${backgroundColor} !important`,
 
-      transform: !customColor ? 'translate(4px, -8px) scale(0.75)' : 'translate(-2px, -8px) scale(0.75)'
+      transform: !customColor ? 'translate(14px, -6px) scale(0.75)' : 'translate(-2px, -8px) scale(0.75)'
     },
 
     '& label': {
+      color: !customColor ? themeColors.whiteRgbaColorWith0dot42valueOfAlfaCanal : customColor.hover,
+ 
       background: !customColor ? 'transparent !important' : `${backgroundColor} !important`
     },
     // '& legend': {
@@ -67,10 +66,9 @@ const useStyles = makeStyles(theme => ({
     borderRadius: '4px',
     borderWidth: !customColor ? 0 : 2,
     '&:hover': {
-      boxShadow: customColor && `0px 0px 8px ${backgroundColor}`,
+      boxShadow: customColor && `0px 0px 4px ${backgroundColor}`,
       border: customColor && customColor.unHover
-    },
-
+    }
   }),
   hidden: { display: 'none' },
   inputTitle: { padding: 0 },
@@ -100,7 +98,7 @@ const NewPaKeep = ({ addNewPaKeepThunk }) => {
     id: nanoid(),
     color: 'default',
     backgroundColor: 'default',
-    labels: ['label3', 'label1', 'label0']
+    labels: []
   };
   const [state, setState] = useState(nulittyState);
   const [value, updateCookie, deleteCookie] = useCookie(state);
@@ -171,11 +169,10 @@ const NewPaKeep = ({ addNewPaKeepThunk }) => {
       return setStatusState(state => ({ ...state, isWritingText: !state.isWritingText }));
     }
   };
-  const [isUseDefault, isReadable, isBackgroundColorDefault, isColorDefault] = useIsReadableColor(
+  const [customColor, isBackgroundColorDefault, isColorDefault] = useGetReadableColor(
     state.backgroundColor,
     state.color
   );
-  const customColor = isUseDefault ? false : isReadable;
 
   const classes = useStyles({
     isLabelViewHidden: statusState.isLabelViewHidden,
