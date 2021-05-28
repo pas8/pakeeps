@@ -1,4 +1,4 @@
-import { Grid, Paper, makeStyles, Typography, Grow } from '@material-ui/core';
+import { Grid, Paper, makeStyles, Typography, Grow, Zoom, Fade } from '@material-ui/core';
 import PropTypes from 'prop-types';
 import { useState, React, useEffect } from 'react';
 import clsx from 'clsx';
@@ -10,28 +10,34 @@ import { connect } from 'react-redux';
 import _, { property } from 'lodash';
 import SkeletonView from './components/SkeletonView';
 import { getFilteredLabels } from 'store/modules/App/selectors';
-import { changeLabelItemThunk, handleDeleteLabelFromPakeepThunk } from 'store/modules/App/operations';
+import {
+  changeLabelItemThunk,
+  handkePakeepPropertyThunk,
+  handleDeleteLabelFromPakeepThunk
+} from 'store/modules/App/operations';
 import { useSwipeable } from 'react-swipeable';
+import { useGetReadableColor } from 'hooks/useGetReadableColor.hook';
+
 const useStyles = makeStyles(theme => ({
-  paper: {
-    padding: theme.spacing(1.96),
-    paddingTop: theme.spacing(0.4),
+  paper: ({ customColor, backgroundColor, isBackgroundColorDefault, utilsViewLikeInGoogleKeep }) => ({
+    padding: theme.spacing(0.4, 1.96, utilsViewLikeInGoogleKeep ? 8 * 0.8 : 1.96, 1.96),
     cursor: 'grab',
-    position: 'relative'
-  },
-  hover: {
-    paddingBottom: theme.spacing(8 * 0.8),
-    transition: theme.transitions.create('all', {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen
-    }),
-    borderColor: 'rgba(255,255,255,0.8)'
-  },
-  unHover: {
+    position: 'relative',
+    background: isBackgroundColorDefault ? '#303030' : backgroundColor,
+    color: !customColor ? themeColors.whiteRgbaColorWith0dot96valueOfAlfaCanal : customColor.hover,
     transition: theme.transitions.create('padding', {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen
     })
+  }),
+
+  isHovered: {
+    paddingBottom: `${theme.spacing(8 * 0.8)}px !important`,
+    transition: theme.transitions.create('all', {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen
+    }),
+    borderColor: themeColors.whiteRgbaColorWith0dot8valueOfAlfaCanal
   },
 
   iconsUtils: {
@@ -60,6 +66,7 @@ const PakeepElement = ({
   bookmark,
   favorite,
   color,
+  backgroundColor,
   labels,
   isDragging,
   id,
@@ -69,21 +76,30 @@ const PakeepElement = ({
   globalLabels,
   filteredLabels,
   handleDeleteLabelFromPakeepThunk,
-  changeLabelItemThunk
+  changeLabelItemThunk,
+  handkePakeepPropertyThunk
 }) => {
-  const classes = useStyles(color);
-  const [hover, setHover] = useState(false);
-  const [loaded, setLoaded] = useToggle(false);
-  const [labelHover, setLabelHover] = useState(!false);
-  const [currentLabels, setCurrentLabels] = useState([]);
-  const setHoverIsTrue = () => setHover(true);
-  const setHoverIsFalse = () => setHover(false);
+  const [customColor, isBackgroundColorDefault, isColorDefault] = useGetReadableColor(backgroundColor, color);
+
+  const classes = useStyles({ customColor, backgroundColor, isBackgroundColorDefault });
+
+  const nullityStatusState = {
+    isHovered: false,
+    isLoaded: false
+  };
+  const [statusState, setStatusState] = useState(nullityStatusState);
+
+  const handleSetIsHovering = () => setStatusState(state => ({ ...state, isHovered: true }));
+  const handleSetIsUnHovering = () => setStatusState(state => ({ ...state, isHovered: false }));
+
   const setEditTitleIsTrue = () => {};
   const handleSetFavoritePakeep = () => {};
-  const handleSetColorPakeep = () => {};
   const handleSetBookmarkPakeep = () => {};
   const handleDeleteLabel = () => {};
   const [ref, { width: widthOfContainer }] = useMeasure();
+
+  const handleSetColorPakeep = color => handkePakeepPropertyThunk(id, { color });
+  const handleSetBackgroundColorPakeep = backgroundColor => handkePakeepPropertyThunk(id, { backgroundColor });
 
   const iconsUtilsProps = {
     isAllIconsIsShown: false,
@@ -96,28 +112,32 @@ const PakeepElement = ({
     labels,
     id,
     checkbox: false,
-    handleSetBookmarkPakeep,
-    handleSetColorPakeep: handleSetColorPakeep,
-    iconsCloser: true
+    handleSetBackgroundColorPakeep,
+    handleSetColorPakeep,
+    isBackgroundColorDefault,
+    isColorDefault,
+    iconsCloser: true,
+    customColor
   };
 
   const handlers = useSwipeable({
     onSwiped: eventData => console.log('User Swiped!', eventData)
   });
 
-  const setLabelHoverStatusIsFalse = () => setLabelHover(false);
-  const setLabelHoverStatus = () => setLabelHover({ title, isHovering: true });
-  useEffect(() => setLoaded(true), []);
+  console.log(statusState);
+  // const setLabelHoverStatusIsFalse = () => setLabelHover(false);
+  // const setLabelHoverStatus = () => setLabelHover({ title, isHovering: true });
+  useEffect(() => setStatusState(state => ({ ...state, isLoaded: true })), []);
 
-  if (!loaded) return <SkeletonView />;
+  if (!statusState.isLoaded) return <SkeletonView />;
 
+  const AnimationElement = utilsViewLikeInGoogleKeep ? Fade : Grow;
   return (
-    <Grid item onMouseEnter={setHoverIsTrue} onMouseLeave={setHoverIsFalse} ref={ref}>
+    <Grid item onMouseEnter={handleSetIsHovering} onMouseLeave={handleSetIsUnHovering} ref={ref}>
       <Paper
         variant={'outlined'}
         {...handlers}
-        style={{ backgroundColor: color === 'default' ? '#303030' : color }}
-        className={clsx(hover ? classes.hover : classes.unHover, classes.paper, isDragging ? classes.isDragging : null)}
+        className={clsx(classes.paper, isDragging && classes.isDragging, statusState.isHovered && classes.isHovered)}
       >
         <Grid item className={classes.title}>
           <Typography variant={'h5'}>{title}</Typography>
@@ -125,17 +145,19 @@ const PakeepElement = ({
         <Grid item>{text}</Grid>
 
         <AttributeGroup
+          parentBackgrounColor={backgroundColor}
+          customColor={customColor}
           labels={filteredLabels}
           events={events}
           pakeepId={id}
           handleDeleteLabelFromPakeepFunc={handleDeleteLabelFromPakeepThunk}
         />
 
-        <Grow in={hover}>
+        <AnimationElement in={statusState.isHovered}>
           <Grid className={classes.iconsUtils}>
             <IconsUtils {...iconsUtilsProps} />
           </Grid>
-        </Grow>
+        </AnimationElement>
       </Paper>
     </Grid>
   );
@@ -166,6 +188,7 @@ const mapStateToProps = ({ settings: { utilsViewLikeInGoogleKeep }, app: { label
 const mapDispatchToProps = dispatch => ({
   handleDeleteLabelFromPakeepThunk: (pakeepId, labelId) =>
     dispatch(handleDeleteLabelFromPakeepThunk(pakeepId, labelId)),
+  handkePakeepPropertyThunk: (pakeepId, property) => dispatch(handkePakeepPropertyThunk(pakeepId, property))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(PakeepElement);
