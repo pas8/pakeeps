@@ -71,8 +71,7 @@ const IconsUtils = ({
       popoverText: 'Show a checkboxes',
       name: 'checkbox',
       onClick: handleSetIsCheckBoxesPakeep,
-      isIconActive: isCheckBoxes,
-      onlyPopover: true
+      isIconActive: isCheckBoxes
     },
     {
       icon: FormatColorFillOutlinedIcon,
@@ -98,9 +97,7 @@ const IconsUtils = ({
       popoverText: 'Archive pakeep',
       name: 'archive',
       onClick: handleClick,
-      ActiveIcon: ArchiveIcon,
-
-      onlyPopover: true
+      ActiveIcon: ArchiveIcon
     },
     {
       icon: EventAvailableOutlinedIcon,
@@ -125,14 +122,13 @@ const IconsUtils = ({
       name: 'edit',
       onClick: setEditTitleIsTrue,
       isIconActive: changingTitle,
-      onlyPopover: true,
-      ActiveIcon:EditIcon
+      ActiveIcon: EditIcon
     },
 
     {
       icon: LabelOutlinedIcon,
       popoverText: 'Add labels',
-      ActiveIcon:LabelIcon, 
+      ActiveIcon: LabelIcon,
       name: 'labels',
       isIconActive: !!labels.length,
       menuComponents: LabelsList,
@@ -145,8 +141,7 @@ const IconsUtils = ({
       name: 'favorite',
       onClick: handleSetFavoritePakeep,
       isIconActive: isFavorite,
-      onlyPopover: true,
-      ActiveIcon:FavoriteIcon
+      ActiveIcon: FavoriteIcon
     },
     {
       icon: BookmarkBorderOutlinedIcon,
@@ -154,17 +149,15 @@ const IconsUtils = ({
       name: 'bookmark',
       onClick: handleSetBookmarkPakeep,
       isIconActive: isInBookmark,
-      onlyPopover: true,
-      ActiveIcon:BookmarkIcon
+      ActiveIcon: BookmarkIcon
     },
     {
       icon: PinOutlinedIcon,
-      ActiveIcon:PinIcon,
+      ActiveIcon: PinIcon,
       popoverText: 'Pin pakeep',
       name: 'pinned',
       onClick: handleSetIsPinnedPakeep,
-      isIconActive: isPinned,
-      onlyPopover: true
+      isIconActive: isPinned
     },
     {
       icon: !isNewPakeepContainerHaveFullWidth ? UnfoldMoreOutlinedIcon : UnfoldLessOutlinedIcon,
@@ -172,57 +165,44 @@ const IconsUtils = ({
       name: 'width',
       onClick: handleSetWidth,
       isIconActive: isNewPakeepContainerHaveFullWidth,
-      rotateDeg: 90,
-      onlyPopover: true
+      rotateDeg: 90
     }
   ];
-  const nullityOfPopoverAndMenuState = {
-    name: 'null',
-    menuIsOpen: false,
-    popoverIsOpen: true,
-    onMenuClose: null
-  };
-  const [popoverAndMenuState, setPopoverAndMenuState] = useState(nullityOfPopoverAndMenuState);
+
   // useEffect(() => setPopoverAndMenuState(nullityOfPopoverAndMenuState), [color]);
 
-  const handlePopoverAndMenuState = value => setPopoverAndMenuState(value);
+  const [slicedArr, isShouldBeSliced, handleConcatAverageWidth] = useSliced(
+    widthOfContainer,
+    buttonUtilsNewPakeepArray
+  );
 
-  // const [slicedArr, isShouldBeSliced, handleConcatAverageWidth] = useSliced(
-  //   widthOfContainer,
-  //   buttonUtilsNewPakeepArray
-  // );
-
-  // const nonSlicedwrapperOfPopoverAndMenuProps = {
-  //   buttonUtilsArr: buttonUtilsNewPakeepArray,
-  //   handlePopoverAndMenuState,
-  //   popoverAndMenuState,
-  //   handleAverageMainComponentWidth: handleConcatAverageWidth,
-  //   customColor
-  // };
-
-  // const buttonMoreOfItemOfArrWhichWasSliced = {
-  //   icon: PlayCircleOutlineOutlinedIcon,
-  //   rotateDeg: 90,
-  //   hidden: slicedArr?.after?.length === 0 ? true : false,
-  //   popoverText: 'Open more utils',
-  //   name: 'moreUtils',
-  //   onClick: handleClick,
-  //   menuComponents: MoreUtils,
-  //   menuComponentsProps: { slicedArrAfter: slicedArr.after }
-  // };
-
-  // const buttonUtilsSlicedAndConcatedWithMoreButtonArr = _.concat(slicedArr.before, buttonMoreOfItemOfArrWhichWasSliced);
-  const slicedWrapperOfPopoverAndMenuProps = {
+  const nonSlicedwrapperOfPopoverAndMenuProps = {
     buttonUtilsArr: buttonUtilsNewPakeepArray,
-    handlePopoverAndMenuState,
-    popoverAndMenuState,
+
+    handleAverageMainComponentWidth: handleConcatAverageWidth,
     customColor
   };
 
-  const wrapperOfPopoverAndMenuProps = 
-  // isShouldBeSliced
-     slicedWrapperOfPopoverAndMenuProps
-    // : nonSlicedwrapperOfPopoverAndMenuProps;
+  const buttonMoreOfItemOfArrWhichWasSliced = {
+    icon: PlayCircleOutlineOutlinedIcon,
+    rotateDeg: 90,
+    hidden: slicedArr?.after?.length === 0 ? true : false,
+    popoverText: 'Open more utils',
+    name: 'moreUtils',
+    onClick: handleClick,
+    menuComponents: MoreUtils,
+    menuComponentsProps: { slicedArrAfter: slicedArr.after }
+  };
+
+  const buttonUtilsSlicedAndConcatedWithMoreButtonArr = _.concat(slicedArr.before, buttonMoreOfItemOfArrWhichWasSliced);
+  const slicedWrapperOfPopoverAndMenuProps = {
+    buttonUtilsArr: buttonUtilsSlicedAndConcatedWithMoreButtonArr,
+    customColor
+  };
+
+  const wrapperOfPopoverAndMenuProps = isShouldBeSliced
+    ? slicedWrapperOfPopoverAndMenuProps
+    : nonSlicedwrapperOfPopoverAndMenuProps;
   // console.log(isShouldBeSliced)
   return (
     <Grid container display={'flex'} wrap={'nowrap'} justify={isAllIconsIsShown ? 'flex-start' : 'space-between'}>
@@ -259,6 +239,6 @@ IconsUtils.propTypes = {
   setEditTitleIsTrue: PropTypes.func,
   sliceArrayTo: PropTypes.number,
   widthOfContainer: PropTypes.any
-}
+};
 
 export default IconsUtils;

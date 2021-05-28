@@ -14,7 +14,7 @@ export const useFindAverageWidthOfUtils = () => {
   useEffect(() => {
     const averageValueWhichShouldBeSet = averageWidthArr.length !== 0 && averageOfArrFunc(averageWidthArr);
 
-    setAverageWidth(averageValueWhichShouldBeSet);
+    return setAverageWidth(averageValueWhichShouldBeSet);
   }, [averageWidthArr]);
 
   return [averageWidth, lengthOfUtilsArr, handleConcatAverageWidth];

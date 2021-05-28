@@ -12,7 +12,7 @@ const Pakeeps = () => (
     <Grid container justify={'center'} alignItems={'center'}>
       <NewPakeep />
     </Grid>
-    {/* <PakeepList /> */}
+    <PakeepList />
   </>
 );
 

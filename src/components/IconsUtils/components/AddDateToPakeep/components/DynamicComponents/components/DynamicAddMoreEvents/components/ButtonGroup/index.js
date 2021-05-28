@@ -5,11 +5,9 @@ import PaletteOutlinedIcon from '@material-ui/icons/PaletteOutlined';
 import AddLocationOutlinedIcon from '@material-ui/icons/AddLocationOutlined';
 import IconButtonByPas from 'components/IconButton';
 import ColorPickerByPas from 'components/ColorChanger';
-import PopoverAndMenu from 'components/IconsUtils/components/PopoverAndMenu';
 import AlarmAddOutlinedIcon from '@material-ui/icons/AlarmAddOutlined';
 import CategoryOutlinedIcon from '@material-ui/icons/CategoryOutlined';
 import { Grid } from '@material-ui/core';
-
 import WrapperOfPopoverAndMenu from 'components/IconsUtils/components/WrapperOfPopoverAndMenu';
 
 const ButtonGroupUtilsOfDynamicAddMoreEvents = ({

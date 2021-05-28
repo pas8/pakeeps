@@ -14,41 +14,32 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const PopoverAndMenu = ({
-  popoverText,
-  mainComponent,
-  menuComponents,
-  popoverTypographyVariant = 'subtitle2',
-  onlyMenu = false,
-  onlyPopover = false,
-  handlePopoverAndMenuState,
   name,
+  isMenuOpen,
+  handlePopoverClose,
+  isPopoverOpen,
+  handleMenuClose,
+  currentTarget,
+  popoverText,
+  menuComponents,
+
+  popoverTypographyVariant = 'subtitle2',
   menuLocation = 'default',
   popoverLocation = 'default',
   popoverLevel = 'first'
 }) => {
   const classes = useStyles();
-  const anchorElRef = useRef(null);
-  const [anchorEl, setAnchorEl] = useState({ name, currentTarget: null, menu: false, popover: false });
 
-  const handlePopoverOpen = ({ currentTarget }) => setAnchorEl(state => ({ ...state, currentTarget, popover: true }));
-
-  const handlePopoverClose = () =>
-    setAnchorEl(state => ({ ...state, currentTarget: null, menu: false, popover: false }));
-
-  const handleMenuOpen = ({ currentTarget }) =>
-    setAnchorEl(state => ({ ...state, currentTarget, menu: true, popover: false }));
-
-  const handleMenuClose = () => setAnchorEl(state => ({ ...state, currentTarget: null, menu: false, popover: false }));
-  useEffect(
-    () =>
-      handlePopoverAndMenuState({
-        name,
-        menuIsOpen: anchorEl.menu,
-        popoverIsOpen: anchorEl.popover,
-        onMenuClose: handleMenuClose
-      }),
-    [anchorEl]
-  );
+  // useEffect(
+  //   () =>
+  //     handlePopoverAndMenuState({
+  //       name,
+  //       menuIsOpen: anchorEl.menu,
+  //       popoverIsOpen: anchorEl.popover,
+  //       onMenuClose: handleMenuClose
+  //     }),
+  //   [anchorEl]
+  // );
   const defaultLocationOfPopoverToWitCentered = {
     anchorOrigin: {
       vertical: 'bottom',
@@ -96,43 +87,31 @@ const PopoverAndMenu = ({
       ? defaultLocationOfPopoverToWitCentered
       : leftSiteLocation;
 
-  const wrapperOfMainComponentProps = {
-    'aria-haspopup': true,
-    onMouseEnter: handlePopoverOpen,
-    onMouseLeave: !anchorEl.menu ? handlePopoverClose : null,
-    ref: anchorElRef,
-    onClick: handleMenuOpen
-  };
-
   const popoverProps = {
     ...locationOfPopover,
     className: classes.popover,
     classes: { paper: classes.padding },
 
-    open: Boolean(anchorEl.currentTarget) && anchorEl.popover,
-    anchorEl: anchorEl.currentTarget,
+    open: isPopoverOpen,
+    anchorEl: currentTarget,
     onClose: handlePopoverClose,
     disableRestoreFocus: true
   };
 
   const menuProps = {
     ...locationOfMenu,
-    anchorEl: anchorEl.currentTarget,
+    anchorEl: currentTarget,
     keepMounted: true,
-    open: Boolean(anchorEl) && anchorEl.menu,
+    open: isMenuOpen,
     onClose: handleMenuClose
   };
   return (
     <>
-      <Grid {...wrapperOfMainComponentProps}>{mainComponent}</Grid>
+      <Popover {...popoverProps}>
+        <Typography variant={popoverTypographyVariant}>{popoverText}</Typography>
+      </Popover>
 
-      {!onlyMenu && (
-        <Popover {...popoverProps}>
-          <Typography variant={popoverTypographyVariant}>{popoverText}</Typography>
-        </Popover>
-      )}
-
-      {!onlyPopover && <Menu {...menuProps}>{menuComponents && menuComponents}</Menu>}
+      {!!menuComponents && <Menu {...menuProps}>{menuComponents && menuComponents}</Menu>}
     </>
   );
 };
