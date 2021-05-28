@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { useIsColorDark } from './useIsColorDark.hook';
 
 export const useIsReadableColor = (backgroundColor, color) => {
-  const [colorState, setColorState] = useState([false, {hover:'',unHover:''}]);
+  const [colorState, setColorState] = useState([false, { hover: '', unHover: '' }, true, true]);
 
   const defaultColors = { backgroundColor: '#303030', color: '#ffffff' };
   const isUseDefaultBackgroundColor = backgroundColor === 'default';
@@ -26,7 +26,7 @@ export const useIsReadableColor = (backgroundColor, color) => {
       : { hover: defaultBlackColor, unHover: colord(defaultColors.backgroundColor).alpha(0.96).toHex() };
 
   useEffect(() => {
-    setColorState([isUseDefault, newColor]);
+    setColorState([isUseDefault, newColor, isUseDefaultBackgroundColor, isUseDefaultColor]);
   }, [backgroundColor, color]);
 
   return [...colorState];

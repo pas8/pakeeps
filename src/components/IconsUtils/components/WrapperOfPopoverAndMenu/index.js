@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import IconButtonByPas from 'components/IconButton';
 import PopoverAndMenu from '../PopoverAndMenu';
 import { nanoid } from 'nanoid';
+import { memo } from 'react';
 
 const WrapperOfPopoverAndMenu = ({
   buttonUtilsArr,
@@ -22,7 +23,8 @@ const WrapperOfPopoverAndMenu = ({
             popoverText,
             name: buttonUtilsName,
             onClick,
-            activeIcon,
+            ActiveIcon,
+            isIconActive,
             onlyPopover = false,
             menuComponents: MenuComponents,
             menuComponentsProps,
@@ -31,7 +33,7 @@ const WrapperOfPopoverAndMenu = ({
             menuLocation,
             popoverLocation,
             rotateDeg = false,
-            badgeContent = 0 
+            badgeContent = 0
           },
           idx
         ) => {
@@ -43,15 +45,21 @@ const WrapperOfPopoverAndMenu = ({
           );
 
           const iconName = isIconNameExtended ? { keyName, buttonUtilsName } : buttonUtilsName;
+
+
+          const isArctiveIconPresent = customColor && isIconActive && !!ActiveIcon
+          const icon = isArctiveIconPresent ? ActiveIcon : Icon;
+
           const iconButtonProps = {
-            icon: Icon,
+            icon,
+            isArctiveIconPresent,
             badgeContent,
             customColor,
             onClick: onClick,
             iconName,
             rotateDeg,
             size: iconSize,
-            activeIcon,
+            isIconActive,
             activeIconName: popoverAndMenuState.name,
             activeProperty: popoverAndMenuState.popoverIsOpen,
             handleAverageMainComponentWidth
@@ -70,7 +78,7 @@ const WrapperOfPopoverAndMenu = ({
             mainComponent
           };
 
-          return <PopoverAndMenu {...popoverAndMenuProps} />;
+          return <PopoverAndMenu {...popoverAndMenuProps} key={`${idx}-${buttonUtilsName}`} />;
         }
       )}
     </>
@@ -94,4 +102,4 @@ WrapperOfPopoverAndMenu.propTypes = {
   })
 };
 
-export default WrapperOfPopoverAndMenu;
+export default memo( WrapperOfPopoverAndMenu);

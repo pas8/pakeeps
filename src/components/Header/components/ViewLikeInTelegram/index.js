@@ -5,7 +5,6 @@ import SearchIcon from '@material-ui/icons/Search';
 import { useState } from 'react';
 import LockButton from './components/LockButton';
 import LabelTab from './components/LabelTab';
-import PinIcon from 'components/Icons/components/PinIcon'
 const useStyles = makeStyles(theme => ({
   upperPart: {
     maxHeight: theme.spacing(4.8)

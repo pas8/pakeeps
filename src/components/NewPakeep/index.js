@@ -17,7 +17,7 @@ import { useIsColorDark } from 'hooks/useIsColorDark.hook';
 import { useIsReadableColor } from 'hooks/useIsReadableColor.hook';
 
 const useStyles = makeStyles(theme => ({
-  container: ({ customColor, isLabelViewHidden }) => ({
+  container: ({ customColor, isLabelViewHidden, backgroundColor }) => ({
     marginTop: theme.spacing(8),
 
     '& .MuiInputBase-root': {
@@ -29,45 +29,49 @@ const useStyles = makeStyles(theme => ({
     },
     '&  .MuiFormLabel-root.Mui-focused': {
       color: !customColor ? themeColors.primaryMain : customColor.hover,
-      padding: !customColor && theme.spacing(0.4, 1.8),
+      padding: customColor && theme.spacing(0.4, 1.8),
       border: !customColor ? 0 : `2px solid ${customColor.hover}`,
-      borderLeft: customColor && 0,
+      // borderLeft: customColor && 0,
+      borderRadius: customColor && '2px',
       borderTopLeftRadius: customColor && '6px',
-      transform: !customColor ? 'translate(4px, -8px) scale(0.75)' : 'translate(0px, 0px) scale(0.75)'
+      // background: `${backgroundColor} !important`,
+
+      transform: !customColor ? 'translate(4px, -8px) scale(0.75)' : 'translate(-2px, -8px) scale(0.75)'
     },
 
-    '& legend': {
-      transform: !customColor ? 'translate(4px, -8px) scale(0.75)' : 'translate(0px, 0px) scale(0.75)'
+    '& label': {
+      background: !customColor ? 'transparent !important' : `${backgroundColor} !important`
     },
+    // '& legend': {
+    //   transform: !customColor ? 'translate(4px, -8px) scale(0.75)' : 'translate(0px, 0px) scale(0.75)'
+    // },
     '& .MuiOutlinedInput-multiline': {
       padding: theme.spacing(!customColor ? 2 : 2.8, 6, isLabelViewHidden ? 6 : 10, 1.4)
     },
     '& input,textarea': {
       caretColor: !customColor ? themeColors.primaryMain : customColor.hover,
-      color: customColor.hover
+      color: !customColor ? themeColors.whiteRgbaColorWith0dot96valueOfAlfaCanal : customColor.hover
     },
     '& .MuiFormLabel-root.Mui-focused': {
       color: !customColor ? themeColors.primaryMain : customColor.hover
     },
 
     '& fieldset': {
-      borderColor: !customColor
-        ? themeColors.whiteRgbaColorWith0dot42valueOfAlfaCanal
-        : `${customColor.hover} !important`,
-      '&:focus': {
-        borderColor: !customColor ? themeColors.secondaryMain : customColor.hover
-      },
-      '&:hover': {
-        borderColor: !customColor ? themeColors.whiteRgbaColorWith0dot8valueOfAlfaCanal : customColor.unHover
-      }
+      display: !customColor ? 'block' : 'none '
     }
   }),
-  wrapper: {
+  wrapper: ({ backgroundColor, customColor }) => ({
     padding: theme.spacing(0),
-    backgroundColor: ({ backgroundColor }) => (colord(backgroundColor).isValid() ? backgroundColor : 'transparent'),
+    backgroundColor: colord(backgroundColor).isValid() ? backgroundColor : 'transparent',
     position: 'relative',
-    borderRadius: '4px'
-  },
+    borderRadius: '4px',
+    borderWidth: !customColor ? 0 : 2,
+    '&:hover': {
+      boxShadow: customColor && `0px 0px 8px ${backgroundColor}`,
+      border: customColor && customColor.unHover
+    },
+
+  }),
   hidden: { display: 'none' },
   inputTitle: { padding: 0 },
   textField: { paddingBottom: 0 },
@@ -89,6 +93,7 @@ const NewPaKeep = ({ addNewPaKeepThunk }) => {
   const nulittyState = {
     title: '',
     text: '',
+    isCheckBoxes: '',
     isInBookmark: false,
     isFavorite: false,
     isPinned: false,
@@ -98,7 +103,6 @@ const NewPaKeep = ({ addNewPaKeepThunk }) => {
     labels: ['label3', 'label1', 'label0']
   };
   const [state, setState] = useState(nulittyState);
-
   const [value, updateCookie, deleteCookie] = useCookie(state);
 
   useEffect(() => _.isEqual(state, nulittyState) && setState(JSON.parse(value)), []);
@@ -133,6 +137,7 @@ const NewPaKeep = ({ addNewPaKeepThunk }) => {
   const handleSetIsPinnedPakeep = () => setState(state => ({ ...state, isPinned: !state.isPinned }));
   const handleSetColorPakeep = color => setState(state => ({ ...state, color }));
   const handleSetBackgroundColorPakeep = backgroundColor => setState(state => ({ ...state, backgroundColor }));
+  const handleSetIsCheckBoxesPakeep = () => setState(state => ({ ...state, isCheckBoxes: !state.isCheckBoxes }));
 
   const handleAddNewLabel = idWhichShouldBeAdded => {
     setState(state => ({ ...state, labels: [...state.labels, idWhichShouldBeAdded] }));
@@ -142,8 +147,8 @@ const NewPaKeep = ({ addNewPaKeepThunk }) => {
   };
 
   const handleNewPakeepSave = () => {
-    addNewPaKeepThunk(state);
     setState(nulittyState);
+    addNewPaKeepThunk(state);
   };
 
   const handleStatusOfHideLabelView = () =>
@@ -166,19 +171,19 @@ const NewPaKeep = ({ addNewPaKeepThunk }) => {
       return setStatusState(state => ({ ...state, isWritingText: !state.isWritingText }));
     }
   };
-  const [isUseDefault, isReadable] = useIsReadableColor(state.backgroundColor, state.color);
-  // const [customColor, setCustomColor] = useState(false);
+  const [isUseDefault, isReadable, isBackgroundColorDefault, isColorDefault] = useIsReadableColor(
+    state.backgroundColor,
+    state.color
+  );
   const customColor = isUseDefault ? false : isReadable;
 
-  // useEffect(() => setCustomColor(isUseDefault ? false : isReadable), [isUseDefault]);
-
-  // console.log(customColor)
   const classes = useStyles({
     isLabelViewHidden: statusState.isLabelViewHidden,
     color: state.color,
     customColor,
     backgroundColor: state.backgroundColor
   });
+
   const labelsListProps = {
     handleStatusOfHideLabelView,
     selectedLabels: state.labels,
@@ -202,7 +207,10 @@ const NewPaKeep = ({ addNewPaKeepThunk }) => {
     widthOfContainer,
     handleSetIsPinnedPakeep,
     labelsListProps,
-    customColor
+    customColor,
+    handleSetIsCheckBoxesPakeep,
+    isBackgroundColorDefault,
+    isColorDefault
   };
   const attributesOfNewPakeepProps = {
     pakeepId: state.id,

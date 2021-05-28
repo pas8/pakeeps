@@ -26,6 +26,17 @@ import LabelsList from './components/LabelsList';
 import PinIcon from 'components/Icons/components/PinIcon';
 import FormatColorFillOutlinedIcon from '@material-ui/icons/FormatColorFillOutlined';
 import FormatColorTextOutlinedIcon from '@material-ui/icons/FormatColorTextOutlined';
+import CheckBoxIcon from '@material-ui/icons/CheckBox';
+import ArchiveIcon from '@material-ui/icons/Archive';
+import EventAvailableIcon from '@material-ui/icons/EventAvailable';
+import InsertPhotoIcon from '@material-ui/icons/InsertPhoto';
+import ShareIcon from '@material-ui/icons/Share';
+import EditIcon from '@material-ui/icons/Edit';
+import LabelIcon from '@material-ui/icons/Label';
+import FavoriteIcon from '@material-ui/icons/Favorite';
+import BookmarkBorderOutlinedIcon from '@material-ui/icons/BookmarkBorderOutlined';
+import BookmarkIcon from '@material-ui/icons/Bookmark';
+import PinOutlinedIcon from 'components/Icons/components/PinOutlinedIcon';
 
 const IconsUtils = ({
   isAllIconsIsShown = true,
@@ -36,8 +47,7 @@ const IconsUtils = ({
   isFavorite,
   isInBookmark,
   labels,
-  color,
-  checkbox,
+  isCheckBoxes,
   handleSetBookmarkPakeep,
   handleSetColorPakeep,
   handleSetWidth,
@@ -48,24 +58,27 @@ const IconsUtils = ({
   labelBargeNumber,
   customColor,
   handleSetBackgroundColorPakeep,
-  backgroundColor
+  backgroundColor,
+  handleSetIsCheckBoxesPakeep,
+  isColorDefault,
+  isBackgroundColorDefault
 }) => {
-
   const handleClick = () => console.log('placeholder');
   const buttonUtilsNewPakeepArray = [
     {
       icon: CheckBoxOutlinedIcon,
+      ActiveIcon: CheckBoxIcon,
       popoverText: 'Show a checkboxes',
       name: 'checkbox',
-      onClick: handleClick,
-      activeIcon: checkbox,
+      onClick: handleSetIsCheckBoxesPakeep,
+      isIconActive: isCheckBoxes,
       onlyPopover: true
     },
     {
       icon: FormatColorFillOutlinedIcon,
       popoverText: 'Change backgroundColor',
       name: 'backgroundColor',
-      activeIcon: !!backgroundColor,
+      isIconActive: !isBackgroundColorDefault,
 
       menuComponentsProps: { handleSave: handleSetBackgroundColorPakeep },
       menuComponents: ColorPickerByPas
@@ -74,20 +87,18 @@ const IconsUtils = ({
       icon: FormatColorTextOutlinedIcon,
       popoverText: 'Change text color',
       name: 'textColor',
-      activeIcon: !!color,
+      isIconActive: !isColorDefault,
 
       menuComponentsProps: { handleSave: handleSetColorPakeep },
       menuComponents: ColorPickerByPas
     },
-
-
-
 
     {
       icon: ArchiveOutlinedIcon,
       popoverText: 'Archive pakeep',
       name: 'archive',
       onClick: handleClick,
+      ActiveIcon: ArchiveIcon,
 
       onlyPopover: true
     },
@@ -96,25 +107,34 @@ const IconsUtils = ({
       popoverText: 'Add date to pakeep',
       name: 'date',
       onClick: handleClick,
+      ActiveIcon: EventAvailableIcon,
 
       menuComponents: AddDateToPakeep
     },
-    { icon: WallpaperOutlinedIcon, popoverText: 'Add picture', name: 'picture', onClick: handleClick },
-    { icon: ShareOutlinedIcon, popoverText: 'Share', name: 'share', onClick: handleClick },
+    {
+      icon: WallpaperOutlinedIcon,
+      popoverText: 'Add picture',
+      name: 'picture',
+      onClick: handleClick,
+      ActiveIcon: InsertPhotoIcon
+    },
+    { icon: ShareOutlinedIcon, popoverText: 'Share', name: 'share', onClick: handleClick, ActiveIcon: ShareIcon },
     {
       icon: EditOutlinedIcon,
       popoverText: 'Edit title',
       name: 'edit',
       onClick: setEditTitleIsTrue,
-      activeIcon: changingTitle,
-      onlyPopover: true
+      isIconActive: changingTitle,
+      onlyPopover: true,
+      ActiveIcon:EditIcon
     },
 
     {
       icon: LabelOutlinedIcon,
       popoverText: 'Add labels',
+      ActiveIcon:LabelIcon, 
       name: 'labels',
-      activeIcon: !!labels.length,
+      isIconActive: !!labels.length,
       menuComponents: LabelsList,
       badgeContent: labelBargeNumber,
       menuComponentsProps: { ...labelsListProps }
@@ -124,23 +144,26 @@ const IconsUtils = ({
       popoverText: 'Add to favorites',
       name: 'favorite',
       onClick: handleSetFavoritePakeep,
-      activeIcon: isFavorite,
-      onlyPopover: true
+      isIconActive: isFavorite,
+      onlyPopover: true,
+      ActiveIcon:FavoriteIcon
     },
     {
-      icon: BookmarksOutlinedIcon,
+      icon: BookmarkBorderOutlinedIcon,
       popoverText: 'Add to bookmark',
       name: 'bookmark',
       onClick: handleSetBookmarkPakeep,
-      activeIcon: isInBookmark,
-      onlyPopover: true
+      isIconActive: isInBookmark,
+      onlyPopover: true,
+      ActiveIcon:BookmarkIcon
     },
     {
-      icon: PinIcon,
+      icon: PinOutlinedIcon,
+      ActiveIcon:PinIcon,
       popoverText: 'Pin pakeep',
       name: 'pinned',
       onClick: handleSetIsPinnedPakeep,
-      activeIcon: isPinned,
+      isIconActive: isPinned,
       onlyPopover: true
     },
     {
@@ -148,7 +171,7 @@ const IconsUtils = ({
       popoverText: !isNewPakeepContainerHaveFullWidth ? 'To full width' : 'To smaller width',
       name: 'width',
       onClick: handleSetWidth,
-      activeIcon: isNewPakeepContainerHaveFullWidth,
+      isIconActive: isNewPakeepContainerHaveFullWidth,
       rotateDeg: 90,
       onlyPopover: true
     }
@@ -164,41 +187,42 @@ const IconsUtils = ({
 
   const handlePopoverAndMenuState = value => setPopoverAndMenuState(value);
 
-  const [slicedArr, isShouldBeSliced, handleConcatAverageWidth] = useSliced(
-    widthOfContainer,
-    buttonUtilsNewPakeepArray
-  );
+  // const [slicedArr, isShouldBeSliced, handleConcatAverageWidth] = useSliced(
+  //   widthOfContainer,
+  //   buttonUtilsNewPakeepArray
+  // );
 
-  const nonSlicedwrapperOfPopoverAndMenuProps = {
+  // const nonSlicedwrapperOfPopoverAndMenuProps = {
+  //   buttonUtilsArr: buttonUtilsNewPakeepArray,
+  //   handlePopoverAndMenuState,
+  //   popoverAndMenuState,
+  //   handleAverageMainComponentWidth: handleConcatAverageWidth,
+  //   customColor
+  // };
+
+  // const buttonMoreOfItemOfArrWhichWasSliced = {
+  //   icon: PlayCircleOutlineOutlinedIcon,
+  //   rotateDeg: 90,
+  //   hidden: slicedArr?.after?.length === 0 ? true : false,
+  //   popoverText: 'Open more utils',
+  //   name: 'moreUtils',
+  //   onClick: handleClick,
+  //   menuComponents: MoreUtils,
+  //   menuComponentsProps: { slicedArrAfter: slicedArr.after }
+  // };
+
+  // const buttonUtilsSlicedAndConcatedWithMoreButtonArr = _.concat(slicedArr.before, buttonMoreOfItemOfArrWhichWasSliced);
+  const slicedWrapperOfPopoverAndMenuProps = {
     buttonUtilsArr: buttonUtilsNewPakeepArray,
     handlePopoverAndMenuState,
     popoverAndMenuState,
-    handleAverageMainComponentWidth: handleConcatAverageWidth,
     customColor
   };
 
-  const buttonMoreOfItemOfArrWhichWasSliced = {
-    icon: PlayCircleOutlineOutlinedIcon,
-    rotateDeg: 90,
-    hidden: slicedArr?.after?.length === 0 ? true : false,
-    popoverText: 'Open more utils',
-    name: 'moreUtils',
-    onClick: handleClick,
-    menuComponents: MoreUtils,
-    menuComponentsProps: { slicedArrAfter: slicedArr.after }
-  };
-
-  const buttonUtilsSlicedAndConcatedWithMoreButtonArr = _.concat(slicedArr.before, buttonMoreOfItemOfArrWhichWasSliced);
-  const slicedWrapperOfPopoverAndMenuProps = {
-    buttonUtilsArr: buttonUtilsSlicedAndConcatedWithMoreButtonArr,
-    handlePopoverAndMenuState,
-    popoverAndMenuState,
-    customColor
-  };
-
-  const wrapperOfPopoverAndMenuProps = isShouldBeSliced
-    ? slicedWrapperOfPopoverAndMenuProps
-    : nonSlicedwrapperOfPopoverAndMenuProps;
+  const wrapperOfPopoverAndMenuProps = 
+  // isShouldBeSliced
+     slicedWrapperOfPopoverAndMenuProps
+    // : nonSlicedwrapperOfPopoverAndMenuProps;
   // console.log(isShouldBeSliced)
   return (
     <Grid container display={'flex'} wrap={'nowrap'} justify={isAllIconsIsShown ? 'flex-start' : 'space-between'}>
@@ -208,19 +232,33 @@ const IconsUtils = ({
 };
 
 IconsUtils.propTypes = {
-  bookmark: PropTypes.any,
-  changingTitle: PropTypes.any,
-  checkbox: PropTypes.any,
-  favorite: PropTypes.bool,
+  backgroundColor: PropTypes.any,
+  customColor: PropTypes.any,
   handleNewPakeepSave: PropTypes.func,
-  handleSetBookmarkPakeep: PropTypes.any,
-  handleSetColorPakeep: PropTypes.any,
+  handleSetBackgroundColorPakeep: PropTypes.func,
+  handleSetBookmarkPakeep: PropTypes.func,
+  handleSetColorPakeep: PropTypes.func,
   handleSetFavoritePakeep: PropTypes.func,
+  handleSetIsCheckBoxesPakeep: PropTypes.func,
+  handleSetIsPinnedPakeep: PropTypes.func,
+  handleSetWidth: PropTypes.func,
   isAllIconsIsShown: PropTypes.bool,
-  sliceArrayTo: PropTypes.number,
-  labels: PropTypes.any,
+  isBackgroundColorDefault: PropTypes.bool,
+  isCheckBoxes: PropTypes.bool,
+  isColorDefault: PropTypes.bool,
+  isFavorite: PropTypes.bool,
+  isInBookmark: PropTypes.bool,
+  isNewPakeepContainerHaveFullWidth: PropTypes.bool,
+  isPinned: PropTypes.bool,
+  labelBargeNumber: PropTypes.number,
+  labels: PropTypes.shape({
+    length: PropTypes.any
+  }),
+  labelsListProps: PropTypes.any,
   open: PropTypes.bool,
-  setEditTitleIsTrue: PropTypes.func
-};
+  setEditTitleIsTrue: PropTypes.func,
+  sliceArrayTo: PropTypes.number,
+  widthOfContainer: PropTypes.any
+}
 
 export default IconsUtils;

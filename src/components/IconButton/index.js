@@ -7,8 +7,9 @@ import { useEffect } from 'react';
 import { colord } from 'colord';
 // import clsx from 'clsx'
 const useStyles = makeStyles(theme => ({
-  icon: ({ iconColor, rotate }) => ({
-    '& svg': { color: iconColor, transform: rotate ,},
+  icon: ({ iconColor, rotate, isArctiveIconPresent,isIconActive }) => ({
+    '& svg': { color: iconColor, transform: rotate },
+    '& path': { fillOpacity: !isArctiveIconPresent && isIconActive && 1  },
     '&:hover ': { background: colord(iconColor).alpha(0.1).toHex() }
   }),
   smallButtonSize: { '& button ': { padding: theme.spacing(1) } }
@@ -16,8 +17,9 @@ const useStyles = makeStyles(theme => ({
 
 const IconButtonByPas = ({
   onClick = null,
+  isArctiveIconPresent,
   rotateDeg = false,
-  activeIcon = false,
+  isIconActive = false,
   icon: Icon,
   iconName = 'icon',
   activeIconName = 'icon',
@@ -30,7 +32,7 @@ const IconButtonByPas = ({
   const currentHoverStatusIsTrue = _.isEqual(activeIconName, iconName) && activeProperty;
   const customIconColor = !!customColor && currentHoverStatusIsTrue ? customColor?.hover : customColor?.unHover;
 
-  const defaultColor = activeIcon
+  const defaultColor = isIconActive
     ? themeColors.primaryMain
     : currentHoverStatusIsTrue
     ? 'rgba(255,255,255,0.92)'
@@ -40,7 +42,7 @@ const IconButtonByPas = ({
 
   const rotate = rotateDeg ? `rotate(${rotateDeg}deg)` : 'rotate(0deg)';
 
-  const classes = useStyles({ iconColor, rotate,activeIcon });
+  const classes = useStyles({ iconColor, rotate, isIconActive ,isArctiveIconPresent});
 
   const [ref, { width }] = useMeasure();
 
@@ -59,7 +61,7 @@ const IconButtonByPas = ({
 
 IconButtonByPas.propTypes = {
   Icon: PropTypes.node,
-  activeIcon: PropTypes.bool,
+  isIconActive: PropTypes.bool,
   activeIconName: PropTypes.string,
   activeProperty: PropTypes.bool,
   badgeContent: PropTypes.number,

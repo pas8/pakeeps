@@ -15,9 +15,9 @@ const MoreUtils = ({ slicedArrAfter }) => {
   const classes = useStyles();
   return (
     <>
-      {slicedArrAfter.map(({ popoverText, icon: Icon, activeIcon }) => {
+      {slicedArrAfter.map(({ popoverText, icon: Icon, isIconActive }) => {
         const hoveredWrapperOfMenuItem = hovered => {
-          const activeColor = activeIcon && themeColors.primaryMain;
+          const activeColor = isIconActive && themeColors.primaryMain;
 
           const iconHoveredColor = hovered && themeColors.whiteRgbaColorWith0dot8valueOfAlfaCanal;
           const iconColor = activeColor || iconHoveredColor || themeColors.whiteRgbaColorWith0dot42valueOfAlfaCanal;
