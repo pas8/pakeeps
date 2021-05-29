@@ -1,4 +1,4 @@
-import { Grid, Paper, makeStyles, Typography, Grow, Zoom, Fade } from '@material-ui/core';
+import { Grid, Paper, makeStyles, Typography, Grow, Zoom, Fade, IconButton } from '@material-ui/core';
 import PropTypes from 'prop-types';
 import { useState, React, useEffect } from 'react';
 import clsx from 'clsx';
@@ -17,6 +17,8 @@ import {
 } from 'store/modules/App/operations';
 import { useSwipeable } from 'react-swipeable';
 import { useGetReadableColor } from 'hooks/useGetReadableColor.hook';
+import PinOutlinedIcon from 'components/Icons/components/PinOutlinedIcon';
+import PinIcon from 'components/Icons/components/PinIcon';
 
 const useStyles = makeStyles(theme => ({
   paper: ({ customColor, backgroundColor, isBackgroundColorDefault, utilsViewLikeInGoogleKeep }) => ({
@@ -31,14 +33,14 @@ const useStyles = makeStyles(theme => ({
     })
   }),
 
-  isHovered: {
+  isHovered: ({ customColor }) => ({
     paddingBottom: `${theme.spacing(8 * 0.8)}px !important`,
     transition: theme.transitions.create('all', {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen
     }),
-    borderColor: themeColors.whiteRgbaColorWith0dot8valueOfAlfaCanal
-  },
+    borderColor: customColor ? customColor.unHover : themeColors.whiteRgbaColorWith0dot8valueOfAlfaCanal
+  }),
 
   iconsUtils: {
     position: 'absolute',
@@ -58,7 +60,20 @@ const useStyles = makeStyles(theme => ({
     marginTop: theme.spacing(1.4),
     marginBottom: theme.spacing(0.8)
   },
-  isDragging: { borderColor: themeColors.primaryMain }
+  isDragging: ({ customColor }) => ({
+    borderColor: !customColor && themeColors.primaryMain,
+    boxShadow: customColor && `0px 0px 8px ${customColor.hover} !important`
+  }),
+  containerOfPinIcon: ({ customColor }) => ({
+    position: 'absolute',
+    top: 0,
+    right: 0,
+
+    color: customColor ? customColor.unHover : themeColors.whiteRgbaColorWith0dot8valueOfAlfaCanal,
+    '&:hover': {
+      color: customColor ? customColor.hover : themeColors.whiteRgbaColorWith0dot96valueOfAlfaCanal
+    }
+  })
 }));
 const PakeepElement = ({
   title,
@@ -77,11 +92,12 @@ const PakeepElement = ({
   filteredLabels,
   handleDeleteLabelFromPakeepThunk,
   changeLabelItemThunk,
-  handkePakeepPropertyThunk
+  handkePakeepPropertyThunk,
+  isPinIconShouldBeShownInPakeep
 }) => {
   const [customColor, isBackgroundColorDefault, isColorDefault] = useGetReadableColor(backgroundColor, color);
 
-  const classes = useStyles({ customColor, backgroundColor, isBackgroundColorDefault });
+  const classes = useStyles({ customColor, backgroundColor, isBackgroundColorDefault, isPinIconShouldBeShownInPakeep });
 
   const nullityStatusState = {
     isHovered: false,
@@ -129,7 +145,6 @@ const PakeepElement = ({
   useEffect(() => setStatusState(state => ({ ...state, isLoaded: true })), []);
 
   if (!statusState.isLoaded) return <SkeletonView />;
-
   const AnimationElement = utilsViewLikeInGoogleKeep ? Fade : Grow;
   return (
     <Grid item onMouseEnter={handleSetIsHovering} onMouseLeave={handleSetIsUnHovering} ref={ref}>
@@ -138,6 +153,11 @@ const PakeepElement = ({
         {...handlers}
         className={clsx(classes.paper, isDragging && classes.isDragging, statusState.isHovered && classes.isHovered)}
       >
+        {isPinIconShouldBeShownInPakeep && (
+          <IconButton className={classes.containerOfPinIcon}>
+            {customColor ? <PinIcon /> : <PinOutlinedIcon />}
+          </IconButton>
+        )}
         <Grid item className={classes.title}>
           <Typography variant={'h5'}>{title}</Typography>
         </Grid>

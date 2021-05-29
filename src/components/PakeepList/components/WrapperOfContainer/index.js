@@ -4,12 +4,14 @@ import _ from 'lodash';
 import { usePrevious } from 'react-use';
 import { useMakeDraggableArr } from 'hooks/useMakeDraggableArr.hook';
 import PakeepListContainer from './components/Container';
+import { connect } from 'react-redux';
+import { getPakeepsOrderNames } from 'store/modules/App/selectors';
 
 const WrapperOfContainerOfPakeepList = ({
   pakeeps,
   pakeepsOrderNames,
   handleSetPreviusOrderNamesFunc,
-  isUsePreviuosOrder ,
+  isUsePreviuosOrder,
   pakeepListContainerProps
 }) => {
   const placeholderName = 'placeholder';
@@ -17,6 +19,7 @@ const WrapperOfContainerOfPakeepList = ({
   const previousPakeepsOrderNames = usePrevious(pakeepsOrderNames);
 
   useEffect(() => {
+    console.log(isUsePreviuosOrder)
     handleSetPreviusOrderNamesFunc(previousPakeepsOrderNames);
   }, [isUsePreviuosOrder]);
 
@@ -24,6 +27,7 @@ const WrapperOfContainerOfPakeepList = ({
     pakeeps,
     pakeepsOrderNames,
     handleSetPreviusOrderNamesFunc
+    // pakeepListContainerProps.isPakeepDragContextPinned
   );
 
   const onDragStart = () => null;
@@ -64,6 +68,7 @@ const WrapperOfContainerOfPakeepList = ({
         return [...sum, newOrderNamesPakeepsElementId];
       };
       const newOrderNames = pakeepsOrderNames.reduce(newOrderNamesReduceFunc, []);
+
       return handleSetPreviusOrderNamesFunc(newOrderNames);
     }
 
@@ -129,6 +134,7 @@ const WrapperOfContainerOfPakeepList = ({
     onDragStart,
     placeholderName
   };
+  console.log(pakeepsOrderNames)
   return <PakeepListContainer {...allPakeepListContainerProps} />;
 };
 
@@ -148,5 +154,8 @@ WrapperOfContainerOfPakeepList.propTypes = {
     reduce: PropTypes.func
   })
 };
+const mapStateToProps = ({ app: { pakeepsOrderNames } }) => ({
+  pakeepsOrderNames: getPakeepsOrderNames(pakeepsOrderNames)
+});
 
-export default WrapperOfContainerOfPakeepList;
+export default connect(mapStateToProps)(WrapperOfContainerOfPakeepList);

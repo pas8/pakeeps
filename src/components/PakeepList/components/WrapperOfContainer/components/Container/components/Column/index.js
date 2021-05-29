@@ -12,19 +12,19 @@ const paddingValueX = 0.8 * 2;
 const paddingValueOfElement = 0.8 * (2 + 1);
 
 const useStyles = makeStyles(({ spacing, breakpoints: { down } }) => ({
-  column: { padding: spacing(0, paddingValue),  },
+  column: { padding: spacing(0, paddingValue) },
   columnFirst: {
     padding: spacing(0),
-    paddingRight: spacing(paddingValueX),
+    paddingRight: spacing(paddingValue),
     [down('sm')]: {
       paddingRight: spacing(paddingValueX / 1.8)
     }
   },
   columnLast: {
     padding: spacing(0),
-    paddingLeft: spacing(paddingValueX),
+    paddingLeft: spacing(paddingValue),
     [down('sm')]: {
-      paddingLeft: spacing(paddingValueX / 1.8)
+      paddingLeft: spacing(paddingValue / 1.8)
     }
   },
   columnElement: {
@@ -67,11 +67,17 @@ const ColumnOfPakeepListContainer = ({
               const draggableProps = { key: el.id, index: idx, draggableId: el.id };
 
               const draggableContainerClassName = classes.columnElement;
-              const draggableContainerOfPakeepElementProps = { draggableProps, el, idx, draggableContainerClassName };
+              const isPinIconShouldBeShownInPakeep = folderProperty === 'ALL' && el?.isPinned;
+              const draggableContainerOfPakeepElementProps = {
+                isPinIconShouldBeShownInPakeep,
+                draggableProps,
+                el,
+                idx,
+                draggableContainerClassName
+              };
 
               const draggableEl = <DraggableContainerOfPakeepElement {...draggableContainerOfPakeepElementProps} />;
 
-            
               const validDraggableEl = useValidationOfPakeepsInColumn(
                 isPakeepDragContextPinned,
                 { el, folderProperty, folderId },
@@ -99,6 +105,6 @@ ColumnOfPakeepListContainer.propTypes = {
   pakeepsInColumn: PropTypes.shape({
     map: PropTypes.func
   })
-}
+};
 
 export default ColumnOfPakeepListContainer;

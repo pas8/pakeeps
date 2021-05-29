@@ -239,12 +239,13 @@ const initialState = {
   scrollDirectionName: 'up',
   currentFolderPropertyIdx: 0,
   drawerWidth: 0,
-  isUsePreviuosOrder: false
+  isUsePreviuosOrder: false,
 };
 
 const AppReducer = createReducer(initialState)({
   [types.ADD_NEW_PAKEEP]: (state, { newPaKeep }) => ({
     ...state,
+    // isUsePreviuosOrder: false,
     pakeeps: [...state.pakeeps, newPaKeep]
   }),
   // [types.HANDLE_CHANGE_PAKEEP_PROPERTY]: (state, { newPaKeep }) => ({
