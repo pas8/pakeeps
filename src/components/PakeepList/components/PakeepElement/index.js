@@ -127,7 +127,7 @@ const PakeepElement = ({
   const handleSetColorPakeep = color => handkePakeepPropertyThunk(id, { color });
   const handleSetBackgroundColorPakeep = backgroundColor => handkePakeepPropertyThunk(id, { backgroundColor });
 
-const handleSetIsPinnedPakeep = () => handlePinStatusPakeepThunk(id)
+  const handleSetIsPinnedPakeep = () => handlePinStatusPakeepThunk(id);
 
   const iconsUtilsProps = {
     isAllIconsIsShown: false,

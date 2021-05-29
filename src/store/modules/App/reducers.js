@@ -1,4 +1,4 @@
-import { filter, find, pickBy } from 'lodash';
+import { filter, find, pickBy, includes } from 'lodash';
 import { createReducer } from 'store/utils';
 import * as types from './types';
 
@@ -273,18 +273,18 @@ const AppReducer = createReducer(initialState)({
     const newAddedPakeepOrderNames = includes(state.pakeepsOrderNames, findedPakeep.id)
       ? state.pakeepsOrderNames
       : [...state.pakeepsOrderNames, findedPakeep.id];
+    const filteredPakeepsOrderNames = filter(state.pakeepsOrderNames, ({ id }) => pakeepId !== id);
+    const pakeepsOrderNames = isPinned ? newAddedPakeepOrderNames : filteredPakeepsOrderNames;
 
-    const pakeepsOrderNames = isPinned
-      ? newAddedPakeepOrderNames
-      : filter(state.pakeepsOrderNames, ({ id }) => pakeepId !== id);
+    const newAddedPinnedPakeepOrderNames = includes(state.pinnedPakeepsOrderNames, findedPakeep.id)
+      ? state.pinnedPakeepsOrderNames
+      : [...state.pinnedPakeepsOrderNames, findedPakeep.id];
 
-    const pinnedPakeepsOrderNames = !isPinned
-      ? [...state.pinnedPakeepsOrderNames, findedPakeep.id]
-      : filter(state.pinnedPakeepsOrderNames, ({ id }) => pakeepId !== id);
+    const filteredPinnedPakeepsOrderNames = filter(state.pinnedPakeepsOrderNames, ({ id }) => pakeepId !== id);
+    const pinnedPakeepsOrderNames = !isPinned ? newAddedPinnedPakeepOrderNames : filteredPinnedPakeepsOrderNames;
 
     const handlelingPakeep = { ...findedPakeep, isPinned: !isPinned };
     const pakeeps = [...filteredPakeeps, handlelingPakeep];
-    console.log(pakeepsOrderNames);
     return { ...state, pakeeps, pakeepsOrderNames, pinnedPakeepsOrderNames };
   },
 
