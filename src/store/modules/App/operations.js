@@ -85,6 +85,11 @@ export const handleSetPreviusOrderNames = orderNames => dispatch => {
   dispatch(toSetPreviusOrderNames(orderNames));
 };
 
+export const handleSetOrderNamesOfPinnedPakeepsThunk = orderNames => dispatch => {
+  dispatch(toSetOrderNamesOfPinnedPakeeps(orderNames));
+};
+
+
 export const handleAddNewGlobalLabelThunk = newLabel => dispatch => {
   dispatch(toAddNewGlobalLabel(newLabel));
 };

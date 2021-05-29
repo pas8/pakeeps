@@ -19,7 +19,7 @@ export const toChangeTwoColumns = (startColumn, finishColumn, breakpointName) =>
   breakpointName
 });
 
-export const toScroll = scrollDirectionName => ({ type: types.SCROLL_DIRECTION, scrollDirectionName });
+export const  toScroll = scrollDirectionName => ({ type: types.SCROLL_DIRECTION, scrollDirectionName });
 
 export const toSetNewOrderNames = newOrder => ({ type: types.SET_NEW_ORDER_NAMES, newOrder });
 export const toSetCurrentFolderPropertyIdx = folderIdx => ({
@@ -38,10 +38,10 @@ export const toDeleteLabelFromPakeep = (currentPakeep, labels) => ({
 });
 
 export const toSetPreviusOrderNames = orderNames => ({ type: types.HANDLE_SET_PREVIUOS_ORDER_NAMES, orderNames });
+export const toSetOrderNamesOfPinnedPakeeps = orderNames => ({ type: types.HANDLE_SET_ORDER_NAMES_OF_PINNED_PAKEEPS, orderNames });
 export const toHandleDrawerWidth = drawerWidth => ({ type: types.HANDLE_DRAWER_WIDTH, drawerWidth });
 
 
 export const toAddNewGlobalLabel = newLabel => ({ type: types.ADD_NEW_GLOBAL_LABEL, newLabel });
 export const toSetNewPakeepsArr = pakeeps => ({ type: types.HANDLE_PAKEEPS, pakeeps });
-
 

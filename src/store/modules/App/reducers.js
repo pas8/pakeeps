@@ -231,7 +231,9 @@ const initialState = {
     //   id: 'pakeep16'
     // },
   ],
+  // pakeepsOrderNames: ['pakeep1', 'pakeep2', 'pakeep3', 'pakeep4', 'pakeep5', 'pakeep6'],
   pakeepsOrderNames: ['pakeep1', 'pakeep2', 'pakeep3', 'pakeep4', 'pakeep5', 'pakeep6'],
+  pinnedPakeepsOrderNames:[],
   notifinationCounter: 8,
   isMenuOpen: false,
   scrollDirectionName: 'up',
@@ -284,6 +286,11 @@ const AppReducer = createReducer(initialState)({
     ...state,
     isUsePreviuosOrder: false,
     pakeepsOrderNames: orderNames
+  }),
+  [types.HANDLE_SET_ORDER_NAMES_OF_PINNED_PAKEEPS]: (state, { orderNames: pinnedPakeepsOrderNames }) => ({
+    ...state,
+    isUsePreviuosOrder: false,
+    pinnedPakeepsOrderNames
   }),
 
   [types.HANDLE_DRAWER_WIDTH]: (state, { drawerWidth }) => ({ ...state, drawerWidth }),

@@ -2,18 +2,13 @@ import PropTypes from 'prop-types';
 import { Grid, makeStyles } from '@material-ui/core';
 import { DragDropContext } from 'react-beautiful-dnd';
 import { find } from 'lodash';
-import Column from '../Column/index';
-import PinColumn from '../PinColumn/index';
+import ColumnOfPakeepListContainer from './components/Column/index';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles(({ spacing, breakpoints: { between, down } }) => ({
   container: {
-    margin: theme.spacing(4, 0, 0, 0),
-    [theme.breakpoints.between('xs', 'sm')]: {
-      margin: theme.spacing(2, 0, 0, 0)
-    },
-    [theme.breakpoints.down('md')]: {
-      margin: theme.spacing(4, 0, 0, 0)
-    }
+    margin: spacing(4, 0, 0, 0),
+    [between('xs', 'sm')]: { margin: spacing(2, 0, 0, 0) },
+    [down('md')]: { margin: spacing(4, 0, 0, 0) }
   }
 }));
 
@@ -35,51 +30,27 @@ const PakeepListContainer = ({
         {responsiveColumnOrder?.map((columnId, idx) => {
           const column = columns[columnId];
           if (!column?.pakeepsId) return;
-          // console.log(column?.pakeepsId)
+
           const filteredArrToMap = column.pakeepsId.filter(id => id !== placeholderName);
 
           const pakeepsInColumn = filteredArrToMap.map(pakeepId => {
             const currentEl = find(pakeeps, ({ id }) => id === pakeepId);
             return currentEl;
           });
-          const lastColumn = !!(idx + 1 === responsiveColumnOrder.length);
-          const firstColumn = !!(idx === 0);
+          const isLastColumn = !!(idx + 1 === responsiveColumnOrder.length);
+          const isFirstColumn = !!(idx === 0);
+
           const columnProps = {
             folderProperty,
             key: column?.id,
             folderId,
             column,
-            firstColumn,
-            lastColumn,
+            isFirstColumn,
+            isLastColumn,
             pakeepsInColumn
           };
 
-          return <PinColumn {...columnProps} />;
-        })}
-
-        {responsiveColumnOrder?.map((columnId, idx) => {
-          const column = columns[columnId];
-          if (!column?.pakeepsId) return;
-          // console.log(column?.pakeepsId)
-          const filteredArrToMap = column.pakeepsId.filter(id => id !== placeholderName);
-
-          const pakeepsInColumn = filteredArrToMap.map(pakeepId => {
-            const currentEl = find(pakeeps, ({ id }) => id === pakeepId);
-            return currentEl;
-          });
-          const lastColumn = !!(idx + 1 === responsiveColumnOrder.length);
-          const firstColumn = !!(idx === 0);
-          const columnProps = {
-            folderProperty,
-            key: column?.id,
-            folderId,
-            column,
-            firstColumn,
-            lastColumn,
-            pakeepsInColumn
-          };
-
-          return <Column {...columnProps} />;
+          return <ColumnOfPakeepListContainer {...columnProps} />;
         })}
       </Grid>
     </DragDropContext>
