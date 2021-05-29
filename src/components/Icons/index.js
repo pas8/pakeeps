@@ -24,6 +24,7 @@ import FavoriteBorderOutlinedIcon from '@material-ui/icons/FavoriteBorderOutline
 import BookmarkBorderOutlinedIcon from '@material-ui/icons/BookmarkBorderOutlined';
 import ArchiveOutlinedIcon from '@material-ui/icons/ArchiveOutlined';
 
+
 export const iconsArr = [
   { icon: <AlarmOutlinedIcon />, iconName: 'alarm', id: '1' },
   { icon: <FingerprintOutlinedIcon />, iconName: 'fingerprint', id: '2' },

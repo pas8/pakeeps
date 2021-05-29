@@ -25,3 +25,6 @@ export const getDefaultFolderArr = createSelector([arr => arr], arr => arr);
 export const getPakeeps = createSelector([pakeeps => pakeeps], pakeeps => pakeeps);
 export const getPakeepsOrderNames = createSelector([orderNames => orderNames], orderNames => orderNames);
 export const getIsUsePreviuosOrder = createSelector([bool => bool], bool => bool);
+
+
+export const getPinnedPakeepsOrderNames = createSelector([orderNames => orderNames], orderNames => orderNames)

@@ -1,4 +1,4 @@
-import { filter, find, pickBy } from 'lodash';
+import { filter, find, pickBy, includes } from 'lodash';
 import { createReducer } from 'store/utils';
 import * as types from './types';
 
@@ -9,6 +9,7 @@ const initialState = {
     { title: 'Pined', iconName: 'pin', id: 'folder-isPinned', property: 'isPinned' },
     { title: 'Bookmark', iconName: 'bookmark', id: 'folder-isInBookmark', property: 'isInBookmark' },
     { title: 'Favorite', iconName: 'favorite', id: 'folder-isFavorite', property: 'isFavorite' },
+    { title: 'With chckebox', iconName: 'checkbox', id: 'folder-isCheckBoxes', property: 'isCheckBoxes' },
     { title: 'Archiveted', iconName: 'archive', id: 'folder-isArchived', property: 'isArchived' }
   ],
 
@@ -34,6 +35,7 @@ const initialState = {
       isArchived: false,
       id: 'pakeep1',
       isPinned: true,
+      isCheckBoxes: true,
       backgroundColor: 'default'
     },
     {
@@ -46,6 +48,8 @@ const initialState = {
       id: 'pakeep2',
       isArchived: false,
       isPinned: false,
+      isCheckBoxes: false,
+
       backgroundColor: 'default'
     },
     {
@@ -58,6 +62,8 @@ const initialState = {
       isArchived: false,
       isPinned: true,
       id: 'pakeep3',
+      isCheckBoxes: false,
+
       backgroundColor: 'default'
     },
     {
@@ -70,7 +76,8 @@ const initialState = {
       isArchived: false,
       id: 'pakeep4',
       isPinned: true,
-      backgroundColor: '#969696'
+      backgroundColor: '#969696',
+      isCheckBoxes: false
     },
     {
       title: 'Placeholder 5',
@@ -82,7 +89,8 @@ const initialState = {
       isArchived: true,
       labels: ['label4', 'label0', 'label1', 'label2'],
       id: 'pakeep5',
-      backgroundColor: 'default'
+      backgroundColor: 'default',
+      isCheckBoxes: false
     },
     {
       title: 'Placeholder 6',
@@ -93,35 +101,37 @@ const initialState = {
       labels: ['label0', 'label2', 'label6'],
       id: 'pakeep6',
       isPinned: true,
+      isCheckBoxes: false,
       isArchived: true,
       backgroundColor: 'default'
+    },
+    {
+      title: 'Placeholder 7',
+      text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. At imperdiet dui accumsan sit amet nulla facilisi morbi. Aliquam sem et tortor consequat id porta nibh. Enim praesent elementum facilisis leo vel fringilla est. Cras adipiscing enim eu turpis egestas pretium aenean. Sed libero enim sed faucibus turpis in eu mi bibendum. Vestibulum lorem sed risus ultricies. Neque egestas congue quisque egestas diam.',
+      isInBookmark: false,
+      isPinned: false,
+
+      isFavorite: false,
+      color: 'default',
+      labels: ['label4', 'label6'],
+      id: 'pakeep7',
+      isCheckBoxes: false,
+      backgroundColor: '#470000',
+
+      isPinned: false
+    },
+    {
+      title: 'Placeholder 8',
+      text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Vulputate dignissim suspendisse in est ante in nibh mauris cursus. Duis convallis convallis tellus id interdum. Eu augue ut lectus arcu bibendum at varius.      ',
+      isInBookmark: false,
+      isFavorite: false,
+      isCheckBoxes: false,
+      backgroundColor: '#d37a18',
+      color: 'default',
+      labels: ['label1'],
+      isPinned: false,
+      id: 'pakeep8'
     }
-    // {
-    //   title: 'Placeholder 7',
-    //   text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. At imperdiet dui accumsan sit amet nulla facilisi morbi. Aliquam sem et tortor consequat id porta nibh. Enim praesent elementum facilisis leo vel fringilla est. Cras adipiscing enim eu turpis egestas pretium aenean. Sed libero enim sed faucibus turpis in eu mi bibendum. Vestibulum lorem sed risus ultricies. Neque egestas congue quisque egestas diam.',
-    //   isInBookmark: false,
-    //   isFavorite: false,
-    //   color: 'default',
-    //   labels: [{ color: 'primary', title: 'Day plans', icon: '', key: 0 }],
-    //   id: 'pakeep7',
-    //   isPinned: false
-    // },
-    // {
-    //   title: 'Placeholder 8',
-    //   text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Vulputate dignissim suspendisse in est ante in nibh mauris cursus. Duis convallis convallis tellus id interdum. Eu augue ut lectus arcu bibendum at varius.      ',
-    //   isInBookmark: false,
-    //   isFavorite: false,
-    //   color: 'default',
-    //   labels: [
-    //     { color: 'secondary', title: 'Plans', icon: '', key: 0 },
-    //     { color: 'default', title: 'Week plans', icon: '', key: 1 },
-    //     { color: 'primary', title: 'Mouth plans', icon: '', key: 2 },
-    //     { color: 'primary', title: 'Year plans', icon: '', key: 3 },
-    //     { color: 'secondary', title: 'Hobby Placeholders', icon: '', key: 4 }
-    //   ],
-    //   isPinned: true,
-    //   id: 'pakeep8'
-    // },
     // {
     //   title: 'Placeholder 9',
     //   text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
@@ -221,7 +231,9 @@ const initialState = {
     //   id: 'pakeep16'
     // },
   ],
-  pakeepsOrderNames: ['pakeep1', 'pakeep2', 'pakeep3', 'pakeep4', 'pakeep5', 'pakeep6'],
+  // pakeepsOrderNames: ['pakeep1', 'pakeep2', 'pakeep3', 'pakeep4', 'pakeep5', 'pakeep6'],
+  pakeepsOrderNames: [],
+  pinnedPakeepsOrderNames: [],
   notifinationCounter: 8,
   isMenuOpen: false,
   scrollDirectionName: 'up',
@@ -231,10 +243,17 @@ const initialState = {
 };
 
 const AppReducer = createReducer(initialState)({
-  [types.ADD_NEW_PAKEEP]: (state, { newPaKeep }) => ({
-    ...state,
-    pakeeps: [...state.pakeeps, newPaKeep]
-  }),
+  [types.ADD_NEW_PAKEEP]: (state, { newPaKeep }) => {
+    const isPinned = newPaKeep?.isPinned;
+
+    const pakeeps = [...state.pakeeps, newPaKeep];
+    const pakeepsOrderNames = isPinned ? state.pakeepsOrderNames : [...state.pakeepsOrderNames, newPaKeep.id];
+    const pinnedPakeepsOrderNames = isPinned
+      ? [...state.pinnedPakeepsOrderNames, newPaKeep.id]
+      : state.pinnedPakeepsOrderNames;
+
+    return { ...state, pinnedPakeepsOrderNames, pakeepsOrderNames, pakeeps };
+  },
   // [types.HANDLE_CHANGE_PAKEEP_PROPERTY]: (state, { newPaKeep }) => ({
   //   ...state,
 
@@ -245,6 +264,29 @@ const AppReducer = createReducer(initialState)({
     ...state,
     folders: foldersArr
   }),
+  [types.HANDLE_PIN_STATUS_OF_PAKEEPS]: (state, { pakeepId }) => {
+    console.log(pakeepId);
+    const findedPakeep = find(state.pakeeps, ({ id }) => id === pakeepId);
+    const isPinned = findedPakeep.isPinned;
+    const filteredPakeeps = filter(state.pakeeps, ({ id }) => pakeepId !== id);
+
+    const newAddedPakeepOrderNames = includes(state.pakeepsOrderNames, findedPakeep.id)
+      ? state.pakeepsOrderNames
+      : [...state.pakeepsOrderNames, findedPakeep.id];
+    const filteredPakeepsOrderNames = filter(state.pakeepsOrderNames, ({ id }) => pakeepId !== id);
+    const pakeepsOrderNames = isPinned ? newAddedPakeepOrderNames : filteredPakeepsOrderNames;
+
+    const newAddedPinnedPakeepOrderNames = includes(state.pinnedPakeepsOrderNames, findedPakeep.id)
+      ? state.pinnedPakeepsOrderNames
+      : [...state.pinnedPakeepsOrderNames, findedPakeep.id];
+
+    const filteredPinnedPakeepsOrderNames = filter(state.pinnedPakeepsOrderNames, ({ id }) => pakeepId !== id);
+    const pinnedPakeepsOrderNames = !isPinned ? newAddedPinnedPakeepOrderNames : filteredPinnedPakeepsOrderNames;
+
+    const handlelingPakeep = { ...findedPakeep, isPinned: !isPinned };
+    const pakeeps = [...filteredPakeeps, handlelingPakeep];
+    return { ...state, pakeeps, pakeepsOrderNames, pinnedPakeepsOrderNames };
+  },
 
   [types.ADD_NEW_GLOBAL_LABEL]: (state, { newLabel }) => ({
     ...state,
@@ -265,7 +307,7 @@ const AppReducer = createReducer(initialState)({
     currentFolderPropertyIdx: folderIdx
   }),
 
-  [types.HANDLE_PAKEEPS]: (state, { pakeeps }) => ({ ...state,  isUsePreviuosOrder: true,pakeeps }),
+  [types.HANDLE_PAKEEPS]: (state, { pakeeps }) => ({ ...state, isUsePreviuosOrder: true, pakeeps }),
   [types.SET_NEW_ORDER_NAMES]: (state, { newOrder }) => ({
     ...state,
     pakeepsOrderNames: newOrder
@@ -274,6 +316,11 @@ const AppReducer = createReducer(initialState)({
     ...state,
     isUsePreviuosOrder: false,
     pakeepsOrderNames: orderNames
+  }),
+  [types.HANDLE_SET_ORDER_NAMES_OF_PINNED_PAKEEPS]: (state, { orderNames: pinnedPakeepsOrderNames }) => ({
+    ...state,
+    isUsePreviuosOrder: false,
+    pinnedPakeepsOrderNames
   }),
 
   [types.HANDLE_DRAWER_WIDTH]: (state, { drawerWidth }) => ({ ...state, drawerWidth }),
