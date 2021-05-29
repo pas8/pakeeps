@@ -16,12 +16,11 @@ const WrapperOfContainerOfPakeepList = ({
 }) => {
   const placeholderName = 'placeholder';
 
-  const previousPakeepsOrderNames = usePrevious(pakeepsOrderNames);
+  // const previousPakeepsOrderNames = usePrevious(pakeepsOrderNames);
 
-  useEffect(() => {
-    console.log(isUsePreviuosOrder)
-    handleSetPreviusOrderNamesFunc(previousPakeepsOrderNames);
-  }, [isUsePreviuosOrder]);
+  // useEffect(() => {
+  //   handleSetPreviusOrderNamesFunc(previousPakeepsOrderNames);
+  // }, [isUsePreviuosOrder]);
 
   const [columns, responsiveColumnOrder] = useMakeDraggableArr(
     pakeeps,
@@ -114,14 +113,16 @@ const WrapperOfContainerOfPakeepList = ({
     const newPakeepsOrderNames = _.concat(pakeepsOrderNames, placholderArrWhichShouldBeConcated);
     const reducedOrderNames = _.reduce(newPakeepsOrderNames, newOrderNamesReduceFunc, []);
 
-    const stringNewOrderNames = _.join(reducedOrderNames, '_');
-    const placeholderPattern = _.join(Array(columnOrderLenght).fill(placeholderName), '_');
+    const uniqName = 'FUCK_UP';
+    const stringNewOrderNames = _.join(reducedOrderNames, uniqName);
+    const placeholderPattern = _.join(Array(columnOrderLenght).fill(placeholderName), uniqName);
 
     const toRemoveNameString = 'toRemove';
     const toSplitNewOrderString = stringNewOrderNames.replaceAll(placeholderPattern, toRemoveNameString);
-    const filteredNewOrderArr = _.split(toSplitNewOrderString, '_');
+    const filteredNewOrderArr = _.split(toSplitNewOrderString, uniqName);
 
     const newOrderNames = _.filter(filteredNewOrderArr, string => string !== toRemoveNameString);
+
     return handleSetPreviusOrderNamesFunc(newOrderNames);
   };
 
@@ -134,7 +135,6 @@ const WrapperOfContainerOfPakeepList = ({
     onDragStart,
     placeholderName
   };
-  console.log(pakeepsOrderNames)
   return <PakeepListContainer {...allPakeepListContainerProps} />;
 };
 
@@ -154,8 +154,5 @@ WrapperOfContainerOfPakeepList.propTypes = {
     reduce: PropTypes.func
   })
 };
-const mapStateToProps = ({ app: { pakeepsOrderNames } }) => ({
-  pakeepsOrderNames: getPakeepsOrderNames(pakeepsOrderNames)
-});
 
-export default connect(mapStateToProps)(WrapperOfContainerOfPakeepList);
+export default WrapperOfContainerOfPakeepList;

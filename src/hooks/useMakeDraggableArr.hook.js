@@ -11,11 +11,7 @@ export const useMakeDraggableArr = (
   defaultBreakpointValue = [6, 4, 3, 2, 1],
   isPinned = true
 ) => {
-  // const [columns, setColumns] = useState({});
-  // _.filter(pakeeps, ({ isPinned }) => !!isPinned),
-
-  // const pakeeps = isPinned ? defaultPakeeps.filter(({ isPinned }) => isPinned === true) : defaultPakeeps;
-  useEffect(() => handlePakeepsOrderNames(pakeeps.map(({ id }) => id)), [pakeeps]);
+  useEffect(() => pakeepsOrderNames.length === 0 && handlePakeepsOrderNames(pakeeps.map(({ id }) => id)), [pakeeps]);
 
   const orderReduceFunc = (sum, placeholder, idx) => [...sum, `${idx}`];
 

@@ -11,7 +11,7 @@ import {
   getPakeepsOrderNames,
   getPinnedPakeepsOrderNames
 } from 'store/modules/App/selectors';
-import { filter, flatten } from 'lodash';
+import { difference, filter, flatten } from 'lodash';
 import WrapperOfContainerOfPakeepList from './components/WrapperOfContainer';
 // const WrapperOfContainerOfPakeepList = dynamic(() => import(), {
 //   loading: () => (
@@ -38,25 +38,27 @@ const PakeepList = ({
   const folderId = flattenFolder[currentFolderPropertyIdx]?.id;
 
   const isFolderPropertyIsAll = folderProperty === 'ALL';
-// console.log(pinnedPakeepsOrderNames,pakeepsOrderNames)
+  const pinnedPakeeps = filter(pakeeps, ({ isPinned }) => !!isPinned);
+  // const notPinnedPakeeps = difference(pakeeps, pinnedPakeeps);
+// console.log(pinnedPakeepsOrderNames)
+  const wrapperOfContainerOfPinnedPakeepListProps = {
+    pakeepListContainerProps: { folderProperty, folderId, isPakeepDragContextPinned: isFolderPropertyIsAll },
+    pakeeps: pinnedPakeeps,
+    pakeepsOrderNames: pinnedPakeepsOrderNames,
+    handleSetPreviusOrderNamesFunc: handleSetOrderNamesOfPinnedPakeepsThunk,
+    isUsePreviuosOrder
+  };
 
-  // const wrapperOfContainerOfPinnedPakeepListProps = {
-  //   pakeepListContainerProps: { folderProperty, folderId, isPakeepDragContextPinned: isFolderPropertyIsAll },
-  //   pakeeps,
-  //   // pakeepsOrderNames: pinnedPakeepsOrderNames,
-  //   handleSetPreviusOrderNamesFunc: handleSetOrderNamesOfPinnedPakeepsThunk,
-  //   isUsePreviuosOrder
-  // };
   const wrapperOfContainerOfAllPakeepListProps = {
     pakeepListContainerProps: { folderProperty, folderId, isPakeepDragContextPinned: false },
-    pakeeps,
-    // pakeepsOrderNames,
+    pakeeps:  pakeeps,
+    pakeepsOrderNames,
     handleSetPreviusOrderNamesFunc: handleSetPreviusOrderNames,
     isUsePreviuosOrder
   };
   return (
     <>
-      {/* {isFolderPropertyIsAll && <WrapperOfContainerOfPakeepList {...wrapperOfContainerOfPinnedPakeepListProps} />} */}
+      {isFolderPropertyIsAll && <WrapperOfContainerOfPakeepList {...wrapperOfContainerOfPinnedPakeepListProps} />}
 
       <WrapperOfContainerOfPakeepList {...wrapperOfContainerOfAllPakeepListProps} />
     </>
@@ -75,14 +77,14 @@ PakeepList.propTypes = {
 };
 
 const mapStateToProps = ({
-  app: { pakeeps, pakeepsOrderNames, currentFolderPropertyIdx, folders, isUsePreviuosOrder, pinnedPakeepsOrderNames, }
+  app: { pakeeps, pakeepsOrderNames, currentFolderPropertyIdx, folders, isUsePreviuosOrder, pinnedPakeepsOrderNames }
 }) => ({
   pakeeps: getPakeeps(pakeeps),
-  // pakeepsOrderNames: getPakeepsOrderNames(pakeepsOrderNames),
-  // pinnedPakeepsOrderNames: getPinnedPakeepsOrderNames(pinnedPakeepsOrderNames),
+  pakeepsOrderNames: getPakeepsOrderNames(pakeepsOrderNames),
+  pinnedPakeepsOrderNames: getPinnedPakeepsOrderNames(pinnedPakeepsOrderNames),
   currentFolderPropertyIdx: getCurrentFolderPropertyIdx(currentFolderPropertyIdx),
   isUsePreviuosOrder: getIsUsePreviuosOrder(isUsePreviuosOrder),
-  folders: getFolders(folders),
+  folders: getFolders(folders)
 });
 const mapDispatchToProps = dispatch => ({
   handleSetPreviusOrderNames: orderNames => dispatch(handleSetPreviusOrderNames(orderNames)),

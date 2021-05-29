@@ -64,10 +64,11 @@ const ColumnOfPakeepListContainer = ({
         {provided => (
           <Grid innerRef={provided.innerRef} {...provided.droppableProps}>
             {pakeepsInColumn.map((el, idx) => {
+              if(!el) return;
               const draggableProps = { key: el.id, index: idx, draggableId: el.id };
 
               const draggableContainerClassName = classes.columnElement;
-              const isPinIconShouldBeShownInPakeep = folderProperty === 'ALL' && el?.isPinned;
+              const isPinIconShouldBeShownInPakeep = folderProperty === 'ALL' && el.isPinned;
               const draggableContainerOfPakeepElementProps = {
                 isPinIconShouldBeShownInPakeep,
                 draggableProps,

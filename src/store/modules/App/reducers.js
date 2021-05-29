@@ -232,22 +232,28 @@ const initialState = {
     // },
   ],
   // pakeepsOrderNames: ['pakeep1', 'pakeep2', 'pakeep3', 'pakeep4', 'pakeep5', 'pakeep6'],
-  pakeepsOrderNames: ['pakeep1', 'pakeep2', 'pakeep3', 'pakeep4', 'pakeep5', 'pakeep6'],
-  pinnedPakeepsOrderNames:[],
+  pakeepsOrderNames: [],
+  pinnedPakeepsOrderNames: [],
   notifinationCounter: 8,
   isMenuOpen: false,
   scrollDirectionName: 'up',
   currentFolderPropertyIdx: 0,
   drawerWidth: 0,
-  isUsePreviuosOrder: false,
+  isUsePreviuosOrder: false
 };
 
 const AppReducer = createReducer(initialState)({
-  [types.ADD_NEW_PAKEEP]: (state, { newPaKeep }) => ({
-    ...state,
-    // isUsePreviuosOrder: false,
-    pakeeps: [...state.pakeeps, newPaKeep]
-  }),
+  [types.ADD_NEW_PAKEEP]: (state, { newPaKeep }) => {
+    const isPinned = newPaKeep?.isPinned;
+
+    const pakeeps = [...state.pakeeps, newPaKeep];
+    const pakeepsOrderNames = isPinned ? state.pakeepsOrderNames : [...state.pakeepsOrderNames, newPaKeep.id];
+    const pinnedPakeepsOrderNames = isPinned
+      ? [...state.pinnedPakeepsOrderNames, newPaKeep.id]
+      : state.pinnedPakeepsOrderNames;
+
+    return { ...state, pinnedPakeepsOrderNames, pakeepsOrderNames, pakeeps };
+  },
   // [types.HANDLE_CHANGE_PAKEEP_PROPERTY]: (state, { newPaKeep }) => ({
   //   ...state,
 
