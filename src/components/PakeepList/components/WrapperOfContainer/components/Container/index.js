@@ -8,7 +8,10 @@ const useStyles = makeStyles(({ spacing, breakpoints: { between, down } }) => ({
   container: {
     margin: spacing(4, 0, 0, 0),
     [between('xs', 'sm')]: { margin: spacing(2, 0, 0, 0) },
-    [down('md')]: { margin: spacing(4, 0, 0, 0) }
+    [down('md')]: { margin: spacing(4, 0, 0, 0) },
+    '& .selected > div ': {
+      boxShadow: '0px 0px 1px 2px   white '
+    }
   }
 }));
 
@@ -71,6 +74,6 @@ PakeepListContainer.propTypes = {
     length: PropTypes.any,
     map: PropTypes.func
   })
-}
+};
 
 export default PakeepListContainer;

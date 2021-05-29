@@ -13,6 +13,8 @@ import {
 } from 'store/modules/App/selectors';
 import { difference, filter, flatten } from 'lodash';
 import WrapperOfContainerOfPakeepList from './components/WrapperOfContainer';
+import { useRef, useState } from 'react';
+import SelectofFPakeepListContainer from './components/WrapperOfContainer/components/Container/components/Selecto';
 // const WrapperOfContainerOfPakeepList = dynamic(() => import(), {
 //   loading: () => (
 //     <Grid style={{ height: '80vh', width: '100%' }} container alignItems={'center'} justify={'center'}>
@@ -29,34 +31,42 @@ const PakeepList = ({
   folders,
   pinnedPakeepsOrderNames,
   handleSetPreviusOrderNames,
-  handleSetOrderNamesOfPinnedPakeepsThunk,
+  handleSetOrderNamesOfPinnedPakeepsThunk
 }) => {
+  const [isPakeepDragging, setIsPakeepDragging] = useState(false);
+console.log(isPakeepDragging)
   const flattenFolder = flatten(folders);
   const folderProperty = flattenFolder[currentFolderPropertyIdx]?.property;
   const folderId = flattenFolder[currentFolderPropertyIdx]?.id;
 
   const isFolderPropertyIsAll = folderProperty === 'ALL';
   const pinnedPakeeps = filter(pakeeps, ({ isPinned }) => !!isPinned);
-// console.log(pinnedPakeepsOrderNames)
+  // console.log(pinnedPakeepsOrderNames)
   const wrapperOfContainerOfPinnedPakeepListProps = {
     pakeepListContainerProps: { folderProperty, folderId, isPakeepDragContextPinned: isFolderPropertyIsAll },
     pakeeps: pinnedPakeeps,
+    setIsPakeepDragging,
     pakeepsOrderNames: pinnedPakeepsOrderNames,
-    handleSetPreviusOrderNamesFunc: handleSetOrderNamesOfPinnedPakeepsThunk,
+    handleSetPreviusOrderNamesFunc: handleSetOrderNamesOfPinnedPakeepsThunk
   };
 
   const wrapperOfContainerOfAllPakeepListProps = {
     pakeepListContainerProps: { folderProperty, folderId, isPakeepDragContextPinned: false },
-    // pakeeps: pakeepsOrderNames ? notPinnedPakeeps : pakeeps ,
+    setIsPakeepDragging,
     pakeeps,
     pakeepsOrderNames,
-    handleSetPreviusOrderNamesFunc: handleSetPreviusOrderNames,
+    handleSetPreviusOrderNamesFunc: handleSetPreviusOrderNames
   };
+  const scrollerRef = useRef(null);
+
   return (
     <>
-      {isFolderPropertyIsAll && <WrapperOfContainerOfPakeepList {...wrapperOfContainerOfPinnedPakeepListProps} />}
+      <Grid ref={scrollerRef} className={'selectoContainer'}>
+        {isFolderPropertyIsAll && <WrapperOfContainerOfPakeepList {...wrapperOfContainerOfPinnedPakeepListProps} />}
 
-      <WrapperOfContainerOfPakeepList {...wrapperOfContainerOfAllPakeepListProps} />
+        <WrapperOfContainerOfPakeepList {...wrapperOfContainerOfAllPakeepListProps} />
+        {!isPakeepDragging && <SelectofFPakeepListContainer scrollerRef={scrollerRef} />}
+      </Grid>
     </>
   );
 };

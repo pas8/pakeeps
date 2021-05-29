@@ -160,11 +160,11 @@ const PakeepElement = ({
   if (!statusState.isLoaded) return <SkeletonView />;
   const AnimationElement = utilsViewLikeInGoogleKeep ? Fade : Grow;
   return (
-    <Grid item onMouseEnter={handleSetIsHovering} onMouseLeave={handleSetIsUnHovering} ref={ref}>
+    <Grid item onMouseEnter={handleSetIsHovering} onMouseLeave={handleSetIsUnHovering} ref={ref} className={'selectoItem'}>
       <Paper
         variant={'outlined'}
         {...handlers}
-        className={clsx(classes.paper, isDragging && classes.isDragging, statusState.isHovered && classes.isHovered)}
+        className={clsx(classes.paper, isDragging && classes.isDragging, statusState.isHovered && classes.isHovered,)}
       >
         {statusState.isHovered && isPinIconShouldBeShownInPakeep && (
           <IconButton className={classes.containerOfPinIcon} onClick={handleSetIsPinnedPakeep}>
