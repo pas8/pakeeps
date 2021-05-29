@@ -9,7 +9,6 @@ export const useMakeDraggableArr = (
   handlePakeepsOrderNames,
   maxColumnNumber = 6,
   defaultBreakpointValue = [6, 4, 3, 2, 1],
-  isPinned = true
 ) => {
   useEffect(() => pakeepsOrderNames.length === 0 && handlePakeepsOrderNames(pakeeps.map(({ id }) => id)), [pakeeps]);
 

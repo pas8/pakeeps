@@ -264,6 +264,29 @@ const AppReducer = createReducer(initialState)({
     ...state,
     folders: foldersArr
   }),
+  [types.HANDLE_PIN_STATUS_OF_PAKEEPS]: (state, { pakeepId }) => {
+    console.log(pakeepId);
+    const findedPakeep = find(state.pakeeps, ({ id }) => id === pakeepId);
+    const isPinned = findedPakeep.isPinned;
+    const filteredPakeeps = filter(state.pakeeps, ({ id }) => pakeepId !== id);
+
+    const newAddedPakeepOrderNames = includes(state.pakeepsOrderNames, findedPakeep.id)
+      ? state.pakeepsOrderNames
+      : [...state.pakeepsOrderNames, findedPakeep.id];
+
+    const pakeepsOrderNames = isPinned
+      ? newAddedPakeepOrderNames
+      : filter(state.pakeepsOrderNames, ({ id }) => pakeepId !== id);
+
+    const pinnedPakeepsOrderNames = !isPinned
+      ? [...state.pinnedPakeepsOrderNames, findedPakeep.id]
+      : filter(state.pinnedPakeepsOrderNames, ({ id }) => pakeepId !== id);
+
+    const handlelingPakeep = { ...findedPakeep, isPinned: !isPinned };
+    const pakeeps = [...filteredPakeeps, handlelingPakeep];
+    console.log(pakeepsOrderNames);
+    return { ...state, pakeeps, pakeepsOrderNames, pinnedPakeepsOrderNames };
+  },
 
   [types.ADD_NEW_GLOBAL_LABEL]: (state, { newLabel }) => ({
     ...state,

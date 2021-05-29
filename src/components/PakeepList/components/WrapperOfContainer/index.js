@@ -1,11 +1,7 @@
-import { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
-import { usePrevious } from 'react-use';
 import { useMakeDraggableArr } from 'hooks/useMakeDraggableArr.hook';
 import PakeepListContainer from './components/Container';
-import { connect } from 'react-redux';
-import { getPakeepsOrderNames } from 'store/modules/App/selectors';
 
 const WrapperOfContainerOfPakeepList = ({
   pakeeps,

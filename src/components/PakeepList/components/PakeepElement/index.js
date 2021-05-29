@@ -13,12 +13,15 @@ import { getFilteredLabels } from 'store/modules/App/selectors';
 import {
   changeLabelItemThunk,
   handkePakeepPropertyThunk,
-  handleDeleteLabelFromPakeepThunk
+  handleDeleteLabelFromPakeepThunk,
+  handlePinStatusPakeepThunk
 } from 'store/modules/App/operations';
 import { useSwipeable } from 'react-swipeable';
 import { useGetReadableColor } from 'hooks/useGetReadableColor.hook';
 import PinOutlinedIcon from 'components/Icons/components/PinOutlinedIcon';
 import PinIcon from 'components/Icons/components/PinIcon';
+import { useIsColorDark } from 'hooks/useIsColorDark.hook';
+import { colord } from 'colord';
 
 const useStyles = makeStyles(theme => ({
   paper: ({ customColor, backgroundColor, isBackgroundColorDefault, utilsViewLikeInGoogleKeep }) => ({
@@ -39,7 +42,10 @@ const useStyles = makeStyles(theme => ({
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen
     }),
-    borderColor: customColor ? customColor.unHover : themeColors.whiteRgbaColorWith0dot8valueOfAlfaCanal
+    borderColor:
+      customColor && useIsColorDark(customColor.unHover)
+        ? customColor.unHover
+        : themeColors.whiteRgbaColorWith0dot8valueOfAlfaCanal
   }),
 
   iconsUtils: {
@@ -62,16 +68,19 @@ const useStyles = makeStyles(theme => ({
   },
   isDragging: ({ customColor }) => ({
     borderColor: !customColor && themeColors.primaryMain,
-    boxShadow: customColor && `0px 0px 8px ${customColor.hover} !important`
+    boxShadow: !!customColor && `0px 0px 8px 2px ${customColor.hover} !important`
   }),
   containerOfPinIcon: ({ customColor }) => ({
     position: 'absolute',
-    top: 0,
-    right: 0,
+    top: theme.spacing(0.42),
+    right: theme.spacing(0.2),
 
-    color: customColor ? customColor.unHover : themeColors.whiteRgbaColorWith0dot8valueOfAlfaCanal,
+    color: customColor ? customColor.unHover : themeColors.whiteRgbaColorWith0dot42valueOfAlfaCanal,
     '&:hover': {
-      color: customColor ? customColor.hover : themeColors.whiteRgbaColorWith0dot96valueOfAlfaCanal
+      background: colord(customColor ? customColor.hover : themeColors.whiteRgbaColorWith0dot8valueOfAlfaCanal)
+        .alpha(0.16)
+        .toHex(),
+      color: customColor ? customColor.hover : themeColors.whiteRgbaColorWith0dot8valueOfAlfaCanal
     }
   })
 }));
@@ -93,7 +102,8 @@ const PakeepElement = ({
   handleDeleteLabelFromPakeepThunk,
   changeLabelItemThunk,
   handkePakeepPropertyThunk,
-  isPinIconShouldBeShownInPakeep
+  isPinIconShouldBeShownInPakeep,
+  handlePinStatusPakeepThunk
 }) => {
   const [customColor, isBackgroundColorDefault, isColorDefault] = useGetReadableColor(backgroundColor, color);
 
@@ -117,6 +127,8 @@ const PakeepElement = ({
   const handleSetColorPakeep = color => handkePakeepPropertyThunk(id, { color });
   const handleSetBackgroundColorPakeep = backgroundColor => handkePakeepPropertyThunk(id, { backgroundColor });
 
+const handleSetIsPinnedPakeep = () => handlePinStatusPakeepThunk(id)
+
   const iconsUtilsProps = {
     isAllIconsIsShown: false,
     widthOfContainer,
@@ -133,7 +145,8 @@ const PakeepElement = ({
     isBackgroundColorDefault,
     isColorDefault,
     iconsCloser: true,
-    customColor
+    customColor,
+    handleSetIsPinnedPakeep
   };
 
   const handlers = useSwipeable({
@@ -153,8 +166,8 @@ const PakeepElement = ({
         {...handlers}
         className={clsx(classes.paper, isDragging && classes.isDragging, statusState.isHovered && classes.isHovered)}
       >
-        {isPinIconShouldBeShownInPakeep && (
-          <IconButton className={classes.containerOfPinIcon}>
+        {statusState.isHovered && isPinIconShouldBeShownInPakeep && (
+          <IconButton className={classes.containerOfPinIcon} onClick={handleSetIsPinnedPakeep}>
             {customColor ? <PinIcon /> : <PinOutlinedIcon />}
           </IconButton>
         )}
@@ -207,7 +220,8 @@ const mapStateToProps = ({ settings: { utilsViewLikeInGoogleKeep }, app: { label
 const mapDispatchToProps = dispatch => ({
   handleDeleteLabelFromPakeepThunk: (pakeepId, labelId) =>
     dispatch(handleDeleteLabelFromPakeepThunk(pakeepId, labelId)),
-  handkePakeepPropertyThunk: (pakeepId, property) => dispatch(handkePakeepPropertyThunk(pakeepId, property))
+  handkePakeepPropertyThunk: (pakeepId, property) => dispatch(handkePakeepPropertyThunk(pakeepId, property)),
+  handlePinStatusPakeepThunk: pakeepId => dispatch(handlePinStatusPakeepThunk(pakeepId))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(PakeepElement);

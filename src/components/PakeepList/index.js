@@ -30,8 +30,6 @@ const PakeepList = ({
   pinnedPakeepsOrderNames,
   handleSetPreviusOrderNames,
   handleSetOrderNamesOfPinnedPakeepsThunk,
-  isUsePreviuosOrder = false,
-  isUsePinnedPreviuosOrder
 }) => {
   const flattenFolder = flatten(folders);
   const folderProperty = flattenFolder[currentFolderPropertyIdx]?.property;
@@ -39,22 +37,22 @@ const PakeepList = ({
 
   const isFolderPropertyIsAll = folderProperty === 'ALL';
   const pinnedPakeeps = filter(pakeeps, ({ isPinned }) => !!isPinned);
-  // const notPinnedPakeeps = difference(pakeeps, pinnedPakeeps);
+  const notPinnedPakeeps = difference(pakeeps, pinnedPakeeps);
+  console.log(pakeepsOrderNames)
 // console.log(pinnedPakeepsOrderNames)
   const wrapperOfContainerOfPinnedPakeepListProps = {
     pakeepListContainerProps: { folderProperty, folderId, isPakeepDragContextPinned: isFolderPropertyIsAll },
     pakeeps: pinnedPakeeps,
     pakeepsOrderNames: pinnedPakeepsOrderNames,
     handleSetPreviusOrderNamesFunc: handleSetOrderNamesOfPinnedPakeepsThunk,
-    isUsePreviuosOrder
   };
 
   const wrapperOfContainerOfAllPakeepListProps = {
     pakeepListContainerProps: { folderProperty, folderId, isPakeepDragContextPinned: false },
-    pakeeps:  pakeeps,
+    // pakeeps: pakeepsOrderNames ? notPinnedPakeeps : pakeeps ,
+    pakeeps,
     pakeepsOrderNames,
     handleSetPreviusOrderNamesFunc: handleSetPreviusOrderNames,
-    isUsePreviuosOrder
   };
   return (
     <>
@@ -83,7 +81,6 @@ const mapStateToProps = ({
   pakeepsOrderNames: getPakeepsOrderNames(pakeepsOrderNames),
   pinnedPakeepsOrderNames: getPinnedPakeepsOrderNames(pinnedPakeepsOrderNames),
   currentFolderPropertyIdx: getCurrentFolderPropertyIdx(currentFolderPropertyIdx),
-  isUsePreviuosOrder: getIsUsePreviuosOrder(isUsePreviuosOrder),
   folders: getFolders(folders)
 });
 const mapDispatchToProps = dispatch => ({
