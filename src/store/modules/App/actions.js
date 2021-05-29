@@ -45,3 +45,7 @@ export const toHandleDrawerWidth = drawerWidth => ({ type: types.HANDLE_DRAWER_W
 export const toAddNewGlobalLabel = newLabel => ({ type: types.ADD_NEW_GLOBAL_LABEL, newLabel });
 export const toSetNewPakeepsArr = pakeeps => ({ type: types.HANDLE_PAKEEPS, pakeeps });
 
+export const toHandlePinStatusPakeep = pakeepId => ({ type: types.HANDLE_PIN_STATUS_OF_PAKEEPS, pakeepId });
+
+
+

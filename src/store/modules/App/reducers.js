@@ -1,4 +1,4 @@
-import { filter, find, pickBy } from 'lodash';
+import { filter, find, pickBy, includes } from 'lodash';
 import { createReducer } from 'store/utils';
 import * as types from './types';
 
@@ -232,8 +232,8 @@ const initialState = {
     // },
   ],
   // pakeepsOrderNames: ['pakeep1', 'pakeep2', 'pakeep3', 'pakeep4', 'pakeep5', 'pakeep6'],
-  pakeepsOrderNames: ['pakeep1', 'pakeep2', 'pakeep3', 'pakeep4', 'pakeep5', 'pakeep6'],
-  pinnedPakeepsOrderNames:[],
+  pakeepsOrderNames: [],
+  pinnedPakeepsOrderNames: [],
   notifinationCounter: 8,
   isMenuOpen: false,
   scrollDirectionName: 'up',
@@ -243,10 +243,17 @@ const initialState = {
 };
 
 const AppReducer = createReducer(initialState)({
-  [types.ADD_NEW_PAKEEP]: (state, { newPaKeep }) => ({
-    ...state,
-    pakeeps: [...state.pakeeps, newPaKeep]
-  }),
+  [types.ADD_NEW_PAKEEP]: (state, { newPaKeep }) => {
+    const isPinned = newPaKeep?.isPinned;
+
+    const pakeeps = [...state.pakeeps, newPaKeep];
+    const pakeepsOrderNames = isPinned ? state.pakeepsOrderNames : [...state.pakeepsOrderNames, newPaKeep.id];
+    const pinnedPakeepsOrderNames = isPinned
+      ? [...state.pinnedPakeepsOrderNames, newPaKeep.id]
+      : state.pinnedPakeepsOrderNames;
+
+    return { ...state, pinnedPakeepsOrderNames, pakeepsOrderNames, pakeeps };
+  },
   // [types.HANDLE_CHANGE_PAKEEP_PROPERTY]: (state, { newPaKeep }) => ({
   //   ...state,
 
@@ -257,6 +264,29 @@ const AppReducer = createReducer(initialState)({
     ...state,
     folders: foldersArr
   }),
+  [types.HANDLE_PIN_STATUS_OF_PAKEEPS]: (state, { pakeepId }) => {
+    console.log(pakeepId);
+    const findedPakeep = find(state.pakeeps, ({ id }) => id === pakeepId);
+    const isPinned = findedPakeep.isPinned;
+    const filteredPakeeps = filter(state.pakeeps, ({ id }) => pakeepId !== id);
+
+    const newAddedPakeepOrderNames = includes(state.pakeepsOrderNames, findedPakeep.id)
+      ? state.pakeepsOrderNames
+      : [...state.pakeepsOrderNames, findedPakeep.id];
+    const filteredPakeepsOrderNames = filter(state.pakeepsOrderNames, ({ id }) => pakeepId !== id);
+    const pakeepsOrderNames = isPinned ? newAddedPakeepOrderNames : filteredPakeepsOrderNames;
+
+    const newAddedPinnedPakeepOrderNames = includes(state.pinnedPakeepsOrderNames, findedPakeep.id)
+      ? state.pinnedPakeepsOrderNames
+      : [...state.pinnedPakeepsOrderNames, findedPakeep.id];
+
+    const filteredPinnedPakeepsOrderNames = filter(state.pinnedPakeepsOrderNames, ({ id }) => pakeepId !== id);
+    const pinnedPakeepsOrderNames = !isPinned ? newAddedPinnedPakeepOrderNames : filteredPinnedPakeepsOrderNames;
+
+    const handlelingPakeep = { ...findedPakeep, isPinned: !isPinned };
+    const pakeeps = [...filteredPakeeps, handlelingPakeep];
+    return { ...state, pakeeps, pakeepsOrderNames, pinnedPakeepsOrderNames };
+  },
 
   [types.ADD_NEW_GLOBAL_LABEL]: (state, { newLabel }) => ({
     ...state,

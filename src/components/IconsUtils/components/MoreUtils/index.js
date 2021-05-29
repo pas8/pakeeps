@@ -15,7 +15,7 @@ const MoreUtils = ({ slicedArrAfter }) => {
   const classes = useStyles();
   return (
     <>
-      {slicedArrAfter.map(({ popoverText, icon: Icon, isIconActive }) => {
+      {slicedArrAfter.map(({ popoverText, icon: Icon, isIconActive, onClick }) => {
         const hoveredWrapperOfMenuItem = hovered => {
           const activeColor = isIconActive && themeColors.primaryMain;
 
@@ -26,9 +26,7 @@ const MoreUtils = ({ slicedArrAfter }) => {
           const textColor = activeColor || textHoveredColor || themeColors.whiteRgbaColorWith0dot8valueOfAlfaCanal;
 
           return (
-            <MenuItem disableGutters 
-            key={nanoid()}
-            >
+            <MenuItem disableGutters onClick={onClick} key={nanoid()}>
               <Grid className={clsx(classes.itemGrid)} container>
                 <Icon style={{ color: iconColor }} />
                 <Grid item className={classes.menuText}>

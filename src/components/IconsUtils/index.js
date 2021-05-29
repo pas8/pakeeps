@@ -61,7 +61,7 @@ const IconsUtils = ({
   backgroundColor,
   handleSetIsCheckBoxesPakeep,
   isColorDefault,
-  isBackgroundColorDefault
+  isBackgroundColorDefault,
 }) => {
   const handleClick = () => console.log('placeholder');
   const buttonUtilsNewPakeepArray = [

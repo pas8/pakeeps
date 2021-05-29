@@ -1,28 +1,28 @@
-import { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
-import { usePrevious } from 'react-use';
 import { useMakeDraggableArr } from 'hooks/useMakeDraggableArr.hook';
+import PakeepListContainer from './components/Container';
 
 const WrapperOfContainerOfPakeepList = ({
   pakeeps,
   pakeepsOrderNames,
   handleSetPreviusOrderNamesFunc,
-  isUsePreviuosOrder = false,
+  isUsePreviuosOrder,
   pakeepListContainerProps
 }) => {
   const placeholderName = 'placeholder';
 
-  const previousPakeepsOrderNames = usePrevious(pakeepsOrderNames);
+  // const previousPakeepsOrderNames = usePrevious(pakeepsOrderNames);
 
-  useEffect(() => {
-    handleSetPreviusOrderNamesFunc(previousPakeepsOrderNames);
-  }, [isUsePreviuosOrder]);
+  // useEffect(() => {
+  //   handleSetPreviusOrderNamesFunc(previousPakeepsOrderNames);
+  // }, [isUsePreviuosOrder]);
 
   const [columns, responsiveColumnOrder] = useMakeDraggableArr(
     pakeeps,
     pakeepsOrderNames,
     handleSetPreviusOrderNamesFunc
+    // pakeepListContainerProps.isPakeepDragContextPinned
   );
 
   const onDragStart = () => null;
@@ -63,6 +63,7 @@ const WrapperOfContainerOfPakeepList = ({
         return [...sum, newOrderNamesPakeepsElementId];
       };
       const newOrderNames = pakeepsOrderNames.reduce(newOrderNamesReduceFunc, []);
+
       return handleSetPreviusOrderNamesFunc(newOrderNames);
     }
 
@@ -108,14 +109,16 @@ const WrapperOfContainerOfPakeepList = ({
     const newPakeepsOrderNames = _.concat(pakeepsOrderNames, placholderArrWhichShouldBeConcated);
     const reducedOrderNames = _.reduce(newPakeepsOrderNames, newOrderNamesReduceFunc, []);
 
-    const stringNewOrderNames = _.join(reducedOrderNames, '_');
-    const placeholderPattern = _.join(Array(columnOrderLenght).fill(placeholderName), '_');
+    const uniqName = 'FUCK_UP';
+    const stringNewOrderNames = _.join(reducedOrderNames, uniqName);
+    const placeholderPattern = _.join(Array(columnOrderLenght).fill(placeholderName), uniqName);
 
     const toRemoveNameString = 'toRemove';
     const toSplitNewOrderString = stringNewOrderNames.replaceAll(placeholderPattern, toRemoveNameString);
-    const filteredNewOrderArr = _.split(toSplitNewOrderString, '_');
+    const filteredNewOrderArr = _.split(toSplitNewOrderString, uniqName);
 
     const newOrderNames = _.filter(filteredNewOrderArr, string => string !== toRemoveNameString);
+
     return handleSetPreviusOrderNamesFunc(newOrderNames);
   };
 
@@ -123,6 +126,7 @@ const WrapperOfContainerOfPakeepList = ({
     ...pakeepListContainerProps,
     responsiveColumnOrder,
     columns,
+    pakeeps,
     onDragEnd,
     onDragStart,
     placeholderName
