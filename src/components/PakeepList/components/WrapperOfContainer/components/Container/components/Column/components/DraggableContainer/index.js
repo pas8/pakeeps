@@ -3,14 +3,14 @@ import { Draggable } from 'react-beautiful-dnd';
 import PropTypes from 'prop-types';
 import PakeepElement from 'components/PakeepList/components/PakeepElement';
 
-const DraggableContainerOfPakeepElement = ({ draggableProps, el, idx }) => (
+const DraggableContainerOfPakeepElement = ({ draggableProps, el, idx ,draggableContainerClassName}) => (
   <Draggable {...draggableProps}>
     {(provided, { isDragging }) => {
       const draggableContainerProps = {
         ...provided.dragHandleProps,
         ...provided.draggableProps,
         innerRef: provided.innerRef,
-        className: classes.columnElement
+        className: draggableContainerClassName
       };
 
       const pakeepElementProps = { ...el, isDragging, idx };
@@ -25,9 +25,10 @@ const DraggableContainerOfPakeepElement = ({ draggableProps, el, idx }) => (
 );
 
 DraggableContainerOfPakeepElement.propTypes = {
+  draggableContainerClassName: PropTypes.any,
   draggableProps: PropTypes.object,
   el: PropTypes.object,
   idx: PropTypes.number
-};
+}
 
 export default DraggableContainerOfPakeepElement;

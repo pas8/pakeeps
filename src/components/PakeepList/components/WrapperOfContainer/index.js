@@ -3,12 +3,13 @@ import PropTypes from 'prop-types';
 import _ from 'lodash';
 import { usePrevious } from 'react-use';
 import { useMakeDraggableArr } from 'hooks/useMakeDraggableArr.hook';
+import PakeepListContainer from './components/Container';
 
 const WrapperOfContainerOfPakeepList = ({
   pakeeps,
   pakeepsOrderNames,
   handleSetPreviusOrderNamesFunc,
-  isUsePreviuosOrder = false,
+  isUsePreviuosOrder ,
   pakeepListContainerProps
 }) => {
   const placeholderName = 'placeholder';
@@ -123,6 +124,7 @@ const WrapperOfContainerOfPakeepList = ({
     ...pakeepListContainerProps,
     responsiveColumnOrder,
     columns,
+    pakeeps,
     onDragEnd,
     onDragStart,
     placeholderName

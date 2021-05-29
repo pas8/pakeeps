@@ -31,7 +31,9 @@ const PakeepList = ({
   pakeepsOrderNames,
   currentFolderPropertyIdx,
   folders,
+  pinnedPakeepsOrderNames,
   handleSetPreviusOrderNames,
+  handleSetOrderNamesOfPinnedPakeepsThunk,
   isUsePreviuosOrder = false
 }) => {
   const flattenFolder = flatten(folders);
@@ -39,15 +41,31 @@ const PakeepList = ({
   const folderProperty = flattenFolder[currentFolderPropertyIdx]?.property;
   const folderId = flattenFolder[currentFolderPropertyIdx]?.id;
 
-  const wrapperOfContainerOfPinnedPakeepListProps = {};
-  const wrapperOfContainerOfAllPakeepListProps = {
-    pakeepListContainerProps: {}
-  };
+  const isFolderPropertyIsAll = folderProperty === 'ALL';
 
+  // const defaultWrapperContainerProps = {
+
+  // }
+
+  const wrapperOfContainerOfPinnedPakeepListProps = {
+    pakeepListContainerProps: { folderProperty, folderId, isPakeepDragContextPinned: isFolderPropertyIsAll },
+    pakeeps,
+    pakeepsOrderNames:   pinnedPakeepsOrderNames,
+    handleSetPreviusOrderNamesFunc: handleSetOrderNamesOfPinnedPakeepsThunk,
+    isUsePreviuosOrder
+  };
+  const wrapperOfContainerOfAllPakeepListProps = {
+    pakeepListContainerProps: { folderProperty, folderId, isPakeepDragContextPinned: false },
+    pakeeps,
+    pakeepsOrderNames,
+    handleSetPreviusOrderNamesFunc: handleSetPreviusOrderNames,
+    isUsePreviuosOrder
+  };
+console.log(pinnedPakeepsOrderNames)
   return (
     <>
       <WrapperOfContainerOfPakeepList {...wrapperOfContainerOfAllPakeepListProps} />
-      <WrapperOfContainerOfPakeepList {...wrapperOfContainerOfPinnedPakeepListProps} />
+      {isFolderPropertyIsAll && <WrapperOfContainerOfPakeepList {...wrapperOfContainerOfPinnedPakeepListProps} />}
     </>
   );
 };
@@ -75,8 +93,8 @@ const mapStateToProps = ({
 });
 const mapDispatchToProps = dispatch => ({
   handleSetPreviusOrderNames: orderNames => dispatch(handleSetPreviusOrderNames(orderNames)),
-  handlePakeepsOrderNamesThunk: newOrder => dispatch(handlePakeepsOrderNamesThunk(newOrder)),
-  handleSetOrderNamesOfPinnedPakeepsThunk: newOrder => dispatch(handleSetOrderNamesOfPinnedPakeepsThunk(newOrder))
+  // handlePakeepsOrderNamesThunk: newOrder => dispatch(handlePakeepsOrderNamesThunk(newOrder)),
+  handleSetOrderNamesOfPinnedPakeepsThunk: orderNames => dispatch(handleSetOrderNamesOfPinnedPakeepsThunk(orderNames))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(PakeepList);

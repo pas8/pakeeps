@@ -15,7 +15,9 @@ import {
   toSetPreviusOrderNames,
   toHandleDrawerWidth,
   toAddNewGlobalLabel,
-  toSetNewPakeepsArr
+  toSetNewPakeepsArr,
+toSetOrderNamesOfPinnedPakeeps
+
 } from './actions';
 
 export const addNewPaKeepThunk = data => dispatch => {

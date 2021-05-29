@@ -5,31 +5,32 @@ import { Droppable } from 'react-beautiful-dnd';
 import clsx from 'clsx';
 import { useCustomBreakpoint } from 'hooks/useCustomBreakpoint';
 import DraggableContainerOfPakeepElement from './components/DraggableContainer';
+import { useValidationOfPakeepsInColumn } from 'hooks/useValidationOfPakeepsInColumn.hook';
 
 const paddingValue = 0.8;
 const paddingValueX = 0.8 * 2;
 const paddingValueOfElement = 0.8 * (2 + 1);
 
-const useStyles = makeStyles(({ spacing, breakpoints }) => ({
-  column: { padding: spacing(0, paddingValue), border: '2px solid blue' },
+const useStyles = makeStyles(({ spacing, breakpoints: { down } }) => ({
+  column: { padding: spacing(0, paddingValue),  },
   columnFirst: {
     padding: spacing(0),
     paddingRight: spacing(paddingValueX),
-    [breakpoints.down('sm')]: {
+    [down('sm')]: {
       paddingRight: spacing(paddingValueX / 1.8)
     }
   },
   columnLast: {
     padding: spacing(0),
     paddingLeft: spacing(paddingValueX),
-    [breakpoints.down('sm')]: {
+    [down('sm')]: {
       paddingLeft: spacing(paddingValueX / 1.8)
     }
   },
   columnElement: {
     margin: spacing(0),
     marginBottom: spacing(paddingValueOfElement),
-    [breakpoints.down('sm')]: {
+    [down('sm')]: {
       marginBottom: spacing(paddingValueOfElement / 1.2)
     }
   }
@@ -41,7 +42,8 @@ const ColumnOfPakeepListContainer = ({
   isLastColumn,
   isFirstColumn,
   folderProperty,
-  folderId
+  folderId,
+  isPakeepDragContextPinned
 }) => {
   const classes = useStyles();
   const [breakpoint] = useCustomBreakpoint();
@@ -64,19 +66,18 @@ const ColumnOfPakeepListContainer = ({
             {pakeepsInColumn.map((el, idx) => {
               const draggableProps = { key: el.id, index: idx, draggableId: el.id };
 
-              const draggableContainerOfPakeepElementProps = { draggableProps, el, idx };
+              const draggableContainerClassName = classes.columnElement;
+              const draggableContainerOfPakeepElementProps = { draggableProps, el, idx, draggableContainerClassName };
+
               const draggableEl = <DraggableContainerOfPakeepElement {...draggableContainerOfPakeepElementProps} />;
 
-              if (folderProperty === 'isArchived' && el[folderProperty]) return draggableEl;
-              if (el.isArchived) return;
-              if (el[folderProperty] && folderProperty !== 'label') return draggableEl;
-              if (folderProperty !== 'isPinned' && el.isPinned) return;
-
-              if (folderProperty === 'ALL') return draggableEl;
-
-              if (folderProperty === 'label' && !!_.find(el?.labels, id => id === folderId)) return draggableEl;
-
-              return;
+            
+              const validDraggableEl = useValidationOfPakeepsInColumn(
+                isPakeepDragContextPinned,
+                { el, folderProperty, folderId },
+                draggableEl
+              );
+              return validDraggableEl;
             })}
             {provided.placeholder}
           </Grid>
@@ -90,13 +91,14 @@ ColumnOfPakeepListContainer.propTypes = {
   column: PropTypes.shape({
     id: PropTypes.any
   }),
-  isFirstColumn: PropTypes.any,
   folderId: PropTypes.any,
   folderProperty: PropTypes.string,
-  isLastColumn: PropTypes.any,
+  isFirstColumn: PropTypes.bool,
+  isLastColumn: PropTypes.bool,
+  isPakeepDragContextPinned: PropTypes.bool,
   pakeepsInColumn: PropTypes.shape({
     map: PropTypes.func
   })
-};
+}
 
 export default ColumnOfPakeepListContainer;
