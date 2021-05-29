@@ -34,7 +34,8 @@ const PakeepList = ({
   handleSetOrderNamesOfPinnedPakeepsThunk
 }) => {
   const [isPakeepDragging, setIsPakeepDragging] = useState(false);
-console.log(isPakeepDragging)
+  const [selectedIds, setSelectedIds] = useState([]);
+
   const flattenFolder = flatten(folders);
   const folderProperty = flattenFolder[currentFolderPropertyIdx]?.property;
   const folderId = flattenFolder[currentFolderPropertyIdx]?.id;
@@ -59,13 +60,18 @@ console.log(isPakeepDragging)
   };
   const scrollerRef = useRef(null);
 
+  const selectofFPakeepListContainerProps = {
+    scrollerRef,
+    setSelectedIds
+  };
+console.log(selectedIds)
   return (
     <>
       <Grid ref={scrollerRef} className={'selectoContainer'}>
         {isFolderPropertyIsAll && <WrapperOfContainerOfPakeepList {...wrapperOfContainerOfPinnedPakeepListProps} />}
 
         <WrapperOfContainerOfPakeepList {...wrapperOfContainerOfAllPakeepListProps} />
-        {!isPakeepDragging && <SelectofFPakeepListContainer scrollerRef={scrollerRef} />}
+        {!isPakeepDragging && <SelectofFPakeepListContainer {...selectofFPakeepListContainerProps} />}
       </Grid>
     </>
   );

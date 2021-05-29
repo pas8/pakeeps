@@ -159,22 +159,30 @@ const PakeepElement = ({
 
   if (!statusState.isLoaded) return <SkeletonView />;
   const AnimationElement = utilsViewLikeInGoogleKeep ? Fade : Grow;
+
+  const pakeepGridContainerPorps = {
+    onMouseEnter: handleSetIsHovering,
+    onMouseLeave: handleSetIsUnHovering,
+    ref,
+    className: 'selectoItem',
+    [id]: id
+  };
   return (
-    <Grid item onMouseEnter={handleSetIsHovering} onMouseLeave={handleSetIsUnHovering} ref={ref} className={'selectoItem'}>
+    <Grid {...pakeepGridContainerPorps}>
       <Paper
         variant={'outlined'}
         {...handlers}
-        className={clsx(classes.paper, isDragging && classes.isDragging, statusState.isHovered && classes.isHovered,)}
+        className={clsx(classes.paper, isDragging && classes.isDragging, statusState.isHovered && classes.isHovered)}
       >
         {statusState.isHovered && isPinIconShouldBeShownInPakeep && (
           <IconButton className={classes.containerOfPinIcon} onClick={handleSetIsPinnedPakeep}>
             {customColor ? <PinIcon /> : <PinOutlinedIcon />}
           </IconButton>
         )}
-        <Grid item className={classes.title}>
+        <Grid className={classes.title}>
           <Typography variant={'h5'}>{title}</Typography>
         </Grid>
-        <Grid item>{text}</Grid>
+        <Grid>{text}</Grid>
 
         <AttributeGroup
           parentBackgrounColor={backgroundColor}

@@ -1,11 +1,12 @@
 import { Grid, makeStyles } from '@material-ui/core';
+import { drop, flatten } from 'lodash';
 import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
 import Selecto from 'react-selecto';
 
 const useStyles = makeStyles(theme => ({}));
 
-const SelectofFPakeepListContainer = ({scrollerRef}) => {
+const SelectofFPakeepListContainer = ({ scrollerRef,setSelectedIds }) => {
   const classes = useStyles();
   const [scrollOptions, setScrollOptions] = useState({});
 
@@ -13,10 +14,9 @@ const SelectofFPakeepListContainer = ({scrollerRef}) => {
     setScrollOptions({
       container: scrollerRef.current,
       throttleTime: 0,
-      threshold: 0
+      threshold: 100
     });
   }, []);
-
 
   const onDragStart = e => {
     if (e.inputEvent.target.nodeName === 'BUTTON') {
@@ -26,12 +26,10 @@ const SelectofFPakeepListContainer = ({scrollerRef}) => {
   };
 
   const onSelect = e => {
-    e.added.forEach(el => {
-      el.classList.add('selected');
-    });
-    e.removed.forEach(el => {
-      el.classList.remove('selected');
-    });
+    const selectedIdArr = flatten(e.selected.map(el => drop(el.getAttributeNames())));
+    setSelectedIds(selectedIdArr)
+    e.added.forEach(el => el.classList.add('selected'));
+    e.removed.forEach(el => el.classList.remove('selected'));
   };
 
   const onScroll = e => {
