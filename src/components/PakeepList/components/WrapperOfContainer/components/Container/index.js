@@ -21,10 +21,8 @@ const PakeepListContainer = ({
   columns,
   onDragEnd,
   placeholderName,
-  folderProperty,
   onDragStart,
-  folderId,
-  isPakeepDragContextPinned
+  columnOfPakeepListContainerProps
 }) => {
   const classes = useStyles();
 
@@ -44,17 +42,15 @@ const PakeepListContainer = ({
           const isLastColumn = !!(idx + 1 === responsiveColumnOrder.length);
           const isFirstColumn = !!(idx === 0);
 
-          const columnOfPakeepListContainerProps = {
-            folderProperty,
+          const allColumnOfPakeepListContainerProps = {
+            ...columnOfPakeepListContainerProps,
             key: column?.id,
-            folderId,
             column,
             isFirstColumn,
             isLastColumn,
-            pakeepsInColumn,
-            isPakeepDragContextPinned
+            pakeepsInColumn
           };
-          return <ColumnOfPakeepListContainer {...columnOfPakeepListContainerProps} />;
+          return <ColumnOfPakeepListContainer {...allColumnOfPakeepListContainerProps} />;
         })}
       </Grid>
     </DragDropContext>
@@ -63,11 +59,9 @@ const PakeepListContainer = ({
 
 PakeepListContainer.propTypes = {
   columns: PropTypes.any,
-  folderId: PropTypes.string,
-  folderProperty: PropTypes.string,
-  isPakeepDragContextPinned: PropTypes.bool,
   onDragEnd: PropTypes.func,
   onDragStart: PropTypes.func,
+  columnOfPakeepListContainerProps: PropTypes.object,
   pakeeps: PropTypes.array,
   placeholderName: PropTypes.string,
   responsiveColumnOrder: PropTypes.shape({

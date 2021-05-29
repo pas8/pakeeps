@@ -7,9 +7,8 @@ const WrapperOfContainerOfPakeepList = ({
   pakeeps,
   pakeepsOrderNames,
   handleSetPreviusOrderNamesFunc,
-    // pakeeps: pakeepsOrderNames ? notPinnedPakeeps : pakeeps ,
     setIsPakeepDragging,
-  pakeepListContainerProps
+    columnOfPakeepListContainerProps
 }) => {
   const placeholderName = 'placeholder';
 
@@ -124,7 +123,7 @@ const WrapperOfContainerOfPakeepList = ({
   };
 
   const allPakeepListContainerProps = {
-    ...pakeepListContainerProps,
+    columnOfPakeepListContainerProps,
     responsiveColumnOrder,
     columns,
     pakeeps,
@@ -141,7 +140,7 @@ WrapperOfContainerOfPakeepList.propTypes = {
   }),
   columns: PropTypes.object,
   handleSetPreviusOrderNamesFunc: PropTypes.func,
-  pakeepListContainerProps: PropTypes.any,
+  columnOfPakeepListContainerProps: PropTypes.any,
   pakeeps: PropTypes.any,
   pakeepsOrderNames: PropTypes.shape({
     filter: PropTypes.func,

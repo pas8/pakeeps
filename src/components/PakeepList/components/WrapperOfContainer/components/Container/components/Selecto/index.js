@@ -6,7 +6,7 @@ import Selecto from 'react-selecto';
 
 const useStyles = makeStyles(theme => ({}));
 
-const SelectofFPakeepListContainer = ({ scrollerRef,setSelectedIds }) => {
+const SelectofFPakeepListContainer = ({ scrollerRef, setSelectedIds, setIsSelecting }) => {
   const classes = useStyles();
   const [scrollOptions, setScrollOptions] = useState({});
 
@@ -19,15 +19,17 @@ const SelectofFPakeepListContainer = ({ scrollerRef,setSelectedIds }) => {
   }, []);
 
   const onDragStart = e => {
+    setIsSelecting(true);
     if (e.inputEvent.target.nodeName === 'BUTTON') {
       return false;
     }
     return true;
   };
 
+  const onDragEnd = () => setIsSelecting(false);
   const onSelect = e => {
     const selectedIdArr = flatten(e.selected.map(el => drop(el.getAttributeNames())));
-    setSelectedIds(selectedIdArr)
+    setSelectedIds(selectedIdArr);
     e.added.forEach(el => el.classList.add('selected'));
     e.removed.forEach(el => el.classList.remove('selected'));
   };
@@ -46,6 +48,7 @@ const SelectofFPakeepListContainer = ({ scrollerRef,setSelectedIds }) => {
     ratio: 0,
     scrollOptions,
     onDragStart,
+    onDragEnd,
     onSelect,
     onScroll
   };
@@ -53,6 +56,14 @@ const SelectofFPakeepListContainer = ({ scrollerRef,setSelectedIds }) => {
   return <Selecto {...selectoProps} />;
 };
 
-SelectofFPakeepListContainer.propTypes = {};
+SelectofFPakeepListContainer.propTypes = {
+  scrollerRef: PropTypes.shape({
+    current: PropTypes.shape({
+      scrollBy: PropTypes.func
+    })
+  }),
+  setIsSelecting: PropTypes.func,
+  setSelectedIds: PropTypes.func
+}
 
 export default SelectofFPakeepListContainer;

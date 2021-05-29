@@ -103,7 +103,8 @@ const PakeepElement = ({
   changeLabelItemThunk,
   handkePakeepPropertyThunk,
   isPinIconShouldBeShownInPakeep,
-  handlePinStatusPakeepThunk
+  handlePinStatusPakeepThunk,
+  isSelecting
 }) => {
   const [customColor, isBackgroundColorDefault, isColorDefault] = useGetReadableColor(backgroundColor, color);
 
@@ -156,7 +157,7 @@ const PakeepElement = ({
   // const setLabelHoverStatusIsFalse = () => setLabelHover(false);
   // const setLabelHoverStatus = () => setLabelHover({ title, isHovering: true });
   useEffect(() => setStatusState(state => ({ ...state, isLoaded: true })), []);
-
+// console.log(isSelecting)
   if (!statusState.isLoaded) return <SkeletonView />;
   const AnimationElement = utilsViewLikeInGoogleKeep ? Fade : Grow;
 
@@ -172,7 +173,7 @@ const PakeepElement = ({
       <Paper
         variant={'outlined'}
         {...handlers}
-        className={clsx(classes.paper, isDragging && classes.isDragging, statusState.isHovered && classes.isHovered)}
+        className={clsx(classes.paper, isDragging && classes.isDragging, statusState.isHovered && !isSelecting && classes.isHovered)}
       >
         {statusState.isHovered && isPinIconShouldBeShownInPakeep && (
           <IconButton className={classes.containerOfPinIcon} onClick={handleSetIsPinnedPakeep}>
@@ -193,7 +194,7 @@ const PakeepElement = ({
           handleDeleteLabelFromPakeepFunc={handleDeleteLabelFromPakeepThunk}
         />
 
-        <AnimationElement in={statusState.isHovered}>
+        <AnimationElement in={statusState.isHovered &&  !isSelecting}>
           <Grid className={classes.iconsUtils}>
             <IconsUtils {...iconsUtilsProps} />
           </Grid>
