@@ -1,12 +1,23 @@
 import HeaderByPas from 'components/Header/index';
-import { makeStyles } from '@material-ui/core';
+import { Grid, makeStyles } from '@material-ui/core';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { connect } from 'react-redux';
 import { getNavigationViewLike } from 'store/modules/Settings/selectors';
-import { getDrawerWidth } from 'store/modules/App/selectors';
+import { getDrawerWidth, getSelectedPakeep, getSelectedPakeepsId } from 'store/modules/App/selectors';
+import HeaderWhenActiveSelecto from 'components/HeaderWhenActiveSelecto';
+import {
+  handleCancelSelectingStatusThunk,
+  handlePinStatusPakeepThunk,
+  handleSelectedPakeepsPropertyThunk
+} from 'store/modules/App/operations';
 
 const useStyles = makeStyles(theme => ({
+  container: {
+    '& header': {
+      paddingRight: '0px !important'
+    }
+  },
   content: {
     flexGrow: 1,
     padding: theme.spacing(2.8),
@@ -35,7 +46,17 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const HeaderLayout = ({ children, isMenuOpen, drawerWidth, navigationViewLike }) => {
+const HeaderLayout = ({
+  children,
+  isMenuOpen,
+  drawerWidth,
+  navigationViewLike,
+  selectedPakeepsId,
+  handleCancelSelectingStatusThunk,
+  handleSelectedPakeepsPropertyThunk,
+  selectedPakeeps,
+  handlePinStatusPakeepThunk
+}) => {
   const navigationViewLikeTelegram = navigationViewLike === 'telegram';
   const navigationViewLikeGoogleKeep = navigationViewLike === 'googleKeep';
   const navigationViewLikePakeeps = navigationViewLike === 'pakeeps';
@@ -49,9 +70,23 @@ const HeaderLayout = ({ children, isMenuOpen, drawerWidth, navigationViewLike })
     isMenuOpen,
     drawerWidth
   };
+  const isShouldBeHeaderWhenActiveSelecto = selectedPakeeps.length > 0;
+
+  const cancelSelectedPakeepsId = () => {
+    handleCancelSelectingStatusThunk(true);
+  };
+  const headerWhenActiveSelectoProps = {
+    selectedPakeeps,
+    cancelSelectedPakeepsId,
+    handleSelectedPakeepsPropertyThunk,
+    handlePinStatusPakeepThunk,
+    selectedPakeepsId
+  };
+
   return (
-    <>
-      <HeaderByPas {...headerByPasProps} />
+    <Grid className={classes.container}>
+      {/* {true ? <HeaderWhenActiveSelecto {...headerWhenActiveSelectoProps} /> : <HeaderByPas {...headerByPasProps} />} */}
+      {isShouldBeHeaderWhenActiveSelecto ? <HeaderWhenActiveSelecto  {...headerWhenActiveSelectoProps}/> : <HeaderByPas {...headerByPasProps} />}
       <main
         className={clsx(classes.content, {
           [classes.contentShift]: isMenuOpen
@@ -59,17 +94,35 @@ const HeaderLayout = ({ children, isMenuOpen, drawerWidth, navigationViewLike })
       >
         {children}
       </main>
-    </>
+    </Grid>
   );
 };
 
 HeaderLayout.propTypes = {
-  children: PropTypes.node
+  children: PropTypes.node,
+  drawerWidth: PropTypes.number,
+  handleCancelSelectingStatusThunk: PropTypes.func,
+  isMenuOpen: PropTypes.bool,
+  navigationViewLike: PropTypes.string,
+  selectedPakeeps: PropTypes.array
 };
-const mapStateToProps = ({ app: { isMenuOpen, drawerWidth }, settings: { navigationViewLike } }) => ({
+const mapStateToProps = ({
+  app: { isMenuOpen, drawerWidth, selectedPakeepsId, pakeeps },
+  settings: { navigationViewLike }
+}) => ({
   isMenuOpen,
   drawerWidth: getDrawerWidth(drawerWidth),
-  navigationViewLike: getNavigationViewLike(navigationViewLike)
+  selectedPakeeps: getSelectedPakeep(selectedPakeepsId, pakeeps),
+  navigationViewLike: getNavigationViewLike(navigationViewLike),
+  selectedPakeepsId: getSelectedPakeepsId(selectedPakeepsId),
+
 });
 
-export default connect(mapStateToProps, null)(HeaderLayout);
+const mapDispatchToProps = dispatch => ({
+  handleCancelSelectingStatusThunk: boolValue => dispatch(handleCancelSelectingStatusThunk(boolValue)),
+  handlePinStatusPakeepThunk: id => dispatch(handlePinStatusPakeepThunk(id)),
+  handleSelectedPakeepsPropertyThunk: (newPakeeps, propertyVariant) =>
+    dispatch(handleSelectedPakeepsPropertyThunk(newPakeeps, propertyVariant))
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(HeaderLayout);

@@ -3,12 +3,18 @@ import { Grid, makeStyles } from '@material-ui/core';
 import { DragDropContext } from 'react-beautiful-dnd';
 import { find } from 'lodash';
 import ColumnOfPakeepListContainer from './components/Column/index';
+import { themeColors } from 'components/theme';
 
 const useStyles = makeStyles(({ spacing, breakpoints: { between, down } }) => ({
   container: {
     margin: spacing(4, 0, 0, 0),
     [between('xs', 'sm')]: { margin: spacing(2, 0, 0, 0) },
-    [down('md')]: { margin: spacing(4, 0, 0, 0) }
+    [down('md')]: { margin: spacing(4, 0, 0, 0) },
+    '& .selected > div ': {
+      boxShadow: `0px 0px 0px 1px ${themeColors.whiteRgbaColorWith0dot96valueOfAlfaCanal}`,
+      borderColor:themeColors.whiteRgbaColorWith0dot96valueOfAlfaCanal,
+    }
+    
   }
 }));
 
@@ -18,10 +24,8 @@ const PakeepListContainer = ({
   columns,
   onDragEnd,
   placeholderName,
-  folderProperty,
   onDragStart,
-  folderId,
-  isPakeepDragContextPinned
+  columnOfPakeepListContainerProps
 }) => {
   const classes = useStyles();
 
@@ -41,17 +45,15 @@ const PakeepListContainer = ({
           const isLastColumn = !!(idx + 1 === responsiveColumnOrder.length);
           const isFirstColumn = !!(idx === 0);
 
-          const columnOfPakeepListContainerProps = {
-            folderProperty,
+          const allColumnOfPakeepListContainerProps = {
+            ...columnOfPakeepListContainerProps,
             key: column?.id,
-            folderId,
             column,
             isFirstColumn,
             isLastColumn,
-            pakeepsInColumn,
-            isPakeepDragContextPinned
+            pakeepsInColumn
           };
-          return <ColumnOfPakeepListContainer {...columnOfPakeepListContainerProps} />;
+          return <ColumnOfPakeepListContainer {...allColumnOfPakeepListContainerProps} />;
         })}
       </Grid>
     </DragDropContext>
@@ -60,17 +62,15 @@ const PakeepListContainer = ({
 
 PakeepListContainer.propTypes = {
   columns: PropTypes.any,
-  folderId: PropTypes.string,
-  folderProperty: PropTypes.string,
-  isPakeepDragContextPinned: PropTypes.bool,
   onDragEnd: PropTypes.func,
   onDragStart: PropTypes.func,
+  columnOfPakeepListContainerProps: PropTypes.object,
   pakeeps: PropTypes.array,
   placeholderName: PropTypes.string,
   responsiveColumnOrder: PropTypes.shape({
     length: PropTypes.any,
     map: PropTypes.func
   })
-}
+};
 
 export default PakeepListContainer;

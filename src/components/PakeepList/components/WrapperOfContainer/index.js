@@ -7,8 +7,8 @@ const WrapperOfContainerOfPakeepList = ({
   pakeeps,
   pakeepsOrderNames,
   handleSetPreviusOrderNamesFunc,
-  isUsePreviuosOrder,
-  pakeepListContainerProps
+    setIsPakeepDragging,
+    columnOfPakeepListContainerProps
 }) => {
   const placeholderName = 'placeholder';
 
@@ -25,11 +25,12 @@ const WrapperOfContainerOfPakeepList = ({
     // pakeepListContainerProps.isPakeepDragContextPinned
   );
 
-  const onDragStart = () => null;
+    const onDragStart = () => setIsPakeepDragging(true)
 
   const onDragEnd = ({ destination, source, draggableId }) => {
     if (!destination) return;
     if (!destination.id === source.index && destination.index === source.index) return;
+    setIsPakeepDragging(false)
 
     const isSameColumn = source.droppableId === destination.droppableId;
     if (source.index === destination.index && isSameColumn) return;
@@ -118,12 +119,11 @@ const WrapperOfContainerOfPakeepList = ({
     const filteredNewOrderArr = _.split(toSplitNewOrderString, uniqName);
 
     const newOrderNames = _.filter(filteredNewOrderArr, string => string !== toRemoveNameString);
-
     return handleSetPreviusOrderNamesFunc(newOrderNames);
   };
 
   const allPakeepListContainerProps = {
-    ...pakeepListContainerProps,
+    columnOfPakeepListContainerProps,
     responsiveColumnOrder,
     columns,
     pakeeps,
@@ -140,15 +140,14 @@ WrapperOfContainerOfPakeepList.propTypes = {
   }),
   columns: PropTypes.object,
   handleSetPreviusOrderNamesFunc: PropTypes.func,
-  isUsePreviuosOrder: PropTypes.bool,
-  labels: PropTypes.any,
-  pakeepListContainerProps: PropTypes.any,
+  columnOfPakeepListContainerProps: PropTypes.any,
   pakeeps: PropTypes.any,
   pakeepsOrderNames: PropTypes.shape({
     filter: PropTypes.func,
     length: PropTypes.any,
     reduce: PropTypes.func
-  })
-};
+  }),
+  setIsPakeepDragging: PropTypes.func
+}
 
 export default WrapperOfContainerOfPakeepList;

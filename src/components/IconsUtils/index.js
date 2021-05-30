@@ -62,9 +62,12 @@ const IconsUtils = ({
   handleSetIsCheckBoxesPakeep,
   isColorDefault,
   isBackgroundColorDefault,
+  arrOfButtonNamesWhichSholudBeHidden = [],
+  isUtilsReversed,
+  handleSetArhivedPakeep
 }) => {
   const handleClick = () => console.log('placeholder');
-  const buttonUtilsNewPakeepArray = [
+  const iconsUtilsArr = [
     {
       icon: CheckBoxOutlinedIcon,
       ActiveIcon: CheckBoxIcon,
@@ -97,7 +100,7 @@ const IconsUtils = ({
       popoverText: 'Archive pakeep',
       name: 'archive',
       onClick: handleClick,
-      ActiveIcon: ArchiveIcon
+      ActiveIcon: handleSetArhivedPakeep
     },
     {
       icon: EventAvailableOutlinedIcon,
@@ -168,19 +171,19 @@ const IconsUtils = ({
       rotateDeg: 90
     }
   ];
+  const correctIconButtonUtilsArr = isUtilsReversed ? _.reverse(iconsUtilsArr) : iconsUtilsArr;
 
   // useEffect(() => setPopoverAndMenuState(nullityOfPopoverAndMenuState), [color]);
 
   const [slicedArr, isShouldBeSliced, handleConcatAverageWidth] = useSliced(
     widthOfContainer,
-    buttonUtilsNewPakeepArray
+    correctIconButtonUtilsArr
   );
+  const defaultWrapperOfPopoverAndMenuProps = { arrOfButtonNamesWhichSholudBeHidden, customColor };
 
   const nonSlicedwrapperOfPopoverAndMenuProps = {
-    buttonUtilsArr: buttonUtilsNewPakeepArray,
-
-    handleAverageMainComponentWidth: handleConcatAverageWidth,
-    customColor
+    buttonUtilsArr: correctIconButtonUtilsArr,
+    handleAverageMainComponentWidth: handleConcatAverageWidth
   };
 
   const buttonMoreOfItemOfArrWhichWasSliced = {
@@ -195,18 +198,18 @@ const IconsUtils = ({
   };
 
   const buttonUtilsSlicedAndConcatedWithMoreButtonArr = _.concat(slicedArr.before, buttonMoreOfItemOfArrWhichWasSliced);
-  const slicedWrapperOfPopoverAndMenuProps = {
-    buttonUtilsArr: buttonUtilsSlicedAndConcatedWithMoreButtonArr,
-    customColor
-  };
+  const slicedWrapperOfPopoverAndMenuProps = { buttonUtilsArr: buttonUtilsSlicedAndConcatedWithMoreButtonArr };
 
   const wrapperOfPopoverAndMenuProps = isShouldBeSliced
     ? slicedWrapperOfPopoverAndMenuProps
     : nonSlicedwrapperOfPopoverAndMenuProps;
+
+  const allWrapperOfPopoverAndMenuProps = { ...defaultWrapperOfPopoverAndMenuProps, ...wrapperOfPopoverAndMenuProps };
+
   // console.log(isShouldBeSliced)
   return (
     <Grid container display={'flex'} wrap={'nowrap'} justify={isAllIconsIsShown ? 'flex-start' : 'space-between'}>
-      <WrapperOfPopoverAndMenu {...wrapperOfPopoverAndMenuProps} />
+      <WrapperOfPopoverAndMenu {...allWrapperOfPopoverAndMenuProps} />
     </Grid>
   );
 };

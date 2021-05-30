@@ -5,10 +5,8 @@ import PakeepElement from 'components/PakeepList/components/PakeepElement';
 
 const DraggableContainerOfPakeepElement = ({
   draggableProps,
-  el,
-  idx,
   draggableContainerClassName,
-  isPinIconShouldBeShownInPakeep
+  pakeepElementProps
 }) => (
   <Draggable {...draggableProps}>
     {(provided, { isDragging }) => {
@@ -19,11 +17,10 @@ const DraggableContainerOfPakeepElement = ({
         className: draggableContainerClassName
       };
 
-      const pakeepElementProps = { ...el, isDragging, idx, isPinIconShouldBeShownInPakeep };
-
+      const allPakeepElementProps = {...pakeepElementProps, isDragging,  };
       return (
         <Grid {...draggableContainerProps}>
-          <PakeepElement {...pakeepElementProps} />
+          <PakeepElement {...allPakeepElementProps} />
         </Grid>
       );
     }}
@@ -33,9 +30,7 @@ const DraggableContainerOfPakeepElement = ({
 DraggableContainerOfPakeepElement.propTypes = {
   draggableContainerClassName: PropTypes.any,
   draggableProps: PropTypes.object,
-  el: PropTypes.object,
-  idx: PropTypes.number,
-  isPinIconShouldBeShownInPakeep: PropTypes.bool
+  pakeepElementProps: PropTypes.object
 }
 
 export default DraggableContainerOfPakeepElement;
