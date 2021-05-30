@@ -18,7 +18,8 @@ import {
   toSetNewPakeepsArr,
   toSetOrderNamesOfPinnedPakeeps,
   toHandlePinStatusPakeep,
-  toSetSelectedPakeepIds
+  toSetSelectedPakeepIds,
+  toSetIsCancelSelectedPakeepsId
 } from './actions';
 
 export const addNewPaKeepThunk = data => dispatch => {
@@ -117,4 +118,8 @@ export const handlePinStatusPakeepThunk = pakeepId => dispatch => {
 
 export const handleSetSelectedPakeepsIdThunk = pakepsId => dispatch => {
   dispatch(toSetSelectedPakeepIds(pakepsId));
+};
+
+export const handleCancelSelectingStatusThunk = boolValue => dispatch => {
+  dispatch(toSetIsCancelSelectedPakeepsId(boolValue));
 };

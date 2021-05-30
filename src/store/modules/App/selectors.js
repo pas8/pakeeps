@@ -32,3 +32,6 @@ export const getSelectedPakeepsId = createSelector(
   [selectedPakeepsId => selectedPakeepsId],
   selectedPakeepsId => selectedPakeepsId
 );
+
+export const getIsCancelSelectedPakeepsId = createSelector([status => status], status => status);
+

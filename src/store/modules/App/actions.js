@@ -48,6 +48,8 @@ export const toSetNewPakeepsArr = pakeeps => ({ type: types.HANDLE_PAKEEPS, pake
 export const toHandlePinStatusPakeep = pakeepId => ({ type: types.HANDLE_PIN_STATUS_OF_PAKEEPS, pakeepId });
 
 export const toSetSelectedPakeepIds = pakepsId => ({ type: types.HANDLE_SET_SELECTED_PAKEEPIDS_ARR, pakepsId });
+export const toSetIsCancelSelectedPakeepsId = boolValue => ({ type: types.HANDLE_CANCEL_SELECTING_STATUS, boolValue });
+
 
 
 

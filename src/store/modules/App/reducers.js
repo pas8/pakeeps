@@ -239,7 +239,8 @@ const initialState = {
   scrollDirectionName: 'up',
   currentFolderPropertyIdx: 0,
   drawerWidth: 0,
-  isUsePreviuosOrder: false
+  isUsePreviuosOrder: false,
+  isCancelSelectedPakeepsId: false
 };
 
 const AppReducer = createReducer(initialState)({
@@ -287,6 +288,10 @@ const AppReducer = createReducer(initialState)({
     const pakeeps = [...filteredPakeeps, handlelingPakeep];
     return { ...state, pakeeps, pakeepsOrderNames, pinnedPakeepsOrderNames };
   },
+  [types.HANDLE_CANCEL_SELECTING_STATUS]: (state, { boolValue }) => ({
+    ...state,
+    isCancelSelectedPakeepsId: boolValue
+  }),
 
   [types.ADD_NEW_GLOBAL_LABEL]: (state, { newLabel }) => ({
     ...state,

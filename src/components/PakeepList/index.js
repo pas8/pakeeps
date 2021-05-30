@@ -4,12 +4,14 @@ import { connect } from 'react-redux';
 import {
   handleSetPreviusOrderNames,
   handleSetOrderNamesOfPinnedPakeepsThunk,
-  handleSetSelectedPakeepsIdThunk
+  handleSetSelectedPakeepsIdThunk,
+  handleCancelSelectingStatusThunk
 } from 'store/modules/App/operations';
 import dynamic from 'next/dynamic';
 import {
   getCurrentFolderPropertyIdx,
   getFolders,
+  getIsCancelSelectedPakeepsId,
   getPakeeps,
   getPakeepsOrderNames,
   getPinnedPakeepsOrderNames,
@@ -17,7 +19,7 @@ import {
 } from 'store/modules/App/selectors';
 import { difference, filter, flatten, includes, words } from 'lodash';
 import WrapperOfContainerOfPakeepList from './components/WrapperOfContainer';
-import { createContext, useRef, useState } from 'react';
+import { createContext, useEffect, useRef, useState } from 'react';
 import SelectofFPakeepListContainer from './components/WrapperOfContainer/components/Container/components/Selecto';
 import { useIsomorphicLayoutEffect, useKeyPressEvent } from 'react-use';
 // const WrapperOfContainerOfPakeepList = dynamic(() => import(), {
@@ -39,14 +41,15 @@ const PakeepList = ({
   handleSetPreviusOrderNames,
   handleSetSelectedPakeepsIdThunk,
   handleSetOrderNamesOfPinnedPakeepsThunk,
-  selectedPakeepsId
+  selectedPakeepsId,
+  isCancelSelectedPakeepsId,
+  handleCancelSelectingStatusThunk
 }) => {
   const SELECTED = 'selected';
 
   const [isPakeepDragging, setIsPakeepDragging] = useState(false);
   const [isSelecting, setIsSelecting] = useState(false);
   const [isPakeepHovering, setIsPakeepHovering] = useState(false);
-  const [isCancelSelectedPakeepsId, setIsCancelSelectedPakeepsId] = useState(false);
   console.log(selectedPakeepsId);
 
   const flattenFolder = flatten(folders);
@@ -91,12 +94,8 @@ const PakeepList = ({
 
   const isSelectoHidden = isPakeepHovering || isPakeepDragging;
 
-  const onKeyDown = e => {
-    console.log(e);
-  };
-
   const cancelSelectedPakeepsId = () => {
-    setIsCancelSelectedPakeepsId(true);
+    handleCancelSelectingStatusThunk(true);
   };
 
   useIsomorphicLayoutEffect(() => {
@@ -105,7 +104,7 @@ const PakeepList = ({
     handleSetSelectedPakeepsIdThunk([]);
     const selectedItems = document.querySelectorAll(`.${SELECTED}`);
     selectedItems.forEach(el => el.classList.remove(SELECTED));
-    setIsCancelSelectedPakeepsId(false);
+    handleCancelSelectingStatusThunk(false);
   }, [isCancelSelectedPakeepsId]);
 
   useKeyPressEvent('Escape', cancelSelectedPakeepsId);
@@ -128,10 +127,15 @@ const PakeepList = ({
 
     return handleSetSelectedPakeepsIdThunk(newSelectedPakeepsId);
   };
+  const pakeepHoveringContextPropviderPropsValue = {
+    setIsPakeepHovering,
+    onClickOfPakeepElement,
+    isSomePakeepsSelected
+  };
 
   return (
-    <PakeepHoveringContext.Provider value={{ setIsPakeepHovering, onClickOfPakeepElement, isSomePakeepsSelected }}>
-      <Grid ref={scrollerRef} className={'selectoContainer'} onClick={onKeyDown}>
+    <PakeepHoveringContext.Provider value={pakeepHoveringContextPropviderPropsValue}>
+      <Grid ref={scrollerRef} className={'selectoContainer'}>
         {isFolderPropertyIsAll && <WrapperOfContainerOfPakeepList {...wrapperOfContainerOfPinnedPakeepListProps} />}
 
         <WrapperOfContainerOfPakeepList {...wrapperOfContainerOfAllPakeepListProps} />
@@ -153,7 +157,15 @@ PakeepList.propTypes = {
 };
 
 const mapStateToProps = ({
-  app: { pakeeps, pakeepsOrderNames, currentFolderPropertyIdx, folders, selectedPakeepsId, pinnedPakeepsOrderNames }
+  app: {
+    pakeeps,
+    pakeepsOrderNames,
+    currentFolderPropertyIdx,
+    folders,
+    selectedPakeepsId,
+    pinnedPakeepsOrderNames,
+    isCancelSelectedPakeepsId
+  }
 }) => ({
   pakeeps: getPakeeps(pakeeps),
   selectedPakeepsId: getSelectedPakeepsId(selectedPakeepsId),
@@ -161,13 +173,15 @@ const mapStateToProps = ({
   pakeepsOrderNames: getPakeepsOrderNames(pakeepsOrderNames),
   pinnedPakeepsOrderNames: getPinnedPakeepsOrderNames(pinnedPakeepsOrderNames),
   currentFolderPropertyIdx: getCurrentFolderPropertyIdx(currentFolderPropertyIdx),
-  folders: getFolders(folders)
+  folders: getFolders(folders),
+  isCancelSelectedPakeepsId: getIsCancelSelectedPakeepsId(isCancelSelectedPakeepsId)
 });
 const mapDispatchToProps = dispatch => ({
   handleSetPreviusOrderNames: orderNames => dispatch(handleSetPreviusOrderNames(orderNames)),
   handleSetSelectedPakeepsIdThunk: pakepsId => dispatch(handleSetSelectedPakeepsIdThunk(pakepsId)),
   // handlePakeepsOrderNamesThunk: newOrder => dispatch(handlePakeepsOrderNamesThunk(newOrder)),
-  handleSetOrderNamesOfPinnedPakeepsThunk: orderNames => dispatch(handleSetOrderNamesOfPinnedPakeepsThunk(orderNames))
+  handleSetOrderNamesOfPinnedPakeepsThunk: orderNames => dispatch(handleSetOrderNamesOfPinnedPakeepsThunk(orderNames)),
+  handleCancelSelectingStatusThunk: boolValue => dispatch(handleCancelSelectingStatusThunk(boolValue))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(PakeepList);
