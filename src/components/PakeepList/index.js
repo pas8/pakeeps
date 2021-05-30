@@ -12,13 +12,14 @@ import {
   getFolders,
   getPakeeps,
   getPakeepsOrderNames,
-  getPinnedPakeepsOrderNames
+  getPinnedPakeepsOrderNames,
+  getSelectedPakeepsId
 } from 'store/modules/App/selectors';
-import { difference, filter, flatten } from 'lodash';
+import { difference, filter, flatten, includes, words } from 'lodash';
 import WrapperOfContainerOfPakeepList from './components/WrapperOfContainer';
 import { createContext, useRef, useState } from 'react';
 import SelectofFPakeepListContainer from './components/WrapperOfContainer/components/Container/components/Selecto';
-import { useKeyPressEvent } from 'react-use';
+import { useIsomorphicLayoutEffect, useKeyPressEvent } from 'react-use';
 // const WrapperOfContainerOfPakeepList = dynamic(() => import(), {
 //   loading: () => (
 //     <Grid style={{ height: '80vh', width: '100%' }} container alignItems={'center'} justify={'center'}>
@@ -37,12 +38,16 @@ const PakeepList = ({
   pinnedPakeepsOrderNames,
   handleSetPreviusOrderNames,
   handleSetSelectedPakeepsIdThunk,
-  handleSetOrderNamesOfPinnedPakeepsThunk
+  handleSetOrderNamesOfPinnedPakeepsThunk,
+  selectedPakeepsId
 }) => {
+  const SELECTED = 'selected';
+
   const [isPakeepDragging, setIsPakeepDragging] = useState(false);
   const [isSelecting, setIsSelecting] = useState(false);
   const [isPakeepHovering, setIsPakeepHovering] = useState(false);
-  // console.log(isSelecting);
+  const [isCancelSelectedPakeepsId, setIsCancelSelectedPakeepsId] = useState(false);
+  console.log(selectedPakeepsId);
 
   const flattenFolder = flatten(folders);
   const folderProperty = flattenFolder[currentFolderPropertyIdx]?.property;
@@ -78,26 +83,59 @@ const PakeepList = ({
   const scrollerRef = useRef(null);
 
   const selectofFPakeepListContainerProps = {
-    scrollerRef,  
+    scrollerRef,
     setSelectedIds: handleSetSelectedPakeepsIdThunk,
-    setIsSelecting
+    setIsSelecting,
+    SELECTED
   };
 
-  const isSelectoHidden = isPakeepHovering || isPakeepDragging
+  const isSelectoHidden = isPakeepHovering || isPakeepDragging;
 
   const onKeyDown = e => {
-  console.log(e)  
+    console.log(e);
   };
-  useKeyPressEvent('Escape', onKeyDown);
 
+  const cancelSelectedPakeepsId = () => {
+    setIsCancelSelectedPakeepsId(true);
+  };
+
+  useIsomorphicLayoutEffect(() => {
+    if (!isCancelSelectedPakeepsId) return;
+
+    handleSetSelectedPakeepsIdThunk([]);
+    const selectedItems = document.querySelectorAll(`.${SELECTED}`);
+    selectedItems.forEach(el => el.classList.remove(SELECTED));
+    setIsCancelSelectedPakeepsId(false);
+  }, [isCancelSelectedPakeepsId]);
+
+  useKeyPressEvent('Escape', cancelSelectedPakeepsId);
+  const isSomePakeepsSelected = selectedPakeepsId.length > 0;
+
+  const onClickOfPakeepElement = id => {
+    if (!isSomePakeepsSelected) return;
+    const newItem = document.getElementById(id);
+    const isSelected = includes(newItem.className, SELECTED);
+
+    if (isSelected) {
+      const newSelectedPakeepsId = filter(selectedPakeepsId, pakeepId => pakeepId !== id);
+      newItem.classList.remove(SELECTED);
+
+      return handleSetSelectedPakeepsIdThunk(newSelectedPakeepsId);
+    }
+
+    const newSelectedPakeepsId = [...selectedPakeepsId, id];
+    newItem.classList.add(SELECTED);
+
+    return handleSetSelectedPakeepsIdThunk(newSelectedPakeepsId);
+  };
 
   return (
-    <PakeepHoveringContext.Provider value={{ setIsPakeepHovering }}> 
-      <Grid ref={scrollerRef} className={'selectoContainer'} onClick={onKeyDown} >
+    <PakeepHoveringContext.Provider value={{ setIsPakeepHovering, onClickOfPakeepElement, isSomePakeepsSelected }}>
+      <Grid ref={scrollerRef} className={'selectoContainer'} onClick={onKeyDown}>
         {isFolderPropertyIsAll && <WrapperOfContainerOfPakeepList {...wrapperOfContainerOfPinnedPakeepListProps} />}
 
         <WrapperOfContainerOfPakeepList {...wrapperOfContainerOfAllPakeepListProps} />
-        {!isSelectoHidden &&  <SelectofFPakeepListContainer {...selectofFPakeepListContainerProps} />}
+        {!isSelectoHidden && <SelectofFPakeepListContainer {...selectofFPakeepListContainerProps} />}
       </Grid>
     </PakeepHoveringContext.Provider>
   );
@@ -118,6 +156,8 @@ const mapStateToProps = ({
   app: { pakeeps, pakeepsOrderNames, currentFolderPropertyIdx, folders, selectedPakeepsId, pinnedPakeepsOrderNames }
 }) => ({
   pakeeps: getPakeeps(pakeeps),
+  selectedPakeepsId: getSelectedPakeepsId(selectedPakeepsId),
+
   pakeepsOrderNames: getPakeepsOrderNames(pakeepsOrderNames),
   pinnedPakeepsOrderNames: getPinnedPakeepsOrderNames(pinnedPakeepsOrderNames),
   currentFolderPropertyIdx: getCurrentFolderPropertyIdx(currentFolderPropertyIdx),

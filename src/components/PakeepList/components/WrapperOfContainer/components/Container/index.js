@@ -3,6 +3,7 @@ import { Grid, makeStyles } from '@material-ui/core';
 import { DragDropContext } from 'react-beautiful-dnd';
 import { find } from 'lodash';
 import ColumnOfPakeepListContainer from './components/Column/index';
+import { themeColors } from 'components/theme';
 
 const useStyles = makeStyles(({ spacing, breakpoints: { between, down } }) => ({
   container: {
@@ -10,8 +11,10 @@ const useStyles = makeStyles(({ spacing, breakpoints: { between, down } }) => ({
     [between('xs', 'sm')]: { margin: spacing(2, 0, 0, 0) },
     [down('md')]: { margin: spacing(4, 0, 0, 0) },
     '& .selected > div ': {
-      boxShadow: '0px 0px 1px 2px   white '
+      boxShadow: `0px 0px 0px 1px ${themeColors.whiteRgbaColorWith0dot96valueOfAlfaCanal}`,
+      borderColor:themeColors.whiteRgbaColorWith0dot96valueOfAlfaCanal,
     }
+    
   }
 }));
 

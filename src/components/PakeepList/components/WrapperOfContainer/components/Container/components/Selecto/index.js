@@ -14,7 +14,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const SelectofFPakeepListContainer = ({ scrollerRef, setSelectedIds, setIsSelecting }) => {
+const SelectofFPakeepListContainer = ({ scrollerRef, setSelectedIds, setIsSelecting,SELECTED }) => {
   const classes = useStyles();
   const [scrollOptions, setScrollOptions] = useState({});
 
@@ -36,8 +36,8 @@ const SelectofFPakeepListContainer = ({ scrollerRef, setSelectedIds, setIsSelect
 
   const onDragEnd = () => setIsSelecting(false);
   const onSelect = e => {
-    e.added.forEach(el => el.classList.add('selected'));
-    e.removed.forEach(el => el.classList.remove('selected'));
+    e.added.forEach(el => el.classList.add(SELECTED));
+    e.removed.forEach(el => el.classList.remove(SELECTED));
   };
   const onSelectEnd = ({ selected }) => {
     const selectedIdArr = selected.map(({ id }) => id);

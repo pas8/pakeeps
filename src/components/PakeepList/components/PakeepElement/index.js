@@ -85,7 +85,8 @@ const useStyles = makeStyles(theme => ({
       color: customColor ? customColor.hover : themeColors.whiteRgbaColorWith0dot8valueOfAlfaCanal
     }
   }),
-  isSelecting: {}
+  isSelecting: {},
+  isSomePakeepsSelected: { cursor: 'pointer !important' }
 }));
 const PakeepElement = ({
   title,
@@ -166,7 +167,7 @@ const PakeepElement = ({
 
   return (
     <PakeepHoveringContext.Consumer>
-      {({ setIsPakeepHovering }) => {
+      {({ setIsPakeepHovering, onClickOfPakeepElement, isSomePakeepsSelected }) => {
         const onMouseEnter = () => {
           setIsPakeepHovering(!isSelecting);
           handleSetIsHovering();
@@ -178,7 +179,10 @@ const PakeepElement = ({
         };
         const className = 'selectoItem';
 
-        const pakeepGridContainerPorps = { onMouseEnter, onMouseLeave, ref, className, id };
+        const onClick = () => {
+          onClickOfPakeepElement(id);
+        };
+        const pakeepGridContainerPorps = { onMouseEnter, onMouseLeave, ref, className, id, onClick };
 
         return (
           <Grid {...pakeepGridContainerPorps}>
@@ -188,11 +192,12 @@ const PakeepElement = ({
               className={clsx(
                 classes.paper,
                 isDragging && classes.isDragging,
-                statusState.isHovered && !isSelecting && classes.isHovered,
-                isSelecting && classes.isSelecting
+                !isSomePakeepsSelected && statusState.isHovered && !isSelecting && classes.isHovered,
+                isSelecting && classes.isSelecting,
+                isSomePakeepsSelected && classes.isSomePakeepsSelected
               )}
             >
-              {!isSelecting && statusState.isHovered && isPinIconShouldBeShownInPakeep && (
+              {!isSomePakeepsSelected && !isSelecting && statusState.isHovered && isPinIconShouldBeShownInPakeep && (
                 <IconButton className={classes.containerOfPinIcon} onClick={handleSetIsPinnedPakeep}>
                   {customColor ? <PinIcon /> : <PinOutlinedIcon />}
                 </IconButton>
@@ -211,7 +216,7 @@ const PakeepElement = ({
                 handleDeleteLabelFromPakeepFunc={handleDeleteLabelFromPakeepThunk}
               />
 
-              <AnimationElement in={statusState.isHovered && !isSelecting}>
+              <AnimationElement in={!isSomePakeepsSelected && statusState.isHovered && !isSelecting}>
                 <Grid className={classes.iconsUtils}>
                   <IconsUtils {...iconsUtilsProps} />
                 </Grid>
