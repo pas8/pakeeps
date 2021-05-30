@@ -17,7 +17,7 @@ import {
   getPinnedPakeepsOrderNames,
   getSelectedPakeepsId
 } from 'store/modules/App/selectors';
-import { difference, filter, flatten, includes, words } from 'lodash';
+import { difference, filter, flatten, forEach, includes, map, words } from 'lodash';
 import WrapperOfContainerOfPakeepList from './components/WrapperOfContainer';
 import { createContext, useEffect, useRef, useState } from 'react';
 import SelectofFPakeepListContainer from './components/WrapperOfContainer/components/Container/components/Selecto';
@@ -131,6 +131,9 @@ const PakeepList = ({
     onClickOfPakeepElement,
     isSomePakeepsSelected
   };
+  useEffect(() => {
+    cancelSelectedPakeepsId();
+  }, [currentFolderPropertyIdx]);
 
   return (
     <PakeepHoveringContext.Provider value={pakeepHoveringContextPropviderPropsValue}>
@@ -168,7 +171,6 @@ const mapStateToProps = ({
 }) => ({
   pakeeps: getPakeeps(pakeeps),
   selectedPakeepsId: getSelectedPakeepsId(selectedPakeepsId),
-
   pakeepsOrderNames: getPakeepsOrderNames(pakeepsOrderNames),
   pinnedPakeepsOrderNames: getPinnedPakeepsOrderNames(pinnedPakeepsOrderNames),
   currentFolderPropertyIdx: getCurrentFolderPropertyIdx(currentFolderPropertyIdx),

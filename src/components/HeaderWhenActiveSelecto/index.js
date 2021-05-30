@@ -1,4 +1,4 @@
-import { AppBar, Grid, makeStyles, Typography } from '@material-ui/core';
+import { AppBar, Grid, makeStyles, Typography, Toolbar, Zoom, Collapse,Slide } from '@material-ui/core';
 import IconButtonByPas from 'components/IconButton';
 import IconsUtils from 'components/IconsUtils';
 import { themeColors } from 'components/theme';
@@ -7,9 +7,19 @@ import PropTypes from 'prop-types';
 import { useMeasure } from 'react-use';
 import CloseOutlinedIcon from '@material-ui/icons/CloseOutlined';
 import { usePropertiesToUtils } from 'hooks/usePropertiesToUtils.hook';
-const useStyles = makeStyles(theme => ({}));
+const useStyles = makeStyles(({ spacing }) => ({
+  container: {
+    padding: spacing(1,0.4)
+  }
+}));
 
-const HeaderWhenActiveSelecto = ({ selectedPakeeps, cancelSelectedPakeepsId, handleSelectedPakeepsPropertyThunk }) => {
+const HeaderWhenActiveSelecto = ({
+  selectedPakeeps,
+  cancelSelectedPakeepsId,
+  handleSelectedPakeepsPropertyThunk,
+  handlePinStatusPakeepThunk,
+  selectedPakeepsId
+}) => {
   const classes = useStyles();
 
   const [ref, { width: widthOfContainer }] = useMeasure();
@@ -18,9 +28,11 @@ const HeaderWhenActiveSelecto = ({ selectedPakeeps, cancelSelectedPakeepsId, han
   // console.log(selectedPakeepsId)
   // const handleSetFavoritePakeep = () => setState(state => ({ ...state, isFavorite: !state.isFavorite }));
 
-  const h = () => console.log('log');
+  const h = () => selectedPakeepsId.map(el => handlePinStatusPakeepThunk(el));
+
   const TOOGLE = 'TOOGLE';
   const VALUE = 'VALUE';
+
   const pakeepPropertyies = {
     isInBookmark: { funcName: 'handleSetBookmarkPakeep', propertyValue: TOOGLE },
     isFavorite: { funcName: 'handleSetFavoritePakeep', propertyValue: TOOGLE },
@@ -29,17 +41,15 @@ const HeaderWhenActiveSelecto = ({ selectedPakeeps, cancelSelectedPakeepsId, han
     color: { funcName: 'handleSetColorPakeep', propertyValue: VALUE },
     backgroundColor: { funcName: 'handleSetBackgroundColorPakeep', propertyValue: VALUE }
   };
-  const propertiesArrToUtils = usePropertiesToUtils(pakeepPropertyies, selectedPakeeps, handleSelectedPakeepsPropertyThunk, {
-    TOOGLE,
-    VALUE
-  });
-  // console.log(g);
-  // const handleSetBookmarkPakeep = () =>
-  //   handleSelectedPakeepsPropertyThunk(selectedPakeeps, { name: 'isInBookmark', value: 'toogle' });
-  // const handleSetIsPinnedPakeep = () => setState(state => ({ ...state, isPinned: !state.isPinned }));
-  // const handleSetColorPakeep = color => setState(state => ({ ...state, color }));
-  // const handleSetBackgroundColorPakeep = backgroundColor => setState(state => ({ ...state, backgroundColor }));
-  // const handleSetIsCheckBoxesPakeep = () => setState(state => ({ ...state, isCheckBoxes: !state.isCheckBoxes }));
+  const propertiesArrToUtils = usePropertiesToUtils(
+    pakeepPropertyies,
+    selectedPakeeps,
+    handleSelectedPakeepsPropertyThunk,
+    {
+      TOOGLE,
+      VALUE
+    }
+  );
 
   const iconsUtilsProps = {
     widthOfContainer,
@@ -47,15 +57,14 @@ const HeaderWhenActiveSelecto = ({ selectedPakeeps, cancelSelectedPakeepsId, han
     labels: [],
     iconsCloser: true,
     customColor,
-    // isInBookmark
     isUtilsReversed: true,
-    // handleSetBookmarkPakeep,
     arrOfButtonNamesWhichSholudBeHidden: ['picture', 'edit', 'checkbox', 'width', 'share'],
     ...propertiesArrToUtils
   };
 
   return (
-    <AppBar ref={ref}>
+    <Slide in={true} direction={"bottom"}>
+    <AppBar ref={ref} className={classes.container}>
       <Grid container>
         <Grid style={{ flex: 1 }}>
           <Grid container alignItems={'center'}>
@@ -68,6 +77,7 @@ const HeaderWhenActiveSelecto = ({ selectedPakeeps, cancelSelectedPakeepsId, han
         </Grid>
       </Grid>
     </AppBar>
+    </Slide>
   );
 };
 

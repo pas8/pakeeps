@@ -11,7 +11,6 @@ export const usePropertiesToUtils = (
 
     if (propertyValue === TOOGLE) {
       const isEveryItemPropetyTrue = every(selectedPakeeps, el => !!el[key]);
-
       const newPakeeps = selectedPakeeps.map(el => ({ ...el, [key]: !isEveryItemPropetyTrue }));
 
       const toogleFunc = () => handleSelectedPakeepsPropertyFunc(newPakeeps);
@@ -31,9 +30,10 @@ export const usePropertiesToUtils = (
   const functionObject = mapValues(objectWithKeysOfFuncNames, ({ func }) => func);
 
   const propertyiesObject = mapValues(pakeepPropertyies, (value, key) => {
-    const isEveryItemPropetyTrue = every(selectedPakeeps, el => !el[key]);
-    const propety = !isEveryItemPropetyTrue;
-
+    if (selectedPakeeps.length === 0) return false;
+    
+    const isEveryItemPropetyTrue = every(selectedPakeeps, el => !!el[key]);
+    const propety = isEveryItemPropetyTrue;
     return propety;
   });
   const propertObject = { ...functionObject, ...propertyiesObject };
