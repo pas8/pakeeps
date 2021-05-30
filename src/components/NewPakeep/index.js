@@ -87,7 +87,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export   const LocaleContext = createContext();
+export const LocaleContext = createContext();
 
 const NewPaKeep = ({ addNewPaKeepThunk }) => {
   const nulittyState = {
@@ -175,7 +175,6 @@ const NewPaKeep = ({ addNewPaKeepThunk }) => {
     state.backgroundColor,
     state.color
   );
-
 
   const classes = useStyles({
     isLabelViewHidden: statusState.isLabelViewHidden,
@@ -267,7 +266,7 @@ const NewPaKeep = ({ addNewPaKeepThunk }) => {
         )}
 
         {!statusState.isUtilsHidden && (
-          <LocaleContext.Provider value={{selectedLabels:state.labels}}>
+          <LocaleContext.Provider value={{ selectedLabels: state.labels }}>
             <NewPakeepUtils {...newPakeepUtils} />
           </LocaleContext.Provider>
         )}

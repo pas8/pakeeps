@@ -4,7 +4,9 @@ import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { connect } from 'react-redux';
 import { getNavigationViewLike } from 'store/modules/Settings/selectors';
-import { getDrawerWidth } from 'store/modules/App/selectors';
+import { getDrawerWidth, getSelectedPakeepsId } from 'store/modules/App/selectors';
+import HeaderWhenActiveSelecto from 'components/HeaderWhenActiveSelecto';
+
 
 const useStyles = makeStyles(theme => ({
   content: {
@@ -35,7 +37,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const HeaderLayout = ({ children, isMenuOpen, drawerWidth, navigationViewLike }) => {
+const HeaderLayout = ({ children, isMenuOpen, drawerWidth, navigationViewLike, selectedPakeepsId }) => {
   const navigationViewLikeTelegram = navigationViewLike === 'telegram';
   const navigationViewLikeGoogleKeep = navigationViewLike === 'googleKeep';
   const navigationViewLikePakeeps = navigationViewLike === 'pakeeps';
@@ -49,9 +51,16 @@ const HeaderLayout = ({ children, isMenuOpen, drawerWidth, navigationViewLike })
     isMenuOpen,
     drawerWidth
   };
+  const isShouldBeHeaderWhenActiveSelecto = selectedPakeepsId.length > 0;
+
+  const headerWhenActiveSelectoProps = {
+    selectedPakeepsId
+  };
+
   return (
     <>
-      <HeaderByPas {...headerByPasProps} />
+      {true ? <HeaderWhenActiveSelecto {...headerWhenActiveSelectoProps} /> : <HeaderByPas {...headerByPasProps} />}
+      {/* {isShouldBeHeaderWhenActiveSelecto ? <HeaderWhenActiveSelecto /> : <HeaderByPas {...headerByPasProps} />} */}
       <main
         className={clsx(classes.content, {
           [classes.contentShift]: isMenuOpen
@@ -66,9 +75,13 @@ const HeaderLayout = ({ children, isMenuOpen, drawerWidth, navigationViewLike })
 HeaderLayout.propTypes = {
   children: PropTypes.node
 };
-const mapStateToProps = ({ app: { isMenuOpen, drawerWidth }, settings: { navigationViewLike } }) => ({
+const mapStateToProps = ({
+  app: { isMenuOpen, drawerWidth, selectedPakeepsId },
+  settings: { navigationViewLike }
+}) => ({
   isMenuOpen,
   drawerWidth: getDrawerWidth(drawerWidth),
+  selectedPakeepsId: getSelectedPakeepsId(selectedPakeepsId),
   navigationViewLike: getNavigationViewLike(navigationViewLike)
 });
 

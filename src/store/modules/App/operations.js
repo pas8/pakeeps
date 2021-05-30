@@ -17,7 +17,8 @@ import {
   toAddNewGlobalLabel,
   toSetNewPakeepsArr,
   toSetOrderNamesOfPinnedPakeeps,
-  toHandlePinStatusPakeep
+  toHandlePinStatusPakeep,
+  toSetSelectedPakeepIds
 } from './actions';
 
 export const addNewPaKeepThunk = data => dispatch => {
@@ -92,6 +93,7 @@ export const handleSetOrderNamesOfPinnedPakeepsThunk = orderNames => dispatch =>
 };
 
 export const handleAddNewGlobalLabelThunk = newLabel => dispatch => {
+  
   dispatch(toAddNewGlobalLabel(newLabel));
 };
 
@@ -111,4 +113,8 @@ export const handkePakeepPropertyThunk = (pakeepId, property) => (dispatch, getS
 
 export const handlePinStatusPakeepThunk = pakeepId => dispatch => {
   dispatch(toHandlePinStatusPakeep(pakeepId));
+};
+
+export const handleSetSelectedPakeepsIdThunk = pakepsId => dispatch => {
+  dispatch(toSetSelectedPakeepIds(pakepsId));
 };

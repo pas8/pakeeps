@@ -4,6 +4,7 @@ import PopoverAndMenu from './components/PopoverAndMenu';
 import { nanoid } from 'nanoid';
 import { memo, useState, useRef } from 'react';
 import WrapperOfMainComponent from './components/WrapperOfMainComponent';
+import includes from 'lodash.includes';
 
 const WrapperOfPopoverAndMenu = ({
   buttonUtilsArr,
@@ -11,7 +12,8 @@ const WrapperOfPopoverAndMenu = ({
   isIconNameExtended = false,
   iconSize = 'default',
   handleAverageMainComponentWidth,
-  customColor
+  customColor,
+  arrOfButtonNamesWhichSholudBeHidden
 }) => {
   const nullityOfAnchorEl = {
     name: '',
@@ -20,14 +22,12 @@ const WrapperOfPopoverAndMenu = ({
     onMenuClose: null,
     currentTarget: null,
     popoverText: '',
-    menuComponentsProps:null,
-    MenuComponents:null
+    menuComponentsProps: null,
+    MenuComponents: null
   };
 
-  
   const [anchorElState, setAnchorElState] = useState(nullityOfAnchorEl);
 
-  
   const handleMenuClose = () => setAnchorElState(nullityOfAnchorEl);
   const handlePopoverClose = () => setAnchorElState(state => ({ ...state, isPopoverOpen: false }));
 
@@ -54,6 +54,7 @@ const WrapperOfPopoverAndMenu = ({
           },
           idx
         ) => {
+          if (includes(arrOfButtonNamesWhichSholudBeHidden, buttonUtilsName)) return;
           if (hidden) return;
           if (customElementComponentOfIconGroup) return customElementComponentOfIconGroup;
 
@@ -100,7 +101,6 @@ const WrapperOfPopoverAndMenu = ({
               onMenuClose: null
             }));
 
-
           const wrapperOfMainComponentProps = {
             onMouseEnter: handlePopoverOpen,
             // onMouseLeave: !anchorEl.menu ? handlePopoverClose : null,
@@ -121,10 +121,13 @@ const WrapperOfPopoverAndMenu = ({
 
 WrapperOfPopoverAndMenu.propTypes = {
   CustomElementComponentOfIconGroup: PropTypes.oneOf(['bool', 'node']),
+  arrOfButtonNamesWhichSholudBeHidden: PropTypes.array,
   buttonUtilsArr: PropTypes.shape({
     map: PropTypes.func
   }),
+  customColor: PropTypes.any,
   customElementComponentOfIconGroupProps: PropTypes.node,
+  handleAverageMainComponentWidth: PropTypes.any,
   handlePopoverAndMenuState: PropTypes.func,
   iconSize: PropTypes.string,
   isIconNameExtended: PropTypes.bool,

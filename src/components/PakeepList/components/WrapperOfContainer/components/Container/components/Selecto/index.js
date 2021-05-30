@@ -1,10 +1,18 @@
 import { Grid, makeStyles } from '@material-ui/core';
-import { drop, flatten } from 'lodash';
+import { colord } from 'colord';
+import { themeColors } from 'components/theme';
 import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
 import Selecto from 'react-selecto';
 
-const useStyles = makeStyles(theme => ({}));
+const useStyles = makeStyles(theme => ({
+  container: {
+    '& .rCSjtiumr': {
+      borderColor: themeColors.secondaryMain,
+      background: colord(themeColors.secondaryMain).alpha(0.42).toHex()
+    }
+  }
+}));
 
 const SelectofFPakeepListContainer = ({ scrollerRef, setSelectedIds, setIsSelecting }) => {
   const classes = useStyles();
@@ -28,10 +36,12 @@ const SelectofFPakeepListContainer = ({ scrollerRef, setSelectedIds, setIsSelect
 
   const onDragEnd = () => setIsSelecting(false);
   const onSelect = e => {
-    const selectedIdArr = flatten(e.selected.map(el => drop(el.getAttributeNames())));
-    setSelectedIds(selectedIdArr);
     e.added.forEach(el => el.classList.add('selected'));
     e.removed.forEach(el => el.classList.remove('selected'));
+  };
+  const onSelectEnd = ({ selected }) => {
+    const selectedIdArr = selected.map(({ id }) => id);
+    setSelectedIds(selectedIdArr);
   };
 
   const onScroll = e => {
@@ -42,7 +52,7 @@ const SelectofFPakeepListContainer = ({ scrollerRef, setSelectedIds, setIsSelect
     dragContainer: '.selectoContainer',
     selectableTargets: ['.selectoItem'],
     hitRate: 0,
-    selectByClick: true,
+    selectByClick: !true,
     selectFromInside: true,
     toggleContinueSelect: ['shift'],
     ratio: 0,
@@ -50,10 +60,15 @@ const SelectofFPakeepListContainer = ({ scrollerRef, setSelectedIds, setIsSelect
     onDragStart,
     onDragEnd,
     onSelect,
+    onSelectEnd,
     onScroll
   };
 
-  return <Selecto {...selectoProps} />;
+  return (
+    <Grid className={classes.container}>
+      <Selecto {...selectoProps} />
+    </Grid>
+  );
 };
 
 SelectofFPakeepListContainer.propTypes = {
@@ -64,6 +79,6 @@ SelectofFPakeepListContainer.propTypes = {
   }),
   setIsSelecting: PropTypes.func,
   setSelectedIds: PropTypes.func
-}
+};
 
 export default SelectofFPakeepListContainer;

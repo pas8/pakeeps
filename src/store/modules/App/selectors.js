@@ -26,5 +26,9 @@ export const getPakeeps = createSelector([pakeeps => pakeeps], pakeeps => pakeep
 export const getPakeepsOrderNames = createSelector([orderNames => orderNames], orderNames => orderNames);
 export const getIsUsePreviuosOrder = createSelector([bool => bool], bool => bool);
 
+export const getPinnedPakeepsOrderNames = createSelector([orderNames => orderNames], orderNames => orderNames);
 
-export const getPinnedPakeepsOrderNames = createSelector([orderNames => orderNames], orderNames => orderNames)
+export const getSelectedPakeepsId = createSelector(
+  [selectedPakeepsId => selectedPakeepsId],
+  selectedPakeepsId => selectedPakeepsId
+);

@@ -21,7 +21,7 @@ const initialState = {
     { color: '#6e9f47', title: 'Your plans', iconName: 'star', id: 'label6', variant: 'default' },
     { color: '', title: 'Hobby Placeholders', iconName: '', id: 'label4', variant: 'default' }
   ],
-
+  selectedPakeepsId: [],
   folders: [[]],
 
   pakeeps: [
@@ -296,6 +296,12 @@ const AppReducer = createReducer(initialState)({
     ...state,
     labels
   }),
+
+  [types.HANDLE_SET_SELECTED_PAKEEPIDS_ARR]: (state, { pakepsId: selectedPakeepsId }) => ({
+    ...state,
+    selectedPakeepsId
+  }),
+
   [types.DELETE_LABEL_FROM_PAKEEP]: (state, { currentPakeep, labels }) => ({
     ...state,
     isUsePreviuosOrder: true,

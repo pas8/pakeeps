@@ -62,6 +62,7 @@ const IconsUtils = ({
   handleSetIsCheckBoxesPakeep,
   isColorDefault,
   isBackgroundColorDefault,
+  arrOfButtonNamesWhichSholudBeHidden = []
 }) => {
   const handleClick = () => console.log('placeholder');
   const buttonUtilsNewPakeepArray = [
@@ -175,12 +176,11 @@ const IconsUtils = ({
     widthOfContainer,
     buttonUtilsNewPakeepArray
   );
+  const defaultWrapperOfPopoverAndMenuProps = { arrOfButtonNamesWhichSholudBeHidden, customColor };
 
   const nonSlicedwrapperOfPopoverAndMenuProps = {
     buttonUtilsArr: buttonUtilsNewPakeepArray,
-
-    handleAverageMainComponentWidth: handleConcatAverageWidth,
-    customColor
+    handleAverageMainComponentWidth: handleConcatAverageWidth
   };
 
   const buttonMoreOfItemOfArrWhichWasSliced = {
@@ -195,18 +195,18 @@ const IconsUtils = ({
   };
 
   const buttonUtilsSlicedAndConcatedWithMoreButtonArr = _.concat(slicedArr.before, buttonMoreOfItemOfArrWhichWasSliced);
-  const slicedWrapperOfPopoverAndMenuProps = {
-    buttonUtilsArr: buttonUtilsSlicedAndConcatedWithMoreButtonArr,
-    customColor
-  };
+  const slicedWrapperOfPopoverAndMenuProps = { buttonUtilsArr: buttonUtilsSlicedAndConcatedWithMoreButtonArr };
 
   const wrapperOfPopoverAndMenuProps = isShouldBeSliced
     ? slicedWrapperOfPopoverAndMenuProps
     : nonSlicedwrapperOfPopoverAndMenuProps;
+
+  const allWrapperOfPopoverAndMenuProps = { ...defaultWrapperOfPopoverAndMenuProps, ...wrapperOfPopoverAndMenuProps };
+
   // console.log(isShouldBeSliced)
   return (
     <Grid container display={'flex'} wrap={'nowrap'} justify={isAllIconsIsShown ? 'flex-start' : 'space-between'}>
-      <WrapperOfPopoverAndMenu {...wrapperOfPopoverAndMenuProps} />
+      <WrapperOfPopoverAndMenu {...allWrapperOfPopoverAndMenuProps} />
     </Grid>
   );
 };

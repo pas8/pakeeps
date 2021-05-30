@@ -22,6 +22,7 @@ import PinOutlinedIcon from 'components/Icons/components/PinOutlinedIcon';
 import PinIcon from 'components/Icons/components/PinIcon';
 import { useIsColorDark } from 'hooks/useIsColorDark.hook';
 import { colord } from 'colord';
+import { PakeepHoveringContext } from 'components/PakeepList';
 
 const useStyles = makeStyles(theme => ({
   paper: ({ customColor, backgroundColor, isBackgroundColorDefault, utilsViewLikeInGoogleKeep }) => ({
@@ -33,7 +34,8 @@ const useStyles = makeStyles(theme => ({
     transition: theme.transitions.create('padding', {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen
-    })
+    }),
+    userSelect: 'none'
   }),
 
   isHovered: ({ customColor }) => ({
@@ -82,7 +84,8 @@ const useStyles = makeStyles(theme => ({
         .toHex(),
       color: customColor ? customColor.hover : themeColors.whiteRgbaColorWith0dot8valueOfAlfaCanal
     }
-  })
+  }),
+  isSelecting: {}
 }));
 const PakeepElement = ({
   title,
@@ -157,50 +160,67 @@ const PakeepElement = ({
   // const setLabelHoverStatusIsFalse = () => setLabelHover(false);
   // const setLabelHoverStatus = () => setLabelHover({ title, isHovering: true });
   useEffect(() => setStatusState(state => ({ ...state, isLoaded: true })), []);
-// console.log(isSelecting)
+  // console.log(isSelecting)
   if (!statusState.isLoaded) return <SkeletonView />;
   const AnimationElement = utilsViewLikeInGoogleKeep ? Fade : Grow;
 
-  const pakeepGridContainerPorps = {
-    onMouseEnter: handleSetIsHovering,
-    onMouseLeave: handleSetIsUnHovering,
-    ref,
-    className: 'selectoItem',
-    [id]: id
-  };
   return (
-    <Grid {...pakeepGridContainerPorps}>
-      <Paper
-        variant={'outlined'}
-        {...handlers}
-        className={clsx(classes.paper, isDragging && classes.isDragging, statusState.isHovered && !isSelecting && classes.isHovered)}
-      >
-        {statusState.isHovered && isPinIconShouldBeShownInPakeep && (
-          <IconButton className={classes.containerOfPinIcon} onClick={handleSetIsPinnedPakeep}>
-            {customColor ? <PinIcon /> : <PinOutlinedIcon />}
-          </IconButton>
-        )}
-        <Grid className={classes.title}>
-          <Typography variant={'h5'}>{title}</Typography>
-        </Grid>
-        <Grid>{text}</Grid>
+    <PakeepHoveringContext.Consumer>
+      {({ setIsPakeepHovering }) => {
+        const onMouseEnter = () => {
+          setIsPakeepHovering(!isSelecting);
+          handleSetIsHovering();
+        };
 
-        <AttributeGroup
-          parentBackgrounColor={backgroundColor}
-          customColor={customColor}
-          labels={filteredLabels}
-          events={events}
-          pakeepId={id}
-          handleDeleteLabelFromPakeepFunc={handleDeleteLabelFromPakeepThunk}
-        />
+        const onMouseLeave = () => {
+          setIsPakeepHovering(false);
+          handleSetIsUnHovering();
+        };
+        const className = 'selectoItem';
 
-        <AnimationElement in={statusState.isHovered &&  !isSelecting}>
-          <Grid className={classes.iconsUtils}>
-            <IconsUtils {...iconsUtilsProps} />
+        const pakeepGridContainerPorps = { onMouseEnter, onMouseLeave, ref, className, id };
+
+        return (
+          <Grid {...pakeepGridContainerPorps}>
+            <Paper
+              variant={'outlined'}
+              {...handlers}
+              className={clsx(
+                classes.paper,
+                isDragging && classes.isDragging,
+                statusState.isHovered && !isSelecting && classes.isHovered,
+                isSelecting && classes.isSelecting
+              )}
+            >
+              {!isSelecting && statusState.isHovered && isPinIconShouldBeShownInPakeep && (
+                <IconButton className={classes.containerOfPinIcon} onClick={handleSetIsPinnedPakeep}>
+                  {customColor ? <PinIcon /> : <PinOutlinedIcon />}
+                </IconButton>
+              )}
+              <Grid className={classes.title}>
+                <Typography variant={'h5'}>{title}</Typography>
+              </Grid>
+              <Grid>{text}</Grid>
+
+              <AttributeGroup
+                parentBackgrounColor={backgroundColor}
+                customColor={customColor}
+                labels={filteredLabels}
+                events={events}
+                pakeepId={id}
+                handleDeleteLabelFromPakeepFunc={handleDeleteLabelFromPakeepThunk}
+              />
+
+              <AnimationElement in={statusState.isHovered && !isSelecting}>
+                <Grid className={classes.iconsUtils}>
+                  <IconsUtils {...iconsUtilsProps} />
+                </Grid>
+              </AnimationElement>
+            </Paper>
           </Grid>
-        </AnimationElement>
-      </Paper>
-    </Grid>
+        );
+      }}
+    </PakeepHoveringContext.Consumer>
   );
 };
 

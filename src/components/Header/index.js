@@ -70,7 +70,6 @@ const HeaderByPas = ({
 
   return (
     <Grid className={classes.root} container>
-      <CssBaseline />
       <AppBar className={clsx(classes.appBar, { [classes.appBarShift]: isMenuOpen })}>
         <Toolbar className={classes.toolBar}>
           {(navigationViewLikePakeeps || navigationViewLikeGoogleKeep) && (
@@ -95,9 +94,13 @@ const HeaderByPas = ({
 };
 
 HeaderByPas.propTypes = {
+  drawerWidth: PropTypes.number,
   isMenuOpen: PropTypes.bool,
+  navigationViewLikeGoogleKeep: PropTypes.bool,
+  navigationViewLikePakeeps: PropTypes.bool,
+  navigationViewLikeTelegram: PropTypes.bool,
   setMenuOpenStatusThunk: PropTypes.func
-};
+}
 
 const mapDispatchToProps = dispatch => ({
   setMenuOpenStatusThunk: boolStatus => dispatch(setMenuOpenStatusThunk(boolStatus))
