@@ -35,3 +35,7 @@ export const getSelectedPakeepsId = createSelector(
 
 export const getIsCancelSelectedPakeepsId = createSelector([status => status], status => status);
 
+export const getSelectedPakeep = createArraySelector(
+  [selectedPakeepsIdArr => selectedPakeepsIdArr, (selectedPakeepsIdArr, pakeeps) => pakeeps],
+  (selectedPakeepsId, pakeeps) => _.find(pakeeps, ({ id }) => id === selectedPakeepsId)
+);

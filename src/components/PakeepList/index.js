@@ -50,7 +50,6 @@ const PakeepList = ({
   const [isPakeepDragging, setIsPakeepDragging] = useState(false);
   const [isSelecting, setIsSelecting] = useState(false);
   const [isPakeepHovering, setIsPakeepHovering] = useState(false);
-  console.log(selectedPakeepsId);
 
   const flattenFolder = flatten(folders);
   const folderProperty = flattenFolder[currentFolderPropertyIdx]?.property;

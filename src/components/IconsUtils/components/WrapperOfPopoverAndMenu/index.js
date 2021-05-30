@@ -1,8 +1,7 @@
 import PropTypes from 'prop-types';
 import IconButtonByPas from 'components/IconButton';
 import PopoverAndMenu from './components/PopoverAndMenu';
-import { nanoid } from 'nanoid';
-import { memo, useState, useRef } from 'react';
+import {  useState, useRef } from 'react';
 import WrapperOfMainComponent from './components/WrapperOfMainComponent';
 import includes from 'lodash.includes';
 

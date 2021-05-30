@@ -62,10 +62,12 @@ const IconsUtils = ({
   handleSetIsCheckBoxesPakeep,
   isColorDefault,
   isBackgroundColorDefault,
-  arrOfButtonNamesWhichSholudBeHidden = []
+  arrOfButtonNamesWhichSholudBeHidden = [],
+  isUtilsReversed,
+  handleSetArhivedPakeep
 }) => {
   const handleClick = () => console.log('placeholder');
-  const buttonUtilsNewPakeepArray = [
+  const iconsUtilsArr = [
     {
       icon: CheckBoxOutlinedIcon,
       ActiveIcon: CheckBoxIcon,
@@ -98,7 +100,7 @@ const IconsUtils = ({
       popoverText: 'Archive pakeep',
       name: 'archive',
       onClick: handleClick,
-      ActiveIcon: ArchiveIcon
+      ActiveIcon: handleSetArhivedPakeep
     },
     {
       icon: EventAvailableOutlinedIcon,
@@ -169,17 +171,18 @@ const IconsUtils = ({
       rotateDeg: 90
     }
   ];
+  const correctIconButtonUtilsArr = isUtilsReversed ? _.reverse(iconsUtilsArr) : iconsUtilsArr;
 
   // useEffect(() => setPopoverAndMenuState(nullityOfPopoverAndMenuState), [color]);
 
   const [slicedArr, isShouldBeSliced, handleConcatAverageWidth] = useSliced(
     widthOfContainer,
-    buttonUtilsNewPakeepArray
+    correctIconButtonUtilsArr
   );
   const defaultWrapperOfPopoverAndMenuProps = { arrOfButtonNamesWhichSholudBeHidden, customColor };
 
   const nonSlicedwrapperOfPopoverAndMenuProps = {
-    buttonUtilsArr: buttonUtilsNewPakeepArray,
+    buttonUtilsArr: correctIconButtonUtilsArr,
     handleAverageMainComponentWidth: handleConcatAverageWidth
   };
 

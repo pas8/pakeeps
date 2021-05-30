@@ -19,7 +19,8 @@ import {
   toSetOrderNamesOfPinnedPakeeps,
   toHandlePinStatusPakeep,
   toSetSelectedPakeepIds,
-  toSetIsCancelSelectedPakeepsId
+  toSetIsCancelSelectedPakeepsId,
+  toHandleSelectedPakeepsProperty
 } from './actions';
 
 export const addNewPaKeepThunk = data => dispatch => {
@@ -94,7 +95,6 @@ export const handleSetOrderNamesOfPinnedPakeepsThunk = orderNames => dispatch =>
 };
 
 export const handleAddNewGlobalLabelThunk = newLabel => dispatch => {
-  
   dispatch(toAddNewGlobalLabel(newLabel));
 };
 
@@ -122,4 +122,8 @@ export const handleSetSelectedPakeepsIdThunk = pakepsId => dispatch => {
 
 export const handleCancelSelectingStatusThunk = boolValue => dispatch => {
   dispatch(toSetIsCancelSelectedPakeepsId(boolValue));
+};
+
+export const handleSelectedPakeepsPropertyThunk = (newPakeeps, propertyVariant) => dispatch => {
+  dispatch(toHandleSelectedPakeepsProperty(newPakeeps, propertyVariant));
 };

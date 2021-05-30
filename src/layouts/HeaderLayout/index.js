@@ -1,14 +1,19 @@
 import HeaderByPas from 'components/Header/index';
-import { makeStyles } from '@material-ui/core';
+import { Grid, makeStyles } from '@material-ui/core';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { connect } from 'react-redux';
 import { getNavigationViewLike } from 'store/modules/Settings/selectors';
-import { getDrawerWidth, getSelectedPakeepsId } from 'store/modules/App/selectors';
+import { getDrawerWidth, getSelectedPakeep, getSelectedPakeepsId } from 'store/modules/App/selectors';
 import HeaderWhenActiveSelecto from 'components/HeaderWhenActiveSelecto';
-
+import { handleCancelSelectingStatusThunk, handleSelectedPakeepsPropertyThunk } from 'store/modules/App/operations';
 
 const useStyles = makeStyles(theme => ({
+  container: {
+    '& header': {
+      padding: '0px !important'
+    }
+  },
   content: {
     flexGrow: 1,
     padding: theme.spacing(2.8),
@@ -37,7 +42,16 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const HeaderLayout = ({ children, isMenuOpen, drawerWidth, navigationViewLike, selectedPakeepsId }) => {
+const HeaderLayout = ({
+  children,
+  isMenuOpen,
+  drawerWidth,
+  navigationViewLike,
+  selectedPakeepsId,
+  handleCancelSelectingStatusThunk,
+  handleSelectedPakeepsPropertyThunk,
+  selectedPakeeps
+}) => {
   const navigationViewLikeTelegram = navigationViewLike === 'telegram';
   const navigationViewLikeGoogleKeep = navigationViewLike === 'googleKeep';
   const navigationViewLikePakeeps = navigationViewLike === 'pakeeps';
@@ -51,14 +65,19 @@ const HeaderLayout = ({ children, isMenuOpen, drawerWidth, navigationViewLike, s
     isMenuOpen,
     drawerWidth
   };
-  const isShouldBeHeaderWhenActiveSelecto = selectedPakeepsId.length > 0;
+  const isShouldBeHeaderWhenActiveSelecto = selectedPakeeps.length > 0;
 
+  const cancelSelectedPakeepsId = () => {
+    handleCancelSelectingStatusThunk(true);
+  };
   const headerWhenActiveSelectoProps = {
-    selectedPakeepsId
+    selectedPakeeps,
+    cancelSelectedPakeepsId,
+    handleSelectedPakeepsPropertyThunk
   };
 
   return (
-    <>
+    <Grid className={classes.container}>
       {true ? <HeaderWhenActiveSelecto {...headerWhenActiveSelectoProps} /> : <HeaderByPas {...headerByPasProps} />}
       {/* {isShouldBeHeaderWhenActiveSelecto ? <HeaderWhenActiveSelecto /> : <HeaderByPas {...headerByPasProps} />} */}
       <main
@@ -68,21 +87,32 @@ const HeaderLayout = ({ children, isMenuOpen, drawerWidth, navigationViewLike, s
       >
         {children}
       </main>
-    </>
+    </Grid>
   );
 };
 
 HeaderLayout.propTypes = {
-  children: PropTypes.node
+  children: PropTypes.node,
+  drawerWidth: PropTypes.number,
+  handleCancelSelectingStatusThunk: PropTypes.func,
+  isMenuOpen: PropTypes.bool,
+  navigationViewLike: PropTypes.string,
+  selectedPakeeps: PropTypes.array,
+  
 };
 const mapStateToProps = ({
-  app: { isMenuOpen, drawerWidth, selectedPakeepsId },
+  app: { isMenuOpen, drawerWidth, selectedPakeepsId,pakeeps },
   settings: { navigationViewLike }
 }) => ({
   isMenuOpen,
   drawerWidth: getDrawerWidth(drawerWidth),
-  selectedPakeepsId: getSelectedPakeepsId(selectedPakeepsId),
+  selectedPakeeps: getSelectedPakeep(selectedPakeepsId,pakeeps),
   navigationViewLike: getNavigationViewLike(navigationViewLike)
 });
 
-export default connect(mapStateToProps, null)(HeaderLayout);
+const mapDispatchToProps = dispatch => ({
+  handleCancelSelectingStatusThunk: boolValue => dispatch(handleCancelSelectingStatusThunk(boolValue)),
+  handleSelectedPakeepsPropertyThunk:(newPakeeps, propertyVariant) =>dispatch(handleSelectedPakeepsPropertyThunk(newPakeeps, propertyVariant))
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(HeaderLayout);
