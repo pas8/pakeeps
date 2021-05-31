@@ -46,7 +46,7 @@ const HeaderWhenActiveSelecto = ({
   const pakeepPropertyies = {
     isInBookmark: { funcName: 'handleSetBookmarkPakeep', propertyValue: TOOGLE },
     isFavorite: { funcName: 'handleSetFavoritePakeep', propertyValue: TOOGLE },
-    isArchived: { funcName: 'handleSetArhivedPakeep', propertyValue: TOOGLE },
+    isArchived: { funcName: 'handleSetArhivedPakeep', propertyValue: TOOGLE ,isShouldBeClosed:true,},
     isPinned: { func: handleSetIsPinnedPakeep, funcName: 'handleSetIsPinnedPakeep', propertyValue: 'isPinned' },
     color: { funcName: 'handleSetColorPakeep', propertyValue: VALUE },
     backgroundColor: { funcName: 'handleSetBackgroundColorPakeep', propertyValue: VALUE }
@@ -55,6 +55,7 @@ const HeaderWhenActiveSelecto = ({
     pakeepPropertyies,
     selectedPakeeps,
     handleSelectedPakeepsPropertyThunk,
+    cancelSelectedPakeepsId,
     { TOOGLE, VALUE }
   );
   const handleDeleteNewLabel = labelId => {
@@ -63,6 +64,8 @@ const HeaderWhenActiveSelecto = ({
   const handleAddNewLabel = labelId => {
     selectedPakeepsId.map(id => handleAddLabelToPakeepThunk(id, labelId));
   };
+
+
   const selectedLabels = useFindSelectedLabels(selectedPakeeps);
 
   const labelsListProps = {
@@ -70,15 +73,17 @@ const HeaderWhenActiveSelecto = ({
     handleAddNewLabel,
     handleDeleteNewLabel
   };
+
+  const arrOfButtonNamesWhichSholudBeHidden = ['picture', 'edit', 'checkbox', 'width', 'share'];
+
   const iconsUtilsProps = {
     widthOfContainer,
-    id: 'f',
     labels: selectedLabels,
     iconsCloser: true,
     customColor,
     isUtilsReversed: true,
     labelsListProps,
-    arrOfButtonNamesWhichSholudBeHidden: ['picture', 'edit', 'checkbox', 'width', 'share'],
+    arrOfButtonNamesWhichSholudBeHidden,
     ...propertiesArrToUtils
   };
 

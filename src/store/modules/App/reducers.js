@@ -109,16 +109,15 @@ const initialState = {
       title: 'Placeholder 7',
       text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. At imperdiet dui accumsan sit amet nulla facilisi morbi. Aliquam sem et tortor consequat id porta nibh. Enim praesent elementum facilisis leo vel fringilla est. Cras adipiscing enim eu turpis egestas pretium aenean. Sed libero enim sed faucibus turpis in eu mi bibendum. Vestibulum lorem sed risus ultricies. Neque egestas congue quisque egestas diam.',
       isInBookmark: false,
+      isArchived:false,
       isPinned: false,
-
+      isCheckBoxes: false,
       isFavorite: false,
       color: 'default',
       labels: ['label4', 'label6'],
       id: 'pakeep7',
-      isCheckBoxes: false,
       backgroundColor: '#470000',
 
-      isPinned: false
     },
     {
       title: 'Placeholder 8',
@@ -126,6 +125,7 @@ const initialState = {
       isInBookmark: false,
       isFavorite: false,
       isCheckBoxes: false,
+      isArchived:false,
       backgroundColor: '#d37a18',
       color: 'default',
       labels: ['label1'],
@@ -169,7 +169,7 @@ const AppReducer = createReducer(initialState)({
   [types.HANDLE_PIN_STATUS_OF_PAKEEPS]: (state, { pakeepId, isPakeepPinned = false }) => {
     const findedPakeep = find(state.pakeeps, ({ id }) => id === pakeepId);
     const isPinned = isPakeepPinned ?? findedPakeep.isPinned;
-    console.log(isPakeepPinned, isPinned);
+
     const filteredPakeeps = filter(state.pakeeps, ({ id }) => pakeepId !== id);
 
     const newAddedPakeepOrderNames = includes(state.pakeepsOrderNames, findedPakeep.id)

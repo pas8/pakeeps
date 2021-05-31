@@ -135,6 +135,10 @@ const PakeepList = ({
     cancelSelectedPakeepsId();
   }, [currentFolderPropertyIdx]);
 
+  useEffect(() => {
+    !isSomePakeepsSelected && cancelSelectedPakeepsId();
+  }, [isSomePakeepsSelected]);
+  
   return (
     <PakeepHoveringContext.Provider value={pakeepHoveringContextPropviderPropsValue}>
       <Grid ref={scrollerRef} className={'selectoContainer'}>
