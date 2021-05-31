@@ -10,6 +10,7 @@ import IconsUtils from 'components/IconsUtils';
 import { themeColors } from 'components/theme';
 import { LocaleContext } from 'components/NewPakeep';
 import { useFindSelectedLabels } from 'hooks/useFindSelectedLabels.hook';
+import { useGetIsColorDefault } from 'hooks/useGetIsColorDefault.hook';
 
 const useStyles = makeStyles(({ spacing }) => ({
   container: {
@@ -35,7 +36,7 @@ const HeaderWhenActiveSelecto = ({
   // const handleSetFavoritePakeep = () => setState(state => ({ ...state, isFavorite: !state.isFavorite }));
 
   const handleSetIsPinnedPakeep = () => {
-    const isEveryItemPropetyTrue = every(selectedPakeeps, el => !!el.isPinned);
+    const isEveryItemPropetyTrue = every(selectedPakeeps, ({ isPinned }) => !!isPinned);
     selectedPakeepsId.map(el => handlePinStatusPakeepThunk(el, isEveryItemPropetyTrue));
     cancelSelectedPakeepsId();
   };
@@ -43,10 +44,13 @@ const HeaderWhenActiveSelecto = ({
   const TOOGLE = 'TOOGLE';
   const VALUE = 'VALUE';
 
+  const isColorDefault = useGetIsColorDefault(selectedPakeeps, 'color');
+  const isBackgroundColorDefault = useGetIsColorDefault(selectedPakeeps, 'backgroundColor');
+
   const pakeepPropertyies = {
     isInBookmark: { funcName: 'handleSetBookmarkPakeep', propertyValue: TOOGLE },
     isFavorite: { funcName: 'handleSetFavoritePakeep', propertyValue: TOOGLE },
-    isArchived: { funcName: 'handleSetArhivedPakeep', propertyValue: TOOGLE ,isShouldBeClosed:true,},
+    isArchived: { funcName: 'handleSetArhivedPakeep', propertyValue: TOOGLE, isShouldBeClosed: true },
     isPinned: { func: handleSetIsPinnedPakeep, funcName: 'handleSetIsPinnedPakeep', propertyValue: 'isPinned' },
     color: { funcName: 'handleSetColorPakeep', propertyValue: VALUE },
     backgroundColor: { funcName: 'handleSetBackgroundColorPakeep', propertyValue: VALUE }
@@ -65,7 +69,6 @@ const HeaderWhenActiveSelecto = ({
     selectedPakeepsId.map(id => handleAddLabelToPakeepThunk(id, labelId));
   };
 
-
   const selectedLabels = useFindSelectedLabels(selectedPakeeps);
 
   const labelsListProps = {
@@ -78,6 +81,8 @@ const HeaderWhenActiveSelecto = ({
 
   const iconsUtilsProps = {
     widthOfContainer,
+    isBackgroundColorDefault,
+    isColorDefault,
     labels: selectedLabels,
     iconsCloser: true,
     customColor,
