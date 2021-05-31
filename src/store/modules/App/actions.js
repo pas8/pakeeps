@@ -31,11 +31,13 @@ export const toChangeFolders = foldersArr => ({ type: types.HANDLE_FOLDERS, fold
 export const toChangeLabelItem = labels => ({ type: types.CHANGE_LABEL_ITEM, labels });
 
 export const toMovePakeepToArchive = (id, changedLabel) => ({ type: types.MOVE_PAKEEP_TO_ARCHIVE, id, changedLabel });
-export const toDeleteLabelFromPakeep = (currentPakeep, labels) => ({
-  type: types.DELETE_LABEL_FROM_PAKEEP,
+export const toChangeLabelFromPakeep = (currentPakeep, labels) => ({
+  type: types.HANDLE_CHANGE_LABEL_IN_PAKEEP,
   currentPakeep,
   labels
 });
+
+
 
 export const toSetPreviusOrderNames = orderNames => ({ type: types.HANDLE_SET_PREVIUOS_ORDER_NAMES, orderNames });
 export const toSetOrderNamesOfPinnedPakeeps = orderNames => ({
@@ -47,7 +49,7 @@ export const toHandleDrawerWidth = drawerWidth => ({ type: types.HANDLE_DRAWER_W
 export const toAddNewGlobalLabel = newLabel => ({ type: types.ADD_NEW_GLOBAL_LABEL, newLabel });
 export const toSetNewPakeepsArr = pakeeps => ({ type: types.HANDLE_PAKEEPS, pakeeps });
 
-export const toHandlePinStatusPakeep = pakeepId => ({ type: types.HANDLE_PIN_STATUS_OF_PAKEEPS, pakeepId });
+export const toHandlePinStatusPakeep = (pakeepId,isPakeepPinned) => ({ type: types.HANDLE_PIN_STATUS_OF_PAKEEPS, pakeepId,isPakeepPinned });
 
 export const toSetSelectedPakeepIds = pakepsId => ({ type: types.HANDLE_SET_SELECTED_PAKEEPIDS_ARR, pakepsId });
 export const toSetIsCancelSelectedPakeepsId = boolValue => ({ type: types.HANDLE_CANCEL_SELECTING_STATUS, boolValue });
@@ -57,3 +59,8 @@ export const toHandleSelectedPakeepsProperty = (newPakeeps, propertyVariant) => 
   newPakeeps,
   propertyVariant
 });
+
+
+
+
+

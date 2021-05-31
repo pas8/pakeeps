@@ -7,9 +7,9 @@ import { useEffect } from 'react';
 import { colord } from 'colord';
 // import clsx from 'clsx'
 const useStyles = makeStyles(theme => ({
-  icon: ({ iconColor, rotate, isArctiveIconPresent,isIconActive }) => ({
+  icon: ({ iconColor, rotate, isArctiveIconPresent, isIconActive }) => ({
     '& svg': { color: iconColor, transform: rotate },
-    '& path': { fillOpacity: !isArctiveIconPresent && isIconActive && 1  },
+    '& path': { fillOpacity: !isArctiveIconPresent && isIconActive && 1 },
     '&:hover ': { background: colord(iconColor).alpha(0.1).toHex() }
   }),
   smallButtonSize: { '& button ': { padding: theme.spacing(1) } }
@@ -35,14 +35,14 @@ const IconButtonByPas = ({
   const defaultColor = isIconActive
     ? themeColors.primaryMain
     : currentHoverStatusIsTrue
-    ? 'rgba(255,255,255,0.92)'
-    : 'rgba(255,255,255,0.42)';
+    ? themeColors.primaryMain
+    : themeColors.whiteRgbaColorWith0dot42valueOfAlfaCanal;
 
   const iconColor = customColor ? customIconColor : defaultColor;
 
   const rotate = rotateDeg ? `rotate(${rotateDeg}deg)` : 'rotate(0deg)';
 
-  const classes = useStyles({ iconColor, rotate, isIconActive ,isArctiveIconPresent});
+  const classes = useStyles({ iconColor, rotate, isIconActive, isArctiveIconPresent });
 
   const [ref, { width }] = useMeasure();
 
