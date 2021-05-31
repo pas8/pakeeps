@@ -99,8 +99,8 @@ const IconsUtils = ({
       icon: ArchiveOutlinedIcon,
       popoverText: 'Archive pakeep',
       name: 'archive',
-      onClick: handleClick,
-      ActiveIcon: handleSetArhivedPakeep
+      onClick: handleSetArhivedPakeep,
+      ActiveIcon: ArchiveIcon
     },
     {
       icon: EventAvailableOutlinedIcon,
