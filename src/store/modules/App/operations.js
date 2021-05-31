@@ -1,4 +1,4 @@
-import { find, filter } from 'lodash';
+import { find, filter, includes } from 'lodash';
 import {
   toAddDateToPakeep,
   toAddNewPakeep,
@@ -11,7 +11,7 @@ import {
   toSetCurrentFolderPropertyIdx,
   toChangeFolders,
   toChangeLabelItem,
-  toDeleteLabelFromPakeep,
+  toChangeLabelFromPakeep,
   toSetPreviusOrderNames,
   toHandleDrawerWidth,
   toAddNewGlobalLabel,
@@ -20,8 +20,10 @@ import {
   toHandlePinStatusPakeep,
   toSetSelectedPakeepIds,
   toSetIsCancelSelectedPakeepsId,
-  toHandleSelectedPakeepsProperty
+  toHandleSelectedPakeepsProperty,
+  toAddLabelToPakeep
 } from './actions';
+import { useGetCurrentPakeep } from './hooks';
 
 export const addNewPaKeepThunk = data => dispatch => {
   console.log(data);
@@ -72,14 +74,19 @@ export const changeLabelItemThunk = changedLabel => (dispatch, getState) => {
 };
 
 export const handleDeleteLabelFromPakeepThunk = (pakeepId, labelId) => (dispatch, getState) => {
-  const {
-    app: { pakeeps }
-  } = getState();
-
-  const currentPakeep = find(pakeeps, ({ id }) => pakeepId === id);
+  const currentPakeep = useGetCurrentPakeep(pakeepId, getState);
   const labels = filter(currentPakeep.labels, id => labelId !== id);
+  dispatch(toChangeLabelFromPakeep(currentPakeep, labels));
+};
 
-  dispatch(toDeleteLabelFromPakeep(currentPakeep, labels));
+export const handleAddLabelToPakeepThunk = (pakeepId, labelId) => (dispatch, getState) => {
+  const currentPakeep = useGetCurrentPakeep(pakeepId, getState);
+
+  const isPakeepHaveThisLabel = includes(currentPakeep.labels, labelId);
+  const newLabels = [...currentPakeep.labels, labelId];
+  const labels = isPakeepHaveThisLabel ? currentPakeep.labels : newLabels;
+
+  dispatch(toChangeLabelFromPakeep(currentPakeep, labels));
 };
 
 export const handleDrawerWidthThunk = drawerWidth => dispatch => {
@@ -112,8 +119,8 @@ export const handkePakeepPropertyThunk = (pakeepId, property) => (dispatch, getS
   dispatch(toSetNewPakeepsArr(newPakeeps));
 };
 
-export const handlePinStatusPakeepThunk = (pakeepId,isPakeepPinned) => dispatch => {
-  dispatch(toHandlePinStatusPakeep(pakeepId,isPakeepPinned));
+export const handlePinStatusPakeepThunk = (pakeepId, isPakeepPinned) => dispatch => {
+  dispatch(toHandlePinStatusPakeep(pakeepId, isPakeepPinned));
 };
 
 export const handleSetSelectedPakeepsIdThunk = pakepsId => dispatch => {

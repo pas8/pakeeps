@@ -10,7 +10,7 @@ import WrapperOfMenuOfLabelPart from './components/MenuWrapper';
 const LabelPart = ({
   labels,
   handleDeleteLabelFromPakeepFunc,
-  changeLabelItemFunc,
+  changeGloabalLabelItemFunc,
   pakeepId,
   customColor,
   parentBackgrounColor
@@ -45,7 +45,7 @@ const LabelPart = ({
     handleClose,
     handleDeleteLabel,
     menuState,
-    changeLabelItemFunc,
+    changeGloabalLabelItemFunc,
     setMenuState
   };
 
@@ -79,7 +79,7 @@ const LabelPart = ({
 };
 
 LabelPart.propTypes = {
-  changeLabelItemFunc: PropTypes.func,
+  changeGloabalLabelItemFunc: PropTypes.func,
   customColor: PropTypes.any,
   handleDeleteLabelFromPakeepFunc: PropTypes.func,
   labels: PropTypes.shape({

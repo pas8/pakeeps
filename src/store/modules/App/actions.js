@@ -31,11 +31,13 @@ export const toChangeFolders = foldersArr => ({ type: types.HANDLE_FOLDERS, fold
 export const toChangeLabelItem = labels => ({ type: types.CHANGE_LABEL_ITEM, labels });
 
 export const toMovePakeepToArchive = (id, changedLabel) => ({ type: types.MOVE_PAKEEP_TO_ARCHIVE, id, changedLabel });
-export const toDeleteLabelFromPakeep = (currentPakeep, labels) => ({
-  type: types.DELETE_LABEL_FROM_PAKEEP,
+export const toChangeLabelFromPakeep = (currentPakeep, labels) => ({
+  type: types.HANDLE_CHANGE_LABEL_IN_PAKEEP,
   currentPakeep,
   labels
 });
+
+
 
 export const toSetPreviusOrderNames = orderNames => ({ type: types.HANDLE_SET_PREVIUOS_ORDER_NAMES, orderNames });
 export const toSetOrderNamesOfPinnedPakeeps = orderNames => ({
@@ -57,3 +59,8 @@ export const toHandleSelectedPakeepsProperty = (newPakeeps, propertyVariant) => 
   newPakeeps,
   propertyVariant
 });
+
+
+
+
+

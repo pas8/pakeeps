@@ -8,6 +8,8 @@ import { usePropertiesToUtils } from 'hooks/usePropertiesToUtils.hook';
 import IconButtonByPas from 'components/IconButton';
 import IconsUtils from 'components/IconsUtils';
 import { themeColors } from 'components/theme';
+import { LocaleContext } from 'components/NewPakeep';
+import { useFindSelectedLabels } from 'hooks/useFindSelectedLabels.hook';
 
 const useStyles = makeStyles(({ spacing }) => ({
   container: {
@@ -20,7 +22,9 @@ const HeaderWhenActiveSelecto = ({
   cancelSelectedPakeepsId,
   handleSelectedPakeepsPropertyThunk,
   handlePinStatusPakeepThunk,
-  selectedPakeepsId
+  selectedPakeepsId,
+  handleDeleteLabelFromPakeepThunk,
+  handleAddLabelToPakeepThunk
 }) => {
   const classes = useStyles();
 
@@ -33,7 +37,7 @@ const HeaderWhenActiveSelecto = ({
   const handleSetIsPinnedPakeep = () => {
     const isEveryItemPropetyTrue = every(selectedPakeeps, el => !!el.isPinned);
     selectedPakeepsId.map(el => handlePinStatusPakeepThunk(el, isEveryItemPropetyTrue));
-    cancelSelectedPakeepsId()
+    cancelSelectedPakeepsId();
   };
 
   const TOOGLE = 'TOOGLE';
@@ -53,55 +57,59 @@ const HeaderWhenActiveSelecto = ({
     handleSelectedPakeepsPropertyThunk,
     { TOOGLE, VALUE }
   );
+  const handleDeleteNewLabel = labelId => {
+    selectedPakeepsId.map(id => handleDeleteLabelFromPakeepThunk(id, labelId));
+  };
+  const handleAddNewLabel = labelId => {
+    selectedPakeepsId.map(id => handleAddLabelToPakeepThunk(id, labelId));
+  };
+  const selectedLabels = useFindSelectedLabels(selectedPakeeps);
 
-
-// const labelsListProps = {
-//   handleStatusOfHideLabelView,
-//   selectedLabels: state.labels,
-//   handleAddNewLabel,
-//   isLabelViewHidden: statusState.isLabelViewHidden,
-//   handleDeleteLabelFromPakeepFunc,
-//   handleDeleteNewLabel
-// };
-
-// const handleAddNewLabel = idWhichShouldBeAdded => {
-//   setState(state => ({ ...state, labels: [...state.labels, idWhichShouldBeAdded] }));
-// };
-// const handleDeleteLabelFromPakeepFunc = (placeholder, labelId) => handleDeleteNewLabel(labelId);
-
+  const labelsListProps = {
+    isDefaultMenuListHidden: true,
+    handleAddNewLabel,
+    handleDeleteNewLabel
+  };
   const iconsUtilsProps = {
     widthOfContainer,
     id: 'f',
-    labels: [],
+    labels: selectedLabels,
     iconsCloser: true,
     customColor,
     isUtilsReversed: true,
+    labelsListProps,
     arrOfButtonNamesWhichSholudBeHidden: ['picture', 'edit', 'checkbox', 'width', 'share'],
     ...propertiesArrToUtils
   };
 
   return (
-    <Slide in={true} direction={'bottom'}>
-      <AppBar ref={ref} className={classes.container}>
-        <Grid container>
-          <Grid style={{ flex: 1 }}>
-            <Grid container alignItems={'center'}>
-              <IconButtonByPas icon={CloseOutlinedIcon} customColor={customColor} onClick={cancelSelectedPakeepsId} />
-              <Typography variant={'subtitle2'}>{selectedPakeeps.length} selected </Typography>
+    <LocaleContext.Provider value={{ selectedLabels }}>
+      <Slide in={true} direction={'bottom'}>
+        <AppBar ref={ref} className={classes.container}>
+          <Grid container>
+            <Grid style={{ flex: 1 }}>
+              <Grid container alignItems={'center'}>
+                <IconButtonByPas icon={CloseOutlinedIcon} customColor={customColor} onClick={cancelSelectedPakeepsId} />
+                <Typography variant={'subtitle2'}>{selectedPakeeps.length} selected </Typography>
+              </Grid>
+            </Grid>
+            <Grid className={classes.utilsContainer}>
+              <IconsUtils {...iconsUtilsProps} />
             </Grid>
           </Grid>
-          <Grid className={classes.utilsContainer}>
-            <IconsUtils {...iconsUtilsProps} />
-          </Grid>
-        </Grid>
-      </AppBar>
-    </Slide>
+        </AppBar>
+      </Slide>
+    </LocaleContext.Provider>
   );
 };
 
 HeaderWhenActiveSelecto.propTypes = {
   cancelSelectedPakeepsId: PropTypes.func,
+  handleAddLabelToPakeepThunk: PropTypes.func,
+  handleDeleteLabelFromPakeepThunk: PropTypes.func,
+  handlePinStatusPakeepThunk: PropTypes.func,
   handleSelectedPakeepsPropertyThunk: PropTypes.func,
+  selectedPakeeps: PropTypes.array,
   selectedPakeepsId: PropTypes.array
 };
 

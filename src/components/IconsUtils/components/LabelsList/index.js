@@ -18,7 +18,6 @@ const LabelsList = ({
   handleDeleteNewLabel,
   handleDeleteLabelFromPakeepFunc,
   globalLabels,
-  // selectedLabels,
   handleStatusOfHideLabelView,
   isLabelViewHidden,
   changeLabelItemThunk,
@@ -70,7 +69,7 @@ const LabelsList = ({
     handleClose,
     handleDeleteLabel,
     menuState,
-    changeLabelItemFunc: changeLabelItemThunk,
+    changeGloabalLabelItemFunc: changeLabelItemThunk,
     setMenuState,
     isThisMenuIsSecond: true
   };

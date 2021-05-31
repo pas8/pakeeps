@@ -1,12 +1,13 @@
 import PropTypes from 'prop-types';
 import includes from 'lodash.includes';
-import { MenuItem, Checkbox, ListItemText, Grid, FormLabel, makeStyles } from '@material-ui/core';
+import { MenuItem, Checkbox, ListItemText, Grid, FormLabel, makeStyles ,FormControl} from '@material-ui/core';
 import IconsUtilsOfGlobalLabelListOflabelList from './components/IconsUtils';
 
 const useStyles = makeStyles(({ spacing }) => ({
   container: {
+    padding:spacing(1.6,0,0,0),
     '& legend': {
-      padding: spacing(0.8,1.6)
+      padding: spacing(0,1.6,0.6,1.6)
     },
     '& li': {
       padding: spacing(0.2, 0)

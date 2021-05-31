@@ -1,28 +1,27 @@
-import {  makeStyles,MenuItem,ListItemText,  Grid,FormLabel } from '@material-ui/core';
+import { makeStyles, MenuItem, ListItemText, FormControl, FormLabel ,Grid} from '@material-ui/core';
 import PropTypes from 'prop-types';
 import { themeColors } from 'components/theme';
 import { nanoid } from 'nanoid';
 
-const useStyles = makeStyles(({spacing}) => ({
-  container:{
-border:0,
-    borderBottomWidth:2,  borderColor:themeColors.whiteRgbaColorWith0dot42valueOfAlfaCanal,
-    borderStyle:'solid',
-margin:spacing(0.8,0,1.4,0),
-'& legend': {
-  padding: spacing(0.8, 1.6)
-}
+const useStyles = makeStyles(({ spacing }) => ({
+  container: {
+    border: 0,
+    borderBottomWidth: 2,
+    borderColor: themeColors.whiteRgbaColorWith0dot42valueOfAlfaCanal,
+    borderStyle: 'solid',
+    margin: spacing(0.8, 0, 0.4, 0),
+    '& legend': {
+      padding: spacing(0.8, 1.6)
+    }
   },
   defaultMenuListItem: {
     padding: spacing(1, 1),
-    fontSize:'10px',  
+    fontSize: '10px',
     '& svg': {
       margin: spacing(0, 1.08, 0, 0.2),
       color: themeColors.whiteRgbaColorWith0dot8valueOfAlfaCanal
-    },
-   
-  },
-
+    }
+  }
 }));
 
 const DefaultMenuListOflabelList = ({ defaultMenuListArr }) => {
@@ -45,6 +44,6 @@ DefaultMenuListOflabelList.propTypes = {
   defaultMenuListArr: PropTypes.shape({
     map: PropTypes.func
   })
-}
+};
 
 export default DefaultMenuListOflabelList;

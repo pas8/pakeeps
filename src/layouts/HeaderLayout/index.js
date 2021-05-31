@@ -7,7 +7,9 @@ import { getNavigationViewLike } from 'store/modules/Settings/selectors';
 import { getDrawerWidth, getSelectedPakeep, getSelectedPakeepsId } from 'store/modules/App/selectors';
 import HeaderWhenActiveSelecto from 'components/HeaderWhenActiveSelecto';
 import {
+  handleAddLabelToPakeepThunk,
   handleCancelSelectingStatusThunk,
+  handleDeleteLabelFromPakeepThunk,
   handlePinStatusPakeepThunk,
   handleSelectedPakeepsPropertyThunk
 } from 'store/modules/App/operations';
@@ -55,7 +57,9 @@ const HeaderLayout = ({
   handleCancelSelectingStatusThunk,
   handleSelectedPakeepsPropertyThunk,
   selectedPakeeps,
-  handlePinStatusPakeepThunk
+  handlePinStatusPakeepThunk,
+  handleDeleteLabelFromPakeepThunk,
+  handleAddLabelToPakeepThunk
 }) => {
   const navigationViewLikeTelegram = navigationViewLike === 'telegram';
   const navigationViewLikeGoogleKeep = navigationViewLike === 'googleKeep';
@@ -80,12 +84,13 @@ const HeaderLayout = ({
     cancelSelectedPakeepsId,
     handleSelectedPakeepsPropertyThunk,
     handlePinStatusPakeepThunk,
-    selectedPakeepsId
+    selectedPakeepsId,
+    handleDeleteLabelFromPakeepThunk,
+    handleAddLabelToPakeepThunk
   };
 
   return (
     <Grid className={classes.container}>
-      {/* {true ? <HeaderWhenActiveSelecto {...headerWhenActiveSelectoProps} /> : <HeaderByPas {...headerByPasProps} />} */}
       {isShouldBeHeaderWhenActiveSelecto ? <HeaderWhenActiveSelecto  {...headerWhenActiveSelectoProps}/> : <HeaderByPas {...headerByPasProps} />}
       <main
         className={clsx(classes.content, {
@@ -121,8 +126,12 @@ const mapStateToProps = ({
 const mapDispatchToProps = dispatch => ({
   handleCancelSelectingStatusThunk: boolValue => dispatch(handleCancelSelectingStatusThunk(boolValue)),
   handlePinStatusPakeepThunk: (id,isPakeepPinned) => dispatch(handlePinStatusPakeepThunk(id,isPakeepPinned)),
+  handleDeleteLabelFromPakeepThunk: (pakeepId, labelId) => dispatch(handleDeleteLabelFromPakeepThunk(pakeepId, labelId)),
+  handleAddLabelToPakeepThunk: (pakeepId, labelId) => dispatch(handleAddLabelToPakeepThunk(pakeepId, labelId)),
+  
   handleSelectedPakeepsPropertyThunk: (newPakeeps, propertyVariant) =>
     dispatch(handleSelectedPakeepsPropertyThunk(newPakeeps, propertyVariant))
+    
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(HeaderLayout);

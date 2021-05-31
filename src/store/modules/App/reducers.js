@@ -166,10 +166,10 @@ const AppReducer = createReducer(initialState)({
     ...state,
     folders: foldersArr
   }),
-  [types.HANDLE_PIN_STATUS_OF_PAKEEPS]: (state, { pakeepId,isPakeepPinned = false}) => {
+  [types.HANDLE_PIN_STATUS_OF_PAKEEPS]: (state, { pakeepId, isPakeepPinned = false }) => {
     const findedPakeep = find(state.pakeeps, ({ id }) => id === pakeepId);
-    const isPinned = isPakeepPinned ??  findedPakeep.isPinned;
-    console.log(isPakeepPinned, isPinned)
+    const isPinned = isPakeepPinned ?? findedPakeep.isPinned;
+    console.log(isPakeepPinned, isPinned);
     const filteredPakeeps = filter(state.pakeeps, ({ id }) => pakeepId !== id);
 
     const newAddedPakeepOrderNames = includes(state.pakeepsOrderNames, findedPakeep.id)
@@ -203,14 +203,15 @@ const AppReducer = createReducer(initialState)({
     labels
   }),
 
+
+
   [types.HANDLE_SET_SELECTED_PAKEEPIDS_ARR]: (state, { pakepsId: selectedPakeepsId }) => ({
     ...state,
     selectedPakeepsId
   }),
 
-  [types.DELETE_LABEL_FROM_PAKEEP]: (state, { currentPakeep, labels }) => ({
+  [types.HANDLE_CHANGE_LABEL_IN_PAKEEP]: (state, { currentPakeep, labels }) => ({
     ...state,
-    isUsePreviuosOrder: true,
     pakeeps: [...filter(state.pakeeps, ({ id }) => currentPakeep.id !== id), { ...currentPakeep, labels }]
   }),
 
@@ -245,7 +246,7 @@ const AppReducer = createReducer(initialState)({
   [types.HANDLE_DRAWER_WIDTH]: (state, { drawerWidth }) => ({ ...state, drawerWidth }),
   [types.DELETE_PAKEEP]: (state, { id }) => ({
     ...state,
-    pakeeps: pickBy(state.pakeeps, ({ id: pakeepsId }) => id !== pakeepsId)
+    pakeeps: filter(state.pakeeps, ({ id: pakeepsId }) => id !== pakeepsId)
   }),
   [types.SCROLL_DIRECTION]: (state, { scrollDirectionName }) => ({
     ...state,
