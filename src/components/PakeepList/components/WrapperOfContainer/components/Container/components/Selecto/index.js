@@ -52,7 +52,7 @@ const SelectofFPakeepListContainer = ({ scrollerRef, setSelectedIds, setIsSelect
     dragContainer: '.selectoContainer',
     selectableTargets: ['.selectoItem'],
     hitRate: 0,
-    selectByClick: !true,
+    selectByClick: false,
     selectFromInside: true,
     toggleContinueSelect: ['shift'],
     ratio: 0,
