@@ -21,6 +21,7 @@ import AttributeGroup from './components/AttributeGroup';
 import SkeletonView from './components/SkeletonView';
 import MainDefaultPartOfPakeepElement from './components/MainDefaultPart';
 import MainDialogPartOfPakeepElement from './MainDialogPart';
+import SaveButtonWithIcon from 'components/SaveButtonWithIcon';
 
 const useStyles = makeStyles(theme => ({
   paper: ({ customColor, backgroundColor, color, utilsViewLikeInGoogleKeep }) => ({
@@ -67,7 +68,13 @@ const useStyles = makeStyles(theme => ({
   }),
 
   isSelecting: {},
-  isSomePakeepsSelected: { cursor: 'pointer !important' }
+  isSomePakeepsSelected: { cursor: 'pointer !important' },
+  dialogIconsUtils: { margin: theme.spacing(-1.4, 0.4, 0), paddingBottom: theme.spacing(0.4) },
+  container: {
+    ' & .MuiDialogContent-root': {
+      overflowY: 'hidden'
+    }
+  }
 }));
 const PakeepElement = ({
   title,
@@ -108,6 +115,9 @@ const PakeepElement = ({
   };
   const [statusState, setStatusState] = useState(nullityStatusState);
 
+  const [state, setState] = useState({ title, text });
+  const onChange = ({ target: { name, value } }) => setState(state => ({ ...state, [name]: value }));
+
   const handleSetIsHovering = () => setStatusState(state => ({ ...state, isHovered: true }));
   const handleSetIsUnHovering = () => setStatusState(state => ({ ...state, isHovered: false }));
 
@@ -115,7 +125,7 @@ const PakeepElement = ({
   const handleSetFavoritePakeep = () => {};
   const handleSetBookmarkPakeep = () => {};
   const handleDeleteLabel = () => {};
-  const [ref, { width: widthOfContainer }] = useMeasure();
+  const [ref, { width }] = useMeasure();
 
   const handleSetColorPakeep = color => handkePakeepPropertyThunk(id, { color });
   const handleSetBackgroundColorPakeep = backgroundColor => handkePakeepPropertyThunk(id, { backgroundColor });
@@ -124,7 +134,6 @@ const PakeepElement = ({
 
   const iconsUtilsProps = {
     isAllIconsIsShown: false,
-    widthOfContainer,
     setEditTitleIsTrue,
     favorite,
     handleSetFavoritePakeep: handleSetFavoritePakeep,
@@ -137,7 +146,7 @@ const PakeepElement = ({
     handleSetColorPakeep,
     isBackgroundColorDefault,
     isColorDefault,
-    iconsCloser: true,
+    // iconsCloser: true,
     customColor,
     handleSetIsPinnedPakeep
   };
@@ -188,7 +197,7 @@ const PakeepElement = ({
           onMouseEnter,
           onMouseLeave,
           ref,
-          className,
+          className: clsx(classes.container, className),
           id,
           onClick,
           open: true,
@@ -226,8 +235,8 @@ const PakeepElement = ({
         };
 
         const defaultContainerProps = {
-          text,
-          title,
+          ...state,
+          onChange,
           customColor
         };
         const containerProps = isDialogOpen ? mainDialogPartOfPakeepElement : mainDefaultPartOfPakeepElement;
@@ -235,6 +244,13 @@ const PakeepElement = ({
 
         const openIn = isDialogOpen || (!isSomePakeepsSelected && statusState.isHovered && !isSelecting);
 
+        const arrOfButtonNamesWhichSholudBeHidden = isDialogOpen ? ['width'] : [];
+
+        const JUST_PADDING_VALUE = 80;
+        const widthOfContainer = isDialogOpen ? width - JUST_PADDING_VALUE : width;
+        const allIconsUtilsProps = { ...iconsUtilsProps, arrOfButtonNamesWhichSholudBeHidden, widthOfContainer };
+
+        const handleSubmit = () => console.log(state);
         return (
           <PakeepContainer {...pakeepGridContainerProps}>
             <Container {...allContainerProps}>
@@ -243,8 +259,10 @@ const PakeepElement = ({
               </AttributeGroupContainer>
 
               <AnimationElement in={openIn}>
-                <UtilsContainer className={!isDialogOpen && classes.iconsUtils}>
-                  <IconsUtils {...iconsUtilsProps} />
+                <UtilsContainer className={isDialogOpen ? classes.dialogIconsUtils : classes.iconsUtils}>
+                  <IconsUtils {...allIconsUtilsProps} />
+
+                  <SaveButtonWithIcon onSave={handleSubmit} customColor={customColor} />
                 </UtilsContainer>
               </AnimationElement>
             </Container>
