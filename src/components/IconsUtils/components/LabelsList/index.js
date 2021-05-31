@@ -16,11 +16,12 @@ import { LocaleContext } from 'components/NewPakeep';
 const LabelsList = ({
   handleAddNewLabel,
   handleDeleteNewLabel,
+  handleDeleteLabelFromPakeepFunc,
   globalLabels,
-  // selectedLabels,
   handleStatusOfHideLabelView,
   isLabelViewHidden,
-  changeLabelItemThunk
+  changeLabelItemThunk,
+  isDefaultMenuListHidden = false
 }) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const handleOpenAddNewLabelDialog = () => setIsDialogOpen(true);
@@ -62,22 +63,22 @@ const LabelsList = ({
     handleClose();
   };
 
-  const globalLabelListProps = { globalLabels, handleChangeNewLabel,  setMenuState };
+  const globalLabelListProps = { globalLabels, handleChangeNewLabel, setMenuState };
 
   const wrapperOfMenuOfLabelPartProps = {
     handleClose,
     handleDeleteLabel,
     menuState,
-    changeLabelItemFunc: changeLabelItemThunk,
+    changeGloabalLabelItemFunc: changeLabelItemThunk,
     setMenuState,
     isThisMenuIsSecond: true
   };
 
   return (
     <LocaleContext.Consumer>
-      {({selectedLabels}) => (
+      {({ selectedLabels }) => (
         <Grid>
-          <DefaultMenuListOflabelList defaultMenuListArr={defaultMenuListArr} />
+          {!isDefaultMenuListHidden && <DefaultMenuListOflabelList defaultMenuListArr={defaultMenuListArr} />}
           <GlobalLabelListOflabelList {...globalLabelListProps} selectedLabels={selectedLabels} />
 
           <WrapperOfMenuOfLabelPart {...wrapperOfMenuOfLabelPartProps} />

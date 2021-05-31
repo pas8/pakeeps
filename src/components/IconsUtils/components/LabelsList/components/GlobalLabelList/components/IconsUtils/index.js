@@ -1,15 +1,14 @@
-import { Box, IconButton } from '@material-ui/core';
+import { Box } from '@material-ui/core';
 import PropTypes from 'prop-types';
 import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
+import IconButtonByPas from 'components/IconButton';
 
 const IconsUtilsOfGlobalLabelListOflabelList = ({ onClickOfEditButton }) => (
-  <Box mx={0.8}>
-    <IconButton onClick={onClickOfEditButton}>
-      <EditOutlinedIcon />
-    </IconButton>
+  <Box mx={0.4}>
+    <IconButtonByPas icon={EditOutlinedIcon} size={'small'}  onClick={onClickOfEditButton} />
   </Box>
 );
 
-IconsUtilsOfGlobalLabelListOflabelList.propTypes = {};
+IconsUtilsOfGlobalLabelListOflabelList.propTypes = {  onClickOfEditButton: PropTypes.func}
 
 export default IconsUtilsOfGlobalLabelListOflabelList;
