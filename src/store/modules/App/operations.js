@@ -73,6 +73,7 @@ export const changeLabelItemThunk = changedLabel => (dispatch, getState) => {
   dispatch(toChangeLabelItem(newLabels));
 };
 
+
 export const handleDeleteLabelFromPakeepThunk = (pakeepId, labelId) => (dispatch, getState) => {
   const currentPakeep = useGetCurrentPakeep(pakeepId, getState);
   const labels = filter(currentPakeep.labels, id => labelId !== id);
@@ -81,10 +82,10 @@ export const handleDeleteLabelFromPakeepThunk = (pakeepId, labelId) => (dispatch
 
 export const handleAddLabelToPakeepThunk = (pakeepId, labelId) => (dispatch, getState) => {
   const currentPakeep = useGetCurrentPakeep(pakeepId, getState);
-
   const isPakeepHaveThisLabel = includes(currentPakeep.labels, labelId);
-  const newLabels = [...currentPakeep.labels, labelId];
-  const labels = isPakeepHaveThisLabel ? currentPakeep.labels : newLabels;
+
+  const newLabels = [...currentPakeep?.labels, labelId];
+  const labels = isPakeepHaveThisLabel    ? currentPakeep.labels : newLabels;
 
   dispatch(toChangeLabelFromPakeep(currentPakeep, labels));
 };
