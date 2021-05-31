@@ -50,6 +50,7 @@ const PakeepList = ({
   const [isPakeepDragging, setIsPakeepDragging] = useState(false);
   const [isSelecting, setIsSelecting] = useState(false);
   const [isPakeepHovering, setIsPakeepHovering] = useState(false);
+  const [pakeepIdOfDialog, setPakeepIdOfDialog] = useState('');
 
   const flattenFolder = flatten(folders);
   const folderProperty = flattenFolder[currentFolderPropertyIdx]?.property;
@@ -97,6 +98,9 @@ const PakeepList = ({
     handleCancelSelectingStatusThunk(true);
   };
 
+  const handleOpenDialog = (id) => {
+    setPakeepIdOfDialog(id);
+  };
   useIsomorphicLayoutEffect(() => {
     if (!isCancelSelectedPakeepsId) return;
 
@@ -110,7 +114,8 @@ const PakeepList = ({
   const isSomePakeepsSelected = selectedPakeepsId.length > 0;
 
   const onClickOfPakeepElement = id => {
-    if (!isSomePakeepsSelected) return;
+    if (!isSomePakeepsSelected) return handleOpenDialog(id);
+
     const newItem = document.getElementById(id);
     const isSelected = includes(newItem.className, SELECTED);
 
@@ -126,10 +131,13 @@ const PakeepList = ({
 
     return handleSetSelectedPakeepsIdThunk(newSelectedPakeepsId);
   };
+  const handleClosePakeepDialog = () => setPakeepIdOfDialog('')
   const pakeepHoveringContextPropviderPropsValue = {
     setIsPakeepHovering,
     onClickOfPakeepElement,
-    isSomePakeepsSelected
+    isSomePakeepsSelected,
+    pakeepIdOfDialog,
+    handleClosePakeepDialog
   };
   useEffect(() => {
     cancelSelectedPakeepsId();
@@ -138,7 +146,7 @@ const PakeepList = ({
   useEffect(() => {
     !isSomePakeepsSelected && cancelSelectedPakeepsId();
   }, [isSomePakeepsSelected]);
-  
+
   return (
     <PakeepHoveringContext.Provider value={pakeepHoveringContextPropviderPropsValue}>
       <Grid ref={scrollerRef} className={'selectoContainer'}>
