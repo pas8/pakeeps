@@ -25,7 +25,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const CustomColor = ({ gradientStatus, setGradientStatus, handleSave }) => {
+const CustomColor = ({ gradientStatus, setGradientStatus, handleSave,customColor }) => {
   const [copyState, copyToClipboardFunc] = useCopyToClipboard();
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const nullityColor = colord(themeColors.whiteRgbaColorWith0dot8valueOfAlfaCanal).toRgb();
@@ -101,7 +101,8 @@ const CustomColor = ({ gradientStatus, setGradientStatus, handleSave }) => {
     onClickOfExtendButton,
     onClickOfPalletteButton,
     onClickOfColorPreviewButton,
-    onClickOfCopyButton
+    onClickOfCopyButton,
+    customColor
   };
 
   const colorColumnArr = [
@@ -127,6 +128,7 @@ const CustomColor = ({ gradientStatus, setGradientStatus, handleSave }) => {
     isExtended,
     color,
     handleSetColor,
+    customColor,
     columnArr: colorColumnArr
   };
 

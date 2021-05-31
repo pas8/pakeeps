@@ -246,7 +246,7 @@ const PakeepElement = ({
 
         const arrOfButtonNamesWhichSholudBeHidden = isDialogOpen ? ['width'] : [];
 
-        const JUST_PADDING_VALUE = 80;
+        const JUST_PADDING_VALUE = 160;
         const widthOfContainer = isDialogOpen ? width - JUST_PADDING_VALUE : width;
         const allIconsUtilsProps = { ...iconsUtilsProps, arrOfButtonNamesWhichSholudBeHidden, widthOfContainer };
 
@@ -262,7 +262,7 @@ const PakeepElement = ({
                 <UtilsContainer className={isDialogOpen ? classes.dialogIconsUtils : classes.iconsUtils}>
                   <IconsUtils {...allIconsUtilsProps} />
 
-                  <SaveButtonWithIcon onSave={handleSubmit} customColor={customColor} />
+                  {isDialogOpen && <SaveButtonWithIcon onSave={handleSubmit} customColor={customColor} />}
                 </UtilsContainer>
               </AnimationElement>
             </Container>

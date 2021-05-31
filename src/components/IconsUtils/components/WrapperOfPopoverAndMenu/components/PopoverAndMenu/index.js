@@ -3,6 +3,8 @@ import { useEffect, useState, useRef } from 'react';
 import Popover from '@material-ui/core/Popover';
 import Typography from '@material-ui/core/Typography';
 import { Grid, Menu, makeStyles } from '@material-ui/core';
+import { colord } from 'colord';
+import { useIsColorDark } from 'hooks/useIsColorDark.hook';
 
 const useStyles = makeStyles(theme => ({
   popover: {
@@ -10,7 +12,13 @@ const useStyles = makeStyles(theme => ({
   },
   padding: {
     padding: theme.spacing(0.8)
-  }
+  },
+  menuContainer: ({ customColor }) => ({
+    '& > div': {
+      backgroundColor: customColor?.hover,
+
+    }
+  })
 }));
 
 const PopoverAndMenu = ({
@@ -26,9 +34,10 @@ const PopoverAndMenu = ({
   popoverTypographyVariant = 'subtitle2',
   menuLocation = 'default',
   popoverLocation = 'default',
-  popoverLevel = 'first'
+  popoverLevel = 'first',
+  customColor
 }) => {
-  const classes = useStyles();
+  const classes = useStyles({ customColor });
 
   // useEffect(
   //   () =>
@@ -103,8 +112,11 @@ const PopoverAndMenu = ({
     anchorEl: currentTarget,
     keepMounted: true,
     open: isMenuOpen,
-    onClose: handleMenuClose
+    onClose: handleMenuClose,
+    className: classes.menuContainer
   };
+
+  const allMenuComponentsProps = { ...menuComponentsProps, customColor };
   return (
     <>
       <Popover {...popoverProps}>
@@ -113,7 +125,7 @@ const PopoverAndMenu = ({
 
       {!!MenuComponents && (
         <Menu {...menuProps}>
-          <MenuComponents {...menuComponentsProps} />
+          <MenuComponents {...allMenuComponentsProps} />
         </Menu>
       )}
     </>

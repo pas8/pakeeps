@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import IconButtonByPas from 'components/IconButton';
 import PopoverAndMenu from './components/PopoverAndMenu';
-import {  useState, useRef } from 'react';
+import { useState, useRef } from 'react';
 import WrapperOfMainComponent from './components/WrapperOfMainComponent';
 import includes from 'lodash.includes';
 
@@ -11,9 +11,19 @@ const WrapperOfPopoverAndMenu = ({
   isIconNameExtended = false,
   iconSize = 'default',
   handleAverageMainComponentWidth,
-  customColor,
+  customColor: notReversedCustomColor,
+  isCustomColorReversed = false,
   arrOfButtonNamesWhichSholudBeHidden
 }) => {
+  const reversedColor = {
+    hover: notReversedCustomColor.bgHover,
+    unHover: notReversedCustomColor.bgUnHover,
+    bgHover: notReversedCustomColor.hover,
+    bgUnHover: notReversedCustomColor.unHover
+  };
+
+  const customColor = isCustomColorReversed ? reversedColor : notReversedCustomColor;
+
   const nullityOfAnchorEl = {
     name: '',
     isMenuOpen: false,
@@ -30,7 +40,7 @@ const WrapperOfPopoverAndMenu = ({
   const handleMenuClose = () => setAnchorElState(nullityOfAnchorEl);
   const handlePopoverClose = () => setAnchorElState(state => ({ ...state, isPopoverOpen: false }));
 
-  const popoverAndMenuProps = { ...anchorElState, handleMenuClose, handlePopoverClose };
+  const popoverAndMenuProps = { ...anchorElState, handleMenuClose, handlePopoverClose, customColor };
   const anchorElRef = useRef(null);
 
   return (
@@ -45,7 +55,7 @@ const WrapperOfPopoverAndMenu = ({
             ActiveIcon,
             isIconActive,
             menuComponents: MenuComponents,
-            menuComponentsProps: customMenuComponentsProps,
+            menuComponentsProps,
             hidden = false,
             customElementComponentOfIconGroup = false,
             rotateDeg = false,
@@ -53,7 +63,6 @@ const WrapperOfPopoverAndMenu = ({
           },
           idx
         ) => {
-          if (includes(arrOfButtonNamesWhichSholudBeHidden, buttonUtilsName)) return;
           if (hidden) return;
           if (customElementComponentOfIconGroup) return customElementComponentOfIconGroup;
 
@@ -77,7 +86,7 @@ const WrapperOfPopoverAndMenu = ({
             handleAverageMainComponentWidth
           };
           const mainComponent = <IconButtonByPas {...iconButtonProps} />;
-          const menuComponentsProps = { ...customMenuComponentsProps, onMenuClose: handleMenuClose };
+          const allMenuComponentsProps = { ...menuComponentsProps, onMenuClose: handleMenuClose, customColor };
 
           const handlePopoverOpen = ({ currentTarget }) =>
             setAnchorElState(state => ({
@@ -93,7 +102,7 @@ const WrapperOfPopoverAndMenu = ({
               ...state,
               currentTarget,
               handleMenuClose,
-              menuComponentsProps,
+              menuComponentsProps: allMenuComponentsProps,
               MenuComponents,
               name: buttonUtilsName,
               isMenuOpen: true,

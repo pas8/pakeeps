@@ -171,7 +171,11 @@ const IconsUtils = ({
       rotateDeg: 90
     }
   ];
-  const correctIconButtonUtilsArr = isUtilsReversed ? _.reverse(iconsUtilsArr) : iconsUtilsArr;
+  const reverseValidatedIconButtonUtilsArr = isUtilsReversed ? _.reverse(iconsUtilsArr) : iconsUtilsArr;
+  const correctIconButtonUtilsArr = _.filter(
+    reverseValidatedIconButtonUtilsArr,
+    ({ name }) => !_.includes(arrOfButtonNamesWhichSholudBeHidden, name)
+  );
 
   // useEffect(() => setPopoverAndMenuState(nullityOfPopoverAndMenuState), [color]);
 
@@ -179,7 +183,7 @@ const IconsUtils = ({
     widthOfContainer,
     correctIconButtonUtilsArr
   );
-  const defaultWrapperOfPopoverAndMenuProps = { arrOfButtonNamesWhichSholudBeHidden, customColor };
+  const defaultWrapperOfPopoverAndMenuProps = { customColor };
 
   const nonSlicedwrapperOfPopoverAndMenuProps = {
     buttonUtilsArr: correctIconButtonUtilsArr,
