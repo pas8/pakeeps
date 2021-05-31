@@ -47,7 +47,7 @@ export const toHandleDrawerWidth = drawerWidth => ({ type: types.HANDLE_DRAWER_W
 export const toAddNewGlobalLabel = newLabel => ({ type: types.ADD_NEW_GLOBAL_LABEL, newLabel });
 export const toSetNewPakeepsArr = pakeeps => ({ type: types.HANDLE_PAKEEPS, pakeeps });
 
-export const toHandlePinStatusPakeep = pakeepId => ({ type: types.HANDLE_PIN_STATUS_OF_PAKEEPS, pakeepId });
+export const toHandlePinStatusPakeep = (pakeepId,isPakeepPinned) => ({ type: types.HANDLE_PIN_STATUS_OF_PAKEEPS, pakeepId,isPakeepPinned });
 
 export const toSetSelectedPakeepIds = pakepsId => ({ type: types.HANDLE_SET_SELECTED_PAKEEPIDS_ARR, pakepsId });
 export const toSetIsCancelSelectedPakeepsId = boolValue => ({ type: types.HANDLE_CANCEL_SELECTING_STATUS, boolValue });

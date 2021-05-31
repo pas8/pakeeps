@@ -166,9 +166,10 @@ const AppReducer = createReducer(initialState)({
     ...state,
     folders: foldersArr
   }),
-  [types.HANDLE_PIN_STATUS_OF_PAKEEPS]: (state, { pakeepId }) => {
+  [types.HANDLE_PIN_STATUS_OF_PAKEEPS]: (state, { pakeepId,isPakeepPinned = false}) => {
     const findedPakeep = find(state.pakeeps, ({ id }) => id === pakeepId);
-    const isPinned = findedPakeep.isPinned;
+    const isPinned = isPakeepPinned ??  findedPakeep.isPinned;
+    console.log(isPakeepPinned, isPinned)
     const filteredPakeeps = filter(state.pakeeps, ({ id }) => pakeepId !== id);
 
     const newAddedPakeepOrderNames = includes(state.pakeepsOrderNames, findedPakeep.id)

@@ -120,7 +120,7 @@ const mapStateToProps = ({
 
 const mapDispatchToProps = dispatch => ({
   handleCancelSelectingStatusThunk: boolValue => dispatch(handleCancelSelectingStatusThunk(boolValue)),
-  handlePinStatusPakeepThunk: id => dispatch(handlePinStatusPakeepThunk(id)),
+  handlePinStatusPakeepThunk: (id,isPakeepPinned) => dispatch(handlePinStatusPakeepThunk(id,isPakeepPinned)),
   handleSelectedPakeepsPropertyThunk: (newPakeeps, propertyVariant) =>
     dispatch(handleSelectedPakeepsPropertyThunk(newPakeeps, propertyVariant))
 });

@@ -112,8 +112,8 @@ export const handkePakeepPropertyThunk = (pakeepId, property) => (dispatch, getS
   dispatch(toSetNewPakeepsArr(newPakeeps));
 };
 
-export const handlePinStatusPakeepThunk = pakeepId => dispatch => {
-  dispatch(toHandlePinStatusPakeep(pakeepId));
+export const handlePinStatusPakeepThunk = (pakeepId,isPakeepPinned) => dispatch => {
+  dispatch(toHandlePinStatusPakeep(pakeepId,isPakeepPinned));
 };
 
 export const handleSetSelectedPakeepsIdThunk = pakepsId => dispatch => {
