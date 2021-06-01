@@ -44,7 +44,6 @@ const MoreUtils = ({ slicedArrAfter, customColor }) => {
         const classes = useStyles({ color, hoverColor,isIconActive });
         //
 
-        console.log(isIconActive);
         return (
           <MenuItem disableGutters onClick={onClick} key={nanoid()} className={classes.container}>
             <Grid className={clsx(classes.itemGrid)} container>

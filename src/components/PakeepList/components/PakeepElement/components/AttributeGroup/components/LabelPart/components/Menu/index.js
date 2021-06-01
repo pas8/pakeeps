@@ -36,7 +36,6 @@ const MenuOfLabelPart = ({
 }) => {
   const color = !menuState?.color ? themeColors.primaryMain : menuState.color;
 
-
 const reversedCustomColor = useGetReversedCustomColor(customColor,true)
 
   const nullifyOfMenuItemState = { name: '' };
@@ -79,7 +78,7 @@ const reversedCustomColor = useGetReversedCustomColor(customColor,true)
             handleChangeLabelIconName,
             labelIconName: menuState.labelIconName,
             color,
-            customColor:reversedCustomColor
+            customColor
           },
           CustomColumnElement: PreparedIconSelectingList,
           columnArr: iconsArr
@@ -106,6 +105,7 @@ const reversedCustomColor = useGetReversedCustomColor(customColor,true)
     currentColor: menuState.color,
     handleOpen: null,
     labelChipProps: previewLabelProps,
+    parentBackgrounColor:customColor.bgHover,
     customColor
   };
 
@@ -139,7 +139,7 @@ const reversedCustomColor = useGetReversedCustomColor(customColor,true)
 
             const correctName = name === menuItemState.name;
             const isDynamicComponentShouldBeShown = correctName && dynamicComponent.component;
-            const dynamicComponentProps = { ...dynamicComponent.props, customColor:reversedCustomColor };
+            const dynamicComponentProps = { customColor:reversedCustomColor,...dynamicComponent.props,  };
             const onClick = () =>
               onMenuItemClick ? onMenuItemClick() : setMenuItemState(state => ({ ...state, name }));
             const menuItemProps = {
@@ -150,12 +150,13 @@ const reversedCustomColor = useGetReversedCustomColor(customColor,true)
               dynamicComponentProps,
               isActiveIcon: false,
               title,
-              customColor,
               isDynamicItemGridMarginIsZero: true,
               isDynamicComponentShouldBeShown,
               menuItemProps,
               isPreventClickOfMenuItem: false,
-              Icon
+              Icon,
+              customColor,
+
             };
             return <DynamicMenuItem {...DynamicMenuItemProps} />;
           }

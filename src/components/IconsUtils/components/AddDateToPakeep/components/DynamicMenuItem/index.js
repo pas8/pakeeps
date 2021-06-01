@@ -16,20 +16,14 @@ const useStyles = makeStyles(theme => ({
   },
 
   // preventClickOfMenuItem: { '& .MuiTouchRipple-root': { display: 'none' } },
-  itemGrid: ({color}) => ({
-    padding: theme.spacing(0.92, 0.8),
-    '& svg,h6': { color },
-
-
+  itemGrid: ({ color }) => ({
+    padding: theme.spacing(1, 1.6),
+    '& svg,h6': { color }
   }),
-  container:  ({hoverColor,color}) => ({
-    margin: theme.spacing(0.4, 0.8 * 4, 0, 1.4),
-
-    // '&:hover svg,h6': { color: hoverColor },
-    '& .MuiTouchRipple-root': {
-      background:useAlpha(color)
+  container: ({ hoverColor, color, }) => ({
+    '&:hover > .MuiTouchRipple-root':  {
+      background:   useAlpha(color)
     }
-
   })
 }));
 
@@ -45,10 +39,8 @@ const DynamicMenuItem = ({
   customColor,
   isDynamicItemGridMarginIsZero = false
 }) => {
-
-const color = !customColor?.isUseDefault ?  customColor?.unHover : themeColors.whiteRgbaColorWith0dot8valueOfAlfaCanal 
-// console.log(customColor?.isUseDefault)
-const classes = useStyles({ color, hoverColor: '' });
+  const color = !customColor ? themeColors.whiteRgbaColorWith0dot8valueOfAlfaCanal : customColor?.unHover;
+  const classes = useStyles({ color, hoverColor: '' ,customColor});
 
   const dynamicMenuItem = (
     <Grid item className={!isDynamicItemGridMarginIsZero && clsx(classes.marginTop, classes.itemGrid)}>
@@ -57,7 +49,7 @@ const classes = useStyles({ color, hoverColor: '' });
   );
 
   const staticMenuItem = (
-    <Grid  container className={ classes.itemGrid}>
+    <Grid container className={classes.itemGrid}>
       <Icon />
       <Grid item className={classes.menuText}>
         <Typography variant={'subtitle2'}>{title}</Typography>
@@ -70,7 +62,7 @@ const classes = useStyles({ color, hoverColor: '' });
   const itemOfMenuProps = {
     ...menuItemProps,
     disableGutters: true,
-    className: isPreventClickOfMenuItem ? classes.preventClickOfMenuItem : classes.itemGrid
+    className: clsx(isPreventClickOfMenuItem && classes.preventClickOfMenuItem,customColor && classes.container)
   };
 
   return (

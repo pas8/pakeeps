@@ -28,21 +28,19 @@ export const useGetReadableColor = (backgroundColor, color = 'default') => {
     : colord(backgroundColor).lighten(0.4).darken(0.08).alpha(0.8).toHex();
 
   const newColor = !isUseDefaultColor
-    ? { hover: color, unHover: colord(color).alpha(0.8).toHex(), bgHover, bgUnHover ,isUseDefault:false}
+    ? { hover: color, unHover: colord(color).alpha(0.8).toHex(), bgHover, bgUnHover }
     : isValid || isUseDefault
     ? {
         hover: defaultColors.color,
         unHover: colord(defaultColors.color).alpha(0.8).toHex(),
         bgHover,
-        bgUnHover,
-        isUseDefault:false
+        bgUnHover
       }
     : {
         hover: defaultBlackColor,
         unHover: colord(defaultColors.backgroundColor).alpha(0.96).toHex(),
         bgHover,
-        bgUnHover,
-        isUseDefault:true
+        bgUnHover
       };
 
   const customColor = isUseDefault ? false : newColor;

@@ -23,8 +23,7 @@ const HeaderOfAddDateToPakeep = ({
   customTitle,
   customColor
 }) => {
-  const borderColor =  !!customColor?.isUseDefault ?  customColor?.hover : themeColors.whiteRgbaColorWith0dot42valueOfAlfaCanal 
-  console.log(borderColor)
+  const borderColor =  !customColor ?  themeColors.whiteRgbaColorWith0dot42valueOfAlfaCanal :  customColor?.hover  
   const classes = useStyles({ borderColor });
 
   return (
