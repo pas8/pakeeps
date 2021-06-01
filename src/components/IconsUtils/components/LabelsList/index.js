@@ -12,6 +12,7 @@ import DialogOfAddNewLabel from './components/DialogOfAddNewLabel';
 import DefaultMenuListOflabelList from './components/DefaultMenuList';
 import GlobalLabelListOflabelList from './components/GlobalLabelList';
 import { SelectedLabels } from 'components/NewPakeep';
+import { useGetReversedCustomColor } from 'hooks/useGetReversedCustomColor.hook';
 
 const LabelsList = ({
   handleAddNewLabel,
@@ -64,7 +65,7 @@ const LabelsList = ({
     handleClose();
   };
 
-  const globalLabelListProps = { globalLabels, handleChangeNewLabel, setMenuState,customColor };
+  const globalLabelListProps = { globalLabels, handleChangeNewLabel, setMenuState, customColor };
 
   const wrapperOfMenuOfLabelPartProps = {
     handleClose,
@@ -72,8 +73,7 @@ const LabelsList = ({
     menuState,
     changeGloabalLabelItemFunc: changeLabelItemThunk,
     setMenuState,
-    isThisMenuIsSecond: true,
-    
+    isThisMenuIsSecond: true
   };
 
   return (

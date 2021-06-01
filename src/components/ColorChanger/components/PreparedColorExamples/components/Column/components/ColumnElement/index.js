@@ -14,7 +14,10 @@ const useStyles = makeStyles(theme => ({
     height: theme.spacing(16 * 0.42),
     margin: theme.spacing(0.4),
     overflow: 'hidden',
-    border: '1px solid rgba(42,42,42,1)',
+    border: '1px solid',
+    borderColor: ({ isColorLight, isBgColorLight, customColor }) =>
+    isBgColorLight && !!customColor ? customColor?.bgUnHover : isColorLight ? 'rgba(8,8,8,1)' : 'rgba(255,255,255,1)',
+
 
     transition: theme.transitions.create('border', {
       easing: theme.transitions.easing.easeIn,
@@ -34,7 +37,7 @@ const useStyles = makeStyles(theme => ({
     borderRadius: '10px'
   },
   elementOfGridColorPickerWithBorder: {
-    borderColor: ({ isColorLight }) => (isColorLight ? 'rgba(8,8,8,1)' : 'rgba(255,255,255,1)'),
+
     transition: theme.transitions.create('border', {
       easing: theme.transitions.easing.easeIn,
       duration: theme.transitions.duration.enteringScreen
@@ -51,11 +54,8 @@ const ColumnElementOfPreparedColorExamples = ({ handleSetColor, isExtended, colo
   const isColorLight = useIsColorDark(color);
   const isBgColorLight = useIsColorDark(customColor?.hover);
 
-  const classes = useStyles({ isColorLight, customColor });
-  const namesOfPartsOfGridElement = [
-    ['A100', 'A200'],
-    ['A400', 'A700']
-  ];
+  const classes = useStyles({ isColorLight, customColor, isBgColorLight });
+  const namesOfPartsOfGridElement = [, ['A100', 'A200'], ['A400', 'A700']];
 
   const correctNamesOfPartsOfGridElementArr = _.flattenDeep(namesOfPartsOfGridElement);
   const isExtendedElementColorCorrect = correctNamesOfPartsOfGridElementArr.some(
@@ -72,9 +72,11 @@ const ColumnElementOfPreparedColorExamples = ({ handleSetColor, isExtended, colo
 
             const elementOfPartsOfGridElementProps = {
               onClick,
-              style: { background: colorOfElementOfPartsOfGridElementProps },
+              style: {
+                background: colorOfElementOfPartsOfGridElementProps
+              },
 
-              className: clsx(classes.extendedElementOfGridColorPicker, isBgColorLight && classes.withBorder),
+              className: clsx(classes.extendedElementOfGridColorPicker),
               key: idx
             };
 
@@ -90,7 +92,11 @@ const ColumnElementOfPreparedColorExamples = ({ handleSetColor, isExtended, colo
     const onClick = onClickOfSelectElement ?? defaultOnClick;
 
     const selectedElementPaperContainerProps = {
-      style: { backgroundColor: color, border: `2px solid ${!!customColor ? customColor?.bgUnHover : color}` ,boxShadow:`0 0 4px 1px ${ customColor?.bgUnHover}`},
+      style: {
+        backgroundColor: color,
+        border: `1px solid ${isBgColorLight && !!customColor ? customColor?.bgUnHover : color}`,
+        // boxShadow: `0 0 2px 1px ${colord(customColor?.bgUnHover).alpha(0.4).toHex()}`
+      },
       className: clsx(
         classes.elementOfGridColorPicker,
         correctStatus ? classes.elementOfGridColorPickerWithBorder : null

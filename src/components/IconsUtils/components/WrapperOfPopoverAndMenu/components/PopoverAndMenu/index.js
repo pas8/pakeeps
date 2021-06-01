@@ -7,16 +7,20 @@ import { colord } from 'colord';
 import { useIsColorDark } from 'hooks/useIsColorDark.hook';
 
 const useStyles = makeStyles(theme => ({
+  paper: ({ customColor }) => ({
+    padding: theme.spacing(0.6,0.8),
+    background: customColor && customColor?.hover,
+    color: customColor && customColor?.bgUnHover,
+    // border: '1px solid',
+    // boxShadow: !useIsColorDark(customColor?.hover) && `0px 0px 2px 1px ${customColor?.bgUnHover}`,
+    // borderColor:useIsColorDark(customColor?.hover) && customColor?.bgHover,
+  }),
   popover: {
     pointerEvents: 'none'
   },
-  padding: {
-    padding: theme.spacing(0.8)
-  },
   menuContainer: ({ customColor }) => ({
     '& > div': {
-      backgroundColor: customColor?.hover,
-
+      backgroundColor: customColor?.hover
     }
   })
 }));
@@ -99,7 +103,7 @@ const PopoverAndMenu = ({
   const popoverProps = {
     ...locationOfPopover,
     className: classes.popover,
-    classes: { paper: classes.padding },
+    classes: { paper: classes.paper },
 
     open: isPopoverOpen,
     anchorEl: currentTarget,
