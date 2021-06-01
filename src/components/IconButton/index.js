@@ -10,7 +10,7 @@ const useStyles = makeStyles(theme => ({
   icon: ({ iconColor, rotate, isArctiveIconPresent, isIconActive }) => ({
     '& svg': { color: iconColor, transform: rotate },
     '& path': { fillOpacity: !isArctiveIconPresent && isIconActive && 1 },
-    '&:hover ': { background: colord(iconColor).alpha(0.1).toHex() }
+    '&:hover ': { background: colord(iconColor).alpha(0.16).toHex() }
   }),
   smallButtonSize: { '& button ': { padding: theme.spacing(1) } }
 }));
@@ -35,7 +35,7 @@ const IconButtonByPas = ({
   const defaultColor = isIconActive
     ? themeColors.primaryMain
     : currentHoverStatusIsTrue
-    ? themeColors.primaryMain
+    ? themeColors.whiteRgbaColorWith0dot96valueOfAlfaCanal
     : themeColors.whiteRgbaColorWith0dot42valueOfAlfaCanal;
 
   const iconColor = customColor ? customIconColor : defaultColor;

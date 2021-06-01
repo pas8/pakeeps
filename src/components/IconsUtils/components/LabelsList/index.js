@@ -11,7 +11,8 @@ import WrapperOfMenuOfLabelPart from 'components/PakeepList/components/PakeepEle
 import DialogOfAddNewLabel from './components/DialogOfAddNewLabel';
 import DefaultMenuListOflabelList from './components/DefaultMenuList';
 import GlobalLabelListOflabelList from './components/GlobalLabelList';
-import { LocaleContext } from 'components/NewPakeep';
+import { SelectedLabels } from 'components/NewPakeep';
+import { useGetReversedCustomColor } from 'hooks/useGetReversedCustomColor.hook';
 
 const LabelsList = ({
   handleAddNewLabel,
@@ -21,7 +22,8 @@ const LabelsList = ({
   handleStatusOfHideLabelView,
   isLabelViewHidden,
   changeLabelItemThunk,
-  isDefaultMenuListHidden = false
+  isDefaultMenuListHidden = false,
+  customColor
 }) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const handleOpenAddNewLabelDialog = () => setIsDialogOpen(true);
@@ -63,7 +65,7 @@ const LabelsList = ({
     handleClose();
   };
 
-  const globalLabelListProps = { globalLabels, handleChangeNewLabel, setMenuState };
+  const globalLabelListProps = { globalLabels, handleChangeNewLabel, setMenuState, customColor };
 
   const wrapperOfMenuOfLabelPartProps = {
     handleClose,
@@ -75,7 +77,7 @@ const LabelsList = ({
   };
 
   return (
-    <LocaleContext.Consumer>
+    <SelectedLabels.Consumer>
       {({ selectedLabels }) => (
         <Grid>
           {!isDefaultMenuListHidden && <DefaultMenuListOflabelList defaultMenuListArr={defaultMenuListArr} />}
@@ -85,7 +87,7 @@ const LabelsList = ({
           <DialogOfAddNewLabel {...dialogOfAddNewLabelProps} />
         </Grid>
       )}
-    </LocaleContext.Consumer>
+    </SelectedLabels.Consumer>
   );
 };
 

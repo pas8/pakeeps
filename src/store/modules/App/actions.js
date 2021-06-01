@@ -37,8 +37,6 @@ export const toChangeLabelFromPakeep = (currentPakeep, labels) => ({
   labels
 });
 
-
-
 export const toSetPreviusOrderNames = orderNames => ({ type: types.HANDLE_SET_PREVIUOS_ORDER_NAMES, orderNames });
 export const toSetOrderNamesOfPinnedPakeeps = orderNames => ({
   type: types.HANDLE_SET_ORDER_NAMES_OF_PINNED_PAKEEPS,
@@ -49,7 +47,11 @@ export const toHandleDrawerWidth = drawerWidth => ({ type: types.HANDLE_DRAWER_W
 export const toAddNewGlobalLabel = newLabel => ({ type: types.ADD_NEW_GLOBAL_LABEL, newLabel });
 export const toSetNewPakeepsArr = pakeeps => ({ type: types.HANDLE_PAKEEPS, pakeeps });
 
-export const toHandlePinStatusPakeep = (pakeepId,isPakeepPinned) => ({ type: types.HANDLE_PIN_STATUS_OF_PAKEEPS, pakeepId,isPakeepPinned });
+export const toHandlePinStatusPakeep = (pakeepId, isPakeepPinned) => ({
+  type: types.HANDLE_PIN_STATUS_OF_PAKEEPS,
+  pakeepId,
+  isPakeepPinned
+});
 
 export const toSetSelectedPakeepIds = pakepsId => ({ type: types.HANDLE_SET_SELECTED_PAKEEPIDS_ARR, pakepsId });
 export const toSetIsCancelSelectedPakeepsId = boolValue => ({ type: types.HANDLE_CANCEL_SELECTING_STATUS, boolValue });
@@ -60,7 +62,8 @@ export const toHandleSelectedPakeepsProperty = (newPakeeps, propertyVariant) => 
   propertyVariant
 });
 
-
-
-
-
+export const toHandlePakeepProperty = (pakeepId, property) => ({
+  type: types.HANDLE_PAKEEP_PROPERTY,
+  pakeepId,
+  property
+});

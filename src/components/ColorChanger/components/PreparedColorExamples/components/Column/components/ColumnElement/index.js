@@ -6,6 +6,7 @@ import _ from 'lodash';
 import CenteredGrid from 'components/CenteredGrid';
 import { colord } from 'colord';
 import { nanoid } from 'nanoid';
+import { useIsColorDark } from 'hooks/useIsColorDark.hook';
 
 const useStyles = makeStyles(theme => ({
   elementOfGridColorPicker: {
@@ -13,17 +14,20 @@ const useStyles = makeStyles(theme => ({
     height: theme.spacing(16 * 0.42),
     margin: theme.spacing(0.4),
     overflow: 'hidden',
-    border: '1px solid rgba(42,42,42,1)',
+    border: '1px solid',
+    borderColor: ({ isColorLight, isBgColorLight, customColor }) =>
+    isBgColorLight && !!customColor ? customColor?.bgUnHover : isColorLight ? 'rgba(8,8,8,1)' : 'rgba(255,255,255,1)',
+
 
     transition: theme.transitions.create('border', {
       easing: theme.transitions.easing.easeIn,
       duration: theme.transitions.duration.leavingScreen
     }),
-    cursor: 'pointer',
+    cursor: 'pointer'
   },
   extendedElementOfGridColorPicker: {
     width: theme.spacing((8 * 0.8) / 2),
-    height: theme.spacing((8 * 0.8) / 2),
+    height: theme.spacing((8 * 0.8) / 2)
 
     // margin: theme.spacing(0.2),
     // borderRadius: 0,
@@ -33,7 +37,7 @@ const useStyles = makeStyles(theme => ({
     borderRadius: '10px'
   },
   elementOfGridColorPickerWithBorder: {
-    borderColor: ({ isColorLight }) => (isColorLight ? 'rgba(8,8,8,1)' : 'rgba(255,255,255,1)'),
+
     transition: theme.transitions.create('border', {
       easing: theme.transitions.easing.easeIn,
       duration: theme.transitions.duration.enteringScreen
@@ -46,15 +50,12 @@ const useStyles = makeStyles(theme => ({
   //   '& .MuiSvgIcon-root': { width: theme.spacing(2 / (0.8 - 0.1)) }
   // },
 }));
-const ColumnElementOfPreparedColorExamples = ({ handleSetColor, isExtended, color, colorName },idx) => {
+const ColumnElementOfPreparedColorExamples = ({ handleSetColor, isExtended, color, colorName, customColor }, idx) => {
+  const isColorLight = useIsColorDark(color);
+  const isBgColorLight = useIsColorDark(customColor?.hover);
 
-  const isColorLight = colord(color).brightness() >= 0.8;
-  const classes = useStyles({ isColorLight });
-
-  const namesOfPartsOfGridElement = [
-    ['A100', 'A200'],
-    ['A400', 'A700']
-  ];
+  const classes = useStyles({ isColorLight, customColor, isBgColorLight });
+  const namesOfPartsOfGridElement = [, ['A100', 'A200'], ['A400', 'A700']];
 
   const correctNamesOfPartsOfGridElementArr = _.flattenDeep(namesOfPartsOfGridElement);
   const isExtendedElementColorCorrect = correctNamesOfPartsOfGridElementArr.some(
@@ -71,9 +72,12 @@ const ColumnElementOfPreparedColorExamples = ({ handleSetColor, isExtended, colo
 
             const elementOfPartsOfGridElementProps = {
               onClick,
-              style: { background: colorOfElementOfPartsOfGridElementProps },
-              className: classes.extendedElementOfGridColorPicker,
-              key:idx
+              style: {
+                background: colorOfElementOfPartsOfGridElementProps
+              },
+
+              className: clsx(classes.extendedElementOfGridColorPicker),
+              key: idx
             };
 
             return <Grid {...elementOfPartsOfGridElementProps} />;
@@ -88,12 +92,16 @@ const ColumnElementOfPreparedColorExamples = ({ handleSetColor, isExtended, colo
     const onClick = onClickOfSelectElement ?? defaultOnClick;
 
     const selectedElementPaperContainerProps = {
-      style: { backgroundColor: color,border:`1px solid ${color}`},
+      style: {
+        backgroundColor: color,
+        border: `1px solid ${isBgColorLight && !!customColor ? customColor?.bgUnHover : color}`,
+        // boxShadow: `0 0 2px 1px ${colord(customColor?.bgUnHover).alpha(0.4).toHex()}`
+      },
       className: clsx(
         classes.elementOfGridColorPicker,
         correctStatus ? classes.elementOfGridColorPickerWithBorder : null
       ),
-      elevation: 8,
+      elevation: isBgColorLight ? 0 : 8,
       onClick
     };
     return (

@@ -8,7 +8,8 @@ const WrapperOfMenuOfLabelPart = ({
   menuState,
   changeGloabalLabelItemFunc,
   setMenuState,
-  isThisMenuIsSecond
+  isThisMenuIsSecond,
+  customColor
 }) => {
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
@@ -46,7 +47,8 @@ const WrapperOfMenuOfLabelPart = ({
     handleChangeLabelTitle,
     onClickOfSaveButton,
     isThisMenuIsSecond,
-    buttonSaveState: true
+    buttonSaveState: true,
+    customColor
   };
 
   return <MenuOfLabelPart {...menuOfLabelPartProps} />;

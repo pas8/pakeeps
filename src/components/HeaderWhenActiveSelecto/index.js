@@ -8,7 +8,7 @@ import { usePropertiesToUtils } from 'hooks/usePropertiesToUtils.hook';
 import IconButtonByPas from 'components/IconButton';
 import IconsUtils from 'components/IconsUtils';
 import { themeColors } from 'components/theme';
-import { LocaleContext } from 'components/NewPakeep';
+import { SelectedLabels } from 'components/NewPakeep';
 import { useFindSelectedLabels } from 'hooks/useFindSelectedLabels.hook';
 import { useGetIsColorDefault } from 'hooks/useGetIsColorDefault.hook';
 
@@ -93,7 +93,7 @@ const HeaderWhenActiveSelecto = ({
   };
 
   return (
-    <LocaleContext.Provider value={{ selectedLabels }}>
+    <SelectedLabels.Provider value={{ selectedLabels }}>
       <Slide in={true} direction={'bottom'}>
         <AppBar ref={ref} className={classes.container}>
           <Grid container>
@@ -109,7 +109,7 @@ const HeaderWhenActiveSelecto = ({
           </Grid>
         </AppBar>
       </Slide>
-    </LocaleContext.Provider>
+    </SelectedLabels.Provider>
   );
 };
 

@@ -5,43 +5,55 @@ import { useState } from 'react';
 import { useHover, useKeyPressEvent, usePageLeave } from 'react-use';
 import { themeColors } from 'components/theme';
 import { nanoid } from 'nanoid';
+import { colord } from 'colord';
+import { useIsColorDark } from 'hooks/useIsColorDark.hook';
 
 const useStyles = makeStyles(theme => ({
-  itemGrid: { margin: theme.spacing(0.4, 0.8 * 4, 0, 1.4), padding: theme.spacing(0.8, 0) },
-  menuText: { marginLeft: theme.spacing(1.4) }
+  itemGrid: {
+    margin: theme.spacing(0.4, 0.8 * 4, 0, 1.4),
+    padding: theme.spacing(0.8, 0)
+  },
+  menuText: { marginLeft: theme.spacing(1.4) },
+
+  container: ({ color, hoverColor,isIconActive }) => ({
+
+    '& svg,h6': { color },
+    '&:hover svg,h6': { color: hoverColor },
+    '&:hover .MuiTouchRipple-root': {
+      background: colord(color).alpha(0.16).toHex(),
+      // borderBottom:isIconActive && `2px solid ${color}`, 
+      borderRight:0,
+      borderLeft:0,
+    }
+  })
 }));
 
-const MoreUtils = ({ slicedArrAfter }) => {
-  const classes = useStyles();
+const MoreUtils = ({ slicedArrAfter, customColor }) => {
   return (
     <>
-      {slicedArrAfter.map(({ popoverText, icon: Icon, isIconActive, onClick }) => {
-        const hoveredWrapperOfMenuItem = hovered => {
-          const activeColor = isIconActive && themeColors.primaryMain;
+      {slicedArrAfter.map(({ popoverText, icon: Icon, isIconActive, onClick, ActiveIcon }) => {
+        const color = !customColor
+          ? isIconActive
+            ? themeColors.primaryMain
+            : themeColors.whiteRgbaColorWith0dot8valueOfAlfaCanal
+          : isIconActive
+          ? customColor.bgUnHover
+          : customColor.bgHover;
 
-          const iconHoveredColor = hovered && themeColors.whiteRgbaColorWith0dot8valueOfAlfaCanal;
-          const iconColor = activeColor || iconHoveredColor || themeColors.whiteRgbaColorWith0dot42valueOfAlfaCanal;
+        const hoverColor = !customColor && !isIconActive && themeColors.whiteRgbaColorWith0dot96valueOfAlfaCanal;
+        const classes = useStyles({ color, hoverColor,isIconActive });
+        //
 
-          const textHoveredColor = hovered && themeColors.whiteRgbaColorWith0dot96valueOfAlfaCanal;
-          const textColor = activeColor || textHoveredColor || themeColors.whiteRgbaColorWith0dot8valueOfAlfaCanal;
-
-          return (
-            <MenuItem disableGutters onClick={onClick} key={nanoid()}>
-              <Grid className={clsx(classes.itemGrid)} container>
-                <Icon style={{ color: iconColor }} />
-                <Grid item className={classes.menuText}>
-                  <Typography variant={'subtitle2'} style={{ color: textColor }}>
-                    {popoverText}
-                  </Typography>
-                </Grid>
+        return (
+          <MenuItem disableGutters onClick={onClick} key={nanoid()} className={classes.container}>
+            <Grid className={clsx(classes.itemGrid)} container>
+              {isIconActive ? <ActiveIcon /> : <Icon />}
+              <Grid item className={classes.menuText}>
+                <Typography variant={'subtitle2'}>{popoverText}</Typography>
               </Grid>
-            </MenuItem>
-          );
-        };
-
-        const [MoreUtilsMenuItem] = useHover(hoveredWrapperOfMenuItem);
-
-        return MoreUtilsMenuItem;
+            </Grid>
+          </MenuItem>
+        );
       })}
     </>
   );

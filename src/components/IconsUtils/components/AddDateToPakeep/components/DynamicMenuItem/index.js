@@ -1,9 +1,10 @@
 import PropTypes from 'prop-types';
 import { Grid, makeStyles, Typography, MenuItem } from '@material-ui/core';
 import clsx from 'clsx';
+import { useAlpha } from 'hooks/useAlpha.hook';
+import { themeColors } from 'components/theme';
 
 const useStyles = makeStyles(theme => ({
-  itemGrid: { margin: theme.spacing(0.4, 0.8 * 4, 0, 1.4), padding: theme.spacing(0.8, 0) },
   menuText: { marginLeft: theme.spacing(1.4) },
   marginTop: {
     marginRight: theme.spacing(1.4),
@@ -13,8 +14,17 @@ const useStyles = makeStyles(theme => ({
       duration: theme.transitions.duration.complex
     })
   },
-  
-  preventClickOfMenuItem: { '& .MuiTouchRipple-root': { display: 'none' } }
+
+  // preventClickOfMenuItem: { '& .MuiTouchRipple-root': { display: 'none' } },
+  itemGrid: ({ color }) => ({
+    padding: theme.spacing(1, 1.6),
+    '& svg,h6': { color }
+  }),
+  container: ({ hoverColor, color, }) => ({
+    '&:hover > .MuiTouchRipple-root':  {
+      background:   useAlpha(color)
+    }
+  })
 }));
 
 const DynamicMenuItem = ({
@@ -26,9 +36,11 @@ const DynamicMenuItem = ({
   menuItemProps,
   isPreventClickOfMenuItem = false,
   Icon,
+  customColor,
   isDynamicItemGridMarginIsZero = false
 }) => {
-  const classes = useStyles();
+  const color = !customColor ? themeColors.whiteRgbaColorWith0dot8valueOfAlfaCanal : customColor?.unHover;
+  const classes = useStyles({ color, hoverColor: '' ,customColor});
 
   const dynamicMenuItem = (
     <Grid item className={!isDynamicItemGridMarginIsZero && clsx(classes.marginTop, classes.itemGrid)}>
@@ -37,12 +49,10 @@ const DynamicMenuItem = ({
   );
 
   const staticMenuItem = (
-    <Grid className={clsx(classes.itemGrid)} container>
-      <Icon style={{ color: `rgba(255,255,255,${isActiveIcon ? 0.8 : 0.42})` }} />
+    <Grid container className={classes.itemGrid}>
+      <Icon />
       <Grid item className={classes.menuText}>
-        <Typography variant={'subtitle2'} style={{ color: `rgba(255,255,255,${isActiveIcon ? 1 : 0.8})` }}>
-          {title}
-        </Typography>
+        <Typography variant={'subtitle2'}>{title}</Typography>
       </Grid>
     </Grid>
   );
@@ -52,7 +62,7 @@ const DynamicMenuItem = ({
   const itemOfMenuProps = {
     ...menuItemProps,
     disableGutters: true,
-    className: isPreventClickOfMenuItem ? classes.preventClickOfMenuItem : null
+    className: clsx(isPreventClickOfMenuItem && classes.preventClickOfMenuItem,customColor && classes.container)
   };
 
   return (

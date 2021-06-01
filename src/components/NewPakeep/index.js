@@ -87,7 +87,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export const LocaleContext = createContext();
+export const SelectedLabels = createContext();
 
 const NewPaKeep = ({ addNewPaKeepThunk }) => {
   const nulittyState = {
@@ -266,9 +266,9 @@ const NewPaKeep = ({ addNewPaKeepThunk }) => {
         )}
 
         {!statusState.isUtilsHidden && (
-          <LocaleContext.Provider value={{ selectedLabels: state.labels }}>
+          <SelectedLabels.Provider value={{ selectedLabels: state.labels }}>
             <NewPakeepUtils {...newPakeepUtils} />
-          </LocaleContext.Provider>
+          </SelectedLabels.Provider>
         )}
 
         <EyeIconButton {...eyeIconButtonProps} />

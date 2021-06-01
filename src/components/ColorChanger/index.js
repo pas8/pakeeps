@@ -1,4 +1,4 @@
-import PropTypes from "prop-types";
+import PropTypes from 'prop-types';
 import { useState } from 'react';
 import { Dialog, Grid, makeStyles } from '@material-ui/core';
 import _ from 'lodash';
@@ -18,15 +18,20 @@ const useStyles = makeStyles(theme => ({
     // overflowX: 'hidden'
   }
 }));
-  
-const ColorPickerByPas = ({handleSave = null}) => {
+
+const ColorPickerByPas = ({ handleSave = null, customColor }) => {
   const [gradientStatus, setGradientStatus] = useState(false);
   const classes = useStyles();
   const Container = gradientStatus ? Dialog : Grid;
   return (
     <Container open={gradientStatus} maxWidth={'lg'} className={classes.container}>
       {!gradientStatus ? (
-        <CustomColor gradientStatus={gradientStatus} setGradientStatus={setGradientStatus} handleSave={handleSave} />
+        <CustomColor
+          gradientStatus={gradientStatus}
+          setGradientStatus={setGradientStatus}
+          handleSave={handleSave}
+          customColor={customColor}
+        />
       ) : (
         <CustomGradient gradientStatus={gradientStatus} setGradientStatus={setGradientStatus} />
       )}
@@ -36,6 +41,6 @@ const ColorPickerByPas = ({handleSave = null}) => {
 
 ColorPickerByPas.propTypes = {
   handleSave: PropTypes.func
-}
+};
 
 export default ColorPickerByPas;

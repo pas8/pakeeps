@@ -18,7 +18,8 @@ const ColumnOfPreparedColorExamples = ({
   columnElementProps,
   droppableId,
   isColor = true,
-  CustomColumnElement
+  CustomColumnElement,
+  customColor
 }) => {
   const classes = useStyles();
   const ColumnElement = isColor ? ColumnElementOfPreparedColorExamples : CustomColumnElement;
@@ -44,7 +45,12 @@ const ColumnOfPreparedColorExamples = ({
                       innerRef={provided.innerRef}
                       className={classes.containerOfElement}
                     >
-                      <ColumnElement {...el} {...columnElementProps} isDragging={snapshot.isDragging} />
+                      <ColumnElement
+                        {...el}
+                        {...columnElementProps}
+                        isDragging={snapshot.isDragging}
+                        customColor={customColor}
+                      />
                     </Grid>
                   )}
                 </Draggable>
