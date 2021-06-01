@@ -6,6 +6,16 @@ import TuneOutlinedIcon from '@material-ui/icons/TuneOutlined';
 import DialogOfAddingCustomColorToColorLayouts from './components/DialogOfAddingCustomColorToColorLayouts';
 
 const useStyles = makeStyles(theme => ({
+  button: ({ customColor, color, nullityColor,colorInHexFormat }) => ({
+    border: '1px solid',
+    borderColor: color === nullityColor ? 'transparent' : colorInHexFormat,
+    '& h6':{
+
+    color: !!customColor && customColor.bgHover,
+    },
+    '& .MuiSvgIcon-root': { width: theme.spacing(2 / (0.8 + 0.1)) }
+
+  }),
   // buttonGroupContainer: {
   //   '&  .MuiBadge-badge': {
   //     backgroundColor: ({ colorInHexFormat, hoverStatusOfButtonOfAddingCustomColorToColorLayouts }) =>
@@ -40,23 +50,17 @@ const useStyles = makeStyles(theme => ({
   //   }
   // },
   buttonWithBargeContainer: {
-    '& .MuiSvgIcon-root': { width: theme.spacing(2 / (0.8 + 0.1)) }
   }
 }));
 
-const CustomizationButton = ({
-  nullityColor,
-  colorInHexFormat,
-  setCustomizationsStatus,
-  color,
-}) => {
+const CustomizationButton = ({ nullityColor, colorInHexFormat, setCustomizationsStatus, color, customColor }) => {
   // const [
   //   hoverStatusOfButtonOfAddingCustomColorToColorLayouts,
   //   setHoverStatusOfButtonOfAddingCustomColorToColorLayouts
   // ] = useState(false);
   const [openStatusOfDialog, setOpenStatusOfDialog] = useState(false);
 
-  const classes = useStyles({ colorInHexFormat,  });
+  const classes = useStyles({ colorInHexFormat, customColor, color, nullityColor,colorInHexFormat });
   // const classes = useStyles({ colorInHexFormat, hoverStatusOfButtonOfAddingCustomColorToColorLayouts });
 
   // const setHoverStatusOfButtonOfAddingCustomColorToColorLayoutsIsTrue = () =>
@@ -78,8 +82,7 @@ const CustomizationButton = ({
     open: openStatusOfDialog,
     onClose: setOpenStatusOfDialogIsFalse,
     colorInHexFormat,
-    onSave:setOpenStatusOfDialogIsFalse
-
+    onSave: setOpenStatusOfDialogIsFalse
   };
 
   // const hoveredButtonGroupChildren = (
@@ -109,21 +112,19 @@ const CustomizationButton = ({
     </Button>
   );
 
-  const buttonGroupChildren = unHoveredButtonGroupChildren
-
+  const buttonGroupChildren = unHoveredButtonGroupChildren;
 
   return (
     <ButtonGroup
+      className={classes.button}
       // onMouseLeave={onMouseLeave}
       outlined
       // onMouseEnter={onMouseEnter}
-      className={classes.buttonGroupContainer}
+      // className={classes.buttonGroupContainer}
       size={'small'}
-      style={{ border: '1px solid', borderColor: color === nullityColor ? 'transparent' : colorInHexFormat }}
     >
       {buttonGroupChildren}
       <DialogOfAddingCustomColorToColorLayouts {...dialogOfAddingCustomColorToColorLayoutsProps} />
-
     </ButtonGroup>
   );
 };

@@ -23,7 +23,7 @@ const AttributeGroup = ({
     labels,
     handleDeleteLabelFromPakeepFunc,
     pakeepId,
-    changeLabelItemFunc: changeLabelItemThunk,
+    changeGloabalLabelItemFunc: changeLabelItemThunk,
     customColor,
     parentBackgrounColor
   };

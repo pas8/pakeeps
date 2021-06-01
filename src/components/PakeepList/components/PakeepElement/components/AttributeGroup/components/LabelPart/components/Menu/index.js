@@ -1,4 +1,4 @@
-import { Grid, Menu } from '@material-ui/core';
+import { Grid, Menu, makeStyles } from '@material-ui/core';
 import PropTypes from 'prop-types';
 import { useState } from 'react';
 import { colord } from 'colord';
@@ -17,6 +17,9 @@ import LabelItem from '../LabelItem';
 import PreparedIconSelectingList from './components/PreparedIconSelectingList';
 import TitleChangerOfLabel from './components/TitleChangerOfLabel';
 import { themeColors } from 'components/theme';
+import { useGetReversedCustomColor } from 'hooks/useGetReversedCustomColor.hook';
+
+const useStyles = makeStyles(theme => ({}));
 
 const MenuOfLabelPart = ({
   menuState,
@@ -28,10 +31,12 @@ const MenuOfLabelPart = ({
   buttonSaveState,
   onClickOfSaveButton,
   handleChangeLabelTitle,
-  isThisMenuIsSecond
+  isThisMenuIsSecond,
+  customColor
 }) => {
-
   const color = !menuState?.color ? themeColors.primaryMain : menuState.color;
+
+const reversedCustomColor = useGetReversedCustomColor(customColor,true)
 
   const nullifyOfMenuItemState = { name: '' };
   const [menuItemState, setMenuItemState] = useState(nullifyOfMenuItemState);
@@ -69,7 +74,12 @@ const MenuOfLabelPart = ({
         className: null,
         props: {
           isColor: false,
-          customColumnElementProps: { handleChangeLabelIconName, labelIconName: menuState.labelIconName, color },
+          customColumnElementProps: {
+            handleChangeLabelIconName,
+            labelIconName: menuState.labelIconName,
+            color,
+            customColor
+          },
           CustomColumnElement: PreparedIconSelectingList,
           columnArr: iconsArr
         }
@@ -82,29 +92,7 @@ const MenuOfLabelPart = ({
       name: 'deletelabel',
       onClick: handleDeleteLabel
     }
-
-    // { title: 'Add Location', icon: AddLocationOutlinedIcon, onClick: placeholderFunc, name: 'addLocation' },
-    // {
-    //   title: 'Add More Events',
-    //   icon: DateRangeOutlinedIcon,
-    //   hidden: !true,
-    //   name: 'addMoreEvents',
-    //   dynamicComponent: {
-    //     component: DynamicAddMoreEvents,
-    //     className: null,
-    //     props: { onlyTime: false, onChangeOfAddMoreEvents }
-    //   }
-    // }
   ];
-
-  // DynamicComponent,
-  //   dynamicComponentProps,
-  //   title,
-  //   isActiveIcon,
-  //   isDynamicComponentShouldBeShown,
-  //   menuItemProps,
-  //   (isPreventClickOfMenuItem = false),
-  //   Icon;
 
   const previewLabelProps = {
     ...menuState,
@@ -112,14 +100,21 @@ const MenuOfLabelPart = ({
     label: menuState.title,
     size: 'small'
   };
-  
-  const labelItemProps = { currentColor: menuState.color, handleOpen: null, labelChipProps: previewLabelProps };
+
+  const labelItemProps = {
+    currentColor: menuState.color,
+    handleOpen: null,
+    labelChipProps: previewLabelProps,
+    parentBackgrounColor:customColor.bgHover,
+    customColor
+  };
 
   const headerOfAddDateToPakeepProps = {
     buttonSaveState: buttonSaveState,
     arrowButtonFunc: handleClose,
     isSaveButtonHidden: false,
     onClickOfSaveButton,
+    customColor,
     customTitle: <LabelItem {...labelItemProps} />
   };
 
@@ -135,7 +130,7 @@ const MenuOfLabelPart = ({
           : undefined
       }
     >
-      <Grid style={{ background: isThisMenuIsSecond && '#484848' }}>
+      <Grid style={{ background: !!customColor ? customColor.bgHover : isThisMenuIsSecond && '#484848' }}>
         <HeaderOfAddDateToPakeep {...headerOfAddDateToPakeepProps} />
 
         {menuLabelListArr.map(
@@ -144,7 +139,7 @@ const MenuOfLabelPart = ({
 
             const correctName = name === menuItemState.name;
             const isDynamicComponentShouldBeShown = correctName && dynamicComponent.component;
-            const dynamicComponentProps = { ...dynamicComponent.props };
+            const dynamicComponentProps = { customColor:reversedCustomColor,...dynamicComponent.props,  };
             const onClick = () =>
               onMenuItemClick ? onMenuItemClick() : setMenuItemState(state => ({ ...state, name }));
             const menuItemProps = {
@@ -159,7 +154,9 @@ const MenuOfLabelPart = ({
               isDynamicComponentShouldBeShown,
               menuItemProps,
               isPreventClickOfMenuItem: false,
-              Icon
+              Icon,
+              customColor,
+
             };
             return <DynamicMenuItem {...DynamicMenuItemProps} />;
           }

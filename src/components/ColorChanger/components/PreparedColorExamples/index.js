@@ -17,6 +17,7 @@ const useStyles = makeStyles(theme => ({
 const PreparedColorExamples = ({
   color,
   isExtended,
+  customColor,
   handleSetColor,
   idColumnArr,
   changeOneColorColumnThunk,
@@ -30,15 +31,14 @@ const PreparedColorExamples = ({
 
   const classes = useStyles();
   const onDragEnd = ({ destination, source, draggableId }) => {
-    console.log(destination, source, draggableId);
     if (!destination) return;
     if (!destination.id === source.draggableId && destination.index === source.index) return;
 
     const columnStart = idColumnArr[source.droppableId];
     const columnFinish = idColumnArr[destination.droppableId];
 
-    const columnFromStart = Array.from(columnStart);
-    const columnFromFinish = Array.from(columnFinish);
+    const columnFromStart = _.cloneDeep(columnStart);
+    const columnFromFinish = _.cloneDeep(columnFinish);
 
     if (columnStart.length <= 1) return;
     if (columnStart === columnFinish) {
@@ -55,7 +55,7 @@ const PreparedColorExamples = ({
     const newFinishArr = columnFromFinish;
     newFinishArr.splice(destination.index, 0, itemWhichShouldBeAdded);
 
-    changeTwoColorColumnThunk(
+    return changeTwoColorColumnThunk(
       { id: destination.droppableId, newArr: newFinishArr },
       { id: source.droppableId, newArr: newStartArr }
     );
@@ -84,7 +84,8 @@ const PreparedColorExamples = ({
             isColor,
             key: nanoid(),
             droppableId: columnId,
-            columnElements
+            columnElements,
+            customColor
           };
 
           return <ColumnOfPreparedColorExamples {...columnProps} />;

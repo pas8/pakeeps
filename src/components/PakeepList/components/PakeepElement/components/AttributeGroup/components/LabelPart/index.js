@@ -6,15 +6,21 @@ import LabelItem from './components/LabelItem';
 import MenuOfLabelPart from './components/Menu';
 import { useFindIcon } from 'hooks/useFindIcon.hook';
 import WrapperOfMenuOfLabelPart from './components/MenuWrapper';
+import { useGetReversedCustomColor } from 'hooks/useGetReversedCustomColor.hook';
 
 const LabelPart = ({
   labels,
   handleDeleteLabelFromPakeepFunc,
-  changeLabelItemFunc,
+  changeGloabalLabelItemFunc,
   pakeepId,
-  customColor,
-  parentBackgrounColor
+  parentBackgrounColor,
+  customColor: notReversedCustomColor
+
 }) => {
+
+  const customColor = useGetReversedCustomColor(notReversedCustomColor);
+
+
   const nullityOfMenuState = {
     mouseX: null,
     mouseY: null,
@@ -24,6 +30,7 @@ const LabelPart = ({
     title: '',
     color: ''
   };
+
   const [menuState, setMenuState] = useState(nullityOfMenuState);
 
   const handleClose = () => setMenuState(nullityOfMenuState);
@@ -33,20 +40,13 @@ const LabelPart = ({
     handleClose();
   };
 
-  // useEffect(() => {
-  //   const { variant, iconName: labelIconName } = find(labels, ({ id }) => menuState.id === id) ?? {
-  //     variant: '',
-  //     labelIconName: ''
-  //   };
-  //   setMenuState(state => ({ ...state, labelIconName, variant }));
-  // }, [labels]);
-
   const wrapperOfMenuOfLabelPartProps = {
     handleClose,
     handleDeleteLabel,
     menuState,
-    changeLabelItemFunc,
-    setMenuState
+    changeGloabalLabelItemFunc,
+    setMenuState,
+    customColor
   };
 
   return (
@@ -69,7 +69,7 @@ const LabelPart = ({
           setMenuState({ mouseX: e.clientX, mouseY: e.clientY, id, variant, labelIconName, title, color });
         };
 
-        const labelItemProps = { currentColor: color, handleOpen, labelChipProps, customColor, parentBackgrounColor };
+        const labelItemProps = { currentColor: color, handleOpen, labelChipProps, customColor:notReversedCustomColor, parentBackgrounColor };
 
         return <LabelItem {...labelItemProps} />;
       })}
@@ -79,7 +79,7 @@ const LabelPart = ({
 };
 
 LabelPart.propTypes = {
-  changeLabelItemFunc: PropTypes.func,
+  changeGloabalLabelItemFunc: PropTypes.func,
   customColor: PropTypes.any,
   handleDeleteLabelFromPakeepFunc: PropTypes.func,
   labels: PropTypes.shape({

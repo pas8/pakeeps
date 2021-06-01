@@ -1,20 +1,16 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import clsx from 'clsx';
-import { makeStyles } from '@material-ui/core/styles';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
+import { connect } from 'react-redux';
+import { AppBar,  makeStyles, Toolbar, Grid } from '@material-ui/core';
+import { getNavigationViewLike } from 'store/modules/Settings/selectors';
+import { setMenuOpenStatusThunk } from 'store/modules/App/operations';
+import { useCustomBreakpoint } from 'hooks/useCustomBreakpoint';
 import HeaderSearch from './components/Search';
 import HeaderDrawer from './components/Drawer';
 import HeaderProfileUtils from './components/ProfileUtils';
 import MainBar from './components/MainBar';
-import { connect } from 'react-redux';
-import { setMenuOpenStatusThunk } from 'store/modules/App/operations';
-import { useCustomBreakpoint } from 'hooks/useCustomBreakpoint';
-import { Grid } from '@material-ui/core';
 import ViewLikeInTelegram from './components/ViewLikeInTelegram';
-import { getNavigationViewLike } from 'store/modules/Settings/selectors';
 
 const useStyles = makeStyles(theme => ({
   root: ({ navigationViewLikeTelegram }) => ({
@@ -69,33 +65,36 @@ const HeaderByPas = ({
   const classes = useStyles({ drawerWidth, navigationViewLikeTelegram, navigationViewLikePakeeps, isMenuOpen });
 
   return (
-    <Grid className={classes.root} container>
-      <CssBaseline />
-      <AppBar className={clsx(classes.appBar, { [classes.appBarShift]: isMenuOpen })}>
-        <Toolbar className={classes.toolBar}>
-          {(navigationViewLikePakeeps || navigationViewLikeGoogleKeep) && (
-            <>
-              <MainBar
-                handleDrawerOpen={handleDrawerOpen}
-                isMenuOpen={navigationViewLikePakeeps ? false : isMenuOpen}
-                isSmallSize={isSmallSize}
-              />
-              <HeaderSearch isSmallSize={isSmallSize} />
-              <HeaderProfileUtils isSmallSize={isSmallSize} />
-            </>
-          )}
-          {navigationViewLikeTelegram && (
-            <ViewLikeInTelegram handleDrawerOpen={handleDrawerOpen} isMenuOpen={isMenuOpen} />
-          )}
-        </Toolbar>
-      </AppBar>
-      {navigationViewLikeTelegram && <HeaderDrawer isMenuOpen={isMenuOpen} handleDrawerClose={handleDrawerClose} />}
-    </Grid>
+      <Grid className={classes.root} container>
+        <AppBar className={clsx(classes.appBar, { [classes.appBarShift]: isMenuOpen })}>
+          <Toolbar className={classes.toolBar}>
+            {(navigationViewLikePakeeps || navigationViewLikeGoogleKeep) && (
+              <>
+                <MainBar
+                  handleDrawerOpen={handleDrawerOpen}
+                  isMenuOpen={navigationViewLikePakeeps ? false : isMenuOpen}
+                  isSmallSize={isSmallSize}
+                />
+                <HeaderSearch isSmallSize={isSmallSize} />
+                <HeaderProfileUtils isSmallSize={isSmallSize} />
+              </>
+            )}
+            {navigationViewLikeTelegram && (
+              <ViewLikeInTelegram handleDrawerOpen={handleDrawerOpen} isMenuOpen={isMenuOpen} />
+            )}
+          </Toolbar>
+        </AppBar>
+        {navigationViewLikeTelegram && <HeaderDrawer isMenuOpen={isMenuOpen} handleDrawerClose={handleDrawerClose} />}
+      </Grid>
   );
 };
 
 HeaderByPas.propTypes = {
+  drawerWidth: PropTypes.number,
   isMenuOpen: PropTypes.bool,
+  navigationViewLikeGoogleKeep: PropTypes.bool,
+  navigationViewLikePakeeps: PropTypes.bool,
+  navigationViewLikeTelegram: PropTypes.bool,
   setMenuOpenStatusThunk: PropTypes.func
 };
 

@@ -7,7 +7,10 @@ import IconButtonByPas from 'components/IconButton';
 import SaveRoundedIcon from '@material-ui/icons/SaveRounded';
 
 const useStyles = makeStyles(theme => ({
-  container: { borderBottom: '1px solid rgba(255,255,255,0.4)' },
+  container: ({ borderColor }) => ({
+    borderBottom: '1px solid',
+    borderBottomColor:  borderColor
+  })
   // wrapperOfSaveButton: { marginRight: theme.spacing(1 * 0.8) }
 }));
 
@@ -17,46 +20,33 @@ const HeaderOfAddDateToPakeep = ({
   dynamicTitle,
   isSaveButtonHidden = false,
   onClickOfSaveButton,
-  customTitle
+  customTitle,
+  customColor
 }) => {
-  const classes = useStyles();
+  const borderColor =  !customColor ?  themeColors.whiteRgbaColorWith0dot42valueOfAlfaCanal :  customColor?.hover  
+  const classes = useStyles({ borderColor });
 
   return (
-    <Grid borderBottom={1} className={classes.container} container justify={'space-between'}>
+    <Grid  className={classes.container} container justify={'space-between'}>
       <Grid item>
         <Grid container alignItems={'center'}>
           <IconButtonByPas
             icon={ArrowBackOutlinedIcon}
             onClick={arrowButtonFunc}
             activeProperty={Boolean(!buttonSaveState)}
+            customColor={customColor}
           />
 
           {!!customTitle ? (
             customTitle
           ) : (
-            <Typography
-              variant={'subtitle1'}
-              style={{
-                color: 'rgba(255,255,255,0.8)'
-              }}
-            >
-              {dynamicTitle ? dynamicTitle : 'Close'}
-            </Typography>
+            <Typography variant={'subtitle1'}>{dynamicTitle ? dynamicTitle : 'Close'}</Typography>
           )}
         </Grid>
       </Grid>
       {!isSaveButtonHidden && (
         <Grid item className={classes.wrapperOfSaveButton}>
-          <IconButton onClick={onClickOfSaveButton}>
-            <SaveRoundedIcon
-              style={{
-                color:
-                  buttonSaveState === 'saved'
-                    ? themeColors.primaryMain
-                    : `rgba(255,255,255,${buttonSaveState ? 0.8 : 0.42}`
-              }}
-            />
-          </IconButton>
+            <IconButtonByPas icon={SaveRoundedIcon} onClick={onClickOfSaveButton} customColor={customColor} />
         </Grid>
       )}
     </Grid>
@@ -65,11 +55,11 @@ const HeaderOfAddDateToPakeep = ({
 
 HeaderOfAddDateToPakeep.propTypes = {
   arrowButtonFunc: PropTypes.func,
-  buttonSaveState: PropTypes.oneOf(["string", "bool"]),
+  buttonSaveState: PropTypes.oneOf(['string', 'bool']),
   customTitle: PropTypes.any,
-  dynamicTitle: PropTypes.oneOf(["string", "bool"]),
+  dynamicTitle: PropTypes.oneOf(['string', 'bool']),
   isSaveButtonHidden: PropTypes.bool,
   onClickOfSaveButton: PropTypes.func
-}
+};
 
 export default HeaderOfAddDateToPakeep;

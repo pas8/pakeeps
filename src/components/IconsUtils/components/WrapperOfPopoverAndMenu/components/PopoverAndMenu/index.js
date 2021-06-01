@@ -3,14 +3,26 @@ import { useEffect, useState, useRef } from 'react';
 import Popover from '@material-ui/core/Popover';
 import Typography from '@material-ui/core/Typography';
 import { Grid, Menu, makeStyles } from '@material-ui/core';
+import { colord } from 'colord';
+import { useIsColorDark } from 'hooks/useIsColorDark.hook';
 
 const useStyles = makeStyles(theme => ({
+  paper: ({ customColor }) => ({
+    padding: theme.spacing(0.6,0.8),
+    background: customColor && customColor?.hover,
+    color: customColor && customColor?.bgUnHover,
+    // border: '1px solid',
+    // boxShadow: !useIsColorDark(customColor?.hover) && `0px 0px 2px 1px ${customColor?.bgUnHover}`,
+    // borderColor:useIsColorDark(customColor?.hover) && customColor?.bgHover,
+  }),
   popover: {
     pointerEvents: 'none'
   },
-  padding: {
-    padding: theme.spacing(0.8)
-  }
+  menuContainer: ({ customColor }) => ({
+    '& > div': {
+      backgroundColor: customColor?.hover
+    }
+  })
 }));
 
 const PopoverAndMenu = ({
@@ -21,14 +33,15 @@ const PopoverAndMenu = ({
   handleMenuClose,
   currentTarget,
   popoverText,
-  menuComponents,
-
+  menuComponentsProps,
+  MenuComponents,
   popoverTypographyVariant = 'subtitle2',
   menuLocation = 'default',
   popoverLocation = 'default',
-  popoverLevel = 'first'
+  popoverLevel = 'first',
+  customColor
 }) => {
-  const classes = useStyles();
+  const classes = useStyles({ customColor });
 
   // useEffect(
   //   () =>
@@ -90,7 +103,7 @@ const PopoverAndMenu = ({
   const popoverProps = {
     ...locationOfPopover,
     className: classes.popover,
-    classes: { paper: classes.padding },
+    classes: { paper: classes.paper },
 
     open: isPopoverOpen,
     anchorEl: currentTarget,
@@ -103,15 +116,22 @@ const PopoverAndMenu = ({
     anchorEl: currentTarget,
     keepMounted: true,
     open: isMenuOpen,
-    onClose: handleMenuClose
+    onClose: handleMenuClose,
+    className: classes.menuContainer
   };
+
+  const allMenuComponentsProps = { ...menuComponentsProps, customColor };
   return (
     <>
       <Popover {...popoverProps}>
         <Typography variant={popoverTypographyVariant}>{popoverText}</Typography>
       </Popover>
 
-      {!!menuComponents && <Menu {...menuProps}>{menuComponents && menuComponents}</Menu>}
+      {!!MenuComponents && (
+        <Menu {...menuProps}>
+          <MenuComponents {...allMenuComponentsProps} />
+        </Menu>
+      )}
     </>
   );
 };

@@ -1,4 +1,4 @@
-import { find, filter } from 'lodash';
+import { find, filter, includes } from 'lodash';
 import {
   toAddDateToPakeep,
   toAddNewPakeep,
@@ -11,12 +11,20 @@ import {
   toSetCurrentFolderPropertyIdx,
   toChangeFolders,
   toChangeLabelItem,
-  toDeleteLabelFromPakeep,
+  toChangeLabelFromPakeep,
   toSetPreviusOrderNames,
   toHandleDrawerWidth,
   toAddNewGlobalLabel,
-  toSetNewPakeepsArr
+  toSetNewPakeepsArr,
+  toSetOrderNamesOfPinnedPakeeps,
+  toHandlePinStatusPakeep,
+  toSetSelectedPakeepIds,
+  toSetIsCancelSelectedPakeepsId,
+  toHandleSelectedPakeepsProperty,
+  toAddLabelToPakeep,
+  toHandlePakeepProperty
 } from './actions';
+import { useGetCurrentPakeep } from './hooks';
 
 export const addNewPaKeepThunk = data => dispatch => {
   console.log(data);
@@ -66,15 +74,21 @@ export const changeLabelItemThunk = changedLabel => (dispatch, getState) => {
   dispatch(toChangeLabelItem(newLabels));
 };
 
+
 export const handleDeleteLabelFromPakeepThunk = (pakeepId, labelId) => (dispatch, getState) => {
-  const {
-    app: { pakeeps }
-  } = getState();
-
-  const currentPakeep = find(pakeeps, ({ id }) => pakeepId === id);
+  const currentPakeep = useGetCurrentPakeep(pakeepId, getState);
   const labels = filter(currentPakeep.labels, id => labelId !== id);
+  dispatch(toChangeLabelFromPakeep(currentPakeep, labels));
+};
 
-  dispatch(toDeleteLabelFromPakeep(currentPakeep, labels));
+export const handleAddLabelToPakeepThunk = (pakeepId, labelId) => (dispatch, getState) => {
+  const currentPakeep = useGetCurrentPakeep(pakeepId, getState);
+  const isPakeepHaveThisLabel = includes(currentPakeep.labels, labelId);
+
+  const newLabels = [...currentPakeep?.labels, labelId];
+  const labels = isPakeepHaveThisLabel    ? currentPakeep.labels : newLabels;
+
+  dispatch(toChangeLabelFromPakeep(currentPakeep, labels));
 };
 
 export const handleDrawerWidthThunk = drawerWidth => dispatch => {
@@ -83,6 +97,10 @@ export const handleDrawerWidthThunk = drawerWidth => dispatch => {
 
 export const handleSetPreviusOrderNames = orderNames => dispatch => {
   dispatch(toSetPreviusOrderNames(orderNames));
+};
+
+export const handleSetOrderNamesOfPinnedPakeepsThunk = orderNames => dispatch => {
+  dispatch(toSetOrderNamesOfPinnedPakeeps(orderNames));
 };
 
 export const handleAddNewGlobalLabelThunk = newLabel => dispatch => {
@@ -101,4 +119,25 @@ export const handkePakeepPropertyThunk = (pakeepId, property) => (dispatch, getS
   const newPakeeps = [...filteredPakeeps, concatedPakeepWithUpdatedProperty];
   // console.log(newPakeeps)
   dispatch(toSetNewPakeepsArr(newPakeeps));
+};
+
+export const handlePinStatusPakeepThunk = (pakeepId, isPakeepPinned) => dispatch => {
+  dispatch(toHandlePinStatusPakeep(pakeepId, isPakeepPinned));
+};
+
+export const handleSetSelectedPakeepsIdThunk = pakepsId => dispatch => {
+  dispatch(toSetSelectedPakeepIds(pakepsId));
+};
+
+export const handleCancelSelectingStatusThunk = boolValue => dispatch => {
+  dispatch(toSetIsCancelSelectedPakeepsId(boolValue));
+};
+
+export const handleSelectedPakeepsPropertyThunk = (newPakeeps, propertyVariant) => dispatch => {
+  dispatch(toHandleSelectedPakeepsProperty(newPakeeps, propertyVariant));
+};
+
+
+export const handlePakeepPropertyThunk = (pakeepId, property)  => dispatch => {
+  dispatch(toHandlePakeepProperty(pakeepId, property) );
 };

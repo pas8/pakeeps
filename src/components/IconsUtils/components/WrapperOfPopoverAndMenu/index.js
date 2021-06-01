@@ -1,9 +1,10 @@
 import PropTypes from 'prop-types';
 import IconButtonByPas from 'components/IconButton';
 import PopoverAndMenu from './components/PopoverAndMenu';
-import { nanoid } from 'nanoid';
-import { memo, useState, useRef } from 'react';
+import { useState, useRef } from 'react';
 import WrapperOfMainComponent from './components/WrapperOfMainComponent';
+import includes from 'lodash.includes';
+import { useGetReversedCustomColor } from 'hooks/useGetReversedCustomColor.hook';
 
 const WrapperOfPopoverAndMenu = ({
   buttonUtilsArr,
@@ -11,8 +12,11 @@ const WrapperOfPopoverAndMenu = ({
   isIconNameExtended = false,
   iconSize = 'default',
   handleAverageMainComponentWidth,
-  customColor
+  customColor: notReversedCustomColor,
+  isCustomColorReversed = false
 }) => {
+  const reversedColor = useGetReversedCustomColor(notReversedCustomColor);
+  const customColor = isCustomColorReversed ? reversedColor : notReversedCustomColor;
 
   const nullityOfAnchorEl = {
     name: '',
@@ -21,14 +25,16 @@ const WrapperOfPopoverAndMenu = ({
     onMenuClose: null,
     currentTarget: null,
     popoverText: '',
-    menuComponents: ''
+    menuComponentsProps: null,
+    MenuComponents: null
   };
+
   const [anchorElState, setAnchorElState] = useState(nullityOfAnchorEl);
 
   const handleMenuClose = () => setAnchorElState(nullityOfAnchorEl);
   const handlePopoverClose = () => setAnchorElState(state => ({ ...state, isPopoverOpen: false }));
 
-  const popoverAndMenuProps = { ...anchorElState, handleMenuClose, handlePopoverClose };
+  const popoverAndMenuProps = { ...anchorElState, handleMenuClose, handlePopoverClose, customColor };
   const anchorElRef = useRef(null);
 
   return (
@@ -54,10 +60,6 @@ const WrapperOfPopoverAndMenu = ({
           if (hidden) return;
           if (customElementComponentOfIconGroup) return customElementComponentOfIconGroup;
 
-          const menuComponents = !!MenuComponents && (
-            <MenuComponents {...menuComponentsProps} onMenuClose={handleMenuClose} />
-          );
-
           const iconName = isIconNameExtended ? { keyName, buttonUtilsName } : buttonUtilsName;
 
           const isArctiveIconPresent = customColor && isIconActive && !!ActiveIcon;
@@ -78,6 +80,7 @@ const WrapperOfPopoverAndMenu = ({
             handleAverageMainComponentWidth
           };
           const mainComponent = <IconButtonByPas {...iconButtonProps} />;
+          const allMenuComponentsProps = { onMenuClose: handleMenuClose, customColor, ...menuComponentsProps };
 
           const handlePopoverOpen = ({ currentTarget }) =>
             setAnchorElState(state => ({
@@ -92,12 +95,13 @@ const WrapperOfPopoverAndMenu = ({
             setAnchorElState(state => ({
               ...state,
               currentTarget,
-              menuComponents,
+              handleMenuClose,
+              menuComponentsProps: allMenuComponentsProps,
+              MenuComponents,
               name: buttonUtilsName,
               isMenuOpen: true,
               onMenuClose: null
             }));
-
 
           const wrapperOfMainComponentProps = {
             onMouseEnter: handlePopoverOpen,
@@ -119,10 +123,13 @@ const WrapperOfPopoverAndMenu = ({
 
 WrapperOfPopoverAndMenu.propTypes = {
   CustomElementComponentOfIconGroup: PropTypes.oneOf(['bool', 'node']),
+  arrOfButtonNamesWhichSholudBeHidden: PropTypes.array,
   buttonUtilsArr: PropTypes.shape({
     map: PropTypes.func
   }),
+  customColor: PropTypes.any,
   customElementComponentOfIconGroupProps: PropTypes.node,
+  handleAverageMainComponentWidth: PropTypes.any,
   handlePopoverAndMenuState: PropTypes.func,
   iconSize: PropTypes.string,
   isIconNameExtended: PropTypes.bool,
@@ -134,4 +141,4 @@ WrapperOfPopoverAndMenu.propTypes = {
   })
 };
 
-export default memo(WrapperOfPopoverAndMenu);
+export default WrapperOfPopoverAndMenu;

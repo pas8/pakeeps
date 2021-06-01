@@ -23,7 +23,6 @@ import PlaylistAddOutlinedIcon from '@material-ui/icons/PlaylistAddOutlined';
 import AddBoxOutlinedIcon from '@material-ui/icons/AddBoxOutlined';
 import { themeColors } from 'components/theme';
 
-
 const IconUtilsOfCustomColor = ({
   statusState,
   onSave,
@@ -37,17 +36,9 @@ const IconUtilsOfCustomColor = ({
   onClickOfPalletteButton,
   onClickOfColorPreviewButton,
   onClickOfCopyButton,
-  onClickCustomizationButton
+  onClickCustomizationButton,
+  customColor
 }) => {
-  const [popoverAndMenuState, setPopoverAndMenuState] = useState({
-    name: 'null',
-    menuIsOpen: false,
-    popoverIsOpen: true,
-    onMenuClose: null
-  });
-
-  const handlePopoverAndMenuState = value => setPopoverAndMenuState(value);
-
   const ColorFormatMenuComponent = () => (
     <SelectColorFormat
       customFormatName={customFormatName}
@@ -57,7 +48,7 @@ const IconUtilsOfCustomColor = ({
   );
 
   const whiteColor = themeColors.whiteRgbaColorWith0dot96valueOfAlfaCanal;
-  const customColor = statusState.colorPreview ? colorInHexFormat : whiteColor;
+  // const customColor = statusState.colorPreview ? colorInHexFormat : whiteColor;
 
   const buttonUtilsArr = [
     {
@@ -67,8 +58,8 @@ const IconUtilsOfCustomColor = ({
       isIconActive: false,
       onlyPopover: true,
       onClick: onClickOfExtendButton,
-      hidden: false,
-      customColor: statusState.extended && customColor
+      hidden: false
+      // customColor: statusState.extended && customColor
     },
 
     {
@@ -77,8 +68,8 @@ const IconUtilsOfCustomColor = ({
       name: 'pallette',
       isIconActive: false,
       onlyPopover: true,
-      onClick: onClickOfPalletteButton,
-      customColor: statusState.customColor && customColor
+      onClick: onClickOfPalletteButton
+      // customColor: statusState.customColor && customColor
     },
     {
       icon: FilterVintageOutlinedIcon,
@@ -87,8 +78,8 @@ const IconUtilsOfCustomColor = ({
       isIconActive: false,
       onlyPopover: true,
       onClick: onClickOfGradientButton,
-      hidden: !statusState.customColor,
-      customColor: statusState.gradient && customColor
+      hidden: !statusState.customColor
+      // customColor: statusState.gradient && customColor
     },
     {
       icon: LibraryAddOutlinedIcon,
@@ -98,7 +89,7 @@ const IconUtilsOfCustomColor = ({
       onlyPopover: true,
       hidden: !statusState.extended || !statusState.customColor,
       onClick: onClickOfCopyButton,
-      customColor: statusState.copy && customColor,
+      // customColor: statusState.copy && customColor,
       rotateDeg: 90
     },
     {
@@ -108,16 +99,16 @@ const IconUtilsOfCustomColor = ({
       isIconActive: false,
       onlyPopover: true,
       hidden: !statusState.extended || !statusState.customColor,
-      onClick: onClickOfColorPreviewButton,
-      customColor: statusState.colorPreview && customColor
+      onClick: onClickOfColorPreviewButton
+      // customColor: statusState.colorPreview && customColor
     },
     {
       icon: AddBoxOutlinedIcon,
       popoverText: 'Add this color to your color pattern',
       name: 'addColorToColorPattern',
       isIconActive: false,
-      hidden:  !statusState.customColor,
-      customColor: statusState.pattern && customColor,
+      hidden: !statusState.customColor,
+      // customColor: statusState.pattern && customColor,
       menuLocation: 'center'
     },
     {
@@ -126,13 +117,13 @@ const IconUtilsOfCustomColor = ({
       name: 'choseColorFormatWhichULike',
       isIconActive: false,
       hidden: !statusState.extended || !statusState.customColor,
-      customColor: statusState.customFormats && customColor,
+      // customColor: statusState.customFormats && customColor,
       menuComponents: ColorFormatMenuComponent,
       menuLocation: 'center'
     },
     {
       hidden: statusState.customColor,
-      customElementComponentOfIconGroup: <CustomizationButton {...customizationButtonProps} />
+      customElementComponentOfIconGroup: <CustomizationButton {...customizationButtonProps} customColor={customColor} />
     },
 
     {
@@ -141,9 +132,9 @@ const IconUtilsOfCustomColor = ({
       name: 'customizationIconButton',
       isIconActive: false,
       onlyPopover: true,
-      hidden:  !statusState.customColor,
-      onClick: onClickCustomizationButton,
-      customColor: statusState.customization && customColor
+      hidden: !statusState.customColor,
+      onClick: onClickCustomizationButton
+      // customColor: statusState.customization && customColor
     },
     {
       icon: SaveRoundedIcon,
@@ -151,15 +142,16 @@ const IconUtilsOfCustomColor = ({
       name: 'save',
       isIconActive: false,
       onlyPopover: true,
-      onClick: onSave,
-      customColor: statusState.save && customColor
+      onClick: onSave
+      // customColor: statusState.save && customColor
     }
   ];
 
+
   const wrapperOfPopoverAndMenuProps = {
     buttonUtilsArr,
-    handlePopoverAndMenuState,
-    popoverAndMenuState,
+    customColor,
+    isCustomColorReversed:true,
     iconSize: 'small'
   };
   return <WrapperOfPopoverAndMenu {...wrapperOfPopoverAndMenuProps} />;

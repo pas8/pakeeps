@@ -2,17 +2,19 @@ import PropTypes from 'prop-types';
 import { Grid, makeStyles } from '@material-ui/core';
 import { DragDropContext } from 'react-beautiful-dnd';
 import { find } from 'lodash';
-import Column from '../Column/index';
+import ColumnOfPakeepListContainer from './components/Column/index';
+import { themeColors } from 'components/theme';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles(({ spacing, breakpoints: { between, down } }) => ({
   container: {
-    margin: theme.spacing(4, 0, 0, 0),
-    [theme.breakpoints.between('xs', 'sm')]: {
-      margin: theme.spacing(2, 0, 0, 0)
-    },
-    [theme.breakpoints.down('md')]: {
-      margin: theme.spacing(4, 0, 0, 0)
+    margin: spacing(4, 0, 0, 0),
+    [between('xs', 'sm')]: { margin: spacing(2, 0, 0, 0) },
+    [down('md')]: { margin: spacing(4, 0, 0, 0) },
+    '& .selected > div ': {
+      boxShadow: `0px 0px 0px 1px ${themeColors.whiteRgbaColorWith0dot96valueOfAlfaCanal}`,
+      borderColor:themeColors.whiteRgbaColorWith0dot96valueOfAlfaCanal,
     }
+    
   }
 }));
 
@@ -22,9 +24,8 @@ const PakeepListContainer = ({
   columns,
   onDragEnd,
   placeholderName,
-  folderProperty,
   onDragStart,
-  folderId
+  columnOfPakeepListContainerProps
 }) => {
   const classes = useStyles();
 
@@ -34,25 +35,25 @@ const PakeepListContainer = ({
         {responsiveColumnOrder?.map((columnId, idx) => {
           const column = columns[columnId];
           if (!column?.pakeepsId) return;
-          // console.log(column?.pakeepsId)
+
           const filteredArrToMap = column.pakeepsId.filter(id => id !== placeholderName);
 
           const pakeepsInColumn = filteredArrToMap.map(pakeepId => {
             const currentEl = find(pakeeps, ({ id }) => id === pakeepId);
             return currentEl;
           });
+          const isLastColumn = !!(idx + 1 === responsiveColumnOrder.length);
+          const isFirstColumn = !!(idx === 0);
 
-          return (
-            <Column
-              folderProperty={folderProperty}
-              key={column?.id}
-              folderId={folderId}
-              column={column}
-              pakeepsInColumn={pakeepsInColumn}
-              lastColumn={!!(idx + 1 === responsiveColumnOrder.length) }
-              firstColumn={!!(idx === 0)}
-            />
-          );
+          const allColumnOfPakeepListContainerProps = {
+            ...columnOfPakeepListContainerProps,
+            key: column?.id,
+            column,
+            isFirstColumn,
+            isLastColumn,
+            pakeepsInColumn
+          };
+          return <ColumnOfPakeepListContainer {...allColumnOfPakeepListContainerProps} />;
         })}
       </Grid>
     </DragDropContext>
@@ -61,11 +62,10 @@ const PakeepListContainer = ({
 
 PakeepListContainer.propTypes = {
   columns: PropTypes.any,
-  folderId: PropTypes.string,
-  folderProperty: PropTypes.any,
   onDragEnd: PropTypes.func,
   onDragStart: PropTypes.func,
-  pakeeps: PropTypes.any,
+  columnOfPakeepListContainerProps: PropTypes.object,
+  pakeeps: PropTypes.array,
   placeholderName: PropTypes.string,
   responsiveColumnOrder: PropTypes.shape({
     length: PropTypes.any,

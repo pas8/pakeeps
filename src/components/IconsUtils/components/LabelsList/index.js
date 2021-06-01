@@ -11,15 +11,19 @@ import WrapperOfMenuOfLabelPart from 'components/PakeepList/components/PakeepEle
 import DialogOfAddNewLabel from './components/DialogOfAddNewLabel';
 import DefaultMenuListOflabelList from './components/DefaultMenuList';
 import GlobalLabelListOflabelList from './components/GlobalLabelList';
+import { SelectedLabels } from 'components/NewPakeep';
+import { useGetReversedCustomColor } from 'hooks/useGetReversedCustomColor.hook';
 
 const LabelsList = ({
   handleAddNewLabel,
   handleDeleteNewLabel,
+  handleDeleteLabelFromPakeepFunc,
   globalLabels,
-  selectedLabels,
   handleStatusOfHideLabelView,
   isLabelViewHidden,
-  changeLabelItemThunk
+  changeLabelItemThunk,
+  isDefaultMenuListHidden = false,
+  customColor
 }) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const handleOpenAddNewLabelDialog = () => setIsDialogOpen(true);
@@ -38,9 +42,11 @@ const LabelsList = ({
     }
   ];
 
-  const dialogOfAddNewLabelProps = {isDialogOpen,handleCloseAddNewLabelDialog,    handleOpenAddNewLabelDialog,  };
+  const dialogOfAddNewLabelProps = { isDialogOpen, handleCloseAddNewLabelDialog, handleOpenAddNewLabelDialog };
 
-  const handleChangeNewLabel = (isChecked, id) => (isChecked ? handleDeleteNewLabel(id) : handleAddNewLabel(id));
+  const handleChangeNewLabel = (isChecked, id) => {
+    isChecked ? handleDeleteNewLabel(id) : handleAddNewLabel(id);
+  };
 
   const nullityOfMenuState = {
     mouseX: null,
@@ -59,27 +65,29 @@ const LabelsList = ({
     handleClose();
   };
 
-  const globalLabelListProps = { globalLabels, handleChangeNewLabel, selectedLabels, setMenuState };
+  const globalLabelListProps = { globalLabels, handleChangeNewLabel, setMenuState, customColor };
 
   const wrapperOfMenuOfLabelPartProps = {
     handleClose,
     handleDeleteLabel,
     menuState,
-    changeLabelItemFunc:changeLabelItemThunk,
+    changeGloabalLabelItemFunc: changeLabelItemThunk,
     setMenuState,
-    isThisMenuIsSecond:true
+    isThisMenuIsSecond: true
   };
 
-
-
   return (
-    <Grid>
-      <DefaultMenuListOflabelList defaultMenuListArr={defaultMenuListArr} />
-      <GlobalLabelListOflabelList {...globalLabelListProps} />
+    <SelectedLabels.Consumer>
+      {({ selectedLabels }) => (
+        <Grid>
+          {!isDefaultMenuListHidden && <DefaultMenuListOflabelList defaultMenuListArr={defaultMenuListArr} />}
+          <GlobalLabelListOflabelList {...globalLabelListProps} selectedLabels={selectedLabels} />
 
-      <WrapperOfMenuOfLabelPart {...wrapperOfMenuOfLabelPartProps} />
-      <DialogOfAddNewLabel {...dialogOfAddNewLabelProps} />
-    </Grid>
+          <WrapperOfMenuOfLabelPart {...wrapperOfMenuOfLabelPartProps} />
+          <DialogOfAddNewLabel {...dialogOfAddNewLabelProps} />
+        </Grid>
+      )}
+    </SelectedLabels.Consumer>
   );
 };
 
@@ -97,7 +105,7 @@ const mapStateToProps = ({ app: { labels } }) => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  changeLabelItemThunk: newLabel => dispatch(changeLabelItemThunk( newLabel))
+  changeLabelItemThunk: newLabel => dispatch(changeLabelItemThunk(newLabel))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(LabelsList);
