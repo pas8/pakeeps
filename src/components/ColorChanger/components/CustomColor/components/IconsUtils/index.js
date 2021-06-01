@@ -123,7 +123,7 @@ const IconUtilsOfCustomColor = ({
     },
     {
       hidden: statusState.customColor,
-      customElementComponentOfIconGroup: <CustomizationButton {...customizationButtonProps} />
+      customElementComponentOfIconGroup: <CustomizationButton {...customizationButtonProps} customColor={customColor} />
     },
 
     {

@@ -4,6 +4,7 @@ import PopoverAndMenu from './components/PopoverAndMenu';
 import { useState, useRef } from 'react';
 import WrapperOfMainComponent from './components/WrapperOfMainComponent';
 import includes from 'lodash.includes';
+import { useGetReversedCustomColor } from 'hooks/useGetReversedCustomColor.hook';
 
 const WrapperOfPopoverAndMenu = ({
   buttonUtilsArr,
@@ -12,16 +13,9 @@ const WrapperOfPopoverAndMenu = ({
   iconSize = 'default',
   handleAverageMainComponentWidth,
   customColor: notReversedCustomColor,
-  isCustomColorReversed = false,
-  arrOfButtonNamesWhichSholudBeHidden
+  isCustomColorReversed = false
 }) => {
-  const reversedColor = {
-    hover: notReversedCustomColor.bgHover,
-    unHover: notReversedCustomColor.bgUnHover,
-    bgHover: notReversedCustomColor.hover,
-    bgUnHover: notReversedCustomColor.unHover
-  };
-
+  const reversedColor = useGetReversedCustomColor(notReversedCustomColor);
   const customColor = isCustomColorReversed ? reversedColor : notReversedCustomColor;
 
   const nullityOfAnchorEl = {
@@ -86,7 +80,7 @@ const WrapperOfPopoverAndMenu = ({
             handleAverageMainComponentWidth
           };
           const mainComponent = <IconButtonByPas {...iconButtonProps} />;
-          const allMenuComponentsProps = { ...menuComponentsProps, onMenuClose: handleMenuClose, customColor };
+          const allMenuComponentsProps = { onMenuClose: handleMenuClose, customColor, ...menuComponentsProps };
 
           const handlePopoverOpen = ({ currentTarget }) =>
             setAnchorElState(state => ({

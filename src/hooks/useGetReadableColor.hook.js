@@ -24,8 +24,8 @@ export const useGetReadableColor = (backgroundColor, color = 'default') => {
     : colord(backgroundColor).lighten(0.08).toHex();
 
   const bgHover = !useIsColorDark(backgroundColor)
-    ? colord(backgroundColor).darken(0.32).toHex()
-    : colord(backgroundColor).lighten(0.32).toHex();
+    ? colord(backgroundColor).darken(0.4).lighten(0.08).alpha(0.8).toHex()
+    : colord(backgroundColor).lighten(0.4).darken(0.08).alpha(0.8).toHex();
 
   const newColor = !isUseDefaultColor
     ? { hover: color, unHover: colord(color).alpha(0.8).toHex(), bgHover, bgUnHover }

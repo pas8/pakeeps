@@ -17,6 +17,7 @@ const useStyles = makeStyles(theme => ({
 const PreparedColorExamples = ({
   color,
   isExtended,
+  customColor,
   handleSetColor,
   idColumnArr,
   changeOneColorColumnThunk,
@@ -84,7 +85,8 @@ const PreparedColorExamples = ({
             isColor,
             key: nanoid(),
             droppableId: columnId,
-            columnElements
+            columnElements,
+            customColor
           };
 
           return <ColumnOfPreparedColorExamples {...columnProps} />;

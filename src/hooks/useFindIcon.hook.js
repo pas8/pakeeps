@@ -1,7 +1,8 @@
 import { iconsArr } from 'components/Icons';
+import { find } from 'lodash';
 
 export const useFindIcon = name => {
-  const icon = iconsArr.find(({ iconName }) => iconName === name)?.icon;
+  const icon = find(iconsArr,({ iconName }) => iconName === name)?.icon;
 
   return icon;
 };

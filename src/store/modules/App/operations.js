@@ -21,7 +21,8 @@ import {
   toSetSelectedPakeepIds,
   toSetIsCancelSelectedPakeepsId,
   toHandleSelectedPakeepsProperty,
-  toAddLabelToPakeep
+  toAddLabelToPakeep,
+  toHandlePakeepProperty
 } from './actions';
 import { useGetCurrentPakeep } from './hooks';
 
@@ -134,4 +135,9 @@ export const handleCancelSelectingStatusThunk = boolValue => dispatch => {
 
 export const handleSelectedPakeepsPropertyThunk = (newPakeeps, propertyVariant) => dispatch => {
   dispatch(toHandleSelectedPakeepsProperty(newPakeeps, propertyVariant));
+};
+
+
+export const handlePakeepPropertyThunk = (pakeepId, property)  => dispatch => {
+  dispatch(toHandlePakeepProperty(pakeepId, property) );
 };

@@ -19,7 +19,8 @@ const initialState = {
     { color: 'primary', title: 'Mouth plans', iconName: 'keyboard', id: 'label2', variant: 'outlined' },
     { color: 'secondary', title: 'Year plans', iconName: '', id: 'label3', variant: 'outlined' },
     { color: '#6e9f47', title: 'Your plans', iconName: 'star', id: 'label6', variant: 'default' },
-    { color: '', title: 'Hobby Placeholders', iconName: '', id: 'label4', variant: 'default' }
+    { color: '', title: 'Hobby Placeholders', iconName: 'bookmark', id: 'label4', variant: 'default' },
+    { color: '#afa646', title: 'Eco', iconName: 'eco', id: 'label8', variant: 'default' }
   ],
   selectedPakeepsId: [],
   folders: [[]],
@@ -109,15 +110,14 @@ const initialState = {
       title: 'Placeholder 7',
       text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. At imperdiet dui accumsan sit amet nulla facilisi morbi. Aliquam sem et tortor consequat id porta nibh. Enim praesent elementum facilisis leo vel fringilla est. Cras adipiscing enim eu turpis egestas pretium aenean. Sed libero enim sed faucibus turpis in eu mi bibendum. Vestibulum lorem sed risus ultricies. Neque egestas congue quisque egestas diam.',
       isInBookmark: false,
-      isArchived:false,
+      isArchived: false,
       isPinned: false,
       isCheckBoxes: false,
       isFavorite: false,
       color: 'default',
       labels: ['label4', 'label6'],
       id: 'pakeep7',
-      backgroundColor: '#470000',
-
+      backgroundColor: '#470000'
     },
     {
       title: 'Placeholder 8',
@@ -125,7 +125,7 @@ const initialState = {
       isInBookmark: false,
       isFavorite: false,
       isCheckBoxes: false,
-      isArchived:false,
+      isArchived: false,
       backgroundColor: '#d37a18',
       color: 'default',
       labels: ['label1'],
@@ -203,8 +203,6 @@ const AppReducer = createReducer(initialState)({
     labels
   }),
 
-
-
   [types.HANDLE_SET_SELECTED_PAKEEPIDS_ARR]: (state, { pakepsId: selectedPakeepsId }) => ({
     ...state,
     selectedPakeepsId
@@ -220,19 +218,17 @@ const AppReducer = createReducer(initialState)({
     currentFolderPropertyIdx: folderIdx
   }),
 
-  [types.HANDLE_PAKEEPS]: (state, { pakeeps }) => ({ ...state, isUsePreviuosOrder: true, pakeeps }),
+  [types.HANDLE_PAKEEPS]: (state, { pakeeps }) => ({ ...state, pakeeps }),
   [types.SET_NEW_ORDER_NAMES]: (state, { newOrder }) => ({
     ...state,
     pakeepsOrderNames: newOrder
   }),
   [types.HANDLE_SET_PREVIUOS_ORDER_NAMES]: (state, { orderNames }) => ({
     ...state,
-    isUsePreviuosOrder: false,
     pakeepsOrderNames: orderNames
   }),
   [types.HANDLE_SET_ORDER_NAMES_OF_PINNED_PAKEEPS]: (state, { orderNames: pinnedPakeepsOrderNames }) => ({
     ...state,
-    isUsePreviuosOrder: false,
     pinnedPakeepsOrderNames
   }),
 
@@ -240,6 +236,15 @@ const AppReducer = createReducer(initialState)({
     const newPakeepsId = newPakeeps.map(({ id }) => id);
     const filteredPakeeps = filter(state.pakeeps, ({ id }) => !includes(newPakeepsId, id));
     const pakeeps = [...filteredPakeeps, ...newPakeeps];
+    return { ...state, pakeeps };
+  },
+
+  [types.HANDLE_PAKEEP_PROPERTY]: (state, { pakeepId, property }) => {
+    const findedPakeep = find(state.pakeeps, ({ id }) => id === pakeepId);
+    const newPakeep = { ...findedPakeep, ...property };
+    const filteredPakeeps = filter(state.pakeeps, ({ id }) => pakeepId !== id);
+
+    const pakeeps = [...filteredPakeeps, ...newPakeep];
     return { ...state, pakeeps };
   },
 
