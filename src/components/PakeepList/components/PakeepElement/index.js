@@ -1,7 +1,7 @@
 import { Grid, makeStyles, Grow, Fade, Dialog, DialogActions, DialogContent, Modal } from '@material-ui/core';
 import PropTypes from 'prop-types';
 import { useState, React, useEffect } from 'react';
-import { addDays, isValid } from 'date-fns';
+import { addDays, addHours, isValid } from 'date-fns';
 import clsx from 'clsx';
 import { useSwipeable } from 'react-swipeable';
 import { useMeasure } from 'react-use';
@@ -180,10 +180,9 @@ const PakeepElement = ({
         }) => {
 
           const events = [
-            { id: '1', value: DateNow },
-            { id: '2', value: addDays(DateNow, 1) },
-            { id: '3', value: addDays(DateNow, 7) }
-          ];
+            { id: '1',value:addHours(new Date(), 2)},
+            { id: '2', value:addHours(new Date(), 27)},
+          ]
 
 
           const handleDeleteNewLabel = labelId => {
@@ -277,7 +276,6 @@ const PakeepElement = ({
 
           const JUST_PADDING_VALUE = 160;
           const widthOfContainer = isDialogOpen ? width - JUST_PADDING_VALUE : width;
-          let DateNow = new Date();
 
           const allIconsUtilsProps = {
             ...iconsUtilsProps,

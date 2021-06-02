@@ -15,7 +15,6 @@ const InputWithCustomColor = withStyles({
     // },
 
     '& .MuiOutlinedInput-root': {
-    
       color: customColor.bgHover,
 
       '& fieldset': {
@@ -24,17 +23,15 @@ const InputWithCustomColor = withStyles({
       '&:hover fieldset': {
         borderColor: customColor.bgHover,
 
-boxShadow:`0px 0px 4px 1px ${useAlpha(customColor.bgHover,0.42)  }`
+        boxShadow: `0px 0px 4px 1px ${useAlpha(customColor.bgHover, 0.42)}`
       },
       '&.Mui-focused fieldset': {
         borderColor: customColor.bgUnHover,
-        boxShadow:`0px 0px 4px 1px ${customColor.bgUnHover}`
+        boxShadow: `0px 0px 4px 1px ${customColor.bgUnHover}`
       },
       '&.Mui-focused ': {
         color: customColor.bgUnHover
-
       }
-      
     }
   })
 })(TextField);
@@ -46,7 +43,7 @@ const TitleChangerOfLabel = ({ value, onChange, customColor }) => {
     autoFocus: true,
     variant: 'outlined',
     // color: 'primary',
-    fullWidth:true,
+    fullWidth: true,
     value,
     customColor,
     onChange

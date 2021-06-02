@@ -47,7 +47,7 @@ export const iconsArr = [
   { icon: <CalendarTodayOutlinedIcon />, iconName: 'today', id: 'random2', checkedIcon: <CalendarTodayIcon /> },
   { icon: <ViewWeekOutlinedIcon />, iconName: 'week', id: 'random3', checkedIcon: <ViewWeekIcon /> },
   { icon: <DashboardOutlinedIcon />, iconName: 'dashboard', id: 'random4', checkedIcon: <DashboardIcon /> },
-  { icon: <DateRangeOutlinedIcon />, iconName: 'dateRange', id: 'random4', checkedIcon: <DateRangeIcon /> },
+  { icon: <DateRangeOutlinedIcon />, iconName: 'dateRange', id: 'random10', checkedIcon: <DateRangeIcon /> },
   { icon: <AlarmOutlinedIcon />, iconName: 'alarm', id: '1' },
   { icon: <FingerprintOutlinedIcon />, iconName: 'fingerprint', id: '2' },
   { icon: <CheckBoxOutlinedIcon />, iconName: 'checkbox', id: '3' },

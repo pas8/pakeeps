@@ -1,3 +1,4 @@
+import { addDays } from 'date-fns';
 import { filter, find, pickBy, includes, map, every } from 'lodash';
 import { createReducer } from 'store/utils';
 import * as types from './types';
@@ -23,9 +24,9 @@ const initialState = {
     { color: '#afa646', title: 'Eco', iconName: 'eco', id: 'label8', variant: 'default' }
   ],
   events: [
-    { title: 'Later today', iconName: 'today', id: '1' },
-    { title: 'Tomorrow', iconName: 'tomorrow', id: '2' },
-    { title: 'Next week', iconName: 'week', id: '3' }
+    { title: 'Later today', iconName: 'today', id: '1', value: new Date(), onlyTime: true },
+    { title: 'Tomorrow', iconName: 'tomorrow', id: '2', value: addDays(new Date(), 1), onlyTime: true },
+    { title: 'Next week', iconName: 'week', id: '3', value: addDays(new Date(), 7) }
   ],
   selectedPakeepsId: [],
   folders: [[]],

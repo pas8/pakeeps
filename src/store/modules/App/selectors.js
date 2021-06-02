@@ -43,7 +43,11 @@ export const getSelectedPakeep = createArraySelector(
 export const getGlobalEventsArr = createArraySelector(
   [globalEvents => globalEvents, (globalEvents, events) => events],
   ({ id: globalId, ...globalEventsProps }, events) => {
-    const extendedGlobalEvent = { ...globalEventsProps, ..._.find(events, ({ id }) => id === globalId) };
+    const findedEvent = _.find(events, ({ id }) => id === globalId);
+    const isEventWasChosen = !!findedEvent;
+
+    const validatedFindedEvent = isEventWasChosen ? { ...findedEvent, isChosen: true } : { isChosen: false, };
+    const extendedGlobalEvent = { ...globalEventsProps, ...validatedFindedEvent,id:globalId };
 
     return extendedGlobalEvent;
   }

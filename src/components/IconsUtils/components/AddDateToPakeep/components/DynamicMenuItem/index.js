@@ -6,14 +6,6 @@ import { themeColors } from 'components/theme';
 
 const useStyles = makeStyles(theme => ({
   menuText: { marginLeft: theme.spacing(1.4) },
-  marginTop: {
-    marginRight: theme.spacing(1.4),
-    marginLeft: theme.spacing(1.0 * 2),
-    transition: theme.transitions.create('all', {
-      easing: theme.transitions.easing.easeIn,
-      duration: theme.transitions.duration.complex
-    })
-  },
 
   // preventClickOfMenuItem: { '& .MuiTouchRipple-root': { display: 'none' } },
   itemGrid: ({ color }) => ({
@@ -33,9 +25,9 @@ const DynamicMenuItem = ({
   title,
   isActiveIcon,
   isDynamicComponentShouldBeShown,
-  menuItemProps,
+  dynamicItemProps,
   isPreventClickOfMenuItem = false,
-  Icon,
+  icon,
   customColor,
   isDynamicItemGridMarginIsZero = false
 }) => {
@@ -43,14 +35,14 @@ const DynamicMenuItem = ({
   const classes = useStyles({ color, hoverColor: '' ,customColor});
 
   const dynamicMenuItem = (
-    <Grid item className={!isDynamicItemGridMarginIsZero && clsx(classes.marginTop, classes.itemGrid)}>
+    <Grid item className={!isDynamicItemGridMarginIsZero && clsx( classes.itemGrid)}>
       <DynamicComponent {...dynamicComponentProps} />
     </Grid>
   );
 
   const staticMenuItem = (
     <Grid container className={classes.itemGrid}>
-      <Icon />
+      {icon}
       <Grid item className={classes.menuText}>
         <Typography variant={'subtitle2'}>{title}</Typography>
       </Grid>
@@ -60,7 +52,7 @@ const DynamicMenuItem = ({
   const ItemOfMenu = isDynamicComponentShouldBeShown ? Grid : MenuItem;
 
   const itemOfMenuProps = {
-    ...menuItemProps,
+    ...dynamicItemProps,
     disableGutters: true,
     className: clsx(isPreventClickOfMenuItem && classes.preventClickOfMenuItem,customColor && classes.container)
   };
