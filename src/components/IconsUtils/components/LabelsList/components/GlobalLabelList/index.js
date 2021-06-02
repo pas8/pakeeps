@@ -49,7 +49,7 @@ const GlobalLabelListOflabelList = ({
 
   extend([mixPlugin]);
   const containerClasses = useStyles({ color: customColor?.hover });
-  console.log(customColor);
+
   return (
     <Grid className={containerClasses.container}>
       <FormLabel component={'legend'}>All labels</FormLabel>

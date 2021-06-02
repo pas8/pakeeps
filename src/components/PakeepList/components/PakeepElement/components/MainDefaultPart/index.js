@@ -1,11 +1,11 @@
-import { Grid, makeStyles, Paper ,IconButton,Typography} from '@material-ui/core';
+import { Grid, makeStyles, Paper, IconButton, Typography } from '@material-ui/core';
 import PropTypes from 'prop-types';
 import { colord } from 'colord';
 import PinOutlinedIcon from 'components/Icons/components/PinOutlinedIcon';
 import PinIcon from 'components/Icons/components/PinIcon';
 import { themeColors } from 'components/theme';
 
-const useStyles = makeStyles(({spacing}) => ({
+const useStyles = makeStyles(({ spacing }) => ({
   title: {
     textOverflow: 'ellipsis',
     overflow: 'hidden',
@@ -17,12 +17,12 @@ const useStyles = makeStyles(({spacing}) => ({
     top: spacing(0.42),
     right: spacing(0.2),
 
-    color: customColor ? customColor.unHover : themeColors.whiteRgbaColorWith0dot42valueOfAlfaCanal,
+    color: customColor ? customColor.unHover : themeColors.mediumEmphasis,
     '&:hover': {
-      background: colord(customColor ? customColor.hover : themeColors.whiteRgbaColorWith0dot8valueOfAlfaCanal)
+      background: colord(customColor ? customColor.hover : themeColors.highEmphasis)
         .alpha(0.16)
         .toHex(),
-      color: customColor ? customColor.hover : themeColors.whiteRgbaColorWith0dot8valueOfAlfaCanal
+      color: customColor ? customColor.hover : themeColors.highEmphasis
     }
   })
 }));
@@ -36,7 +36,7 @@ const MainDefaultPartOfPakeepElement = ({
   title,
   customColor
 }) => {
-  const classes = useStyles({customColor});
+  const classes = useStyles({ customColor });
 
   return (
     <Paper variant={'outlined'} className={className}>
@@ -48,7 +48,11 @@ const MainDefaultPartOfPakeepElement = ({
       <Grid className={classes.title}>
         <Typography variant={'h5'}>{title}</Typography>
       </Grid>
-      <Grid>{text}</Grid>
+      <Grid className={classes.text}>
+        <Typography variant={'body2'} component={'p'}>
+          {text}
+        </Typography>
+      </Grid>
       {children}
     </Paper>
   );
@@ -61,6 +65,6 @@ MainDefaultPartOfPakeepElement.propTypes = {
   onClickOfPinIconButton: PropTypes.func,
   text: PropTypes.any,
   title: PropTypes.string
-}
+};
 
 export default MainDefaultPartOfPakeepElement;

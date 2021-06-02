@@ -37,7 +37,7 @@ const useStyles = makeStyles(theme => ({
     },
 
     '& label': {
-      color: !customColor ? themeColors.whiteRgbaColorWith0dot42valueOfAlfaCanal : customColor.hover,
+      color: !customColor ? themeColors.mediumEmphasis : customColor.hover,
 
       background: !customColor ? 'transparent !important' : `${backgroundColor} !important`
     },
@@ -49,7 +49,7 @@ const useStyles = makeStyles(theme => ({
     },
     '& input,textarea': {
       caretColor: !customColor ? themeColors.primaryMain : customColor.hover,
-      color: !customColor ? themeColors.whiteRgbaColorWith0dot96valueOfAlfaCanal : customColor.hover
+      color: !customColor ? themeColors.maxEmphasis : customColor.hover
     },
     '& .MuiFormLabel-root.Mui-focused': {
       color: !customColor ? themeColors.primaryMain : customColor.hover

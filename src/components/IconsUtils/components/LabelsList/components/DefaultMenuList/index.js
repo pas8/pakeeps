@@ -7,7 +7,7 @@ const useStyles = makeStyles(({ spacing }) => ({
   container: {
     border: 0,
     borderBottomWidth: 2,
-    borderColor: themeColors.whiteRgbaColorWith0dot42valueOfAlfaCanal,
+    borderColor: themeColors.mediumEmphasis,
     borderStyle: 'solid',
     margin: spacing(0.8, 0, 0.4, 0),
     '& legend': {
@@ -19,7 +19,7 @@ const useStyles = makeStyles(({ spacing }) => ({
     fontSize: '10px',
     '& svg': {
       margin: spacing(0, 1.08, 0, 0.2),
-      color: themeColors.whiteRgbaColorWith0dot8valueOfAlfaCanal
+      color: themeColors.highEmphasis
     }
   }
 }));

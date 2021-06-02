@@ -154,7 +154,7 @@ const reversedCustomColor = useGetReversedCustomColor(customColor,true)
               isDynamicComponentShouldBeShown,
               menuItemProps,
               isPreventClickOfMenuItem: false,
-              Icon,
+              icon:<Icon/>,
               customColor,
 
             };

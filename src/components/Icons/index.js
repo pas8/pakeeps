@@ -30,8 +30,24 @@ import CategoryIcon from '@material-ui/icons/Category';
 import StarIcon from '@material-ui/icons/Star';
 import KeyboardVoiceIcon from '@material-ui/icons/KeyboardVoice';
 import EcoIcon from '@material-ui/icons/Eco';
-
+import TodayOutlinedIcon from '@material-ui/icons/TodayOutlined';
+import TodayIcon from '@material-ui/icons/Today';
+import CalendarTodayIcon from '@material-ui/icons/CalendarToday';
+import CalendarTodayOutlinedIcon from '@material-ui/icons/CalendarTodayOutlined';
+import CalendarViewDayOutlinedIcon from '@material-ui/icons/CalendarViewDayOutlined';
+import ViewWeekIcon from '@material-ui/icons/ViewWeek';
+import ViewWeekOutlinedIcon from '@material-ui/icons/ViewWeekOutlined';
+import DashboardOutlinedIcon from '@material-ui/icons/DashboardOutlined';
+import DashboardIcon from '@material-ui/icons/Dashboard';
+import DateRangeIcon from '@material-ui/icons/DateRange';
+import DateRangeOutlinedIcon from '@material-ui/icons/DateRangeOutlined';
 export const iconsArr = [
+
+  { icon: <TodayOutlinedIcon />, iconName: 'tomorrow', id: 'random1', checkedIcon: <TodayIcon /> },
+  { icon: <CalendarTodayOutlinedIcon />, iconName: 'today', id: 'random2', checkedIcon: <CalendarTodayIcon /> },
+  { icon: <ViewWeekOutlinedIcon />, iconName: 'week', id: 'random3', checkedIcon: <ViewWeekIcon /> },
+  { icon: <DashboardOutlinedIcon />, iconName: 'dashboard', id: 'random4', checkedIcon: <DashboardIcon /> },
+  { icon: <DateRangeOutlinedIcon />, iconName: 'dateRange', id: 'random10', checkedIcon: <DateRangeIcon /> },
   { icon: <AlarmOutlinedIcon />, iconName: 'alarm', id: '1' },
   { icon: <FingerprintOutlinedIcon />, iconName: 'fingerprint', id: '2' },
   { icon: <CheckBoxOutlinedIcon />, iconName: 'checkbox', id: '3' },

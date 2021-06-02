@@ -33,7 +33,7 @@ const useStyles = makeStyles(theme => ({
     width: theme.spacing(10),
     '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
       borderColor: ({ color, colorPreview }) =>
-        colorPreview ? color : themeColors.whiteRgbaColorWith0dot96valueOfAlfaCanal
+        colorPreview ? color : themeColors.maxEmphasis
     }
   }
 }));
@@ -76,7 +76,7 @@ const ButtonUtilsOfCustomGradient = ({
     direction: 1,
     label: '',
     appendToValue: '°',
-    knobColor: colorPreview ? color : themeColors.whiteRgbaColorWith0dot96valueOfAlfaCanal,
+    knobColor: colorPreview ? color : themeColors.maxEmphasis,
     trackSize: 2,
     knobSize: 24,
     dataIndex: gradientAngle,

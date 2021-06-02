@@ -1,9 +1,18 @@
+import { addDays } from 'date-fns';
 import { filter, find, pickBy, includes, map, every } from 'lodash';
 import { createReducer } from 'store/utils';
 import * as types from './types';
 
 const initialState = {
   data: 1,
+  theme:{
+    primaryMain:'#ffff8d',
+    secondaryMain:'#00b0ff',
+    type: 'dark',
+    highEmphasis: 'rgba(255,255,255,0.8)',
+    mediumEmphasis: 'rgba(255,255,255,0.6)',
+    maxEmphasis: 'rgba(255,255,255,0.96)',
+  },
   defaultFolderArr: [
     { title: 'All pakeeps', iconName: '', id: 'folder-ALL', property: 'ALL' },
     { title: 'Pined', iconName: 'pin', id: 'folder-isPinned', property: 'isPinned' },
@@ -21,6 +30,11 @@ const initialState = {
     { color: '#6e9f47', title: 'Your plans', iconName: 'star', id: 'label6', variant: 'default' },
     { color: '', title: 'Hobby Placeholders', iconName: 'bookmark', id: 'label4', variant: 'default' },
     { color: '#afa646', title: 'Eco', iconName: 'eco', id: 'label8', variant: 'default' }
+  ],
+  events: [
+    { title: 'Later today', iconName: 'today', id: '1', value: new Date(), onlyTime: true },
+    { title: 'Tomorrow', iconName: 'tomorrow', id: '2', value: addDays(new Date(), 1), onlyTime: true },
+    { title: 'Next week', iconName: 'week', id: '3', value: addDays(new Date(), 7) }
   ],
   selectedPakeepsId: [],
   folders: [[]],

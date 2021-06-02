@@ -156,7 +156,7 @@ const DialogOfAddNewLabel = ({
       <SteperOfDialogOfAddNewLabel {...steperOfDialogOfAddNewLabelProps} />
       <DialogActions>
         <LabelItem {...labelItemProps} />
-        <Button onClick={handleCloseDialog} style={{ color: themeColors.whiteRgbaColorWith0dot42valueOfAlfaCanal }}>
+        <Button onClick={handleCloseDialog} style={{ color: themeColors.mediumEmphasis }}>
           Close
         </Button>
 

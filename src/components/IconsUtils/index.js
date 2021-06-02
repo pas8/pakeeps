@@ -64,6 +64,7 @@ const IconsUtils = ({
   isBackgroundColorDefault,
   arrOfButtonNamesWhichSholudBeHidden = [],
   isUtilsReversed,
+  events= [],
   handleSetArhivedPakeep
 }) => {
   const handleClick = () => console.log('placeholder');
@@ -108,7 +109,8 @@ const IconsUtils = ({
       name: 'date',
       onClick: handleClick,
       ActiveIcon: EventAvailableIcon,
-
+      isIconActive: !!events.length,
+      menuComponentsProps: { events },
       menuComponents: AddDateToPakeep
     },
     {

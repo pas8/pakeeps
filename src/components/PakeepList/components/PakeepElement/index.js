@@ -1,6 +1,7 @@
 import { Grid, makeStyles, Grow, Fade, Dialog, DialogActions, DialogContent, Modal } from '@material-ui/core';
 import PropTypes from 'prop-types';
 import { useState, React, useEffect } from 'react';
+import { addDays, addHours, isValid } from 'date-fns';
 import clsx from 'clsx';
 import { useSwipeable } from 'react-swipeable';
 import { useMeasure } from 'react-use';
@@ -50,7 +51,7 @@ const useStyles = makeStyles(theme => ({
     borderColor:
       customColor && useIsColorDark(customColor.unHover)
         ? customColor.unHover
-        : themeColors.whiteRgbaColorWith0dot8valueOfAlfaCanal
+        : themeColors.highEmphasis
   }),
 
   iconsUtils: {
@@ -90,7 +91,6 @@ const PakeepElement = ({
   labels,
   isDragging,
   id,
-  events,
   utilsViewLikeInGoogleKeep,
   idx,
   globalLabels,
@@ -106,7 +106,7 @@ const PakeepElement = ({
 }) => {
   const [customColor, isBackgroundColorDefault, isColorDefault] = useGetReadableColor(backgroundColor, color);
   const correctBackground = isBackgroundColorDefault ? '#303030' : backgroundColor;
-  const correctColor = !customColor ? themeColors.whiteRgbaColorWith0dot96valueOfAlfaCanal : customColor.hover;
+  const correctColor = !customColor ? themeColors.maxEmphasis : customColor.hover;
 
   const classes = useStyles({
     customColor,
@@ -178,6 +178,13 @@ const PakeepElement = ({
           pakeepIdOfDialog,
           handleClosePakeepDialog
         }) => {
+
+          const events = [
+            { id: '1',value:addHours(new Date(), 2)},
+            { id: '2', value:addHours(new Date(), 27)},
+          ]
+
+
           const handleDeleteNewLabel = labelId => {
             handleDeleteLabelFromPakeepThunk(id, labelId);
           };
@@ -272,6 +279,7 @@ const PakeepElement = ({
 
           const allIconsUtilsProps = {
             ...iconsUtilsProps,
+            events,
             arrOfButtonNamesWhichSholudBeHidden,
             widthOfContainer,
             labelsListProps
