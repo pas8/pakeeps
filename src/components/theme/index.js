@@ -35,13 +35,6 @@ export const theme = responsiveFontSizes(
         main: themeColors.secondaryMain
       }
     },
-    overrides: {
-      MuiCssBaseline: {
-        '@global': {
-          '@font-face': [diiaHeadRegular]
-        }
-      }
-    },
 
     contrastThreshold: 2,
     tonalOffset: 0.4

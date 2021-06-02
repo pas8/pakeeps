@@ -1,11 +1,12 @@
-import { createMuiTheme, Grid, makeStyles, responsiveFontSizes } from '@material-ui/core';
+import { createMuiTheme, Grid, makeStyles, responsiveFontSizes,ThemeProvider } from '@material-ui/core';
 import PropTypes from 'prop-types';
+import { useEffect } from 'react';
+import { connect } from 'react-redux';
 
-const useStyles = makeStyles(theme => ({}));
 
 const ThemeLayout = ({ children ,theme:themeColors}) => {
-  const classes = useStyles();
 
+  
 
   const theme = responsiveFontSizes(
     createMuiTheme({
@@ -25,16 +26,16 @@ const ThemeLayout = ({ children ,theme:themeColors}) => {
     })
   );
 
-  const array1 = [Grid, Grid, Grid, Grid];
-
-  const reducer = (accumulator, currentValue) => <currentValue>{accumulator}</currentValue>  
-
-  console.log(array1.reduce(reducer));
-
-  return <ThemeProvider theme={theme}>{children}</ThemeProvider>;
+  return <ThemeProvider theme={theme}>  {children} </ThemeProvider>;
 };
 
-ThemeLayout.propTypes = {};
+ThemeLayout.propTypes = {
+  children: PropTypes.any,
+  theme: PropTypes.shape({
+    primaryMain: PropTypes.any,
+    secondaryMain: PropTypes.any
+  })
+}
 const mapStateToProps = ({ app: { theme } }) => ({ theme });
 
-export default connect(mapStateToProps, mapDispatchToProps)(ThemeLayout);
+export default connect(mapStateToProps, )(ThemeLayout);
