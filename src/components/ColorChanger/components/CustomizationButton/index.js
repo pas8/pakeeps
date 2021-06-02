@@ -22,7 +22,7 @@ const useStyles = makeStyles(theme => ({
   //       hoverStatusOfButtonOfAddingCustomColorToColorLayouts ? colorInHexFormat : '#424242',
   //     fontSize: theme.spacing(2.42),
   //     fontWeight: 900,
-  //     color: themeColors.whiteRgbaColorWith0dot8valueOfAlfaCanal,
+  //     color: themeColors.highEmphasis,
   //     maxWidth: theme.spacing(2),
   //     top: theme.spacing(0.8),
   //     right: theme.spacing(0.42),

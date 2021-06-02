@@ -61,7 +61,7 @@ const NewPakeepUtils = ({ customColor, handleNewPakeepSave, widthOfContainer, ..
           <Button
             style={{
               color: !customColor
-                ? themeColors.whiteRgbaColorWith0dot42valueOfAlfaCanal
+                ? themeColors.mediumEmphasis
                 : colord(customColor.hover).alpha(0.6).toHex()
             }}
           >

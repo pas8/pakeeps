@@ -31,7 +31,7 @@ const DynamicMenuItem = ({
   customColor,
   isDynamicItemGridMarginIsZero = false
 }) => {
-  const color = !customColor ? themeColors.whiteRgbaColorWith0dot8valueOfAlfaCanal : customColor?.unHover;
+  const color = !customColor ? themeColors.highEmphasis : customColor?.unHover;
   const classes = useStyles({ color, hoverColor: '' ,customColor});
 
   const dynamicMenuItem = (

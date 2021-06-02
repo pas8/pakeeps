@@ -51,7 +51,7 @@ const useStyles = makeStyles(theme => ({
     borderColor:
       customColor && useIsColorDark(customColor.unHover)
         ? customColor.unHover
-        : themeColors.whiteRgbaColorWith0dot8valueOfAlfaCanal
+        : themeColors.highEmphasis
   }),
 
   iconsUtils: {
@@ -106,7 +106,7 @@ const PakeepElement = ({
 }) => {
   const [customColor, isBackgroundColorDefault, isColorDefault] = useGetReadableColor(backgroundColor, color);
   const correctBackground = isBackgroundColorDefault ? '#303030' : backgroundColor;
-  const correctColor = !customColor ? themeColors.whiteRgbaColorWith0dot96valueOfAlfaCanal : customColor.hover;
+  const correctColor = !customColor ? themeColors.maxEmphasis : customColor.hover;
 
   const classes = useStyles({
     customColor,

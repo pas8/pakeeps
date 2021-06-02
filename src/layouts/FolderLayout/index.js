@@ -52,9 +52,9 @@ const useStyles = makeStyles(theme => ({
       positionOfFolderViewWithPakeepViewIsBottom ? 270 : positionOfFolderViewWithPakeepViewIsRight ? 180 : 0
     }deg)`,
     '& svg': {
-      color: themeColors.whiteRgbaColorWith0dot42valueOfAlfaCanal,
+      color: themeColors.mediumEmphasis,
       '&:hover': {
-        color: themeColors.whiteRgbaColorWith0dot8valueOfAlfaCanal
+        color: themeColors.highEmphasis
       }
     }
   })

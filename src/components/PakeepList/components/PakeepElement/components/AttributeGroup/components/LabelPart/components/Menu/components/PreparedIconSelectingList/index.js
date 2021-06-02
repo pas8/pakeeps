@@ -45,14 +45,14 @@ const PreparedIconSelectingList = ({
       : customColor.bgHover
     : isSelected
     ? themeColors.primaryMain
-    : themeColors.whiteRgbaColorWith0dot42valueOfAlfaCanal;
+    : themeColors.mediumEmphasis;
   const hoverColor = customColor
     ? isSelected
       ? customColor.bgUnHover
       : customColor.bgHover
     : isSelected
     ? themeColors.primaryMain
-    : themeColors.whiteRgbaColorWith0dot96valueOfAlfaCanal;
+    : themeColors.maxEmphasis;
 
   const classes = useStyles({ color:newColor, hoverColor,isDragging ,customColor});
   const onClick = () => handleChangeLabelIconName(iconName);

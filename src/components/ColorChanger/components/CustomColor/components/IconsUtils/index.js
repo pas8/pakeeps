@@ -47,7 +47,7 @@ const IconUtilsOfCustomColor = ({
     />
   );
 
-  const whiteColor = themeColors.whiteRgbaColorWith0dot96valueOfAlfaCanal;
+  const whiteColor = themeColors.maxEmphasis;
   // const customColor = statusState.colorPreview ? colorInHexFormat : whiteColor;
 
   const buttonUtilsArr = [

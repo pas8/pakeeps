@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types';
 import '../styles/globals.css';
 import { theme } from 'components/theme/index';
-import { ThemeProvider } from '@material-ui/core/styles';
 import { Provider as ReduxProvider } from 'react-redux';
 import { Provider as AuthProvider } from 'next-auth/client';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
@@ -20,16 +19,21 @@ const DynamicComponentWithNoSSR = dynamic(() => import('../src/layouts/HeaderLay
 });
 // LogRocket.init('b6se1p/pakeeps');
 
+
+
 const MyApp = ({ Component, pageProps }) => {
   useEffect(() => {
     const jssStyles = document.querySelector('#jss-server-side');
     if (jssStyles) jssStyles.parentElement.removeChild(jssStyles);
   }, []);
 
+
+  
+
   return (
-    <ThemeProvider theme={theme}>
+    <ReduxProvider store={store}>
+
       <MuiPickersUtilsProvider utils={DateFnsUtils}>
-        <ReduxProvider store={store}>
           <AuthProvider session={pageProps.session}>
             <ScrollLayout>
               <SnackBarLayout>
@@ -43,12 +47,11 @@ const MyApp = ({ Component, pageProps }) => {
               </SnackBarLayout>
             </ScrollLayout>
           </AuthProvider>
-        </ReduxProvider>
       </MuiPickersUtilsProvider>
-    </ThemeProvider>
+    </ReduxProvider>
+
   );
 };
-
 export default MyApp;
 
 MyApp.propTypes = {

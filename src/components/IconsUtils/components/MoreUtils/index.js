@@ -35,12 +35,12 @@ const MoreUtils = ({ slicedArrAfter, customColor }) => {
         const color = !customColor
           ? isIconActive
             ? themeColors.primaryMain
-            : themeColors.whiteRgbaColorWith0dot8valueOfAlfaCanal
+            : themeColors.highEmphasis
           : isIconActive
           ? customColor.bgUnHover
           : customColor.bgHover;
 
-        const hoverColor = !customColor && !isIconActive && themeColors.whiteRgbaColorWith0dot96valueOfAlfaCanal;
+        const hoverColor = !customColor && !isIconActive && themeColors.maxEmphasis;
         const classes = useStyles({ color, hoverColor,isIconActive });
         //
 

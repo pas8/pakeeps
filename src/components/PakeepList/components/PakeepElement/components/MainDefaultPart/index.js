@@ -17,12 +17,12 @@ const useStyles = makeStyles(({spacing}) => ({
     top: spacing(0.42),
     right: spacing(0.2),
 
-    color: customColor ? customColor.unHover : themeColors.whiteRgbaColorWith0dot42valueOfAlfaCanal,
+    color: customColor ? customColor.unHover : themeColors.mediumEmphasis,
     '&:hover': {
-      background: colord(customColor ? customColor.hover : themeColors.whiteRgbaColorWith0dot8valueOfAlfaCanal)
+      background: colord(customColor ? customColor.hover : themeColors.highEmphasis)
         .alpha(0.16)
         .toHex(),
-      color: customColor ? customColor.hover : themeColors.whiteRgbaColorWith0dot8valueOfAlfaCanal
+      color: customColor ? customColor.hover : themeColors.highEmphasis
     }
   })
 }));

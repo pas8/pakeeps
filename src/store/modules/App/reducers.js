@@ -5,6 +5,14 @@ import * as types from './types';
 
 const initialState = {
   data: 1,
+  theme:{
+    primaryMain:'#ffff8d',
+    secondaryMain:'#00b0ff',
+    type: 'dark',
+    highEmphasis: 'rgba(255,255,255,0.8)',
+    mediumEmphasis: 'rgba(255,255,255,0.6)',
+    maxEmphasis: 'rgba(255,255,255,0.96)',
+  },
   defaultFolderArr: [
     { title: 'All pakeeps', iconName: '', id: 'folder-ALL', property: 'ALL' },
     { title: 'Pined', iconName: 'pin', id: 'folder-isPinned', property: 'isPinned' },

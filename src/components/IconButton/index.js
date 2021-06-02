@@ -35,8 +35,8 @@ const IconButtonByPas = ({
   const defaultColor = isIconActive
     ? themeColors.primaryMain
     : currentHoverStatusIsTrue
-    ? themeColors.whiteRgbaColorWith0dot96valueOfAlfaCanal
-    : themeColors.whiteRgbaColorWith0dot42valueOfAlfaCanal;
+    ? themeColors.maxEmphasis
+    : themeColors.mediumEmphasis;
 
   const iconColor = customColor ? customIconColor : defaultColor;
 

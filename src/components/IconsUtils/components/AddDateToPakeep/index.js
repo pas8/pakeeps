@@ -103,10 +103,10 @@ const AddDateToPakeep = ({ ampm = false, onMenuClose, id, globalEventsArr, custo
 
           const isDynamicComponentShouldBeShown = correctName || (isChosen && DynamicComponent);
 
-          const onClick = () =>
-            correctName ? null : onMenuItemClick ? onMenuItemClick() : setMenuItemState(state => ({ ...state, name }));
+          // const onClick = () =>
+          //   correctName ? null : onMenuItemClick ? onMenuItemClick() : setMenuItemState(state => ({ ...state, name }));
 
-            const dynamicItemProps = isDynamicComponentShouldBeShown && {onClick};
+            const dynamicItemProps = isDynamicComponentShouldBeShown && {};
         
 
           const dynamicComponentProps = {

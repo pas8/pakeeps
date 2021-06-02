@@ -24,11 +24,11 @@ const EyeIconButton = ({ onClickOfEyeIconButton, isUtilsHidden, customColor }) =
       <IconButton onClick={onClickOfEyeIconButton}>
         {isUtilsHidden ? (
           <VisibilityOutlinedIcon
-            style={{ color: !customColor ? themeColors.whiteRgbaColorWith0dot8valueOfAlfaCanal : customColor.unHover }}
+            style={{ color: !customColor ? themeColors.highEmphasis : customColor.unHover }}
           />
         ) : (
           <VisibilityOffOutlinedIcon
-            style={{ color: !customColor ? themeColors.whiteRgbaColorWith0dot42valueOfAlfaCanal : customColor.unHover }}
+            style={{ color: !customColor ? themeColors.mediumEmphasis : customColor.unHover }}
           />
         )}
       </IconButton>

@@ -1,20 +1,21 @@
 import PropTypes from 'prop-types';
 import { KeyboardDateTimePicker, KeyboardTimePicker } from '@material-ui/pickers';
-import { Grid, InputAdornment, makeStyles, withStyles, Checkbox } from '@material-ui/core';
+import { Grid, InputAdornment, makeStyles, withStyles, Checkbox, Box } from '@material-ui/core';
 import { themeColors } from 'components/theme';
 import DoneOutlineOutlinedIcon from '@material-ui/icons/DoneOutlineOutlined';
 import { useCallback, useEffect, useState } from 'react';
 import { addDays, isValid } from 'date-fns';
 import { useAlpha } from 'hooks/useAlpha.hook';
+import CloseIcon from '@material-ui/icons/Close';
 import IconButtonByPas from 'components/IconButton';
 import DeleteOutlinedIcon from '@material-ui/icons/DeleteOutlined';
 import { Typography } from '@material-ui/core';
-const useStyles = makeStyles(({ spacing }) => ({
+const useStyles = makeStyles(({ spacing, typography: { h4 } }) => ({
   container: ({ keyboardIconColor, correctName, error, customColor, onlyTime }) => ({
     marginRight: spacing(-0.4),
     '& button': {
       color: error ? '#f44336CC' : correctName ? keyboardIconColor : 'rgba(255,255,255,0.42)',
-      marginRight: spacing(-1)
+      margin: spacing(0, -1.4, 0, -1.4)
     },
 
     '& p': {
@@ -25,7 +26,7 @@ const useStyles = makeStyles(({ spacing }) => ({
       color: customColor.hover,
 
       // color: correctName ? 'rgba(255,255,255,0.96)' : 'rgba(255,255,255,0.8)',
-      width: onlyTime ? spacing(8) : spacing(20)
+      width: onlyTime ? spacing(10) : spacing(20)
     },
 
     // '& label.Mui-focused': {
@@ -34,7 +35,7 @@ const useStyles = makeStyles(({ spacing }) => ({
 
     '& .MuiOutlinedInput-root': {
       color: customColor.bgHover,
-      justifyContent: 'space-between',
+      justifyContent: 'space-evently',
 
       '& fieldset': {
         borderColor: customColor.unHover
@@ -53,14 +54,6 @@ const useStyles = makeStyles(({ spacing }) => ({
       '&.Mui-focused ': {
         color: customColor.bgUnHover
       }
-    }
-  }),
-  containerOfDeleteButton: ({ customColor }) => ({
-    // width:'100%',
-    height:'100%',
-    '& svg': {
-
-      color: customColor.unHover
     }
   })
 }));
@@ -103,7 +96,6 @@ const DynamicInputDateAndTimePickers = ({
     inputVariant: 'outlined',
     keyboardIcon: icon,
     autoOk: false,
-    fullWidth: true,
     format: onlyTime ? 'hh:mm' : 'yyyy  /  MM  /  dd  /  hh:mm',
     disablePast: true,
     error,
@@ -113,32 +105,26 @@ const DynamicInputDateAndTimePickers = ({
     onAccept,
     ampm,
     variant: 'dialog',
-    endAdornment: (
-      <InputAdornment position="end">
-        <Checkbox defaultChecked indeterminate />
-      </InputAdornment>
-    ),
+    InputAdornmentProps: { position: 'start' },
     InputProps: {
-      startAdornment: (
-        <InputAdornment position={'start'}>
+      endAdornment: (
+        <InputAdornment position={'end'} style={{ width: '100%', justifyContent: 'flex-end' }}>
           <Typography component={'p'}> {title}</Typography>
+          <Box ml={1.4}>
+            <IconButtonByPas icon={CloseIcon} size={'small'}/>
+          </Box>
         </InputAdornment>
       )
-    }
+    },
+    fullWidth: true
   };
 
   const KeyboardPicker = onlyTime ? KeyboardTimePicker : KeyboardDateTimePicker;
 
   return (
-    <Grid container>
-
+    <Grid>
       <Grid className={classes.container}>
         <KeyboardPicker {...keyboardPickerState} />
-      </Grid>
-      <Grid >
-        <Grid  container alignItems={'center'} justify={'center'} className={classes.containerOfDeleteButton}>
-          <DeleteOutlinedIcon />
-        </Grid>
       </Grid>
     </Grid>
   );
