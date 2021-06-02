@@ -56,7 +56,7 @@ const DynamicInputDateAndTimePickers = ({
     onFocus,
     onAccept,
     ampm,
-    fullWidth:true,
+    fullWidth:false,
     variant:'dialog'
   };
 

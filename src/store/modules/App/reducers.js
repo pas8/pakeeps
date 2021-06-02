@@ -22,6 +22,11 @@ const initialState = {
     { color: '', title: 'Hobby Placeholders', iconName: 'bookmark', id: 'label4', variant: 'default' },
     { color: '#afa646', title: 'Eco', iconName: 'eco', id: 'label8', variant: 'default' }
   ],
+  events: [
+    { title: 'Later today', iconName: 'today', id: '1' },
+    { title: 'Tomorrow', iconName: 'tomorrow', id: '2' },
+    { title: 'Next week', iconName: 'week', id: '3' }
+  ],
   selectedPakeepsId: [],
   folders: [[]],
 

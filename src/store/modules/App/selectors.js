@@ -39,3 +39,12 @@ export const getSelectedPakeep = createArraySelector(
   [selectedPakeepsIdArr => selectedPakeepsIdArr, (selectedPakeepsIdArr, pakeeps) => pakeeps],
   (selectedPakeepsId, pakeeps) => _.find(pakeeps, ({ id }) => id === selectedPakeepsId)
 );
+
+export const getGlobalEventsArr = createArraySelector(
+  [globalEvents => globalEvents, (globalEvents, events) => events],
+  ({ id: globalId, ...globalEventsProps }, events) => {
+    const extendedGlobalEvent = { ...globalEventsProps, ..._.find(events, ({ id }) => id === globalId) };
+
+    return extendedGlobalEvent;
+  }
+);

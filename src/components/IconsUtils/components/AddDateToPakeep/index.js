@@ -29,93 +29,34 @@ import { addDays, isValid } from 'date-fns';
 import { connect } from 'react-redux';
 import DynamicAddMoreEvents from './components/DynamicComponents/components/DynamicAddMoreEvents';
 import DynamicMenuItem from './components/DynamicMenuItem';
+import { getGlobalEventsArr } from 'store/modules/App/selectors';
+import includes from 'lodash.includes';
+import { find, mapKeys } from 'lodash';
 
 const useStyles = makeStyles(theme => ({
   dateContainer: { padding: theme.spacing(0, 0) },
   // scale:{transform:'scale(0.88)'}
-  box: { borderBottom: '1px solid rgba(255,255,255,0.4)' },
-  timePickerWrapper: { '& input': { width: theme.spacing(16) } }
+  box: { borderBottom: '1px solid rgba(255,255,255,0.4)' }
+  // timePickerWrapper: { '& input': { width: theme.spacing(16) } }
 }));
 
-const AddDateToPakeep = ({ ampm = false, onMenuClose, id, events }) => {
+const AddDateToPakeep = ({ ampm = false, onMenuClose, id, globalEventsArr, customColor,events }) => {
   let DateNow = new Date();
 
-  const nullifyOfMenuItemState = {
-    name: '',
-    hoverStatus: false,
-    clickStatus: false,
-    changedStatus: false,
-    dynamicTitle: false,
-    isItemShouldBeOfFullWidth: false
-  };
-  const nullifyDateAndTimeInputsState = {
-    laterToday: !events?.laterToday && { value: DateNow, isValid: true, isChosen: false, saved: false },
-    tomorrow: !events?.tomorrow && { value: addDays(DateNow, 1), isValid: true, isChosen: false, saved: false },
-    nextWeek: !events?.nextWeek && { value: addDays(DateNow, 7), isValid: true, isChosen: false, saved: false },
-    addToDashboard: { value: '', isValid: true, isChosen: false, saved: false },
-    addDateAndTime: { value: DateNow, isValid: true, isChosen: false, saved: false },
-    addLocation: { value: '', isValid: true, isChosen: false, saved: false },
-    addMoreEvents: {
-      value: [
-        {
-          title: '',
-          iconName: '',
-          value: DateNow,
-          color: 'default',
-          saved: false,
-          isValid: true,
-          key: 'AMV1',
-          isInPatternList: false,
-          location: false
-        },
-        {
-          title: '',
-          iconName: '',
-          value: addDays(DateNow, 2),
-          color: 'primary',
-          saved: false,
-          isValid: true,
-          key: 'AMV3',
-          isInPatternList: false,
-          location: false
-        },
-        {
-          title: '',
-          iconName: '',
-          value: addDays(DateNow, 4),
-          color: 'primary',
-          saved: false,
-          isValid: true,
-          key: 'AMV4',
-          isInPatternList: false,
-          location: false
-        },
-        {
-          title: '',
-          iconName: '',
-          value: addDays(DateNow, 1),
-          color: 'primary',
-          saved: false,
-          isValid: true,
-          key: 'AMV2',
-          isInPatternList: false,
-          location: false
-        }
-      ],
-      isValid: true,
-      isChosen: false,
-      saved: false
-    }
-  };
+  //   laterToday: { value: DateNow, isValid: true, isChosen: false, saved: false },
 
+
+
+
+  const globalEventsObject = mapKeys(globalEventsArr, ({ id }) => id);
+  
   // const eventsOrder = [{key:'laterToday',value:'',iconName:'book'},'tomorrow','nextWeek','addDateAndTime','addMoreEvents']
 
   const [buttonSaveState, setButtonSaveState] = useState(false);
-  const [menuItemState, setMenuItemState] = useState(nullifyOfMenuItemState);
-  const [dateAndTimeInputsState, setDateAndTimeInputsState] = useState(nullifyDateAndTimeInputsState);
+  const [dateAndTimeInputsState, setDateAndTimeInputsState] = useState(null);
 
   const classes = useStyles();
-  const placeholderFunc = value => console.log(';');
+
   const handleDateAndTimeInputsState = (name, value) => {
     setDateAndTimeInputsState(state => ({
       ...state,
@@ -123,114 +64,52 @@ const AddDateToPakeep = ({ ampm = false, onMenuClose, id, events }) => {
     }));
   };
 
-  const onChangeOfAddMoreEvents = value => {
-    setDateAndTimeInputsState(state => ({
-      ...state,
-      addMoreEvents: { ...state.addMoreEvents, value }
-    }));
+  const handleAddCustomEvent = newCustomEvent => {
+    setDateAndTimeInputsState(state => ({ ...state, addMoreEvents: [...state.addMoreEvents, newCustomEvent] }));
   };
   // console.log(dateAndTimeInputsState);
-  const dateListArr = [
-    {
-      title: 'Later today',
-      icon: TodayOutlinedIcon,
-      name: 'laterToday',
-      dynamicComponent: {
-        component: DynamicInputDateAndTimePickers,
-        className: classes.timePickerWrapper,
-        props: { onlyTime: true }
-      }
-    },
-    {
-      title: 'Tomorrow',
-      icon: CalendarTodayOutlinedIcon,
-      name: 'tomorrow',
-      dynamicComponent: {
-        component: DynamicInputDateAndTimePickers,
-        className: classes.timePickerWrapper,
-        props: { onlyTime: true }
-      }
-    },
-    {
-      title: 'Next week',
-      icon: ViewWeekOutlinedIcon,
-      name: 'nextWeek',
-      dynamicComponent: {
-        component: DynamicInputDateAndTimePickers,
-        className: null,
-        props: { onlyTime: false }
-      }
-    },
-    { title: 'Add to dashboard', icon: DashboardOutlinedIcon, onClick: placeholderFunc, name: 'addToDashboard' },
-    {
-      title: 'Add Date & Time',
-      icon: EventNoteOutlinedIcon,
-      onClick: placeholderFunc,
-      dynamicComponent: { component: DynamicInputDateAndTimePickers, className: null, props: { onlyTime: false } },
-      name: 'addDateAndTime'
-    },
-    { title: 'Add Location', icon: AddLocationOutlinedIcon, onClick: placeholderFunc, name: 'addLocation' },
-    {
-      title: 'Add More Events',
-      icon: DateRangeOutlinedIcon,
-      hidden: !true,
-      name: 'addMoreEvents',
-      dynamicComponent: {
-        component: DynamicAddMoreEvents,
-        className: null,
-        props: { onlyTime: false, onChangeOfAddMoreEvents }
-      }
-    }
-  ];
-  const setHoverOfMenuItemIsTrue = name => setMenuItemState(state => ({ ...state, name, hoverStatus: true }));
-  const setHoverOfMenuItemIsFalse = name => setMenuItemState(state => ({ ...state, name, hoverStatus: false }));
-  const setClickStatusOfMenuItemIsTrue = (name, title) =>
-    setMenuItemState(state => ({ ...state, name, hoverStatus: false, clickStatus: true, dynamicTitle: title }));
 
-  const setNullifyOfMenuItemState = () => setMenuItemState(nullifyOfMenuItemState);
+  // { title: 'Add Custom Events',  iconName: 'addMoreEvents', id: '210' }
 
-  let currentClickStatus = menuItemState.clickStatus;
+  // dynamicComponent: {
+  //   component: DynamicInputDateAndTimePickers,
+  //   className: classes.timePickerWrapper,
+  //   props: { onlyTime: true }
+  // }
+
+  const nullifyOfMenuItemState = { name: '' };
+  const [menuItemState, setMenuItemState] = useState(nullifyOfMenuItemState);
 
   return (
     <>
       <HeaderOfAddDateToPakeep
         buttonSaveState={buttonSaveState}
-        arrowButtonFunc={!currentClickStatus ? onMenuClose : setNullifyOfMenuItemState}
-        dynamicTitle={menuItemState.dynamicTitle}
+        arrowButtonFunc={onMenuClose}
+        // dynamicTitle={menuItemState.dynamicTitle}
       />
-      {dateListArr.map(({ title, icon: Icon, onClick, hidden, dynamicComponent = false, name }, idx) => {
+      {/* {dateListArr.map(({ title, icon: Icon, onClick: onMenuItemClick, hidden, dynamicComponent = false }, idx) => {
         const DynamicComponent = dynamicComponent.component ?? Grid;
-
+        const name = title;
         const correctName = name === menuItemState.name;
-        const isActiveIcon = correctName && menuItemState.hoverStatus;
+        const isActiveIcon = correctName;
 
-        const isItemShouldBeOfFullWidth = dynamicComponent?.props?.onlyTime;
-        const isDynamicComponentShouldBeShown =
-          (Boolean(dynamicComponent) && correctName && currentClickStatus) || dateAndTimeInputsState[name].isChosen;
+        // const isDynamicComponentShouldBeShown = correctName && dynamicComponent.component;
+        const isDynamicComponentShouldBeShown = false;
 
-        const onMouseEnterOfMenuItem = () => (currentClickStatus ? null : setHoverOfMenuItemIsTrue(name));
-        const onMouseLeaveOfMenuItem = () => (currentClickStatus ? null : setHoverOfMenuItemIsFalse(name));
-        const onClickOfMenuItem = () => setClickStatusOfMenuItemIsTrue(name, title);
+        const onClick = () =>
+          correctName ? null : onMenuItemClick ? onMenuItemClick() : setMenuItemState(state => ({ ...state, name }));
 
-        let menuItemProps = {
-          
+        const menuItemProps = {
           key: nanoid(),
-
-          onMouseEnter: onMouseEnterOfMenuItem,
-          onMouseLeave: onMouseLeaveOfMenuItem,
-          onClick: onClick
-            ? onClick
-            : (currentClickStatus || dateAndTimeInputsState[name].isChosen) && correctName
-            ? null
-            : onClickOfMenuItem
+          onClick
         };
-        let dynamicComponentProps = {
+
+        const dynamicComponentProps = {
           ...dynamicComponent.props,
           onChange: handleDateAndTimeInputsState,
           KeyboardIcon: Icon,
           itemState: dateAndTimeInputsState[name],
           correctName,
-          clickStatus: correctName && currentClickStatus,
           name,
           title,
           ampm
@@ -246,11 +125,11 @@ const AddDateToPakeep = ({ ampm = false, onMenuClose, id, events }) => {
           isDynamicComponentShouldBeShown,
           menuItemProps,
           Icon,
-          isPreventClickOfMenuItem: correctName && currentClickStatus
+          isPreventClickOfMenuItem: correctName
         };
 
         return <DynamicMenuItem {...dynamicMenuListProps} />;
-      })}
+      })} */}
     </>
   );
 };
@@ -261,7 +140,9 @@ AddDateToPakeep.propTypes = {
   onMenuClose: PropTypes.func
 };
 
-const mapStateToProps = ({ app: { data } }) => ({ data });
+const mapStateToProps = ({ app: { events: globalEvents } }, { events }) => ({
+  globalEventsArr: getGlobalEventsArr(globalEvents, events)
+});
 // const mapDispatchToProps = dispatch => ({ setData: data => dispatch(setData(data)) });
 
 export default connect(mapStateToProps, null)(AddDateToPakeep);

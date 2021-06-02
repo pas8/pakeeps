@@ -7,7 +7,7 @@ import ColorPickerByPs from 'components/ColorChanger';
 import TextRotationNoneOutlinedIcon from '@material-ui/icons/TextRotationNoneOutlined';
 import PaletteOutlinedIcon from '@material-ui/icons/PaletteOutlined';
 import ButtonGroupUtilsOfDynamicAddMoreEvents from './components/ButtonGroup';
-import { nanoid } from 'nanoid'
+import { nanoid } from 'nanoid';
 import clsx from 'clsx';
 
 const useStyles = makeStyles(theme => ({
@@ -50,7 +50,7 @@ const useStyles = makeStyles(theme => ({
     '& .MuiInputAdornment-positionEnd button': {
       marginRight: theme.spacing(0.4)
     }
-  },
+  }
 }));
 
 const DynamicAddMoreEvents = ({ onChangeOfAddMoreEvents, itemState: { value }, ...inputProps }) => {
@@ -83,7 +83,6 @@ const DynamicAddMoreEvents = ({ onChangeOfAddMoreEvents, itemState: { value }, .
     setMoreEventsState(resultArr);
   };
 
-
   const [popoverAndMenuState, setPopoverAndMenuState] = useState({
     name: 'null',
     menuIsOpen: false,
@@ -103,7 +102,7 @@ const DynamicAddMoreEvents = ({ onChangeOfAddMoreEvents, itemState: { value }, .
   // useEffect(() => onChangeOfAstatusddMoreEvents(moreEventsState), [moreEventsState]);
   return (
     <Grid>
-      {_.map(moreEventsState, ({ value, color, saved, isValid, isInPatternList, location, key, iconName }, idx) => {
+      {moreEventsState.map(({ value, color, saved, isValid, isInPatternList, location, key, iconName }, idx) => {
         const inputPickersProps = {
           ...inputProps,
           onChange: onChangeOfInputPicker,
@@ -155,14 +154,10 @@ const DynamicAddMoreEvents = ({ onChangeOfAddMoreEvents, itemState: { value }, .
             onFocus={onFocusOfMoreEvents}
             // onBlur={onBlurOfMoreEvents}
           >
-            {/* <Grow in={!writingTitleStatus}> */}
             <InputOfMoreEventElement {...inputOfMoreEventElementProps} />
-            {/* </Grow> */}
 
             <Grid className={classes.utils} container>
-              {/* <Grow in> */}
               {focus.status && focus.key === key && <ButtonGroupUtilsOfDynamicAddMoreEvents {...buttonGroupProps} />}
-              {/* </Grow> */}
             </Grid>
           </Grid>
         );
