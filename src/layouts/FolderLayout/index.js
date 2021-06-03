@@ -23,9 +23,8 @@ import {
   getPositionOfFolderViewWithPakeepView
 } from 'store/modules/Settings/selectors';
 import ArrowForwardIosOutlinedIcon from '@material-ui/icons/ArrowForwardIosOutlined';
-import { themeColors } from 'components/theme';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles(({palette}) => ({
   container: ({ positionOfFolderViewWithPakeepViewIsBottom, positionOfFolderViewWithPakeepViewIsRight }) => ({
     // justifyContent: positionOfFolderViewWithPakeepViewIsBottom && 'center',
     '& nav': positionOfFolderViewWithPakeepViewIsBottom
@@ -52,9 +51,9 @@ const useStyles = makeStyles(theme => ({
       positionOfFolderViewWithPakeepViewIsBottom ? 270 : positionOfFolderViewWithPakeepViewIsRight ? 180 : 0
     }deg)`,
     '& svg': {
-      color: themeColors.mediumEmphasis,
+      color: palette?.mediumEmphasis?.main,
       '&:hover': {
-        color: themeColors.highEmphasis
+        color: palette?.highEmphasis?.main
       }
     }
   })

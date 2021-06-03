@@ -3,9 +3,16 @@ import PropTypes from 'prop-types';
 import { useEffect } from 'react';
 import { connect } from 'react-redux';
 
-const ThemeLayout = ({ children, theme: themeColors }) => {
+const ThemeLayout = ({ children, theme: themeColors, breakpointsValues }) => {
+  const { xs, sm, md, lg, xl } = breakpointsValues;
+  const breakpointsArr = [xl, lg, md, sm, xs];
+
   const theme = responsiveFontSizes(
     createMuiTheme({
+      breakpointsArr,
+      breakpoints: {
+        values: breakpointsValues
+      },
       direction: 'rtl',
       palette: {
         success: { main: '#4caf50' },
@@ -41,6 +48,6 @@ ThemeLayout.propTypes = {
     secondaryMain: PropTypes.any
   })
 };
-const mapStateToProps = ({ app: { theme } }) => ({ theme });
+const mapStateToProps = ({ app: { theme, breakpointsValues } }) => ({ theme, breakpointsValues });
 
 export default connect(mapStateToProps)(ThemeLayout);
