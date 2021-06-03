@@ -9,108 +9,111 @@ import CloseIcon from '@material-ui/icons/Close';
 import IconButtonByPas from 'components/IconButton';
 import DeleteOutlinedIcon from '@material-ui/icons/DeleteOutlined';
 import { Typography } from '@material-ui/core';
-const useStyles = makeStyles(({ spacing, typography: { h4 } }) => ({
-  container: ({ keyboardIconColor, correctName, error, customColor, onlyTime }) => ({
-    marginRight: spacing(-0.4),
-    '& button': {
-      color: error ? '#f44336CC' : correctName ? keyboardIconColor : 'rgba(255,255,255,0.42)',
-      margin: spacing(0, -1.4, 0, -1.4)
-    },
+const useStyles = makeStyles(({ spacing, typography: { h4 }, palette }) => ({
+  container: ({ customColor, onlyTime }) => {
+    const defaultColor = !customColor ? palette?.mediumEmphasis?.main : customColor.unHover;
+    const focusedColor = !customColor ? palette?.primary?.main : customColor.hover;
 
-    '& p': {
-      color: customColor.unHover
-    },
-
-    '& input': {
-      color: customColor.hover,
-
-      // color: correctName ? 'rgba(255,255,255,0.96)' : 'rgba(255,255,255,0.8)',
-      width: onlyTime ? spacing(10) : spacing(20)
-    },
-
-    // '& label.Mui-focused': {
-    //   color: customColor
-    // },
-
-    '& .MuiOutlinedInput-root': {
-      color: customColor.bgHover,
-      justifyContent: 'space-evently',
-
-      '& fieldset': {
-        borderColor: customColor.unHover
+    return {
+      marginRight: spacing(-0.4),
+      '& button': {
+        margin: spacing(0, -1.4, 0, -1.4)
       },
-      '& button:hover  .MuiTouchRipple-root': {
-        background: useAlpha(customColor.hover)
+
+      '& p': {
+        color: customColor.unHover
       },
-      '&:hover fieldset': {
-        borderColor: customColor.hover,
-        boxShadow: `0px 0px 4px 1px ${useAlpha(customColor.hover, 0.42)}`
+
+      '& input': {
+        color: customColor.hover,
+
+        // color: correctName ? 'rgba(255,255,255,0.96)' : 'rgba(255,255,255,0.8)',
+        width: onlyTime ? spacing(10) : spacing(42)
       },
-      '&.Mui-focused fieldset': {
-        borderColor: customColor.hover,
-        boxShadow: `0px 0px 4px 1px ${customColor.hover}`
-      },
-      '&.Mui-focused ': {
-        color: customColor.bgUnHover
+
+      // '& label.Mui-focused': {
+      //   color: customColor
+      // },
+
+      '& .MuiOutlinedInput-root': {
+        color: customColor.bgHover,
+        justifyContent: 'space-evently',
+
+        '& fieldset': {
+          borderColor: defaultColor
+        },
+        '& button:hover  .MuiTouchRipple-root': {
+          background: useAlpha(customColor.hover)
+        },
+        '&:hover fieldset': {
+          borderColor: !customColor ? palette?.maxEmphasis?.main : useAlpha(focusedColor, 0.8),
+          boxShadow: customColor && `0px 0px 4px 1px ${useAlpha(focusedColor, 0.8)}`
+        },
+        '&.Mui-focused fieldset': {
+          borderColor: focusedColor,
+          boxShadow: customColor && `0px 0px 4px 1px ${focusedColor}`
+        },
+        '&.Mui-focused ': {
+          color: customColor.bgUnHover
+        },
+        '& .Mui-error ': {
+          borderColor: 'red'
+        }
       }
-    }
+    };
+  },
+  containerOfEndAdornment: ({ onlyTime }) => ({
+    // maxWidth: spacing(10),
+    marginLeft: onlyTime ? spacing(-2) : spacing(-18),
+    width: '100%',
+    justifyContent: 'flex-end'
   })
 }));
 
 const DynamicInputDateAndTimePickers = ({
-  onChange,
+  onChange: onChangeFunc,
   onlyTime,
   icon,
   name,
   customColor,
   ampm = false,
   value,
-  // itemState: { saved: savedStatus, isValid: propsIsValid, value },
   correctName,
-  title
+  title,
+  error,
+  buttonSaveState
 }) => {
-  // const error = !propsIsValid;
-  const error = false;
-  // const keyboardIconColor = savedStatus ? themeColors.primaryMain : null;
   const classes = useStyles({ keyboardIconColor: customColor.hover, correctName, error, customColor, onlyTime });
-
-  const [focus, setFocus] = useState(false);
   const [inputValue, setInputValue] = useState(value);
 
-  const isInputValueValid = isValid(inputValue);
-
-  // document.onkeydown = evt => (evt.key === 'Enter' && focus && isInputValueValid ? onChange(name, inputValue) : null);
+  useEffect(() => {
+    !!buttonSaveState && console.log(name,!!value);
+  }, [buttonSaveState]);
 
   const onAccept = data => onChange(name, data);
-  const onFocus = () => setFocus(true);
-
-  // const keyboardIcon = savedStatus ? <DoneOutlineOutlinedIcon /> : <KeyboardIcon />;
 
   const keyboardPickerState = {
     value: inputValue,
-    // autoFocus:true,
     onChange: setInputValue,
     todayButton: !onlyTime,
-    // label: !correctName ? title : error ? 'Invalid Date Format ' : null,
     inputVariant: 'outlined',
     keyboardIcon: icon,
     autoOk: false,
-    format: onlyTime ? 'hh:mm' : 'yyyy  /  MM  /  dd  /  hh:mm',
+    format: onlyTime ? 'hh:mm' : 'yyyy / MM / dd / hh:mm',
     disablePast: true,
-    error,
     // mask: `${title}   __:__`,
-    onFocus,
     customColor,
+    error: false,
     onAccept,
     ampm,
     variant: 'dialog',
     InputAdornmentProps: { position: 'start' },
     InputProps: {
       endAdornment: (
-        <InputAdornment position={'end'} style={{ width: '100%', justifyContent: 'flex-end' }}>
+        <InputAdornment position={'end'} className={classes.containerOfEndAdornment}>
           <Typography component={'p'}> {title}</Typography>
           <Box ml={1.4}>
-            <IconButtonByPas icon={CloseIcon} size={'small'}/>
+            <IconButtonByPas icon={CloseIcon} size={'small'} />
           </Box>
         </InputAdornment>
       )

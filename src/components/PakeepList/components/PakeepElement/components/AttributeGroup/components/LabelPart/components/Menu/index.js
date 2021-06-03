@@ -144,17 +144,18 @@ const MenuOfLabelPart = ({
             const dynamicComponentProps = { customColor: reversedCustomColor, ...dynamicComponent.props };
             const onClick = () =>
               onMenuItemClick ? onMenuItemClick() : setMenuItemState(state => ({ ...state, name }));
-            const menuItemProps = {
+            const dynamicItemProps = {
               onClick
             };
             const DynamicMenuItemProps = {
+              
               DynamicComponent,
               dynamicComponentProps,
               isActiveIcon: false,
               title,
               isDynamicItemGridMarginIsZero: true,
               isDynamicComponentShouldBeShown,
-              menuItemProps,
+              dynamicItemProps,
               isPreventClickOfMenuItem: false,
               icon: <Icon />,
               customColor

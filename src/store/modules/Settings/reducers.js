@@ -4,7 +4,7 @@ import * as types from './types';
 const settingsInitialState = {
   viewOfThemeChangerButton: 'iconButton', // 'iconButton' ||  'switch'
   maxSnack: 4,
-  utilsViewLikeInGoogleKeep: false,
+  utilsViewLikeInGoogleKeep: true,
 
   navigationViewLike:'pakeeps',  //'telegram' || 'googleKeep' || 'pakeeps'
   positionOfFolderViewWithPakeepView:'left',  //'left' || 'bottom' || 'right'

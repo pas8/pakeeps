@@ -5,12 +5,16 @@ import SaveOutlinedIcon from '@material-ui/icons/SaveOutlined';
 import IconButtonByPas from 'components/IconButton';
 import SaveRoundedIcon from '@material-ui/icons/SaveRounded';
 import { useThemeColors } from 'hooks/useThemeColors.hook';
+import { useAlpha } from 'hooks/useAlpha.hook';
 
 const useStyles = makeStyles(theme => ({
   container: ({ borderColor }) => ({
     borderBottom: '1px solid',
     borderBottomColor: borderColor
-  })
+  }),
+  title: {
+    color: ({ borderColor }) => useAlpha( borderColor,0.8)
+  }
   // wrapperOfSaveButton: { marginRight: theme.spacing(1 * 0.8) }
 }));
 
@@ -20,7 +24,7 @@ const HeaderOfAddDateToPakeep = ({
   dynamicTitle,
   isSaveButtonHidden = false,
   onClickOfSaveButton,
-  customTitle,
+  customTitle = false,
   customColor
 }) => {
   const [, , , mediumEmphasisColor] = useThemeColors();
@@ -38,10 +42,11 @@ const HeaderOfAddDateToPakeep = ({
             customColor={customColor}
           />
 
-          {!!customTitle ? (
-            customTitle
-          ) : (
-            <Typography variant={'subtitle1'}>{dynamicTitle ? dynamicTitle : 'Close'}</Typography>
+          {customTitle || (
+            <Grid className={classes.title}>
+              {' '}
+              <Typography variant={'subtitle1'}>{dynamicTitle ? dynamicTitle : 'Close'}</Typography>{' '}
+            </Grid>
           )}
         </Grid>
       </Grid>

@@ -31,40 +31,27 @@ import DynamicAddMoreEvents from './components/DynamicComponents/components/Dyna
 import DynamicMenuItem from './components/DynamicMenuItem';
 import { getGlobalEventsArr } from 'store/modules/App/selectors';
 import includes from 'lodash.includes';
-import { find, mapKeys } from 'lodash';
+import { filter, find, mapKeys, map } from 'lodash';
 import { useTakeIcon } from 'hooks/useTakeIcon.hook';
 import { useGetReversedCustomColor } from 'hooks/useGetReversedCustomColor.hook';
-
-const useStyles = makeStyles(theme => ({
-  // dateContainer: { padding: theme.spacing(0, 0) },
-  box: { borderBottom: '1px solid rgba(255,255,255,0.4)' }
-}));
 
 const AddDateToPakeep = ({ ampm = false, onMenuClose, id, globalEventsArr, customColor: color, events }) => {
   const globalEventsObject = mapKeys(globalEventsArr, ({ id }) => id);
   const customColor = useGetReversedCustomColor(color);
   const [buttonSaveState, setButtonSaveState] = useState(false);
   const [dateAndTimeInputsState, setDateAndTimeInputsState] = useState(globalEventsObject);
-
   // const [/s, setButtonSaveState] = useState(false);
+const [newEvents,setNewEvents] = useState([])
 
-  const [chosenEventsIdArr, setChosenItemsIdArr] = useState(false);
 
-  console.table(dateAndTimeInputsState);
+const addNewEvent = (id,value) => setNewEvents(state=>[...state,{id,value}])
+  console.log(dateAndTimeInputsState);
 
-  const classes = useStyles();
-
-  const handleDateAndTimeInputsState = (name, value) => {
-    console.log(name, value);
-    setDateAndTimeInputsState(state => ({
-      ...state,
-      [name]: { ...state[name], value, isChosen: true, isValid: isValid(value) }
-    }));
-  };
 
   const handleAddCustomEvent = newCustomEvent => {
     setDateAndTimeInputsState(state => ({ ...state, addMoreEvents: [...state.addMoreEvents, newCustomEvent] }));
   };
+
   // console.log(dateAndTimeInputsState);
 
   // { title: 'Add Custom Events',  iconName: 'addMoreEvents', id: '210' }
@@ -79,68 +66,72 @@ const AddDateToPakeep = ({ ampm = false, onMenuClose, id, globalEventsArr, custo
       }
     }
   ];
-  const dateListArr = [...globalEventsArr, ...defaultDateListArr];
-  const nullifyOfMenuItemState = { name: '' };
-  const [menuItemState, setMenuItemState] = useState(nullifyOfMenuItemState);
 
+  const dateListArr = [...globalEventsArr, ...defaultDateListArr];
+
+  const nulittyOfChosenItemArr = map(filter(dateListArr, 'isChosen'), 'id');
+  const [chosenItemArr, setChosenItemArr] = useState(nulittyOfChosenItemArr);
   return (
     <>
       <HeaderOfAddDateToPakeep
         buttonSaveState={buttonSaveState}
         arrowButtonFunc={onMenuClose}
+        onClickOfSaveButton={()=> setButtonSaveState('to save')}
         customColor={customColor}
         // dynamicTitle={menuItemState.dynamicTitle}
       />
-      {dateListArr.map(
-        ({ title, iconName, onClick: onMenuItemClick, onlyTime, dynamicComponent, value, id, isChosen }, idx) => {
-          const [icon] = useTakeIcon(iconName);
-          const DynamicComponent = onMenuItemClick ?? dynamicComponent?.component ?? DynamicInputDateAndTimePickers;
-          // console.log(onMenuItemClick ?? dynamicComponent.component ?? DynamicInputDateAndTimePickers )
+      {dateListArr.map(({ title, iconName, onClick: onMenuItemClick, onlyTime, dynamicComponent, id }, idx) => {
+        const [icon] = useTakeIcon(iconName);
+        const DynamicComponent = onMenuItemClick ?? dynamicComponent?.component ?? DynamicInputDateAndTimePickers;
+        // console.log(onMenuItemClick ?? dynamicComponent.component ?? DynamicInputDateAndTimePickers )
 
-          const name = id;
-          const correctName = name === menuItemState.name;
-          const isActiveIcon = correctName;
+        const name = id;
 
-          const isDynamicComponentShouldBeShown = correctName || (isChosen && DynamicComponent);
+        const isChosen = includes(chosenItemArr, name);
+        const isActiveIcon = isChosen;
 
-          // const onClick = () =>
-          //   correctName ? null : onMenuItemClick ? onMenuItemClick() : setMenuItemState(state => ({ ...state, name }));
+        const isDynamicComponentShouldBeShown = isChosen && DynamicComponent;
 
-            const dynamicItemProps = isDynamicComponentShouldBeShown && {};
-        
-
-          const dynamicComponentProps = {
-            ...dynamicComponent?.props,
-            onChange: handleDateAndTimeInputsState,
-            icon,
-            itemState: dateAndTimeInputsState[name],
-            correctName,
-            name,
-
-            value,
-            onlyTime,
-            title,
-            ampm,
-            customColor
+        const onClick = () => {
+          const onDefaultClick = () => {
+            setChosenItemArr(state => [...state, name]);
+            // setButtonSaveState(true);
           };
 
-          // if (hidden) return;
+          isChosen ? null : onMenuItemClick ? onMenuItemClick() : onDefaultClick();
+        };
+        const dynamicItemProps = { onClick };
 
-          const dynamicMenuListProps = {
-            DynamicComponent,
-            dynamicComponentProps,
-            title,
-            isActiveIcon,
-            isDynamicComponentShouldBeShown,
-            dynamicItemProps,
-            icon,
-            customColor,
-            isPreventClickOfMenuItem: correctName
-          };
+        const dynamicComponentProps = {
+          ...dynamicComponent?.props,
+          icon,
+          correctName: isChosen,
+          name,
+          value: dateAndTimeInputsState[name]?.value,
+          onlyTime,
+          title,
+          ampm,
+          addNewEvent,
+          buttonSaveState,
+          customColor
+        };
 
-          return <DynamicMenuItem {...dynamicMenuListProps} key={nanoid()} />;
-        }
-      )}
+        // if (hidden) return;
+
+        const dynamicMenuListProps = {
+          DynamicComponent,
+          dynamicComponentProps,
+          title,
+          isActiveIcon,
+          isDynamicComponentShouldBeShown,
+          dynamicItemProps,
+          icon,
+          customColor,
+          isPreventClickOfMenuItem: isChosen
+        };
+
+        return <DynamicMenuItem {...dynamicMenuListProps} key={nanoid()} />;
+      })}
     </>
   );
 };

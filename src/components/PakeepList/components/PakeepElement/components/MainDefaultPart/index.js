@@ -33,7 +33,8 @@ const MainDefaultPartOfPakeepElement = ({
   onClickOfPinIconButton,
   text,
   title,
-  customColor
+  customColor,
+  onClick
 }) => {
   const classes = useStyles({ customColor });
 
@@ -44,13 +45,15 @@ const MainDefaultPartOfPakeepElement = ({
           {customColor ? <PinIcon /> : <PinOutlinedIcon />}
         </IconButton>
       )}
-      <Grid className={classes.title}>
-        <Typography variant={'h5'}>{title}</Typography>
-      </Grid>
-      <Grid className={classes.text}>
-        <Typography variant={'body2'} component={'p'}>
-          {text}
-        </Typography>
+      <Grid onClick={onClick}>
+        <Grid className={classes.title}>
+          <Typography variant={'h5'}>{title}</Typography>
+        </Grid>
+        <Grid className={classes.text}>
+          <Typography variant={'body2'} component={'p'}>
+            {text}
+          </Typography>
+        </Grid>
       </Grid>
       {children}
     </Paper>

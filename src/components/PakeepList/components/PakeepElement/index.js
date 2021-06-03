@@ -218,15 +218,20 @@ const PakeepElement = ({
           const onClick = () => {
             onClickOfPakeepElement(id);
           };
+
+          const onClose = () => {
+            handleClosePakeepDialog();
+            handleSetIsUnHovering();
+          };
+
           const pakeepGridContainerProps = {
             onMouseEnter,
             onMouseLeave,
             ref,
             className: clsx(classes.container, className),
             id,
-            onClick,
             open: true,
-            onClose: handleClosePakeepDialog,
+            onClose,
             maxWidth: 'md'
           };
 
@@ -251,6 +256,7 @@ const PakeepElement = ({
               isSelecting && classes.isSelecting,
               isSomePakeepsSelected && classes.isSomePakeepsSelected
             ),
+            onClick,
             onClickOfPinIconButton: handleSetIsPinnedPakeep
           };
 
