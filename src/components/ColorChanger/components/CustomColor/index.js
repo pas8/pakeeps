@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types';
 import { memo, useEffect, useState } from 'react';
 import { Box, Grid, makeStyles } from '@material-ui/core';
-import { themeColors } from 'components/theme';
 import { colord } from 'colord';
 import _ from 'lodash';
 import IconUtilsOfCustomColor from './components/IconsUtils';
@@ -10,6 +9,7 @@ import PreparedColorExamples from '../PreparedColorExamples';
 import PickerByPas from './components/Picker';
 import { useCopyToClipboard } from 'react-use';
 import { useSnackbar } from 'notistack';
+import { useThemeColors } from 'hooks/useThemeColors.hook';
 
 const useStyles = makeStyles(theme => ({
   customColorContainer: {
@@ -25,10 +25,12 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const CustomColor = ({ gradientStatus, setGradientStatus, handleSave,customColor }) => {
+const CustomColor = ({ gradientStatus, setGradientStatus, handleSave, customColor }) => {
+
+  const [, , , highEmphasisColor] = useThemeColors();
   const [copyState, copyToClipboardFunc] = useCopyToClipboard();
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
-  const nullityColor = colord(themeColors.highEmphasis).toRgb();
+  const nullityColor = colord(highEmphasisColor).toRgb();
   const [color, setColor] = useState(nullityColor);
   const colorInHexFormat = colord(color).toHex();
 

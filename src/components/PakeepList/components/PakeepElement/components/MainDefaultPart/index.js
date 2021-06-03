@@ -3,9 +3,8 @@ import PropTypes from 'prop-types';
 import { colord } from 'colord';
 import PinOutlinedIcon from 'components/Icons/components/PinOutlinedIcon';
 import PinIcon from 'components/Icons/components/PinIcon';
-import { themeColors } from 'components/theme';
 
-const useStyles = makeStyles(({ spacing }) => ({
+const useStyles = makeStyles(({ spacing, palette }) => ({
   title: {
     textOverflow: 'ellipsis',
     overflow: 'hidden',
@@ -17,12 +16,12 @@ const useStyles = makeStyles(({ spacing }) => ({
     top: spacing(0.42),
     right: spacing(0.2),
 
-    color: customColor ? customColor.unHover : themeColors.mediumEmphasis,
+    color: customColor ? customColor.unHover : palette?.mediumEmphasis?.main,
     '&:hover': {
-      background: colord(customColor ? customColor.hover : themeColors.highEmphasis)
+      background: colord(customColor ? customColor.hover : palette?.highEmphasis?.main)
         .alpha(0.16)
         .toHex(),
-      color: customColor ? customColor.hover : themeColors.highEmphasis
+      color: customColor ? customColor.hover : palette?.highEmphasis?.main
     }
   })
 }));

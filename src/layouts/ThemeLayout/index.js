@@ -1,13 +1,9 @@
-import { createMuiTheme, Grid, makeStyles, responsiveFontSizes,ThemeProvider } from '@material-ui/core';
+import { createMuiTheme, Grid, makeStyles, responsiveFontSizes, ThemeProvider } from '@material-ui/core';
 import PropTypes from 'prop-types';
 import { useEffect } from 'react';
 import { connect } from 'react-redux';
 
-
-const ThemeLayout = ({ children ,theme:themeColors}) => {
-
-  
-
+const ThemeLayout = ({ children, theme: themeColors }) => {
   const theme = responsiveFontSizes(
     createMuiTheme({
       direction: 'rtl',
@@ -19,6 +15,15 @@ const ThemeLayout = ({ children ,theme:themeColors}) => {
         },
         secondary: {
           main: themeColors.secondaryMain
+        },
+        highEmphasis: {
+          main: themeColors?.highEmphasis
+        },
+        mediumEmphasis: {
+          main: themeColors?.mediumEmphasis
+        },
+        maxEmphasis: {
+          main: themeColors?.maxEmphasis
         }
       },
       contrastThreshold: 2,
@@ -26,7 +31,7 @@ const ThemeLayout = ({ children ,theme:themeColors}) => {
     })
   );
 
-  return <ThemeProvider theme={theme}>  {children} </ThemeProvider>;
+  return <ThemeProvider theme={theme}> {children} </ThemeProvider>;
 };
 
 ThemeLayout.propTypes = {
@@ -35,7 +40,7 @@ ThemeLayout.propTypes = {
     primaryMain: PropTypes.any,
     secondaryMain: PropTypes.any
   })
-}
+};
 const mapStateToProps = ({ app: { theme } }) => ({ theme });
 
-export default connect(mapStateToProps, )(ThemeLayout);
+export default connect(mapStateToProps)(ThemeLayout);

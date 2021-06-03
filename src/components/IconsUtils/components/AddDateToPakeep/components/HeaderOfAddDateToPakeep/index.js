@@ -2,14 +2,14 @@ import PropTypes from 'prop-types';
 import { Grid, IconButton, Typography, makeStyles, SvgIcon } from '@material-ui/core';
 import ArrowBackOutlinedIcon from '@material-ui/icons/ArrowBackOutlined';
 import SaveOutlinedIcon from '@material-ui/icons/SaveOutlined';
-import { themeColors } from 'components/theme';
 import IconButtonByPas from 'components/IconButton';
 import SaveRoundedIcon from '@material-ui/icons/SaveRounded';
+import { useThemeColors } from 'hooks/useThemeColors.hook';
 
 const useStyles = makeStyles(theme => ({
   container: ({ borderColor }) => ({
     borderBottom: '1px solid',
-    borderBottomColor:  borderColor
+    borderBottomColor: borderColor
   })
   // wrapperOfSaveButton: { marginRight: theme.spacing(1 * 0.8) }
 }));
@@ -23,11 +23,12 @@ const HeaderOfAddDateToPakeep = ({
   customTitle,
   customColor
 }) => {
-  const borderColor =  !customColor ?  themeColors.mediumEmphasis :  customColor?.hover  
+  const [, , , mediumEmphasisColor] = useThemeColors();
+  const borderColor = !customColor ? mediumEmphasisColor : customColor?.hover;
   const classes = useStyles({ borderColor });
 
   return (
-    <Grid  className={classes.container} container justify={'space-between'}>
+    <Grid className={classes.container} container justify={'space-between'}>
       <Grid item>
         <Grid container alignItems={'center'}>
           <IconButtonByPas
@@ -46,7 +47,7 @@ const HeaderOfAddDateToPakeep = ({
       </Grid>
       {!isSaveButtonHidden && (
         <Grid item className={classes.wrapperOfSaveButton}>
-            <IconButtonByPas icon={SaveRoundedIcon} onClick={onClickOfSaveButton} customColor={customColor} />
+          <IconButtonByPas icon={SaveRoundedIcon} onClick={onClickOfSaveButton} customColor={customColor} />
         </Grid>
       )}
     </Grid>

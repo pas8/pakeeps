@@ -1,29 +1,25 @@
 import { Grid, makeStyles, MenuItem, Typography } from '@material-ui/core';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
-import { useState } from 'react';
-import { useHover, useKeyPressEvent, usePageLeave } from 'react-use';
-import { themeColors } from 'components/theme';
 import { nanoid } from 'nanoid';
-import { colord } from 'colord';
-import { useIsColorDark } from 'hooks/useIsColorDark.hook';
+import { useThemeColors } from 'hooks/useThemeColors.hook';
+import { useAlpha } from 'hooks/useAlpha.hook';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles(({ spacing }) => ({
   itemGrid: {
-    margin: theme.spacing(0.4, 0.8 * 4, 0, 1.4),
-    padding: theme.spacing(0.8, 0)
+    margin: spacing(0.4, 0.8 * 4, 0, 1.4),
+    padding: spacing(0.8, 0)
   },
-  menuText: { marginLeft: theme.spacing(1.4) },
+  menuText: { marginLeft: spacing(1.4) },
 
-  container: ({ color, hoverColor,isIconActive }) => ({
-
+  container: ({ color, hoverColor, isIconActive }) => ({
     '& svg,h6': { color },
     '&:hover svg,h6': { color: hoverColor },
     '&:hover .MuiTouchRipple-root': {
-      background: colord(color).alpha(0.16).toHex(),
-      // borderBottom:isIconActive && `2px solid ${color}`, 
-      borderRight:0,
-      borderLeft:0,
+      background: useAlpha(color),
+      // borderBottom:isIconActive && `2px solid ${color}`,
+      borderRight: 0,
+      borderLeft: 0
     }
   })
 }));
@@ -32,16 +28,18 @@ const MoreUtils = ({ slicedArrAfter, customColor }) => {
   return (
     <>
       {slicedArrAfter.map(({ popoverText, icon: Icon, isIconActive, onClick, ActiveIcon }) => {
+        const [primaryColor, , maxEmphasisColor, highEmphasisColor] = useThemeColors();
+
         const color = !customColor
           ? isIconActive
-            ? themeColors.primaryMain
-            : themeColors.highEmphasis
+            ? primaryColor
+            : highEmphasisColor
           : isIconActive
           ? customColor.bgUnHover
           : customColor.bgHover;
 
-        const hoverColor = !customColor && !isIconActive && themeColors.maxEmphasis;
-        const classes = useStyles({ color, hoverColor,isIconActive });
+        const hoverColor = !customColor && !isIconActive && maxEmphasisColor;
+        const classes = useStyles({ color, hoverColor, isIconActive });
         //
 
         return (
@@ -59,6 +57,12 @@ const MoreUtils = ({ slicedArrAfter, customColor }) => {
   );
 };
 
-MoreUtils.propTypes = {};
+MoreUtils.propTypes = {
+  customColor: PropTypes.shape({
+    bgHover: PropTypes.any,
+    bgUnHover: PropTypes.any
+  }),
+  slicedArrAfter: PropTypes.array
+}
 
 export default MoreUtils;

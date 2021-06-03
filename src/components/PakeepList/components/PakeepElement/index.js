@@ -7,7 +7,6 @@ import { useSwipeable } from 'react-swipeable';
 import { useMeasure } from 'react-use';
 import _ from 'lodash';
 import { connect } from 'react-redux';
-import { themeColors } from 'components/theme';
 import { getFilteredLabels } from 'store/modules/App/selectors';
 import {
   handkePakeepPropertyThunk,
@@ -27,31 +26,29 @@ import MainDialogPartOfPakeepElement from './MainDialogPart';
 import SaveButtonWithIcon from 'components/SaveButtonWithIcon';
 import { SelectedLabels } from 'components/NewPakeep';
 import { useGetReversedCustomColor } from 'hooks/useGetReversedCustomColor.hook';
+import { useThemeColors } from 'hooks/useThemeColors.hook';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles(({ spacing, transitions, palette }) => ({
   paper: ({ customColor, backgroundColor, color, utilsViewLikeInGoogleKeep }) => ({
-    padding: theme.spacing(0.4, 1.96, utilsViewLikeInGoogleKeep ? 8 * 0.8 : 1.96, 1.96),
+    padding: spacing(0.4, 1.96, utilsViewLikeInGoogleKeep ? 8 * 0.8 : 1, 1.96),
     cursor: 'grab',
     position: 'relative',
     backgroundColor,
     color,
-    transition: theme.transitions.create('padding', {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen
+    transition: transitions.create('padding', {
+      easing: transitions.easing.sharp,
+      duration: transitions.duration.leavingScreen
     }),
     userSelect: 'none'
   }),
 
   isHovered: ({ customColor }) => ({
-    paddingBottom: `${theme.spacing(8 * 0.8)}px !important`,
-    transition: theme.transitions.create('all', {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen
+    paddingBottom: `${spacing(8 * 0.8)}px !important`,
+    transition: transitions.create('all', {
+      easing: transitions.easing.sharp,
+      duration: transitions.duration.leavingScreen
     }),
-    borderColor:
-      customColor && useIsColorDark(customColor.unHover)
-        ? customColor.unHover
-        : themeColors.highEmphasis
+    borderColor: customColor && useIsColorDark(customColor.unHover) ? customColor.unHover : palette?.highEmphasis?.main
   }),
 
   iconsUtils: {
@@ -59,22 +56,22 @@ const useStyles = makeStyles(theme => ({
     bottom: 0,
     right: 0,
     left: 0,
-    transition: theme.transitions.create('height', {
-      easing: theme.transitions.easing.easeInOut,
-      duration: theme.transitions.duration.complex
+    transition: transitions.create('height', {
+      easing: transitions.easing.easeInOut,
+      duration: transitions.duration.complex
     })
   },
-  label: { marginTop: theme.spacing(0) },
-  labelsContainer: { marginTop: theme.spacing(0.8) },
+  label: { marginTop: spacing(0) },
+  labelsContainer: { marginTop: spacing(0.8) },
 
   isDragging: ({ customColor }) => ({
-    borderColor: !customColor && themeColors.primaryMain,
+    borderColor: !customColor && palette.primary.main,
     boxShadow: !!customColor && `0px 0px 8px 2px ${customColor.hover} !important`
   }),
 
   isSelecting: {},
   isSomePakeepsSelected: { cursor: 'pointer !important' },
-  dialogIconsUtils: { margin: theme.spacing(-1.4, 0.4, 0), paddingBottom: theme.spacing(0.4) },
+  dialogIconsUtils: { margin: spacing(-1.4, 0.4, 0), paddingBottom: spacing(0.4) },
   container: {
     ' & .MuiDialogContent-root': {
       overflowY: 'hidden'
@@ -104,15 +101,17 @@ const PakeepElement = ({
   handlePakeepPropertyThunk,
   handleAddLabelToPakeepThunk
 }) => {
-  const [customColor, isBackgroundColorDefault, isColorDefault] = useGetReadableColor(backgroundColor, color);
-  const correctBackground = isBackgroundColorDefault ? '#303030' : backgroundColor;
-  const correctColor = !customColor ? themeColors.maxEmphasis : customColor.hover;
+  const [, , maxEmphasisColor] = useThemeColors();
 
+  const [customColor, isBackgroundColorDefault, isColorDefault] = useGetReadableColor(backgroundColor, color);
+  const correctColor = !customColor ? maxEmphasisColor : customColor?.hover;
+
+  const correctBackground = isBackgroundColorDefault ? '#303030' : backgroundColor;
   const classes = useStyles({
     customColor,
     backgroundColor: correctBackground,
-    color: correctColor,
-    isPinIconShouldBeShownInPakeep
+    isPinIconShouldBeShownInPakeep,
+    color: correctColor
   });
 
   const nullityStatusState = {
@@ -178,12 +177,10 @@ const PakeepElement = ({
           pakeepIdOfDialog,
           handleClosePakeepDialog
         }) => {
-
           const events = [
-            { id: '1',value:addHours(new Date(), 2)},
-            { id: '2', value:addHours(new Date(), 27)},
-          ]
-
+            { id: '1', value: addHours(new Date(), 2) },
+            { id: '2', value: addHours(new Date(), 27) }
+          ];
 
           const handleDeleteNewLabel = labelId => {
             handleDeleteLabelFromPakeepThunk(id, labelId);
@@ -196,7 +193,7 @@ const PakeepElement = ({
 
           const labelsListProps = {
             handleAddNewLabel,
-            handleDeleteNewLabel,
+            handleDeleteNewLabel
           };
           const attributeGroupProps = {
             handleDeleteLabelFromPakeepFunc: handleDeleteLabelFromPakeepThunk,

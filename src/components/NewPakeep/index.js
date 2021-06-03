@@ -6,7 +6,6 @@ import { useCookie, useKeyPressEvent, useMeasure, usePageLeave } from 'react-use
 import { nanoid } from 'nanoid';
 import { Box, Grid, IconButton, makeStyles, Paper, TextField, withStyles } from '@material-ui/core';
 import { addNewPaKeepThunk } from 'store/modules/App/operations';
-import { themeColors } from 'components/theme';
 import NewPakeepUtils from './components/Utils';
 import AttributesOfNewPakeep from './components/Attributes';
 import { useCustomBreakpoint } from 'hooks/useCustomBreakpoint';
@@ -16,17 +15,17 @@ import { colord } from 'colord';
 import { useIsColorDark } from 'hooks/useIsColorDark.hook';
 import { useGetReadableColor } from 'hooks/useGetReadableColor.hook';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles(({spacing, palette,transitions}) => ({
   container: ({ customColor, isLabelViewHidden, backgroundColor }) => ({
-    marginTop: theme.spacing(8),
+    marginTop: spacing(8),
 
     '& .MuiInputBase-root': {
-      paddingRight: theme.spacing(4.8)
+      paddingRight: spacing(4.8)
     },
 
     '&  .MuiFormLabel-root.Mui-focused': {
-      color: !customColor ? themeColors.primaryMain : customColor.hover,
-      padding: customColor && theme.spacing(0.4, 1.8),
+      color: !customColor ? palette.primary.main : customColor.hover,
+      padding: customColor && spacing(0.4, 1.8),
       border: !customColor ? 0 : `2px solid ${customColor.hover}`,
       // borderLeft: customColor && 0,
       borderRadius: customColor && '2px',
@@ -37,7 +36,7 @@ const useStyles = makeStyles(theme => ({
     },
 
     '& label': {
-      color: !customColor ? themeColors.mediumEmphasis : customColor.hover,
+      color: !customColor ? palette?.mediumEmphasis?.main : customColor.hover,
 
       background: !customColor ? 'transparent !important' : `${backgroundColor} !important`
     },
@@ -45,14 +44,14 @@ const useStyles = makeStyles(theme => ({
     //   transform: !customColor ? 'translate(4px, -8px) scale(0.75)' : 'translate(0px, 0px) scale(0.75)'
     // },
     '& .MuiOutlinedInput-multiline': {
-      padding: theme.spacing(!customColor ? 2 : 2.8, 6, isLabelViewHidden ? 6 : 10, 1.4)
+      padding: spacing(!customColor ? 2 : 2.8, 6, isLabelViewHidden ? 6 : 10, 1.4)
     },
     '& input,textarea': {
-      caretColor: !customColor ? themeColors.primaryMain : customColor.hover,
-      color: !customColor ? themeColors.maxEmphasis : customColor.hover
+      caretColor: !customColor ?  palette.primary.main : customColor.hover,
+      color: !customColor ?  palette?.maxEmphasis?.main : customColor.hover
     },
     '& .MuiFormLabel-root.Mui-focused': {
-      color: !customColor ? themeColors.primaryMain : customColor.hover
+      color: !customColor ?  palette.primary.main : customColor.hover
     },
 
     '& fieldset': {
@@ -60,7 +59,7 @@ const useStyles = makeStyles(theme => ({
     }
   }),
   wrapper: ({ backgroundColor, customColor }) => ({
-    padding: theme.spacing(0),
+    padding: spacing(0),
     backgroundColor: colord(backgroundColor).isValid() ? backgroundColor : 'transparent',
     position: 'relative',
     borderRadius: '4px',
@@ -74,15 +73,15 @@ const useStyles = makeStyles(theme => ({
   inputTitle: { padding: 0 },
   textField: { paddingBottom: 0 },
   full: {
-    transition: theme.transitions.create('all', {
-      easing: theme.transitions.easing.easeIn,
-      duration: theme.transitions.duration.complex
+    transition: transitions.create('all', {
+      easing: transitions.easing.easeIn,
+      duration: transitions.duration.complex
     })
   },
   unFull: {
-    transition: theme.transitions.create('all', {
-      easing: theme.transitions.easing.easeInOut,
-      duration: theme.transitions.duration.complex
+    transition: transitions.create('all', {
+      easing: transitions.easing.easeInOut,
+      duration: transitions.duration.complex
     })
   }
 }));

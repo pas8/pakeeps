@@ -5,7 +5,6 @@ import IconsUtilsOfGlobalLabelListOflabelList from './components/IconsUtils';
 import { useTakeIcon } from 'hooks/useTakeIcon.hook';
 import mixPlugin from 'colord/plugins/mix';
 import { colord, extend } from 'colord';
-import { themeColors } from 'components/theme';
 import { useGetReversedCustomColor } from 'hooks/useGetReversedCustomColor.hook';
 import { useIsColorDark } from 'hooks/useIsColorDark.hook';
 import { useAlpha } from 'hooks/useAlpha.hook';
@@ -54,7 +53,6 @@ const GlobalLabelListOflabelList = ({
     <Grid className={containerClasses.container}>
       <FormLabel component={'legend'}>All labels</FormLabel>
       {globalLabels.map(labelState => {
-        // const mixedColor = colord(customColor?.bgHover).mix(themeColors.secondaryMain, 0.4).toHex();
         const isChecked = includes(selectedLabels, labelState.id);
 
         const isShoulColorBeChanged = !!customColor && isChecked;

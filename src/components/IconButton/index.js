@@ -1,16 +1,16 @@
 import PropTypes from 'prop-types';
-import { Grid, IconButton, makeStyles, Badge } from '@material-ui/core';
-import { themeColors } from 'components/theme';
 import _ from 'lodash';
+import { Grid, IconButton, makeStyles, Badge } from '@material-ui/core';
 import { useMeasure } from 'react-use';
 import { useEffect } from 'react';
-import { colord } from 'colord';
+import { useThemeColors } from 'hooks/useThemeColors.hook';
+import { useAlpha } from 'hooks/useAlpha.hook';
 // import clsx from 'clsx'
 const useStyles = makeStyles(theme => ({
   icon: ({ iconColor, rotate, isArctiveIconPresent, isIconActive }) => ({
     '& svg': { color: iconColor, transform: rotate },
     '& path': { fillOpacity: !isArctiveIconPresent && isIconActive && 1 },
-    '&:hover ': { background: colord(iconColor).alpha(0.16).toHex() }
+    '&:hover ': { background: useAlpha(iconColor) }
   }),
   smallButtonSize: { '& button ': { padding: theme.spacing(1) } }
 }));
@@ -29,23 +29,17 @@ const IconButtonByPas = ({
   handleAverageMainComponentWidth = false,
   badgeContent
 }) => {
+  const [primaryColor, , maxEmphasisColor, , mediumEmphasisColor] = useThemeColors();
   const currentHoverStatusIsTrue = _.isEqual(activeIconName, iconName) && activeProperty;
   const customIconColor = !!customColor && currentHoverStatusIsTrue ? customColor?.hover : customColor?.unHover;
 
-  const defaultColor = isIconActive
-    ? themeColors.primaryMain
-    : currentHoverStatusIsTrue
-    ? themeColors.maxEmphasis
-    : themeColors.mediumEmphasis;
-
+  const defaultColor = isIconActive ? primaryColor : currentHoverStatusIsTrue ? maxEmphasisColor : mediumEmphasisColor;
   const iconColor = customColor ? customIconColor : defaultColor;
 
   const rotate = rotateDeg ? `rotate(${rotateDeg}deg)` : 'rotate(0deg)';
-
   const classes = useStyles({ iconColor, rotate, isIconActive, isArctiveIconPresent });
 
   const [ref, { width }] = useMeasure();
-
   useEffect(() => width !== 0 && handleAverageMainComponentWidth && handleAverageMainComponentWidth(width), [width]);
 
   return (
@@ -61,14 +55,15 @@ const IconButtonByPas = ({
 
 IconButtonByPas.propTypes = {
   Icon: PropTypes.node,
-  isIconActive: PropTypes.bool,
   activeIconName: PropTypes.string,
   activeProperty: PropTypes.bool,
   badgeContent: PropTypes.number,
-  customColor: PropTypes.any,
+  customColor: PropTypes.bool,
   handleAverageMainComponentWidth: PropTypes.bool,
   icon: PropTypes.any,
   iconName: PropTypes.string,
+  isArctiveIconPresent: PropTypes.bool,
+  isIconActive: PropTypes.bool,
   onClick: PropTypes.func,
   rotateDeg: PropTypes.number,
   size: PropTypes.string

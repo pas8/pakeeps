@@ -4,9 +4,9 @@ import { useSnackbar } from 'notistack';
 import { makeStyles, Box, Button, Grid } from '@material-ui/core';
 import IconsUtils from 'components/IconsUtils';
 import { useMeasure } from 'react-use';
-import { themeColors } from 'components/theme';
-import { colord } from 'colord';
 import SaveButtonWithIcon from 'components/SaveButtonWithIcon';
+import { useAlpha } from 'hooks/useAlpha.hook';
+import { useThemeColors } from 'hooks/useThemeColors.hook';
 
 // import SaveOutlinedIcon from '@material-ui/icons/SaveOutlined';
 const useStyles = makeStyles(theme => ({
@@ -17,7 +17,7 @@ const useStyles = makeStyles(theme => ({
     left: 0,
     right: 8,
     '& button:hover': {
-      background: ({ customColor }) => (customColor ? colord(customColor.hover).alpha(0.16).toHex() : null)
+      background: ({ customColor }) => (customColor ? useAlpha(customColor.hover) : null)
     }
   },
   buttonWrapper: { display: 'flex', alignItems: 'center', justifyContent: 'flex-end' },
@@ -31,6 +31,7 @@ const useStyles = makeStyles(theme => ({
 
 const NewPakeepUtils = ({ customColor, handleNewPakeepSave, widthOfContainer, ...newPakeepUtilsProps }) => {
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+  const [, , , , mediumEmphasisColor] = useThemeColors();
 
   const handleNewPakeepSubmit = () => {
     try {
@@ -60,16 +61,14 @@ const NewPakeepUtils = ({ customColor, handleNewPakeepSave, widthOfContainer, ..
         <Box className={classes.buttonWrapper}>
           <Button
             style={{
-              color: !customColor
-                ? themeColors.mediumEmphasis
-                : colord(customColor.hover).alpha(0.6).toHex()
+              color: !customColor ? mediumEmphasisColor : useAlpha(customColor.hover, 0.6)
             }}
           >
             Close
           </Button>
         </Box>
         <Box className={clsx(classes.buttonWrapper, classes.button)}>
-          <SaveButtonWithIcon onSave={handleNewPakeepSubmit}  customColor={customColor}/>
+          <SaveButtonWithIcon onSave={handleNewPakeepSubmit} customColor={customColor} />
         </Box>
       </Box>
     </Box>

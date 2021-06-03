@@ -1,15 +1,15 @@
 import { Grid, makeStyles } from '@material-ui/core';
 import { colord } from 'colord';
-import { themeColors } from 'components/theme';
+import { useAlpha } from 'hooks/useAlpha.hook';
 import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
 import Selecto from 'react-selecto';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles(({palette:{secondary}}) => ({
   container: {
     '& .rCSjtiumr': {
-      borderColor: themeColors.secondaryMain,
-      background: colord(themeColors.secondaryMain).alpha(0.42).toHex()
+      borderColor: secondary.main,
+      background: useAlpha(secondary.main,0.42) 
     }
   }
 }));

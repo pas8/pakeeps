@@ -16,8 +16,8 @@ import PreparedColorExamples from 'components/ColorChanger/components/PreparedCo
 import LabelItem from '../LabelItem';
 import PreparedIconSelectingList from './components/PreparedIconSelectingList';
 import TitleChangerOfLabel from './components/TitleChangerOfLabel';
-import { themeColors } from 'components/theme';
 import { useGetReversedCustomColor } from 'hooks/useGetReversedCustomColor.hook';
+import { useThemeColors } from 'hooks/useThemeColors.hook';
 
 const useStyles = makeStyles(theme => ({}));
 
@@ -34,9 +34,11 @@ const MenuOfLabelPart = ({
   isThisMenuIsSecond,
   customColor
 }) => {
-  const color = !menuState?.color ? themeColors.primaryMain : menuState.color;
+  const [primaryColor] = useThemeColors();
 
-const reversedCustomColor = useGetReversedCustomColor(customColor,true)
+  const color = !menuState?.color ? primaryColor : menuState.color;
+
+  const reversedCustomColor = useGetReversedCustomColor(customColor, true);
 
   const nullifyOfMenuItemState = { name: '' };
   const [menuItemState, setMenuItemState] = useState(nullifyOfMenuItemState);
@@ -105,7 +107,7 @@ const reversedCustomColor = useGetReversedCustomColor(customColor,true)
     currentColor: menuState.color,
     handleOpen: null,
     labelChipProps: previewLabelProps,
-    parentBackgrounColor:customColor.bgHover,
+    parentBackgrounColor: customColor.bgHover,
     customColor
   };
 
@@ -139,7 +141,7 @@ const reversedCustomColor = useGetReversedCustomColor(customColor,true)
 
             const correctName = name === menuItemState.name;
             const isDynamicComponentShouldBeShown = correctName && dynamicComponent.component;
-            const dynamicComponentProps = { customColor:reversedCustomColor,...dynamicComponent.props,  };
+            const dynamicComponentProps = { customColor: reversedCustomColor, ...dynamicComponent.props };
             const onClick = () =>
               onMenuItemClick ? onMenuItemClick() : setMenuItemState(state => ({ ...state, name }));
             const menuItemProps = {
@@ -154,9 +156,8 @@ const reversedCustomColor = useGetReversedCustomColor(customColor,true)
               isDynamicComponentShouldBeShown,
               menuItemProps,
               isPreventClickOfMenuItem: false,
-              icon:<Icon/>,
-              customColor,
-
+              icon: <Icon />,
+              customColor
             };
             return <DynamicMenuItem {...DynamicMenuItemProps} />;
           }

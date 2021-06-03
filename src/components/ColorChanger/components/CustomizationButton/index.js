@@ -1,6 +1,5 @@
 import { Button, ButtonGroup, Typography, makeStyles, SvgIcon, IconButton, Badge, Grid } from '@material-ui/core';
 import ColorIcon from 'components/Icons/components/ColorIcon';
-import { themeColors } from 'components/theme';
 import { useState } from 'react';
 import TuneOutlinedIcon from '@material-ui/icons/TuneOutlined';
 import DialogOfAddingCustomColorToColorLayouts from './components/DialogOfAddingCustomColorToColorLayouts';

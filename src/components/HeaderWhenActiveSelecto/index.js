@@ -7,10 +7,10 @@ import { useGetReadableColor } from 'hooks/useGetReadableColor.hook';
 import { usePropertiesToUtils } from 'hooks/usePropertiesToUtils.hook';
 import IconButtonByPas from 'components/IconButton';
 import IconsUtils from 'components/IconsUtils';
-import { themeColors } from 'components/theme';
 import { SelectedLabels } from 'components/NewPakeep';
 import { useFindSelectedLabels } from 'hooks/useFindSelectedLabels.hook';
 import { useGetIsColorDefault } from 'hooks/useGetIsColorDefault.hook';
+import { useThemeColors } from 'hooks/useThemeColors.hook';
 
 const useStyles = makeStyles(({ spacing }) => ({
   container: {
@@ -30,8 +30,9 @@ const HeaderWhenActiveSelecto = ({
   const classes = useStyles();
 
   const [ref, { width: widthOfContainer }] = useMeasure();
+  const [primaryColor] = useThemeColors();
 
-  const [customColor] = useGetReadableColor(themeColors.primaryMain);
+  const [customColor] = useGetReadableColor(primaryColor);
   // console.log(selectedPakeepsId)
   // const handleSetFavoritePakeep = () => setState(state => ({ ...state, isFavorite: !state.isFavorite }));
 

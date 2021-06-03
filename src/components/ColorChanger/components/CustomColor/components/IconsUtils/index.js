@@ -21,7 +21,7 @@ import LibraryAddOutlinedIcon from '@material-ui/icons/LibraryAddOutlined';
 import SettingsInputComponentOutlinedIcon from '@material-ui/icons/SettingsInputComponentOutlined';
 import PlaylistAddOutlinedIcon from '@material-ui/icons/PlaylistAddOutlined';
 import AddBoxOutlinedIcon from '@material-ui/icons/AddBoxOutlined';
-import { themeColors } from 'components/theme';
+
 
 const IconUtilsOfCustomColor = ({
   statusState,
@@ -47,7 +47,6 @@ const IconUtilsOfCustomColor = ({
     />
   );
 
-  const whiteColor = themeColors.maxEmphasis;
   // const customColor = statusState.colorPreview ? colorInHexFormat : whiteColor;
 
   const buttonUtilsArr = [

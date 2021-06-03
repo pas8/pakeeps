@@ -6,14 +6,14 @@ import { useEffect, useRef, useState } from 'react';
 import _ from 'lodash';
 import { ToggleButton, ToggleButtonGroup } from '@material-ui/lab';
 import { colord } from 'colord';
-import { themeColors } from 'components/theme';
 import { nanoid } from 'nanoid';
 import ButtonItem from './components/ButtonItem';
 import MoreMenuOfFolders from './components/MoreMenu';
+import { useAlpha } from 'hooks/useAlpha.hook';
 
 const marginOfToogleGroups = 1;
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles(({ spacing, typography, palette: { primary } }) => ({
   containerOfFolderWithPakeepsView: ({
     isMenuOpen,
     positionOfFolderViewWithPakeepViewIsBottom,
@@ -22,11 +22,11 @@ const useStyles = makeStyles(theme => ({
   }) => ({
     // transform:'scale(0.8)',
 
-    margin: theme.spacing(positionOfFolderViewWithPakeepViewIsBottom ? 8 : 8 + 1.8, 0, 0, 0),
-    // margin: theme.spacing(positionOfFolderViewWithPakeepViewIsBottom ? -10 : -10 + 1.4, 0, 0, 0),
+    margin: spacing(positionOfFolderViewWithPakeepViewIsBottom ? 8 : 8 + 1.8, 0, 0, 0),
+    // margin: spacing(positionOfFolderViewWithPakeepViewIsBottom ? -10 : -10 + 1.4, 0, 0, 0),
     '& .MuiToggleButtonGroup-root': {
       width: positionOfFolderViewWithPakeepViewIsBottom ? 'auto' : '100%',
-      margin: theme.spacing(
+      margin: spacing(
         marginOfToogleGroups,
         positionOfFolderViewWithPakeepViewIsRight || positionOfFolderViewWithPakeepViewIsBottom
           ? marginOfToogleGroups
@@ -43,7 +43,7 @@ const useStyles = makeStyles(theme => ({
     '& button': {
       flexWrap: 'nowrap',
       height: '100%',
-      padding: theme.spacing(1.4, positionOfFolderViewWithPakeepViewIsBottom ? 1.4 : 1),
+      padding: spacing(1.4, positionOfFolderViewWithPakeepViewIsBottom ? 1.4 : 1),
 
       display: positionOfFolderViewWithPakeepViewIsBottom && isMenuOpen ? 'block' : 'flex',
       whiteSpace: 'pre',
@@ -54,17 +54,17 @@ const useStyles = makeStyles(theme => ({
       }
     },
     '& .Mui-selected': {
-      background: colord(themeColors.primaryMain).alpha(0.16).toHex(),
-      color: themeColors.primaryMain,
-      '&:hover': { background: colord(themeColors.primaryMain).alpha(0.16).toHex() },
+      background: useAlpha(primary.main),
+      color: primary.main,
+      '&:hover': { background: useAlpha(primary.main, 0.2) },
       '& svg': {
-        color: themeColors.primaryMain
+        color: primary.main
       }
     }
   }),
   textOfFolderWithPakeepsView: ({ positionOfFolderViewWithPakeepViewIsBottom }) =>
     !positionOfFolderViewWithPakeepViewIsBottom
-      ? { padding: theme.spacing(0, 0, 0, 0.8) }
+      ? { padding: spacing(0, 0, 0, 0.8) }
       : {
           writingMode: 'vertical-rl',
           textOrientation: 'upright',
@@ -75,7 +75,7 @@ const useStyles = makeStyles(theme => ({
           alignItems: 'center'
         },
   container: {
-    margin: theme.spacing(10.32, 0, 0, 0),
+    margin: spacing(10.32, 0, 0, 0),
     height: '100vh',
     // position: 'fixed',
     '& button:first-of-type': {
@@ -87,29 +87,29 @@ const useStyles = makeStyles(theme => ({
     '& .MuiTabs-indicator': {
       // height:'80%',
       width: 2,
-      borderRadius: theme.spacing(0.8)
+      borderRadius: spacing(0.8)
     },
 
     '& button': {
       textTransform: 'none',
       color: '#fff',
       minWidth: '40px',
-      fontWeight: theme.typography.fontWeightRegular,
-      fontSize: theme.typography.pxToRem(16),
+      fontWeight: typography.fontWeightRegular,
+      fontSize: typography.pxToRem(16),
       // borderRadius:8,
       '&:focus': {
         opacity: 1
       },
       minHeight: 0,
-      // marginTop: theme.spacing(1.4),
-      // margin:theme.spacing(2,0),
-      marginBottom: theme.spacing(0.8),
-      padding: theme.spacing(1.48, 2.6),
+      // marginTop: spacing(1.4),
+      // margin:spacing(2,0),
+      marginBottom: spacing(0.8),
+      padding: spacing(1.48, 2.6),
       '& span': {
         flexDirection: 'row',
         '& svg': {
           fontSize: '1.8em'
-          // margin: theme.spacing(0.8, 0.4, 0, 0)
+          // margin: spacing(0.8, 0.4, 0, 0)
         }
       }
     }
@@ -138,22 +138,22 @@ const Folders = ({
     positionOfFolderViewWithPakeepViewIsRight,
     isFolderViewWithPakeepViewAlignToCenter
   });
-  const theme = useTheme();
+  const { spacing } = useTheme();
   const { width: windowWidth, height: windowHeight } = useWindowSize();
 
   const utilsFolders = [
     [
       { title: 'Open settings1', iconName: 'settings', id: 'folder-94', property: 'settings' },
-      { title: 'Hide folders2', iconName: 'visibility', onClick: handleHideFolder, id: 'folder-93' },
+      { title: 'Hide folders2', iconName: 'visibility', onClick: handleHideFolder, id: 'folder-93' }
     ]
   ];
 
-  const marginsOfToogleGroups = theme.spacing(marginOfToogleGroups) * 2;
+  const marginsOfToogleGroups = spacing(marginOfToogleGroups) * 2;
   // const allFolders = [...folders];
   const allFolders = [...folders, ...utilsFolders];
 
   const allMarginsOfBottomView = marginsOfToogleGroups * (allFolders.length + 1);
-  const allMarginsOfNotBottomView = marginsOfToogleGroups * (allFolders.length + 4) + theme.spacing(8);
+  const allMarginsOfNotBottomView = marginsOfToogleGroups * (allFolders.length + 4) + spacing(8);
 
   const allMarginsOfToogleGroups = positionOfFolderViewWithPakeepViewIsBottom
     ? allMarginsOfBottomView
@@ -251,7 +251,7 @@ const Folders = ({
 
                     const onClickOfToggleButton = isButtonIsMore ? handleOpenMenu : onClick;
                     const inNextButtonIsMore = findedIdx + 1 === idxOfFolderItemWhichShouldBeInMenu;
-                    const borderRadiusValue = theme.spacing(0.6);
+                    const borderRadiusValue = spacing(0.6);
 
                     const isButtonLastOfNotHiddenBottomArr =
                       positionOfFolderViewWithPakeepViewIsBottom && inNextButtonIsMore;
@@ -263,8 +263,7 @@ const Folders = ({
                         //  ref={ref}
                         style={{
                           opacity: isButtonIsMore ? 1 : isShouldBeHidden ? 0 : 1,
-                          marginLeft:
-                            positionOfFolderViewWithPakeepViewIsBottom && isButtonIsMore && theme.spacing(2.8),
+                          marginLeft: positionOfFolderViewWithPakeepViewIsBottom && isButtonIsMore && spacing(2.8),
                           borderLeft: isButtonIsMore && '1px solid rgba(255, 255, 255, 0.12)',
                           borderTop: isButtonIsMore && '1px solid rgba(255, 255, 255, 0.12)',
 
@@ -281,7 +280,7 @@ const Folders = ({
                           borderTopLeftRadius:
                             (isButtonLastOfNotHiddenNotBottomArr || isButtonIsMore) && borderRadiusValue,
 
-                          marginTop: isButtonIsMore && !positionOfFolderViewWithPakeepViewIsBottom && theme.spacing(2)
+                          marginTop: isButtonIsMore && !positionOfFolderViewWithPakeepViewIsBottom && spacing(2)
                         }}
                         value={findedIdx}
                         aria-label={isButtonIsMore ? moreButtonTitle : title}

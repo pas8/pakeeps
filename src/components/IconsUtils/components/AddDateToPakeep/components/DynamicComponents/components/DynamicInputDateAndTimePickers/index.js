@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types';
 import { KeyboardDateTimePicker, KeyboardTimePicker } from '@material-ui/pickers';
 import { Grid, InputAdornment, makeStyles, withStyles, Checkbox, Box } from '@material-ui/core';
-import { themeColors } from 'components/theme';
 import DoneOutlineOutlinedIcon from '@material-ui/icons/DoneOutlineOutlined';
 import { useCallback, useEffect, useState } from 'react';
 import { addDays, isValid } from 'date-fns';

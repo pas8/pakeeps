@@ -20,6 +20,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const ColorPickerByPas = ({ handleSave = null, customColor }) => {
+
   const [gradientStatus, setGradientStatus] = useState(false);
   const classes = useStyles();
   const Container = gradientStatus ? Dialog : Grid;

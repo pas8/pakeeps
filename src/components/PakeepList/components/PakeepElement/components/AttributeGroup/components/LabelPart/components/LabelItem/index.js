@@ -1,17 +1,19 @@
 import { Chip, Grid, makeStyles } from '@material-ui/core';
 import PropTypes from 'prop-types';
-import { themeColors } from 'components/theme';
 import { useIsColorDark } from 'hooks/useIsColorDark.hook';
+import { useThemeColors } from 'hooks/useThemeColors.hook';
 
-const useStyles = makeStyles(theme => ({
-  container: ({ color, isDark, currentColor, isCustomColor, parentBackgrounColor }) => ({
+const useStyles = makeStyles(({spacing}) => ({
+  container: ({ color, isDark, currentColor, isCustomColor, parentBackgrounColor,aplyMargin }) => ({
     cursor: 'pointer',
+    marginRight:spacing(aplyMargin && 1),
+    marginBottom:spacing(aplyMargin && 1),
     '& .MuiChip-root': {
       cursor: 'pointer',
       background: color,
       color: isCustomColor ? parentBackgrounColor : isDark ? '#080808' : null,
       '& svg': {
-        color: isCustomColor ? parentBackgrounColor :  isDark ? '#080808' : null
+        color: isCustomColor ? parentBackgrounColor : isDark ? '#080808' : null
       },
       '&:hover': {
         boxShadow: `0px 0px 4px 1px ${color} `
@@ -28,24 +30,26 @@ const useStyles = makeStyles(theme => ({
   })
 }));
 
-const LabelItem = ({ currentColor, handleOpen, labelChipProps, customColor, parentBackgrounColor }) => {
+const LabelItem = ({ currentColor, handleOpen, labelChipProps, customColor, parentBackgrounColor,aplyMargin =  true }) => {
   const isDark = useIsColorDark(currentColor);
   const isCustomColor = !!customColor;
+
+  const [primaryColor, secondaryColor] = useThemeColors();
 
   const color = isCustomColor
     ? customColor.hover
     : !currentColor
     ? '#969696'
     : currentColor === 'primary'
-    ? themeColors.primaryMain
+    ? primaryColor
     : currentColor === 'secondary'
-    ? themeColors.secondaryMain
+    ? secondaryColor
     : currentColor;
 
-  const classes = useStyles({ color, isDark, currentColor, isCustomColor, parentBackgrounColor });
+  const classes = useStyles({ color, isDark, currentColor, isCustomColor, parentBackgrounColor,aplyMargin });
 
   return (
-    <Grid item className={classes.container} onContextMenu={handleOpen} onClick={handleOpen}>
+    <Grid className={classes.container} onContextMenu={handleOpen} onClick={handleOpen}>
       <Chip {...labelChipProps} />
     </Grid>
   );

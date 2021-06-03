@@ -19,7 +19,6 @@ import LibraryAddOutlinedIcon from '@material-ui/icons/LibraryAddOutlined';
 import SettingsInputComponentOutlinedIcon from '@material-ui/icons/SettingsInputComponentOutlined';
 import PlaylistAddOutlinedIcon from '@material-ui/icons/PlaylistAddOutlined';
 import AddBoxOutlinedIcon from '@material-ui/icons/AddBoxOutlined';
-import { themeColors } from 'components/theme';
 import { ToggleButton, ToggleButtonGroup } from '@material-ui/lab';
 import { Grid, makeStyles } from '@material-ui/core';
 import _ from 'lodash';

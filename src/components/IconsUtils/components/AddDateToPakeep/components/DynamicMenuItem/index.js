@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import { Grid, makeStyles, Typography, MenuItem } from '@material-ui/core';
 import clsx from 'clsx';
 import { useAlpha } from 'hooks/useAlpha.hook';
-import { themeColors } from 'components/theme';
+import { useThemeColors } from 'hooks/useThemeColors.hook';
 
 const useStyles = makeStyles(theme => ({
   menuText: { marginLeft: theme.spacing(1.4) },
@@ -12,9 +12,9 @@ const useStyles = makeStyles(theme => ({
     padding: theme.spacing(1, 1.6),
     '& svg,h6': { color }
   }),
-  container: ({ hoverColor, color, }) => ({
-    '&:hover > .MuiTouchRipple-root':  {
-      background:   useAlpha(color)
+  container: ({ hoverColor, color }) => ({
+    '&:hover > .MuiTouchRipple-root': {
+      background: useAlpha(color)
     }
   })
 }));
@@ -31,11 +31,12 @@ const DynamicMenuItem = ({
   customColor,
   isDynamicItemGridMarginIsZero = false
 }) => {
-  const color = !customColor ? themeColors.highEmphasis : customColor?.unHover;
-  const classes = useStyles({ color, hoverColor: '' ,customColor});
+  const [, , , highEmphasisColor] = useThemeColors();
+  const color = !customColor ? highEmphasisColor : customColor?.unHover;
+  const classes = useStyles({ color, hoverColor: '', customColor });
 
   const dynamicMenuItem = (
-    <Grid item className={!isDynamicItemGridMarginIsZero && clsx( classes.itemGrid)}>
+    <Grid item className={!isDynamicItemGridMarginIsZero && clsx(classes.itemGrid)}>
       <DynamicComponent {...dynamicComponentProps} />
     </Grid>
   );
@@ -54,7 +55,7 @@ const DynamicMenuItem = ({
   const itemOfMenuProps = {
     ...dynamicItemProps,
     disableGutters: true,
-    className: clsx(isPreventClickOfMenuItem && classes.preventClickOfMenuItem,customColor && classes.container)
+    className: clsx(isPreventClickOfMenuItem && classes.preventClickOfMenuItem, customColor && classes.container)
   };
 
   return (

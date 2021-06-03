@@ -1,13 +1,12 @@
 import { makeStyles, MenuItem, ListItemText, FormControl, FormLabel ,Grid} from '@material-ui/core';
 import PropTypes from 'prop-types';
-import { themeColors } from 'components/theme';
 import { nanoid } from 'nanoid';
 
-const useStyles = makeStyles(({ spacing }) => ({
+const useStyles = makeStyles(({ spacing,palette }) => ({
   container: {
     border: 0,
     borderBottomWidth: 2,
-    borderColor: themeColors.mediumEmphasis,
+    borderColor: palette?.mediumEmphasis?.main,
     borderStyle: 'solid',
     margin: spacing(0.8, 0, 0.4, 0),
     '& legend': {
@@ -19,7 +18,7 @@ const useStyles = makeStyles(({ spacing }) => ({
     fontSize: '10px',
     '& svg': {
       margin: spacing(0, 1.08, 0, 0.2),
-      color: themeColors.highEmphasis
+      color: palette?.highEmphasis?.main
     }
   }
 }));

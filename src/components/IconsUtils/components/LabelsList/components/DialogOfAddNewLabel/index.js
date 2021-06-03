@@ -16,24 +16,25 @@ import PreparedColorExamples from 'components/ColorChanger/components/PreparedCo
 import ColorPickerByPas from 'components/ColorChanger';
 import LabelItem from 'components/PakeepList/components/PakeepElement/components/AttributeGroup/components/LabelPart/components/LabelItem';
 import PreparedIconSelectingList from 'components/PakeepList/components/PakeepElement/components/AttributeGroup/components/LabelPart/components/Menu/components/PreparedIconSelectingList';
-import { themeColors } from 'components/theme';
 import SteperOfDialogOfAddNewLabel from './components/Steper';
 import FirstStepOfSteperOfDialogOfAddNewLabel from './components/Steper/components/First';
 import SecondStepOfSteperOfDialogOfAddNewLabel from './components/Steper/components/Second';
 import ThirdStepOfSteperOfDialogOfAddNewLabel from './components/Steper/components/Third';
 import FourthStepOfSteperOfDialogOfAddNewLabel from './components/Steper/components/Fourth';
+import { useThemeColors } from 'hooks/useThemeColors.hook';
 
 const DialogOfAddNewLabel = ({
   isDialogOpen,
   handleCloseAddNewLabelDialog,
   handleAddNewGlobalLabelThunk,
-  handleOpenAddNewLabelDialog,
+  handleOpenAddNewLabelDialog
 }) => {
+  const [, , , , mediumEmphasisColor] = useThemeColors();
+
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
   const labelVariants = ['outlined', 'default'];
   const iconNameVariants = ['', 'favorite'];
-
 
   const nullityOfNewLabelState = {
     title: '',
@@ -43,7 +44,6 @@ const DialogOfAddNewLabel = ({
     iconName: ''
   };
   const [newLabelState, setNewLabelState] = useState(nullityOfNewLabelState);
-
 
   const colorVariantsNames = ['', 'primary', 'secondary'];
   const customColorValue = includes(colorVariantsNames, newLabelState.color) ? 'customColor' : newLabelState.color;
@@ -156,7 +156,7 @@ const DialogOfAddNewLabel = ({
       <SteperOfDialogOfAddNewLabel {...steperOfDialogOfAddNewLabelProps} />
       <DialogActions>
         <LabelItem {...labelItemProps} />
-        <Button onClick={handleCloseDialog} style={{ color: themeColors.mediumEmphasis }}>
+        <Button onClick={handleCloseDialog} style={{ color: mediumEmphasisColor }}>
           Close
         </Button>
 
@@ -172,7 +172,7 @@ DialogOfAddNewLabel.propTypes = {
   handleAddNewGlobalLabelThunk: PropTypes.func,
   handleCloseAddNewLabelDialog: PropTypes.func,
   handleOpenAddNewLabelDialog: PropTypes.func,
-  isDialogOpen: PropTypes.bool,
+  isDialogOpen: PropTypes.bool
 };
 
 const mapDispatchToProps = dispatch => ({

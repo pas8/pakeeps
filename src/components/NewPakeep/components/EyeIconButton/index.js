@@ -2,8 +2,8 @@ import PropTypes from 'prop-types';
 import { Grid, makeStyles, IconButton } from '@material-ui/core';
 import VisibilityOutlinedIcon from '@material-ui/icons/VisibilityOutlined';
 import VisibilityOffOutlinedIcon from '@material-ui/icons/VisibilityOffOutlined';
-import { themeColors } from 'components/theme';
-import { colord } from 'colord';
+import { useThemeColors } from 'hooks/useThemeColors.hook';
+import { useAlpha } from 'hooks/useAlpha.hook';
 
 const useStyles = makeStyles(theme => ({
   containeOfEyeIconButton: {
@@ -11,25 +11,21 @@ const useStyles = makeStyles(theme => ({
     right: 4,
     top: 4,
     '& button:hover': {
-      color: ({ customColor }) => (customColor && colord(customColor.hover).alpha(0.16).toHex())
+      color: ({ customColor }) => customColor && useAlpha(customColor.hover) 
     }
   }
 }));
 
 const EyeIconButton = ({ onClickOfEyeIconButton, isUtilsHidden, customColor }) => {
   const classes = useStyles({ customColor });
-
+  const [, , , highEmphasisColor, mediumEmphasisColor] = useThemeColors();
   return (
     <Grid className={classes.containeOfEyeIconButton} justify={'center'} alignItems={'center'}>
       <IconButton onClick={onClickOfEyeIconButton}>
         {isUtilsHidden ? (
-          <VisibilityOutlinedIcon
-            style={{ color: !customColor ? themeColors.highEmphasis : customColor.unHover }}
-          />
+          <VisibilityOutlinedIcon style={{ color: !customColor ? highEmphasisColor : customColor.unHover }} />
         ) : (
-          <VisibilityOffOutlinedIcon
-            style={{ color: !customColor ? themeColors.mediumEmphasis : customColor.unHover }}
-          />
+          <VisibilityOffOutlinedIcon style={{ color: !customColor ? mediumEmphasisColor : customColor.unHover }} />
         )}
       </IconButton>
     </Grid>

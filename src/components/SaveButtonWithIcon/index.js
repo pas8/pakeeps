@@ -1,26 +1,27 @@
 import { Grid, makeStyles, Button } from '@material-ui/core';
 import PropTypes from 'prop-types';
 import SaveRoundedIcon from '@material-ui/icons/SaveRounded';
-import { themeColors } from 'components/theme';
-import { colord } from 'colord';
+import { useAlpha } from 'hooks/useAlpha.hook';
 
-const useStyles = makeStyles(theme => ({
-  container: ({ color }) => ({
-    '& button': {
-      color,
-      '& svg': {
-        color
-      },
-      '&:hover': {
-        background: colord(color).alpha(0.16).toHex()
+const useStyles = makeStyles(({ palette }) => ({
+  container: ({ customColor }) => {
+    const color = !customColor ? palette.primary.main : customColor.unHover;
+    return {
+      '& button': {
+        color,
+        '& svg': {
+          color
+        },
+        '&:hover': {
+          background: useAlpha(color)
+        }
       }
-    }
-  })
+    };
+  }
 }));
 
 const SaveButtonWithIcon = ({ onSave, customColor }) => {
-  const color = !customColor ? themeColors.primaryMain : customColor.unHover;
-  const classes = useStyles({ color });
+  const classes = useStyles({ customColor });
 
   return (
     <Grid className={classes.container}>
@@ -31,6 +32,9 @@ const SaveButtonWithIcon = ({ onSave, customColor }) => {
   );
 };
 
-SaveButtonWithIcon.propTypes = {};
+SaveButtonWithIcon.propTypes = {
+  customColor: PropTypes.any,
+  onSave: PropTypes.func
+}
 
 export default SaveButtonWithIcon;

@@ -1,28 +1,27 @@
 import { Grid, makeStyles, Typography, Box } from '@material-ui/core';
 import { colord } from 'colord';
-import { themeColors } from 'components/theme';
 import PropTypes from 'prop-types';
 import { useAlpha } from 'hooks/useAlpha.hook';
+import { useThemeColors } from 'hooks/useThemeColors.hook';
 
-const useStyles = makeStyles(theme => ({
-  iconContainer: ({ color, hoverColor ,isDragging}) => ({
-    padding: theme.spacing(1.4),
+const useStyles = makeStyles(({ spacing, transition, shadowss }) => ({
+  iconContainer: ({ color, hoverColor, isDragging }) => ({
+    padding: spacing(1.4),
     transform: 'scale(1.2)',
     color,
-    borderRadius: theme.spacing(0.6),
-    transition: theme.transitions.create('all', {
-      easing: theme.transitions.easing.easeIn,
-      duration: theme.transitions.duration.enteringScreen
+    borderRadius: spacing(0.6),
+    transition: transitions.create('all', {
+      easing: transitions.easing.easeIn,
+      duration: transitions.duration.enteringScreen
     }),
-  //  border: isDragging && '1px solid',
-  //  borderColor:isDragging && color,
+    //  border: isDragging && '1px solid',
+    //  borderColor:isDragging && color,
     cursor: 'pointer',
     '&:hover': {
       background: useAlpha(hoverColor, 0.2),
-      boxShadow: theme.shadows[8],
-      color: hoverColor,
-  //  borderColor:isDragging && hoverColor
-
+      boxShadow: shadows[8],
+      color: hoverColor
+      //  borderColor:isDragging && hoverColor
     }
   })
 }));
@@ -35,8 +34,10 @@ const PreparedIconSelectingList = ({
   color,
   customColor,
   isDragging,
-  checkedIcon,
+  checkedIcon
 }) => {
+  const [primaryColor, , , maxEmphasisColor, , mediumEmphasisColor] = useThemeColors();
+
   const isSelected = iconName === labelIconName;
 
   const newColor = customColor
@@ -44,23 +45,23 @@ const PreparedIconSelectingList = ({
       ? customColor.bgUnHover
       : customColor.bgHover
     : isSelected
-    ? themeColors.primaryMain
-    : themeColors.mediumEmphasis;
+    ? primaryColor
+    : mediumEmphasisColor;
   const hoverColor = customColor
     ? isSelected
       ? customColor.bgUnHover
       : customColor.bgHover
     : isSelected
-    ? themeColors.primaryMain
-    : themeColors.maxEmphasis;
+    ? primaryColor
+    : maxEmphasisColor;
 
-  const classes = useStyles({ color:newColor, hoverColor,isDragging ,customColor});
+  const classes = useStyles({ color: newColor, hoverColor, isDragging, customColor });
   const onClick = () => handleChangeLabelIconName(iconName);
 
   return (
     <Box mx={0.4} onClick={onClick}>
       <Grid container alignItems={'center'} justify={'center'} className={classes.iconContainer}>
-        { isSelected && !!checkedIcon ? checkedIcon :   icon}
+        {isSelected && !!checkedIcon ? checkedIcon : icon}
       </Grid>
     </Box>
   );

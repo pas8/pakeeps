@@ -3,18 +3,16 @@ import { Grid, makeStyles } from '@material-ui/core';
 import { DragDropContext } from 'react-beautiful-dnd';
 import { find } from 'lodash';
 import ColumnOfPakeepListContainer from './components/Column/index';
-import { themeColors } from 'components/theme';
 
-const useStyles = makeStyles(({ spacing, breakpoints: { between, down } }) => ({
+const useStyles = makeStyles(({ spacing, breakpoints: { between, down }, palette }) => ({
   container: {
     margin: spacing(4, 0, 0, 0),
     [between('xs', 'sm')]: { margin: spacing(2, 0, 0, 0) },
     [down('md')]: { margin: spacing(4, 0, 0, 0) },
     '& .selected > div ': {
-      boxShadow: `0px 0px 0px 1px ${themeColors.maxEmphasis}`,
-      borderColor:themeColors.maxEmphasis,
+      boxShadow: `0px 0px 0px 1px ${palette?.maxEmphasis?.main}`,
+      borderColor: palette?.maxEmphasis?.main
     }
-    
   }
 }));
 
