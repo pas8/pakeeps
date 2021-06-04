@@ -2,13 +2,15 @@ import PropTypes from 'prop-types';
 import { KeyboardDateTimePicker, KeyboardTimePicker } from '@material-ui/pickers';
 import { Grid, InputAdornment, makeStyles, withStyles, Checkbox, Box } from '@material-ui/core';
 import DoneOutlineOutlinedIcon from '@material-ui/icons/DoneOutlineOutlined';
-import { useCallback, useEffect, useState } from 'react';
-import { addDays, isValid } from 'date-fns';
+import { useCallback, useEffect, useState, memo } from 'react';
+import { addDays, format as toFormat, isValid } from 'date-fns';
 import { useAlpha } from 'hooks/useAlpha.hook';
 import CloseIcon from '@material-ui/icons/Close';
 import IconButtonByPas from 'components/IconButton';
 import DeleteOutlinedIcon from '@material-ui/icons/DeleteOutlined';
 import { Typography } from '@material-ui/core';
+import { usePrevious } from 'react-use';
+import { debounce } from 'lodash';
 const useStyles = makeStyles(({ spacing, typography: { h4 }, palette }) => ({
   container: ({ customColor, onlyTime }) => {
     const defaultColor = !customColor ? palette?.mediumEmphasis?.main : customColor.unHover;
@@ -71,39 +73,48 @@ const useStyles = makeStyles(({ spacing, typography: { h4 }, palette }) => ({
 }));
 
 const DynamicInputDateAndTimePickers = ({
-  onChange: onChangeFunc,
   onlyTime,
   icon,
   name,
   customColor,
+  inputValue,
   ampm = false,
   value,
+  format,
   correctName,
   title,
+  focusedEventId,
   error,
-  buttonSaveState
+  handleDateAndTimeInputsState
 }) => {
   const classes = useStyles({ keyboardIconColor: customColor.hover, correctName, error, customColor, onlyTime });
-  const [inputValue, setInputValue] = useState(value);
 
-  useEffect(() => {
-    !!buttonSaveState && console.log(name,!!value);
-  }, [buttonSaveState]);
+  const onChange = (date, value) => {
+    handleDateAndTimeInputsState(name, date, value);
+  };
 
-  const onAccept = data => onChange(name, data);
+  const onAccept = date => {
+    const inputValue = toFormat(date, format);
+    handleDateAndTimeInputsState(name, date, inputValue);
+  };
+
+  const autoFocus = focusedEventId === name;
 
   const keyboardPickerState = {
-    value: inputValue,
-    onChange: setInputValue,
+    value,
+    inputValue,
+    onChange,
+    key: name,
     todayButton: !onlyTime,
     inputVariant: 'outlined',
     keyboardIcon: icon,
     autoOk: false,
-    format: onlyTime ? 'hh:mm' : 'yyyy / MM / dd / hh:mm',
+    format,
     disablePast: true,
     // mask: `${title}   __:__`,
     customColor,
     error: false,
+    autoFocus,
     onAccept,
     ampm,
     variant: 'dialog',
@@ -146,4 +157,4 @@ DynamicInputDateAndTimePickers.propTypes = {
   value: PropTypes.string
 };
 
-export default DynamicInputDateAndTimePickers;
+export default memo(DynamicInputDateAndTimePickers);

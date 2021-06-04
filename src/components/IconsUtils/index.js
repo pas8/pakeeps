@@ -46,6 +46,7 @@ const IconsUtils = ({
   isPinned,
   isFavorite,
   isInBookmark,
+  id,
   labels,
   isCheckBoxes,
   handleSetBookmarkPakeep,
@@ -110,7 +111,7 @@ const IconsUtils = ({
       onClick: handleClick,
       ActiveIcon: EventAvailableIcon,
       isIconActive: !!events.length,
-      menuComponentsProps: { events },
+      menuComponentsProps: { events,id },
       menuComponents: AddDateToPakeep
     },
     {

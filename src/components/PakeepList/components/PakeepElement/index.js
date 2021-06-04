@@ -282,6 +282,7 @@ const PakeepElement = ({
 
           const allIconsUtilsProps = {
             ...iconsUtilsProps,
+            id,
             events,
             arrOfButtonNamesWhichSholudBeHidden,
             widthOfContainer,
