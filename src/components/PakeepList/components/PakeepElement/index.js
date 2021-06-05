@@ -92,7 +92,7 @@ const PakeepElement = ({
   id,
   utilsViewLikeInGoogleKeep,
   idx,
-  events,
+  // events,
   globalLabels,
   filteredLabels,
   handleDeleteLabelFromPakeepThunk,
@@ -105,6 +105,13 @@ const PakeepElement = ({
   handleAddLabelToPakeepThunk,
   ...props
 }) => {
+
+  const events = [
+    { id: '1', value: addHours(new Date(), 2) },
+    { id: '3', value: addHours(new Date(), 27) }
+  ];
+
+
   const [, , maxEmphasisColor] = useThemeColors();
 
   const [customColor, isBackgroundColorDefault, isColorDefault] = useGetReadableColor(backgroundColor, color);
@@ -182,11 +189,7 @@ const PakeepElement = ({
             pakeepIdOfDialog,
             handleClosePakeepDialog
           }) => {
-            // const events = [
-            //   { id: '1', value: addHours(new Date(), 2) },
-            //   { id: '2', value: addHours(new Date(), 27) }
-            // ];
-
+        
             const handleDeleteNewLabel = labelId => {
               handleDeleteLabelFromPakeepThunk(id, labelId);
             };

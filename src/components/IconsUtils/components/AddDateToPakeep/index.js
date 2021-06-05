@@ -1,44 +1,23 @@
 import PropTypes from 'prop-types';
-import React, { Fragment, useState, useEffect } from 'react';
-import {
-  Box,
-  CssBaseline,
-  Grid,
-  IconButton,
-  InputAdornment,
-  makeStyles,
-  Menu,
-  MenuItem,
-  MenuList,
-  Typography
-} from '@material-ui/core';
-import ViewWeekOutlinedIcon from '@material-ui/icons/ViewWeekOutlined';
-import TodayOutlinedIcon from '@material-ui/icons/TodayOutlined';
-import AddLocationOutlinedIcon from '@material-ui/icons/AddLocationOutlined';
-import CalendarTodayOutlinedIcon from '@material-ui/icons/CalendarTodayOutlined';
-import DashboardOutlinedIcon from '@material-ui/icons/DashboardOutlined';
-import ScheduleOutlinedIcon from '@material-ui/icons/ScheduleOutlined';
-import EventNoteOutlinedIcon from '@material-ui/icons/EventNoteOutlined';
-import DateRangeOutlinedIcon from '@material-ui/icons/DateRangeOutlined';
-import DoneOutlineOutlinedIcon from '@material-ui/icons/DoneOutlineOutlined';
-import clsx from 'clsx';
+import React, { useState, useEffect } from 'react';
 import { nanoid } from 'nanoid';
 import HeaderOfAddDateToPakeep from './components/HeaderOfAddDateToPakeep';
 import DynamicInputDateAndTimePickers from './components/DynamicComponents/components/DynamicInputDateAndTimePickers';
-import { addDays, isValid, format as toFormat } from 'date-fns';
 import { connect } from 'react-redux';
-import { useCounter } from 'react-use';
 import DynamicAddMoreEvents from './components/DynamicComponents/components/DynamicAddMoreEvents';
 import DynamicMenuItem from './components/DynamicMenuItem';
 import { getGlobalEventsArr } from 'store/modules/App/selectors';
 import includes from 'lodash.includes';
-import { filter, find, mapKeys, map, uniq, uniqWith, isEqual, mapValues } from 'lodash';
+import { filter, mapKeys, map, mapValues, find } from 'lodash';
 import { useTakeIcon } from 'hooks/useTakeIcon.hook';
 import { useGetReversedCustomColor } from 'hooks/useGetReversedCustomColor.hook';
 import { useSnackbar } from 'notistack';
 import { handlePakeepEventsThunk, handleThemeColorsThunk } from 'store/modules/App/operations';
 import { useCurrentEvents } from 'hooks/useCurrentEvents.hook';
 import { useValidatedCurrentEvents } from 'hooks/useValidatedCurrentEvents.hook';
+import { Chip, Typography, Grid, makeStyles } from '@material-ui/core';
+import { format } from 'date-fns';
+import EventItem from 'components/PakeepList/components/PakeepElement/components/AttributeGroup/components/EventsPart/components/EventItem';
 
 const AddDateToPakeep = ({
   ampm = false,
@@ -126,6 +105,9 @@ const AddDateToPakeep = ({
   }, [buttonSaveState]);
 
   const onClickOfSaveButton = () => setButtonSaveState(TO_PUSH);
+
+  const eventItemProps = { validatedCurrentEvents, currentEventsArr, customColor };
+  const customTitle = <EventItem {...eventItemProps} />;
   return (
     <>
       <HeaderOfAddDateToPakeep
@@ -133,6 +115,7 @@ const AddDateToPakeep = ({
         arrowButtonFunc={onMenuClose}
         onClickOfSaveButton={onClickOfSaveButton}
         customColor={customColor}
+        customTitle={customTitle}
         // dynamicTitle={menuItemState.dynamicTitle}
       />
       {dateListArr.map(
@@ -216,9 +199,7 @@ const mapStateToProps = ({ app: { events: globalEvents }, settings: { timeFormat
 });
 const mapDispatchToProps = dispatch => ({
   handlePakeepEventsThunk: (id, events) => dispatch(handlePakeepEventsThunk(id, events)),
-  handleThemeColorsThunk: (newThemeColors) => dispatch(handleThemeColorsThunk(newThemeColors)),
-
-
+  handleThemeColorsThunk: newThemeColors => dispatch(handleThemeColorsThunk(newThemeColors))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddDateToPakeep);

@@ -37,7 +37,7 @@ const LabelItem = ({ currentColor, handleOpen, labelChipProps, customColor, pare
   const [primaryColor, secondaryColor] = useThemeColors();
 
   const color = isCustomColor
-    ? customColor.hover
+    ? customColor?.hover
     : !currentColor
     ? '#969696'
     : currentColor === 'primary'
