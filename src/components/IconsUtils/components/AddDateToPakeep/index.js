@@ -38,6 +38,7 @@ import { useGetReversedCustomColor } from 'hooks/useGetReversedCustomColor.hook'
 import { useSnackbar } from 'notistack';
 import { handlePakeepEventsThunk } from 'store/modules/App/operations';
 import { useCurrentEvents } from 'hooks/useCurrentEvents.hook';
+import { useValidatedCurrentEvents } from 'hooks/useValidatedCurrentEvents.hook';
 
 const AddDateToPakeep = ({
   ampm = false,
@@ -57,7 +58,7 @@ const AddDateToPakeep = ({
 
   const TO_PUSH = 'TO_PUSH';
   const SAVED = 'saved';
-  const globalEventsObject = mapKeys(currentEventsArr, ({ id }) => id);
+  const currentEventsObject = mapKeys(currentEventsArr, ({ id }) => id);
   const customColor = useGetReversedCustomColor(color);
 
   const [buttonSaveState, setButtonSaveState] = useState(false);
@@ -91,7 +92,7 @@ const AddDateToPakeep = ({
   const [chosenItemArr, setChosenItemArr] = useState([]);
 
   useEffect(() => {
-    const nullityOfDateAndTimeInputsState = mapValues(globalEventsObject, ({ id, value, inputValue }) => ({
+    const nullityOfDateAndTimeInputsState = mapValues(currentEventsObject, ({ id, value, inputValue }) => ({
       id,
       value,
       inputValue
@@ -102,14 +103,10 @@ const AddDateToPakeep = ({
     setChosenItemArr(nulittyOfChosenItemArr);
   }, [currentEventsArr]);
 
+  const validatedCurrentEvents = useValidatedCurrentEvents(dateAndTimeInputsState, chosenItemArr);
+
   useEffect(() => {
     if (buttonSaveState !== TO_PUSH) return;
-    const currentEvents = map(dateAndTimeInputsState, el => el);
-
-    const validatedCurrentEvents = filter(
-      currentEvents,
-      ({ value, id }) => !!isValid(value) && includes(chosenItemArr, id)
-    );
 
     if (!validatedCurrentEvents.length)
       return enqueueSnackbar({
@@ -117,7 +114,7 @@ const AddDateToPakeep = ({
         severity: 'error'
       });
 
-      handlePakeepEventsThunk(id, validatedCurrentEvents);
+    handlePakeepEventsThunk(id, validatedCurrentEvents);
     onMenuClose();
 
     enqueueSnackbar({
@@ -172,7 +169,7 @@ const AddDateToPakeep = ({
             name,
             value: dateAndTimeInputsState[name]?.value,
             inputValue: dateAndTimeInputsState[name]?.inputValue,
-            format: globalEventsObject[name]?.format,
+            format: currentEventsObject[name]?.format,
             onlyTime,
             onClickOfCloseIcon,
             title,

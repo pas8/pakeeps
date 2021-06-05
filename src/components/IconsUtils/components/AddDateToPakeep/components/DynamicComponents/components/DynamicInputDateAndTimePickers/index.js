@@ -11,14 +11,19 @@ import { Typography } from '@material-ui/core';
 const useStyles = makeStyles(({ spacing, typography: { h4 }, palette }) => ({
   container: ({ customColor, onlyTime }) => {
     const defaultColor = !customColor ? palette?.mediumEmphasis?.main : customColor.unHover;
+    const defaultHoverColor = !customColor ? palette?.maxEmphasis?.main : useAlpha(customColor.hover, 0.8);
     const focusedColor = !customColor ? palette?.primary?.main : customColor.hover;
 
     return {
       marginRight: spacing(-0.4),
       '& button': {
-        margin: spacing(0, -1.4, 0, -1.4)
+        margin: spacing(0, -0.8, 0, -1.42)
       },
+'& svg':{
 
+  color:defaultColor
+
+},
       '& p': {
         color: customColor.unHover
       },
@@ -35,8 +40,11 @@ const useStyles = makeStyles(({ spacing, typography: { h4 }, palette }) => ({
       // },
 
       '& button:hover': {
-        color:defaultColor,
-        background: useAlpha( defaultColor,0.32)
+        '& svg':{
+
+          color:defaultHoverColor
+        },        
+        background: useAlpha( defaultColor,0.2)
       },
       '& .MuiOutlinedInput-root': {
         color: customColor.bgHover,
@@ -49,8 +57,8 @@ const useStyles = makeStyles(({ spacing, typography: { h4 }, palette }) => ({
           background: useAlpha(customColor.hover)
         },
         '&:hover fieldset': {
-          borderColor: !customColor ? palette?.maxEmphasis?.main : useAlpha(focusedColor, 0.8),
-          boxShadow: customColor && `0px 0px 4px 1px ${useAlpha(focusedColor, 0.8)}`
+          borderColor: defaultHoverColor,
+          boxShadow: customColor && `0px 0px 4px 1px ${defaultHoverColor}`
         },
         '&.Mui-focused fieldset': {
           borderColor: focusedColor,
