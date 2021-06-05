@@ -18,6 +18,7 @@ const DraggableContainerOfPakeepElement = ({
       };
 
       const allPakeepElementProps = {...pakeepElementProps, isDragging,  };
+
       return (
         <Grid {...draggableContainerProps}>
           <PakeepElement {...allPakeepElementProps} />

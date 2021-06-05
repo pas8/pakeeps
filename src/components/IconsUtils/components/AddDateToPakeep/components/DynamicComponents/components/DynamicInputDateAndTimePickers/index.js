@@ -1,16 +1,13 @@
 import PropTypes from 'prop-types';
 import { KeyboardDateTimePicker, KeyboardTimePicker } from '@material-ui/pickers';
-import { Grid, InputAdornment, makeStyles, withStyles, Checkbox, Box } from '@material-ui/core';
-import DoneOutlineOutlinedIcon from '@material-ui/icons/DoneOutlineOutlined';
-import { useCallback, useEffect, useState, memo } from 'react';
-import { addDays, format as toFormat, isValid } from 'date-fns';
+import { Grid, InputAdornment, makeStyles, Box } from '@material-ui/core';
+import { memo } from 'react';
+import { format as toFormat } from 'date-fns';
 import { useAlpha } from 'hooks/useAlpha.hook';
 import CloseIcon from '@material-ui/icons/Close';
 import IconButtonByPas from 'components/IconButton';
-import DeleteOutlinedIcon from '@material-ui/icons/DeleteOutlined';
 import { Typography } from '@material-ui/core';
-import { usePrevious } from 'react-use';
-import { debounce } from 'lodash';
+
 const useStyles = makeStyles(({ spacing, typography: { h4 }, palette }) => ({
   container: ({ customColor, onlyTime }) => {
     const defaultColor = !customColor ? palette?.mediumEmphasis?.main : customColor.unHover;
@@ -37,6 +34,10 @@ const useStyles = makeStyles(({ spacing, typography: { h4 }, palette }) => ({
       //   color: customColor
       // },
 
+      '& button:hover': {
+        color:defaultColor,
+        background: useAlpha( defaultColor,0.32)
+      },
       '& .MuiOutlinedInput-root': {
         color: customColor.bgHover,
         justifyContent: 'space-evently',
@@ -84,10 +85,10 @@ const DynamicInputDateAndTimePickers = ({
   correctName,
   title,
   focusedEventId,
-  error,
-  handleDateAndTimeInputsState
+  handleDateAndTimeInputsState,
+  onClickOfCloseIcon
 }) => {
-  const classes = useStyles({ keyboardIconColor: customColor.hover, correctName, error, customColor, onlyTime });
+  const classes = useStyles({ keyboardIconColor: customColor.hover, correctName, customColor, onlyTime });
 
   const onChange = (date, value) => {
     handleDateAndTimeInputsState(name, date, value);
@@ -111,7 +112,6 @@ const DynamicInputDateAndTimePickers = ({
     autoOk: false,
     format,
     disablePast: true,
-    // mask: `${title}   __:__`,
     customColor,
     error: false,
     autoFocus,
@@ -124,7 +124,7 @@ const DynamicInputDateAndTimePickers = ({
         <InputAdornment position={'end'} className={classes.containerOfEndAdornment}>
           <Typography component={'p'}> {title}</Typography>
           <Box ml={1.4}>
-            <IconButtonByPas icon={CloseIcon} size={'small'} />
+            <IconButtonByPas icon={CloseIcon} size={'small'} onClick={onClickOfCloseIcon} />
           </Box>
         </InputAdornment>
       )
@@ -146,11 +146,19 @@ const DynamicInputDateAndTimePickers = ({
 DynamicInputDateAndTimePickers.propTypes = {
   KeyboardIcon: PropTypes.node,
   ampm: PropTypes.bool,
-  clickStatus: PropTypes.any,
+  clickStatus: PropTypes.bool,
   correctName: PropTypes.any,
-  error: PropTypes.any,
+  customColor: PropTypes.shape({
+    hover: PropTypes.any
+  }),
+  focusedEventId: PropTypes.string,
+  format: PropTypes.string,
+  handleDateAndTimeInputsState: PropTypes.func,
+  icon: PropTypes.any,
+  inputValue: PropTypes.any,
   name: PropTypes.string,
   onChange: PropTypes.func,
+  onClickOfCloseIcon: PropTypes.func,
   onlyTime: PropTypes.bool,
   savedStatus: PropTypes.bool,
   title: PropTypes.string,

@@ -1,6 +1,6 @@
 import { Grid, makeStyles, Grow, Fade, Dialog, DialogActions, DialogContent, Modal } from '@material-ui/core';
 import PropTypes from 'prop-types';
-import { useState, React, useEffect } from 'react';
+import { useState, React, useEffect, createContext } from 'react';
 import { addDays, addHours, isValid } from 'date-fns';
 import clsx from 'clsx';
 import { useSwipeable } from 'react-swipeable';
@@ -27,6 +27,8 @@ import SaveButtonWithIcon from 'components/SaveButtonWithIcon';
 import { SelectedLabels } from 'components/NewPakeep';
 import { useGetReversedCustomColor } from 'hooks/useGetReversedCustomColor.hook';
 import { useThemeColors } from 'hooks/useThemeColors.hook';
+
+export const Events = createContext()
 
 const useStyles = makeStyles(({ spacing, transitions, palette }) => ({
   paper: ({ customColor, backgroundColor, color, utilsViewLikeInGoogleKeep }) => ({
@@ -90,6 +92,7 @@ const PakeepElement = ({
   id,
   utilsViewLikeInGoogleKeep,
   idx,
+  events,
   globalLabels,
   filteredLabels,
   handleDeleteLabelFromPakeepThunk,
@@ -99,7 +102,8 @@ const PakeepElement = ({
   handlePinStatusPakeepThunk,
   isSelecting,
   handlePakeepPropertyThunk,
-  handleAddLabelToPakeepThunk
+  handleAddLabelToPakeepThunk,
+  ...props
 }) => {
   const [, , maxEmphasisColor] = useThemeColors();
 
@@ -169,147 +173,148 @@ const PakeepElement = ({
 
   return (
     <SelectedLabels.Provider value={{ selectedLabels: labels }}>
-      <PakeepHoveringContext.Consumer>
-        {({
-          setIsPakeepHovering,
-          onClickOfPakeepElement,
-          isSomePakeepsSelected,
-          pakeepIdOfDialog,
-          handleClosePakeepDialog
-        }) => {
-          const events = [
-            { id: '1', value: addHours(new Date(), 2) },
-            { id: '2', value: addHours(new Date(), 27) }
-          ];
+      <Events.Provider value={{ events }}>
+        <PakeepHoveringContext.Consumer>
+          {({
+            setIsPakeepHovering,
+            onClickOfPakeepElement,
+            isSomePakeepsSelected,
+            pakeepIdOfDialog,
+            handleClosePakeepDialog
+          }) => {
+            // const events = [
+            //   { id: '1', value: addHours(new Date(), 2) },
+            //   { id: '2', value: addHours(new Date(), 27) }
+            // ];
 
-          const handleDeleteNewLabel = labelId => {
-            handleDeleteLabelFromPakeepThunk(id, labelId);
-          };
+            const handleDeleteNewLabel = labelId => {
+              handleDeleteLabelFromPakeepThunk(id, labelId);
+            };
 
-          const handleAddNewLabel = labelId => {
-            handleAddLabelToPakeepThunk(id, labelId);
-          };
-          // const reversedColor = useGetReversedCustomColor(customColor);
+            const handleAddNewLabel = labelId => {
+              handleAddLabelToPakeepThunk(id, labelId);
+            };
+            // const reversedColor = useGetReversedCustomColor(customColor);
 
-          const labelsListProps = {
-            handleAddNewLabel,
-            handleDeleteNewLabel
-          };
-          const attributeGroupProps = {
-            handleDeleteLabelFromPakeepFunc: handleDeleteLabelFromPakeepThunk,
-            parentBackgrounColor: backgroundColor,
-            handleDeleteNewLabel,
-            customColor,
-            labels: filteredLabels,
-            events,
-            pakeepId: id
-          };
+            const labelsListProps = {
+              handleAddNewLabel,
+              handleDeleteNewLabel
+            };
+            const attributeGroupProps = {
+              handleDeleteLabelFromPakeepFunc: handleDeleteLabelFromPakeepThunk,
+              parentBackgrounColor: backgroundColor,
+              handleDeleteNewLabel,
+              customColor,
+              labels: filteredLabels,
+              pakeepId: id
+            };
 
-          const onMouseEnter = () => {
-            setIsPakeepHovering(!isSelecting);
-            handleSetIsHovering();
-          };
+            const onMouseEnter = () => {
+              setIsPakeepHovering(!isSelecting);
+              handleSetIsHovering();
+            };
 
-          const onMouseLeave = () => {
-            setIsPakeepHovering(false);
-            handleSetIsUnHovering();
-          };
-          const className = 'selectoItem';
-          const onClick = () => {
-            onClickOfPakeepElement(id);
-          };
+            const onMouseLeave = () => {
+              setIsPakeepHovering(false);
+              handleSetIsUnHovering();
+            };
+            const className = 'selectoItem';
+            const onClick = () => {
+              onClickOfPakeepElement(id);
+            };
 
-          const onClose = () => {
-            handleClosePakeepDialog();
-            handleSetIsUnHovering();
-          };
+            const onClose = () => {
+              handleClosePakeepDialog();
+              handleSetIsUnHovering();
+            };
 
-          const pakeepGridContainerProps = {
-            onMouseEnter,
-            onMouseLeave,
-            ref,
-            className: clsx(classes.container, className),
-            id,
-            open: true,
-            onClose,
-            maxWidth: 'md'
-          };
+            const pakeepGridContainerProps = {
+              onMouseEnter,
+              onMouseLeave,
+              ref,
+              className: clsx(classes.container, className),
+              id,
+              open: true,
+              onClose,
+              maxWidth: 'md'
+            };
 
-          const isDialogOpen = pakeepIdOfDialog === id;
-          const isPinIconButtonHidden = !(
-            !isSomePakeepsSelected &&
-            !isSelecting &&
-            statusState.isHovered &&
-            isPinIconShouldBeShownInPakeep
-          );
+            const isDialogOpen = pakeepIdOfDialog === id;
+            const isPinIconButtonHidden = !(
+              !isSomePakeepsSelected &&
+              !isSelecting &&
+              statusState.isHovered &&
+              isPinIconShouldBeShownInPakeep
+            );
 
-          const PakeepContainer = isDialogOpen ? Dialog : Grid;
-          const Container = isDialogOpen ? MainDialogPartOfPakeepElement : MainDefaultPartOfPakeepElement;
-          const UtilsContainer = isDialogOpen ? DialogActions : Grid;
-          const AttributeGroupContainer = isDialogOpen ? DialogContent : Grid;
-          const mainDefaultPartOfPakeepElement = {
-            isPinIconButtonHidden,
-            className: clsx(
-              classes.paper,
-              isDragging && classes.isDragging,
-              !isSomePakeepsSelected && statusState.isHovered && !isSelecting && classes.isHovered,
-              isSelecting && classes.isSelecting,
-              isSomePakeepsSelected && classes.isSomePakeepsSelected
-            ),
-            onClick,
-            onClickOfPinIconButton: handleSetIsPinnedPakeep
-          };
+            const PakeepContainer = isDialogOpen ? Dialog : Grid;
+            const Container = isDialogOpen ? MainDialogPartOfPakeepElement : MainDefaultPartOfPakeepElement;
+            const UtilsContainer = isDialogOpen ? DialogActions : Grid;
+            const AttributeGroupContainer = isDialogOpen ? DialogContent : Grid;
+            const mainDefaultPartOfPakeepElement = {
+              isPinIconButtonHidden,
+              className: clsx(
+                classes.paper,
+                isDragging && classes.isDragging,
+                !isSomePakeepsSelected && statusState.isHovered && !isSelecting && classes.isHovered,
+                isSelecting && classes.isSelecting,
+                isSomePakeepsSelected && classes.isSomePakeepsSelected
+              ),
+              onClick,
+              onClickOfPinIconButton: handleSetIsPinnedPakeep
+            };
 
-          const mainDialogPartOfPakeepElement = {
-            backgroundColor: correctBackground,
-            color: correctColor
-          };
+            const mainDialogPartOfPakeepElement = {
+              backgroundColor: correctBackground,
+              color: correctColor
+            };
 
-          const defaultContainerProps = {
-            ...state,
-            onChange,
-            customColor
-          };
-          const containerProps = isDialogOpen ? mainDialogPartOfPakeepElement : mainDefaultPartOfPakeepElement;
-          const allContainerProps = { ...defaultContainerProps, ...containerProps };
+            const defaultContainerProps = {
+              ...state,
+              onChange,
+              customColor
+            };
+            const containerProps = isDialogOpen ? mainDialogPartOfPakeepElement : mainDefaultPartOfPakeepElement;
+            const allContainerProps = { ...defaultContainerProps, ...containerProps };
 
-          const openIn = isDialogOpen || (!isSomePakeepsSelected && statusState.isHovered && !isSelecting);
+            const openIn = isDialogOpen || (!isSomePakeepsSelected && statusState.isHovered && !isSelecting);
 
-          const arrOfButtonNamesWhichSholudBeHidden = isDialogOpen ? ['width'] : [];
+            const arrOfButtonNamesWhichSholudBeHidden = isDialogOpen ? ['width'] : [];
 
-          const JUST_PADDING_VALUE = 160;
-          const widthOfContainer = isDialogOpen ? width - JUST_PADDING_VALUE : width;
+            const JUST_PADDING_VALUE = 160;
+            const widthOfContainer = isDialogOpen ? width - JUST_PADDING_VALUE : width;
 
-          const allIconsUtilsProps = {
-            ...iconsUtilsProps,
-            id,
-            events,
-            arrOfButtonNamesWhichSholudBeHidden,
-            widthOfContainer,
-            labelsListProps
-          };
+            const allIconsUtilsProps = {
+              ...iconsUtilsProps,
+              id,
+              events,
+              arrOfButtonNamesWhichSholudBeHidden,
+              widthOfContainer,
+              labelsListProps
+            };
 
-          const handleSubmit = () => console.log(state);
+            const handleSubmit = () => console.log(state);
 
-          return (
-            <PakeepContainer {...pakeepGridContainerProps}>
-              <Container {...allContainerProps}>
-                <AttributeGroupContainer>
-                  <AttributeGroup {...attributeGroupProps} />
-                </AttributeGroupContainer>
+            return (
+              <PakeepContainer {...pakeepGridContainerProps}>
+                <Container {...allContainerProps}>
+                  <AttributeGroupContainer>
+                    <AttributeGroup {...attributeGroupProps} />
+                  </AttributeGroupContainer>
 
-                <AnimationElement in={openIn}>
-                  <UtilsContainer className={isDialogOpen ? classes.dialogIconsUtils : classes.iconsUtils}>
-                    <IconsUtils {...allIconsUtilsProps} />
+                  <AnimationElement in={openIn}>
+                    <UtilsContainer className={isDialogOpen ? classes.dialogIconsUtils : classes.iconsUtils}>
+                      <IconsUtils {...allIconsUtilsProps} />
 
-                    {isDialogOpen && <SaveButtonWithIcon onSave={handleSubmit} customColor={customColor} />}
-                  </UtilsContainer>
-                </AnimationElement>
-              </Container>
-            </PakeepContainer>
-          );
-        }}
-      </PakeepHoveringContext.Consumer>
+                      {isDialogOpen && <SaveButtonWithIcon onSave={handleSubmit} customColor={customColor} />}
+                    </UtilsContainer>
+                  </AnimationElement>
+                </Container>
+              </PakeepContainer>
+            );
+          }}
+        </PakeepHoveringContext.Consumer>
+      </Events.Provider>
     </SelectedLabels.Provider>
   );
 };

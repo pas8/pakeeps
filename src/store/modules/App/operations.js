@@ -141,3 +141,11 @@ export const handleSelectedPakeepsPropertyThunk = (newPakeeps, propertyVariant) 
 export const handlePakeepPropertyThunk = (pakeepId, property)  => dispatch => {
   dispatch(toHandlePakeepProperty(pakeepId, property) );
 };
+
+
+
+export const handlePakeepEventsThunk = (pakeepId, events)  => dispatch => {
+  dispatch(toHandlePakeepProperty(pakeepId, {events}) );
+};
+
+

@@ -1,4 +1,3 @@
-import { format as toFormat } from 'date-fns';
 import _ from 'lodash';
 import { createSelector } from 'reselect';
 import { createArraySelector } from 'reselect-map';
@@ -41,23 +40,4 @@ export const getSelectedPakeep = createArraySelector(
   (selectedPakeepsId, pakeeps) => _.find(pakeeps, ({ id }) => id === selectedPakeepsId)
 );
 
-export const getGlobalEventsArr = createArraySelector(
-  [
-    globalEvents => globalEvents,
-    (globalEvents, events) => events,
-    (globalEvents, events, timeFormat) => timeFormat,
-    (globalEvents, events, timeFormat, timeAndDateFromat) => timeAndDateFromat
-  ],
-  ({ id: globalId, ...globalEventsProps }, events, timeFormat, timeAndDateFromat) => {
-    const findedEvent = _.find(events, ({ id }) => id === globalId);
-    const isEventWasChosen = !!findedEvent;
-
-    const format = globalEventsProps?.onlyTime ? timeFormat : timeAndDateFromat;
-    const inputValue = toFormat(findedEvent?.value || globalEventsProps?.value, format);
-
-    const validatedFindedEvent = isEventWasChosen ? { ...findedEvent, isChosen: true } : { isChosen: false };
-    const extendedGlobalEvent = { ...globalEventsProps, ...validatedFindedEvent, id: globalId, inputValue, format };
-
-    return extendedGlobalEvent;
-  }
-);
+export const getGlobalEventsArr = createSelector([globalEvents => globalEvents], globalEvents => globalEvents);

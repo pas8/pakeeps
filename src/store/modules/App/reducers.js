@@ -49,6 +49,7 @@ const initialState = {
       color: 'default',
       labels: ['label3', 'label1', 'label0', 'label2'],
       isArchived: false,
+      events: [],
       id: 'pakeep1',
       isPinned: true,
       isCheckBoxes: true,
@@ -58,6 +59,7 @@ const initialState = {
       title: 'Placeholder 2',
       text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. At imperdiet dui accumsan sit amet nulla facilisi morbi. Aliquam sem et tortor consequat id porta nibh. Enim praesent elementum facilisis leo vel fringilla est. Cras adipiscing enim eu turpis egestas pretium aenean. Sed libero enim sed faucibus turpis in eu mi bibendum. Vestibulum lorem sed risus ultricies. Neque egestas congue quisque egestas diam.',
       isInBookmark: false,
+      events: [],
       isFavorite: true,
       color: 'default',
       labels: ['label4', 'label0', 'label1', 'label2', 'label3'],
@@ -78,6 +80,7 @@ const initialState = {
       isArchived: false,
       isPinned: true,
       id: 'pakeep3',
+      events: [],
       isCheckBoxes: false,
 
       backgroundColor: 'default'
@@ -89,6 +92,7 @@ const initialState = {
       isFavorite: true,
       color: '#312b03',
       labels: ['label1', 'label2', 'label0', 'label6'],
+      events: [],
       isArchived: false,
       id: 'pakeep4',
       isPinned: true,
@@ -102,6 +106,7 @@ const initialState = {
       isFavorite: false,
       color: 'default',
       isPinned: false,
+      events: [],
       isArchived: true,
       labels: ['label4', 'label0', 'label1', 'label2'],
       id: 'pakeep5',
@@ -116,6 +121,7 @@ const initialState = {
       color: 'default',
       labels: ['label0', 'label2', 'label6'],
       id: 'pakeep6',
+      events: [],
       isPinned: true,
       isCheckBoxes: false,
       isArchived: true,
@@ -125,6 +131,7 @@ const initialState = {
       title: 'Placeholder 7',
       text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. At imperdiet dui accumsan sit amet nulla facilisi morbi. Aliquam sem et tortor consequat id porta nibh. Enim praesent elementum facilisis leo vel fringilla est. Cras adipiscing enim eu turpis egestas pretium aenean. Sed libero enim sed faucibus turpis in eu mi bibendum. Vestibulum lorem sed risus ultricies. Neque egestas congue quisque egestas diam.',
       isInBookmark: false,
+      events: [],
       isArchived: false,
       isPinned: false,
       isCheckBoxes: false,
@@ -142,6 +149,7 @@ const initialState = {
       isCheckBoxes: false,
       isArchived: false,
       backgroundColor: '#d37a18',
+      events: [],
       color: 'default',
       labels: ['label1'],
       isPinned: false,
@@ -257,9 +265,10 @@ const AppReducer = createReducer(initialState)({
   [types.HANDLE_PAKEEP_PROPERTY]: (state, { pakeepId, property }) => {
     const findedPakeep = find(state.pakeeps, ({ id }) => id === pakeepId);
     const newPakeep = { ...findedPakeep, ...property };
+
     const filteredPakeeps = filter(state.pakeeps, ({ id }) => pakeepId !== id);
 
-    const pakeeps = [...filteredPakeeps, ...newPakeep];
+    const pakeeps = [...filteredPakeeps, newPakeep];
     return { ...state, pakeeps };
   },
 

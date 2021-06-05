@@ -25,7 +25,7 @@ import clsx from 'clsx';
 import { nanoid } from 'nanoid';
 import HeaderOfAddDateToPakeep from './components/HeaderOfAddDateToPakeep';
 import DynamicInputDateAndTimePickers from './components/DynamicComponents/components/DynamicInputDateAndTimePickers';
-import { addDays, isValid } from 'date-fns';
+import { addDays, isValid, format as toFormat } from 'date-fns';
 import { connect } from 'react-redux';
 import { useCounter } from 'react-use';
 import DynamicAddMoreEvents from './components/DynamicComponents/components/DynamicAddMoreEvents';
@@ -35,23 +35,36 @@ import includes from 'lodash.includes';
 import { filter, find, mapKeys, map, uniq, uniqWith, isEqual, mapValues } from 'lodash';
 import { useTakeIcon } from 'hooks/useTakeIcon.hook';
 import { useGetReversedCustomColor } from 'hooks/useGetReversedCustomColor.hook';
+import { useSnackbar } from 'notistack';
+import { handlePakeepEventsThunk } from 'store/modules/App/operations';
+import { useCurrentEvents } from 'hooks/useCurrentEvents.hook';
 
-const AddDateToPakeep = ({ ampm = false, onMenuClose, id, globalEventsArr, customColor: color, events, }) => {
+const AddDateToPakeep = ({
+  ampm = false,
+  onMenuClose,
+  id,
+  customColor: color,
+  timeFormat,
+  timeAndDateFromat,
+  globalEvents,
+  events,
+  handlePakeepEventsThunk
+}) => {
+  const currentEventsArr = useCurrentEvents(globalEvents, events, timeFormat, timeAndDateFromat);
+  // console.log(events);
+
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+
   const TO_PUSH = 'TO_PUSH';
   const SAVED = 'saved';
-  const globalEventsObject = mapKeys(globalEventsArr, ({ id }) => id);
+  const globalEventsObject = mapKeys(currentEventsArr, ({ id }) => id);
   const customColor = useGetReversedCustomColor(color);
 
   const [buttonSaveState, setButtonSaveState] = useState(false);
 
   const [focusedEventId, setFocusedEventId] = useState('');
 
-  const nullityOfDateAndTimeInputsState = mapValues(globalEventsObject, ({ id, value, inputValue }) => ({
-    id,
-    value,
-    inputValue
-  }));
-  const [dateAndTimeInputsState, setDateAndTimeInputsState] = useState(nullityOfDateAndTimeInputsState);
+  const [dateAndTimeInputsState, setDateAndTimeInputsState] = useState({});
 
   const handleDateAndTimeInputsState = (id, value, inputValue) => {
     setFocusedEventId(id);
@@ -73,22 +86,48 @@ const AddDateToPakeep = ({ ampm = false, onMenuClose, id, globalEventsArr, custo
     }
   ];
 
-  const dateListArr = [...globalEventsArr, ...defaultDateListArr];
+  const dateListArr = [...currentEventsArr, ...defaultDateListArr];
 
-  const nulittyOfChosenItemArr = map(filter(dateListArr, 'isChosen'), 'id');
-  const [chosenItemArr, setChosenItemArr] = useState(nulittyOfChosenItemArr);
+  const [chosenItemArr, setChosenItemArr] = useState([]);
+
+  useEffect(() => {
+    const nullityOfDateAndTimeInputsState = mapValues(globalEventsObject, ({ id, value, inputValue }) => ({
+      id,
+      value,
+      inputValue
+    }));
+    setDateAndTimeInputsState(nullityOfDateAndTimeInputsState);
+
+    const nulittyOfChosenItemArr = map(filter(dateListArr, 'isChosen'), 'id');
+    setChosenItemArr(nulittyOfChosenItemArr);
+  }, [currentEventsArr]);
 
   useEffect(() => {
     if (buttonSaveState !== TO_PUSH) return;
     const currentEvents = map(dateAndTimeInputsState, el => el);
-    const validatedCurrentEvents = filter(currentEvents, ({ value ,id}) => !!isValid(value) && includes(chosenItemArr, id) );
-    console.log(validatedCurrentEvents, id);
+
+    const validatedCurrentEvents = filter(
+      currentEvents,
+      ({ value, id }) => !!isValid(value) && includes(chosenItemArr, id)
+    );
+
+    if (!validatedCurrentEvents.length)
+      return enqueueSnackbar({
+        message: `Can not add events`,
+        severity: 'error'
+      });
+
+      handlePakeepEventsThunk(id, validatedCurrentEvents);
+    onMenuClose();
+
+    enqueueSnackbar({
+      message: `You succsesfully added ${validatedCurrentEvents.length} events`
+    });
 
     return setButtonSaveState(SAVED);
   }, [buttonSaveState]);
 
   const onClickOfSaveButton = () => setButtonSaveState(TO_PUSH);
-
   return (
     <>
       <HeaderOfAddDateToPakeep
@@ -98,61 +137,69 @@ const AddDateToPakeep = ({ ampm = false, onMenuClose, id, globalEventsArr, custo
         customColor={customColor}
         // dynamicTitle={menuItemState.dynamicTitle}
       />
-      {dateListArr.map(({ title, iconName, onClick: onMenuItemClick, onlyTime, dynamicComponent, id }, idx) => {
-        const [icon] = useTakeIcon(iconName);
-        const DynamicComponent = onMenuItemClick ?? dynamicComponent?.component ?? DynamicInputDateAndTimePickers;
-        // console.log(onMenuItemClick ?? dynamicComponent.component ?? DynamicInputDateAndTimePickers )
+      {dateListArr.map(
+        (
+          { title, iconName, onClick: onMenuItemClick, onlyTime, dynamicComponent, id, handlePakeepEventsThunk },
+          idx
+        ) => {
+          const [icon] = useTakeIcon(iconName);
+          const DynamicComponent = onMenuItemClick ?? dynamicComponent?.component ?? DynamicInputDateAndTimePickers;
+          // console.log(onMenuItemClick ?? dynamicComponent.component ?? DynamicInputDateAndTimePickers )
 
-        const name = id;
+          const name = id;
 
-        const isChosen = includes(chosenItemArr, name);
-        const isActiveIcon = isChosen;
+          const isChosen = includes(chosenItemArr, name);
+          const isActiveIcon = isChosen;
 
-        const isDynamicComponentShouldBeShown = isChosen && DynamicComponent;
+          const isDynamicComponentShouldBeShown = isChosen && DynamicComponent;
 
-        const onClick = () => {
-          const onDefaultClick = () => {
-            setChosenItemArr(state => [...state, name]);
-            // setButtonSaveState(true);
+          const onClick = () => {
+            const onDefaultClick = () => {
+              setChosenItemArr(state => [...state, name]);
+              // setButtonSaveState(true);
+            };
+
+            isChosen ? null : onMenuItemClick ? onMenuItemClick() : onDefaultClick();
+          };
+          const onClickOfCloseIcon = () => setChosenItemArr(state => filter(state, elId => elId !== name));
+
+          const dynamicItemProps = { onClick };
+
+          const dynamicComponentProps = {
+            ...dynamicComponent?.props,
+            icon,
+            correctName: isChosen,
+            name,
+            value: dateAndTimeInputsState[name]?.value,
+            inputValue: dateAndTimeInputsState[name]?.inputValue,
+            format: globalEventsObject[name]?.format,
+            onlyTime,
+            onClickOfCloseIcon,
+            title,
+            ampm,
+            handleDateAndTimeInputsState,
+            customColor,
+            focusedEventId
           };
 
-          isChosen ? null : onMenuItemClick ? onMenuItemClick() : onDefaultClick();
-        };
-        const dynamicItemProps = { onClick };
+          // if (hidden) return;
 
-        const dynamicComponentProps = {
-          ...dynamicComponent?.props,
-          icon,
-          correctName: isChosen,
-          name,
-          value: dateAndTimeInputsState[name]?.value,
-          inputValue: dateAndTimeInputsState[name]?.inputValue,
-          format: globalEventsObject[name]?.format,
-          onlyTime,
-          title,
-          ampm,
-          handleDateAndTimeInputsState,
-          customColor,
-          focusedEventId
-        };
+          const dynamicMenuListProps = {
+            DynamicComponent,
+            dynamicComponentProps,
+            title,
+            isActiveIcon,
+            isDynamicComponentShouldBeShown,
+            dynamicItemProps,
+            icon,
+            customColor,
+            // key: name,
+            isPreventClickOfMenuItem: isChosen
+          };
 
-        // if (hidden) return;
-
-        const dynamicMenuListProps = {
-          DynamicComponent,
-          dynamicComponentProps,
-          title,
-          isActiveIcon,
-          isDynamicComponentShouldBeShown,
-          dynamicItemProps,
-          icon,
-          customColor,
-          // key: name,
-          isPreventClickOfMenuItem: isChosen
-        };
-
-        return <DynamicMenuItem {...dynamicMenuListProps} key={nanoid()} />;
-      })}
+          return <DynamicMenuItem {...dynamicMenuListProps} key={nanoid()} />;
+        }
+      )}
     </>
   );
 };
@@ -163,12 +210,13 @@ AddDateToPakeep.propTypes = {
   onMenuClose: PropTypes.func
 };
 
-const mapStateToProps = (
-  { app: { events: globalEvents }, settings: { timeFormat, timeAndDateFromat } },
-  { events }
-) => ({
-  globalEventsArr: getGlobalEventsArr(globalEvents, events, timeFormat, timeAndDateFromat)
+const mapStateToProps = ({ app: { events: globalEvents }, settings: { timeFormat, timeAndDateFromat } }) => ({
+  globalEvents: getGlobalEventsArr(globalEvents),
+  timeFormat,
+  timeAndDateFromat
 });
-// const mapDispatchToProps = dispatch => ({ setData: data => dispatch(setData(data)) });
+const mapDispatchToProps = dispatch => ({
+  handlePakeepEventsThunk: (id, events) => dispatch(handlePakeepEventsThunk(id, events))
+});
 
-export default connect(mapStateToProps, null)(AddDateToPakeep);
+export default connect(mapStateToProps, mapDispatchToProps)(AddDateToPakeep);
