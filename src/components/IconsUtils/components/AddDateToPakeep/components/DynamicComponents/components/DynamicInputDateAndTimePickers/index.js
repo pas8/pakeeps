@@ -7,23 +7,37 @@ import { useAlpha } from 'hooks/useAlpha.hook';
 import CloseIcon from '@material-ui/icons/Close';
 import IconButtonByPas from 'components/IconButton';
 import { Typography } from '@material-ui/core';
+import { colord, extend } from 'colord';
+import mixPlugin from 'colord/plugins/mix';
+import { useIsColorDark } from 'hooks/useIsColorDark.hook';
+import { defaultTheme } from 'store/modules/App/reducers';
 
 const useStyles = makeStyles(({ spacing, typography: { h4 }, palette }) => ({
-  container: ({ customColor, onlyTime }) => {
+  '@global': {
+    '.MuiPickersToolbarText-toolbarTxt': {
+      color: ({ customColor, isDark }) => `${customColor && isDark && customColor.unHover} !important`
+    },
+    '.MuiPickersToolbarText-toolbarBtnSelected': {
+      color: ({ customColor, isDark }) => `${customColor && isDark && customColor.hover} !important`
+    },
+    '.MuiPickersModal-dialogRoot': {
+      borderRadius: ({customColor})=> customColor && '6px'
+    }
+  },
+  container: ({ customColor, onlyTime, isDark }) => {
     const defaultColor = !customColor ? palette?.mediumEmphasis?.main : customColor.unHover;
     const defaultHoverColor = !customColor ? palette?.maxEmphasis?.main : useAlpha(customColor.hover, 0.8);
     const focusedColor = !customColor ? palette?.primary?.main : customColor.hover;
 
     return {
       marginRight: spacing(-0.4),
+
       '& button': {
         margin: spacing(0, -0.8, 0, -1.42)
       },
-'& svg':{
-
-  color:defaultColor
-
-},
+      '& svg': {
+        color: defaultColor
+      },
       '& p': {
         color: customColor.unHover
       },
@@ -40,11 +54,10 @@ const useStyles = makeStyles(({ spacing, typography: { h4 }, palette }) => ({
       // },
 
       '& button:hover': {
-        '& svg':{
-
-          color:defaultHoverColor
-        },        
-        background: useAlpha( defaultColor,0.2)
+        '& svg': {
+          color: defaultHoverColor
+        },
+        background: useAlpha(defaultColor, 0.2)
       },
       '& .MuiOutlinedInput-root': {
         color: customColor.bgHover,
@@ -94,26 +107,46 @@ const DynamicInputDateAndTimePickers = ({
   title,
   focusedEventId,
   handleDateAndTimeInputsState,
-  onClickOfCloseIcon
+  onClickOfCloseIcon,
+  handleThemeColorsThunk
 }) => {
-  const classes = useStyles({ keyboardIconColor: customColor.hover, correctName, customColor, onlyTime });
+  extend([mixPlugin]);
+  const isDark = !useIsColorDark(customColor?.bgHover);
+
+  const classes = useStyles({ keyboardIconColor: customColor.hover, correctName, customColor, onlyTime, isDark });
 
   const onChange = (date, value) => {
     handleDateAndTimeInputsState(name, date, value);
   };
 
+  const handleSetDefaultTheme = () => handleThemeColorsThunk(defaultTheme);
+
   const onAccept = date => {
+    handleSetDefaultTheme();
     const inputValue = toFormat(date, format);
     handleDateAndTimeInputsState(name, date, inputValue);
   };
 
   const autoFocus = focusedEventId === name;
-
+  const onOpen = () =>
+    customColor &&
+    handleThemeColorsThunk({
+      type: isDark ? 'dark' : 'light',
+      primaryMain: customColor.hover,
+      // paperMain: 'green',
+      paperMain: customColor?.bgHover,
+      // paperMain: useIsColorDark(customColor?.bgHover)
+      // ? colord(customColor?.bgHover).lighten(0.04).toHex()
+      // : colord(customColor?.bgHover).darken(0.04).toHex(),
+      defaultBackgroundMain: customColor?.bgUnHover
+    });
+  const onClose = () => handleSetDefaultTheme();
   const keyboardPickerState = {
     value,
     inputValue,
     onChange,
     key: name,
+    onOpen,
     todayButton: !onlyTime,
     inputVariant: 'outlined',
     keyboardIcon: icon,
@@ -121,6 +154,7 @@ const DynamicInputDateAndTimePickers = ({
     format,
     disablePast: true,
     customColor,
+    onClose,
     error: false,
     autoFocus,
     onAccept,

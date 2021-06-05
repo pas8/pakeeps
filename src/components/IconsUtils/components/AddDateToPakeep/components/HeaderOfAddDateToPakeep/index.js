@@ -44,7 +44,6 @@ const HeaderOfAddDateToPakeep = ({
 
           {customTitle || (
             <Grid className={classes.title}>
-              {' '}
               <Typography variant={'subtitle1'}>{dynamicTitle ? dynamicTitle : 'Close'}</Typography>{' '}
             </Grid>
           )}
@@ -67,5 +66,9 @@ HeaderOfAddDateToPakeep.propTypes = {
   isSaveButtonHidden: PropTypes.bool,
   onClickOfSaveButton: PropTypes.func
 };
+
+
+
+
 
 export default HeaderOfAddDateToPakeep;

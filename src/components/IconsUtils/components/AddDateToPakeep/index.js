@@ -36,7 +36,7 @@ import { filter, find, mapKeys, map, uniq, uniqWith, isEqual, mapValues } from '
 import { useTakeIcon } from 'hooks/useTakeIcon.hook';
 import { useGetReversedCustomColor } from 'hooks/useGetReversedCustomColor.hook';
 import { useSnackbar } from 'notistack';
-import { handlePakeepEventsThunk } from 'store/modules/App/operations';
+import { handlePakeepEventsThunk, handleThemeColorsThunk } from 'store/modules/App/operations';
 import { useCurrentEvents } from 'hooks/useCurrentEvents.hook';
 import { useValidatedCurrentEvents } from 'hooks/useValidatedCurrentEvents.hook';
 
@@ -49,6 +49,7 @@ const AddDateToPakeep = ({
   timeAndDateFromat,
   globalEvents,
   events,
+  handleThemeColorsThunk,
   handlePakeepEventsThunk
 }) => {
   const currentEventsArr = useCurrentEvents(globalEvents, events, timeFormat, timeAndDateFromat);
@@ -173,6 +174,7 @@ const AddDateToPakeep = ({
             onlyTime,
             onClickOfCloseIcon,
             title,
+            handleThemeColorsThunk,
             ampm,
             handleDateAndTimeInputsState,
             customColor,
@@ -213,7 +215,10 @@ const mapStateToProps = ({ app: { events: globalEvents }, settings: { timeFormat
   timeAndDateFromat
 });
 const mapDispatchToProps = dispatch => ({
-  handlePakeepEventsThunk: (id, events) => dispatch(handlePakeepEventsThunk(id, events))
+  handlePakeepEventsThunk: (id, events) => dispatch(handlePakeepEventsThunk(id, events)),
+  handleThemeColorsThunk: (newThemeColors) => dispatch(handleThemeColorsThunk(newThemeColors)),
+
+
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddDateToPakeep);

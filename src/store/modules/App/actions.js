@@ -67,3 +67,9 @@ export const toHandlePakeepProperty = (pakeepId, property) => ({
   pakeepId,
   property
 });
+
+export const toHandleThemeColors = (newThemeColors) => ({
+  type: types.HANDLE_THEME_COLORS,
+  newThemeColors,
+});
+

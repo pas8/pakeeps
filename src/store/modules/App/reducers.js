@@ -3,17 +3,21 @@ import { filter, find, pickBy, includes, map, every } from 'lodash';
 import { createReducer } from 'store/utils';
 import * as types from './types';
 
+export const defaultTheme = {
+  primaryMain: '#ffff8d',
+  paperMain: '#424242',
+  defaultBackgroundMain: '#282828',
+  secondaryMain: '#00b0ff',
+  type: 'dark',
+  highEmphasis: 'rgba(255,255,255,0.8)',
+  mediumEmphasis: 'rgba(255,255,255,0.6)',
+  maxEmphasis: 'rgba(255,255,255,0.96)'
+};
+
 const initialState = {
   data: 1,
   breakpointsValues: { xs: 0, sm: 600, md: 960, lg: 1280, xl: 1920 },
-  theme: {
-    primaryMain: '#ffff8d',
-    secondaryMain: '#00b0ff',
-    type: 'dark',
-    highEmphasis: 'rgba(255,255,255,0.8)',
-    mediumEmphasis: 'rgba(255,255,255,0.6)',
-    maxEmphasis: 'rgba(255,255,255,0.96)'
-  },
+  theme: defaultTheme,
   defaultFolderArr: [
     { title: 'All pakeeps', iconName: '', id: 'folder-ALL', property: 'ALL' },
     { title: 'Pined', iconName: 'pin', id: 'folder-isPinned', property: 'isPinned' },
@@ -254,6 +258,11 @@ const AppReducer = createReducer(initialState)({
     ...state,
     pinnedPakeepsOrderNames
   }),
+
+  [types.HANDLE_THEME_COLORS]: (state, { newThemeColors }) => {
+    const theme = { ...state.theme, ...newThemeColors };
+    return { ...state, theme };
+  },
 
   [types.HANDLE_SELECTED_PAKEEPS_PROPERTY]: (state, { newPakeeps }) => {
     const newPakeepsId = newPakeeps.map(({ id }) => id);
