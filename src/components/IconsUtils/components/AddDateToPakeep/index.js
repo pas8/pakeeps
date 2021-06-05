@@ -17,7 +17,7 @@ import { useCurrentEvents } from 'hooks/useCurrentEvents.hook';
 import { useValidatedCurrentEvents } from 'hooks/useValidatedCurrentEvents.hook';
 import { Chip, Typography, Grid, makeStyles } from '@material-ui/core';
 import { format } from 'date-fns';
-import EventItem from 'components/PakeepList/components/PakeepElement/components/AttributeGroup/components/EventsPart/components/EventItem';
+import PreviewEventList from 'components/PakeepList/components/PakeepElement/components/AttributeGroup/components/EventsPart/components/PreviewEventList';
 
 const AddDateToPakeep = ({
   ampm = false,
@@ -106,23 +106,22 @@ const AddDateToPakeep = ({
 
   const onClickOfSaveButton = () => setButtonSaveState(TO_PUSH);
 
-  const eventItemProps = { validatedCurrentEvents, currentEventsArr, customColor };
-  const customTitle = <EventItem {...eventItemProps} />;
+  const previewEventListProps = { validatedCurrentEvents, currentEventsArr, customColor };
+  const customTitle = <PreviewEventList {...previewEventListProps} />;
+
+  const headerOfAddDateToPakeepProps = {
+    buttonSaveState,
+    arrowButtonFunc: onMenuClose,
+    onClickOfSaveButton,
+    customColor,
+    customTitle
+  };
+
   return (
     <>
-      <HeaderOfAddDateToPakeep
-        buttonSaveState={buttonSaveState}
-        arrowButtonFunc={onMenuClose}
-        onClickOfSaveButton={onClickOfSaveButton}
-        customColor={customColor}
-        customTitle={customTitle}
-        // dynamicTitle={menuItemState.dynamicTitle}
-      />
+      <HeaderOfAddDateToPakeep {...headerOfAddDateToPakeepProps} />
       {dateListArr.map(
-        (
-          { title, iconName, onClick: onMenuItemClick, onlyTime, dynamicComponent, id, handlePakeepEventsThunk },
-          idx
-        ) => {
+        ({ title, iconName, onClick: onMenuItemClick, onlyTime, dynamicComponent, id, }) => {
           const [icon] = useTakeIcon(iconName);
           const DynamicComponent = onMenuItemClick ?? dynamicComponent?.component ?? DynamicInputDateAndTimePickers;
           // console.log(onMenuItemClick ?? dynamicComponent.component ?? DynamicInputDateAndTimePickers )

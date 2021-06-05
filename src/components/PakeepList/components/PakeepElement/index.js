@@ -108,7 +108,8 @@ const PakeepElement = ({
 
   const events = [
     { id: '1', value: addHours(new Date(), 2) },
-    { id: '3', value: addHours(new Date(), 27) }
+    { id: '3', value: addHours(new Date(), 27) },
+    { id: '2', value: addHours(new Date(), 27) }
   ];
 
 
