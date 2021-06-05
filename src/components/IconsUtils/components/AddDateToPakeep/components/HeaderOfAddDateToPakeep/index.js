@@ -13,7 +13,7 @@ const useStyles = makeStyles(theme => ({
     borderBottomColor: borderColor
   }),
   title: {
-    color: ({ borderColor }) => useAlpha( borderColor,0.8)
+    color: ({ borderColor }) => useAlpha(borderColor, 0.8)
   }
   // wrapperOfSaveButton: { marginRight: theme.spacing(1 * 0.8) }
 }));
@@ -25,28 +25,33 @@ const HeaderOfAddDateToPakeep = ({
   isSaveButtonHidden = false,
   onClickOfSaveButton,
   customTitle = false,
-  customColor
+  customColor,
+  isHideBorder = false
 }) => {
   const [, , , mediumEmphasisColor] = useThemeColors();
-  const borderColor = !customColor ? mediumEmphasisColor : customColor?.hover;
+  const borderColor = isHideBorder ? 'transparent' : !customColor ? mediumEmphasisColor : customColor?.hover;
   const classes = useStyles({ borderColor });
 
   return (
     <Grid className={classes.container} container justify={'space-between'}>
-      <Grid item>
-        <Grid container alignItems={'center'}>
+      <Grid>
+        <Grid container>
           <IconButtonByPas
             icon={ArrowBackOutlinedIcon}
             onClick={arrowButtonFunc}
             activeProperty={Boolean(!buttonSaveState)}
             customColor={customColor}
           />
+      <Grid>
 
-          {customTitle || (
-            <Grid className={classes.title}>
-              <Typography variant={'subtitle1'}>{dynamicTitle ? dynamicTitle : 'Close'}</Typography>{' '}
-            </Grid>
-          )}
+          <Grid container alignItems={'center'}>
+            {customTitle || (
+              <Grid className={classes.title}>
+                <Typography variant={'subtitle1'}>{dynamicTitle ? dynamicTitle : 'Close'}</Typography>{' '}
+              </Grid>
+            )}
+          </Grid>
+          </Grid>
         </Grid>
       </Grid>
       {!isSaveButtonHidden && (
@@ -61,14 +66,14 @@ const HeaderOfAddDateToPakeep = ({
 HeaderOfAddDateToPakeep.propTypes = {
   arrowButtonFunc: PropTypes.func,
   buttonSaveState: PropTypes.oneOf(['string', 'bool']),
-  customTitle: PropTypes.any,
+  customColor: PropTypes.shape({
+    hover: PropTypes.any
+  }),
+  customTitle: PropTypes.bool,
   dynamicTitle: PropTypes.oneOf(['string', 'bool']),
+  isHideBorder: PropTypes.bool,
   isSaveButtonHidden: PropTypes.bool,
   onClickOfSaveButton: PropTypes.func
 };
-
-
-
-
 
 export default HeaderOfAddDateToPakeep;

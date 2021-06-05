@@ -8,12 +8,13 @@ import EventItem from './components/EventItem';
 const useStyles = makeStyles(({ spacing }) => ({
   container: {
     maxWidth: spacing(38),
-    margin:spacing(1,0)
+    margin: spacing(0.4, 0)
   }
 }));
 
 const PreviewEventList = ({ validatedCurrentEvents, currentEventsArr, customColor }) => {
   const classes = useStyles();
+  const isFirstVariantOfEventItemView = true;
 
   return (
     <Grid>
@@ -27,9 +28,8 @@ const PreviewEventList = ({ validatedCurrentEvents, currentEventsArr, customColo
           const value = isValid(findedEl?.value) ? toFormat(findedEl?.value, format) : 'Invalid date';
           const title = findedEl?.title;
 
-
-          const isOnlyTime = findedEl?.onlyTime
-          const eventItemProps = { icon, title, customColor, value,isOnlyTime  };
+          const isOnlyTime = findedEl?.onlyTime;
+          const eventItemProps = { icon, title, customColor, value, isOnlyTime, isFirstVariantOfEventItemView };
           return <EventItem {...eventItemProps} />;
         })}
       </Grid>

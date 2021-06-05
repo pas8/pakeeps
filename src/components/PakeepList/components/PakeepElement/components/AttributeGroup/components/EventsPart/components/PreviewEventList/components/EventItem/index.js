@@ -1,3 +1,4 @@
+import { Icon } from '@material-ui/core';
 import { Box, Grid, makeStyles, Typography } from '@material-ui/core';
 import PropTypes from 'prop-types';
 
@@ -14,35 +15,61 @@ const useStyles = makeStyles(({ spacing, transitions, palette, shape: { borderRa
       borderRadius: borderRadius
     };
   },
+
+  containerOfFirstVariantOfEventItemView: {
+    '& svg': {
+      fontSize: spacing(2.4),
+      margin: spacing(0, 0.8, 0, 0),
+    }
+  },
+
   iconContainer: {
     position: 'absolute',
     top: 0,
     left: spacing(0.8),
     bottom: 0,
-    fontSize: spacing(2.16),
-    margin: spacing(0, 0.8, 0, 0)
+    margin: spacing(0, 0.8, 0, 0),
+    fontSize: spacing(2.16)
   }
 }));
-const EventItem = ({ icon, title, customColor, value,isOnlyTime }) => {
+const EventItem = ({ icon, title, customColor, value, isOnlyTime, isFirstVariantOfEventItemView }) => {
   const classes = useStyles({ customColor });
-
-
-
-
   return (
     <Grid className={classes.containerOfDateItem}>
-      <Grid className={classes.iconContainer} container alignItems={'center'}>
-        {icon}
-      </Grid>
+      {isFirstVariantOfEventItemView ? (
+        <Grid className={classes.containerOfFirstVariantOfEventItemView}>
+          <Grid>
+            <Typography variant={'body2'}>{title}</Typography>
+          </Grid>
 
-      <Box ml={4}>
-        <Grid container>
-          <Typography variant={'body2'}>{title}</Typography>
+          <Grid container alignItems={'center'}>
+            {icon} <Typography variant={'body1'}>{value}</Typography>
+          </Grid>
         </Grid>
-        <Grid>
-          <Typography variant={'body2'}>{value}</Typography>
-        </Grid>
-      </Box>
+      ) : (
+        <>
+          <Grid className={classes.iconContainer} container alignItems={'center'}>
+            {icon}
+          </Grid>
+          <Box ml={4}>
+            {/* {!isOnlyTime ? ( */}
+            <>
+              <Grid>
+                <Typography variant={'body2'}>{title}</Typography>
+              </Grid>
+              <Grid>
+                <Typography variant={'body2'}>{value}</Typography>
+              </Grid>
+            </>
+            {/* ) : ( */}
+            {/* <Typography variant={'body2'}> */}
+            {/* {title} */}
+            {/* {value} */}
+            {/* </Typography> */}
+            {/* )} */}
+          </Box>
+        </>
+      )}
     </Grid>
   );
 };
