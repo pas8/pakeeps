@@ -4,7 +4,7 @@ import LabelPart from './components/LabelPart';
 import EventsPart from './components/EventsPart';
 import { changeLabelItemThunk } from 'store/modules/App/operations';
 import { connect } from 'react-redux';
-
+import { reverse } from 'lodash';
 const useStyles = makeStyles(theme => ({
   labelsContainer: { marginTop: theme.spacing(0.8) }
 }));
@@ -34,10 +34,20 @@ const AttributeGroup = ({
 
   const eventsPartProps = { globalEvents, events, customColor, timeFormat, timeAndDateFromat };
 
+  const isAttributeGroupOrderIsReverse = false;
+
+  const partsArr = [
+    { Component: EventsPart, props: eventsPartProps },
+    { Component: LabelPart, props: labelPartProps }
+  ];
+
+  const validatedPartsArr = isAttributeGroupOrderIsReverse ? reverse(partsArr) : partsArr;
+
   return (
     <Grid spacing={1} container className={classes.labelsContainer}>
-      <LabelPart {...labelPartProps} />
-      <EventsPart {...eventsPartProps} />
+      {validatedPartsArr.map(({ Component, props },idx) => (
+        <Component {...props} key={idx} />
+      ))}
     </Grid>
   );
 };

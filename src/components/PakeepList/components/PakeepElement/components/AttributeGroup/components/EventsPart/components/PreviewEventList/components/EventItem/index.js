@@ -7,8 +7,8 @@ const useStyles = makeStyles(({ spacing, transitions, palette, shape: { borderRa
     const color = !customColor ? palette?.highEmphasis?.main : customColor?.hover;
     return {
       position: 'relative',
-      padding: spacing(0.4 - 0.04, 0.8),
-      margin: spacing(0.6, 0.6),
+      padding: spacing(0.32, 0.8,0.16,0.8),
+      margin: spacing(0.4, 0.4),
       border: '1px solid',
       borderColor: color,
       color,
@@ -18,8 +18,8 @@ const useStyles = makeStyles(({ spacing, transitions, palette, shape: { borderRa
 
   containerOfFirstVariantOfEventItemView: {
     '& svg': {
-      fontSize: spacing(2.4),
-      margin: spacing(0, 0.8, 0, 0)
+      fontSize: spacing(2.16),
+      margin: spacing(0, 0.4, 0.4, 0)
     }
   },
 
@@ -28,22 +28,28 @@ const useStyles = makeStyles(({ spacing, transitions, palette, shape: { borderRa
     top: 0,
     left: spacing(0.8),
     bottom: 0,
-    margin: spacing(0, 0.8, 0, 0),
     fontSize: spacing(2.16)
   }
 }));
-const EventItem = ({ icon, title, customColor, value,  isFirstVariantOfEventItemView }) => {
+const EventItem = ({
+  icon,
+  title,
+  customColor,
+  value,
+  isFirstVariantOfEventItemView,
+  isInlineVariantOfEventItemView
+}) => {
   const classes = useStyles({ customColor });
   return (
     <Grid className={classes.containerOfDateItem}>
       {isFirstVariantOfEventItemView ? (
         <Grid className={classes.containerOfFirstVariantOfEventItemView}>
           <Grid>
-            <Typography variant={'body2'}>{title}</Typography>
+            <Typography variant={'caption'}>{title}</Typography>
           </Grid>
 
           <Grid container alignItems={'center'}>
-            {icon} <Typography variant={'body1'}>{value}</Typography>
+            {icon} <Typography variant={'body2'}>{value}</Typography>
           </Grid>
         </Grid>
       ) : (
@@ -53,7 +59,7 @@ const EventItem = ({ icon, title, customColor, value,  isFirstVariantOfEventItem
           </Grid>
           <Box ml={4}>
             <Grid>
-              <Typography variant={'body2'}>{title}</Typography>
+              <Typography variant={'caption'}>{title}</Typography>
             </Grid>
             <Grid>
               <Typography variant={'body2'}>{value}</Typography>
@@ -66,9 +72,12 @@ const EventItem = ({ icon, title, customColor, value,  isFirstVariantOfEventItem
 };
 
 EventItem.propTypes = {
-  customColor: PropTypes.oneOf(['bool', 'object']),
+  customColor: PropTypes.oneOf(["bool", "object"]),
   icon: PropTypes.any,
-  title: PropTypes.string
-};
+  isFirstVariantOfEventItemView: PropTypes.bool,
+  isInlineVariantOfEventItemView: PropTypes.bool,
+  title: PropTypes.string,
+  value: PropTypes.any
+}
 
 export default EventItem;

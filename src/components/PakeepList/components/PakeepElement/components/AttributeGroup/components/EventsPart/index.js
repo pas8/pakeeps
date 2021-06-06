@@ -7,11 +7,12 @@ import { nanoid } from 'nanoid';
 import PreviewEventList from './components/PreviewEventList';
 import { useCurrentEvents } from 'hooks/useCurrentEvents.hook';
 import compareFunc from 'compare-func';
+import { useFindCurrentEvents } from 'hooks/useFindCurrentEvents.hook';
 
 const EventsPart = ({ globalEvents = [], events = [], timeFormat, timeAndDateFromat, ...previewEventListProps }) => {
   const sortedEvents = events.sort(compareFunc('value'));
 
-  const currentEventsArr = useCurrentEvents(globalEvents, sortedEvents, timeFormat, timeAndDateFromat);
+  const currentEventsArr = useFindCurrentEvents(globalEvents, sortedEvents, timeFormat, timeAndDateFromat);
   const allPreviewEventListProps = {
     ...previewEventListProps,
     validatedCurrentEvents: events,
