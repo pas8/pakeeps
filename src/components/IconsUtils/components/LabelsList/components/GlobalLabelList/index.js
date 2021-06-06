@@ -11,33 +11,40 @@ import { useAlpha } from 'hooks/useAlpha.hook';
 import IndeterminateCheckBoxOutlinedIcon from '@material-ui/icons/IndeterminateCheckBoxOutlined';
 import { useMix } from 'hooks/useMix.hook';
 
-const useStyles = makeStyles(({ spacing }) => {
+const useStyles = makeStyles(({ spacing, palette: { secondary } }) => {
   return {
-    container: ({ color,customColor }) => ({
+    container: ({ color, customColor }) => ({
       '&  p': {
         color
       },
       padding: spacing(1.6, 0, 0, 0),
       '& legend': {
         padding: spacing(0, 1.6, 0.6, 1.6),
-      color:useMix(customColor,0.8),
-
+        color: customColor && useMix(customColor, 0.8)
       },
-      '& li': {
-        padding: spacing(0.2, 0)
+      '& li,span': {
+        '&:hover > .MuiTouchRipple-root': {
+          background: useAlpha(color)
+        }
       }
     }),
-    menuElement: ({ color }) => ({
-      '&:hover  >  .MuiTouchRipple-root': {
-        background: useAlpha(color, 0.08)
-      },
-      '& svg,p': {
-        color
-      },
-      '& span:hover >  .MuiTouchRipple-root': {
-        background: useAlpha(color)
-      }
-    })
+    menuElement: ({ color, customColor, isChecked }) => {
+      const correctColor = isChecked && !customColor ? secondary.main : color;
+      return {
+        padding: spacing(0.2, 0),
+
+        color: correctColor,
+        '& span:hover': {
+          // background:  [useAlpha(correctColor), '!important']
+        },
+        '& svg,p': {
+          color: correctColor
+        }
+        // '& span:hover >  .MuiTouchRipple-root': {
+        //   background: !isChecked &&   useAlpha(color)
+        // }
+      };
+    }
   };
 });
 
@@ -51,17 +58,18 @@ const GlobalLabelListOflabelList = ({
   // const customColor = useGetReversedCustomColor(notReverserCustomColor);
 
   extend([mixPlugin]);
-  const containerClasses = useStyles({ color: customColor?.hover,customColor });
+  const containerClasses = useStyles({ color: customColor?.hover, customColor });
 
   return (
     <Grid className={containerClasses.container}>
       <FormLabel component={'legend'}>All labels</FormLabel>
       {globalLabels.map(labelState => {
         const isChecked = includes(selectedLabels, labelState.id);
-
         const isShoulColorBeChanged = !!customColor && isChecked;
         const color = !isShoulColorBeChanged ? customColor?.unHover : customColor?.hover;
-        const classes = useStyles({ color });
+console.log(color)
+
+        const classes = useStyles({ color, isChecked, customColor });
         // ||  useIsColorDark(customColor.bgUnHover)
         const onClickOfCheckBoxContainer = () => handleChangeNewLabel(isChecked, labelState.id);
         const onClickOfEditButton = e => {
@@ -82,7 +90,7 @@ const GlobalLabelListOflabelList = ({
               <Checkbox
                 checked={isChecked}
                 checkedIcon={checkedIcon}
-                icon={isIndeterminate && !isIndeterminateChecked ? <IndeterminateCheckBoxOutlinedIcon/> :   icon}
+                icon={isIndeterminate && !isIndeterminateChecked ? <IndeterminateCheckBoxOutlinedIcon /> : icon}
                 indeterminate={isIndeterminateChecked}
               />
               <ListItemText secondary={labelState.title} />
