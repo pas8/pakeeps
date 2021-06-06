@@ -15,14 +15,14 @@ const useStyles = makeStyles(({ spacing, palette }) => ({
     borderStyle: 'solid',
 
     '& li:hover .MuiTouchRipple-root': {
-      background: useAlpha(customColor?.unHover)
+      background: customColor && useAlpha(customColor?.unHover)
     },
     '& svg,p': {
-      color: customColor?.unHover
+      color: customColor ? customColor?.unHover : palette?.highEmphasis?.main
     },
     margin: spacing(0, 0, 0.4, 0),
     '& legend': {
-      color: useMix(customColor, 0.8),
+      color: customColor && useMix(customColor, 0.8),
       padding: spacing(0.8, 1.6, 0.8, 0)
     }
   }),
@@ -30,8 +30,7 @@ const useStyles = makeStyles(({ spacing, palette }) => ({
     padding: spacing(1, 1),
     fontSize: '10px',
     '& svg': {
-      margin: spacing(0, 1.08, 0, 0.2),
-      color: palette?.highEmphasis?.main
+      margin: spacing(0, 1.08, 0, 0.2)
     }
   }
 }));

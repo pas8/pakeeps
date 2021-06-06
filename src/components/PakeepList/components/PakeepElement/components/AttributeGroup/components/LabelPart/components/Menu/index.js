@@ -19,7 +19,15 @@ import TitleChangerOfLabel from './components/TitleChangerOfLabel';
 import { useGetReversedCustomColor } from 'hooks/useGetReversedCustomColor.hook';
 import { useThemeColors } from 'hooks/useThemeColors.hook';
 
-const useStyles = makeStyles(theme => ({}));
+const useStyles = makeStyles(({ spacing }) => ({
+  wrapper: ({ customColor, isThisMenuIsSecond }) => {
+    const colorOfThisMenuIsSecond = '#484848';
+    return {
+      padding: spacing(0, 0, 0, 0),
+      background: !!customColor ? customColor?.bgHover : isThisMenuIsSecond && colorOfThisMenuIsSecond
+    };
+  }
+}));
 
 const MenuOfLabelPart = ({
   menuState,
@@ -34,6 +42,8 @@ const MenuOfLabelPart = ({
   isThisMenuIsSecond,
   customColor
 }) => {
+  const classes = useStyles({ customColor, isThisMenuIsSecond });
+
   const [primaryColor] = useThemeColors();
 
   const color = !menuState?.color ? primaryColor : menuState.color;
@@ -108,7 +118,9 @@ const MenuOfLabelPart = ({
     handleOpen: null,
     labelChipProps: previewLabelProps,
     parentBackgrounColor: customColor?.bgHover,
-    customColor
+    customColor,
+    aplyMargin:false,
+
   };
 
   const headerOfAddDateToPakeepProps = {
@@ -117,7 +129,7 @@ const MenuOfLabelPart = ({
     isSaveButtonHidden: false,
     onClickOfSaveButton,
     customColor,
-    customTitle: <LabelItem {...labelItemProps} />
+  customTitle: <LabelItem {...labelItemProps} />
   };
 
   return (
@@ -132,7 +144,7 @@ const MenuOfLabelPart = ({
           : undefined
       }
     >
-      <Grid style={{ background: !!customColor ? customColor?.bgHover : isThisMenuIsSecond && '#484848' }}>
+      <Grid className={classes.wrapper}>
         <HeaderOfAddDateToPakeep {...headerOfAddDateToPakeepProps} />
 
         {menuLabelListArr.map(
@@ -148,7 +160,6 @@ const MenuOfLabelPart = ({
               onClick
             };
             const DynamicMenuItemProps = {
-              
               DynamicComponent,
               dynamicComponentProps,
               isActiveIcon: false,

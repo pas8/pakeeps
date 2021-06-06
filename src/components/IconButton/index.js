@@ -7,7 +7,9 @@ import { useThemeColors } from 'hooks/useThemeColors.hook';
 import { useAlpha } from 'hooks/useAlpha.hook';
 // import clsx from 'clsx'
 const useStyles = makeStyles(theme => ({
-  icon: ({ iconColor, rotate, isArctiveIconPresent, isIconActive }) => ({
+  icon: ({ iconColor, rotate, isArctiveIconPresent, isIconActive,fillOpacity }) => ({
+  fillOpacity,
+
     '& svg': { color: iconColor, transform: rotate },
     '& path': { fillOpacity: !isArctiveIconPresent && isIconActive && 1 },
     '&:hover ': { background: useAlpha(iconColor) }
@@ -21,6 +23,7 @@ const IconButtonByPas = ({
   rotateDeg = false,
   isIconActive = false,
   icon: Icon,
+  fillOpacity =1,
   iconName = 'icon',
   activeIconName = 'icon',
   activeProperty = false,
@@ -37,7 +40,7 @@ const IconButtonByPas = ({
   const iconColor = customColor ? customIconColor : defaultColor;
 
   const rotate = rotateDeg ? `rotate(${rotateDeg}deg)` : 'rotate(0deg)';
-  const classes = useStyles({ iconColor, rotate, isIconActive, isArctiveIconPresent });
+  const classes = useStyles({ iconColor, rotate, isIconActive, isArctiveIconPresent,fillOpacity });
 
   const [ref, { width }] = useMeasure();
   useEffect(() => width !== 0 && handleAverageMainComponentWidth && handleAverageMainComponentWidth(width), [width]);

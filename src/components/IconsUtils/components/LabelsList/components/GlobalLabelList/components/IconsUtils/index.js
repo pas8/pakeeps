@@ -16,7 +16,7 @@ import IconButtonByPas from 'components/IconButton';
 
 const IconsUtilsOfGlobalLabelListOflabelList = ({ onClickOfEditButton, customColor }) => (
   <Box mx={0.4}>
-    <IconButtonByPas icon={EditOutlinedIcon} size={'small'} onClick={onClickOfEditButton} customColor={customColor} />
+    <IconButtonByPas icon={EditOutlinedIcon} size={'small'} onClick={onClickOfEditButton} customColor={customColor} fillOpacity={0.6}/>
   </Box>
 );
 

@@ -78,6 +78,7 @@ const LabelsList = ({
     menuState,
     changeGloabalLabelItemFunc: changeLabelItemThunk,
     setMenuState,
+    customColor:notReverseCustomColor,
     isThisMenuIsSecond: true
   };
 
