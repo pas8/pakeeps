@@ -23,7 +23,7 @@ const useStyles = makeStyles(({ spacing, palette: { secondary } }) => {
         color: customColor && useMix(customColor, 0.8)
       },
       '& li,span': {
-        '&:hover > .MuiTouchRipple-root': {
+        '&:hover > .MuiTouchRipple-root': customColor  && {
           background: useAlpha(color)
         }
       }
@@ -34,15 +34,12 @@ const useStyles = makeStyles(({ spacing, palette: { secondary } }) => {
         padding: spacing(0.2, 0),
 
         color: correctColor,
-        '& span:hover': {
-          // background:  [useAlpha(correctColor), '!important']
+        '&:hover > .MuiTouchRipple-root':isChecked && !customColor &&  {
+          background:  useAlpha(secondary.main),
         },
         '& svg,p': {
           color: correctColor
         }
-        // '& span:hover >  .MuiTouchRipple-root': {
-        //   background: !isChecked &&   useAlpha(color)
-        // }
       };
     }
   };
@@ -67,7 +64,6 @@ const GlobalLabelListOflabelList = ({
         const isChecked = includes(selectedLabels, labelState.id);
         const isShoulColorBeChanged = !!customColor && isChecked;
         const color = !isShoulColorBeChanged ? customColor?.unHover : customColor?.hover;
-console.log(color)
 
         const classes = useStyles({ color, isChecked, customColor });
         // ||  useIsColorDark(customColor.bgUnHover)

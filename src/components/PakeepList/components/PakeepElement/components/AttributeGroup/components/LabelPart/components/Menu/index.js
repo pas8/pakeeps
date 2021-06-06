@@ -23,7 +23,7 @@ const useStyles = makeStyles(({ spacing }) => ({
   wrapper: ({ customColor, isThisMenuIsSecond }) => {
     const colorOfThisMenuIsSecond = '#484848';
     return {
-      padding: spacing(0, 0.6, 0, 0),
+      padding: spacing(0, 0, 0, 0),
       background: !!customColor ? customColor?.bgHover : isThisMenuIsSecond && colorOfThisMenuIsSecond
     };
   }
@@ -118,7 +118,9 @@ const MenuOfLabelPart = ({
     handleOpen: null,
     labelChipProps: previewLabelProps,
     parentBackgrounColor: customColor?.bgHover,
-    customColor
+    customColor,
+    aplyMargin:false,
+
   };
 
   const headerOfAddDateToPakeepProps = {
@@ -127,7 +129,7 @@ const MenuOfLabelPart = ({
     isSaveButtonHidden: false,
     onClickOfSaveButton,
     customColor,
-    customTitle: <LabelItem {...labelItemProps} />
+  customTitle: <LabelItem {...labelItemProps} />
   };
 
   return (

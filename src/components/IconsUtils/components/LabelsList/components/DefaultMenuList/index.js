@@ -15,10 +15,9 @@ const useStyles = makeStyles(({ spacing, palette }) => ({
     borderStyle: 'solid',
 
     '& li:hover .MuiTouchRipple-root': {
-      background: customColor &&useAlpha(customColor?.unHover)
+      background: customColor && useAlpha(customColor?.unHover)
     },
     '& svg,p': {
-
       color: customColor ? customColor?.unHover : palette?.highEmphasis?.main
     },
     margin: spacing(0, 0, 0.4, 0),
@@ -30,11 +29,8 @@ const useStyles = makeStyles(({ spacing, palette }) => ({
   defaultMenuListItem: {
     padding: spacing(1, 1),
     fontSize: '10px',
-    '& svg':{
-
-      margin: spacing(0, 1.08, 0, 0.2),
-
-
+    '& svg': {
+      margin: spacing(0, 1.08, 0, 0.2)
     }
   }
 }));
