@@ -8,14 +8,18 @@ import { connect } from 'react-redux';
 const useStyles = makeStyles(theme => ({
   labelsContainer: { marginTop: theme.spacing(0.8) }
 }));
+
 const AttributeGroup = ({
-  events = [],
   labels,
   handleDeleteLabelFromPakeepFunc,
   pakeepId,
   changeLabelItemThunk,
   customColor,
-  parentBackgrounColor
+  parentBackgrounColor,
+  globalEvents,
+  events,
+  timeFormat,
+  timeAndDateFromat
 }) => {
   const classes = useStyles();
 
@@ -27,23 +31,29 @@ const AttributeGroup = ({
     customColor,
     parentBackgrounColor
   };
+
+  const eventsPartProps = { globalEvents, events, customColor, timeFormat, timeAndDateFromat };
+
   return (
     <Grid spacing={1} container className={classes.labelsContainer}>
       <LabelPart {...labelPartProps} />
-      {/* <EventsPart events={events}/> */}
+      <EventsPart {...eventsPartProps} />
     </Grid>
   );
 };
 
 AttributeGroup.propTypes = {
-  parentBackgrounColor: PropTypes.string,
   changeLabelItemThunk: PropTypes.func,
   customColor: PropTypes.any,
   events: PropTypes.array,
+  globalEvents: PropTypes.array,
   handleDeleteLabelFromPakeepFunc: PropTypes.func,
   labels: PropTypes.array,
-  pakeepId: PropTypes.string
-}
+  pakeepId: PropTypes.string,
+  parentBackgrounColor: PropTypes.string,
+  timeAndDateFromat: PropTypes.string,
+  timeFormat: PropTypes.string
+};
 
 const mapDispatchToProps = dispatch => ({
   changeLabelItemThunk: (labelId, property) => dispatch(changeLabelItemThunk(labelId, property))

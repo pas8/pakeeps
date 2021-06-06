@@ -19,7 +19,7 @@ const useStyles = makeStyles(({ spacing, transitions, palette, shape: { borderRa
   containerOfFirstVariantOfEventItemView: {
     '& svg': {
       fontSize: spacing(2.4),
-      margin: spacing(0, 0.8, 0, 0),
+      margin: spacing(0, 0.8, 0, 0)
     }
   },
 
@@ -32,7 +32,7 @@ const useStyles = makeStyles(({ spacing, transitions, palette, shape: { borderRa
     fontSize: spacing(2.16)
   }
 }));
-const EventItem = ({ icon, title, customColor, value, isOnlyTime, isFirstVariantOfEventItemView }) => {
+const EventItem = ({ icon, title, customColor, value,  isFirstVariantOfEventItemView }) => {
   const classes = useStyles({ customColor });
   return (
     <Grid className={classes.containerOfDateItem}>
@@ -52,21 +52,12 @@ const EventItem = ({ icon, title, customColor, value, isOnlyTime, isFirstVariant
             {icon}
           </Grid>
           <Box ml={4}>
-            {/* {!isOnlyTime ? ( */}
-            <>
-              <Grid>
-                <Typography variant={'body2'}>{title}</Typography>
-              </Grid>
-              <Grid>
-                <Typography variant={'body2'}>{value}</Typography>
-              </Grid>
-            </>
-            {/* ) : ( */}
-            {/* <Typography variant={'body2'}> */}
-            {/* {title} */}
-            {/* {value} */}
-            {/* </Typography> */}
-            {/* )} */}
+            <Grid>
+              <Typography variant={'body2'}>{title}</Typography>
+            </Grid>
+            <Grid>
+              <Typography variant={'body2'}>{value}</Typography>
+            </Grid>
           </Box>
         </>
       )}

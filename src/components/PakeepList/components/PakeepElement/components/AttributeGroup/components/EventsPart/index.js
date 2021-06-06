@@ -1,47 +1,35 @@
+import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 import DeleteForeverOutlinedIcon from '@material-ui/icons/DeleteForeverOutlined';
 import { iconsArr } from 'components/Icons';
 import { Grid, Chip, makeStyles } from '@material-ui/core';
 import { nanoid } from 'nanoid';
+import PreviewEventList from './components/PreviewEventList';
+import { useCurrentEvents } from 'hooks/useCurrentEvents.hook';
+import compareFunc from 'compare-func';
 
-const EventsPart = ({ events:labels }) => {
-  const [labelHover, setLabelHover] = useState(!false);
+const EventsPart = ({ globalEvents = [], events = [], timeFormat, timeAndDateFromat, ...previewEventListProps }) => {
+  const sortedEvents = events.sort(compareFunc('value'));
 
-  const setLabelHoverStatusIsFalse = () => setLabelHover(false);
-  const setLabelHoverStatus = () => setLabelHover({ title, isHovering: true });
-
-  const handleDeleteLabel = () => {};
-
+  const currentEventsArr = useCurrentEvents(globalEvents, sortedEvents, timeFormat, timeAndDateFromat);
+  const allPreviewEventListProps = {
+    ...previewEventListProps,
+    validatedCurrentEvents: events,
+    currentEventsArr
+  };
+  
   return (
     <>
-      {labels?.map(({ title, icon: labelIcon, key, color }) => {
-        const canLabelBeDeleted = (labelHover?.isHovering && labelHover?.title === title) || !labelIcon;
-        const onDeleteOfLabelItem = () => (canLabelBeDeleted ? () => handleDeleteLabel(key) : null);
-
-        const isLabelHaveIcon = !(labelHover?.isHovering && labelHover?.title === title);
-        const icon = isLabelHaveIcon ? iconsArr.find(({ iconName }) => iconName === labelIcon)?.icon : null;
-
-        const labelChipProps = {
-          onMouseEnter: setLabelHoverStatus,
-          onMouseLeave: setLabelHoverStatusIsFalse,
-          icon,
-          label: title,
-          onDelete: onDeleteOfLabelItem,
-          className: null,
-          variant: 'outlined',
-          color,
-          size: 'small',
-          deleteIcon: <DeleteForeverOutlinedIcon />
-        };
-
-        return (
-          <Grid item key={nanoid()}>
-            <Chip {...labelChipProps} />
-          </Grid>
-        );
-      })}
+      <PreviewEventList {...allPreviewEventListProps} />
     </>
   );
+};
+
+EventsPart.propTypes = {
+  events: PropTypes.array,
+  globalEvents: PropTypes.array,
+  timeAndDateFromat: PropTypes.string,
+  timeFormat: PropTypes.string
 };
 
 export default EventsPart;

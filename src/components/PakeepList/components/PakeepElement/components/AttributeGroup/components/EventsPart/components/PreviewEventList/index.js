@@ -12,7 +12,7 @@ const useStyles = makeStyles(({ spacing }) => ({
   }
 }));
 
-const PreviewEventList = ({ validatedCurrentEvents, currentEventsArr, customColor }) => {
+const PreviewEventList = ({ validatedCurrentEvents , currentEventsArr , customColor }) => {
   const classes = useStyles();
   const isFirstVariantOfEventItemView = true;
 
@@ -25,7 +25,7 @@ const PreviewEventList = ({ validatedCurrentEvents, currentEventsArr, customColo
           const [icon] = useTakeIcon(findedEl?.iconName);
 
           const format = findedEl?.format;
-          const value = isValid(findedEl?.value) ? toFormat(findedEl?.value, format) : 'Invalid date';
+          const value = isValid(findedEl?.value) ? toFormat(findedEl?.value, format,{ useAdditionalDayOfYearTokens: true }) : 'Invalid date';
           const title = findedEl?.title;
 
           const isOnlyTime = findedEl?.onlyTime;
