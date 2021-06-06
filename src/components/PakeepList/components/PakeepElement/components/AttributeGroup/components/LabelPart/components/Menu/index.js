@@ -107,7 +107,7 @@ const MenuOfLabelPart = ({
     currentColor: menuState.color,
     handleOpen: null,
     labelChipProps: previewLabelProps,
-    parentBackgrounColor: customColor.bgHover,
+    parentBackgrounColor: customColor?.bgHover,
     customColor
   };
 
@@ -132,7 +132,7 @@ const MenuOfLabelPart = ({
           : undefined
       }
     >
-      <Grid style={{ background: !!customColor ? customColor.bgHover : isThisMenuIsSecond && '#484848' }}>
+      <Grid style={{ background: !!customColor ? customColor?.bgHover : isThisMenuIsSecond && '#484848' }}>
         <HeaderOfAddDateToPakeep {...headerOfAddDateToPakeepProps} />
 
         {menuLabelListArr.map(
@@ -144,17 +144,18 @@ const MenuOfLabelPart = ({
             const dynamicComponentProps = { customColor: reversedCustomColor, ...dynamicComponent.props };
             const onClick = () =>
               onMenuItemClick ? onMenuItemClick() : setMenuItemState(state => ({ ...state, name }));
-            const menuItemProps = {
+            const dynamicItemProps = {
               onClick
             };
             const DynamicMenuItemProps = {
+              
               DynamicComponent,
               dynamicComponentProps,
               isActiveIcon: false,
               title,
               isDynamicItemGridMarginIsZero: true,
               isDynamicComponentShouldBeShown,
-              menuItemProps,
+              dynamicItemProps,
               isPreventClickOfMenuItem: false,
               icon: <Icon />,
               customColor

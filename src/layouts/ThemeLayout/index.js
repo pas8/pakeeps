@@ -16,7 +16,7 @@ const ThemeLayout = ({ children, theme: themeColors, breakpointsValues }) => {
       direction: 'rtl',
       palette: {
         success: { main: '#4caf50' },
-        type: 'dark',
+        type: themeColors?.type,
         primary: {
           main: themeColors.primaryMain
         },
@@ -31,6 +31,10 @@ const ThemeLayout = ({ children, theme: themeColors, breakpointsValues }) => {
         },
         maxEmphasis: {
           main: themeColors?.maxEmphasis
+        },
+        background: {
+          paper: themeColors?.paperMain,
+          default: themeColors?.defaultBackgroundMain
         }
       },
       contrastThreshold: 2,

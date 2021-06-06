@@ -37,6 +37,7 @@ import FavoriteIcon from '@material-ui/icons/Favorite';
 import BookmarkBorderOutlinedIcon from '@material-ui/icons/BookmarkBorderOutlined';
 import BookmarkIcon from '@material-ui/icons/Bookmark';
 import PinOutlinedIcon from 'components/Icons/components/PinOutlinedIcon';
+import WrapperOfAddDateToPakeep from './components/WrapperOfAddDateToPakeep';
 
 const IconsUtils = ({
   isAllIconsIsShown = true,
@@ -46,6 +47,7 @@ const IconsUtils = ({
   isPinned,
   isFavorite,
   isInBookmark,
+  id,
   labels,
   isCheckBoxes,
   handleSetBookmarkPakeep,
@@ -64,9 +66,10 @@ const IconsUtils = ({
   isBackgroundColorDefault,
   arrOfButtonNamesWhichSholudBeHidden = [],
   isUtilsReversed,
-  events= [],
+  events = [],
   handleSetArhivedPakeep
 }) => {
+  // console.log(events)
   const handleClick = () => console.log('placeholder');
   const iconsUtilsArr = [
     {
@@ -110,8 +113,8 @@ const IconsUtils = ({
       onClick: handleClick,
       ActiveIcon: EventAvailableIcon,
       isIconActive: !!events.length,
-      menuComponentsProps: { events },
-      menuComponents: AddDateToPakeep
+      menuComponentsProps: { id },
+      menuComponents: WrapperOfAddDateToPakeep
     },
     {
       icon: WallpaperOutlinedIcon,

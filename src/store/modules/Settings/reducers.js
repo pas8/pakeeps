@@ -4,11 +4,12 @@ import * as types from './types';
 const settingsInitialState = {
   viewOfThemeChangerButton: 'iconButton', // 'iconButton' ||  'switch'
   maxSnack: 4,
-  utilsViewLikeInGoogleKeep: false,
-
-  navigationViewLike:'pakeeps',  //'telegram' || 'googleKeep' || 'pakeeps'
-  positionOfFolderViewWithPakeepView:'left',  //'left' || 'bottom' || 'right'
-  isFolderViewWithPakeepViewAlignToCenter:!true,
+  utilsViewLikeInGoogleKeep: true,
+  timeFormat: 'hh:mm',
+  timeAndDateFromat: 'yyyy / MM / dd / hh:mm',
+  navigationViewLike: 'pakeeps', //'telegram' || 'googleKeep' || 'pakeeps'
+  positionOfFolderViewWithPakeepView: 'left', //'left' || 'bottom' || 'right'
+  isFolderViewWithPakeepViewAlignToCenter: !true
 };
 
 const settingsReducer = createReducer(settingsInitialState)({

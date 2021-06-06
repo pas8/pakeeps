@@ -23,8 +23,11 @@ const LabelsList = ({
   isLabelViewHidden,
   changeLabelItemThunk,
   isDefaultMenuListHidden = false,
-  customColor
+  customColor:notReverseCustomColor,
+  // customColor,
+  onMenuClose
 }) => {
+  const customColor = useGetReversedCustomColor(notReverseCustomColor)
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const handleOpenAddNewLabelDialog = () => setIsDialogOpen(true);
   const handleCloseAddNewLabelDialog = () => setIsDialogOpen(false);
@@ -65,6 +68,8 @@ const LabelsList = ({
     handleClose();
   };
 
+  const arrowButtonFunc = () => onMenuClose();
+
   const globalLabelListProps = { globalLabels, handleChangeNewLabel, setMenuState, customColor };
 
   const wrapperOfMenuOfLabelPartProps = {
@@ -76,11 +81,13 @@ const LabelsList = ({
     isThisMenuIsSecond: true
   };
 
+  const defaultMenuListOflabelListProps = { defaultMenuListArr, customColor, arrowButtonFunc };
+
   return (
     <SelectedLabels.Consumer>
       {({ selectedLabels }) => (
         <Grid>
-          {!isDefaultMenuListHidden && <DefaultMenuListOflabelList defaultMenuListArr={defaultMenuListArr} />}
+          {!isDefaultMenuListHidden && <DefaultMenuListOflabelList {...defaultMenuListOflabelListProps} />}
           <GlobalLabelListOflabelList {...globalLabelListProps} selectedLabels={selectedLabels} />
 
           <WrapperOfMenuOfLabelPart {...wrapperOfMenuOfLabelPartProps} />

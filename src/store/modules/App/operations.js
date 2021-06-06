@@ -22,7 +22,8 @@ import {
   toSetIsCancelSelectedPakeepsId,
   toHandleSelectedPakeepsProperty,
   toAddLabelToPakeep,
-  toHandlePakeepProperty
+  toHandlePakeepProperty,
+  toHandleThemeColors
 } from './actions';
 import { useGetCurrentPakeep } from './hooks';
 
@@ -141,3 +142,17 @@ export const handleSelectedPakeepsPropertyThunk = (newPakeeps, propertyVariant) 
 export const handlePakeepPropertyThunk = (pakeepId, property)  => dispatch => {
   dispatch(toHandlePakeepProperty(pakeepId, property) );
 };
+
+
+
+export const handlePakeepEventsThunk = (pakeepId, events)  => dispatch => {
+  dispatch(toHandlePakeepProperty(pakeepId, {events}) );
+};
+
+
+
+export const handleThemeColorsThunk = (newThemeColors)  => dispatch => {
+  dispatch(toHandleThemeColors(newThemeColors))
+};
+
+
