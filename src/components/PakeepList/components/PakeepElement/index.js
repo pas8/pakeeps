@@ -7,7 +7,7 @@ import { useSwipeable } from 'react-swipeable';
 import { useMeasure } from 'react-use';
 import _ from 'lodash';
 import { connect } from 'react-redux';
-import { getFilteredLabels } from 'store/modules/App/selectors';
+import { getFilteredLabels, getGlobalEventsArr } from 'store/modules/App/selectors';
 import {
   handkePakeepPropertyThunk,
   handleDeleteLabelFromPakeepThunk,
@@ -92,9 +92,11 @@ const PakeepElement = ({
   id,
   utilsViewLikeInGoogleKeep,
   idx,
-  events,
+  globalEvents,
+  // events,
   globalLabels,
   filteredLabels,
+  timeFormat, timeAndDateFromat,
   handleDeleteLabelFromPakeepThunk,
   changeLabelItemThunk,
   handkePakeepPropertyThunk,
@@ -105,6 +107,14 @@ const PakeepElement = ({
   handleAddLabelToPakeepThunk,
   ...props
 }) => {
+
+  const events = [
+    { id: '1', value: addHours(new Date(), 2) },
+    { id: '2', value: addHours(new Date(), 32) },
+    { id: '3', value: addHours(new Date(), 100) },
+  ];
+
+
   const [, , maxEmphasisColor] = useThemeColors();
 
   const [customColor, isBackgroundColorDefault, isColorDefault] = useGetReadableColor(backgroundColor, color);
@@ -182,11 +192,7 @@ const PakeepElement = ({
             pakeepIdOfDialog,
             handleClosePakeepDialog
           }) => {
-            // const events = [
-            //   { id: '1', value: addHours(new Date(), 2) },
-            //   { id: '2', value: addHours(new Date(), 27) }
-            // ];
-
+        
             const handleDeleteNewLabel = labelId => {
               handleDeleteLabelFromPakeepThunk(id, labelId);
             };
@@ -206,7 +212,10 @@ const PakeepElement = ({
               handleDeleteNewLabel,
               customColor,
               labels: filteredLabels,
-              pakeepId: id
+              pakeepId: id,
+              globalEvents,
+              events,
+              timeFormat, timeAndDateFromat,
             };
 
             const onMouseEnter = () => {
@@ -336,9 +345,11 @@ PakeepElement.propTypes = {
   utilsViewLikeInGoogleKeep: PropTypes.any
 };
 
-const mapStateToProps = ({ settings: { utilsViewLikeInGoogleKeep }, app: { labels: globalLabels } }, { labels }) => ({
+const mapStateToProps = ({ settings: { utilsViewLikeInGoogleKeep,  timeFormat, timeAndDateFromat, }, app: { labels: globalLabels,events } }, { labels }) => ({
   utilsViewLikeInGoogleKeep,
-  filteredLabels: getFilteredLabels(labels, globalLabels)
+  filteredLabels: getFilteredLabels(labels, globalLabels),
+  globalEvents:getGlobalEventsArr(events),
+  timeFormat, timeAndDateFromat,
 });
 // const mapDispatchToProps = dispatch => ({  })
 const mapDispatchToProps = dispatch => ({

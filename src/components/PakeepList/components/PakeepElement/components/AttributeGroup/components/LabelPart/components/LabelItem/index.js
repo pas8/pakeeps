@@ -2,12 +2,13 @@ import { Chip, Grid, makeStyles } from '@material-ui/core';
 import PropTypes from 'prop-types';
 import { useIsColorDark } from 'hooks/useIsColorDark.hook';
 import { useThemeColors } from 'hooks/useThemeColors.hook';
+import { useAttributeGroupColor } from 'hooks/useAttributeGroupColor.hook';
 
-const useStyles = makeStyles(({spacing}) => ({
-  container: ({ color, isDark, currentColor, isCustomColor, parentBackgrounColor,aplyMargin }) => ({
+const useStyles = makeStyles(({ spacing }) => ({
+  container: ({ color, isDark, currentColor, isCustomColor, parentBackgrounColor, aplyMargin }) => ({
     cursor: 'pointer',
-    marginRight:spacing(aplyMargin && 1),
-    marginBottom:spacing(aplyMargin && 1),
+    marginRight: spacing(aplyMargin && 1),
+    marginBottom: spacing(aplyMargin && 1),
     '& .MuiChip-root': {
       cursor: 'pointer',
       background: color,
@@ -30,23 +31,17 @@ const useStyles = makeStyles(({spacing}) => ({
   })
 }));
 
-const LabelItem = ({ currentColor, handleOpen, labelChipProps, customColor, parentBackgrounColor,aplyMargin =  true }) => {
-  const isDark = useIsColorDark(currentColor);
-  const isCustomColor = !!customColor;
+const LabelItem = ({
+  currentColor,
+  handleOpen,
+  labelChipProps,
+  customColor,
+  parentBackgrounColor,
+  aplyMargin = true
+}) => {
+  const [color, isCustomColor, isDark] = useAttributeGroupColor(customColor, currentColor);
 
-  const [primaryColor, secondaryColor] = useThemeColors();
-
-  const color = isCustomColor
-    ? customColor.hover
-    : !currentColor
-    ? '#969696'
-    : currentColor === 'primary'
-    ? primaryColor
-    : currentColor === 'secondary'
-    ? secondaryColor
-    : currentColor;
-
-  const classes = useStyles({ color, isDark, currentColor, isCustomColor, parentBackgrounColor,aplyMargin });
+  const classes = useStyles({ color, isDark, currentColor, isCustomColor, parentBackgrounColor, aplyMargin });
 
   return (
     <Grid className={classes.container} onContextMenu={handleOpen} onClick={handleOpen}>

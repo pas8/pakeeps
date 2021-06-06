@@ -1,44 +1,24 @@
 import PropTypes from 'prop-types';
-import React, { Fragment, useState, useEffect } from 'react';
-import {
-  Box,
-  CssBaseline,
-  Grid,
-  IconButton,
-  InputAdornment,
-  makeStyles,
-  Menu,
-  MenuItem,
-  MenuList,
-  Typography
-} from '@material-ui/core';
-import ViewWeekOutlinedIcon from '@material-ui/icons/ViewWeekOutlined';
-import TodayOutlinedIcon from '@material-ui/icons/TodayOutlined';
-import AddLocationOutlinedIcon from '@material-ui/icons/AddLocationOutlined';
-import CalendarTodayOutlinedIcon from '@material-ui/icons/CalendarTodayOutlined';
-import DashboardOutlinedIcon from '@material-ui/icons/DashboardOutlined';
-import ScheduleOutlinedIcon from '@material-ui/icons/ScheduleOutlined';
-import EventNoteOutlinedIcon from '@material-ui/icons/EventNoteOutlined';
-import DateRangeOutlinedIcon from '@material-ui/icons/DateRangeOutlined';
-import DoneOutlineOutlinedIcon from '@material-ui/icons/DoneOutlineOutlined';
-import clsx from 'clsx';
+import React, { useState, useEffect } from 'react';
 import { nanoid } from 'nanoid';
 import HeaderOfAddDateToPakeep from './components/HeaderOfAddDateToPakeep';
 import DynamicInputDateAndTimePickers from './components/DynamicComponents/components/DynamicInputDateAndTimePickers';
-import { addDays, isValid, format as toFormat } from 'date-fns';
 import { connect } from 'react-redux';
-import { useCounter } from 'react-use';
 import DynamicAddMoreEvents from './components/DynamicComponents/components/DynamicAddMoreEvents';
 import DynamicMenuItem from './components/DynamicMenuItem';
 import { getGlobalEventsArr } from 'store/modules/App/selectors';
 import includes from 'lodash.includes';
-import { filter, find, mapKeys, map, uniq, uniqWith, isEqual, mapValues } from 'lodash';
+import { filter, mapKeys, map, mapValues, find } from 'lodash';
 import { useTakeIcon } from 'hooks/useTakeIcon.hook';
 import { useGetReversedCustomColor } from 'hooks/useGetReversedCustomColor.hook';
 import { useSnackbar } from 'notistack';
 import { handlePakeepEventsThunk, handleThemeColorsThunk } from 'store/modules/App/operations';
 import { useCurrentEvents } from 'hooks/useCurrentEvents.hook';
 import { useValidatedCurrentEvents } from 'hooks/useValidatedCurrentEvents.hook';
+import { Chip, Typography, Grid, makeStyles } from '@material-ui/core';
+import { format } from 'date-fns';
+import PreviewEventList from 'components/PakeepList/components/PakeepElement/components/AttributeGroup/components/EventsPart/components/PreviewEventList';
+import DialogOfEditingDate from 'components/PakeepList/components/PakeepElement/components/AttributeGroup/components/EventsPart/components/DialogOfEditingDate';
 
 const AddDateToPakeep = ({
   ampm = false,
@@ -56,6 +36,8 @@ const AddDateToPakeep = ({
   // console.log(events);
 
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+
+  const FIRST_EVENT_ID = '1';
 
   const TO_PUSH = 'TO_PUSH';
   const SAVED = 'saved';
@@ -126,79 +108,91 @@ const AddDateToPakeep = ({
   }, [buttonSaveState]);
 
   const onClickOfSaveButton = () => setButtonSaveState(TO_PUSH);
+
+  const previewEventListProps = { validatedCurrentEvents, currentEventsArr, customColor };
+  const customTitle = <PreviewEventList {...previewEventListProps} />;
+
+  const headerOfAddDateToPakeepProps = {
+    buttonSaveState,
+    arrowButtonFunc: onMenuClose,
+    onClickOfSaveButton,
+    customColor,
+    customTitle,
+    isHideBorder: includes(chosenItemArr, FIRST_EVENT_ID)
+  };
+
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+
+  const dialogOfEditingDateProps = {
+    open: isEditDialogOpen
+  };
+
   return (
     <>
-      <HeaderOfAddDateToPakeep
-        buttonSaveState={buttonSaveState}
-        arrowButtonFunc={onMenuClose}
-        onClickOfSaveButton={onClickOfSaveButton}
-        customColor={customColor}
-        // dynamicTitle={menuItemState.dynamicTitle}
-      />
-      {dateListArr.map(
-        (
-          { title, iconName, onClick: onMenuItemClick, onlyTime, dynamicComponent, id, handlePakeepEventsThunk },
-          idx
-        ) => {
-          const [icon] = useTakeIcon(iconName);
-          const DynamicComponent = onMenuItemClick ?? dynamicComponent?.component ?? DynamicInputDateAndTimePickers;
-          // console.log(onMenuItemClick ?? dynamicComponent.component ?? DynamicInputDateAndTimePickers )
+      <HeaderOfAddDateToPakeep {...headerOfAddDateToPakeepProps} />
+      {dateListArr.map(({ title, iconName, onClick: onMenuItemClick, onlyTime, dynamicComponent, id }) => {
+        const [icon] = useTakeIcon(iconName);
+        const DynamicComponent = onMenuItemClick ?? dynamicComponent?.component ?? DynamicInputDateAndTimePickers;
+        // console.log(onMenuItemClick ?? dynamicComponent.component ?? DynamicInputDateAndTimePickers )
 
-          const name = id;
+        const name = id;
 
-          const isChosen = includes(chosenItemArr, name);
-          const isActiveIcon = isChosen;
+        const isChosen = includes(chosenItemArr, name);
+        const isActiveIcon = isChosen;
 
-          const isDynamicComponentShouldBeShown = isChosen && DynamicComponent;
+        const isDynamicComponentShouldBeShown = isChosen && DynamicComponent;
 
-          const onClick = () => {
-            const onDefaultClick = () => {
-              setChosenItemArr(state => [...state, name]);
-              // setButtonSaveState(true);
-            };
-
-            isChosen ? null : onMenuItemClick ? onMenuItemClick() : onDefaultClick();
-          };
-          const onClickOfCloseIcon = () => setChosenItemArr(state => filter(state, elId => elId !== name));
-
-          const dynamicItemProps = { onClick };
-
-          const dynamicComponentProps = {
-            ...dynamicComponent?.props,
-            icon,
-            correctName: isChosen,
-            name,
-            value: dateAndTimeInputsState[name]?.value,
-            inputValue: dateAndTimeInputsState[name]?.inputValue,
-            format: currentEventsObject[name]?.format,
-            onlyTime,
-            onClickOfCloseIcon,
-            title,
-            handleThemeColorsThunk,
-            ampm,
-            handleDateAndTimeInputsState,
-            customColor,
-            focusedEventId
+        const onClick = () => {
+          const onDefaultClick = () => {
+            setChosenItemArr(state => [...state, name]);
+            // setButtonSaveState(true);
           };
 
-          // if (hidden) return;
+          isChosen ? null : onMenuItemClick ? onMenuItemClick() : onDefaultClick();
+        };
+        const onClickOfCloseIcon = () => setChosenItemArr(state => filter(state, elId => elId !== name));
+        const onClickOfEditIcon = () => setIsEditDialogOpen(true);
 
-          const dynamicMenuListProps = {
-            DynamicComponent,
-            dynamicComponentProps,
-            title,
-            isActiveIcon,
-            isDynamicComponentShouldBeShown,
-            dynamicItemProps,
-            icon,
-            customColor,
-            // key: name,
-            isPreventClickOfMenuItem: isChosen
-          };
+        const dynamicItemProps = { onClick };
 
-          return <DynamicMenuItem {...dynamicMenuListProps} key={nanoid()} />;
-        }
-      )}
+        const dynamicComponentProps = {
+          ...dynamicComponent?.props,
+          icon,
+          correctName: isChosen,
+          name,
+          value: dateAndTimeInputsState[name]?.value,
+          inputValue: dateAndTimeInputsState[name]?.inputValue,
+          format: currentEventsObject[name]?.format,
+          onlyTime,
+          onClickOfCloseIcon,
+          title,
+          handleThemeColorsThunk,
+          ampm,
+          handleDateAndTimeInputsState,
+          customColor,
+          focusedEventId,
+          onClickOfEditIcon
+        };
+
+        // if (hidden) return;
+
+        const dynamicMenuListProps = {
+          DynamicComponent,
+          dynamicComponentProps,
+          title,
+          isMarginSmaller: true,
+          isActiveIcon,
+          isDynamicComponentShouldBeShown,
+          dynamicItemProps,
+          icon,
+          customColor,
+          // key: name,
+          isPreventClickOfMenuItem: isChosen
+        };
+
+        return <DynamicMenuItem {...dynamicMenuListProps} key={nanoid()} />;
+      })}
+      <DialogOfEditingDate {...dialogOfEditingDateProps} />
     </>
   );
 };
@@ -216,9 +210,7 @@ const mapStateToProps = ({ app: { events: globalEvents }, settings: { timeFormat
 });
 const mapDispatchToProps = dispatch => ({
   handlePakeepEventsThunk: (id, events) => dispatch(handlePakeepEventsThunk(id, events)),
-  handleThemeColorsThunk: (newThemeColors) => dispatch(handleThemeColorsThunk(newThemeColors)),
-
-
+  handleThemeColorsThunk: newThemeColors => dispatch(handleThemeColorsThunk(newThemeColors))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddDateToPakeep);

@@ -107,7 +107,7 @@ const MenuOfLabelPart = ({
     currentColor: menuState.color,
     handleOpen: null,
     labelChipProps: previewLabelProps,
-    parentBackgrounColor: customColor.bgHover,
+    parentBackgrounColor: customColor?.bgHover,
     customColor
   };
 
@@ -132,7 +132,7 @@ const MenuOfLabelPart = ({
           : undefined
       }
     >
-      <Grid style={{ background: !!customColor ? customColor.bgHover : isThisMenuIsSecond && '#484848' }}>
+      <Grid style={{ background: !!customColor ? customColor?.bgHover : isThisMenuIsSecond && '#484848' }}>
         <HeaderOfAddDateToPakeep {...headerOfAddDateToPakeepProps} />
 
         {menuLabelListArr.map(

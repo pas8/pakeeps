@@ -37,9 +37,9 @@ const initialState = {
     { color: '#afa646', title: 'Eco', iconName: 'eco', id: 'label8', variant: 'default' }
   ],
   events: [
-    { title: 'Later today', iconName: 'today', id: '1', value: new Date(), onlyTime: true },
-    { title: 'Tomorrow', iconName: 'tomorrow', id: '2', value: addDays(new Date(), 1), onlyTime: true },
-    { title: 'Next week', iconName: 'week', id: '3', value: addDays(new Date(), 7) }
+    { title: 'Later today', iconName: 'today', id: '1', value: Date.now(), onlyTime: true },
+    { title: 'Tomorrow', iconName: 'tomorrow', id: '2', value: addDays(Date.now(), 1), onlyTime: true },
+    { title: 'Next week', iconName: 'week', id: '3', value: addDays(Date.now(), 7) }
   ],
   selectedPakeepsId: [],
   folders: [[]],

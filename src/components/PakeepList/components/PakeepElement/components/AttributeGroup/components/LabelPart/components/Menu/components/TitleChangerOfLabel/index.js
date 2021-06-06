@@ -15,22 +15,22 @@ const InputWithCustomColor = withStyles({
     // },
 
     '& .MuiOutlinedInput-root': {
-      color: customColor.bgHover,
+      color: customColor?.bgHover,
 
       '& fieldset': {
-        borderColor: customColor.bgHover
+        borderColor: customColor?.bgHover
       },
       '&:hover fieldset': {
-        borderColor: customColor.bgHover,
+        borderColor: customColor?.bgHover,
 
-        boxShadow: `0px 0px 4px 1px ${useAlpha(customColor.bgHover, 0.42)}`
+        boxShadow: `0px 0px 4px 1px ${useAlpha(customColor?.bgHover, 0.42)}`
       },
       '&.Mui-focused fieldset': {
-        borderColor: customColor.bgUnHover,
-        boxShadow: `0px 0px 4px 1px ${customColor.bgUnHover}`
+        borderColor: customColor?.bgUnHover,
+        boxShadow: `0px 0px 4px 1px ${customColor?.bgUnHover}`
       },
       '&.Mui-focused ': {
-        color: customColor.bgUnHover
+        color: customColor?.bgUnHover
       }
     }
   })
