@@ -18,6 +18,7 @@ import { useValidatedCurrentEvents } from 'hooks/useValidatedCurrentEvents.hook'
 import { Chip, Typography, Grid, makeStyles } from '@material-ui/core';
 import { format } from 'date-fns';
 import PreviewEventList from 'components/PakeepList/components/PakeepElement/components/AttributeGroup/components/EventsPart/components/PreviewEventList';
+import DialogOfEditingDate from 'components/PakeepList/components/PakeepElement/components/AttributeGroup/components/EventsPart/components/DialogOfEditingDate';
 
 const AddDateToPakeep = ({
   ampm = false,
@@ -122,6 +123,10 @@ const AddDateToPakeep = ({
 
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
 
+  const dialogOfEditingDateProps = {
+    open: isEditDialogOpen
+  };
+
   return (
     <>
       <HeaderOfAddDateToPakeep {...headerOfAddDateToPakeepProps} />
@@ -147,7 +152,7 @@ const AddDateToPakeep = ({
         };
         const onClickOfCloseIcon = () => setChosenItemArr(state => filter(state, elId => elId !== name));
         const onClickOfEditIcon = () => setIsEditDialogOpen(true);
-        
+
         const dynamicItemProps = { onClick };
 
         const dynamicComponentProps = {
@@ -187,6 +192,7 @@ const AddDateToPakeep = ({
 
         return <DynamicMenuItem {...dynamicMenuListProps} key={nanoid()} />;
       })}
+      <DialogOfEditingDate {...dialogOfEditingDateProps} />
     </>
   );
 };

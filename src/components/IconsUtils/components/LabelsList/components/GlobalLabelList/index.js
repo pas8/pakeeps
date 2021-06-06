@@ -8,16 +8,20 @@ import { colord, extend } from 'colord';
 import { useGetReversedCustomColor } from 'hooks/useGetReversedCustomColor.hook';
 import { useIsColorDark } from 'hooks/useIsColorDark.hook';
 import { useAlpha } from 'hooks/useAlpha.hook';
+import IndeterminateCheckBoxOutlinedIcon from '@material-ui/icons/IndeterminateCheckBoxOutlined';
+import { useMix } from 'hooks/useMix.hook';
 
 const useStyles = makeStyles(({ spacing }) => {
   return {
-    container: ({ color }) => ({
+    container: ({ color,customColor }) => ({
       '&  p': {
         color
       },
       padding: spacing(1.6, 0, 0, 0),
       '& legend': {
-        padding: spacing(0, 1.6, 0.6, 1.6)
+        padding: spacing(0, 1.6, 0.6, 1.6),
+      color:useMix(customColor,0.8),
+
       },
       '& li': {
         padding: spacing(0.2, 0)
@@ -42,12 +46,12 @@ const GlobalLabelListOflabelList = ({
   handleChangeNewLabel,
   selectedLabels,
   setMenuState,
-  customColor: notReverserCustomColor
+  customColor
 }) => {
-  const customColor = useGetReversedCustomColor(notReverserCustomColor);
+  // const customColor = useGetReversedCustomColor(notReverserCustomColor);
 
   extend([mixPlugin]);
-  const containerClasses = useStyles({ color: customColor?.hover });
+  const containerClasses = useStyles({ color: customColor?.hover,customColor });
 
   return (
     <Grid className={containerClasses.container}>
@@ -56,7 +60,7 @@ const GlobalLabelListOflabelList = ({
         const isChecked = includes(selectedLabels, labelState.id);
 
         const isShoulColorBeChanged = !!customColor && isChecked;
-        const color = isShoulColorBeChanged ? customColor?.unHover : customColor?.hover;
+        const color = !isShoulColorBeChanged ? customColor?.unHover : customColor?.hover;
         const classes = useStyles({ color });
         // ||  useIsColorDark(customColor.bgUnHover)
         const onClickOfCheckBoxContainer = () => handleChangeNewLabel(isChecked, labelState.id);
@@ -68,11 +72,19 @@ const GlobalLabelListOflabelList = ({
         const iconsUtilsOfGlobalLabelListOflabelListProps = { onClickOfEditButton, customColor };
 
         const [icon, checkedIcon] = useTakeIcon(labelState.iconName);
+
         const isIndeterminate = !checkedIcon;
+        const isIndeterminateChecked = isIndeterminate && isShoulColorBeChanged;
+
         return (
           <MenuItem disableGutters key={`newPakeep-label-${labelState.id}`} className={classes.menuElement}>
             <Grid container alignItems={'center'} onClick={onClickOfCheckBoxContainer}>
-              <Checkbox checked={isChecked} checkedIcon={checkedIcon} icon={icon} indeterminate={isIndeterminate} />
+              <Checkbox
+                checked={isChecked}
+                checkedIcon={checkedIcon}
+                icon={isIndeterminate && !isIndeterminateChecked ? <IndeterminateCheckBoxOutlinedIcon/> :   icon}
+                indeterminate={isIndeterminateChecked}
+              />
               <ListItemText secondary={labelState.title} />
             </Grid>
             <IconsUtilsOfGlobalLabelListOflabelList {...iconsUtilsOfGlobalLabelListOflabelListProps} />
