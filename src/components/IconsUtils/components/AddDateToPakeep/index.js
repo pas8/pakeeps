@@ -120,6 +120,8 @@ const AddDateToPakeep = ({
     isHideBorder: includes(chosenItemArr, FIRST_EVENT_ID)
   };
 
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+
   return (
     <>
       <HeaderOfAddDateToPakeep {...headerOfAddDateToPakeepProps} />
@@ -144,7 +146,8 @@ const AddDateToPakeep = ({
           isChosen ? null : onMenuItemClick ? onMenuItemClick() : onDefaultClick();
         };
         const onClickOfCloseIcon = () => setChosenItemArr(state => filter(state, elId => elId !== name));
-
+        const onClickOfEditIcon = () => setIsEditDialogOpen(true);
+        
         const dynamicItemProps = { onClick };
 
         const dynamicComponentProps = {
@@ -162,7 +165,8 @@ const AddDateToPakeep = ({
           ampm,
           handleDateAndTimeInputsState,
           customColor,
-          focusedEventId
+          focusedEventId,
+          onClickOfEditIcon
         };
 
         // if (hidden) return;
@@ -171,6 +175,7 @@ const AddDateToPakeep = ({
           DynamicComponent,
           dynamicComponentProps,
           title,
+          isMarginSmaller: true,
           isActiveIcon,
           isDynamicComponentShouldBeShown,
           dynamicItemProps,

@@ -42,15 +42,14 @@ const HeaderOfAddDateToPakeep = ({
             activeProperty={Boolean(!buttonSaveState)}
             customColor={customColor}
           />
-      <Grid>
-
-          <Grid container alignItems={'center'}>
-            {customTitle || (
-              <Grid className={classes.title}>
-                <Typography variant={'subtitle1'}>{dynamicTitle ? dynamicTitle : 'Close'}</Typography>{' '}
-              </Grid>
-            )}
-          </Grid>
+          <Grid>
+            <Grid container alignItems={'center'} justify={'center'} style={{height:'100%'}}>
+              {customTitle || (
+                <Grid className={classes.title}>
+                  <Typography variant={'subtitle1'}>{dynamicTitle ? dynamicTitle : 'Close'}</Typography>
+                </Grid>
+              )}
+            </Grid>
           </Grid>
         </Grid>
       </Grid>

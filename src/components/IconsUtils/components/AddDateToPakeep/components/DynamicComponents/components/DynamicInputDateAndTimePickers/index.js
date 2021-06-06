@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import { KeyboardDateTimePicker, KeyboardTimePicker } from '@material-ui/pickers';
-import { Grid, InputAdornment, makeStyles, Box } from '@material-ui/core';
+import { Grid, InputAdornment, makeStyles, Box, SvgIcon } from '@material-ui/core';
 import { memo } from 'react';
 import { format as toFormat } from 'date-fns';
 import { useAlpha } from 'hooks/useAlpha.hook';
@@ -11,6 +11,15 @@ import { colord, extend } from 'colord';
 import mixPlugin from 'colord/plugins/mix';
 import { useIsColorDark } from 'hooks/useIsColorDark.hook';
 import { defaultTheme } from 'store/modules/App/reducers';
+import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
+
+const EditIcon = () => {
+  return (
+    <SvgIcon viewBox="0 0 24 24">
+      <path d="M19,3H18V1H16V3H8V1H6V3H5A2,2 0 0,0 3,5V19A2,2 0 0,0 5,21H10V19H5V8H19V9H21V5A2,2 0 0,0 19,3M21.7,13.35L20.7,14.35L18.65,12.35L19.65,11.35C19.85,11.14 20.19,11.13 20.42,11.35L21.7,12.63C21.89,12.83 21.89,13.15 21.7,13.35M12,18.94L18.07,12.88L20.12,14.88L14.06,21H12V18.94Z" />
+    </SvgIcon>
+  );
+};
 
 const useStyles = makeStyles(({ spacing, typography: { h4 }, palette }) => ({
   '@global': {
@@ -21,7 +30,7 @@ const useStyles = makeStyles(({ spacing, typography: { h4 }, palette }) => ({
       color: ({ customColor, isDark }) => `${customColor && isDark && customColor.hover} !important`
     },
     '.MuiPickersModal-dialogRoot': {
-      borderRadius: ({customColor})=> customColor && '6px'
+      borderRadius: ({ customColor }) => customColor && '6px'
     }
   },
   container: ({ customColor, onlyTime, isDark }) => {
@@ -108,7 +117,8 @@ const DynamicInputDateAndTimePickers = ({
   focusedEventId,
   handleDateAndTimeInputsState,
   onClickOfCloseIcon,
-  handleThemeColorsThunk
+  handleThemeColorsThunk,
+  onClickOfEditIcon
 }) => {
   extend([mixPlugin]);
   const isDark = !useIsColorDark(customColor?.bgHover);
@@ -165,8 +175,10 @@ const DynamicInputDateAndTimePickers = ({
       endAdornment: (
         <InputAdornment position={'end'} className={classes.containerOfEndAdornment}>
           <Typography component={'p'}> {title}</Typography>
-          <Box ml={1.4}>
-            <IconButtonByPas icon={CloseIcon} size={'small'} onClick={onClickOfCloseIcon} />
+          <Box ml={1.4} display={'flex'}>
+          {/* <IconButtonByPas icon={CloseIcon} size={'small'} onClick={onClickOfCloseIcon} /> */}
+
+            <IconButtonByPas icon={EditIcon} size={'small'} onClick={onClickOfEditIcon} />
           </Box>
         </InputAdornment>
       )
