@@ -1,6 +1,10 @@
+import { useSecondaryColor } from "./useSecondaryColor.hook";
+
 export const useGetReversedCustomColor = (customColor, secondVarinat = false) => {
   if (!customColor) return customColor;
+
   const reversedColor = {
+    ...customColor,
     hover: customColor.bgUnHover,
     unHover: customColor.bgHover,
     bgHover: customColor.hover,
@@ -8,11 +12,17 @@ export const useGetReversedCustomColor = (customColor, secondVarinat = false) =>
   };
 
   const secondVarinatReversedColor = {
+    ...customColor,
     hover: customColor.bgHover,
     unHover: customColor.bgUnHover,
     bgHover: customColor.unHover,
     bgUnHover: customColor.hover
   };
 
-  return secondVarinat ? secondVarinatReversedColor : reversedColor;
+  const mainPart = secondVarinat ? secondVarinatReversedColor : reversedColor;
+
+  const secondaryColor = useSecondaryColor(mainPart);
+  const newColor = { ...mainPart, secondaryColor };
+
+  return newColor;
 };

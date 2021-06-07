@@ -36,23 +36,24 @@ const InputWithCustomColor = withStyles({
   })
 })(TextField);
 
-const TitleChangerOfLabel = ({ value, onChange, customColor }) => {
+const TitleChangerOfLabel = ({ value, onChange, customColor,...textFieldProps }) => {
   const classes = useStyles();
 
-  const textFieldProps = {
+  const allTextFieldProps = {
     autoFocus: true,
     variant: 'outlined',
     // color: 'primary',
     fullWidth: true,
     value,
     customColor,
-    onChange
+    onChange,
+    ...textFieldProps
     // size:'small'
   };
   const InputTitleChangerOfLabel = !customColor?.isUseDefault ? InputWithCustomColor : TextField;
   return (
     <Grid className={classes.container}>
-      <InputTitleChangerOfLabel {...textFieldProps} />
+      <InputTitleChangerOfLabel {...allTextFieldProps}  />
     </Grid>
   );
 };

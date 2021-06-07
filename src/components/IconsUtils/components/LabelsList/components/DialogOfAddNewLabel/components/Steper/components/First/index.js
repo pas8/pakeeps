@@ -1,21 +1,21 @@
 import { TextField } from '@material-ui/core';
+import TitleChangerOfLabel from 'components/PakeepList/components/PakeepElement/components/AttributeGroup/components/LabelPart/components/Menu/components/TitleChangerOfLabel';
 import PropTypes from 'prop-types';
 
-const FirstStepOfSteperOfDialogOfAddNewLabel = ({ value, onChange }) => {
+const FirstStepOfSteperOfDialogOfAddNewLabel = ({ value, onChange, customColor }) => {
   const textFieldProps = {
-    required: true,
-    autoFocus: true,
-    label: 'Required',
-    variant: 'outlined',
-    color: 'secondary',
     value,
-    onChange
+
+    customColor,
+    onChange,
+    color: 'secondary'
   };
 
-  return <TextField {...textFieldProps} />;
+  return <TitleChangerOfLabel {...textFieldProps} />;
 };
 
 FirstStepOfSteperOfDialogOfAddNewLabel.propTypes = {
+  customColor: PropTypes.any,
   onChange: PropTypes.func,
   value: PropTypes.string
 };

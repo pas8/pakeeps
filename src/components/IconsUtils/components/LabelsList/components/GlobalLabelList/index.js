@@ -20,10 +20,10 @@ const useStyles = makeStyles(({ spacing, palette: { secondary } }) => {
       padding: spacing(1.6, 0, 0, 0),
       '& legend': {
         padding: spacing(0, 1.6, 0.6, 1.6),
-        color: customColor && useMix(customColor, 0.8)
+        color: customColor && useMix({ bgHover: customColor?.bgHover, hover: customColor?.hover },0.8)
       },
       '& li,span': {
-        '&:hover > .MuiTouchRipple-root': customColor  && {
+        '&:hover > .MuiTouchRipple-root': customColor && {
           background: useAlpha(color)
         }
       }
@@ -34,9 +34,10 @@ const useStyles = makeStyles(({ spacing, palette: { secondary } }) => {
         padding: spacing(0.2, 0),
 
         color: correctColor,
-        '&:hover > .MuiTouchRipple-root':isChecked && !customColor &&  {
-          background:  useAlpha(secondary.main),
-        },
+        '&:hover > .MuiTouchRipple-root': isChecked &&
+          !customColor && {
+            background: useAlpha(secondary.main)
+          },
         '& svg,p': {
           color: correctColor
         }

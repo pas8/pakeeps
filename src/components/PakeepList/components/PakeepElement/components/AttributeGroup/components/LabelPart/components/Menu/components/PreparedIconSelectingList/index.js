@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { useAlpha } from 'hooks/useAlpha.hook';
 import { useThemeColors } from 'hooks/useThemeColors.hook';
 
-const useStyles = makeStyles(({ spacing, transitions, shadowss }) => ({
+const useStyles = makeStyles(({ spacing, transitions, shadows }) => ({
   iconContainer: ({ color, hoverColor, isDragging }) => ({
     padding: spacing(1.4),
     transform: 'scale(1.2)',

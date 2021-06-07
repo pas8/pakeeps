@@ -3,7 +3,7 @@ import { nanoid } from 'nanoid';
 import PropTypes from 'prop-types';
 
 const ThirdStepOfSteperOfDialogOfAddNewLabel = ({ value, onChange, colorVariants }) => (
-  <RadioGroup aria-label="gender" value={value} onChange={onChange}>
+  <RadioGroup  value={value} onChange={onChange}>
     {colorVariants.map(({ labelText, value }) => {
       const formControlLabelProps = { value, control: <Radio />, label: labelText };
 

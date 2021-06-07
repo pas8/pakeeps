@@ -7,7 +7,7 @@ import { nanoid } from 'nanoid';
 import { isEqual } from 'lodash';
 import { useSnackbar } from 'notistack';
 import { useFindIcon } from 'hooks/useFindIcon.hook';
-import { Dialog, DialogActions, DialogTitle, Button } from '@material-ui/core';
+import { Dialog, DialogActions, DialogTitle, Button, makeStyles } from '@material-ui/core';
 import SaveRoundedIcon from '@material-ui/icons/SaveRounded';
 import RestoreOutlinedIcon from '@material-ui/icons/RestoreOutlined';
 import { handleAddNewGlobalLabelThunk } from 'store/modules/App/operations';
@@ -22,14 +22,57 @@ import SecondStepOfSteperOfDialogOfAddNewLabel from './components/Steper/compone
 import ThirdStepOfSteperOfDialogOfAddNewLabel from './components/Steper/components/Third';
 import FourthStepOfSteperOfDialogOfAddNewLabel from './components/Steper/components/Fourth';
 import { useThemeColors } from 'hooks/useThemeColors.hook';
+import { useGetReversedCustomColor } from 'hooks/useGetReversedCustomColor.hook';
+import { useMix } from 'hooks/useMix.hook';
+import { useAlpha } from 'hooks/useAlpha.hook';
+import { useIsColorDark } from 'hooks/useIsColorDark.hook';
+
+const useStyles = makeStyles(({ spacing, palette }) => ({
+  container: ({ customColor }) => ({
+    '& .MuiDialog-paper': {
+      // background: customColor && !useIsColorDark( customColor?.bgUnHover) ?grey[50] :  customColor?.bgUnHover,
+
+      '& .MuiDialogTitle-root, .MuiStepper-root,.MuiDialogActions-root': {
+        background: customColor && customColor?.bgUnHover,
+        color: customColor?.hover
+      },
+      '& .MuiStepper-root': {
+        padding: spacing(0.4, 2.8)
+      }
+    }
+  }),
+
+  closeButton: ({ customColor }) => {
+    const color = !customColor ? palette?.mediumEmphasis?.main : customColor.unHover;
+    return {
+      color,
+      '&:hover': {
+        background: useAlpha(color)
+      }
+    };
+  },
+
+  saveButton: ({ reverserCustomColor:customColor }) => {
+    const customMixedColor =  customColor?.secondaryColor
+    return {
+      color:customColor  &&  customMixedColor,
+      '&:hover': {
+        background:customColor &&  useAlpha(customMixedColor)
+      }
+    };
+  }
+}));
 
 const DialogOfAddNewLabel = ({
   isDialogOpen,
   handleCloseAddNewLabelDialog,
   handleAddNewGlobalLabelThunk,
-  handleOpenAddNewLabelDialog
+  handleOpenAddNewLabelDialog,
+  customColor
 }) => {
-  const [, , , , mediumEmphasisColor] = useThemeColors();
+  const reverserCustomColor = useGetReversedCustomColor(customColor);
+  const classes = useStyles({ customColor,reverserCustomColor  });
+
 
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
@@ -140,7 +183,11 @@ const DialogOfAddNewLabel = ({
     }
   ];
 
-  const steperOfDialogOfAddNewLabelProps = { stepsArrOfDialogOfAddNewLabel, toNullityNewLabelState };
+  const steperOfDialogOfAddNewLabelProps = {
+    stepsArrOfDialogOfAddNewLabel,
+    toNullityNewLabelState,
+    customColor: reverserCustomColor
+  };
 
   const previewLabelProps = {
     ...newLabelState,
@@ -148,19 +195,26 @@ const DialogOfAddNewLabel = ({
     label: newLabelState.title,
     size: 'small'
   };
-  const labelItemProps = { currentColor: newLabelState.color, handleOpen: null, labelChipProps: previewLabelProps };
+  const labelItemProps = {
+    currentColor: newLabelState.color,
+    handleOpen: null,
+    parentBackgrounColor:customColor?.bgHover,
+    labelChipProps: previewLabelProps,
+    aplyMargin: false,
+    customColor
+  };
 
   return (
-    <Dialog open={isDialogOpen} onClose={handleCloseDialog}>
+    <Dialog open={isDialogOpen} onClose={handleCloseDialog} className={classes.container}>
       <DialogTitle>Add new global label</DialogTitle>
       <SteperOfDialogOfAddNewLabel {...steperOfDialogOfAddNewLabelProps} />
       <DialogActions>
         <LabelItem {...labelItemProps} />
-        <Button onClick={handleCloseDialog} style={{ color: mediumEmphasisColor }}>
+        <Button onClick={handleCloseDialog}  className={classes.closeButton}>
           Close
         </Button>
 
-        <Button onClick={handleSave} color={'primary'} startIcon={<SaveRoundedIcon />}>
+        <Button onClick={handleSave} color={'primary'} startIcon={<SaveRoundedIcon />} className={classes.saveButton}>
           Save
         </Button>
       </DialogActions>

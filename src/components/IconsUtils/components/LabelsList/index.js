@@ -23,11 +23,11 @@ const LabelsList = ({
   isLabelViewHidden,
   changeLabelItemThunk,
   isDefaultMenuListHidden = false,
-  customColor:notReverseCustomColor,
+  customColor: notReverseCustomColor,
   // customColor,
   onMenuClose
 }) => {
-  const customColor = useGetReversedCustomColor(notReverseCustomColor)
+  const customColor = useGetReversedCustomColor(notReverseCustomColor);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const handleOpenAddNewLabelDialog = () => setIsDialogOpen(true);
   const handleCloseAddNewLabelDialog = () => setIsDialogOpen(false);
@@ -45,7 +45,12 @@ const LabelsList = ({
     }
   ];
 
-  const dialogOfAddNewLabelProps = { isDialogOpen, handleCloseAddNewLabelDialog, handleOpenAddNewLabelDialog };
+  const dialogOfAddNewLabelProps = {
+    isDialogOpen,
+    handleCloseAddNewLabelDialog,
+    handleOpenAddNewLabelDialog,
+    customColor: notReverseCustomColor
+  };
 
   const handleChangeNewLabel = (isChecked, id) => {
     isChecked ? handleDeleteNewLabel(id) : handleAddNewLabel(id);
@@ -78,7 +83,7 @@ const LabelsList = ({
     menuState,
     changeGloabalLabelItemFunc: changeLabelItemThunk,
     setMenuState,
-    customColor:notReverseCustomColor,
+    customColor: notReverseCustomColor,
     isThisMenuIsSecond: true
   };
 
