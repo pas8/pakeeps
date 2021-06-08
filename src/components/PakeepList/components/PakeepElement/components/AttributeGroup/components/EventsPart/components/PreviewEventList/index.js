@@ -7,7 +7,7 @@ import EventItem from './components/EventItem';
 
 const useStyles = makeStyles(({ spacing }) => ({
   container: {
-    maxWidth: spacing(38),
+    // maxWidth: spacing(38),
     margin: spacing(0.4, 0)
   }
 }));

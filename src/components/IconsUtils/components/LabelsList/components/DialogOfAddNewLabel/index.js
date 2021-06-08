@@ -10,7 +10,10 @@ import { useFindIcon } from 'hooks/useFindIcon.hook';
 import { Dialog, DialogActions, DialogTitle, Button, makeStyles } from '@material-ui/core';
 import SaveRoundedIcon from '@material-ui/icons/SaveRounded';
 import RestoreOutlinedIcon from '@material-ui/icons/RestoreOutlined';
+import CloseIcon from '@material-ui/icons/Close';
 import { handleAddNewGlobalLabelThunk } from 'store/modules/App/operations';
+import { useGetReversedCustomColor } from 'hooks/useGetReversedCustomColor.hook';
+import ActionsButtonGroup from 'components/ActionsButtonGroup';
 import { iconsArr } from 'components/Icons';
 import PreparedColorExamples from 'components/ColorChanger/components/PreparedColorExamples';
 import ColorPickerByPas from 'components/ColorChanger';
@@ -21,11 +24,7 @@ import FirstStepOfSteperOfDialogOfAddNewLabel from './components/Steper/componen
 import SecondStepOfSteperOfDialogOfAddNewLabel from './components/Steper/components/Second';
 import ThirdStepOfSteperOfDialogOfAddNewLabel from './components/Steper/components/Third';
 import FourthStepOfSteperOfDialogOfAddNewLabel from './components/Steper/components/Fourth';
-import { useThemeColors } from 'hooks/useThemeColors.hook';
-import { useGetReversedCustomColor } from 'hooks/useGetReversedCustomColor.hook';
-import { useMix } from 'hooks/useMix.hook';
-import { useAlpha } from 'hooks/useAlpha.hook';
-import { useIsColorDark } from 'hooks/useIsColorDark.hook';
+
 
 const useStyles = makeStyles(({ spacing, palette }) => ({
   container: ({ customColor }) => ({
@@ -40,27 +39,7 @@ const useStyles = makeStyles(({ spacing, palette }) => ({
         padding: spacing(0.4, 2.8)
       }
     }
-  }),
-
-  closeButton: ({ customColor }) => {
-    const color = !customColor ? palette?.mediumEmphasis?.main : customColor.unHover;
-    return {
-      color,
-      '&:hover': {
-        background: useAlpha(color)
-      }
-    };
-  },
-
-  saveButton: ({ reverserCustomColor:customColor }) => {
-    const customMixedColor =  customColor?.secondaryColor
-    return {
-      color:customColor  &&  customMixedColor,
-      '&:hover': {
-        background:customColor &&  useAlpha(customMixedColor)
-      }
-    };
-  }
+  })
 }));
 
 const DialogOfAddNewLabel = ({
@@ -71,8 +50,7 @@ const DialogOfAddNewLabel = ({
   customColor
 }) => {
   const reverserCustomColor = useGetReversedCustomColor(customColor);
-  const classes = useStyles({ customColor,reverserCustomColor  });
-
+  const classes = useStyles({ customColor, reverserCustomColor });
 
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
@@ -198,10 +176,17 @@ const DialogOfAddNewLabel = ({
   const labelItemProps = {
     currentColor: newLabelState.color,
     handleOpen: null,
-    parentBackgrounColor:customColor?.bgHover,
+    parentBackgrounColor: customColor?.bgHover,
     labelChipProps: previewLabelProps,
     aplyMargin: false,
     customColor
+  };
+
+  const actionsButtonGroupProps = {
+    onSave: handleSave,
+    colorOfSaveButton: reverserCustomColor?.secondaryColor,
+    onClose: handleCloseDialog,
+    colorOfCloseButton: customColor?.unHover
   };
 
   return (
@@ -210,13 +195,15 @@ const DialogOfAddNewLabel = ({
       <SteperOfDialogOfAddNewLabel {...steperOfDialogOfAddNewLabelProps} />
       <DialogActions>
         <LabelItem {...labelItemProps} />
-        <Button onClick={handleCloseDialog}  className={classes.closeButton}>
+        <Button onClick={handleCloseDialog} className={classes.closeButton} endIcon={<CloseIcon />}>
           Close
         </Button>
 
-        <Button onClick={handleSave} color={'primary'} startIcon={<SaveRoundedIcon />} className={classes.saveButton}>
+        <Button onClick={handleSave} color={'primary'} endIcon={<SaveRoundedIcon />} className={classes.saveButton}>
           Save
         </Button>
+
+        <ActionsButtonGroup {...actionsButtonGroupProps} />
       </DialogActions>
     </Dialog>
   );

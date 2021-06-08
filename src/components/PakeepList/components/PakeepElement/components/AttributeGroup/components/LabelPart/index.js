@@ -15,11 +15,9 @@ const LabelPart = ({
   pakeepId,
   parentBackgrounColor,
   customColor: notReversedCustomColor
-
 }) => {
-
+  if (!labels) return null;
   const customColor = useGetReversedCustomColor(notReversedCustomColor);
-
 
   const nullityOfMenuState = {
     mouseX: null,
@@ -69,7 +67,13 @@ const LabelPart = ({
           setMenuState({ mouseX: e.clientX, mouseY: e.clientY, id, variant, labelIconName, title, color });
         };
 
-        const labelItemProps = { currentColor: color, handleOpen, labelChipProps, customColor:notReversedCustomColor, parentBackgrounColor };
+        const labelItemProps = {
+          currentColor: color,
+          handleOpen,
+          labelChipProps,
+          customColor: notReversedCustomColor,
+          parentBackgrounColor
+        };
 
         return <LabelItem {...labelItemProps} />;
       })}
