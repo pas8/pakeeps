@@ -2,30 +2,39 @@ import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { useSnackbar } from 'notistack';
 import { makeStyles, Box, Button, Grid } from '@material-ui/core';
-import IconsUtils from 'components/IconsUtils';
 import { useMeasure } from 'react-use';
-import SaveButtonWithIcon from 'components/SaveButtonWithIcon';
 import { useAlpha } from 'hooks/useAlpha.hook';
 import { useThemeColors } from 'hooks/useThemeColors.hook';
+import IconsUtils from 'components/IconsUtils';
+import ActionsButtonGroup from 'components/ActionsButtonGroup';
 
 // import SaveOutlinedIcon from '@material-ui/icons/SaveOutlined';
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles(({spacing}) => ({
   container: {
     display: 'flex',
     position: 'absolute',
     bottom: 0,
     left: 0,
     right: 8,
-    '& button:hover': {
-      background: ({ customColor }) => (customColor ? useAlpha(customColor.hover) : null)
-    }
+    // '& button:hover': {
+    //   background: ({ customColor }) => (customColor ? useAlpha(customColor.hover) : null)
+    // }
+  
   },
   buttonWrapper: { display: 'flex', alignItems: 'center', justifyContent: 'flex-end' },
   buttonGroupWrapper: {
+    '& svg':{
+
+      margin:spacing(0,0,0,-0.42)
+  
+    },
     display: 'flex',
     justifyContent: 'flex-end',
-    flexGrow: 1
+    flexGrow: 1,
+    marginBottom:spacing(-0.42)
   },
+  
+
   button: { justifyContent: 'flex-end' }
 }));
 
@@ -54,21 +63,19 @@ const NewPakeepUtils = ({ customColor, handleNewPakeepSave, widthOfContainer, ..
 
   const classes = useStyles({ customColor });
 
+  const actionsButtonGroupProps = {
+    onSave: handleNewPakeepSubmit,
+    onClose: null,
+    colorOfCloseButton:customColor &&  useAlpha(customColor?.hover, 0.6),
+    colorOfSaveButton: customColor?.hover
+  };
+
   return (
     <Box className={clsx(classes.container)}>
       <IconsUtils {...iconUtilsProps} />
       <Box className={classes.buttonGroupWrapper} ref={ref}>
         <Box className={classes.buttonWrapper}>
-          <Button
-            style={{
-              color: !customColor ? mediumEmphasisColor : useAlpha(customColor.hover, 0.6)
-            }}
-          >
-            Close
-          </Button>
-        </Box>
-        <Box className={clsx(classes.buttonWrapper, classes.button)}>
-          <SaveButtonWithIcon onSave={handleNewPakeepSubmit} customColor={customColor} />
+          <ActionsButtonGroup {...actionsButtonGroupProps} />
         </Box>
       </Box>
     </Box>

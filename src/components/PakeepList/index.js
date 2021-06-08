@@ -22,6 +22,7 @@ import WrapperOfContainerOfPakeepList from './components/WrapperOfContainer';
 import { createContext, useEffect, useRef, useState } from 'react';
 import SelectofFPakeepListContainer from './components/WrapperOfContainer/components/Container/components/Selecto';
 import { useIsomorphicLayoutEffect, useKeyPressEvent } from 'react-use';
+import EditingDialogOfPakeepElement from './components/EditingDialogOfPakeepElement';
 // const WrapperOfContainerOfPakeepList = dynamic(() => import(), {
 //   loading: () => (
 //     <Grid style={{ height: '80vh', width: '100%' }} container alignItems={'center'} justify={'center'}>
@@ -49,7 +50,18 @@ const PakeepList = ({
   const [isPakeepDragging, setIsPakeepDragging] = useState(false);
   const [isSelecting, setIsSelecting] = useState(false);
   const [isPakeepHovering, setIsPakeepHovering] = useState(false);
-  const [pakeepIdOfDialog, setPakeepIdOfDialog] = useState('');
+
+  const nullityOfPakeepDialogProps = {
+    id: '',
+    customColor: false,
+    dialogIconsUtilsProps: {},
+    correctColor: '',
+    correctBackground: '',
+    title: '',
+    text: '',
+    dialogAttributeGroupProps: {}
+  };
+  const [pakeepDialogProps, setPakeepDialogProps] = useState(nullityOfPakeepDialogProps);
 
   const flattenFolder = flatten(folders);
   const folderProperty = flattenFolder[currentFolderPropertyIdx]?.property;
@@ -97,8 +109,8 @@ const PakeepList = ({
     handleCancelSelectingStatusThunk(true);
   };
 
-  const handleOpenDialog = (id) => {
-    setPakeepIdOfDialog(id);
+  const handleOpenDialog = id => {
+    setPakeepDialogProps(id);
   };
   useIsomorphicLayoutEffect(() => {
     if (!isCancelSelectedPakeepsId) return;
@@ -112,9 +124,10 @@ const PakeepList = ({
   useKeyPressEvent('Escape', cancelSelectedPakeepsId);
   const isSomePakeepsSelected = selectedPakeepsId.length > 0;
 
-  const onClickOfPakeepElement = id => {
-    if (!isSomePakeepsSelected) return handleOpenDialog(id);
+  const onClickOfPakeepElement = props => {
+    if (!isSomePakeepsSelected) return handleOpenDialog(props);
 
+    const id = props?.id;
     const newItem = document.getElementById(id);
     const isSelected = includes(newItem.className, SELECTED);
 
@@ -130,13 +143,12 @@ const PakeepList = ({
 
     return handleSetSelectedPakeepsIdThunk(newSelectedPakeepsId);
   };
-  const handleClosePakeepDialog = () => setPakeepIdOfDialog('')
+  const handleClosePakeepDialog = () => setPakeepDialogProps(nullityOfPakeepDialogProps);
+
   const pakeepHoveringContextPropviderPropsValue = {
     setIsPakeepHovering,
     onClickOfPakeepElement,
-    isSomePakeepsSelected,
-    pakeepIdOfDialog,
-    handleClosePakeepDialog
+    isSomePakeepsSelected
   };
   useEffect(() => {
     cancelSelectedPakeepsId();
@@ -146,6 +158,11 @@ const PakeepList = ({
     !isSomePakeepsSelected && cancelSelectedPakeepsId();
   }, [isSomePakeepsSelected]);
 
+  const allPakeepDialogProps = {
+    ...pakeepDialogProps,
+    handleClosePakeepDialog
+  };
+
   return (
     <PakeepHoveringContext.Provider value={pakeepHoveringContextPropviderPropsValue}>
       <Grid ref={scrollerRef} className={'selectoContainer'}>
@@ -153,6 +170,7 @@ const PakeepList = ({
 
         <WrapperOfContainerOfPakeepList {...wrapperOfContainerOfAllPakeepListProps} />
         {!isSelectoHidden && <SelectofFPakeepListContainer {...selectofFPakeepListContainerProps} />}
+        <EditingDialogOfPakeepElement {...allPakeepDialogProps} />
       </Grid>
     </PakeepHoveringContext.Provider>
   );

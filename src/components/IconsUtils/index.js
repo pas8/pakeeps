@@ -112,7 +112,7 @@ const IconsUtils = ({
       name: 'date',
       onClick: handleClick,
       ActiveIcon: EventAvailableIcon,
-      isIconActive: !!events.length,
+      isIconActive: !!events?.length,
       menuComponentsProps: { id },
       menuComponents: WrapperOfAddDateToPakeep
     },
@@ -138,7 +138,7 @@ const IconsUtils = ({
       popoverText: 'Add labels',
       ActiveIcon: LabelIcon,
       name: 'labels',
-      isIconActive: !!labels.length,
+      isIconActive: !!labels?.length,
       menuComponents: LabelsList,
       badgeContent: labelBargeNumber,
       menuComponentsProps: { ...labelsListProps }
