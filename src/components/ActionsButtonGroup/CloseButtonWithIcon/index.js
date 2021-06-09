@@ -10,7 +10,7 @@ const useStyles = makeStyles(({ palette ,spacing}) => ({
     return {
       '& button': {
         color,
-        '& svg,p': {
+        '& svg,span': {
           color
         },
 
