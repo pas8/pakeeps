@@ -5,8 +5,6 @@ export type CustomColorType =
       unHover?: string;
       bgHover?: string;
       bgUnHover?: string;
-      secondaryColor?:string
+      secondaryColor?: string;
     };
 
-
-    

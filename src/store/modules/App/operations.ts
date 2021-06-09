@@ -28,7 +28,6 @@ import {
 import { useGetCurrentPakeep } from './hooks';
 
 export const addNewPaKeepThunk = data => dispatch => {
-  console.log(data);
   dispatch(toAddNewPakeep(data));
 };
 
@@ -43,12 +42,6 @@ export const addDateToPakeepThunk = (pakeepId, event) => dispatch => {
   dispatch(toAddDateToPakeep(pakeepId, event));
 };
 
-export const changePakeepColumnsDataThunk = (columnValue, breakpointName) => dispatch => {
-  dispatch(toChangeColumns(columnValue, breakpointName));
-};
-export const changeTwoPakeepColumnsDataThunk = (startColumn, finishColumn, breakpointName) => dispatch => {
-  dispatch(toChangeTwoColumns(startColumn, finishColumn, breakpointName));
-};
 
 export const handleScrollDirectionName = scrollDirectionName => dispatch => {
   dispatch(toScroll(scrollDirectionName));

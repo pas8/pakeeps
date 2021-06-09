@@ -1,9 +1,10 @@
 import { addDays } from 'date-fns';
 import { filter, find, pickBy, includes, map, every } from 'lodash';
 import { createReducer } from 'store/utils';
+import { DefaultThemeInterface, InitialStateInteface } from './interfaces';
 import * as types from './types';
 
-export const defaultTheme = {
+export const defaultTheme: DefaultThemeInterface = {
   primaryMain: '#ffff8d',
   paperMain: '#424242',
   defaultBackgroundMain: '#282828',
@@ -14,9 +15,8 @@ export const defaultTheme = {
   maxEmphasis: 'rgba(255,255,255,0.96)'
 };
 
-const initialState = {
-  data: 1,
-  breakpointsValues: { xs: 0, sm: 600, md: 960, lg: 1280, xl: 1920 },
+const initialState: InitialStateInteface = {
+  breakpointsValues: { xs: 1, sm: 600, md: 960, lg: 1280, xl: 1920 },
   theme: defaultTheme,
   defaultFolderArr: [
     { title: 'All pakeeps', iconName: '', id: 'folder-ALL', property: 'ALL' },
@@ -37,9 +37,9 @@ const initialState = {
     { color: '#afa646', title: 'Eco', iconName: 'eco', id: 'label8', variant: 'default' }
   ],
   events: [
-    { title: 'Later today', iconName: 'today', id: '1', value: Date.now(), onlyTime: true },
-    { title: 'Tomorrow', iconName: 'tomorrow', id: '2', value: addDays(Date.now(), 1), onlyTime: true },
-    { title: 'Next week', iconName: 'week', id: '3', value: addDays(Date.now(), 7) }
+    { title: 'Later today', iconName: 'today', id: '1', value: Date.now(), onlyTime: true, color: '' },
+    { title: 'Tomorrow', iconName: 'tomorrow', id: '2', value: addDays(Date.now(), 1), onlyTime: true, color: '' },
+    { title: 'Next week', iconName: 'week', id: '3', value: addDays(Date.now(), 7), color: '' }
   ],
   selectedPakeepsId: [],
   folders: [[]],
@@ -164,10 +164,8 @@ const initialState = {
   pinnedPakeepsOrderNames: [],
   notifinationCounter: 8,
   isMenuOpen: false,
-  scrollDirectionName: 'up',
   currentFolderPropertyIdx: 0,
   drawerWidth: 0,
-  isUsePreviuosOrder: false,
   isCancelSelectedPakeepsId: false
 };
 
