@@ -30,8 +30,7 @@ import { IconsUtilsProps, NullityStatusState, PakeepElementProps, ReduxState, Us
 
 export const Events = createContext<null | { events: any[] }>(null);
 
-const useStyles = makeStyles(({ spacing, transitions, palette }: Theme) => {
-  return {
+const useStyles = makeStyles(({ spacing, transitions, palette }: Theme) => ({
     paperClass: ({ customColor, backgroundColor, color, utilsViewLikeInGoogleKeep }: UseStylesProps) => ({
       padding: spacing(0.4, 1.96, utilsViewLikeInGoogleKeep ? 8 * 0.8 : 1, 1.96),
       cursor: 'grab',
@@ -68,10 +67,10 @@ const useStyles = makeStyles(({ spacing, transitions, palette }: Theme) => {
     labelClass: { marginTop: spacing(0) },
     labelsContainerClass: { marginTop: spacing(0.8) },
 
-    isDraggingClass: ({ customColor }: UseStylesProps) => ({
-      borderColor: !customColor && palette.primary.main,
-      boxShadow: !!customColor && `0px 0px 8px 2px ${customColor.hover} !important`
-    }),
+    // isDraggingClass: ({ customColor }: UseStylesProps) => ({
+      // borderColor: !customColor && palette.primary.main,
+      // boxShadow: !!customColor && `0px 0px 8px 2px ${customColor.hover} !important`
+    // }),
 
     isSelectingClass: {},
     isSomePakeepsSelectedClass: { cursor: 'pointer !important' },
@@ -80,8 +79,7 @@ const useStyles = makeStyles(({ spacing, transitions, palette }: Theme) => {
         overflowY: 'hidden'
       }
     }
-  };
-});
+  }));
 
 const PakeepElement: FC<PakeepElementProps> = ({
   title,
@@ -116,7 +114,7 @@ const PakeepElement: FC<PakeepElementProps> = ({
   const correctColor: string = !customColor ? maxEmphasisColor : customColor?.hover;
 
   const correctBackground: string = isBackgroundColorDefault ? '#303030' : backgroundColor;
-  //@ts-ignore
+
   const classes = useStyles({
     customColor,
     backgroundColor: correctBackground,

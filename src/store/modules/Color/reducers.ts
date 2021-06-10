@@ -1,7 +1,20 @@
 import { createReducer } from 'store/utils';
 import * as types from './types';
 
+export const defaultTheme: DefaultThemeInterface = {
+  primaryMain: '#ffff8d',
+  paperMain: '#424242',
+  defaultBackgroundMain: '#282828',
+  secondaryMain: '#00b0ff',
+  type: 'dark',
+  highEmphasis: 'rgba(255,255,255,0.8)',
+  mediumEmphasis: 'rgba(255,255,255,0.6)',
+  maxEmphasis: 'rgba(255,255,255,0.96)'
+};
+
 const colorInitialState = {
+  breakpointsValues: { xs: 1, sm: 600, md: 960, lg: 1280, xl: 1920 },
+  theme: defaultTheme,
   idColumnArr: {
     'column-1': ['1', '2', '3', '4'],
     'column-2': ['5', '6', '7', '8'],

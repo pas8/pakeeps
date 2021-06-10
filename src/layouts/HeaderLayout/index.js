@@ -11,7 +11,7 @@ import {
   handleCancelSelectingStatusThunk,
   handleDeleteLabelFromPakeepThunk,
   handlePinStatusPakeepThunk,
-  handleSelectedPakeepsPropertyThunk
+  operateToChangeSelectedPakeepsProperty
 } from 'store/modules/App/operations';
 
 const useStyles = makeStyles(theme => ({
@@ -55,7 +55,7 @@ const HeaderLayout = ({
   navigationViewLike,
   selectedPakeepsId,
   handleCancelSelectingStatusThunk,
-  handleSelectedPakeepsPropertyThunk,
+  operateToChangeSelectedPakeepsProperty,
   selectedPakeeps,
   handlePinStatusPakeepThunk,
   handleDeleteLabelFromPakeepThunk,
@@ -82,7 +82,7 @@ const HeaderLayout = ({
   const headerWhenActiveSelectoProps = {
     selectedPakeeps,
     cancelSelectedPakeepsId,
-    handleSelectedPakeepsPropertyThunk,
+    operateToChangeSelectedPakeepsProperty,
     handlePinStatusPakeepThunk,
     selectedPakeepsId,
     handleDeleteLabelFromPakeepThunk,
@@ -129,8 +129,8 @@ const mapDispatchToProps = dispatch => ({
   handleDeleteLabelFromPakeepThunk: (pakeepId, labelId) => dispatch(handleDeleteLabelFromPakeepThunk(pakeepId, labelId)),
   handleAddLabelToPakeepThunk: (pakeepId, labelId) => dispatch(handleAddLabelToPakeepThunk(pakeepId, labelId)),
   
-  handleSelectedPakeepsPropertyThunk: (newPakeeps, propertyVariant) =>
-    dispatch(handleSelectedPakeepsPropertyThunk(newPakeeps, propertyVariant))
+  operateToChangeSelectedPakeepsProperty: (newPakeeps, propertyVariant) =>
+    dispatch(operateToChangeSelectedPakeepsProperty(newPakeeps, propertyVariant))
     
 });
 

@@ -127,8 +127,8 @@ export const handleCancelSelectingStatusThunk = boolValue => dispatch => {
   dispatch(toSetIsCancelSelectedPakeepsId(boolValue));
 };
 
-export const handleSelectedPakeepsPropertyThunk = (newPakeeps, propertyVariant) => dispatch => {
-  dispatch(toHandleSelectedPakeepsProperty(newPakeeps, propertyVariant));
+export const operateToChangeSelectedPakeepsProperty = (newPakeeps) => dispatch => {
+  dispatch(toHandleSelectedPakeepsProperty(newPakeeps));
 };
 
 

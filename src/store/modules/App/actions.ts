@@ -1,84 +1,117 @@
-import { AppActionTypes, PayloadTypes, TypesNames } from './types';
+import { AppActionTypes, PayloadTypes, TypeNames } from './types';
 
-export const toAddNewPakeep = (payload: PayloadTypes[TypesNames.HANDLE_ADD_NEW_PAKEEP]): AppActionTypes => ({
-  type: TypesNames.HANDLE_ADD_NEW_PAKEEP,
+type ActionWithOnlyPayloadType<T> = (payload: T) => AppActionTypes;
+
+export const toAddNewPakeep: ActionWithOnlyPayloadType<PayloadTypes[TypeNames.HANDLE_ADD_NEW_PAKEEP]> = payload => ({
+  type: TypeNames.HANDLE_ADD_NEW_PAKEEP,
   payload
 });
-export const toDeletePakeep = (payload: PayloadTypes[TypesNames.HANDLE_DELETE_PAKEEP]): AppActionTypes => ({
-  type: TypesNames.HANDLE_DELETE_PAKEEP,
+export const toDeletePakeep: ActionWithOnlyPayloadType<PayloadTypes[TypeNames.HANDLE_DELETE_PAKEEP]> = payload => ({
+  type: TypeNames.HANDLE_DELETE_PAKEEP,
   payload
 });
 
-export const toAddEventToPakeep = (payload: PayloadTypes[TypesNames.HANDLE_ADD_EVENT_TO_PAKEEP]): AppActionTypes => ({
-  type: TypesNames.HANDLE_ADD_EVENT_TO_PAKEEP,
+export const toAddEventToPakeep = (payload: PayloadTypes[TypeNames.HANDLE_ADD_EVENT_TO_PAKEEP]): AppActionTypes => ({
+  type: TypeNames.HANDLE_ADD_EVENT_TO_PAKEEP,
   payload
 });
+
+ 
 
 export const toChangeMenuOpenStatus = (
-  payload: PayloadTypes[TypesNames.HANDLE_CHANGE_MENU_OPEN_STATUS]
+  payload: PayloadTypes[TypeNames.HANDLE_CHANGE_MENU_OPEN_STATUS]
 ): AppActionTypes => ({
-  type: TypesNames.HANDLE_CHANGE_MENU_OPEN_STATUS,
+  type: TypeNames.HANDLE_CHANGE_MENU_OPEN_STATUS,
   payload
 });
 
 export const toSetCurrentFolderPropertyIdx = (
-  payload: PayloadTypes[TypesNames.HANDLE_SET_CURRENT_FOLDER_PROPERTY_IDX]
+  payload: PayloadTypes[TypeNames.HANDLE_SET_CURRENT_FOLDER_PROPERTY_IDX]
 ): AppActionTypes => ({
-  type: TypesNames.HANDLE_SET_CURRENT_FOLDER_PROPERTY_IDX,
+  type: TypeNames.HANDLE_SET_CURRENT_FOLDER_PROPERTY_IDX,
   payload
 });
 
-// export const toAddDateToPakeep = (pakeepId, event) => ({ type: types.ADD_DATE_TO_PAKEEP, pakeepId, event });
+export const toChangeFolders: ActionWithOnlyPayloadType<PayloadTypes[TypeNames.HANDLE_CHANGE_FOLDERS]> = payload => ({
+  type: TypeNames.HANDLE_CHANGE_FOLDERS,
+  payload
+});
 
-// export const toScroll = scrollDirectionName => ({ type: types.SCROLL_DIRECTION, scrollDirectionName });
+export const toChangeGlobalLabels = (payload: PayloadTypes[TypeNames.HANDLE_CHANGE_GLOBAL_LABELS]): AppActionTypes => ({
+  type: TypeNames.HANDLE_CHANGE_GLOBAL_LABELS,
+  payload
+});
 
-// export const toSetNewOrderNames = newOrder => ({ type: types.SET_NEW_ORDER_NAMES, newOrder });
-// export const toSetCurrentFolderPropertyIdx = folderIdx => ({
-//   type: types.HANDLE_CURRENT_FOLDER_PROPERTY_IDX,
-//   folderIdx
-// });
+export const toChangeLabelsInPakeep = (
+  payload: PayloadTypes[TypeNames.HANDLE_CHANGE_LABELS_IN_PAKEEP]
+): AppActionTypes => ({
+  type: TypeNames.HANDLE_CHANGE_LABELS_IN_PAKEEP,
+  payload
+});
 
-// export const toChangeFolders = foldersArr => ({ type: types.HANDLE_FOLDERS, foldersArr });
-// export const toChangeLabelItem = labels => ({ type: types.CHANGE_LABEL_ITEM, labels });
+export const toSetDrawerWidth = (payload: PayloadTypes[TypeNames.HANDLE_SET_DRAWER_WIDTH]): AppActionTypes => ({
+  type: TypeNames.HANDLE_SET_DRAWER_WIDTH,
+  payload
+});
 
-// export const toChangeLabelFromPakeep = (currentPakeep, labels) => ({
-//   type: types.HANDLE_CHANGE_LABEL_IN_PAKEEP,
-//   currentPakeep,
-//   labels
-// });
+export const toAddNewGlobalLabel = (payload: PayloadTypes[TypeNames.HANDLE_ADD_NEW_GLOBAL_LABEL]): AppActionTypes => ({
+  type: TypeNames.HANDLE_ADD_NEW_GLOBAL_LABEL,
+  payload
+});
 
-// export const toSetPreviusOrderNames = orderNames => ({ type: types.HANDLE_SET_PREVIUOS_ORDER_NAMES, orderNames });
-// export const toSetOrderNamesOfPinnedPakeeps = orderNames => ({
-//   type: types.HANDLE_SET_ORDER_NAMES_OF_PINNED_PAKEEPS,
-//   orderNames
-// });
-// export const toHandleDrawerWidth = drawerWidth => ({ type: types.HANDLE_DRAWER_WIDTH, drawerWidth });
+export const toChangePakeeps = (payload: PayloadTypes[TypeNames.HANDLE_SET_DRAWER_WIDTH]): AppActionTypes => ({
+  type: TypeNames.HANDLE_SET_DRAWER_WIDTH,
+  payload
+});
 
-// export const toAddNewGlobalLabel = newLabel => ({ type: types.ADD_NEW_GLOBAL_LABEL, newLabel });
-// export const toSetNewPakeepsArr = pakeeps => ({ type: types.HANDLE_PAKEEPS, pakeeps });
+export const toPinStatusOfPakeeps = (
+  payload: PayloadTypes[TypeNames.HANDLE_PIN_STATUS_OF_PAKEEPS]
+): AppActionTypes => ({
+  type: TypeNames.HANDLE_PIN_STATUS_OF_PAKEEPS,
+  payload
+});
 
-// export const toHandlePinStatusPakeep = (pakeepId, isPakeepPinned) => ({
-//   type: types.HANDLE_PIN_STATUS_OF_PAKEEPS,
-//   pakeepId,
-//   isPakeepPinned
-// });
+export const toSetOrderNamesOfPinnedPakeeps = (
+  payload: PayloadTypes[TypeNames.HANDLE_SET_ORDER_NAMES_OF_PINNED_PAKEEPS]
+): AppActionTypes => ({
+  type: TypeNames.HANDLE_SET_ORDER_NAMES_OF_PINNED_PAKEEPS,
+  payload
+});
 
-// export const toSetSelectedPakeepIds = pakepsId => ({ type: types.HANDLE_SET_SELECTED_PAKEEPIDS_ARR, pakepsId });
-// export const toSetIsCancelSelectedPakeepsId = boolValue => ({ type: types.HANDLE_CANCEL_SELECTING_STATUS, boolValue });
+export const toSetSelectedPakeepIdsArr = (
+  payload: PayloadTypes[TypeNames.HANDLE_SET_SELECTED_PAKEEPIDS_ARR]
+): AppActionTypes => ({
+  type: TypeNames.HANDLE_SET_SELECTED_PAKEEPIDS_ARR,
+  payload
+});
 
-// export const toHandleSelectedPakeepsProperty = (newPakeeps, propertyVariant) => ({
-//   type: types.HANDLE_SELECTED_PAKEEPS_PROPERTY,
-//   newPakeeps,
-//   propertyVariant
-// });
+export const toCancelSelectingStatus = (
+  payload: PayloadTypes[TypeNames.HANDLE_CANCEL_SELECTING_STATUS]
+): AppActionTypes => ({
+  type: TypeNames.HANDLE_CANCEL_SELECTING_STATUS,
+  payload
+});
 
-// export const toHandlePakeepProperty = (pakeepId, property) => ({
-//   type: types.HANDLE_PAKEEP_PROPERTY,
-//   pakeepId,
-//   property
-// });
+export const toChangeSelectedPakeepsProperty = (
+  payload: PayloadTypes[TypeNames.HANDLE_CHANGE_SELECTED_PAKEEPS_PROPERTY]
+): AppActionTypes => ({
+  type: TypeNames.HANDLE_CHANGE_SELECTED_PAKEEPS_PROPERTY,
+  payload
+});
 
-// export const toHandleThemeColors = newThemeColors => ({
-//   type: types.HANDLE_THEME_COLORS,
-//   newThemeColors
-// });
+export const toAddLabelToPakeep = (payload: PayloadTypes[TypeNames.HANDLE_ADD_LABEL_TO_PAKEEP]): AppActionTypes => ({
+  type: TypeNames.HANDLE_ADD_LABEL_TO_PAKEEP,
+  payload
+});
+
+export const toChangePakeepProperty = (
+  payload: PayloadTypes[TypeNames.HANDLE_CHANGE_PAKEEP_PROPERTY]
+): AppActionTypes => ({
+  type: TypeNames.HANDLE_CHANGE_PAKEEP_PROPERTY,
+  payload
+});
+
+export const toChangeThemeColors = (payload: PayloadTypes[TypeNames.HANDLE_CHANGE_THEME_COLORS]): AppActionTypes => ({
+  type: TypeNames.HANDLE_CHANGE_THEME_COLORS,
+  payload
+});
