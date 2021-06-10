@@ -5,7 +5,7 @@ import clsx from 'clsx';
 import { useCookie, useKeyPressEvent, useMeasure, usePageLeave } from 'react-use';
 import { nanoid } from 'nanoid';
 import { Box, Grid, IconButton, makeStyles, Paper, TextField, withStyles } from '@material-ui/core';
-import { addNewPaKeepThunk } from 'store/modules/App/operations';
+import { operateToAddNewPakeep } from 'store/modules/App/operations';
 import NewPakeepUtils from './components/Utils';
 import AttributesOfNewPakeep from './components/Attributes';
 import { useCustomBreakpoint } from 'hooks/useCustomBreakpoint';
@@ -88,7 +88,7 @@ const useStyles = makeStyles(({spacing, palette,transitions}) => ({
 
 export const SelectedLabels = createContext();
 
-const NewPaKeep = ({ addNewPaKeepThunk }) => {
+const NewPaKeep = ({ operateToAddNewPakeep }) => {
   const nulittyState = {
     title: '',
     text: '',
@@ -147,7 +147,7 @@ const NewPaKeep = ({ addNewPaKeepThunk }) => {
 
   const handleNewPakeepSave = () => {
     setState(nulittyState);
-    addNewPaKeepThunk(state);
+    operateToAddNewPakeep(state);
   };
 
   const handleStatusOfHideLabelView = () =>
@@ -276,6 +276,6 @@ const NewPaKeep = ({ addNewPaKeepThunk }) => {
   );
 };
 
-const mapDispatchToProps = dispatch => ({ addNewPaKeepThunk: data => dispatch(addNewPaKeepThunk(data)) });
+const mapDispatchToProps = dispatch => ({ operateToAddNewPakeep: data => dispatch(operateToAddNewPakeep(data)) });
 
 export default connect(null, mapDispatchToProps)(NewPaKeep);

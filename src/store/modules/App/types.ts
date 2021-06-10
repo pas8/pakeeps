@@ -1,6 +1,8 @@
+import { TypeNames } from './enums';
 import {
   DefaultThemeInterface,
   DrawerWidthType,
+  FoldersType,
   GlobalLabelsType,
   LabelElementInterface,
   OrderNamesType,
@@ -13,29 +15,6 @@ import {
   SelectedPakeepsIdType
 } from './interfaces';
 
-export enum TypeNames {
-  HANDLE_ADD_EVENT_TO_PAKEEP = 'HANDLE_ADD_EVENT_TO_PAKEEP',
-  HANDLE_ADD_NEW_PAKEEP = 'HANDLE_ADD_NEW_PAKEP',
-  HANDLE_CHANGE_MENU_OPEN_STATUS = 'HANDLE_CHANGE_MENU_OPEN_STATUS',
-  HANDLE_DELETE_PAKEEP = 'DELETE_PAKEEP',
-  HANDLE_SET_NEW_ORDER_NAMES = 'SET_NEW_ORDER_NAMES',
-  HANDLE_SET_CURRENT_FOLDER_PROPERTY_IDX = 'HANDLE_CURRENT_FOLDER_PROPERTY_IDX',
-  HANDLE_CHANGE_FOLDERS = 'HANDLE_CHANGE_FOLDERS',
-  HANDLE_CHANGE_GLOBAL_LABELS = 'HANDLE_CHANGE_GLOBAL_LABELS',
-  HANDLE_CHANGE_LABELS_IN_PAKEEP = 'HANDLE_CHANGE_LABELS_IN_PAKEEP',
-  HANDLE_SET_DRAWER_WIDTH = 'HANDLE_SET_DRAWER_WIDTH',
-  HANDLE_ADD_NEW_GLOBAL_LABEL = 'HANDLE_ADD_NEW_GLOBAL_LABEL',
-  HANDLE_CHANGE_PAKEEPS = 'HANDLE_CHANGE_PAKEEPS',
-  HANDLE_PIN_STATUS_OF_PAKEEPS = 'HANDLE_PIN_STATUS_OF_PAKEEPS',
-  HANDLE_SET_ORDER_NAMES_OF_PINNED_PAKEEPS = 'HANDLE_SET_ORDER_NAMES_OF_PINNED_PAKEEPS',
-  HANDLE_SET_SELECTED_PAKEEPIDS_ARR = 'HANDLE_SET_SELECTED_PAKEEPIDS_ARR',
-  HANDLE_CANCEL_SELECTING_STATUS = 'HANDLE_CANCEL_SELECTING_STATUS',
-  HANDLE_CHANGE_SELECTED_PAKEEPS_PROPERTY = 'HANDLE_CHANGE_SELECTED_PAKEEPS_PROPERTY',
-  HANDLE_ADD_LABEL_TO_PAKEEP = 'ADD_LABEL_TO_PAKEEP',
-  HANDLE_CHANGE_PAKEEP_PROPERTY = 'HANDLE_CHANGE_PAKEEP_PROPERTY',
-  HANDLE_CHANGE_THEME_COLORS = 'HANDLE_CHANGE_THEME_COLORS'
-}
-
 export type PayloadTypes = {
   [TypeNames.HANDLE_ADD_NEW_PAKEEP]: { newPakeep: PakeepElementInterface };
   [TypeNames.HANDLE_DELETE_PAKEEP]: { pakeepId: string };
@@ -43,7 +22,7 @@ export type PayloadTypes = {
   [TypeNames.HANDLE_CHANGE_MENU_OPEN_STATUS]: { menuOpenStatus: boolean };
   [TypeNames.HANDLE_SET_CURRENT_FOLDER_PROPERTY_IDX]: { folderIdx: number };
   [TypeNames.HANDLE_SET_NEW_ORDER_NAMES]: { newOrderNames: OrderNamesType };
-  [TypeNames.HANDLE_CHANGE_FOLDERS]: { newPakeep: PakeepElementInterface };
+  [TypeNames.HANDLE_CHANGE_FOLDERS]: { folders: FoldersType };
   [TypeNames.HANDLE_CHANGE_GLOBAL_LABELS]: { newGlobalLabels: GlobalLabelsType };
   [TypeNames.HANDLE_CHANGE_LABELS_IN_PAKEEP]: {
     currentPakeep: PakeepElementInterface;
@@ -51,7 +30,7 @@ export type PayloadTypes = {
   };
   [TypeNames.HANDLE_SET_DRAWER_WIDTH]: { drawerWidth: DrawerWidthType };
   [TypeNames.HANDLE_ADD_NEW_GLOBAL_LABEL]: { newLabel: LabelElementInterface };
-  [TypeNames.HANDLE_CHANGE_PAKEEPS]: { pakeeps: PakeepsType };
+  [TypeNames.HANDLE_CHANGE_PAKEEPS]: { pakeeps: PakeepElementInterface };
   [TypeNames.HANDLE_PIN_STATUS_OF_PAKEEPS]: { pakeepId: PakeepIdType; isPakeepPinned?: boolean };
   [TypeNames.HANDLE_SET_ORDER_NAMES_OF_PINNED_PAKEEPS]: { pinnedPakeepsOrderNames: OrderNamesType };
   [TypeNames.HANDLE_SET_SELECTED_PAKEEPIDS_ARR]: { selectedPakeepsId: SelectedPakeepsIdType };

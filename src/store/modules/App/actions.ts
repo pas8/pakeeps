@@ -1,4 +1,5 @@
-import { AppActionTypes, PayloadTypes, TypeNames } from './types';
+import { TypeNames } from './enums';
+import { AppActionTypes, PayloadTypes } from './types';
 
 type ActionWithOnlyPayloadType<T> = (payload: T) => AppActionTypes;
 
@@ -6,6 +7,7 @@ export const toAddNewPakeep: ActionWithOnlyPayloadType<PayloadTypes[TypeNames.HA
   type: TypeNames.HANDLE_ADD_NEW_PAKEEP,
   payload
 });
+
 export const toDeletePakeep: ActionWithOnlyPayloadType<PayloadTypes[TypeNames.HANDLE_DELETE_PAKEEP]> = payload => ({
   type: TypeNames.HANDLE_DELETE_PAKEEP,
   payload
@@ -15,8 +17,6 @@ export const toAddEventToPakeep = (payload: PayloadTypes[TypeNames.HANDLE_ADD_EV
   type: TypeNames.HANDLE_ADD_EVENT_TO_PAKEEP,
   payload
 });
-
- 
 
 export const toChangeMenuOpenStatus = (
   payload: PayloadTypes[TypeNames.HANDLE_CHANGE_MENU_OPEN_STATUS]

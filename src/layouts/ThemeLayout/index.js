@@ -2,10 +2,15 @@ import { createMuiTheme, Grid, makeStyles, responsiveFontSizes, ThemeProvider } 
 import PropTypes from 'prop-types';
 import { useEffect } from 'react';
 import { connect } from 'react-redux';
+import { h } from 'store/modules/App/operations';
 
 const ThemeLayout = ({ children, theme: themeColors, breakpointsValues }) => {
   const { xs, sm, md, lg, xl } = breakpointsValues;
   const breakpointsArr = [xl, lg, md, sm, xs];
+
+  
+
+h[0]({newEvent: [], pakeepId: ';;dflqwfbhwjs' })
 
   const theme = responsiveFontSizes(
     createMuiTheme({
@@ -52,6 +57,6 @@ ThemeLayout.propTypes = {
     secondaryMain: PropTypes.any
   })
 };
-const mapStateToProps = ({ app: { theme, breakpointsValues } }) => ({ theme, breakpointsValues });
+const mapStateToProps = ({ color: { theme, breakpointsValues } }) => ({ theme, breakpointsValues });
 
 export default connect(mapStateToProps)(ThemeLayout);

@@ -48,7 +48,7 @@ export interface PakeepElementInterface {
   labels: string[];
   isArchived: boolean;
   events: GlobalEventInteface[];
-  id: PakeepIdType;
+  readonly id: PakeepIdType;
   isPinned: boolean;
   isCheckBoxes: boolean;
   backgroundColor: ColorType;
@@ -99,8 +99,7 @@ export interface InitialStateInteface {
   isCancelSelectedPakeepsId: boolean;
 }
 
-export type PakeepPropertyValueType = $Values<InitialStateInteface>;
-export type PakeepPropertyKeysType = $Keys<InitialStateInteface>;
+export type PakeepPropertyValueType = $Values<PakeepElementInterface>;
+export type PakeepPropertyKeysType = $Keys<PakeepElementInterface>;
 
-export type PakeepPropertyType = { [key: string]: PakeepPropertyValueType }
-
+export type PakeepPropertyType = { [key: string]: PakeepElementInterface };
