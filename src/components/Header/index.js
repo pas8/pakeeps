@@ -4,7 +4,7 @@ import clsx from 'clsx';
 import { connect } from 'react-redux';
 import { AppBar,  makeStyles, Toolbar, Grid } from '@material-ui/core';
 import { getNavigationViewLike } from 'store/modules/Settings/selectors';
-import { setMenuOpenStatusThunk } from 'store/modules/App/operations';
+import { operateToChangeMenuOpenStatus } from 'store/modules/App/operations';
 import { useCustomBreakpoint } from 'hooks/useCustomBreakpoint';
 import HeaderSearch from './components/Search';
 import HeaderDrawer from './components/Drawer';
@@ -47,7 +47,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const HeaderByPas = ({
-  setMenuOpenStatusThunk,
+  operateToChangeMenuOpenStatus,
   isMenuOpen,
 
   drawerWidth,
@@ -57,8 +57,8 @@ const HeaderByPas = ({
 }) => {
   const [breakpoint] = useCustomBreakpoint();
 
-  const handleDrawerOpen = () => setMenuOpenStatusThunk(!isMenuOpen);
-  const handleDrawerClose = () => setMenuOpenStatusThunk(false);
+  const handleDrawerOpen = () => operateToChangeMenuOpenStatus(!isMenuOpen);
+  const handleDrawerClose = () => operateToChangeMenuOpenStatus(false);
 
   const isSmallSize = breakpoint === 'xs';
 
@@ -95,11 +95,11 @@ HeaderByPas.propTypes = {
   navigationViewLikeGoogleKeep: PropTypes.bool,
   navigationViewLikePakeeps: PropTypes.bool,
   navigationViewLikeTelegram: PropTypes.bool,
-  setMenuOpenStatusThunk: PropTypes.func
+  operateToChangeMenuOpenStatus: PropTypes.func
 };
 
 const mapDispatchToProps = dispatch => ({
-  setMenuOpenStatusThunk: boolStatus => dispatch(setMenuOpenStatusThunk(boolStatus))
+  operateToChangeMenuOpenStatus: boolStatus => dispatch(operateToChangeMenuOpenStatus(boolStatus))
 });
 
 export default connect(null, mapDispatchToProps)(HeaderByPas);

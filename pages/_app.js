@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
-import { useEffect } from 'react';
+import { AppProps } from 'next/app';
+import { FC, useEffect } from 'react';
 import { ComposeLayouts } from 'layouts';
 // import LogRocket from 'logrocket';
 import SnackBarLayout from 'layouts/SnackBarLayout';
@@ -19,17 +20,14 @@ const Index = ({ Component, pageProps }) => {
     if (jssStyles) jssStyles.parentElement.removeChild(jssStyles);
   }, []);
 
-  const layouts = [StoreLayout, ThemeLayout, DateLayout, AuthLayout, SnackBarLayout, FolderLayout, HeaderLayout];
+  // const layouts = [StoreLayout, ThemeLayout, DateLayout, AuthLayout, SnackBarLayout, FolderLayout, HeaderLayout];
+  const layouts = [StoreLayout,ThemeLayout];
 
   return (
     <ComposeLayouts layouts={layouts} pageProps={pageProps}>
-      <Component {...pageProps} />
+      <div>fuck</div>
+      {/* <Component {...pageProps} /> */}
     </ComposeLayouts>
   );
 };
 export default Index;
-
-Index.propTypes = {
-  Component: PropTypes.elementType.isRequired,
-  pageProps: PropTypes.object.isRequired
-};

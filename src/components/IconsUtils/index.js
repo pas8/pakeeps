@@ -223,34 +223,34 @@ const IconsUtils = ({
   );
 };
 
-IconsUtils.propTypes = {
-  backgroundColor: PropTypes.any,
-  customColor: PropTypes.any,
-  handleNewPakeepSave: PropTypes.func,
-  handleSetBackgroundColorPakeep: PropTypes.func,
-  handleSetBookmarkPakeep: PropTypes.func,
-  handleSetColorPakeep: PropTypes.func,
-  handleSetFavoritePakeep: PropTypes.func,
-  handleSetIsCheckBoxesPakeep: PropTypes.func,
-  handleSetIsPinnedPakeep: PropTypes.func,
-  handleSetWidth: PropTypes.func,
-  isAllIconsIsShown: PropTypes.bool,
-  isBackgroundColorDefault: PropTypes.bool,
-  isCheckBoxes: PropTypes.bool,
-  isColorDefault: PropTypes.bool,
-  isFavorite: PropTypes.bool,
-  isInBookmark: PropTypes.bool,
-  isNewPakeepContainerHaveFullWidth: PropTypes.bool,
-  isPinned: PropTypes.bool,
-  labelBargeNumber: PropTypes.number,
-  labels: PropTypes.shape({
-    length: PropTypes.any
-  }),
-  labelsListProps: PropTypes.any,
-  open: PropTypes.bool,
-  setEditTitleIsTrue: PropTypes.func,
-  sliceArrayTo: PropTypes.number,
-  widthOfContainer: PropTypes.any
-};
+// IconsUtils.propTypes = {
+//   backgroundColor: PropTypes.any,
+//   customColor: PropTypes.any,
+//   handleNewPakeepSave: PropTypes.func,
+//   handleSetBackgroundColorPakeep: PropTypes.func,
+//   handleSetBookmarkPakeep: PropTypes.func,
+//   handleSetColorPakeep: PropTypes.func,
+//   handleSetFavoritePakeep: PropTypes.func,
+//   handleSetIsCheckBoxesPakeep: PropTypes.func,
+//   handleSetIsPinnedPakeep: PropTypes.func,
+//   handleSetWidth: PropTypes.func,
+//   isAllIconsIsShown: PropTypes.bool,
+//   isBackgroundColorDefault: PropTypes.bool,
+//   isCheckBoxes: PropTypes.bool,
+//   isColorDefault: PropTypes.bool,
+//   isFavorite: PropTypes.bool,
+//   isInBookmark: PropTypes.bool,
+//   isNewPakeepContainerHaveFullWidth: PropTypes.bool,
+//   isPinned: PropTypes.bool,
+//   labelBargeNumber: PropTypes.number,
+//   labels: PropTypes.shape({
+//     length: PropTypes.any
+//   }),
+//   labelsListProps: PropTypes.any,
+//   open: PropTypes.bool,
+//   setEditTitleIsTrue: PropTypes.func,
+//   sliceArrayTo: PropTypes.number,
+//   widthOfContainer: PropTypes.any
+// };
 
 export default IconsUtils;
