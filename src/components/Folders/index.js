@@ -120,7 +120,7 @@ const Folders = ({
   value,
   handleChange,
   folders,
-  handleDrawerWidthThunk,
+  handleDrawerWidth,
   isMenuOpen,
   navigationViewLike,
   positionOfFolderViewWithPakeepViewIsBottom,
@@ -309,8 +309,8 @@ const Folders = ({
   ));
   // useEffect(() =>  setButtonWidth(buttonW), [isFolderOpen])
 
-  useEffect(() => handleDrawerWidthThunk(width), [width, isFolderOpen]);
-  useEffect(() => handleDrawerWidthThunk(0), [isMenuOpen]);
+  useEffect(() => handleDrawerWidth(width), [width, isFolderOpen]);
+  useEffect(() => handleDrawerWidth(0), [isMenuOpen]);
 
   return f;
 };
@@ -320,7 +320,7 @@ Folders.propTypes = {
     map: PropTypes.func
   }),
   handleChange: PropTypes.func,
-  handleDrawerWidthThunk: PropTypes.func,
+  handleDrawerWidth: PropTypes.func,
   isMenuOpen: PropTypes.bool,
   navigationViewLike: PropTypes.string,
   positionOfFolderViewWithPakeepViewIsBottom: PropTypes.bool,

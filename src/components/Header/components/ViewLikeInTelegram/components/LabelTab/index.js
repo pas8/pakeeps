@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { useState } from 'react';
 import { connect } from 'react-redux';
 import { useTakeIcon } from 'hooks/useTakeIcon.hook';
-import { handleCurrentFolderPropertyIdxThunk } from 'store/modules/App/operations';
+import { handleCurrentFolderPropertyIdx } from 'store/modules/App/operations';
 
 const useStyles = makeStyles(({spacing,typography}) => ({
   container: {
@@ -52,10 +52,10 @@ const StyledTabs = withStyles(({palette:{primary}}) => ({
   }
 }))(props => <Tabs {...props} TabIndicatorProps={{ children: <span /> }} />);
 
-const LabelTab = ({ folders, handleCurrentFolderPropertyIdxThunk, currentFolderPropertyIdx }) => {
+const LabelTab = ({ folders, handleCurrentFolderPropertyIdx, currentFolderPropertyIdx }) => {
 
   const handleTabIdxChange = (placeholder, folderName) => {
-    handleCurrentFolderPropertyIdxThunk(folderName)
+    handleCurrentFolderPropertyIdx(folderName)
   };
 
   const classes = useStyles();
@@ -88,7 +88,7 @@ LabelTab.propTypes = {};
 
 const mapStateToProps = ({ app: { folders, currentFolderPropertyIdx } }) => ({ folders, currentFolderPropertyIdx });
 const mapDispatchToProps = dispatch => ({
-  handleCurrentFolderPropertyIdxThunk: folderIdx => dispatch(handleCurrentFolderPropertyIdxThunk(folderIdx))
+  handleCurrentFolderPropertyIdx: folderIdx => dispatch(handleCurrentFolderPropertyIdx(folderIdx))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(LabelTab);
