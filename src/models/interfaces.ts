@@ -1,12 +1,10 @@
-export type CustomColorType =
-  | boolean
-  | {
-      hover?: string;
-      unHover?: string;
-      bgHover?: string;
-      bgUnHover?: string;
-      secondaryColor?:string
-    };
+import { ReactNode } from 'react';
+import { ColorInitialStateType } from 'store/modules/Color/interfaces';
+import { AppInitialStateInteface } from '../store/modules/App/types';
 
+export type RootStoreType = {
+  app: AppInitialStateInteface;
+  color: ColorInitialStateType;
+};
 
-    
+export type LayoutChildrenType =  { children: ReactNode }

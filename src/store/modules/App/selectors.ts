@@ -2,12 +2,12 @@ import _ from 'lodash';
 import { createSelector } from 'reselect';
 import { createArraySelector } from 'reselect-map';
 
-const getPakeeplLabels = labels => labels;
-const getGlobalLabels = (labels, globalLabels) => globalLabels;
+// const getPakeeplLabels = labels => labels;
+// const getGlobalLabels = (labels, globalLabels) => globalLabels;
 
-export const getFilteredLabels = createArraySelector([getPakeeplLabels, getGlobalLabels], (pakeepId, globalLabels) =>
-  _.find(globalLabels, ({ id }) => id === pakeepId)
-);
+// export const getFilteredLabels = createArraySelector([getPakeeplLabels, getGlobalLabels], (pakeepId, globalLabels) =>
+//   _.find(globalLabels, ({ id }) => id === pakeepId)
+// );
 
 export const getCurrentFolderPropertyIdx = createSelector(
   [currentFolderPropertyIdx => currentFolderPropertyIdx],
@@ -35,9 +35,9 @@ export const getSelectedPakeepsId = createSelector(
 
 export const getIsCancelSelectedPakeepsId = createSelector([status => status], status => status);
 
-export const getSelectedPakeep = createArraySelector(
-  [selectedPakeepsIdArr => selectedPakeepsIdArr, (selectedPakeepsIdArr, pakeeps) => pakeeps],
-  (selectedPakeepsId, pakeeps) => _.find(pakeeps, ({ id }) => id === selectedPakeepsId)
-);
+// export const getSelectedPakeep = createArraySelector(
+//   [selectedPakeepsIdArr => selectedPakeepsIdArr, (selectedPakeepsIdArr, pakeeps) => pakeeps],
+//   (selectedPakeepsId, pakeeps) => _.find(pakeeps, ({ id }) => id === selectedPakeepsId)
+// );
 
 export const getGlobalEventsArr = createSelector([globalEvents => globalEvents], globalEvents => globalEvents);

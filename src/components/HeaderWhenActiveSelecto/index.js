@@ -21,7 +21,7 @@ const useStyles = makeStyles(({ spacing }) => ({
 const HeaderWhenActiveSelecto = ({
   selectedPakeeps,
   cancelSelectedPakeepsId,
-  handleSelectedPakeepsPropertyThunk,
+  operateToChangeSelectedPakeepsProperty,
   handlePinStatusPakeepThunk,
   selectedPakeepsId,
   handleDeleteLabelFromPakeepThunk,
@@ -59,7 +59,7 @@ const HeaderWhenActiveSelecto = ({
   const propertiesArrToUtils = usePropertiesToUtils(
     pakeepPropertyies,
     selectedPakeeps,
-    handleSelectedPakeepsPropertyThunk,
+    operateToChangeSelectedPakeepsProperty,
     cancelSelectedPakeepsId,
     { TOOGLE, VALUE }
   );
@@ -119,7 +119,7 @@ HeaderWhenActiveSelecto.propTypes = {
   handleAddLabelToPakeepThunk: PropTypes.func,
   handleDeleteLabelFromPakeepThunk: PropTypes.func,
   handlePinStatusPakeepThunk: PropTypes.func,
-  handleSelectedPakeepsPropertyThunk: PropTypes.func,
+  operateToChangeSelectedPakeepsProperty: PropTypes.func,
   selectedPakeeps: PropTypes.array,
   selectedPakeepsId: PropTypes.array
 };

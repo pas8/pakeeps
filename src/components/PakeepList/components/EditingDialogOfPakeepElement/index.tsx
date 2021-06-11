@@ -76,8 +76,7 @@ const EditingDialogOfPakeepElement: FC<EditingDialogOfPakeepElementProps> = ({
   dialogAttributeGroupProps,
   handleClosePakeepDialog
 }) => {
-  // @ts-ignore
-  const classes = useStyles<UseStylesInteface>({ backgroundColor: correctBackground, color: correctColor });
+  const classes = useStyles({ backgroundColor: correctBackground, color: correctColor });
   const [ref, { width }] = useMeasure<HTMLDivElement>();
 
   const [state, setState] = useState<StateInteface>({ title, text });

@@ -1,23 +1,16 @@
 import { addDays } from 'date-fns';
-import { filter, find, pickBy, includes, map, every } from 'lodash';
-import { createReducer } from 'store/utils';
-import * as types from './types';
+import { TypeNames } from './enums';
+import {
+  useAddNewPakeep,
+  useChangeLabelsInPakeep,
+  useChangePakeepProperty,
+  useChangeSelectedPakeepsProperty,
+  useDeletePakeep,
+  usePinStatusOfPakeeps
+} from './hooks';
+import { AppActionTypes, AppInitialStateInteface } from './types';
 
-export const defaultTheme = {
-  primaryMain: '#ffff8d',
-  paperMain: '#424242',
-  defaultBackgroundMain: '#282828',
-  secondaryMain: '#00b0ff',
-  type: 'dark',
-  highEmphasis: 'rgba(255,255,255,0.8)',
-  mediumEmphasis: 'rgba(255,255,255,0.6)',
-  maxEmphasis: 'rgba(255,255,255,0.96)'
-};
-
-const initialState = {
-  data: 1,
-  breakpointsValues: { xs: 0, sm: 600, md: 960, lg: 1280, xl: 1920 },
-  theme: defaultTheme,
+const initialState: AppInitialStateInteface = {
   defaultFolderArr: [
     { title: 'All pakeeps', iconName: '', id: 'folder-ALL', property: 'ALL' },
     { title: 'Pined', iconName: 'pin', id: 'folder-isPinned', property: 'isPinned' },
@@ -37,9 +30,9 @@ const initialState = {
     { color: '#afa646', title: 'Eco', iconName: 'eco', id: 'label8', variant: 'default' }
   ],
   events: [
-    { title: 'Later today', iconName: 'today', id: '1', value: Date.now(), onlyTime: true },
-    { title: 'Tomorrow', iconName: 'tomorrow', id: '2', value: addDays(Date.now(), 1), onlyTime: true },
-    { title: 'Next week', iconName: 'week', id: '3', value: addDays(Date.now(), 7) }
+    { title: 'Later today', iconName: 'today', id: '1', value: Date.now(), onlyTime: true, color: '' },
+    { title: 'Tomorrow', iconName: 'tomorrow', id: '2', value: addDays(Date.now(), 1), onlyTime: true, color: '' },
+    { title: 'Next week', iconName: 'week', id: '3', value: addDays(Date.now(), 7), color: '' }
   ],
   selectedPakeepsId: [],
   folders: [[]],
@@ -164,144 +157,95 @@ const initialState = {
   pinnedPakeepsOrderNames: [],
   notifinationCounter: 8,
   isMenuOpen: false,
-  scrollDirectionName: 'up',
   currentFolderPropertyIdx: 0,
   drawerWidth: 0,
-  isUsePreviuosOrder: false,
   isCancelSelectedPakeepsId: false
 };
 
-const AppReducer = createReducer(initialState)({
-  [types.ADD_NEW_PAKEEP]: (state, { newPaKeep }) => {
-    const isPinned = newPaKeep?.isPinned;
+// console.log(TypeNames)
+export const AppReducer = (state = initialState, action: AppActionTypes): AppInitialStateInteface => {
+  // if (!('type' in action) ) return state;
+  switch (action.type) {
+    case TypeNames.HANDLE_ADD_NEW_PAKEEP: {
+      const { pakeeps, pakeepsOrderNames, pinnedPakeepsOrderNames } = state;
+      const variedState = useAddNewPakeep({ pakeeps, pakeepsOrderNames, pinnedPakeepsOrderNames, ...action.payload });
 
-    const pakeeps = [...state.pakeeps, newPaKeep];
-    const pakeepsOrderNames = isPinned ? state.pakeepsOrderNames : [...state.pakeepsOrderNames, newPaKeep.id];
-    const pinnedPakeepsOrderNames = isPinned
-      ? [...state.pinnedPakeepsOrderNames, newPaKeep.id]
-      : state.pinnedPakeepsOrderNames;
-
-    return { ...state, pinnedPakeepsOrderNames, pakeepsOrderNames, pakeeps };
-  },
-  // [types.HANDLE_CHANGE_PAKEEP_PROPERTY]: (state, { newPaKeep }) => ({
-  //   ...state,
-
-  //   pakeeps: [...state.pakeeps, newPaKeep]
-  // }),
-
-  [types.HANDLE_FOLDERS]: (state, { foldersArr }) => ({
-    ...state,
-    folders: foldersArr
-  }),
-  [types.HANDLE_PIN_STATUS_OF_PAKEEPS]: (state, { pakeepId, isPakeepPinned = false }) => {
-    const findedPakeep = find(state.pakeeps, ({ id }) => id === pakeepId);
-    const isPinned = isPakeepPinned ?? findedPakeep.isPinned;
-
-    const filteredPakeeps = filter(state.pakeeps, ({ id }) => pakeepId !== id);
-
-    const newAddedPakeepOrderNames = includes(state.pakeepsOrderNames, findedPakeep.id)
-      ? state.pakeepsOrderNames
-      : [...state.pakeepsOrderNames, findedPakeep.id];
-    const filteredPakeepsOrderNames = filter(state.pakeepsOrderNames, ({ id }) => pakeepId !== id);
-    const pakeepsOrderNames = isPinned ? newAddedPakeepOrderNames : filteredPakeepsOrderNames;
-
-    const newAddedPinnedPakeepOrderNames = includes(state.pinnedPakeepsOrderNames, findedPakeep.id)
-      ? state.pinnedPakeepsOrderNames
-      : [...state.pinnedPakeepsOrderNames, findedPakeep.id];
-
-    const filteredPinnedPakeepsOrderNames = filter(state.pinnedPakeepsOrderNames, ({ id }) => pakeepId !== id);
-    const pinnedPakeepsOrderNames = !isPinned ? newAddedPinnedPakeepOrderNames : filteredPinnedPakeepsOrderNames;
-
-    const handlelingPakeep = { ...findedPakeep, isPinned: !isPinned };
-    const pakeeps = [...filteredPakeeps, handlelingPakeep];
-    return { ...state, pakeeps, pakeepsOrderNames, pinnedPakeepsOrderNames };
-  },
-  [types.HANDLE_CANCEL_SELECTING_STATUS]: (state, { boolValue }) => ({
-    ...state,
-    isCancelSelectedPakeepsId: boolValue
-  }),
-
-  [types.ADD_NEW_GLOBAL_LABEL]: (state, { newLabel }) => ({
-    ...state,
-    labels: [...state.labels, newLabel]
-  }),
-  [types.CHANGE_LABEL_ITEM]: (state, { labels }) => ({
-    ...state,
-    labels
-  }),
-
-  [types.HANDLE_SET_SELECTED_PAKEEPIDS_ARR]: (state, { pakepsId: selectedPakeepsId }) => ({
-    ...state,
-    selectedPakeepsId
-  }),
-
-  [types.HANDLE_CHANGE_LABEL_IN_PAKEEP]: (state, { currentPakeep, labels }) => ({
-    ...state,
-    pakeeps: [...filter(state.pakeeps, ({ id }) => currentPakeep.id !== id), { ...currentPakeep, labels }]
-  }),
-
-  [types.HANDLE_CURRENT_FOLDER_PROPERTY_IDX]: (state, { folderIdx }) => ({
-    ...state,
-    currentFolderPropertyIdx: folderIdx
-  }),
-
-  [types.HANDLE_PAKEEPS]: (state, { pakeeps }) => ({ ...state, pakeeps }),
-  [types.SET_NEW_ORDER_NAMES]: (state, { newOrder }) => ({
-    ...state,
-    pakeepsOrderNames: newOrder
-  }),
-  [types.HANDLE_SET_PREVIUOS_ORDER_NAMES]: (state, { orderNames }) => ({
-    ...state,
-    pakeepsOrderNames: orderNames
-  }),
-  [types.HANDLE_SET_ORDER_NAMES_OF_PINNED_PAKEEPS]: (state, { orderNames: pinnedPakeepsOrderNames }) => ({
-    ...state,
-    pinnedPakeepsOrderNames
-  }),
-
-  [types.HANDLE_THEME_COLORS]: (state, { newThemeColors }) => {
-    const theme = { ...state.theme, ...newThemeColors };
-    return { ...state, theme };
-  },
-
-  [types.HANDLE_SELECTED_PAKEEPS_PROPERTY]: (state, { newPakeeps }) => {
-    const newPakeepsId = newPakeeps.map(({ id }) => id);
-    const filteredPakeeps = filter(state.pakeeps, ({ id }) => !includes(newPakeepsId, id));
-    const pakeeps = [...filteredPakeeps, ...newPakeeps];
-    return { ...state, pakeeps };
-  },
-
-  [types.HANDLE_PAKEEP_PROPERTY]: (state, { pakeepId, property }) => {
-    const findedPakeep = find(state.pakeeps, ({ id }) => id === pakeepId);
-    const newPakeep = { ...findedPakeep, ...property };
-
-    const filteredPakeeps = filter(state.pakeeps, ({ id }) => pakeepId !== id);
-
-    const pakeeps = [...filteredPakeeps, newPakeep];
-    return { ...state, pakeeps };
-  },
-
-  [types.HANDLE_DRAWER_WIDTH]: (state, { drawerWidth }) => ({ ...state, drawerWidth }),
-  [types.DELETE_PAKEEP]: (state, { id }) => ({
-    ...state,
-    pakeeps: filter(state.pakeeps, ({ id: pakeepsId }) => id !== pakeepsId)
-  }),
-  [types.SCROLL_DIRECTION]: (state, { scrollDirectionName }) => ({
-    ...state,
-    scrollDirectionName
-  }),
-
-  [types.IS_MENU_OPEN]: (state, { boolStatus }) => ({ ...state, isMenuOpen: boolStatus }),
-  [types.ADD_DATE_TO_PAKEEP]: (state, { pakeepId, event }) => ({
-    ...state,
-    pakeeps: {
-      ...state.pakeeps,
-      [pakeepId]: {
-        ...state.pakeeps[pakeepId],
-        date: [...state.pakeeps[pakeepId].date, event]
-      }
+      return { ...state, ...variedState };
     }
-  })
-});
 
-export default AppReducer;
+    case TypeNames.HANDLE_ADD_EVENT_TO_PAKEEP: {
+      const { pakeeps } = state;
+      const { newEvent: propertyValue, pakeepId } = action.payload;
+      const properyName = 'events';
+
+      const variedState = useChangePakeepProperty({ pakeepId, properyName, propertyValue, pakeeps });
+
+      return { ...state, ...variedState };
+    }
+
+    case TypeNames.HANDLE_DELETE_PAKEEP: {
+      const { pakeeps } = state;
+      const variedState = useDeletePakeep({ pakeeps, ...action.payload });
+
+      return { ...state, ...variedState };
+    }
+
+    case TypeNames.HANDLE_CHANGE_LABELS_IN_PAKEEP: {
+      const { pakeeps } = state;
+      const variedState = useChangeLabelsInPakeep({ pakeeps, ...action.payload });
+
+      return { ...state, ...variedState };
+    }
+    case TypeNames.HANDLE_PIN_STATUS_OF_PAKEEPS: {
+      const { pinnedPakeepsOrderNames, pakeeps, pakeepsOrderNames } = state;
+      const variedState = usePinStatusOfPakeeps({
+        pinnedPakeepsOrderNames,
+        pakeeps,
+        pakeepsOrderNames,
+        ...action.payload
+      });
+
+      return { ...state, ...variedState };
+    }
+
+    case TypeNames.HANDLE_CHANGE_SELECTED_PAKEEPS_PROPERTY: {
+      const { pakeeps } = state;
+      const variedState = useChangeSelectedPakeepsProperty({ pakeeps, ...action.payload });
+
+      return { ...state, ...variedState };
+    }
+
+    case TypeNames.HANDLE_ADD_NEW_GLOBAL_LABEL: {
+      const { newLabel } = action.payload;
+      const labels = [...state.labels, newLabel];
+
+      return { ...state, labels };
+    }
+
+    case TypeNames.HANDLE_SET_ORDER_NAMES_OF_PINNED_PAKEEPS:
+    case TypeNames.HANDLE_SET_NEW_ORDER_NAMES:
+    case TypeNames.HANDLE_CHANGE_PAKEEPS:
+    case TypeNames.HANDLE_SET_SELECTED_PAKEEPIDS_ARR:
+    case TypeNames.HANDLE_CANCEL_SELECTING_STATUS:
+    case TypeNames.HANDLE_CHANGE_GLOBAL_LABELS:
+    case TypeNames.HANDLE_CHANGE_FOLDERS:
+    case TypeNames.HANDLE_SET_DRAWER_WIDTH:
+    case TypeNames.HANDLE_SET_CURRENT_FOLDER_PROPERTY_IDX:
+    case TypeNames.HANDLE_CHANGE_MENU_OPEN_STATUS: {
+      return { ...state, ...action.payload };
+    }
+
+    // [types.SET_NEW_ORDER_NAMES]: (state, { newOrder }) => ({
+    //   ...state,
+    //   pakeepsOrderNames: newOrder
+    // }),
+    // [types.HANDLE_SET_ORDER_NAMES_OF_PINNED_PAKEEPS]: (state, { pinnedPakeepsOrderNames }) => ({
+    //   pinnedPakeepsOrderNames
+    // }),
+
+    default:
+      //@ts-ignore
+      const x: never = action;
+  }
+  return state;
+};
