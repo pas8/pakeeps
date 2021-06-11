@@ -229,7 +229,7 @@ export interface DefaultThemeInterface {
 }
 export type OrderNameType = string;
 export type OrderNamesType = OrderNameType[];
-export type DrawerWidthType = number | string;
+export type DrawerWidthType = number ;
 export type PakeepsType = PakeepElementInterface[];
 export type SelectedPakeepsIdType = string[];
 

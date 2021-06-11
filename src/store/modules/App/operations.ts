@@ -15,11 +15,11 @@
 //   dispatch(toSetNewOrderNames(newOrder));
 // };
 
-// export const handleCurrentFolderPropertyIdxThunk = folderIdx => dispatch => {
+// export const handleCurrentFolderPropertyIdx = folderIdx => dispatch => {
 //   dispatch(toSetCurrentFolderPropertyIdx(folderIdx));
 // };
 
-// export const handleFoldersThunk = foldersArr => dispatch => {
+// export const handleChangeFolders = foldersArr => dispatch => {
 //   dispatch(toChangeFolders(foldersArr));
 // };
 
@@ -49,7 +49,7 @@
 //   dispatch(toChangeLabelFromPakeep(currentPakeep, labels));
 // };
 
-// export const handleDrawerWidthThunk = drawerWidth => dispatch => {
+// export const handleDrawerWidth = drawerWidth => dispatch => {
 //   dispatch(toHandleDrawerWidth(drawerWidth));
 // };
 

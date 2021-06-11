@@ -52,9 +52,7 @@ const ThemeLayout = ({ children }: LayoutChildrenType) => {
           default: themeColors?.defaultBackgroundMain
         }
       },
-      contrastThreshold: 2,
-      tonalOffset: 0.4
-    })
+    },)
   );
 
   return (
