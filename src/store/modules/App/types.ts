@@ -1,3 +1,4 @@
+import { $Values } from 'utility-types';
 import { TypeNames } from './enums';
 import {
   DefaultThemeInterface,
@@ -44,121 +45,113 @@ export type PayloadTypes = {
   [TypeNames.HANDLE_CHANGE_THEME_COLORS]: { newThemeColors: DefaultThemeInterface };
 };
 
-type ToAddNewPakepType = {
-  type: typeof TypeNames.HANDLE_ADD_NEW_PAKEEP;
-  payload: PayloadTypes[TypeNames.HANDLE_ADD_NEW_PAKEEP];
+type AppActionsValueType = {
+  ToAddNewPakep: {
+    type: typeof TypeNames.HANDLE_ADD_NEW_PAKEEP;
+    payload: PayloadTypes[ typeof TypeNames.HANDLE_ADD_NEW_PAKEEP];
+  };
+  ToDeletePakeep: {
+    type: typeof TypeNames.HANDLE_DELETE_PAKEEP;
+    payload: PayloadTypes[ typeof TypeNames.HANDLE_DELETE_PAKEEP];
+  };
+  ToAddNewPakepType: {
+    type: typeof TypeNames.HANDLE_ADD_NEW_PAKEEP;
+    payload: PayloadTypes[TypeNames.HANDLE_ADD_NEW_PAKEEP];
+  };
+
+  ToDeletePakeepType: {
+    type: typeof TypeNames.HANDLE_DELETE_PAKEEP;
+    payload: PayloadTypes[TypeNames.HANDLE_DELETE_PAKEEP];
+  };
+
+  ToAddEventToPakeepType: {
+    type: typeof TypeNames.HANDLE_ADD_EVENT_TO_PAKEEP;
+    payload: PayloadTypes[TypeNames.HANDLE_ADD_EVENT_TO_PAKEEP];
+  };
+
+  ToChangeMenuOpenStatusType: {
+    type: typeof TypeNames.HANDLE_CHANGE_MENU_OPEN_STATUS;
+    payload: PayloadTypes[TypeNames.HANDLE_CHANGE_MENU_OPEN_STATUS];
+  };
+  ToSetNewOrderNamesType: {
+    type: typeof TypeNames.HANDLE_SET_NEW_ORDER_NAMES;
+    payload: PayloadTypes[TypeNames.HANDLE_SET_NEW_ORDER_NAMES];
+  };
+  ToSetCurrentFolderPropertyIdxType: {
+    type: typeof TypeNames.HANDLE_SET_CURRENT_FOLDER_PROPERTY_IDX;
+    payload: PayloadTypes[TypeNames.HANDLE_SET_CURRENT_FOLDER_PROPERTY_IDX];
+  };
+
+  ToChangeFolders: {
+    type: typeof TypeNames.HANDLE_CHANGE_FOLDERS;
+    payload: PayloadTypes[TypeNames.HANDLE_CHANGE_FOLDERS];
+  };
+
+  ToChangeGlobalLabels: {
+    type: typeof TypeNames.HANDLE_CHANGE_GLOBAL_LABELS;
+    payload: PayloadTypes[TypeNames.HANDLE_CHANGE_GLOBAL_LABELS];
+  };
+  ToChangeLabelsInPakeep: {
+    type: typeof TypeNames.HANDLE_CHANGE_LABELS_IN_PAKEEP;
+    payload: PayloadTypes[TypeNames.HANDLE_CHANGE_LABELS_IN_PAKEEP];
+  };
+
+  ToSetDrawerWidth: {
+    type: typeof TypeNames.HANDLE_SET_DRAWER_WIDTH;
+    payload: PayloadTypes[TypeNames.HANDLE_SET_DRAWER_WIDTH];
+  };
+
+  ToAddNewGlobalLabel: {
+    type: typeof TypeNames.HANDLE_ADD_NEW_GLOBAL_LABEL;
+    payload: PayloadTypes[TypeNames.HANDLE_ADD_NEW_GLOBAL_LABEL];
+  };
+
+  ToChangePakeeps: {
+    type: typeof TypeNames.HANDLE_CHANGE_PAKEEPS;
+    payload: PayloadTypes[TypeNames.HANDLE_CHANGE_PAKEEPS];
+  };
+
+  ToPinStatusOfPakeeps: {
+    type: typeof TypeNames.HANDLE_PIN_STATUS_OF_PAKEEPS;
+    payload: PayloadTypes[TypeNames.HANDLE_PIN_STATUS_OF_PAKEEPS];
+  };
+
+  ToSetOrderNamesOfPinnedPakeeps: {
+    type: typeof TypeNames.HANDLE_SET_ORDER_NAMES_OF_PINNED_PAKEEPS;
+    payload: PayloadTypes[TypeNames.HANDLE_SET_ORDER_NAMES_OF_PINNED_PAKEEPS];
+  };
+
+  ToSetSelectedPakeepIdsArr: {
+    type: typeof TypeNames.HANDLE_SET_SELECTED_PAKEEPIDS_ARR;
+    payload: PayloadTypes[TypeNames.HANDLE_SET_SELECTED_PAKEEPIDS_ARR];
+  };
+  ToCancelSelectingStatus: {
+    type: typeof TypeNames.HANDLE_CANCEL_SELECTING_STATUS;
+    payload: PayloadTypes[TypeNames.HANDLE_CANCEL_SELECTING_STATUS];
+  };
+
+  ToChangeSelectedPakeepsProperty: {
+    type: typeof TypeNames.HANDLE_CHANGE_SELECTED_PAKEEPS_PROPERTY;
+    payload: PayloadTypes[TypeNames.HANDLE_CHANGE_SELECTED_PAKEEPS_PROPERTY];
+  };
+
+  ToAddLabelToPakeep: {
+    type: typeof TypeNames.HANDLE_ADD_LABEL_TO_PAKEEP;
+    payload: PayloadTypes[TypeNames.HANDLE_ADD_LABEL_TO_PAKEEP];
+  };
+
+  ToChangePakeepProperty: {
+    type: typeof TypeNames.HANDLE_CHANGE_PAKEEP_PROPERTY;
+    payload: PayloadTypes[TypeNames.HANDLE_CHANGE_PAKEEP_PROPERTY];
+  };
+
+  ToChangeThemeColors: {
+    type: typeof TypeNames.HANDLE_CHANGE_THEME_COLORS;
+    payload: PayloadTypes[  TypeNames.HANDLE_CHANGE_THEME_COLORS];
+  };
 };
 
-type ToDeletePakeepType = {
-  type: typeof TypeNames.HANDLE_DELETE_PAKEEP;
-  payload: PayloadTypes[TypeNames.HANDLE_DELETE_PAKEEP];
-};
+// export type ActionWithOnlyPayloadType<T> = (payload: T) => AppActionTypes;
 
-type ToAddEventToPakeepType = {
-  type: typeof TypeNames.HANDLE_ADD_EVENT_TO_PAKEEP;
-  payload: PayloadTypes[TypeNames.HANDLE_ADD_EVENT_TO_PAKEEP];
-};
 
-type ToChangeMenuOpenStatusType = {
-  type: typeof TypeNames.HANDLE_CHANGE_MENU_OPEN_STATUS;
-  payload: PayloadTypes[TypeNames.HANDLE_CHANGE_MENU_OPEN_STATUS];
-};
-
-type ToSetNewOrderNamesType = {
-  type: typeof TypeNames.HANDLE_SET_NEW_ORDER_NAMES;
-  payload: PayloadTypes[TypeNames.HANDLE_SET_NEW_ORDER_NAMES];
-};
-type ToSetCurrentFolderPropertyIdxType = {
-  type: typeof TypeNames.HANDLE_SET_CURRENT_FOLDER_PROPERTY_IDX;
-  payload: PayloadTypes[TypeNames.HANDLE_SET_CURRENT_FOLDER_PROPERTY_IDX];
-};
-
-type ToChangeFolders = {
-  type: typeof TypeNames.HANDLE_CHANGE_FOLDERS;
-  payload: PayloadTypes[TypeNames.HANDLE_CHANGE_FOLDERS];
-};
-
-type ToChangeGlobalLabels = {
-  type: typeof TypeNames.HANDLE_CHANGE_GLOBAL_LABELS;
-  payload: PayloadTypes[TypeNames.HANDLE_CHANGE_GLOBAL_LABELS];
-};
-type ToChangeLabelsInPakeep = {
-  type: typeof TypeNames.HANDLE_CHANGE_LABELS_IN_PAKEEP;
-  payload: PayloadTypes[TypeNames.HANDLE_CHANGE_LABELS_IN_PAKEEP];
-};
-
-type ToSetDrawerWidth = {
-  type: typeof TypeNames.HANDLE_SET_DRAWER_WIDTH;
-  payload: PayloadTypes[TypeNames.HANDLE_SET_DRAWER_WIDTH];
-};
-
-type ToAddNewGlobalLabel = {
-  type: typeof TypeNames.HANDLE_ADD_NEW_GLOBAL_LABEL;
-  payload: PayloadTypes[TypeNames.HANDLE_ADD_NEW_GLOBAL_LABEL];
-};
-
-type ToChangePakeeps = {
-  type: typeof TypeNames.HANDLE_CHANGE_PAKEEPS;
-  payload: PayloadTypes[TypeNames.HANDLE_CHANGE_PAKEEPS];
-};
-
-type ToPinStatusOfPakeeps = {
-  type: typeof TypeNames.HANDLE_PIN_STATUS_OF_PAKEEPS;
-  payload: PayloadTypes[TypeNames.HANDLE_PIN_STATUS_OF_PAKEEPS];
-};
-
-type ToSetOrderNamesOfPinnedPakeeps = {
-  type: typeof TypeNames.HANDLE_SET_ORDER_NAMES_OF_PINNED_PAKEEPS;
-  payload: PayloadTypes[TypeNames.HANDLE_SET_ORDER_NAMES_OF_PINNED_PAKEEPS];
-};
-
-type ToSetSelectedPakeepIdsArr = {
-  type: typeof TypeNames.HANDLE_SET_SELECTED_PAKEEPIDS_ARR;
-  payload: PayloadTypes[TypeNames.HANDLE_SET_SELECTED_PAKEEPIDS_ARR];
-};
-type ToCancelSelectingStatus = {
-  type: typeof TypeNames.HANDLE_CANCEL_SELECTING_STATUS;
-  payload: PayloadTypes[TypeNames.HANDLE_CANCEL_SELECTING_STATUS];
-};
-
-type ToChangeSelectedPakeepsProperty = {
-  type: typeof TypeNames.HANDLE_CHANGE_SELECTED_PAKEEPS_PROPERTY;
-  payload: PayloadTypes[TypeNames.HANDLE_CHANGE_SELECTED_PAKEEPS_PROPERTY];
-};
-
-type ToAddLabelToPakeep = {
-  type: typeof TypeNames.HANDLE_ADD_LABEL_TO_PAKEEP;
-  payload: PayloadTypes[TypeNames.HANDLE_ADD_LABEL_TO_PAKEEP];
-};
-
-type ToChangePakeepProperty = {
-  type: typeof TypeNames.HANDLE_CHANGE_PAKEEP_PROPERTY;
-  payload: PayloadTypes[TypeNames.HANDLE_CHANGE_PAKEEP_PROPERTY];
-};
-
-type ToChangeThemeColors = {
-  type: typeof TypeNames.HANDLE_CHANGE_THEME_COLORS;
-  payload: PayloadTypes[TypeNames.HANDLE_CHANGE_THEME_COLORS];
-};
-
-export type AppActionTypes =
-  | ToAddNewPakepType
-  | ToAddEventToPakeepType
-  | ToChangeSelectedPakeepsProperty
-  | ToCancelSelectingStatus
-  | ToAddLabelToPakeep
-  | ToChangeMenuOpenStatusType
-  | ToChangePakeepProperty
-  | ToChangeThemeColors
-  | ToSetSelectedPakeepIdsArr
-  | ToDeletePakeepType
-  | ToSetNewOrderNamesType
-  | ToSetOrderNamesOfPinnedPakeeps
-  | ToChangePakeeps
-  | ToPinStatusOfPakeeps
-  | ToSetCurrentFolderPropertyIdxType
-  | ToChangeFolders
-  | ToAddNewGlobalLabel
-  | ToChangeLabelsInPakeep
-  | ToSetDrawerWidth
-  | ToChangeGlobalLabels;
+export type AppActionTypes = $Values<AppActionsValueType>;

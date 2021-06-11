@@ -1,43 +1,44 @@
-import { find, filter, includes, mapValues, camelCase, map, replace } from 'lodash';
+import { find, filter, includes, mapValues, camelCase, map, replace, keys, cloneDeep } from 'lodash';
 import { useDispatch } from 'react-redux';
 import * as actions from './actions';
 import { useGetCurrentPakeep } from './hooks';
-import { $enum } from "ts-enum-util";
+import { $enum } from 'ts-enum-util';
 import { TypeNames } from './enums';
 import { PayloadTypes } from './types';
+import { $Keys, $Values } from 'utility-types';
 
+// const f = keys(actions) as const
+type ActionType = keyof typeof TypeNames;
 
-type OperateWithOnlyPayload = (payload: any) => void;
+type OperateWithOnlyPayload<N> = (payload: N) => void;
 
-export const h = map($enum( TypeNames),(el)=>{
-
-const func= (payload:PayloadTypes[TypeNames.HANDLE_ADD_EVENT_TO_PAKEEP]):void=>{
-
+const operateToDispatch = <P>(action: ActionType, payload: P): void => {
   const dispatch = useDispatch();
-  const toCamelCase = camelCase(el[0])
-  const actionFuncName = replace(toCamelCase, 'handle', 'to');
-return dispatch(actions[actionFuncName](payload))
-}
-// console.log(func)
+  payload;
 
-const toCamelCase = camelCase(el[0])
-const actionFuncName = replace(toCamelCase, 'handle', 'to');
+  const a = {
+    toAddNewPakeep: 8
+  };
+  const getObjectKey = <T extends object, R extends keyof T>(obj: T, key: R) => {
+    return obj[key];
+  };
 
-return func
-
-})
-export const operateToAddNewPakeep: OperateWithOnlyPayload = payload => {
-const dispatch = useDispatch();
-
-  dispatch(actions.toAddNewPakeep(payload));
+  const actionName = replace(camelCase(action),'handle','to')
+  console.log(actionName)
+  const actionFunc = getObjectKey(actions,actionName);
+  // dispatch(actions[action](payload));
+  // func()
 };
 
-export const operateToDeletePakeep:OperateWithOnlyPayload = payload  => {
-const dispatch = useDispatch();
-
-  dispatch(actions.toDeletePakeep(payload));
+type OperateToAddNewPakeepType = PayloadTypes[TypeNames.HANDLE_ADD_NEW_PAKEEP];
+export const operateToAddNewPakeep: OperateWithOnlyPayload<OperateToAddNewPakeepType> = payload => {
+  operateToDispatch<OperateToAddNewPakeepType>(TypeNames.HANDLE_ADD_NEW_PAKEEP, payload);
 };
 
+// type i = PayloadTypes[TypeNames.HANDLE_DELETE_PAKEEP];
+// export const operateToDeletePakeep: OperateWithOnlyPayload<i> = payload => {
+//   operateToDispatch<i>(actions.toDeletePakeep, { pakeepId: ';' });
+// };
 
 // export const setMenuOpenStatusThunk = boolStatus => dispatch => {
 //   dispatch(toSetMenuOpenStatus(boolStatus));
@@ -133,7 +134,6 @@ const dispatch = useDispatch();
 // export const operateToChangeSelectedPakeepsProperty = newPakeeps => dispatch => {
 //   dispatch(actions.toChangeSelectedPakeepsProperty(newPakeeps));
 // };
-
 
 // export const handlePakeepPropertyThunk = (pakeepId, property) => dispatch => {
 //   dispatch(toHandlePakeepProperty(pakeepId, property));
