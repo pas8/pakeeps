@@ -1,6 +1,4 @@
-import * as appOperations from './operations';
-import appReducer from './reducers';
+// import * as appOperations from './operations';
+import { AppReducer as app } from './reducers';
 
-export { appOperations };
-
-export default appReducer;
+export default app;

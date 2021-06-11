@@ -1,51 +1,11 @@
-import { find, filter, includes, mapValues, camelCase, map, replace, keys, cloneDeep } from 'lodash';
-import { useDispatch } from 'react-redux';
-import * as actions from './actions';
-import { useGetCurrentPakeep } from './hooks';
-import { $enum } from 'ts-enum-util';
-import { TypeNames } from './enums';
-import { PayloadTypes } from './types';
-import { $Keys, $Values } from 'utility-types';
-
-// const f = keys(actions) as const
-type ActionType = keyof typeof TypeNames;
-
-type OperateWithOnlyPayload<N> = (payload: N) => void;
-
-const operateToDispatch = <P>(action: ActionType, payload: P): void => {
-  const dispatch = useDispatch();
-  payload;
-
-  const a = {
-    toAddNewPakeep: 8
-  };
-  const getObjectKey = <T extends object, R extends keyof T>(obj: T, key: R) => {
-    return obj[key];
-  };
-
-  const actionName = replace(camelCase(action),'handle','to')
-  console.log(actionName)
-  const actionFunc = getObjectKey(actions,actionName);
-  // dispatch(actions[action](payload));
-  // func()
-};
-
-type OperateToAddNewPakeepType = PayloadTypes[TypeNames.HANDLE_ADD_NEW_PAKEEP];
-export const operateToAddNewPakeep: OperateWithOnlyPayload<OperateToAddNewPakeepType> = payload => {
-  operateToDispatch<OperateToAddNewPakeepType>(TypeNames.HANDLE_ADD_NEW_PAKEEP, payload);
-};
-
-// type i = PayloadTypes[TypeNames.HANDLE_DELETE_PAKEEP];
-// export const operateToDeletePakeep: OperateWithOnlyPayload<i> = payload => {
-//   operateToDispatch<i>(actions.toDeletePakeep, { pakeepId: ';' });
-// };
-
-// export const setMenuOpenStatusThunk = boolStatus => dispatch => {
-//   dispatch(toSetMenuOpenStatus(boolStatus));
-// };
-
 // export const addDateToPakeepThunk = (pakeepId, event) => dispatch => {
 //   dispatch(toAddDateToPakeep(pakeepId, event));
+// };
+
+// export const operateToChangeMenuOpenStatus: OperateWOP<
+//   PayloadTypes[TypeNames.HANDLE_CHANGE_MENU_OPEN_STATUS]
+// > = payload => {
+//   useOperateToDispatch<PayloadTypes[TypeNames.HANDLE_CHANGE_MENU_OPEN_STATUS]>(actions.toChangeMenuOpenStatus, payload);
 // };
 
 // export const handleScrollDirectionName = scrollDirectionName => dispatch => {

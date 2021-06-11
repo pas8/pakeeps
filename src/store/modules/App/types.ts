@@ -1,41 +1,28 @@
-import { $Values } from 'utility-types';
+import { $Keys, $Values, Brand } from 'utility-types';
 import { TypeNames } from './enums';
-import {
-  DefaultThemeInterface,
-  DrawerWidthType,
-  FoldersType,
-  GlobalLabelsType,
-  LabelElementInterface,
-  OrderNamesType,
-  PakeepElementInterface,
-  PakeepEventInteface,
-  PakeepIdType,
-  PakeepPropertyType,
-  PakeepPropertyValueType,
-  PakeepsType,
-  SelectedPakeepsIdType
-} from './interfaces';
 
 export type PayloadTypes = {
-  [TypeNames.HANDLE_ADD_NEW_PAKEEP]: { newPakeep: PakeepElementInterface };
+  [TypeNames.HANDLE_ADD_NEW_PAKEEP]: {
+    newPakeep: PakeepElementInterface;
+  };
   [TypeNames.HANDLE_DELETE_PAKEEP]: { pakeepId: string };
   [TypeNames.HANDLE_ADD_EVENT_TO_PAKEEP]: { newEvent: PakeepEventInteface; pakeepId: PakeepIdType };
-  [TypeNames.HANDLE_CHANGE_MENU_OPEN_STATUS]: { menuOpenStatus: boolean };
-  [TypeNames.HANDLE_SET_CURRENT_FOLDER_PROPERTY_IDX]: { folderIdx: number };
+  [TypeNames.HANDLE_CHANGE_MENU_OPEN_STATUS]: { isMenuOpen: boolean };
+  [TypeNames.HANDLE_SET_CURRENT_FOLDER_PROPERTY_IDX]: { currentFolderPropertyIdx: number };
   [TypeNames.HANDLE_SET_NEW_ORDER_NAMES]: { newOrderNames: OrderNamesType };
   [TypeNames.HANDLE_CHANGE_FOLDERS]: { folders: FoldersType };
-  [TypeNames.HANDLE_CHANGE_GLOBAL_LABELS]: { newGlobalLabels: GlobalLabelsType };
+  [TypeNames.HANDLE_CHANGE_GLOBAL_LABELS]: { labels: GlobalLabelsType };
   [TypeNames.HANDLE_CHANGE_LABELS_IN_PAKEEP]: {
     currentPakeep: PakeepElementInterface;
     currentPakeepLabels: LabelElementInterface[];
   };
   [TypeNames.HANDLE_SET_DRAWER_WIDTH]: { drawerWidth: DrawerWidthType };
   [TypeNames.HANDLE_ADD_NEW_GLOBAL_LABEL]: { newLabel: LabelElementInterface };
-  [TypeNames.HANDLE_CHANGE_PAKEEPS]: { pakeeps: PakeepElementInterface };
+  [TypeNames.HANDLE_CHANGE_PAKEEPS]: { pakeeps: PakeepsType };
   [TypeNames.HANDLE_PIN_STATUS_OF_PAKEEPS]: { pakeepId: PakeepIdType; isPakeepPinned?: boolean };
   [TypeNames.HANDLE_SET_ORDER_NAMES_OF_PINNED_PAKEEPS]: { pinnedPakeepsOrderNames: OrderNamesType };
   [TypeNames.HANDLE_SET_SELECTED_PAKEEPIDS_ARR]: { selectedPakeepsId: SelectedPakeepsIdType };
-  [TypeNames.HANDLE_CANCEL_SELECTING_STATUS]: { boolStatus: boolean };
+  [TypeNames.HANDLE_CANCEL_SELECTING_STATUS]: { isCancelSelectedPakeepsId: boolean };
   [TypeNames.HANDLE_CHANGE_SELECTED_PAKEEPS_PROPERTY]: { newPakeeps: PakeepsType };
   [TypeNames.HANDLE_ADD_LABEL_TO_PAKEEP]: { newPakeep: PakeepElementInterface };
   [TypeNames.HANDLE_CHANGE_PAKEEP_PROPERTY]: {
@@ -45,21 +32,13 @@ export type PayloadTypes = {
   [TypeNames.HANDLE_CHANGE_THEME_COLORS]: { newThemeColors: DefaultThemeInterface };
 };
 
-type AppActionsValueType = {
+export type ActionsValueTypes = {
   ToAddNewPakep: {
-    type: typeof TypeNames.HANDLE_ADD_NEW_PAKEEP;
-    payload: PayloadTypes[ typeof TypeNames.HANDLE_ADD_NEW_PAKEEP];
-  };
-  ToDeletePakeep: {
-    type: typeof TypeNames.HANDLE_DELETE_PAKEEP;
-    payload: PayloadTypes[ typeof TypeNames.HANDLE_DELETE_PAKEEP];
-  };
-  ToAddNewPakepType: {
     type: typeof TypeNames.HANDLE_ADD_NEW_PAKEEP;
     payload: PayloadTypes[TypeNames.HANDLE_ADD_NEW_PAKEEP];
   };
 
-  ToDeletePakeepType: {
+  ToDeletePakeep: {
     type: typeof TypeNames.HANDLE_DELETE_PAKEEP;
     payload: PayloadTypes[TypeNames.HANDLE_DELETE_PAKEEP];
   };
@@ -147,11 +126,134 @@ type AppActionsValueType = {
 
   ToChangeThemeColors: {
     type: typeof TypeNames.HANDLE_CHANGE_THEME_COLORS;
-    payload: PayloadTypes[  TypeNames.HANDLE_CHANGE_THEME_COLORS];
+    payload: PayloadTypes[TypeNames.HANDLE_CHANGE_THEME_COLORS];
   };
 };
+export type AppActionTypes = $Values<ActionsValueTypes>;
 
+export type useHooksTypes = {
+  [TypeNames.HANDLE_ADD_NEW_PAKEEP]: {
+    pinnedPakeepsOrderNames: OrderNamesType;
+    pakeepsOrderNames: OrderNamesType;
+    pakeeps: PakeepsType;
+  };
+  [TypeNames.HANDLE_ADD_EVENT_TO_PAKEEP]: {
+    pakeepId: PakeepIdType;
+    properyName: PakeepPropertyKeysType;
+    propertyValue: any;
+    pakeeps: PakeepsType;
+  };
+  [TypeNames.HANDLE_DELETE_PAKEEP]: {
+    pakeepId: PakeepIdType;
+    pakeeps: PakeepsType;
+  };
+  [TypeNames.HANDLE_CHANGE_LABELS_IN_PAKEEP]: {
+    currentPakeep: PakeepElementInterface;
+    pakeeps: PakeepsType;
+    currentPakeepLabels:GlobalLabelsType
+  };
+  [TypeNames.HANDLE_CHANGE_LABELS_IN_PAKEEP]: {
+    currentPakeep: PakeepElementInterface;
+    pakeeps: PakeepsType;
+    currentPakeepLabels:GlobalLabelsType
+  };
+};
+export type OnlyPakeepReturnType=  { pakeeps: PakeepsType }
 // export type ActionWithOnlyPayloadType<T> = (payload: T) => AppActionTypes;
 
+type ColorType = 'default' | string;
+export type LabelVariantType = 'default' | 'outlined';
+export type IconNameType = string;
+export type TitleType = string;
 
-export type AppActionTypes = $Values<AppActionsValueType>;
+export type FoldersType = any[][];
+
+export interface GlobalEventInteface {
+  title: TitleType;
+  iconName: IconNameType;
+  id: string;
+  value: number | Date;
+  onlyTime?: boolean;
+  color: string;
+}
+
+export interface DefaultFolderElementInterface {
+  title: TitleType;
+  iconName: string;
+  id: string;
+  property: string;
+}
+
+export interface PakeepEventInteface {
+  id: string;
+  value: number | Date;
+}
+
+// export type PakeepIdType = Brand<string, '_pakeepId'>;
+export type PakeepIdType = string;
+
+export interface PakeepElementInterface {
+  title: TitleType;
+  text: string;
+  isInBookmark: boolean;
+  isFavorite: boolean;
+  color: ColorType;
+  labels: string[];
+  isArchived: boolean;
+  events: GlobalEventInteface[];
+  readonly id: PakeepIdType;
+  isPinned: boolean;
+  isCheckBoxes: boolean;
+  backgroundColor: ColorType;
+}
+
+export interface LabelElementInterface {
+  color: ColorType;
+  title: string;
+  iconName: IconNameType;
+  id: string;
+  variant: LabelVariantType;
+}
+export type GlobalLabelsType = LabelElementInterface[];
+export type GlobalEventsType = GlobalEventInteface[];
+
+export interface DefaultThemeInterface {
+  primaryMain?: string;
+  paperMain?: string;
+  defaultBackgroundMain?: string;
+  secondaryMain?: string;
+  type: 'dark' | 'light';
+  highEmphasis?: string;
+  mediumEmphasis?: string;
+  maxEmphasis?: string;
+}
+export type OrderNameType = string;
+export type OrderNamesType = OrderNameType[];
+export type DrawerWidthType = number | string;
+export type PakeepsType = PakeepElementInterface[];
+export type SelectedPakeepsIdType = string[];
+
+export interface AppInitialStateInteface {
+  // breakpointsValues: BreakpointsValuesInterface<number>;
+  // theme: DefaultThemeInterface;
+  defaultFolderArr: DefaultFolderElementInterface[];
+  labels: GlobalLabelsType;
+  events: GlobalEventsType;
+  selectedPakeepsId: SelectedPakeepsIdType;
+  folders: FoldersType;
+  pakeeps: PakeepsType;
+  pakeepsOrderNames: OrderNamesType;
+  pinnedPakeepsOrderNames: OrderNamesType;
+  notifinationCounter: number;
+  isMenuOpen: boolean;
+  currentFolderPropertyIdx: number;
+  drawerWidth: DrawerWidthType;
+  isCancelSelectedPakeepsId: boolean;
+}
+
+export type PakeepPropertyValueType = $Values<PakeepElementInterface>;
+export type PakeepPropertyKeysType = $Keys<PakeepElementInterface>;
+
+export type PakeepPropertyType = { [key: string]: PakeepElementInterface };
+
+export type OperateWOP<N> = (payload: N) => void;
