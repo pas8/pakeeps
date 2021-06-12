@@ -1,11 +1,12 @@
+import { useSlicedType } from 'models/types';
 import { useEffect, useState } from 'react';
 import { useFindAverageWidthOfUtils } from './useFindAverageWidthOfUtils';
 
-export const useSliced = (widthOfContainer, arrWhichShouldBeSliced) => {
+export const useSliced: useSlicedType = (widthOfContainer, arrWhichShouldBeSliced) => {
   const [averageWidth, lengthOfUtilsArr, handleConcatAverageWidth] = useFindAverageWidthOfUtils();
   const [slicedArr, setSlicedArr] = useState({ before: [], after: [] });
 
-  const slicedCoefficient = widthOfContainer / (averageWidth * lengthOfUtilsArr + (averageWidth * 1.4));
+  const slicedCoefficient = widthOfContainer / (averageWidth * lengthOfUtilsArr + averageWidth * 1.4);
   const sliceArrayTo = lengthOfUtilsArr * slicedCoefficient;
   const isShouldBeSliced = slicedCoefficient < 1;
 

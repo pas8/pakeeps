@@ -3,11 +3,12 @@ import { ReactNode } from 'react';
 import { ColorInitialStateType } from 'store/modules/Color/interfaces';
 import { AppInitialStateInteface, PakeepIdType, PakeepsType } from 'store/modules/App/types';
 import { HandleSelectedPakeepsPropertyFuncType, PakeepPropertyiesType } from 'components/HeaderWhenActiveSelecto/types';
+import { IconsUtilsArrType } from 'components/IconsUtils/types';
 
 export type SelectedPakeepsType = PakeepsType;
 export type SelectedPakeepsIdType = PakeepIdType[];
 
-
+export type useSlicedType = (widthOfContainer?: number , arrWhichShouldBeSliced: IconsUtilsArrType) => any[];
 
 export type UsePropertiesToUtilsType = (
   pakeepPropertyies: PakeepPropertyiesType,

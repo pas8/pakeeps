@@ -3,7 +3,6 @@ import IconButtonByPas from 'components/IconButton';
 import PopoverAndMenu from './components/PopoverAndMenu';
 import { useState, useRef } from 'react';
 import WrapperOfMainComponent from './components/WrapperOfMainComponent';
-import includes from 'lodash.includes';
 import { useGetReversedCustomColor } from 'hooks/useGetReversedCustomColor.hook';
 
 const WrapperOfPopoverAndMenu = ({
@@ -43,7 +42,7 @@ const WrapperOfPopoverAndMenu = ({
         (
           {
             icon: Icon,
-            popoverText,
+            popoverText: notActivePopoverText,
             name: buttonUtilsName,
             onClick,
             ActiveIcon,
@@ -53,7 +52,8 @@ const WrapperOfPopoverAndMenu = ({
             hidden = false,
             customElementComponentOfIconGroup = false,
             rotateDeg = false,
-            badgeContent = 0
+            badgeContent = 0,
+            activePopoverText = notActivePopoverText
           },
           idx
         ) => {
@@ -64,6 +64,7 @@ const WrapperOfPopoverAndMenu = ({
 
           const isArctiveIconPresent = customColor && isIconActive && !!ActiveIcon;
           const icon = isArctiveIconPresent ? ActiveIcon : Icon;
+          const popoverText = isIconActive ? activePopoverText : notActivePopoverText;
 
           const iconButtonProps = {
             icon,
