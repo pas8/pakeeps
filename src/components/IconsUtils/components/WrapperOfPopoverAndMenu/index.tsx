@@ -1,11 +1,12 @@
-import PropTypes from 'prop-types';
 import IconButtonByPas from 'components/IconButton';
-import PopoverAndMenu from './components/PopoverAndMenu';
-import { useState, useRef } from 'react';
-import WrapperOfMainComponent from './components/WrapperOfMainComponent';
 import { useGetReversedCustomColor } from 'hooks/useGetReversedCustomColor.hook';
+import { FC, MouseEvent, ReactNode, useRef, useState } from 'react';
+import { Optional } from 'utility-types';
+import PopoverAndMenu from './components/PopoverAndMenu';
+import WrapperOfMainComponent from './components/WrapperOfMainComponent';
+import { WrapperOfPopoverAndMenuType } from './types';
 
-const WrapperOfPopoverAndMenu = ({
+const WrapperOfPopoverAndMenu: FC<WrapperOfPopoverAndMenuType> = ({
   buttonUtilsArr,
   keyName,
   isIconNameExtended = false,
@@ -24,11 +25,11 @@ const WrapperOfPopoverAndMenu = ({
     onMenuClose: null,
     currentTarget: null,
     popoverText: '',
-    menuComponentsProps: null,
-    MenuComponents: null
-  };
+    menuComponentsProps: {},
+    MenuComponents: null as ReactNode
+};
 
-  const [anchorElState, setAnchorElState] = useState(nullityOfAnchorEl);
+  const [anchorElState, setAnchorElState] = useState<Optional<typeof nullityOfAnchorEl>>(nullityOfAnchorEl);
 
   const handleMenuClose = () => setAnchorElState(nullityOfAnchorEl);
   const handlePopoverClose = () => setAnchorElState(state => ({ ...state, isPopoverOpen: false }));
@@ -83,7 +84,7 @@ const WrapperOfPopoverAndMenu = ({
           const mainComponent = <IconButtonByPas {...iconButtonProps} />;
           const allMenuComponentsProps = { onMenuClose: handleMenuClose, customColor, ...menuComponentsProps };
 
-          const handlePopoverOpen = ({ currentTarget }) =>
+          const handlePopoverOpen = ({ currentTarget }: MouseEvent<HTMLElement, MouseEvent>) =>
             setAnchorElState(state => ({
               ...state,
               currentTarget,
@@ -92,7 +93,7 @@ const WrapperOfPopoverAndMenu = ({
               popoverText
             }));
 
-          const handleMenuOpen = ({ currentTarget }) =>
+          const handleMenuOpen = ({ currentTarget }: MouseEvent<HTMLElement, MouseEvent>) =>
             setAnchorElState(state => ({
               ...state,
               currentTarget,
@@ -122,24 +123,6 @@ const WrapperOfPopoverAndMenu = ({
   );
 };
 
-WrapperOfPopoverAndMenu.propTypes = {
-  CustomElementComponentOfIconGroup: PropTypes.oneOf(['bool', 'node']),
-  arrOfButtonNamesWhichSholudBeHidden: PropTypes.array,
-  buttonUtilsArr: PropTypes.shape({
-    map: PropTypes.func
-  }),
-  customColor: PropTypes.any,
-  customElementComponentOfIconGroupProps: PropTypes.node,
-  handleAverageMainComponentWidth: PropTypes.any,
-  handlePopoverAndMenuState: PropTypes.func,
-  iconSize: PropTypes.string,
-  isIconNameExtended: PropTypes.bool,
-  keyName: PropTypes.any,
-  popoverAndMenuState: PropTypes.shape({
-    name: PropTypes.any,
-    onMenuClose: PropTypes.func,
-    popoverIsOpen: PropTypes.bool
-  })
-};
+
 
 export default WrapperOfPopoverAndMenu;

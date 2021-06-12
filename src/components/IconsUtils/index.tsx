@@ -193,7 +193,6 @@ const IconsUtils: FC<IconsUtilsPropsType> = ({
     hidden: slicedArr?.after?.length === 0,
     popoverText: 'Open more utils',
     name: 'moreUtils',
-    // onClick: handleClick,
     menuComponents: MoreUtils,
     menuComponentsProps: { slicedArrAfter: slicedArr.after }
   };

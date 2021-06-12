@@ -2,28 +2,30 @@ import PropTypes from 'prop-types';
 import _ from 'lodash';
 import { Grid, IconButton, makeStyles, Badge } from '@material-ui/core';
 import { useMeasure } from 'react-use';
-import { useEffect } from 'react';
+import { FC, useEffect } from 'react';
+I
 import { useThemeColors } from 'hooks/useThemeColors.hook';
 import { useAlpha } from 'hooks/useAlpha.hook';
-// import clsx from 'clsx'
+import { IconClassType } from './types';
+
 const useStyles = makeStyles(theme => ({
-  icon: ({ iconColor, rotate, isArctiveIconPresent, isIconActive,fillOpacity }) => ({
-  fillOpacity,
+  iconClass: ({ iconColor, rotate, isArctiveIconPresent, isIconActive, fillOpacity }: IconClassType) => ({
+    fillOpacity,
 
     '& svg': { color: iconColor, transform: rotate },
     '& path': { fillOpacity: !isArctiveIconPresent && isIconActive && 1 },
     '&:hover ': { background: useAlpha(iconColor) }
   }),
-  smallButtonSize: { '& button ': { padding: theme.spacing(1) } }
+  smallButtonSizeClass: { '& button ': { padding: theme.spacing(1) } }
 }));
 
-const IconButtonByPas = ({
+const IconButtonByPas: FC<any> = ({
   onClick = null,
   isArctiveIconPresent,
   rotateDeg = false,
   isIconActive = false,
   icon: Icon,
-  fillOpacity =1,
+  fillOpacity = 1,
   iconName = 'icon',
   activeIconName = 'icon',
   activeProperty = false,
@@ -40,14 +42,13 @@ const IconButtonByPas = ({
   const iconColor = customColor ? customIconColor : defaultColor;
 
   const rotate = rotateDeg ? `rotate(${rotateDeg}deg)` : 'rotate(0deg)';
-  const classes = useStyles({ iconColor, rotate, isIconActive, isArctiveIconPresent,fillOpacity });
-
-  const [ref, { width }] = useMeasure();
+  const classes = useStyles({ iconColor, rotate, isIconActive, isArctiveIconPresent, fillOpacity });
+  const [ref, { width }] = useMeasure<HTMLDivElement>();
   useEffect(() => width !== 0 && handleAverageMainComponentWidth && handleAverageMainComponentWidth(width), [width]);
 
   return (
-    <Grid className={size === 'small' ? classes.smallButtonSize : null} component={'div'} ref={ref}>
-      <IconButton onClick={onClick} className={classes.icon}>
+    <Grid className={size === 'small' ? classes.smallButtonSizeClass : ''} ref={ref}>
+      <IconButton onClick={onClick} className={classes.iconClass}>
         <Badge badgeContent={badgeContent} color={'secondary'}>
           <Icon />
         </Badge>

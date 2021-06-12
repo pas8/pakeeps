@@ -43,16 +43,7 @@ const PopoverAndMenu = ({
 }) => {
   const classes = useStyles({ customColor });
 
-  // useEffect(
-  //   () =>
-  //     handlePopoverAndMenuState({
-  //       name,
-  //       menuIsOpen: anchorEl.menu,
-  //       popoverIsOpen: anchorEl.popover,
-  //       onMenuClose: handleMenuClose
-  //     }),
-  //   [anchorEl]
-  // );
+
   const defaultLocationOfPopoverToWitCentered = {
     anchorOrigin: {
       vertical: 'bottom',

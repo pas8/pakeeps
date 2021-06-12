@@ -50,7 +50,7 @@ export type IconsUtilsPropetyiesType = {
 export type IconsUtilsPropsType = IconsUtilsFunctionType & IconsUtilsValuesType & IconsUtilsPropetyiesType;
 
 export type IconsUtilsArrDenotationType = $Values<typeof iconsUtilsArrDenotation>;
-export type IconsUtilsArrDenotationNameType = $Values<Pick<IconsUtilsArrDenotationType, 'name'>>
+export type IconsUtilsArrDenotationNameType = $Values<Pick<IconsUtilsArrDenotationType, 'name'>>;
 
 export type IconUtilElementOptionalPropertyiesType = {
   isIconActive?: boolean;
@@ -58,11 +58,17 @@ export type IconUtilElementOptionalPropertyiesType = {
   menuComponents?: ReactNode;
   ActiveIcon?: ReactNode;
   onClick?: Function;
+  popoverText?: string;
+  activePopoverText?: string;
   badgeContent?: number | any;
   rotateDeg?: number;
+  customElementComponentOfIconGroup?: ReactNode;
+  hidden?: boolean;
 };
 
 export type IconUtilElementType = { icon: ReactNode } & IconUtilElementOptionalPropertyiesType &
   IconsUtilsArrDenotationType;
 
 export type IconsUtilsArrType = IconUtilElementType[];
+
+export type NullityOfSlicedArrType = { before: IconsUtilsArrType; after: IconsUtilsArrType };

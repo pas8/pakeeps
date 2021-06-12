@@ -1,10 +1,13 @@
+import { NullityOfSlicedArrType } from 'components/IconsUtils/types';
 import { useSlicedType } from 'models/types';
 import { useEffect, useState } from 'react';
 import { useFindAverageWidthOfUtils } from './useFindAverageWidthOfUtils';
 
-export const useSliced: useSlicedType = (widthOfContainer, arrWhichShouldBeSliced) => {
+export const useSliced: useSlicedType = (widthOfContainer = 0, arrWhichShouldBeSliced) => {
+  const nullityOfSlicedArr = { before: [], after: [] };
+
   const [averageWidth, lengthOfUtilsArr, handleConcatAverageWidth] = useFindAverageWidthOfUtils();
-  const [slicedArr, setSlicedArr] = useState({ before: [], after: [] });
+  const [slicedArr, setSlicedArr] = useState<NullityOfSlicedArrType>(nullityOfSlicedArr);
 
   const slicedCoefficient = widthOfContainer / (averageWidth * lengthOfUtilsArr + averageWidth * 1.4);
   const sliceArrayTo = lengthOfUtilsArr * slicedCoefficient;
