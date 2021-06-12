@@ -25,7 +25,7 @@ export interface PakeepElementProps {
   changeLabelItemThunk: any; //func
   handkePakeepPropertyThunk: any; //func
   isPinIconShouldBeShownInPakeep: boolean;
-  handlePinStatusPakeepThunk: any; //func,
+  handlePinStatusPakeep: any; //func,
   isSelecting: boolean;
   handlePakeepPropertyThunk: any; //func
   handleAddLabelToPakeepThunk: any; //func

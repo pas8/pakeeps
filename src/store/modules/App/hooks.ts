@@ -41,8 +41,14 @@ export const useOperate = () => {
 
 export const useFilterPakeeps = (pakeeps: PakeepsType, pakeepId: PakeepIdType): PakeepsType => {
   const filteredPakeeps = filter(pakeeps, ({ id }) => id !== pakeepId);
-
   return filteredPakeeps;
+};
+
+export const useFindPakeep = (pakeeps: PakeepsType, pakeepId: PakeepIdType): PakeepElementInterface | null => {
+  const findedPakeep = find(pakeeps, ({ id }) => id === pakeepId);
+
+  if (!findedPakeep) return null;
+  return findedPakeep;
 };
 
 export const useChangePakeepProperty = ({
@@ -99,13 +105,37 @@ export const useDeletePakeep = ({
   return variedState;
 };
 
-export const useChangeLabelsInPakeep = ({
-  currentPakeep,
-  currentPakeepLabels,
+export const useDeleteLabelFromPakeep = ({
+  currentPakeepId,
+  labelIdWhichShouldBeDeleted,
   pakeeps
-}: useHooksTypes[TypeNames.HANDLE_CHANGE_LABELS_IN_PAKEEP]): OnlyPakeepReturnType => {
-  const filteredPakeeps = useFilterPakeeps(pakeeps, currentPakeep.id);
-  const newPakeeps = [...filteredPakeeps, { ...currentPakeep, currentPakeepLabels }];
+}: PayloadTypes[TypeNames.HANDLE_DELETE_LABEL_FROM_PAKEEP] & OnlyPakeepReturnType): OnlyPakeepReturnType => {
+  const findedPakeep = useFindPakeep(pakeeps, currentPakeepId);
+  if (!findedPakeep) return { pakeeps };
+
+  const labels = filter(findedPakeep.labels, id => labelIdWhichShouldBeDeleted !== id);
+  const newPakeep = { ...findedPakeep, labels };
+  const newPakeeps = [...pakeeps, newPakeep];
+
+  const variedState = { pakeeps: newPakeeps };
+  return variedState;
+};
+
+export const useAddLabelToPakeep = ({
+  currentPakeepId,
+  labelIdWhichShouldBeAdded,
+  pakeeps
+}: PayloadTypes[TypeNames.HANDLE_ADD_LABEL_TO_PAKEEP] & OnlyPakeepReturnType): OnlyPakeepReturnType => {
+  const findedPakeep = useFindPakeep(pakeeps, currentPakeepId);
+  if (!findedPakeep) return { pakeeps };
+
+  const isPakeepHaveThisLabel = includes(findedPakeep.labels, labelIdWhichShouldBeAdded);
+
+  const newLabels = [...findedPakeep?.labels, labelIdWhichShouldBeAdded];
+  const labels = isPakeepHaveThisLabel ? findedPakeep.labels : newLabels;
+
+  const newPakeep = { ...findedPakeep, labels };
+  const newPakeeps = [...pakeeps, newPakeep];
 
   const variedState = { pakeeps: newPakeeps };
   return variedState;

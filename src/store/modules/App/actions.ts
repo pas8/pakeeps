@@ -45,10 +45,10 @@ export const toChangeGlobalLabels = (payload: PayloadTypes[TypeNames.HANDLE_CHAN
   payload
 });
 
-export const toChangeLabelsInPakeep = (
-  payload: PayloadTypes[TypeNames.HANDLE_CHANGE_LABELS_IN_PAKEEP]
+export const toDeleteLabelFromPakeep = (
+  payload: PayloadTypes[TypeNames.HANDLE_DELETE_LABEL_FROM_PAKEEP]
 ): AppActionTypes => ({
-  type: TypeNames.HANDLE_CHANGE_LABELS_IN_PAKEEP,
+  type: TypeNames.HANDLE_DELETE_LABEL_FROM_PAKEEP,
   payload
 });
 
@@ -62,7 +62,7 @@ export const toAddNewGlobalLabel = (payload: PayloadTypes[TypeNames.HANDLE_ADD_N
   payload
 });
 
-export const toPinStatusOfPakeeps = (
+export const toChangePinStatusOfPakeeps = (
   payload: PayloadTypes[TypeNames.HANDLE_PIN_STATUS_OF_PAKEEPS]
 ): AppActionTypes => ({
   type: TypeNames.HANDLE_PIN_STATUS_OF_PAKEEPS,

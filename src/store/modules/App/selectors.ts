@@ -49,8 +49,8 @@ export const getIsCancelSelectedPakeepsId = createSelector(
   status => status
 );
 
-export const getSelectedPakeep = createArraySelector(
-  [({ app }: RootStoreType) => app.selectedPakeepsId, (__: never, { app: { pakeeps } }: RootStoreType) => pakeeps],
+export const getSelectedPakeeps = createArraySelector(
+  [({ app }: RootStoreType) => app.selectedPakeepsId, ({ app: { pakeeps } }: RootStoreType) => pakeeps],
   (selectedPakeepsId, pakeeps) => _.find(pakeeps, ({ id }) => id === selectedPakeepsId)
 );
 

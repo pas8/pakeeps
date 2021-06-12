@@ -1,0 +1,29 @@
+import { SettingsInitialStateType } from 'store/modules/Settings/types';
+import { ReactNode } from 'react';
+import { ColorInitialStateType } from 'store/modules/Color/interfaces';
+import { AppInitialStateInteface, PakeepIdType, PakeepsType } from 'store/modules/App/types';
+import { HandleSelectedPakeepsPropertyFuncType, PakeepPropertyiesType } from 'components/HeaderWhenActiveSelecto/types';
+
+export type SelectedPakeepsType = PakeepsType;
+export type SelectedPakeepsIdType = PakeepIdType[];
+
+
+
+export type UsePropertiesToUtilsType = (
+  pakeepPropertyies: PakeepPropertyiesType,
+  selectedPakeeps: SelectedPakeepsType,
+  handleSelectedPakeepsPropertyFunc: HandleSelectedPakeepsPropertyFuncType,
+  cancelSelectedPakeepsId: () => void
+) => Object;
+
+export type RootStoreType = {
+  app: AppInitialStateInteface;
+  color: ColorInitialStateType;
+  settings: SettingsInitialStateType;
+};
+
+export type LayoutChildrenType = { children: ReactNode };
+
+export type AllElementsIsBooleanType = {
+  [key: string]: boolean;
+};

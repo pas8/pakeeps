@@ -1,10 +1,11 @@
 import { addDays } from 'date-fns';
 import { TypeNames } from './enums';
 import {
+  useAddLabelToPakeep,
   useAddNewPakeep,
-  useChangeLabelsInPakeep,
   useChangePakeepProperty,
   useChangeSelectedPakeepsProperty,
+  useDeleteLabelFromPakeep,
   useDeletePakeep,
   usePinStatusOfPakeeps
 } from './hooks';
@@ -190,12 +191,20 @@ export const AppReducer = (state = initialState, action: AppActionTypes): AppIni
       return { ...state, ...variedState };
     }
 
-    case TypeNames.HANDLE_CHANGE_LABELS_IN_PAKEEP: {
+    case TypeNames.HANDLE_DELETE_LABEL_FROM_PAKEEP: {
       const { pakeeps } = state;
-      const variedState = useChangeLabelsInPakeep({ pakeeps, ...action.payload });
+      const variedState = useDeleteLabelFromPakeep({ pakeeps, ...action.payload });
 
       return { ...state, ...variedState };
     }
+
+    case TypeNames.HANDLE_ADD_LABEL_TO_PAKEEP: {
+      const { pakeeps } = state;
+      const variedState = useAddLabelToPakeep({ pakeeps, ...action.payload });
+
+      return { ...state, ...variedState };
+    }
+
     case TypeNames.HANDLE_PIN_STATUS_OF_PAKEEPS: {
       const { pinnedPakeepsOrderNames, pakeeps, pakeepsOrderNames } = state;
       const variedState = usePinStatusOfPakeeps({

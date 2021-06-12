@@ -11,7 +11,7 @@ import { getFilteredLabels, getGlobalEventsArr } from 'store/modules/App/selecto
 import {
   handkePakeepPropertyThunk,
   handleDeleteLabelFromPakeepThunk,
-  handlePinStatusPakeepThunk,
+  handlePinStatusPakeep,
   handlePakeepPropertyThunk,
   handleAddLabelToPakeepThunk
 } from 'store/modules/App/operations';
@@ -97,7 +97,7 @@ const PakeepElement: FC<PakeepElementProps> = ({
   handleDeleteLabelFromPakeepThunk,
   handkePakeepPropertyThunk,
   isPinIconShouldBeShownInPakeep = false,
-  handlePinStatusPakeepThunk,
+  handlePinStatusPakeep,
   isSelecting,
   handlePakeepPropertyThunk,
   handleAddLabelToPakeepThunk
@@ -150,7 +150,7 @@ const PakeepElement: FC<PakeepElementProps> = ({
   };
 
   const handleSetIsPinnedPakeep = (): void => {
-    handlePinStatusPakeepThunk(id);
+    handlePinStatusPakeep(id);
   };
 
   const iconsUtilsProps = {
@@ -323,7 +323,7 @@ const mapDispatchToProps = (dispatch?:any) => ({
   handleAddLabelToPakeepThunk: (pakeepId?: string, labelId?: string) =>
     dispatch(handleAddLabelToPakeepThunk(pakeepId, labelId)),
 
-  handlePinStatusPakeepThunk: (pakeepId?: string) => dispatch(handlePinStatusPakeepThunk(pakeepId)),
+  handlePinStatusPakeep: (pakeepId?: string) => dispatch(handlePinStatusPakeep(pakeepId)),
   handlePakeepPropertyThunk: (pakeepId?: string, property?: any) =>
     dispatch(handlePakeepPropertyThunk(pakeepId, property))
 });

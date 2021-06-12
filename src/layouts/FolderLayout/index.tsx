@@ -23,7 +23,7 @@ import {
   getPositionOfFolderViewWithPakeepView
 } from 'store/modules/Settings/selectors';
 import ArrowForwardIosOutlinedIcon from '@material-ui/icons/ArrowForwardIosOutlined';
-import { AllElementsIsBooleanType } from 'models/interfaces';
+import { AllElementsIsBooleanType } from 'models/types';
 import { FolderLayoutPropsType } from './types';
 import { toChangeFolders, toSetCurrentFolderPropertyIdx, toSetDrawerWidth } from 'store/modules/App/actions';
 import { DrawerWidthType, FoldersType } from 'store/modules/App/types';

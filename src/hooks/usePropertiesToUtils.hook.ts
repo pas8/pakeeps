@@ -1,15 +1,22 @@
+import { PakeepPropertyValueType } from './../store/modules/App/types';
 import { map, mapKeys, every, forIn, mapValues } from 'lodash';
+import { UsePropertiesToUtilsType, SelectedPakeepsType } from 'models/types';
+import { VariantsOfropertiesToUtils } from 'models/unums';
+import { PakeepElementInterface, PakeepPropertyKeysType } from 'store/modules/App/types';
+import { $Keys } from 'utility-types';
+import { IconUtilsFuncNameType } from 'components/HeaderWhenActiveSelecto/types';
 
-export const usePropertiesToUtils = (
+export const usePropertiesToUtils: UsePropertiesToUtilsType = (
   pakeepPropertyies,
   selectedPakeeps,
   handleSelectedPakeepsPropertyFunc,
-  cancelSelectedPakeepsId,
-  { TOOGLE, VALUE }
+  cancelSelectedPakeepsId
 ) => {
+  const { TOOGLE, VALUE } = VariantsOfropertiesToUtils;
+
   const functionObjectWithPropetyNameKeys = mapValues(
     pakeepPropertyies,
-    ({ func, propertyValue, funcName, isShouldBeClosed }, key) => {
+    ({ func, propertyValue, funcName, isShouldBeClosed }, key: PakeepPropertyKeysType) => {
       if (func) return { func, funcName };
 
       if (propertyValue === TOOGLE) {
@@ -23,7 +30,7 @@ export const usePropertiesToUtils = (
         return { func: toogleFunc, funcName };
       }
       if (propertyValue === VALUE) {
-        const valueFunc = value => {
+        const valueFunc = (value: PakeepPropertyValueType) => {
           const newPakeeps = selectedPakeeps.map(el => ({ ...el, [key]: value }));
           handleSelectedPakeepsPropertyFunc(newPakeeps);
         };
@@ -32,11 +39,11 @@ export const usePropertiesToUtils = (
       return { func: () => console.log(';'), funcName };
     }
   );
-
+  //@ts-ignore
   const objectWithKeysOfFuncNames = mapKeys(functionObjectWithPropetyNameKeys, ({ funcName }) => funcName);
-  const functionObject = mapValues(objectWithKeysOfFuncNames, ({ func }) => func);
+  const functionObject = mapValues(objectWithKeysOfFuncNames, ({ func }: { func: Function }) => func);
 
-  const propertyiesObject = mapValues(pakeepPropertyies, (value, key) => {
+  const propertyiesObject = mapValues(pakeepPropertyies, (value, key: PakeepPropertyKeysType) => {
     if (selectedPakeeps.length === 0) return false;
 
     const isEveryItemPropetyTrue = every(selectedPakeeps, el => !!el[key]);

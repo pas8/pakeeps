@@ -29,7 +29,7 @@ import {
   UseStylesInteface
 } from './interface';
 
-const useStyles = makeStyles(({ typography: { h4, h6 }, spacing }: Theme) => {
+const useStyles = makeStyles(({ typography: { h4, h6 }, spacing }) => {
   return {
     containerClass: ({ backgroundColor, color }: UseStylesInteface) => ({
       backgroundColor,
