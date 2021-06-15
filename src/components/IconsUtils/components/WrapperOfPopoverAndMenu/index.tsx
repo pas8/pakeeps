@@ -1,5 +1,6 @@
 import IconButtonByPas from 'components/IconButton';
 import { useGetReversedCustomColor } from 'hooks/useGetReversedCustomColor.hook';
+import { ClosePopoverOrMenuType } from 'models/types';
 import { FC, MouseEvent, ReactNode, useRef, useState } from 'react';
 import { Optional } from 'utility-types';
 import PopoverAndMenu from './components/PopoverAndMenu';
@@ -31,11 +32,11 @@ const WrapperOfPopoverAndMenu: FC<WrapperOfPopoverAndMenuType> = ({
 
   const [anchorElState, setAnchorElState] = useState<Optional<typeof nullityOfAnchorEl>>(nullityOfAnchorEl);
 
-  const handleMenuClose = () => setAnchorElState(nullityOfAnchorEl);
-  const handlePopoverClose = () => setAnchorElState(state => ({ ...state, isPopoverOpen: false }));
+  const handleMenuClose:ClosePopoverOrMenuType = () => setAnchorElState(nullityOfAnchorEl);
+  const handlePopoverClose:ClosePopoverOrMenuType = () => setAnchorElState(state => ({ ...state, isPopoverOpen: false }));
 
   const popoverAndMenuProps = { ...anchorElState, handleMenuClose, handlePopoverClose, customColor };
-  const anchorElRef = useRef(null);
+  const anchorElRef = useRef<HTMLDivElement>(null);
 
   return (
     <>
@@ -52,7 +53,7 @@ const WrapperOfPopoverAndMenu: FC<WrapperOfPopoverAndMenuType> = ({
             menuComponentsProps,
             hidden = false,
             customElementComponentOfIconGroup = false,
-            rotateDeg = false,
+            rotateDeg = 0,
             badgeContent = 0,
             activePopoverText = notActivePopoverText
           },

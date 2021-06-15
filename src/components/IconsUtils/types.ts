@@ -1,4 +1,4 @@
-import { CustomColorType } from 'hooks/useGetReadableColor.hook';
+import { CustomColorType } from 'models/types';
 import { ReactNode } from 'react';
 import { GlobalEventsType, GlobalLabelsType, PakeepIdType } from 'store/modules/App/types';
 import { $Values } from 'utility-types';

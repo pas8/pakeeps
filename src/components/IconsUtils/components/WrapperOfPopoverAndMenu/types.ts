@@ -1,5 +1,5 @@
 import { IconsUtilsArrType } from 'components/IconsUtils/types';
-import { CustomColorType } from 'hooks/useGetReadableColor.hook';
+import { CustomColorType } from 'models/types';
 
 export type IconSizeType = 'default' | 'small';
 

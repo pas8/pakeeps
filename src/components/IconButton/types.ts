@@ -1,26 +1,28 @@
-import { ReactNode } from 'react';
+import { IconSizeType } from './../IconsUtils/components/WrapperOfPopoverAndMenu/types';
+import { ReactNode, ReactElement, FC } from 'react';
+import { CustomColorType } from 'models/types';
+import { IconsUtilsArrDenotationNameType } from 'components/IconsUtils/types';
 export type IconColorType = string;
 
 export type IconClassType = {
-  iconColor: IconColorType;
+  iconColor?: IconColorType;
   rotate?: string;
   isArctiveIconPresent: boolean;
-  isIconActive: boolean;
-  fillOpacity: number;
+  isIconActive: boolean | any;
+  fillOpacity?: number;
 };
 
+type IconType = any;
+
 export type IconButtonByPasType = IconClassType & {
-
-  badgeContent:any;
-  onClick :Function,
-  rotateDeg:number,
-  icon: ReactNode,
-  iconName:string,
-  activeIconName:string,
-  activeProperty = false,
-  size:IconSizeType,
-  customColor = false,
-  handleAverageMainComponentWidth = false,
-  badgeContent
-
-}
+  badgeContent: number;
+  onClick?: any;
+  rotateDeg?: number;
+  icon: IconType;
+  iconName:  any | string ;
+  activeIconName?: string;
+  activeProperty?: boolean;
+  size?: IconSizeType;
+  customColor?: CustomColorType;
+  handleAverageMainComponentWidth?: Function;
+};

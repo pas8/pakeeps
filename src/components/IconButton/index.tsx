@@ -3,24 +3,23 @@ import _ from 'lodash';
 import { Grid, IconButton, makeStyles, Badge } from '@material-ui/core';
 import { useMeasure } from 'react-use';
 import { FC, useEffect } from 'react';
-I
+
 import { useThemeColors } from 'hooks/useThemeColors.hook';
 import { useAlpha } from 'hooks/useAlpha.hook';
-import { IconClassType } from './types';
+import { IconButtonByPasType, IconClassType } from './types';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles(({ spacing }) => ({
   iconClass: ({ iconColor, rotate, isArctiveIconPresent, isIconActive, fillOpacity }: IconClassType) => ({
     fillOpacity,
-
     '& svg': { color: iconColor, transform: rotate },
     '& path': { fillOpacity: !isArctiveIconPresent && isIconActive && 1 },
     '&:hover ': { background: useAlpha(iconColor) }
   }),
-  smallButtonSizeClass: { '& button ': { padding: theme.spacing(1) } }
+  smallButtonSizeClass: { '& button ': { padding: spacing(1) } }
 }));
 
-const IconButtonByPas: FC<any> = ({
-  onClick = null,
+const IconButtonByPas: FC<IconButtonByPasType> = ({
+  onClick,
   isArctiveIconPresent,
   rotateDeg = false,
   isIconActive = false,
@@ -30,16 +29,16 @@ const IconButtonByPas: FC<any> = ({
   activeIconName = 'icon',
   activeProperty = false,
   size,
-  customColor = false,
-  handleAverageMainComponentWidth = false,
+  customColor,
+  handleAverageMainComponentWidth,
   badgeContent
 }) => {
   const [primaryColor, , maxEmphasisColor, , mediumEmphasisColor] = useThemeColors();
   const currentHoverStatusIsTrue = _.isEqual(activeIconName, iconName) && activeProperty;
-  const customIconColor = !!customColor && currentHoverStatusIsTrue ? customColor?.hover : customColor?.unHover;
+  const customIconColor = !customColor?.isUseDefault && currentHoverStatusIsTrue ? customColor?.hover : customColor?.unHover;
 
   const defaultColor = isIconActive ? primaryColor : currentHoverStatusIsTrue ? maxEmphasisColor : mediumEmphasisColor;
-  const iconColor = customColor ? customIconColor : defaultColor;
+  const iconColor = !customColor?.isUseDefault ? customIconColor : defaultColor;
 
   const rotate = rotateDeg ? `rotate(${rotateDeg}deg)` : 'rotate(0deg)';
   const classes = useStyles({ iconColor, rotate, isIconActive, isArctiveIconPresent, fillOpacity });
@@ -57,20 +56,5 @@ const IconButtonByPas: FC<any> = ({
   );
 };
 
-IconButtonByPas.propTypes = {
-  Icon: PropTypes.node,
-  activeIconName: PropTypes.string,
-  activeProperty: PropTypes.bool,
-  badgeContent: PropTypes.number,
-  customColor: PropTypes.bool,
-  handleAverageMainComponentWidth: PropTypes.bool,
-  icon: PropTypes.any,
-  iconName: PropTypes.string,
-  isArctiveIconPresent: PropTypes.bool,
-  isIconActive: PropTypes.bool,
-  onClick: PropTypes.func,
-  rotateDeg: PropTypes.number,
-  size: PropTypes.string
-};
 
 export default IconButtonByPas;

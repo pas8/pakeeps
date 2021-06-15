@@ -6,9 +6,9 @@ import PakeepListContainer from './components/Container';
 const WrapperOfContainerOfPakeepList = ({
   pakeeps,
   pakeepsOrderNames,
-  handleSetPreviusOrderNamesFunc,
-    setIsPakeepDragging,
-    columnOfPakeepListContainerProps
+  handlePakeepsOrderNames,
+  setIsPakeepDragging,
+  columnOfPakeepListContainerProps
 }) => {
   const placeholderName = 'placeholder';
 
@@ -21,16 +21,16 @@ const WrapperOfContainerOfPakeepList = ({
   const [columns, responsiveColumnOrder] = useMakeDraggableArr(
     pakeeps,
     pakeepsOrderNames,
-    handleSetPreviusOrderNamesFunc
+    handlePakeepsOrderNames
     // pakeepListContainerProps.isPakeepDragContextPinned
   );
 
-    const onDragStart = () => setIsPakeepDragging(true)
+  const onDragStart = () => setIsPakeepDragging(true);
 
   const onDragEnd = ({ destination, source, draggableId }) => {
     if (!destination) return;
     if (!destination.id === source.index && destination.index === source.index) return;
-    setIsPakeepDragging(false)
+    setIsPakeepDragging(false);
 
     const isSameColumn = source.droppableId === destination.droppableId;
     if (source.index === destination.index && isSameColumn) return;
@@ -148,6 +148,6 @@ WrapperOfContainerOfPakeepList.propTypes = {
     reduce: PropTypes.func
   }),
   setIsPakeepDragging: PropTypes.func
-}
+};
 
 export default WrapperOfContainerOfPakeepList;
