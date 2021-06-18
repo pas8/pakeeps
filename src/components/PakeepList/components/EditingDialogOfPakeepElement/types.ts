@@ -1,3 +1,5 @@
+import { IconsUtilsPropsType } from "components/IconsUtils/types";
+
 interface attributeGroupProps {
   handleDeleteLabelFromPakeepFunc:  any; //func
   parentBackgrounColor: string;
@@ -11,38 +13,25 @@ interface attributeGroupProps {
   timeAndDateFromat: string;
 }
 
-interface DialogIconsUtilsProps {
-  isAllIconsIsShown: boolean;
-  setEditTitleIsTrue:  any; //func
-  handleSetFavoritePakeep:  any; //func
-  changingTitle: false;
-  labels: any;
-  id: string;
-  handleSetBackgroundColorPakeep: () => void;
-  handleSetColorPakeep: void;
-  isBackgroundColorDefault: boolean;
-  isColorDefault: boolean;
-  customColor: any;
-  handleSetIsPinnedPakeep: boolean;
-}
 
-export interface EditingDialogOfPakeepElementProps {
+
+export type EditingDialogOfPakeepElementProps =  {
   title: string;
   text: string;
-  correctColor: string | boolean;
-  correctBackground: string | boolean;
+  correctColor: string ;
+  correctBackground: string ;
   id: string;
-  dialogIconsUtilsProps: DialogIconsUtilsProps;
+  dialogIconsUtilsProps: IconsUtilsPropsType;
   customColor: any;
   dialogAttributeGroupProps: attributeGroupProps;
-  handleClosePakeepDialog: void;
+  handleClosePakeepDialog: Function;
 }
 
-export interface OnChangeInterface {
+export type OnChangeInterface =  {
   target: { name: string; value: string };
 }
 
-export interface InputProps {
+export type InputProps =  {
   placeholder: string;
   autoComplete: string;
   onChange: (target: OnChangeInterface) => void;
@@ -71,15 +60,10 @@ export interface UseStylesInteface {
   backgroundColor: string;
   color: string;
 }
-// export interface ClassesInterface {
-
-// }
 
 export interface IconsUtilsProps {
   widthOfContainer: number;
   arrOfButtonNamesWhichSholudBeHidden: [string];
 }
 
-export interface DialogAttributeGroupProps {}
 
-export interface AllAttributeGroupProps extends DialogIconsUtilsProps, IconsUtilsProps {}

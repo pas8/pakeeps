@@ -2,7 +2,7 @@ import { PakeepPropertyValueType } from './../store/modules/App/types';
 import { map, mapKeys, every, forIn, mapValues } from 'lodash';
 import { UsePropertiesToUtilsType, SelectedPakeepsType } from 'models/types';
 import { VariantsOfropertiesToUtils } from 'models/unums';
-import { PakeepElementInterface, PakeepPropertyKeysType } from 'store/modules/App/types';
+import { PakeepElementType, PakeepPropertyKeysType } from 'store/modules/App/types';
 import { $Keys } from 'utility-types';
 import { IconUtilsFuncNameType } from 'components/HeaderWhenActiveSelecto/types';
 

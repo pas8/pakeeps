@@ -45,6 +45,13 @@ export const toChangeGlobalLabels = (payload: PayloadTypes[TypeNames.HANDLE_CHAN
   payload
 });
 
+export const toChangeGlobalLabelItem = (
+  payload: PayloadTypes[TypeNames.HANDLE_CHANGE_GLOBAL_LABEL_ITEM]
+): AppActionTypes => ({
+  type: TypeNames.HANDLE_CHANGE_GLOBAL_LABEL_ITEM,
+  payload
+});
+
 export const toDeleteLabelFromPakeep = (
   payload: PayloadTypes[TypeNames.HANDLE_DELETE_LABEL_FROM_PAKEEP]
 ): AppActionTypes => ({
@@ -73,6 +80,10 @@ export const toSetOrderNamesOfPinnedPakeeps = (
   payload: PayloadTypes[TypeNames.HANDLE_SET_ORDER_NAMES_OF_PINNED_PAKEEPS]
 ): AppActionTypes => ({
   type: TypeNames.HANDLE_SET_ORDER_NAMES_OF_PINNED_PAKEEPS,
+  payload
+});
+export const toSetOrderNamesOfPakeeps = (payload: PayloadTypes[TypeNames.HANDLE_SET_ORDER_NAMES]): AppActionTypes => ({
+  type: TypeNames.HANDLE_SET_ORDER_NAMES,
   payload
 });
 

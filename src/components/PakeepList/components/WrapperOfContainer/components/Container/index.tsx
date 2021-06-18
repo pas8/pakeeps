@@ -3,9 +3,12 @@ import { Grid, makeStyles } from '@material-ui/core';
 import { DragDropContext } from 'react-beautiful-dnd';
 import { find } from 'lodash';
 import ColumnOfPakeepListContainer from './components/Column/index';
+import { FC } from 'react';
+import { PakeepListContainerPropsType } from './types';
+import { PakeepElementType, PakeepsType } from 'store/modules/App/types';
 
 const useStyles = makeStyles(({ spacing, breakpoints: { between, down }, palette }) => ({
-  container: {
+  containerClass: {
     margin: spacing(4, 0, 0, 0),
     [between('xs', 'sm')]: { margin: spacing(2, 0, 0, 0) },
     [down('md')]: { margin: spacing(4, 0, 0, 0) },
@@ -16,7 +19,7 @@ const useStyles = makeStyles(({ spacing, breakpoints: { between, down }, palette
   }
 }));
 
-const PakeepListContainer = ({
+const PakeepListContainer: FC<PakeepListContainerPropsType> = ({
   pakeeps,
   responsiveColumnOrder,
   columns,
@@ -29,7 +32,7 @@ const PakeepListContainer = ({
 
   return (
     <DragDropContext onDragEnd={onDragEnd} onDragStart={onDragStart}>
-      <Grid container className={classes.container}>
+      <Grid container className={classes.containerClass}>
         {responsiveColumnOrder?.map((columnId, idx) => {
           const column = columns[columnId];
           if (!column?.pakeepsId) return;
@@ -37,9 +40,13 @@ const PakeepListContainer = ({
           const filteredArrToMap = column.pakeepsId.filter(id => id !== placeholderName);
 
           const pakeepsInColumn = filteredArrToMap.map(pakeepId => {
-            const currentEl = find(pakeeps, ({ id }) => id === pakeepId);
+            const findedPakeep = find(pakeeps, ({ id }) => id === pakeepId);
+            if (!findedPakeep) return null;
+            const currentEl: PakeepElementType = findedPakeep;
             return currentEl;
           });
+
+          // if(pakeepsInColumn)
           const isLastColumn = !!(idx + 1 === responsiveColumnOrder.length);
           const isFirstColumn = !!(idx === 0);
 
@@ -56,19 +63,6 @@ const PakeepListContainer = ({
       </Grid>
     </DragDropContext>
   );
-};
-
-PakeepListContainer.propTypes = {
-  columns: PropTypes.any,
-  onDragEnd: PropTypes.func,
-  onDragStart: PropTypes.func,
-  columnOfPakeepListContainerProps: PropTypes.object,
-  pakeeps: PropTypes.array,
-  placeholderName: PropTypes.string,
-  responsiveColumnOrder: PropTypes.shape({
-    length: PropTypes.any,
-    map: PropTypes.func
-  })
 };
 
 export default PakeepListContainer;

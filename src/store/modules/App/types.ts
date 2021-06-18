@@ -4,7 +4,7 @@ import { TypeNames } from './enums';
 
 export type PayloadTypes = {
   [TypeNames.HANDLE_ADD_NEW_PAKEEP]: {
-    newPakeep: PakeepElementInterface;
+    newPakeep: PakeepElementType;
   };
   [TypeNames.HANDLE_DELETE_PAKEEP]: { pakeepId: string };
   [TypeNames.HANDLE_ADD_EVENT_TO_PAKEEP]: { newEvent: PakeepEventInteface; pakeepId: PakeepIdType };
@@ -13,6 +13,7 @@ export type PayloadTypes = {
   [TypeNames.HANDLE_SET_NEW_ORDER_NAMES]: { newOrderNames: OrderNamesType };
   [TypeNames.HANDLE_CHANGE_FOLDERS]: { folders: FoldersType };
   [TypeNames.HANDLE_CHANGE_GLOBAL_LABELS]: { labels: GlobalLabelsType };
+  [TypeNames.HANDLE_CHANGE_GLOBAL_LABEL_ITEM]: { changedLabel: ILabelElement };
   [TypeNames.HANDLE_DELETE_LABEL_FROM_PAKEEP]: {
     currentPakeepId: PakeepIdType;
     labelIdWhichShouldBeDeleted: LabelIdType;
@@ -22,10 +23,11 @@ export type PayloadTypes = {
     labelIdWhichShouldBeAdded: LabelIdType;
   };
   [TypeNames.HANDLE_SET_DRAWER_WIDTH]: { drawerWidth: DrawerWidthType };
-  [TypeNames.HANDLE_ADD_NEW_GLOBAL_LABEL]: { newLabel: LabelElementInterface };
+  [TypeNames.HANDLE_ADD_NEW_GLOBAL_LABEL]: { newLabel: ILabelElement };
   [TypeNames.HANDLE_CHANGE_PAKEEPS]: { pakeeps: PakeepsType };
   [TypeNames.HANDLE_PIN_STATUS_OF_PAKEEPS]: { pakeepId: PakeepIdType; isPakeepPinned?: boolean };
   [TypeNames.HANDLE_SET_ORDER_NAMES_OF_PINNED_PAKEEPS]: { pinnedPakeepsOrderNames: OrderNamesType };
+  [TypeNames.HANDLE_SET_ORDER_NAMES]: { pakeepsOrderNames: OrderNamesType };
   [TypeNames.HANDLE_SET_SELECTED_PAKEEPIDS_ARR]: { selectedPakeepsId: SelectedPakeepsIdType };
   [TypeNames.HANDLE_CANCEL_SELECTING_STATUS]: { isCancelSelectedPakeepsId: boolean };
   [TypeNames.HANDLE_CHANGE_SELECTED_PAKEEPS_PROPERTY]: { newPakeeps: PakeepsType };
@@ -40,6 +42,10 @@ export type ActionsValueTypes = {
   ToAddNewPakep: {
     type: typeof TypeNames.HANDLE_ADD_NEW_PAKEEP;
     payload: PayloadTypes[TypeNames.HANDLE_ADD_NEW_PAKEEP];
+  };
+  toChangeGlobalLabelItem: {
+    type: typeof TypeNames.HANDLE_CHANGE_GLOBAL_LABEL_ITEM;
+    payload: PayloadTypes[TypeNames.HANDLE_CHANGE_GLOBAL_LABEL_ITEM];
   };
 
   ToDeletePakeep: {
@@ -102,6 +108,10 @@ export type ActionsValueTypes = {
   ToSetOrderNamesOfPinnedPakeeps: {
     type: typeof TypeNames.HANDLE_SET_ORDER_NAMES_OF_PINNED_PAKEEPS;
     payload: PayloadTypes[TypeNames.HANDLE_SET_ORDER_NAMES_OF_PINNED_PAKEEPS];
+  };
+  ToSetOrderNames: {
+    type: typeof TypeNames.HANDLE_SET_ORDER_NAMES;
+    payload: PayloadTypes[TypeNames.HANDLE_SET_ORDER_NAMES];
   };
 
   ToSetSelectedPakeepIdsArr: {
@@ -186,31 +196,36 @@ export interface PakeepEventInteface {
 // export type PakeepIdType = Brand<string, '_pakeepId'>;
 export type PakeepIdType = string;
 
-export interface PakeepElementInterface {
+export type DefaultFolderElementPropertyNamesType =
+  | 'isInBookmark'
+  | 'isFavorite'
+  | 'isArchived'
+  | 'isPinned'
+  | 'isCheckBoxes';
+export type DefaultFolderElementPropertyType = {
+  [Property in DefaultFolderElementPropertyNamesType]: boolean;
+};
+
+export type PakeepElementType = DefaultFolderElementPropertyType & {
   title: TitleType;
   text: string;
-  isInBookmark: boolean;
-  isFavorite: boolean;
   color: ColorType;
   labels: string[];
-  isArchived: boolean;
   events: GlobalEventInteface[];
   readonly id: PakeepIdType;
-  isPinned: boolean;
-  isCheckBoxes: boolean;
   backgroundColor: ColorType;
-}
+};
 
 export type LabelIdType = string;
 
-export interface LabelElementInterface {
+export interface ILabelElement {
   color: ColorType;
   title: string;
   iconName: IconNameType;
   id: LabelIdType;
   variant: LabelVariantType;
 }
-export type GlobalLabelsType = LabelElementInterface[];
+export type GlobalLabelsType = ILabelElement[];
 export type GlobalEventsType = GlobalEventInteface[];
 
 export interface DefaultThemeInterface {
@@ -226,7 +241,7 @@ export interface DefaultThemeInterface {
 export type OrderNameType = string;
 export type OrderNamesType = OrderNameType[];
 export type DrawerWidthType = number;
-export type PakeepsType = PakeepElementInterface[];
+export type PakeepsType = PakeepElementType[];
 
 export interface AppInitialStateInteface {
   // breakpointsValues: BreakpointsValuesInterface<number>;
@@ -246,9 +261,9 @@ export interface AppInitialStateInteface {
   isCancelSelectedPakeepsId: boolean;
 }
 
-export type PakeepPropertyValueType = $Values<PakeepElementInterface>;
-export type PakeepPropertyKeysType = $Keys<PakeepElementInterface>;
+export type PakeepPropertyValueType = $Values<PakeepElementType>;
+export type PakeepPropertyKeysType = $Keys<PakeepElementType>;
 
-export type PakeepPropertyType = { [key: string]: PakeepElementInterface };
+export type PakeepPropertyType = { [key: string]: PakeepElementType };
 
 export type OperateWOP<N> = (payload: N) => void;

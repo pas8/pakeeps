@@ -27,7 +27,7 @@ import {
   OnChangeInterface,
   StateInteface,
   UseStylesInteface
-} from './interface';
+} from './types';
 
 const useStyles = makeStyles(({ typography: { h4, h6 }, spacing }) => {
   return {
@@ -83,7 +83,9 @@ const EditingDialogOfPakeepElement: FC<EditingDialogOfPakeepElementProps> = ({
 
   useEffect(() => setState({ title, text }), [title, text]);
 
-  const onChange = ({ target: { name, value } }: OnChangeInterface) => setState(state => ({ ...state, [name]: value }));
+  const onChange = ({ target: { name, value } }: OnChangeInterface) => {
+    setState(state => ({ ...state, [name]: value }));
+  };
 
   const titleInputProps: InputProps = {
     placeholder: 'Title',
@@ -105,17 +107,16 @@ const EditingDialogOfPakeepElement: FC<EditingDialogOfPakeepElementProps> = ({
     multiline: true
   };
 
-  const JUST_PADDING_VALUE: number = 160;
+  const JUST_PADDING_VALUE = 160;
+  const widthOfContainer = width - JUST_PADDING_VALUE;
 
-  const widthOfContainer: number = width - JUST_PADDING_VALUE;
-
-  const arrOfButtonNamesWhichSholudBeHidden: [string] = ['width'];
+  const arrOfButtonNamesWhichSholudBeHidden: string[] = ['width'];
 
   const iconsUtilsProps: IconsUtilsProps = {
     widthOfContainer,
     arrOfButtonNamesWhichSholudBeHidden
   };
-  const allIconsUtilsProps: AllAttributeGroupProps = { ...dialogIconsUtilsProps, ...iconsUtilsProps };
+  const allIconsUtilsProps = { ...dialogIconsUtilsProps, ...iconsUtilsProps };
 
   const attributeGroupProps = {};
   const allAttributeGroupProps = { ...dialogAttributeGroupProps, ...attributeGroupProps };
@@ -124,7 +125,7 @@ const EditingDialogOfPakeepElement: FC<EditingDialogOfPakeepElementProps> = ({
     console.log(state);
   };
 
-  const isOpen: boolean = !!id;
+  const isOpen = !!id;
 
   const actionsButtonGroupProps: ActionsButtonGroupProps = {
     onSave: handleSubmit,
@@ -132,7 +133,7 @@ const EditingDialogOfPakeepElement: FC<EditingDialogOfPakeepElementProps> = ({
     colorOfCloseButton: customColor && useAlpha(customColor?.hover, 0.6),
     colorOfSaveButton: customColor?.hover
   };
-  
+
   const onClose = () => {
     handleClosePakeepDialog();
   };

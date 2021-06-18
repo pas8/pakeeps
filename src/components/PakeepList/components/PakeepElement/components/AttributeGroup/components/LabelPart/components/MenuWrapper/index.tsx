@@ -1,21 +1,35 @@
 import { useSnackbar } from 'notistack';
 import PropTypes from 'prop-types';
+import { FC } from 'react';
 import MenuOfLabelPart from '../Menu';
+import {
+  HandleChangeLabelColorType,
+  HandleChangeLabelIconNameType,
+  HandleChangeLabelTitleType,
+  WrapperOfMenuOfLabelPartPropsType
+} from './types';
 
-const WrapperOfMenuOfLabelPart = ({
+const WrapperOfMenuOfLabelPart: FC<WrapperOfMenuOfLabelPartPropsType> = ({
   handleClose,
   handleDeleteLabel,
   menuState,
-  changeGloabalLabelItemFunc,
+  handleChangeGlobalLabelItem,
   setMenuState,
   isThisMenuIsSecond,
   customColor
 }) => {
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
-  const handleChangeLabelColor = color => setMenuState(state => ({ ...state, color }));
-  const handleChangeLabelTitle = ({ target: { value: title } }) => setMenuState(state => ({ ...state, title }));
-  const handleChangeLabelIconName = labelIconName => setMenuState(state => ({ ...state, labelIconName }));
+  const handleChangeLabelColor: HandleChangeLabelColorType = color => setMenuState(state => ({ ...state, color }));
+
+  const handleChangeLabelTitle: HandleChangeLabelTitleType = ({ target: { value: title } }) => {
+    setMenuState(state => ({ ...state, title }));
+  };
+
+  const handleChangeLabelIconName: HandleChangeLabelIconNameType = labelIconName => {
+    setMenuState(state => ({ ...state, labelIconName }));
+  };
+
   const handleChangeLabelVariant = () => {
     const variant = menuState.variant === 'default' ? 'outlined' : 'default';
     setMenuState(state => ({ ...state, variant }));
@@ -30,7 +44,7 @@ const WrapperOfMenuOfLabelPart = ({
       variant: menuState.variant
     };
     try {
-      changeGloabalLabelItemFunc(newLabel);
+      handleChangeGlobalLabelItem(newLabel);
       enqueueSnackbar({ message: 'Label was successfully chnged' });
     } catch (error) {
       enqueueSnackbar({ message: !error ? 'Something went wrong ' : error, severity: 'error' });
@@ -52,15 +66,6 @@ const WrapperOfMenuOfLabelPart = ({
   };
 
   return <MenuOfLabelPart {...menuOfLabelPartProps} />;
-};
-
-WrapperOfMenuOfLabelPart.propTypes = {
-  changeGloabalLabelItemFunc: PropTypes.func,
-  handleClose: PropTypes.func,
-  handleDeleteLabel: PropTypes.func,
-  isThisMenuIsSecond: PropTypes.bool,
-  menuState: PropTypes.object,
-  setMenuState: PropTypes.func
 };
 
 export default WrapperOfMenuOfLabelPart;

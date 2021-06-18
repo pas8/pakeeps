@@ -1,25 +1,28 @@
-import compareFunc from 'compare-func';
-import { useEffect, useState } from 'react';
-import { usePrevious } from 'react-use';
+import { useEffect } from 'react';
+import { OrderNamesType, PakeepsType } from 'store/modules/App/types';
+import { PakeepsReduceFuncType } from 'models/types';
+import { HandleSetPakeepsOrderNamesType } from 'components/PakeepList/types';
 import { useTakeValueFromBreakpoints } from './useTakeValueFromBreakpoints.hook';
 
 export const useMakeDraggableArr = (
-  pakeeps,
-  pakeepsOrderNames,
-  handlePakeepsOrderNames,
+  pakeeps: PakeepsType,
+  pakeepsOrderNames: OrderNamesType,
+  handlePakeepsOrderNames: HandleSetPakeepsOrderNamesType,
   maxColumnNumber = 6,
-  defaultBreakpointValue = [6, 4, 3, 2, 1],
+  defaultBreakpointValue = [6, 4, 3, 2, 1]
 ) => {
-  useEffect(() => pakeepsOrderNames.length === 0 && handlePakeepsOrderNames(pakeeps.map(({ id }) => id)), [pakeeps]);
+  useEffect(() => {
+    pakeepsOrderNames.length === 0 && handlePakeepsOrderNames(pakeeps.map(({ id }) => id));
+  }, [pakeeps]);
 
-  const orderReduceFunc = (sum, placeholder, idx) => [...sum, `${idx}`];
+  const orderReduceFunc = (sum: string[], placeholder: any, idx: number) => [...sum, `${idx}`];
 
   const order = Array(maxColumnNumber).fill(maxColumnNumber).reduce(orderReduceFunc, []);
 
   const responsiveColumnOrder = order.slice(0, useTakeValueFromBreakpoints(defaultBreakpointValue));
   const columnArrLenght = responsiveColumnOrder.length;
 
-  const pakeepsReduceFunc = (sum, id, idx) => {
+  const pakeepsReduceFunc: PakeepsReduceFuncType = (sum, id, idx) => {
     const columnId = responsiveColumnOrder.filter((id, columnIndex) => {
       return (columnIndex + columnArrLenght) % columnArrLenght === idx % columnArrLenght && id;
     });
@@ -38,5 +41,5 @@ export const useMakeDraggableArr = (
 
   const columns = pakeepsOrderNames.reduce(pakeepsReduceFunc, {});
 
-  return [columns, responsiveColumnOrder];
+  return {columns, responsiveColumnOrder}
 };

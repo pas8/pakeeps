@@ -1,12 +1,6 @@
 import PropTypes from 'prop-types';
 import { Grid, CircularProgress } from '@material-ui/core';
-import { connect } from 'react-redux';
-import {
-  handleSetPreviusOrderNames,
-  handleSetOrderNamesOfPinnedPakeepsThunk,
-  handleSetSelectedPakeepsIdThunk,
-  handleCancelSelectingStatusThunk
-} from 'store/modules/App/operations';
+import { connect, useDispatch, useSelector } from 'react-redux';
 import dynamic from 'next/dynamic';
 import {
   getCurrentFolderPropertyIdx,
@@ -19,10 +13,26 @@ import {
 } from 'store/modules/App/selectors';
 import { difference, filter, flatten, forEach, includes, map, words } from 'lodash';
 import WrapperOfContainerOfPakeepList from './components/WrapperOfContainer';
-import { createContext, useEffect, useRef, useState } from 'react';
+import { createContext, FC, memo, useEffect, useRef, useState } from 'react';
 import SelectofFPakeepListContainer from './components/WrapperOfContainer/components/Container/components/Selecto';
 import { useIsomorphicLayoutEffect, useKeyPressEvent } from 'react-use';
 import EditingDialogOfPakeepElement from './components/EditingDialogOfPakeepElement';
+import { FoldersType, PakeepElementType, PakeepsType } from 'store/modules/App/types';
+import {
+  toCancelSelectingStatus,
+  toSetOrderNamesOfPakeeps,
+  toSetOrderNamesOfPinnedPakeeps,
+  toSetSelectedPakeepIdsArr
+} from 'store/modules/App/actions';
+import { CustomColorType, SelectedPakeepsIdType } from 'models/types';
+import {
+  HandleSetPakeepsOrderNamesType,
+  HandleSetPinnedPakeepsOrderNamesType,
+  HandleSetSelectedPakeepsIdType,
+  PakeepDialogPropsType,
+  PakeepHoveringContextPropviderPropsValueType
+} from './types';
+import { Optional } from 'utility-types';
 // const WrapperOfContainerOfPakeepList = dynamic(() => import(), {
 //   loading: () => (
 //     <Grid style={{ height: '80vh', width: '100%' }} container alignItems={'center'} justify={'center'}>
@@ -31,21 +41,34 @@ import EditingDialogOfPakeepElement from './components/EditingDialogOfPakeepElem
 //   ),
 //   ssr: false
 // });
-export const PakeepHoveringContext = createContext();
 
-const PakeepList = ({
-  pakeeps,
-  pakeepsOrderNames,
-  currentFolderPropertyIdx,
-  folders,
-  pinnedPakeepsOrderNames,
-  handleSetPreviusOrderNames,
-  handleSetSelectedPakeepsIdThunk,
-  handleSetOrderNamesOfPinnedPakeepsThunk,
-  selectedPakeepsId,
-  isCancelSelectedPakeepsId,
-  handleCancelSelectingStatusThunk
-}) => {
+export const PakeepHoveringContext = createContext({} as PakeepHoveringContextPropviderPropsValueType);
+
+const PakeepList: FC = () => {
+  const dispatch = useDispatch();
+  const pakeeps: PakeepsType = useSelector(getPakeeps);
+  const selectedPakeepsId: SelectedPakeepsIdType = useSelector(getSelectedPakeepsId);
+  const pakeepsOrderNames = useSelector(getPakeepsOrderNames);
+  const pinnedPakeepsOrderNames = useSelector(getPinnedPakeepsOrderNames);
+  const currentFolderPropertyIdx: number = useSelector(getCurrentFolderPropertyIdx);
+  const folders: FoldersType = useSelector(getFolders);
+  const isCancelSelectedPakeepsId = useSelector(getIsCancelSelectedPakeepsId);
+
+  const handleSetSelectedPakeepsId: HandleSetSelectedPakeepsIdType = selectedPakeepsId => {
+    dispatch(toSetSelectedPakeepIdsArr({ selectedPakeepsId }));
+  };
+  const handleChangeSelectingStatus = (isCancelSelectedPakeepsId: boolean) => {
+    dispatch(toCancelSelectingStatus({ isCancelSelectedPakeepsId }));
+  };
+
+  const handleSetPakeepsOrderNames: HandleSetPakeepsOrderNamesType = pakeepsOrderNames => {
+    dispatch(toSetOrderNamesOfPakeeps({ pakeepsOrderNames }));
+  };
+
+  const handleSetPinnedPakeepsOrderNames: HandleSetPinnedPakeepsOrderNamesType = pinnedPakeepsOrderNames => {
+    dispatch(toSetOrderNamesOfPinnedPakeeps({ pinnedPakeepsOrderNames }));
+  };
+
   const SELECTED = 'selected';
   const [isPakeepDragging, setIsPakeepDragging] = useState(false);
   const [isSelecting, setIsSelecting] = useState(false);
@@ -53,7 +76,7 @@ const PakeepList = ({
 
   const nullityOfPakeepDialogProps = {
     id: '',
-    customColor: false,
+    customColor: {} as CustomColorType,
     dialogIconsUtilsProps: {},
     correctColor: '',
     correctBackground: '',
@@ -61,7 +84,7 @@ const PakeepList = ({
     text: '',
     dialogAttributeGroupProps: {}
   };
-  const [pakeepDialogProps, setPakeepDialogProps] = useState(nullityOfPakeepDialogProps);
+  const [pakeepDialogProps, setPakeepDialogProps] = useState<PakeepDialogPropsType>(nullityOfPakeepDialogProps);
 
   const flattenFolder = flatten(folders);
   const folderProperty = flattenFolder[currentFolderPropertyIdx]?.property;
@@ -84,7 +107,7 @@ const PakeepList = ({
     pakeeps: pinnedPakeeps,
     setIsPakeepDragging,
     pakeepsOrderNames: pinnedPakeepsOrderNames,
-    handleSetPreviusOrderNamesFunc: handleSetOrderNamesOfPinnedPakeepsThunk
+    handleSetPakeepsOrderNames: handleSetPinnedPakeepsOrderNames
   };
 
   const wrapperOfContainerOfAllPakeepListProps = {
@@ -92,13 +115,13 @@ const PakeepList = ({
     setIsPakeepDragging,
     pakeeps,
     pakeepsOrderNames,
-    handleSetPreviusOrderNamesFunc: handleSetPreviusOrderNames
+    handleSetPakeepsOrderNames
   };
   const scrollerRef = useRef(null);
 
-  const selectofFPakeepListContainerProps = {
+  const selectoOfPakeepListContainerProps = {
     scrollerRef,
-    setSelectedIds: handleSetSelectedPakeepsIdThunk,
+    setSelectedIds: handleSetSelectedPakeepsId,
     setIsSelecting,
     SELECTED
   };
@@ -106,42 +129,40 @@ const PakeepList = ({
   const isSelectoHidden = isPakeepHovering || isPakeepDragging;
 
   const cancelSelectedPakeepsId = () => {
-    handleCancelSelectingStatusThunk(true);
+    handleChangeSelectingStatus(true);
   };
 
-  const handleOpenDialog = id => {
-    setPakeepDialogProps(id);
-  };
   useIsomorphicLayoutEffect(() => {
     if (!isCancelSelectedPakeepsId) return;
 
-    handleSetSelectedPakeepsIdThunk([]);
+    handleSetSelectedPakeepsId([]);
     const selectedItems = document.querySelectorAll(`.${SELECTED}`);
     selectedItems.forEach(el => el.classList.remove(SELECTED));
-    handleCancelSelectingStatusThunk(false);
+    handleChangeSelectingStatus(false);
   }, [isCancelSelectedPakeepsId]);
 
   useKeyPressEvent('Escape', cancelSelectedPakeepsId);
   const isSomePakeepsSelected = selectedPakeepsId.length > 0;
 
-  const onClickOfPakeepElement = props => {
-    if (!isSomePakeepsSelected) return handleOpenDialog(props);
+  const onClickOfPakeepElement = (props: PakeepDialogPropsType) => {
+    if (!isSomePakeepsSelected) return setPakeepDialogProps(props);
 
     const id = props?.id;
-    const newItem = document.getElementById(id);
+    const newItem: HTMLElement = document.getElementById(id)!;
+
     const isSelected = includes(newItem.className, SELECTED);
 
     if (isSelected) {
       const newSelectedPakeepsId = filter(selectedPakeepsId, pakeepId => pakeepId !== id);
       newItem.classList.remove(SELECTED);
 
-      return handleSetSelectedPakeepsIdThunk(newSelectedPakeepsId);
+      return handleSetSelectedPakeepsId(newSelectedPakeepsId);
     }
 
     const newSelectedPakeepsId = [...selectedPakeepsId, id];
     newItem.classList.add(SELECTED);
 
-    return handleSetSelectedPakeepsIdThunk(newSelectedPakeepsId);
+    return handleSetSelectedPakeepsId(newSelectedPakeepsId);
   };
   const handleClosePakeepDialog = () => setPakeepDialogProps(nullityOfPakeepDialogProps);
 
@@ -169,49 +190,11 @@ const PakeepList = ({
         {isFolderPropertyIsAll && <WrapperOfContainerOfPakeepList {...wrapperOfContainerOfPinnedPakeepListProps} />}
 
         <WrapperOfContainerOfPakeepList {...wrapperOfContainerOfAllPakeepListProps} />
-        {!isSelectoHidden && <SelectofFPakeepListContainer {...selectofFPakeepListContainerProps} />}
+        {!isSelectoHidden && <SelectofFPakeepListContainer {...selectoOfPakeepListContainerProps} />}
         <EditingDialogOfPakeepElement {...allPakeepDialogProps} />
       </Grid>
     </PakeepHoveringContext.Provider>
   );
 };
 
-PakeepList.propTypes = {
-  changePakeepColumnsDataThunk: PropTypes.func,
-  changeTwoPakeepColumnsDataThunk: PropTypes.func,
-  columnOrder: PropTypes.shape({
-    slice: PropTypes.func
-  }),
-  columns: PropTypes.any,
-  labels: PropTypes.any,
-  pakeeps: PropTypes.any
-};
-
-const mapStateToProps = ({
-  app: {
-    pakeeps,
-    pakeepsOrderNames,
-    currentFolderPropertyIdx,
-    folders,
-    selectedPakeepsId,
-    pinnedPakeepsOrderNames,
-    isCancelSelectedPakeepsId
-  }
-}) => ({
-  pakeeps: getPakeeps(pakeeps),
-  selectedPakeepsId: getSelectedPakeepsId(selectedPakeepsId),
-  pakeepsOrderNames: getPakeepsOrderNames(pakeepsOrderNames),
-  pinnedPakeepsOrderNames: getPinnedPakeepsOrderNames(pinnedPakeepsOrderNames),
-  currentFolderPropertyIdx: getCurrentFolderPropertyIdx(currentFolderPropertyIdx),
-  folders: getFolders(folders),
-  isCancelSelectedPakeepsId: getIsCancelSelectedPakeepsId(isCancelSelectedPakeepsId)
-});
-const mapDispatchToProps = dispatch => ({
-  handleSetPreviusOrderNames: orderNames => dispatch(handleSetPreviusOrderNames(orderNames)),
-  handleSetSelectedPakeepsIdThunk: pakepsId => dispatch(handleSetSelectedPakeepsIdThunk(pakepsId)),
-  // handlePakeepsOrderNamesThunk: newOrder => dispatch(handlePakeepsOrderNamesThunk(newOrder)),
-  handleSetOrderNamesOfPinnedPakeepsThunk: orderNames => dispatch(handleSetOrderNamesOfPinnedPakeepsThunk(orderNames)),
-  handleCancelSelectingStatusThunk: boolValue => dispatch(handleCancelSelectingStatusThunk(boolValue))
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(PakeepList);
+export default memo(PakeepList);

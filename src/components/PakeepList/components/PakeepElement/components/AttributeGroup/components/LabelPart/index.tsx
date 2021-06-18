@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, FC, MouseEvent } from 'react';
 import { nanoid } from 'nanoid';
 import { find } from 'lodash';
 import LabelItem from './components/LabelItem';
@@ -7,11 +7,12 @@ import MenuOfLabelPart from './components/Menu';
 import { useFindIcon } from 'hooks/useFindIcon.hook';
 import WrapperOfMenuOfLabelPart from './components/MenuWrapper';
 import { useGetReversedCustomColor } from 'hooks/useGetReversedCustomColor.hook';
+import { LabelPartPropsType, MenuStateType } from './types';
 
-const LabelPart = ({
+const LabelPart: FC<LabelPartPropsType> = ({
   labels,
   handleDeleteLabelFromPakeepFunc,
-  changeGloabalLabelItemFunc,
+  handleChangeGlobalLabelItem,
   pakeepId,
   parentBackgrounColor,
   customColor: notReversedCustomColor
@@ -20,16 +21,16 @@ const LabelPart = ({
   const customColor = useGetReversedCustomColor(notReversedCustomColor);
 
   const nullityOfMenuState = {
-    mouseX: null,
-    mouseY: null,
-    id: null,
+    mouseX: 0,
+    mouseY: 0,
+    id: '',
     variant: '',
     labelIconName: '',
     title: '',
     color: ''
   };
 
-  const [menuState, setMenuState] = useState(nullityOfMenuState);
+  const [menuState, setMenuState] = useState<MenuStateType>(nullityOfMenuState);
 
   const handleClose = () => setMenuState(nullityOfMenuState);
 
@@ -42,7 +43,7 @@ const LabelPart = ({
     handleClose,
     handleDeleteLabel,
     menuState,
-    changeGloabalLabelItemFunc,
+    handleChangeGlobalLabelItem,
     setMenuState,
     customColor
   };
@@ -62,7 +63,7 @@ const LabelPart = ({
           key: nanoid()
         };
 
-        const handleOpen = e => {
+        const handleOpen = (e: MouseEvent<HTMLElement>) => {
           e.preventDefault();
           setMenuState({ mouseX: e.clientX, mouseY: e.clientY, id, variant, labelIconName, title, color });
         };
@@ -80,17 +81,6 @@ const LabelPart = ({
       <WrapperOfMenuOfLabelPart {...wrapperOfMenuOfLabelPartProps} />
     </>
   );
-};
-
-LabelPart.propTypes = {
-  changeGloabalLabelItemFunc: PropTypes.func,
-  customColor: PropTypes.any,
-  handleDeleteLabelFromPakeepFunc: PropTypes.func,
-  labels: PropTypes.shape({
-    map: PropTypes.func
-  }),
-  pakeepId: PropTypes.string,
-  parentBackgrounColor: PropTypes.any
 };
 
 export default LabelPart;

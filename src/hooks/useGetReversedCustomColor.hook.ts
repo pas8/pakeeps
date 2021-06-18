@@ -1,6 +1,7 @@
-import { useSecondaryColor } from "./useSecondaryColor.hook";
+import { CustomColorType } from 'models/types';
+import { useSecondaryColor } from './useSecondaryColor.hook';
 
-export const useGetReversedCustomColor = (customColor, secondVarinat = false) => {
+export const useGetReversedCustomColor = (customColor: CustomColorType, secondVarinat = false) => {
   if (!customColor) return customColor;
 
   const reversedColor = {

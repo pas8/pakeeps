@@ -81,7 +81,7 @@ const LabelsList = ({
     handleClose,
     handleDeleteLabel,
     menuState,
-    changeGloabalLabelItemFunc: changeLabelItemThunk,
+    handleChangeGlobalLabelItem: changeLabelItemThunk,
     setMenuState,
     customColor: notReverseCustomColor,
     isThisMenuIsSecond: true

@@ -41,8 +41,9 @@ import DashboardOutlinedIcon from '@material-ui/icons/DashboardOutlined';
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import DateRangeIcon from '@material-ui/icons/DateRange';
 import DateRangeOutlinedIcon from '@material-ui/icons/DateRangeOutlined';
-export const iconsArr = [
+import { $Values } from 'utility-types';
 
+export const iconsArr = [
   { icon: <TodayOutlinedIcon />, iconName: 'tomorrow', id: 'random1', checkedIcon: <TodayIcon /> },
   { icon: <CalendarTodayOutlinedIcon />, iconName: 'today', id: 'random2', checkedIcon: <CalendarTodayIcon /> },
   { icon: <ViewWeekOutlinedIcon />, iconName: 'week', id: 'random3', checkedIcon: <ViewWeekIcon /> },
@@ -73,4 +74,5 @@ export const iconsArr = [
   { icon: <BookmarkBorderOutlinedIcon />, iconName: 'bookmark', id: '964', checkedIcon: <BookmarkIcon /> },
   { icon: <FavoriteBorderOutlinedIcon />, iconName: 'favorite', id: '968', checkedIcon: <FavoriteIcon /> },
   { icon: <ArchiveOutlinedIcon />, iconName: 'archive', id: '928' }
-];
+] as const 
+

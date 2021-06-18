@@ -1,3 +1,4 @@
+import { TimeAndDateFromatType } from './../store/modules/Settings/types';
 import { SettingsInitialStateType } from 'store/modules/Settings/types';
 import { ReactNode } from 'react';
 import { ColorInitialStateType } from 'store/modules/Color/interfaces';
@@ -45,3 +46,12 @@ export type CurrentTargetType = any;
 export type UseStylesCustomColorType = { customColor: CustomColorType };
 
 export type ClosePopoverOrMenuType = (event?: {}, reason?: 'backdropClick' | 'escapeKeyDown') => void;
+
+export type ColumnElementType = { id: string; pakeepsId: PakeepIdType[] };
+export type SumOfPakeepsReduceFuncType = { [key: string]: ColumnElementType };
+
+export type PakeepsReduceFuncType = (
+  sum: SumOfPakeepsReduceFuncType,
+  id: string,
+  idx: number
+) => SumOfPakeepsReduceFuncType;

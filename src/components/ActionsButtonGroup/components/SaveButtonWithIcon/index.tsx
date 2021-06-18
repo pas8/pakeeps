@@ -2,9 +2,11 @@ import { Grid, makeStyles, Button } from '@material-ui/core';
 import PropTypes from 'prop-types';
 import SaveRoundedIcon from '@material-ui/icons/SaveRounded';
 import { useAlpha } from 'hooks/useAlpha.hook';
+import { FC } from 'react';
+import { SaveButtonWithIconPropsType, UseStylesOfSaveButtonWithIconType } from 'components/ActionsButtonGroup/types';
 
 const useStyles = makeStyles(({ palette,spacing }) => ({
-  container: ({ colorOfSaveButton }) => {
+  container: ({ colorOfSaveButton }:UseStylesOfSaveButtonWithIconType) => {
     const color = !colorOfSaveButton ? palette.primary.main : colorOfSaveButton;
     return {
       '& button': {
@@ -22,7 +24,7 @@ const useStyles = makeStyles(({ palette,spacing }) => ({
   }
 }));
 
-const SaveButtonWithIcon = ({ onSave, colorOfSaveButton }) => {
+const SaveButtonWithIcon:FC<SaveButtonWithIconPropsType> = ({ onSave, colorOfSaveButton }) => {
   const classes = useStyles({ colorOfSaveButton });
 
   return (
@@ -32,11 +34,6 @@ const SaveButtonWithIcon = ({ onSave, colorOfSaveButton }) => {
       </Button>
     </Grid>
   );
-};
-
-SaveButtonWithIcon.propTypes = {
-  colorOfSaveButton: PropTypes.any,
-  onSave: PropTypes.func
 };
 
 export default SaveButtonWithIcon;

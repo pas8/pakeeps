@@ -3,6 +3,7 @@ import { TypeNames } from './enums';
 import {
   useAddLabelToPakeep,
   useAddNewPakeep,
+  useChangeGlobalLabelItem,
   useChangePakeepProperty,
   useChangeSelectedPakeepsProperty,
   useDeleteLabelFromPakeep,
@@ -220,6 +221,13 @@ export const AppReducer = (state = initialState, action: AppActionTypes): AppIni
     case TypeNames.HANDLE_CHANGE_SELECTED_PAKEEPS_PROPERTY: {
       const { pakeeps } = state;
       const variedState = useChangeSelectedPakeepsProperty({ pakeeps, ...action.payload });
+
+      return { ...state, ...variedState };
+    }
+
+    case TypeNames.HANDLE_CHANGE_GLOBAL_LABEL_ITEM: {
+      const { labels: globalLabels } = state;
+      const variedState = useChangeGlobalLabelItem({ globalLabels, ...action.payload });
 
       return { ...state, ...variedState };
     }

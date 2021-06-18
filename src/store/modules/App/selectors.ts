@@ -1,4 +1,4 @@
-import { LabelElementInterface } from './types';
+import { ILabelElement } from './types';
 import { RootStoreType } from 'models/interfaces';
 import _ from 'lodash';
 import { createSelector } from 'reselect';
