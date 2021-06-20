@@ -1,21 +1,8 @@
-import PropTypes from 'prop-types';
-import { useState, useEffect, FC } from 'react';
+import { useState,  FC } from 'react';
 import { useMeasure } from 'react-use';
 import { useSelector } from 'react-redux';
 
-import {
-  Grid,
-  makeStyles,
-  DialogTitle,
-  DialogContent,
-  
-  InputBase,
-  Button,
-  Dialog,
-  DialogActions,
-  IconButton,
-  Theme
-} from '@material-ui/core';
+import { Grid, makeStyles, DialogTitle, DialogContent, InputBase, Dialog, DialogActions } from '@material-ui/core';
 import IconsUtils from 'components/IconsUtils';
 import { useAlpha } from 'hooks/useAlpha.hook';
 import ActionsButtonGroup from 'components/ActionsButtonGroup';
@@ -26,8 +13,6 @@ import { useGetReadableColor } from 'hooks/useGetReadableColor.hook';
 import { usePakeepUtilsFunc } from 'hooks/usePakeepUtilsFunc.hook';
 import { IconsUtilsArrDenotationNameType } from 'components/IconsUtils/types';
 // import AttributeGroup from '../PakeepElement/components/AttributeGroup';
-
-
 
 import { EditingDialogOfPakeepElementProps, onChangeType, UseStylesInteface } from './types';
 
@@ -68,8 +53,10 @@ const useStyles = makeStyles(({ typography: { h4, h6 }, spacing }) => {
 });
 
 const EditingDialogOfPakeepElement: FC<EditingDialogOfPakeepElementProps> = ({ id, handleClosePakeepDialog }) => {
-  const { backgroundColor, color, title, text } = useFindPakeepUsingId(useSelector(getPakeeps), id);
+  const findedPakeep = useFindPakeepUsingId(useSelector(getPakeeps), id);
+  if (!findedPakeep) return null;
 
+  const { backgroundColor, color, title, text } = findedPakeep;
   const [ref, { width }] = useMeasure<HTMLDivElement>();
   const [state, setState] = useState({ title, text, backgroundColor, color });
 
@@ -150,9 +137,7 @@ const EditingDialogOfPakeepElement: FC<EditingDialogOfPakeepElementProps> = ({ i
         <DialogContent>
           <InputBase {...textInputProps} />
         </DialogContent>
-        <DialogContent>
-          {/* <AttributeGroup {...allAttributeGroupProps} /> */}
-        </DialogContent>
+        <DialogContent>{/* <AttributeGroup {...allAttributeGroupProps} /> */}</DialogContent>
 
         <DialogActions className={classes.dialogIconsUtilsClass}>
           <IconsUtils {...iconsUtilsProps} />

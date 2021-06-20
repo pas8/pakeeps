@@ -85,4 +85,4 @@ export type UseFindCurrentEventsType = (
 
 export type UsePakeepUtilsFuncType = (pakeepId: PakeepIdType) => IconsUtilsFunctionType;
 
-export type UseFindPakeepUsingIdType = (pakeeps: PakeepsType, id: PakeepIdType) => PakeepElementType;
+export type UseFindPakeepUsingIdType = (pakeeps: PakeepsType, id: PakeepIdType) => PakeepElementType | void;
