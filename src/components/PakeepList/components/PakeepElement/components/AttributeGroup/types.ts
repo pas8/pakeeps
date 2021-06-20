@@ -1,15 +1,4 @@
-import { CustomColorType } from 'models/types';
-import { GlobalEventsType, GlobalLabelsType, PakeepIdType } from 'store/modules/App/types';
-import { TimeAndDateFromatType, TimeFormatType } from 'store/modules/Settings/types';
+import { DefaultEventsPartPropsType } from './components/EventsPart/types';
+import { LabelPartPropsType } from './components/LabelPart/types';
 
-export type AttributeGroupPropsType = {
-  customColor: CustomColorType;
-  events: GlobalEventsType;
-  globalEvents: GlobalEventsType;
-  handleDeleteLabelFromPakeepFunc: Function;
-  labels: GlobalLabelsType;
-  pakeepId: PakeepIdType;
-  parentBackgrounColor: string;
-  timeAndDateFromat: TimeAndDateFromatType;
-  timeFormat: TimeFormatType;
-};
+export type AttributeGroupPropsType = LabelPartPropsType & DefaultEventsPartPropsType;

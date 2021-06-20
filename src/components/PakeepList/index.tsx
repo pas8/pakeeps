@@ -17,7 +17,7 @@ import { createContext, FC, memo, useEffect, useRef, useState } from 'react';
 import SelectofFPakeepListContainer from './components/WrapperOfContainer/components/Container/components/Selecto';
 import { useIsomorphicLayoutEffect, useKeyPressEvent } from 'react-use';
 import EditingDialogOfPakeepElement from './components/EditingDialogOfPakeepElement';
-import { FoldersType, PakeepElementType, PakeepsType } from 'store/modules/App/types';
+import { FoldersType, PakeepElementType, PakeepIdType, PakeepsType } from 'store/modules/App/types';
 import {
   toCancelSelectingStatus,
   toSetOrderNamesOfPakeeps,
@@ -29,7 +29,6 @@ import {
   HandleSetPakeepsOrderNamesType,
   HandleSetPinnedPakeepsOrderNamesType,
   HandleSetSelectedPakeepsIdType,
-  PakeepDialogPropsType,
   PakeepHoveringContextPropviderPropsValueType
 } from './types';
 import { Optional } from 'utility-types';
@@ -74,17 +73,7 @@ const PakeepList: FC = () => {
   const [isSelecting, setIsSelecting] = useState(false);
   const [isPakeepHovering, setIsPakeepHovering] = useState(false);
 
-  const nullityOfPakeepDialogProps = {
-    id: '',
-    customColor: {} as CustomColorType,
-    dialogIconsUtilsProps: {},
-    correctColor: '',
-    correctBackground: '',
-    title: '',
-    text: '',
-    dialogAttributeGroupProps: {}
-  };
-  const [pakeepDialogProps, setPakeepDialogProps] = useState<PakeepDialogPropsType>(nullityOfPakeepDialogProps);
+  const [pakeepDialogId, setPakeepDialogId] = useState<PakeepIdType>('');
 
   const flattenFolder = flatten(folders);
   const folderProperty = flattenFolder[currentFolderPropertyIdx]?.property;
@@ -144,10 +133,9 @@ const PakeepList: FC = () => {
   useKeyPressEvent('Escape', cancelSelectedPakeepsId);
   const isSomePakeepsSelected = selectedPakeepsId.length > 0;
 
-  const onClickOfPakeepElement = (props: PakeepDialogPropsType) => {
-    if (!isSomePakeepsSelected) return setPakeepDialogProps(props);
+  const onClickOfPakeepElement = (id: PakeepIdType) => {
+    if (!isSomePakeepsSelected) return setPakeepDialogId(id);
 
-    const id = props?.id;
     const newItem: HTMLElement = document.getElementById(id)!;
 
     const isSelected = includes(newItem.className, SELECTED);
@@ -164,7 +152,7 @@ const PakeepList: FC = () => {
 
     return handleSetSelectedPakeepsId(newSelectedPakeepsId);
   };
-  const handleClosePakeepDialog = () => setPakeepDialogProps(nullityOfPakeepDialogProps);
+  const handleClosePakeepDialog = () => setPakeepDialogId('');
 
   const pakeepHoveringContextPropviderPropsValue = {
     setIsPakeepHovering,
@@ -180,7 +168,7 @@ const PakeepList: FC = () => {
   }, [isSomePakeepsSelected]);
 
   const allPakeepDialogProps = {
-    ...pakeepDialogProps,
+    id:pakeepDialogId,
     handleClosePakeepDialog
   };
 

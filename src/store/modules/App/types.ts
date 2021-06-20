@@ -1,3 +1,4 @@
+import { pakeepPropertyiesNames } from 'models/denotation';
 import { SelectedPakeepsIdType, SelectedPakeepsType } from 'models/types';
 import { $Keys, $Values, Brand } from 'utility-types';
 import { TypeNames } from './enums';
@@ -33,12 +34,21 @@ export type PayloadTypes = {
   [TypeNames.HANDLE_CHANGE_SELECTED_PAKEEPS_PROPERTY]: { newPakeeps: PakeepsType };
   [TypeNames.HANDLE_CHANGE_PAKEEP_PROPERTY]: {
     pakeepId: PakeepIdType;
+    properyName: PakeepPropertyKeysType;
+  };
+  [TypeNames.HANDLE_CHANGE_PAKEEP_CUSTOM_PROPERTY]: {
+    pakeepId: PakeepIdType;
     property: PakeepPropertyType;
   };
   [TypeNames.HANDLE_CHANGE_THEME_COLORS]: { newThemeColors: DefaultThemeInterface };
 };
 
 export type ActionsValueTypes = {
+  toChangePakeepCustomProperty: {
+    type: typeof TypeNames.HANDLE_CHANGE_PAKEEP_CUSTOM_PROPERTY;
+    payload: PayloadTypes[TypeNames.HANDLE_CHANGE_PAKEEP_CUSTOM_PROPERTY];
+  };
+
   ToAddNewPakep: {
     type: typeof TypeNames.HANDLE_ADD_NEW_PAKEEP;
     payload: PayloadTypes[TypeNames.HANDLE_ADD_NEW_PAKEEP];
@@ -154,29 +164,35 @@ export type useHooksTypes = {
   [TypeNames.HANDLE_ADD_EVENT_TO_PAKEEP]: {
     pakeepId: PakeepIdType;
     properyName: PakeepPropertyKeysType;
-    propertyValue: any;
+    propertyValue?: any;
     pakeeps: PakeepsType;
   };
   [TypeNames.HANDLE_DELETE_PAKEEP]: {
     pakeepId: PakeepIdType;
     pakeeps: PakeepsType;
   };
+
+  [TypeNames.HANDLE_CHANGE_PAKEEP_CUSTOM_PROPERTY]: {
+    pakeepId: PakeepIdType;
+    property: any;
+    pakeeps: PakeepsType;
+  };
 };
 export type OnlyPakeepReturnType = { pakeeps: PakeepsType };
 // export type ActionWithOnlyPayloadType<T> = (payload: T) => AppActionTypes;
 
-type ColorType = 'default' | string;
+export type ColorType = 'default' | string;
 export type LabelVariantType = 'default' | 'outlined';
 export type IconNameType = string;
 export type TitleType = string;
 
 export type FoldersType = any[][];
 
-export interface GlobalEventInteface {
+export interface IGlobalEvent {
   title: TitleType;
   iconName: IconNameType;
   id: string;
-  value: number | Date;
+  value: EventyValueType;
   onlyTime?: boolean;
   color: string;
 }
@@ -196,27 +212,36 @@ export interface PakeepEventInteface {
 // export type PakeepIdType = Brand<string, '_pakeepId'>;
 export type PakeepIdType = string;
 
-export type DefaultFolderElementPropertyNamesType =
-  | 'isInBookmark'
-  | 'isFavorite'
-  | 'isArchived'
-  | 'isPinned'
-  | 'isCheckBoxes';
+
+export type DefaultFolderElementPropertyNamesType = keyof typeof  pakeepPropertyiesNames;
 export type DefaultFolderElementPropertyType = {
   [Property in DefaultFolderElementPropertyNamesType]: boolean;
 };
+export type LabelIdType = string;
+export type LabelsOfPakeepType = LabelIdType[];
 
-export type PakeepElementType = DefaultFolderElementPropertyType & {
-  title: TitleType;
-  text: string;
-  color: ColorType;
-  labels: string[];
-  events: GlobalEventInteface[];
-  readonly id: PakeepIdType;
-  backgroundColor: ColorType;
+export type EventyValueType = number | Date;
+export type EventIdType = string;
+export type EventOfPakeepType = { id: EventIdType; value: EventyValueType };
+
+export type EventsOfPakeepType = EventOfPakeepType[];
+
+export type TitleOfPakeepType = string;
+export type TextOfPakeepType = string;
+
+export type TitleAndTextOfPakeepType = {
+  title: TitleOfPakeepType;
+  text: TextOfPakeepType;
 };
 
-export type LabelIdType = string;
+export type PakeepElementType = DefaultFolderElementPropertyType &
+  TitleAndTextOfPakeepType & {
+    color: ColorType;
+    labels: LabelsOfPakeepType;
+    events: EventsOfPakeepType;
+    readonly id: PakeepIdType;
+    backgroundColor: ColorType;
+  };
 
 export interface ILabelElement {
   color: ColorType;
@@ -226,7 +251,7 @@ export interface ILabelElement {
   variant: LabelVariantType;
 }
 export type GlobalLabelsType = ILabelElement[];
-export type GlobalEventsType = GlobalEventInteface[];
+export type GlobalEventsType = IGlobalEvent[];
 
 export interface DefaultThemeInterface {
   primaryMain?: string;
@@ -264,6 +289,6 @@ export interface AppInitialStateInteface {
 export type PakeepPropertyValueType = $Values<PakeepElementType>;
 export type PakeepPropertyKeysType = $Keys<PakeepElementType>;
 
-export type PakeepPropertyType = { [key: string]: PakeepElementType };
+export type PakeepPropertyType = { [Property in PakeepPropertyKeysType]?: PakeepPropertyValueType };
 
 export type OperateWOP<N> = (payload: N) => void;

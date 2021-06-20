@@ -1,23 +1,28 @@
-import PropTypes from 'prop-types';
-import React, { useState, useEffect, FC, MouseEvent } from 'react';
+import React, { useState, FC, MouseEvent } from 'react';
 import { nanoid } from 'nanoid';
-import { find } from 'lodash';
-import LabelItem from './components/LabelItem';
-import MenuOfLabelPart from './components/Menu';
+import { useDispatch } from 'react-redux';
 import { useFindIcon } from 'hooks/useFindIcon.hook';
-import WrapperOfMenuOfLabelPart from './components/MenuWrapper';
+import { toChangeGlobalLabelItem } from 'store/modules/App/actions';
+import { ILabelElement } from 'store/modules/App/types';
 import { useGetReversedCustomColor } from 'hooks/useGetReversedCustomColor.hook';
+import WrapperOfMenuOfLabelPart from './components/MenuWrapper';
+import LabelItem from './components/LabelItem';
 import { LabelPartPropsType, MenuStateType } from './types';
 
 const LabelPart: FC<LabelPartPropsType> = ({
   labels,
   handleDeleteLabelFromPakeepFunc,
-  handleChangeGlobalLabelItem,
   pakeepId,
   parentBackgrounColor,
   customColor: notReversedCustomColor
 }) => {
   if (!labels) return null;
+  const dispatch = useDispatch();
+
+  const handleChangeGlobalLabelItem = (changedLabel: ILabelElement) => {
+    dispatch(toChangeGlobalLabelItem({ changedLabel }));
+  };
+
   const customColor = useGetReversedCustomColor(notReversedCustomColor);
 
   const nullityOfMenuState = {

@@ -1,5 +1,5 @@
 import { ILabelElement } from './types';
-import { RootStoreType } from 'models/interfaces';
+import { RootStoreType } from 'models/types';
 import _ from 'lodash';
 import { createSelector } from 'reselect';
 import { createArraySelector } from 'reselect-map';
@@ -11,6 +11,10 @@ export const getFilteredLabels = createArraySelector(
   [(labels: any) => labels, (__: never, { app: { labels } }: RootStoreType) => labels],
   (pakeepId, globalLabels) => _.find(globalLabels, ({ id }) => id === pakeepId)
 );
+
+
+
+
 
 export const getCurrentFolderPropertyIdx = createSelector(
   [(state: RootStoreType) => state.app.currentFolderPropertyIdx],
@@ -58,3 +62,10 @@ export const getGlobalEventsArr = createSelector(
   [({ app }: RootStoreType) => app.events],
   globalEvents => globalEvents
 );
+
+
+
+
+
+
+

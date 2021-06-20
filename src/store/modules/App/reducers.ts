@@ -4,6 +4,7 @@ import {
   useAddLabelToPakeep,
   useAddNewPakeep,
   useChangeGlobalLabelItem,
+  useChangePakeepCustomProperty,
   useChangePakeepProperty,
   useChangeSelectedPakeepsProperty,
   useDeleteLabelFromPakeep,
@@ -228,6 +229,19 @@ export const AppReducer = (state = initialState, action: AppActionTypes): AppIni
     case TypeNames.HANDLE_CHANGE_GLOBAL_LABEL_ITEM: {
       const { labels: globalLabels } = state;
       const variedState = useChangeGlobalLabelItem({ globalLabels, ...action.payload });
+
+      return { ...state, ...variedState };
+    }
+    case TypeNames.HANDLE_CHANGE_PAKEEP_PROPERTY: {
+      const { pakeeps } = state;
+      const variedState = useChangePakeepProperty({ pakeeps, ...action.payload });
+
+      return { ...state, ...variedState };
+    }
+
+    case TypeNames.HANDLE_CHANGE_PAKEEP_CUSTOM_PROPERTY: {
+      const { pakeeps } = state;
+      const variedState = useChangePakeepCustomProperty({ pakeeps, ...action.payload });
 
       return { ...state, ...variedState };
     }

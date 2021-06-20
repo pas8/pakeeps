@@ -76,6 +76,13 @@ export const toChangePinStatusOfPakeeps = (
   payload
 });
 
+export const toChangePakeepCustomProperty = (
+  payload: PayloadTypes[TypeNames.HANDLE_CHANGE_PAKEEP_CUSTOM_PROPERTY]
+): AppActionTypes => ({
+  type: TypeNames.HANDLE_CHANGE_PAKEEP_CUSTOM_PROPERTY,
+  payload
+});
+
 export const toSetOrderNamesOfPinnedPakeeps = (
   payload: PayloadTypes[TypeNames.HANDLE_SET_ORDER_NAMES_OF_PINNED_PAKEEPS]
 ): AppActionTypes => ({

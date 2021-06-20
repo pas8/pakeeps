@@ -1,13 +1,10 @@
-import PropTypes from 'prop-types';
+import { reverse } from 'lodash';
+import { FC } from 'react';
 import { Grid, makeStyles } from '@material-ui/core';
 import LabelPart from './components/LabelPart';
 import EventsPart from './components/EventsPart';
-import { connect, useDispatch } from 'react-redux';
-import { reverse } from 'lodash';
-import { toChangeGlobalLabelItem, toChangeGlobalLabels } from 'store/modules/App/actions';
-import { ILabelElement } from 'store/modules/App/types';
-import { FC } from 'react';
 import { AttributeGroupPropsType } from './types';
+
 const useStyles = makeStyles(theme => ({
   labelsContainerClass: { marginTop: theme.spacing(0.8) }
 }));
@@ -18,27 +15,19 @@ const AttributeGroup: FC<AttributeGroupPropsType> = ({
   pakeepId,
   customColor,
   parentBackgrounColor,
-  globalEvents,
-  events,
-  timeFormat,
-  timeAndDateFromat
+  events
 }) => {
   const classes = useStyles();
-  const dispatch = useDispatch();
-  const handleChangeGlobalLabelItem = (changedLabel: ILabelElement) => {
-    dispatch(toChangeGlobalLabelItem({ changedLabel }));
-  };
 
   const labelPartProps = {
     labels,
     handleDeleteLabelFromPakeepFunc,
     pakeepId,
-    handleChangeGlobalLabelItem,
     customColor,
     parentBackgrounColor
   };
 
-  const eventsPartProps = { globalEvents, events, customColor, timeFormat, timeAndDateFromat };
+  const eventsPartProps = { events, customColor };
 
   const isAttributeGroupOrderIsReverse = false;
 
@@ -52,6 +41,7 @@ const AttributeGroup: FC<AttributeGroupPropsType> = ({
   return (
     <Grid spacing={1} container className={classes.labelsContainerClass}>
       {validatedPartsArr.map(({ Component, props }, idx) => (
+        //@ts-ignore
         <Component {...props} key={idx} />
       ))}
     </Grid>

@@ -1,4 +1,4 @@
-import { RootStoreType } from 'models/interfaces';
+import { RootStoreType } from 'models/types';
 import { createSelector } from 'reselect';
 
 export const getNavigationViewLike = createSelector(
@@ -12,4 +12,19 @@ export const getPositionOfFolderViewWithPakeepView = createSelector(
 export const getIsFolderViewWithPakeepViewAlignToCenter = createSelector(
   [({ settings }: RootStoreType) => settings.isFolderViewWithPakeepViewAlignToCenter],
   bool => bool
+);
+
+export const getTimeFormat = createSelector(
+  [({ settings: { timeFormat } }: RootStoreType) => timeFormat],
+  timeFormat => timeFormat
+);
+
+export const getTimeAndDateFromat = createSelector(
+  [({ settings: { timeAndDateFromat } }: RootStoreType) => timeAndDateFromat],
+  timeAndDateFromat => timeAndDateFromat
+);
+
+export const getIsUtilsHaveViewLikeInGoogleKeep = createSelector(
+  [({ settings: { isUtilsHaveViewLikeInGoogleKeep } }: RootStoreType) => isUtilsHaveViewLikeInGoogleKeep],
+  isUtilsHaveViewLikeInGoogleKeep => isUtilsHaveViewLikeInGoogleKeep
 );

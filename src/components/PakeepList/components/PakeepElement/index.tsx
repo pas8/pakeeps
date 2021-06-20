@@ -5,16 +5,8 @@ import { addDays, addHours, isValid } from 'date-fns';
 import clsx from 'clsx';
 import { useSwipeable } from 'react-swipeable';
 import { useMeasure } from 'react-use';
-import _ from 'lodash';
-import { connect } from 'react-redux';
-import { getFilteredLabels, getGlobalEventsArr } from 'store/modules/App/selectors';
-import {
-  handkePakeepPropertyThunk,
-  handleDeleteLabelFromPakeepThunk,
-  handlePinStatusPakeep,
-  handlePakeepPropertyThunk,
-  handleAddLabelToPakeepThunk
-} from 'store/modules/App/operations';
+import { connect, useDispatch, useSelector } from 'react-redux';
+import { getFilteredLabels, getGlobalEventsArr, getLabels } from 'store/modules/App/selectors';
 import { useGetReadableColor } from 'hooks/useGetReadableColor.hook';
 import IconsUtils from 'components/IconsUtils';
 import { useIsColorDark } from 'hooks/useIsColorDark.hook';
@@ -26,62 +18,70 @@ import MainDialogPartOfPakeepElement from '../EditingDialogOfPakeepElement';
 import { SelectedLabels } from 'components/NewPakeep';
 import { useGetReversedCustomColor } from 'hooks/useGetReversedCustomColor.hook';
 import { useThemeColors } from 'hooks/useThemeColors.hook';
-import { IconsUtilsProps, NullityStatusState, PakeepElementProps, ReduxState, UseStylesProps } from './interface';
+import { NullityStatusState, PakeepElementPropsType, UseStylesProps } from './types';
+import {
+  getIsUtilsHaveViewLikeInGoogleKeep,
+  getTimeAndDateFromat,
+  getTimeFormat
+} from 'store/modules/Settings/selectors';
+import { useFilteredLabels } from 'hooks/useFilteredLabels.hook';
+import { toAddLabelToPakeep, toChangePakeepProperty, toDeleteLabelFromPakeep } from 'store/modules/App/actions';
+import { ColorType, LabelIdType } from 'store/modules/App/types';
+import { usePakeepUtilsFunc } from 'hooks/usePakeepUtilsFunc.hook';
 
 export const Events = createContext<null | { events: any[] }>(null);
 
 const useStyles = makeStyles(({ spacing, transitions, palette }: Theme) => ({
-    paperClass: ({ customColor, backgroundColor, color, utilsViewLikeInGoogleKeep }: UseStylesProps) => ({
-      padding: spacing(0.4, 1.96, utilsViewLikeInGoogleKeep ? 8 * 0.8 : 1, 1.96),
-      cursor: 'grab',
-      position: 'relative',
-      backgroundColor,
-      color,
-      transition: transitions.create('padding', {
-        easing: transitions.easing.sharp,
-        duration: transitions.duration.leavingScreen
-      }),
-      userSelect: 'none'
+  paperClass: ({ customColor, backgroundColor, color, isUtilsHaveViewLikeInGoogleKeep }: UseStylesProps) => ({
+    padding: spacing(0.4, 1.96, isUtilsHaveViewLikeInGoogleKeep ? 8 * 0.8 : 1, 1.96),
+    cursor: 'grab',
+    position: 'relative',
+    backgroundColor,
+    color,
+    transition: transitions.create('padding', {
+      easing: transitions.easing.sharp,
+      duration: transitions.duration.leavingScreen
     }),
+    userSelect: 'none'
+  }),
 
-    isHoveredClass: ({ customColor }: UseStylesProps) => ({
-      paddingBottom: `${spacing(8 * 0.8)}px !important`,
-      transition: transitions.create('all', {
-        easing: transitions.easing.sharp,
-        duration: transitions.duration.leavingScreen
-      }),
-      borderColor:
-        customColor && useIsColorDark(customColor.unHover) ? customColor.unHover : palette?.highEmphasis?.main
+  isHoveredClass: ({ customColor }: UseStylesProps) => ({
+    paddingBottom: `${spacing(8 * 0.8)}px !important`,
+    transition: transitions.create('all', {
+      easing: transitions.easing.sharp,
+      duration: transitions.duration.leavingScreen
     }),
+    borderColor: customColor && useIsColorDark(customColor.unHover) ? customColor.unHover : palette?.highEmphasis?.main
+  }),
 
-    iconsUtilsClass: {
-      position: 'absolute',
-      bottom: 0,
-      right: 0,
-      left: 0,
-      transition: transitions.create('height', {
-        easing: transitions.easing.easeInOut,
-        duration: transitions.duration.complex
-      })
-    },
-    labelClass: { marginTop: spacing(0) },
-    labelsContainerClass: { marginTop: spacing(0.8) },
+  iconsUtilsClass: {
+    position: 'absolute',
+    bottom: 0,
+    right: 0,
+    left: 0,
+    transition: transitions.create('height', {
+      easing: transitions.easing.easeInOut,
+      duration: transitions.duration.complex
+    })
+  },
+  labelClass: { marginTop: spacing(0) },
+  labelsContainerClass: { marginTop: spacing(0.8) },
 
-    // isDraggingClass: ({ customColor }: UseStylesProps) => ({
-      // borderColor: !customColor && palette.primary.main,
-      // boxShadow: !!customColor && `0px 0px 8px 2px ${customColor.hover} !important`
-    // }),
+  // isDraggingClass: ({ customColor }: UseStylesProps) => ({
+  // borderColor: !customColor && palette.primary.main,
+  // boxShadow: !!customColor && `0px 0px 8px 2px ${customColor.hover} !important`
+  // }),
 
-    isSelectingClass: {},
-    isSomePakeepsSelectedClass: { cursor: 'pointer !important' },
-    containerClass: {
-      ' & .MuiDialogContent-root': {
-        overflowY: 'hidden'
-      }
+  isSelectingClass: {},
+  isSomePakeepsSelectedClass: { cursor: 'pointer !important' },
+  containerClass: {
+    ' & .MuiDialogContent-root': {
+      overflowY: 'hidden'
     }
-  }));
+  }
+}));
 
-const PakeepElement: FC<PakeepElementProps> = ({
+const PakeepElement: FC<PakeepElementPropsType> = ({
   title,
   text,
   color,
@@ -89,20 +89,17 @@ const PakeepElement: FC<PakeepElementProps> = ({
   labels,
   isDragging,
   id,
-  utilsViewLikeInGoogleKeep,
-  globalEvents,
-  filteredLabels,
-  timeFormat,
-  timeAndDateFromat,
-  handleDeleteLabelFromPakeepThunk,
-  handkePakeepPropertyThunk,
   isPinIconShouldBeShownInPakeep = false,
   handlePinStatusPakeep,
-  isSelecting,
-  handlePakeepPropertyThunk,
-  handleAddLabelToPakeepThunk
+  isSelecting
 }) => {
-  const events: any[] = [
+  const dispatch = useDispatch();
+  const isUtilsHaveViewLikeInGoogleKeep = useSelector(getIsUtilsHaveViewLikeInGoogleKeep);
+  const globalLabels = useSelector(getLabels);
+
+  const filteredLabels = useFilteredLabels(labels, globalLabels);
+
+  const events = [
     { id: '1', value: addHours(new Date(), 2) },
     { id: '2', value: addHours(new Date(), 32) },
     { id: '3', value: addHours(new Date(), 100) }
@@ -111,14 +108,14 @@ const PakeepElement: FC<PakeepElementProps> = ({
   const [, , maxEmphasisColor] = useThemeColors();
 
   const [customColor, isBackgroundColorDefault, isColorDefault] = useGetReadableColor(backgroundColor, color);
-  const correctColor: string = !customColor ? maxEmphasisColor : customColor?.hover;
+  const correctColor = customColor.isUseDefault ? maxEmphasisColor : customColor?.hover;
 
-  const correctBackground: string = isBackgroundColorDefault ? '#303030' : backgroundColor;
+  const correctBackground = isBackgroundColorDefault ? '#303030' : backgroundColor;
 
   const classes = useStyles({
     customColor,
     backgroundColor: correctBackground,
-    utilsViewLikeInGoogleKeep,
+    isUtilsHaveViewLikeInGoogleKeep,
     color: correctColor
   });
 
@@ -127,6 +124,7 @@ const PakeepElement: FC<PakeepElementProps> = ({
     isLoaded: false
   };
   const [statusState, setStatusState] = useState<NullityStatusState>(nullityStatusState);
+  const [ref, { width: widthOfContainer }] = useMeasure();
 
   const handleSetIsHovering = (): void => {
     setStatusState(state => ({ ...state, isHovered: true }));
@@ -135,37 +133,23 @@ const PakeepElement: FC<PakeepElementProps> = ({
     setStatusState(state => ({ ...state, isHovered: false }));
   };
 
-  const setEditTitleIsTrue = (): void => {};
-  const handleSetFavoritePakeep = (): void => {};
-  const handleSetBookmarkPakeep = (): void => {};
-  const handleDeleteLabel = (): void => {};
-  const [ref, { width: widthOfContainer }] = useMeasure();
-
-  const handleSetColorPakeep = (color: string): void => {
-    handkePakeepPropertyThunk(id, { color });
+  const handleDeleteLabelFromPakeepFunc = (labelIdWhichShouldBeDeleted: LabelIdType): void => {
+    dispatch(toDeleteLabelFromPakeep({ currentPakeepId: id, labelIdWhichShouldBeDeleted }));
   };
 
-  const handleSetBackgroundColorPakeep = (backgroundColor: string): void => {
-    handkePakeepPropertyThunk(id, { backgroundColor });
-  };
-
-  const handleSetIsPinnedPakeep = (): void => {
-    handlePinStatusPakeep(id);
-  };
+  const { handleSetIsPinnedPakeep, ...iconsUtilsFunc } = usePakeepUtilsFunc(id);
 
   const iconsUtilsProps = {
+    ...iconsUtilsFunc,
+    handleSetIsPinnedPakeep,
     isAllIconsIsShown: false,
-    setEditTitleIsTrue,
-    handleSetFavoritePakeep,
+    // setEditTitleIsTrue,
     changingTitle: false,
     labels,
     id,
-    handleSetBackgroundColorPakeep,
-    handleSetColorPakeep,
     isBackgroundColorDefault,
     isColorDefault,
-    customColor,
-    handleSetIsPinnedPakeep
+    customColor
   };
 
   // const handlers = useSwipeable({
@@ -177,37 +161,34 @@ const PakeepElement: FC<PakeepElementProps> = ({
   useEffect(() => setStatusState(state => ({ ...state, isLoaded: true })), []);
   // console.log(isSelecting)
   if (!statusState.isLoaded) return <SkeletonView />;
-  const AnimationElement = utilsViewLikeInGoogleKeep ? Fade : Grow;
+  const AnimationElement = isUtilsHaveViewLikeInGoogleKeep ? Fade : Grow;
 
   return (
     <SelectedLabels.Provider value={{ selectedLabels: labels }}>
       <Events.Provider value={{ events }}>
         <PakeepHoveringContext.Consumer>
           {({ setIsPakeepHovering, onClickOfPakeepElement, isSomePakeepsSelected }) => {
-            const handleDeleteNewLabel = (labelId: string): void => {
-              handleDeleteLabelFromPakeepThunk(id, labelId);
+            const handleDeleteNewLabel = (labelIdWhichShouldBeDeleted: LabelIdType): void => {
+              dispatch(toDeleteLabelFromPakeep({ currentPakeepId: id, labelIdWhichShouldBeDeleted }));
             };
 
-            const handleAddNewLabel = (labelId: string): void => {
-              handleAddLabelToPakeepThunk(id, labelId);
+            const handleAddNewLabel = (labelIdWhichShouldBeAdded: LabelIdType): void => {
+              dispatch(toAddLabelToPakeep({ currentPakeepId: id, labelIdWhichShouldBeAdded }));
             };
             // const reversedColor = useGetReversedCustomColor(customColor);
 
             const labelsListProps = {
               handleAddNewLabel,
               handleDeleteNewLabel
-            };iconsUtilsProps
+            };
             const attributeGroupProps = {
-              // handleDeleteLabelFromPakeepFunc,
+              handleDeleteLabelFromPakeepFunc,
               parentBackgrounColor: backgroundColor,
               handleDeleteNewLabel,
               customColor,
               labels: filteredLabels,
               pakeepId: id,
-              globalEvents,
-              events,
-              timeFormat,
-              timeAndDateFromat
+              events
             };
 
             const onMouseEnter = (): void => {
@@ -219,9 +200,9 @@ const PakeepElement: FC<PakeepElementProps> = ({
               setIsPakeepHovering(false);
               handleSetIsUnHovering();
             };
-            const className: string = 'selectoItem';
+            const className = 'selectoItem';
 
-            const isPinIconButtonHidden: boolean = !(
+            const isPinIconButtonHidden = !(
               !isSomePakeepsSelected &&
               !isSelecting &&
               statusState.isHovered &&
@@ -229,16 +210,7 @@ const PakeepElement: FC<PakeepElementProps> = ({
             );
 
             const onClick = (): void => {
-              onClickOfPakeepElement({
-                id,
-                customColor,
-                dialogIconsUtilsProps,
-                correctColor,
-                correctBackground,
-                title,
-                text,
-                dialogAttributeGroupProps
-              });
+              onClickOfPakeepElement(id);
             };
 
             const containerProps = {
@@ -247,7 +219,7 @@ const PakeepElement: FC<PakeepElementProps> = ({
               isPinIconButtonHidden,
               className: clsx(
                 classes.paperClass,
-                isDragging && classes.isDraggingClass,
+                // isDragging && classes.isDraggingClass,
                 !isSomePakeepsSelected && statusState.isHovered && !isSelecting && classes.isHoveredClass,
                 isSelecting && classes.isSelectingClass,
                 isSomePakeepsSelected && classes.isSomePakeepsSelectedClass
@@ -257,7 +229,7 @@ const PakeepElement: FC<PakeepElementProps> = ({
               customColor
             };
 
-            const openIn: boolean = !isSomePakeepsSelected && statusState.isHovered && !isSelecting;
+            const openIn = !isSomePakeepsSelected && statusState.isHovered && !isSelecting;
 
             const pakeepGridContainerProps = {
               onMouseEnter,
@@ -275,9 +247,6 @@ const PakeepElement: FC<PakeepElementProps> = ({
               widthOfContainer,
               labelsListProps
             };
-
-            const dialogIconsUtilsProps = { ...iconsUtilsProps };
-            const dialogAttributeGroupProps = { ...attributeGroupProps };
 
             return (
               <Grid {...pakeepGridContainerProps}>
@@ -301,31 +270,4 @@ const PakeepElement: FC<PakeepElementProps> = ({
   );
 };
 
-const mapStateToProps = (
-  {
-    settings: { utilsViewLikeInGoogleKeep, timeFormat, timeAndDateFromat },
-    app: { labels: globalLabels, events }
-  }: ReduxState,
-  { labels }: { labels: [any] }
-) => ({
-  utilsViewLikeInGoogleKeep,
-  filteredLabels: getFilteredLabels(labels, globalLabels),
-  globalEvents: getGlobalEventsArr(events),
-  timeFormat,
-  timeAndDateFromat
-});
-// const mapDispatchToProps = dispatch => ({  })
-const mapDispatchToProps = (dispatch?:any) => ({
-  handleDeleteLabelFromPakeepThunk: (pakeepId?: string, labelId?: string) =>
-    dispatch(handleDeleteLabelFromPakeepThunk(pakeepId, labelId)),
-  handkePakeepPropertyThunk: (pakeepId?: string, property?: any) =>
-    dispatch(handkePakeepPropertyThunk(pakeepId, property)),
-  handleAddLabelToPakeepThunk: (pakeepId?: string, labelId?: string) =>
-    dispatch(handleAddLabelToPakeepThunk(pakeepId, labelId)),
-
-  handlePinStatusPakeep: (pakeepId?: string) => dispatch(handlePinStatusPakeep(pakeepId)),
-  handlePakeepPropertyThunk: (pakeepId?: string, property?: any) =>
-    dispatch(handlePakeepPropertyThunk(pakeepId, property))
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(PakeepElement);
+export default PakeepElement;

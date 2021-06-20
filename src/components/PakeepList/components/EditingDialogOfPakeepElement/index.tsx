@@ -1,12 +1,14 @@
 import PropTypes from 'prop-types';
 import { useState, useEffect, FC } from 'react';
 import { useMeasure } from 'react-use';
+import { useSelector } from 'react-redux';
+
 import {
   Grid,
   makeStyles,
   DialogTitle,
   DialogContent,
-  TextField,
+  
   InputBase,
   Button,
   Dialog,
@@ -16,18 +18,18 @@ import {
 } from '@material-ui/core';
 import IconsUtils from 'components/IconsUtils';
 import { useAlpha } from 'hooks/useAlpha.hook';
-import AttributeGroup from '../PakeepElement/components/AttributeGroup';
 import ActionsButtonGroup from 'components/ActionsButtonGroup';
-import {
-  ActionsButtonGroupProps,
-  AllAttributeGroupProps,
-  EditingDialogOfPakeepElementProps,
-  IconsUtilsProps,
-  InputProps,
-  OnChangeInterface,
-  StateInteface,
-  UseStylesInteface
-} from './types';
+
+import { getPakeeps } from 'store/modules/App/selectors';
+import { useFindPakeepUsingId } from 'hooks/useFindPakeepUsingId.hook';
+import { useGetReadableColor } from 'hooks/useGetReadableColor.hook';
+import { usePakeepUtilsFunc } from 'hooks/usePakeepUtilsFunc.hook';
+import { IconsUtilsArrDenotationNameType } from 'components/IconsUtils/types';
+// import AttributeGroup from '../PakeepElement/components/AttributeGroup';
+
+
+
+import { EditingDialogOfPakeepElementProps, onChangeType, UseStylesInteface } from './types';
 
 const useStyles = makeStyles(({ typography: { h4, h6 }, spacing }) => {
   return {
@@ -65,29 +67,24 @@ const useStyles = makeStyles(({ typography: { h4, h6 }, spacing }) => {
   };
 });
 
-const EditingDialogOfPakeepElement: FC<EditingDialogOfPakeepElementProps> = ({
-  title,
-  text,
-  correctColor,
-  correctBackground,
-  id,
-  dialogIconsUtilsProps,
-  customColor,
-  dialogAttributeGroupProps,
-  handleClosePakeepDialog
-}) => {
-  const classes = useStyles({ backgroundColor: correctBackground, color: correctColor });
+const EditingDialogOfPakeepElement: FC<EditingDialogOfPakeepElementProps> = ({ id, handleClosePakeepDialog }) => {
+  const { backgroundColor, color, title, text } = useFindPakeepUsingId(useSelector(getPakeeps), id);
+
   const [ref, { width }] = useMeasure<HTMLDivElement>();
+  const [state, setState] = useState({ title, text, backgroundColor, color });
 
-  const [state, setState] = useState<StateInteface>({ title, text });
+  const [customColor, isBackgroundColorDefault, isColorDefault] = useGetReadableColor(backgroundColor, color);
 
-  useEffect(() => setState({ title, text }), [title, text]);
+  const correctBackgroundColor = isBackgroundColorDefault ? '#303030' : state.backgroundColor;
+  const correctColor = isColorDefault ? '#fff' : state.color;
 
-  const onChange = ({ target: { name, value } }: OnChangeInterface) => {
+  const classes = useStyles({ backgroundColor: correctBackgroundColor, color: correctColor });
+
+  const onChange: onChangeType = ({ target: { name, value } }) => {
     setState(state => ({ ...state, [name]: value }));
   };
 
-  const titleInputProps: InputProps = {
+  const titleInputProps = {
     placeholder: 'Title',
     autoComplete: 'off',
     onChange,
@@ -97,7 +94,7 @@ const EditingDialogOfPakeepElement: FC<EditingDialogOfPakeepElementProps> = ({
     autoFocus: true
   };
 
-  const textInputProps: InputProps = {
+  const textInputProps = {
     placeholder: 'Text',
     autoComplete: 'off',
     onChange,
@@ -110,16 +107,18 @@ const EditingDialogOfPakeepElement: FC<EditingDialogOfPakeepElementProps> = ({
   const JUST_PADDING_VALUE = 160;
   const widthOfContainer = width - JUST_PADDING_VALUE;
 
-  const arrOfButtonNamesWhichSholudBeHidden: string[] = ['width'];
+  const arrOfButtonNamesWhichSholudBeHidden: IconsUtilsArrDenotationNameType[] = ['width'];
 
-  const iconsUtilsProps: IconsUtilsProps = {
+  const iconsUtilsFunc = usePakeepUtilsFunc(id);
+
+  const iconsUtilsProps = {
     widthOfContainer,
+    id,
+    iconsUtilsFunc,
     arrOfButtonNamesWhichSholudBeHidden
   };
-  const allIconsUtilsProps = { ...dialogIconsUtilsProps, ...iconsUtilsProps };
 
   const attributeGroupProps = {};
-  const allAttributeGroupProps = { ...dialogAttributeGroupProps, ...attributeGroupProps };
 
   const handleSubmit = () => {
     console.log(state);
@@ -127,16 +126,17 @@ const EditingDialogOfPakeepElement: FC<EditingDialogOfPakeepElementProps> = ({
 
   const isOpen = !!id;
 
-  const actionsButtonGroupProps: ActionsButtonGroupProps = {
+  const onClose = () => {
+    handleClosePakeepDialog();
+  };
+
+  const actionsButtonGroupProps = {
     onSave: handleSubmit,
-    onClose: handleClosePakeepDialog,
+    onClose,
     colorOfCloseButton: customColor && useAlpha(customColor?.hover, 0.6),
     colorOfSaveButton: customColor?.hover
   };
 
-  const onClose = () => {
-    handleClosePakeepDialog();
-  };
   return (
     <Dialog open={isOpen} onClose={onClose}>
       <Grid className={classes.containerClass} ref={ref}>
@@ -151,11 +151,11 @@ const EditingDialogOfPakeepElement: FC<EditingDialogOfPakeepElementProps> = ({
           <InputBase {...textInputProps} />
         </DialogContent>
         <DialogContent>
-          <AttributeGroup {...allAttributeGroupProps} />
+          {/* <AttributeGroup {...allAttributeGroupProps} /> */}
         </DialogContent>
 
         <DialogActions className={classes.dialogIconsUtilsClass}>
-          <IconsUtils {...allIconsUtilsProps} />
+          <IconsUtils {...iconsUtilsProps} />
           <ActionsButtonGroup {...actionsButtonGroupProps} />
         </DialogActions>
       </Grid>

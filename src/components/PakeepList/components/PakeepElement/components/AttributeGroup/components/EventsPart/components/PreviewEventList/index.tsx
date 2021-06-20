@@ -1,9 +1,11 @@
 import { Grid, makeStyles } from '@material-ui/core';
 import { format as toFormat, isValid } from 'date-fns';
-import { useTakeIcon } from 'hooks/useTakeIcon.hook';
 import { find } from 'lodash';
-import PropTypes from 'prop-types';
+import { FC } from 'react';
+import { useTakeIcon } from 'hooks/useTakeIcon.hook';
+import { CurrentEventsElementType } from 'models/types';
 import EventItem from './components/EventItem';
+import { PreviewEventListPropsType } from './types';
 
 const useStyles = makeStyles(({ spacing }) => ({
   container: {
@@ -12,7 +14,7 @@ const useStyles = makeStyles(({ spacing }) => ({
   }
 }));
 
-const PreviewEventList = ({ validatedCurrentEvents, currentEventsArr, customColor }, idx) => {
+const PreviewEventList: FC<PreviewEventListPropsType> = ({ validatedCurrentEvents, currentEventsArr, customColor }) => {
   const classes = useStyles();
   const isFirstVariantOfEventItemView = !true;
   const isInlineVariantOfEventItemView = true;
@@ -20,14 +22,14 @@ const PreviewEventList = ({ validatedCurrentEvents, currentEventsArr, customColo
   return (
     <Grid>
       <Grid container className={classes.container}>
-        {validatedCurrentEvents.map(({ id }) => {
-          const findedEl = find(currentEventsArr, ['id', id]);
+        {validatedCurrentEvents.map(({ id }, idx) => {
+          const findedEl: CurrentEventsElementType = find(currentEventsArr, ['id', id])!;
 
           const [icon] = useTakeIcon(findedEl?.iconName);
 
           const format = findedEl?.format;
           const value = isValid(findedEl?.value)
-            ? toFormat(findedEl?.value, format, { useAdditionalDayOfYearTokens: true })
+            ? toFormat(findedEl.value, format, { useAdditionalDayOfYearTokens: true })
             : 'Invalid date';
           const title = findedEl?.title;
 
@@ -49,12 +51,6 @@ const PreviewEventList = ({ validatedCurrentEvents, currentEventsArr, customColo
       </Grid>
     </Grid>
   );
-};
-
-PreviewEventList.propTypes = {
-  currentEventsArr: PropTypes.array,
-  customColor: PropTypes.any,
-  validatedCurrentEvents: PropTypes.array
 };
 
 export default PreviewEventList;

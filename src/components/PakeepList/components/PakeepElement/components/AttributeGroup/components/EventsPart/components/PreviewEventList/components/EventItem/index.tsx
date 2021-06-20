@@ -1,13 +1,15 @@
 import { Icon } from '@material-ui/core';
 import { Box, Grid, makeStyles, Typography } from '@material-ui/core';
 import PropTypes from 'prop-types';
+import { FC } from 'react';
+import { EventItemPropsType, UseStylesOfEventItemType } from './types';
 
-const useStyles = makeStyles(({ spacing, transitions, palette, shape: { borderRadius } }, l) => ({
-  containerOfDateItem: ({ customColor }) => {
+const useStyles = makeStyles(({ spacing, transitions, palette, shape: { borderRadius } }) => ({
+  containerOfDateItem: ({ customColor }: UseStylesOfEventItemType) => {
     const color = !customColor ? palette?.highEmphasis?.main : customColor?.hover;
     return {
       position: 'relative',
-      padding: spacing(0.32, 0.8,0.16,0.8),
+      padding: spacing(0.32, 0.8, 0.16, 0.8),
       margin: spacing(0.4, 0.4),
       border: '1px solid',
       borderColor: color,
@@ -31,14 +33,8 @@ const useStyles = makeStyles(({ spacing, transitions, palette, shape: { borderRa
     fontSize: spacing(2.16)
   }
 }));
-const EventItem = ({
-  icon,
-  title,
-  customColor,
-  value,
-  isFirstVariantOfEventItemView,
-  isInlineVariantOfEventItemView
-}) => {
+
+const EventItem: FC<EventItemPropsType> = ({ icon, title, customColor, value, isFirstVariantOfEventItemView }) => {
   const classes = useStyles({ customColor });
   return (
     <Grid className={classes.containerOfDateItem}>
@@ -70,14 +66,5 @@ const EventItem = ({
     </Grid>
   );
 };
-
-EventItem.propTypes = {
-  customColor: PropTypes.oneOf(["bool", "object"]),
-  icon: PropTypes.any,
-  isFirstVariantOfEventItemView: PropTypes.bool,
-  isInlineVariantOfEventItemView: PropTypes.bool,
-  title: PropTypes.string,
-  value: PropTypes.any
-}
 
 export default EventItem;

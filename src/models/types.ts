@@ -1,10 +1,16 @@
-import { TimeAndDateFromatType } from './../store/modules/Settings/types';
+import { TimeAndDateFromatType, TimeFormatType } from './../store/modules/Settings/types';
 import { SettingsInitialStateType } from 'store/modules/Settings/types';
 import { ReactNode } from 'react';
 import { ColorInitialStateType } from 'store/modules/Color/interfaces';
-import { AppInitialStateInteface, PakeepIdType, PakeepsType } from 'store/modules/App/types';
+import {
+  AppInitialStateInteface,
+  GlobalEventsType,
+  PakeepIdType,
+  PakeepsType,
+  PakeepElementType
+} from 'store/modules/App/types';
 import { HandleSelectedPakeepsPropertyFuncType, PakeepPropertyiesType } from 'components/HeaderWhenActiveSelecto/types';
-import { IconsUtilsArrType } from 'components/IconsUtils/types';
+import { IconsUtilsArrType, IconsUtilsFunctionType } from 'components/IconsUtils/types';
 
 export type SelectedPakeepsType = PakeepsType;
 export type SelectedPakeepsIdType = PakeepIdType[];
@@ -55,3 +61,28 @@ export type PakeepsReduceFuncType = (
   id: string,
   idx: number
 ) => SumOfPakeepsReduceFuncType;
+
+export type CurrentEventsElementType = {
+  id: string;
+  inputValue: string;
+  format: string;
+  value: number | Date;
+  isChosen: boolean;
+  title: string;
+  iconName: string;
+  onlyTime?: boolean;
+  color: string;
+};
+
+export type CurrentEventsArrType = CurrentEventsElementType[];
+
+export type UseFindCurrentEventsType = (
+  globalEvents: GlobalEventsType,
+  events: GlobalEventsType,
+  timeFormat: TimeFormatType,
+  timeAndDateFromat: TimeAndDateFromatType
+) => CurrentEventsArrType;
+
+export type UsePakeepUtilsFuncType = (pakeepId: PakeepIdType) => IconsUtilsFunctionType;
+
+export type UseFindPakeepUsingIdType = (pakeeps: PakeepsType, id: PakeepIdType) => PakeepElementType;

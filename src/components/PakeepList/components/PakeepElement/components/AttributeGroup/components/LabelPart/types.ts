@@ -1,10 +1,9 @@
 import { CustomColorType } from 'models/types';
-import { GlobalLabelsType, PakeepIdType } from 'store/modules/App/types';
+import { GlobalLabelsType, ILabelElement, PakeepIdType } from 'store/modules/App/types';
 
 export type LabelPartPropsType = {
-  labels: GlobalLabelsType;
+  labels: (ILabelElement | null)[];
   handleDeleteLabelFromPakeepFunc: Function;
-  handleChangeGlobalLabelItem: Function;
   pakeepId: PakeepIdType;
   parentBackgrounColor: string;
   customColor: CustomColorType;

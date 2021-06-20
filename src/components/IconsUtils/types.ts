@@ -1,6 +1,12 @@
 import { CustomColorType } from 'models/types';
 import { ReactNode } from 'react';
-import { GlobalEventsType, GlobalLabelsType, PakeepIdType } from 'store/modules/App/types';
+import {
+  EventsOfPakeepType,
+  GlobalEventsType,
+  GlobalLabelsType,
+  LabelsOfPakeepType,
+  PakeepIdType
+} from 'store/modules/App/types';
 import { $Values } from 'utility-types';
 import { iconsUtilsArrDenotation } from './denotation';
 
@@ -18,7 +24,7 @@ export type IconsUtilsFunctionKeyNameType =
   | 'handleSetArhivedPakeep';
 
 export type IconsUtilsFunctionType = {
-  [Property in IconsUtilsFunctionKeyNameType]?: Function;
+  [Property in IconsUtilsFunctionKeyNameType]?: (any?: any) => void;
 };
 
 export type IconsUtilsValuesType = {
@@ -27,8 +33,8 @@ export type IconsUtilsValuesType = {
   isFavorite?: boolean;
   isInBookmark?: boolean;
   isPinned?: boolean;
-  labels?: GlobalLabelsType;
-  events?: GlobalEventsType;
+  labels?: LabelsOfPakeepType;
+  events?: EventsOfPakeepType;
   isNewPakeepContainerHaveFullWidth?: boolean;
   isChangingTitle?: boolean;
 };

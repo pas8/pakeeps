@@ -34,6 +34,9 @@ const useStyles = makeStyles(({ spacing }) => ({
   }
 }));
 
+const { TOOGLE, VALUE } = VariantsOfropertiesToUtils;
+
+
 const HeaderWhenActiveSelecto: FC<HeaderWhenActiveSelectoPropsType> = ({ selectedPakeeps, selectedPakeepsId }) => {
   const dispatch = useDispatch();
 
@@ -56,7 +59,6 @@ const HeaderWhenActiveSelecto: FC<HeaderWhenActiveSelectoPropsType> = ({ selecte
     cancelSelectedPakeepsId();
   };
 
-  const { TOOGLE, VALUE } = VariantsOfropertiesToUtils;
 
   const isColorDefault = useGetIsColorDefault(selectedPakeeps, 'color');
   const isBackgroundColorDefault = useGetIsColorDefault(selectedPakeeps, 'backgroundColor');
@@ -137,14 +139,6 @@ const HeaderWhenActiveSelecto: FC<HeaderWhenActiveSelectoPropsType> = ({ selecte
   );
 };
 
-HeaderWhenActiveSelecto.propTypes = {
-  cancelSelectedPakeepsId: PropTypes.func,
-  handleAddLabelToPakeepThunk: PropTypes.func,
-  handleDeleteLabelFromPakeepThunk: PropTypes.func,
-  handlePinStatusPakeep: PropTypes.func,
-  operateToChangeSelectedPakeepsProperty: PropTypes.func,
-  selectedPakeeps: PropTypes.array,
-  selectedPakeepsId: PropTypes.array
-};
+
 
 export default HeaderWhenActiveSelecto;
