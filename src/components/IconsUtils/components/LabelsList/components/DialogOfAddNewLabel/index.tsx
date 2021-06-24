@@ -1,19 +1,18 @@
 import PropTypes from 'prop-types';
-import { useState } from 'react';
+import { ChangeEvent, FC, KeyboardEvent, useState } from 'react';
 import { usePrevious } from 'react-use';
-import { connect } from 'react-redux';
+import { connect, useDispatch } from 'react-redux';
 import includes from 'lodash.includes';
 import { nanoid } from 'nanoid';
 import { isEqual } from 'lodash';
 import { useSnackbar } from 'notistack';
 import { useFindIcon } from 'hooks/useFindIcon.hook';
 import { Dialog, DialogActions, DialogTitle, Button, makeStyles } from '@material-ui/core';
-import SaveRoundedIcon from '@material-ui/icons/SaveRounded';
 import RestoreOutlinedIcon from '@material-ui/icons/RestoreOutlined';
-import CloseIcon from '@material-ui/icons/Close';
-import { handleAddNewGlobalLabelThunk } from 'store/modules/App/operations';
+import { toAddNewGlobalLabel } from 'store/modules/App/actions';
+import { ColorType, IconNameType, LabelVariantType } from 'store/modules/App/types';
 import { useGetReversedCustomColor } from 'hooks/useGetReversedCustomColor.hook';
-import ActionsButtonGroup from 'components/ActionsButtonGroup';
+import ActionsButtonGroup from 'components/ActionsButtonGroup/index';
 import { iconsArr } from 'components/Icons';
 import PreparedColorExamples from 'components/ColorChanger/components/PreparedColorExamples';
 import ColorPickerByPas from 'components/ColorChanger';
@@ -24,15 +23,21 @@ import FirstStepOfSteperOfDialogOfAddNewLabel from './components/Steper/componen
 import SecondStepOfSteperOfDialogOfAddNewLabel from './components/Steper/components/Second';
 import ThirdStepOfSteperOfDialogOfAddNewLabel from './components/Steper/components/Third';
 import FourthStepOfSteperOfDialogOfAddNewLabel from './components/Steper/components/Fourth';
-
+import {
+  DialogOfAddNewLabelPropsType,
+  HandleAddNewGlobalLabelType,
+  NewLabelStateType,
+  OnChangeOfLabelColorRadioType,
+  UseStylesOfDialogOfAddNewLabelProps
+} from './types';
 
 const useStyles = makeStyles(({ spacing, palette }) => ({
-  container: ({ customColor }) => ({
+  container: ({ customColor }: UseStylesOfDialogOfAddNewLabelProps) => ({
     '& .MuiDialog-paper': {
       // background: customColor && !useIsColorDark( customColor?.bgUnHover) ?grey[50] :  customColor?.bgUnHover,
 
       '& .MuiDialogTitle-root, .MuiStepper-root,.MuiDialogActions-root': {
-        background: customColor && customColor?.bgUnHover,
+        background: customColor.isUseDefault ? '' : customColor?.bgUnHover,
         color: customColor?.hover
       },
       '& .MuiStepper-root': {
@@ -42,29 +47,35 @@ const useStyles = makeStyles(({ spacing, palette }) => ({
   })
 }));
 
-const DialogOfAddNewLabel = ({
+const DialogOfAddNewLabel: FC<DialogOfAddNewLabelPropsType> = ({
   isDialogOpen,
   handleCloseAddNewLabelDialog,
-  handleAddNewGlobalLabelThunk,
   handleOpenAddNewLabelDialog,
   customColor
 }) => {
+  const dispatch = useDispatch();
+
+  const handleAddNewGlobalLabel: HandleAddNewGlobalLabelType = newLabel => {
+    dispatch(toAddNewGlobalLabel({ newLabel }));
+  };
+
   const reverserCustomColor = useGetReversedCustomColor(customColor);
-  const classes = useStyles({ customColor, reverserCustomColor });
+  const classes = useStyles({ customColor });
 
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
-  const labelVariants = ['outlined', 'default'];
+  const labelVariants: LabelVariantType[] = ['outlined', 'default'];
   const iconNameVariants = ['', 'favorite'];
 
-  const nullityOfNewLabelState = {
+  const nullityOfNewLabelState: NewLabelStateType = {
     title: '',
     variant: labelVariants[0],
     id: nanoid(),
     color: '',
     iconName: ''
   };
-  const [newLabelState, setNewLabelState] = useState(nullityOfNewLabelState);
+
+  const [newLabelState, setNewLabelState] = useState<NewLabelStateType>(nullityOfNewLabelState);
 
   const colorVariantsNames = ['', 'primary', 'secondary'];
   const customColorValue = includes(colorVariantsNames, newLabelState.color) ? 'customColor' : newLabelState.color;
@@ -79,9 +90,12 @@ const DialogOfAddNewLabel = ({
   const isLabelOutlined = newLabelState.variant === labelVariants[0];
   const isLabelHaveIcon = newLabelState.iconName === iconNameVariants[0];
   const previuosNewLabelState = usePrevious(newLabelState);
+
   const toNullityNewLabelState = () => setNewLabelState(nullityOfNewLabelState);
 
   const handleRestoreLastGlobalLabel = () => {
+    if (!previuosNewLabelState) return;
+
     !isEqual(nullityOfNewLabelState, previuosNewLabelState) && setNewLabelState(previuosNewLabelState);
     handleOpenAddNewLabelDialog();
     closeSnackbar();
@@ -105,7 +119,7 @@ const DialogOfAddNewLabel = ({
       return enqueueSnackbar({ message: 'Label should have more than 1 letter', severity: 'error' });
 
     try {
-      handleAddNewGlobalLabelThunk(newLabelState);
+      handleAddNewGlobalLabel(newLabelState);
       enqueueSnackbar({ message: 'Global label was successfully added' });
       handleCloseAddNewLabelDialog();
       toNullityNewLabelState();
@@ -114,17 +128,23 @@ const DialogOfAddNewLabel = ({
     }
   };
 
-  const onChangeOfLabelTitleInput = ({ target: { value } }) => setNewLabelState(state => ({ ...state, title: value }));
+  const onChangeOfLabelTitleInput = ({ target: { value } }: ChangeEvent<HTMLInputElement>) =>
+    setNewLabelState(state => ({ ...state, title: value }));
+
   const onChangeOfLabelVariantSwitch = () => {
-    setNewLabelState(state => ({ ...state, variant: isLabelOutlined ? labelVariants[1] : labelVariants[0] }));
+    const variant = isLabelOutlined ? labelVariants[1] : labelVariants[0];
+    setNewLabelState(state => ({ ...state, variant }));
   };
-  const onChangeOfLabelColorRadio = ({ target: { value } }) => setNewLabelState(state => ({ ...state, color: value }));
+  const onChangeOfLabelColorRadio: OnChangeOfLabelColorRadioType = ({ target: { value } }) =>
+    setNewLabelState(state => ({ ...state, color: value }));
+
   const onChangeOfLabelIconNameSwitch = () => {
     setNewLabelState(state => ({ ...state, iconName: isLabelHaveIcon ? iconNameVariants[1] : iconNameVariants[0] }));
   };
 
-  const handleChangeLabelIconName = iconName => setNewLabelState(state => ({ ...state, iconName }));
-  const handleChangeLabelColor = color => setNewLabelState(state => ({ ...state, color }));
+  const handleChangeLabelIconName = (iconName: IconNameType) => setNewLabelState(state => ({ ...state, iconName }));
+  const handleChangeLabelColor = (color: ColorType) => setNewLabelState(state => ({ ...state, color }));
+
   const stepsArrOfDialogOfAddNewLabel = [
     {
       title: 'Enter the title',
@@ -195,13 +215,6 @@ const DialogOfAddNewLabel = ({
       <SteperOfDialogOfAddNewLabel {...steperOfDialogOfAddNewLabelProps} />
       <DialogActions>
         <LabelItem {...labelItemProps} />
-        <Button onClick={handleCloseDialog} className={classes.closeButton} endIcon={<CloseIcon />}>
-          Close
-        </Button>
-
-        <Button onClick={handleSave} color={'primary'} endIcon={<SaveRoundedIcon />} className={classes.saveButton}>
-          Save
-        </Button>
 
         <ActionsButtonGroup {...actionsButtonGroupProps} />
       </DialogActions>
@@ -209,15 +222,4 @@ const DialogOfAddNewLabel = ({
   );
 };
 
-DialogOfAddNewLabel.propTypes = {
-  handleAddNewGlobalLabelThunk: PropTypes.func,
-  handleCloseAddNewLabelDialog: PropTypes.func,
-  handleOpenAddNewLabelDialog: PropTypes.func,
-  isDialogOpen: PropTypes.bool
-};
-
-const mapDispatchToProps = dispatch => ({
-  handleAddNewGlobalLabelThunk: newLabel => dispatch(handleAddNewGlobalLabelThunk(newLabel))
-});
-
-export default connect(null, mapDispatchToProps)(DialogOfAddNewLabel);
+export default DialogOfAddNewLabel;

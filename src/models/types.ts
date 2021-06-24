@@ -1,5 +1,6 @@
 import { TimeAndDateFromatType, TimeFormatType } from './../store/modules/Settings/types';
 import { SettingsInitialStateType } from 'store/modules/Settings/types';
+import AddCircleOutlineOutlinedIcon from '@material-ui/icons/AddCircleOutlineOutlined';
 import { ReactNode } from 'react';
 import { ColorInitialStateType } from 'store/modules/Color/interfaces';
 import {
@@ -86,3 +87,5 @@ export type UseFindCurrentEventsType = (
 export type UsePakeepUtilsFuncType = (pakeepId: PakeepIdType) => IconsUtilsFunctionType;
 
 export type UseFindPakeepUsingIdType = (pakeeps: PakeepsType, id: PakeepIdType) => PakeepElementType | void;
+
+export type IconType = typeof AddCircleOutlineOutlinedIcon;

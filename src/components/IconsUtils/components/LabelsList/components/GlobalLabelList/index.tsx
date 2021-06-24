@@ -10,49 +10,51 @@ import { useIsColorDark } from 'hooks/useIsColorDark.hook';
 import { useAlpha } from 'hooks/useAlpha.hook';
 import IndeterminateCheckBoxOutlinedIcon from '@material-ui/icons/IndeterminateCheckBoxOutlined';
 import { useMix } from 'hooks/useMix.hook';
+import { useSelector } from 'react-redux';
+import { getGlobalEventsArr, getLabels } from 'store/modules/App/selectors';
+import { FC, MouseEvent, MouseEventHandler } from 'react';
+import { GlobalLabelListOflabelListPropsType, UseStylesOfGlobalLabelListOflabelListType } from './types';
 
 const useStyles = makeStyles(({ spacing, palette: { secondary } }) => {
   return {
-    container: ({ color, customColor }) => ({
-      '&  p': {
-        color
-      },
-      padding: spacing(1.6, 0, 0, 0),
-      '& legend': {
-        padding: spacing(0, 1.6, 0.6, 1.6),
-        color: customColor && useMix({ bgHover: customColor?.bgHover, hover: customColor?.hover },0.8)
-      },
-      '& li,span': {
-        '&:hover > .MuiTouchRipple-root': customColor && {
-          background: useAlpha(color)
+    container: ({ color, customColor }: UseStylesOfGlobalLabelListOflabelListType) => {
+      return {
+        '&  p': { color },
+        padding: spacing(1.6, 0, 0, 0),
+        '& legend': {
+          padding: spacing(0, 1.6, 0.6, 1.6),
+          color: customColor && useMix({ bgHover: customColor?.bgHover, hover: customColor?.hover }, 0.8)
+        },
+        '& li,span': {
+          '&:hover > .MuiTouchRipple-root': customColor && {
+            background: useAlpha(color)
+          }
         }
-      }
-    }),
-    menuElement: ({ color, customColor, isChecked }) => {
+      };
+    },
+    menuElement: ({ color, customColor, isChecked }: UseStylesOfGlobalLabelListOflabelListType) => {
+      // if(isChecked === undefined) return {}
+      // if (customColor.isUseDefault) return {};
       const correctColor = isChecked && !customColor ? secondary.main : color;
       return {
         padding: spacing(0.2, 0),
 
         color: correctColor,
-        '&:hover > .MuiTouchRipple-root': isChecked &&
-          !customColor && {
-            background: useAlpha(secondary.main)
-          },
-        '& svg,p': {
-          color: correctColor
-        }
+        '&:hover > .MuiTouchRipple-root': isChecked && !customColor ? { background: useAlpha(secondary.main) } : {},
+        '& svg,p': { color: correctColor }
       };
     }
   };
 });
 
-const GlobalLabelListOflabelList = ({
-  globalLabels,
+const GlobalLabelListOflabelList: FC<GlobalLabelListOflabelListPropsType> = ({
   handleChangeNewLabel,
   selectedLabels,
   setMenuState,
   customColor
 }) => {
+  const globalLabels = useSelector(getLabels);
+
   // const customColor = useGetReversedCustomColor(notReverserCustomColor);
 
   extend([mixPlugin]);
@@ -69,7 +71,7 @@ const GlobalLabelListOflabelList = ({
         const classes = useStyles({ color, isChecked, customColor });
         // ||  useIsColorDark(customColor.bgUnHover)
         const onClickOfCheckBoxContainer = () => handleChangeNewLabel(isChecked, labelState.id);
-        const onClickOfEditButton = e => {
+        const onClickOfEditButton: MouseEventHandler<HTMLButtonElement> = e => {
           e.preventDefault();
           setMenuState({ mouseX: e.clientX, mouseY: e.clientY, ...labelState, labelIconName: labelState.iconName });
         };
@@ -98,15 +100,6 @@ const GlobalLabelListOflabelList = ({
       })}
     </Grid>
   );
-};
-
-GlobalLabelListOflabelList.propTypes = {
-  globalLabels: PropTypes.shape({
-    map: PropTypes.func
-  }),
-  handleChangeNewLabel: PropTypes.func,
-  selectedLabels: PropTypes.array,
-  setMenuState: PropTypes.func
 };
 
 export default GlobalLabelListOflabelList;

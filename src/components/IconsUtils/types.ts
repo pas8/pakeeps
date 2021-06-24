@@ -10,7 +10,6 @@ import {
 import { $Values } from 'utility-types';
 import { iconsUtilsArrDenotation } from './denotation';
 
-export type LabelsListPropsType = Object;
 
 export type IconsUtilsFunctionKeyNameType =
   | 'handleSetBookmarkPakeep'

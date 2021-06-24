@@ -23,10 +23,10 @@ import {
   getPositionOfFolderViewWithPakeepView
 } from 'store/modules/Settings/selectors';
 import ArrowForwardIosOutlinedIcon from '@material-ui/icons/ArrowForwardIosOutlined';
-import { AllElementsIsBooleanType } from 'models/types';
-import { FolderLayoutPropsType } from './types';
+import { AllElementsIsBooleanType, LayoutChildrenType } from 'models/types';
 import { toChangeFolders, toSetCurrentFolderPropertyIdx, toSetDrawerWidth } from 'store/modules/App/actions';
 import { DrawerWidthType, FoldersType } from 'store/modules/App/types';
+import { HandleChangeOfFolders } from 'components/Folders/types';
 
 const useStyles = makeStyles(({ palette }) => ({
   container: ({
@@ -69,7 +69,7 @@ const useStyles = makeStyles(({ palette }) => ({
   })
 }));
 
-const FolderLayout = ({ children }: FolderLayoutPropsType) => {
+const FolderLayout = ({ children }: LayoutChildrenType) => {
   const dispatch = useDispatch();
 
   const handleDrawerWidth = (drawerWidth: number) => {
@@ -85,14 +85,12 @@ const FolderLayout = ({ children }: FolderLayoutPropsType) => {
   };
 
   const currentFolderPropertyIdx = useSelector(getCurrentFolderPropertyIdx);
-  const folders = useSelector(getFolders);
   const labels = useSelector(getLabels);
   const defaultFolderArr = useSelector(getDefaultFolderArr);
 
   const isMenuOpen = useSelector(getMenuOpenStatus);
   const drawerWidth = useSelector(getDrawerWidth);
 
-  const navigationViewLike = useSelector(getNavigationViewLike);
   const positionOfFolderViewWithPakeepView = useSelector(getPositionOfFolderViewWithPakeepView);
   const isFolderViewWithPakeepViewAlignToCenter = useSelector(getIsFolderViewWithPakeepViewAlignToCenter);
 
@@ -104,7 +102,9 @@ const FolderLayout = ({ children }: FolderLayoutPropsType) => {
   const [isFolderOpen, setIsFolderOpen] = useState(false);
   const marginValue = 8;
 
-  const handleChange = (__: never, idx: number) => handleCurrentFolderPropertyIdx(idx);
+  const handleChange: HandleChangeOfFolders = (__, idx) => {
+    handleCurrentFolderPropertyIdx(idx);
+  };
   const handleHideFolder = () => setIsFolderOpen(false);
 
   const [margin, setMargin] = useState(0);
@@ -112,13 +112,11 @@ const FolderLayout = ({ children }: FolderLayoutPropsType) => {
 
   const foldersProps = {
     handleChange,
-    folders,
     value: currentFolderPropertyIdx,
     handleDrawerWidth,
     isMenuOpen,
     isFolderOpen,
     handleHideFolder,
-    navigationViewLike,
     positionOfFolderViewWithPakeepViewIsBottom,
     positionOfFolderViewWithPakeepViewIsRight,
     isFolderViewWithPakeepViewAlignToCenter,

@@ -6,7 +6,7 @@ import { useMeasure } from 'react-use';
 import { useAlpha } from 'hooks/useAlpha.hook';
 import { useThemeColors } from 'hooks/useThemeColors.hook';
 import IconsUtils from 'components/IconsUtils';
-import ActionsButtonGroup from 'components/ActionsButtonGroup';
+import ActionsButtonGroup from 'components/ActionsButtonGroup/index';
 
 // import SaveOutlinedIcon from '@material-ui/icons/SaveOutlined';
 const useStyles = makeStyles(({spacing}) => ({

@@ -4,6 +4,8 @@ import clsx from 'clsx';
 import { nanoid } from 'nanoid';
 import { useThemeColors } from 'hooks/useThemeColors.hook';
 import { useAlpha } from 'hooks/useAlpha.hook';
+import { FC } from 'react';
+import { MoreUtilsPropsType, UseStylesOfMoreUtilsType } from './types';
 
 const useStyles = makeStyles(({ spacing }) => ({
   itemGrid: {
@@ -12,7 +14,7 @@ const useStyles = makeStyles(({ spacing }) => ({
   },
   menuText: { marginLeft: spacing(1.4) },
 
-  container: ({ color, hoverColor, isIconActive }) => ({
+  container: ({ color, hoverColor }: UseStylesOfMoreUtilsType) => ({
     '& svg,h6': { color },
     '&:hover svg,h6': { color: hoverColor },
     '&:hover .MuiTouchRipple-root': {
@@ -24,22 +26,24 @@ const useStyles = makeStyles(({ spacing }) => ({
   })
 }));
 
-const MoreUtils = ({ slicedArrAfter, customColor }) => {
+const MoreUtils: FC<MoreUtilsPropsType> = ({ slicedArrAfter, customColor }) => {
   return (
     <>
       {slicedArrAfter.map(({ popoverText, icon: Icon, isIconActive, onClick, ActiveIcon }) => {
         const [primaryColor, , maxEmphasisColor, highEmphasisColor] = useThemeColors();
 
-        const color = !customColor
-          ? isIconActive
-            ? primaryColor
-            : highEmphasisColor
-          : isIconActive
-          ? customColor.bgUnHover
-          : customColor.bgHover;
+        const color = (
+          customColor.isUseDefault
+            ? isIconActive
+              ? primaryColor
+              : highEmphasisColor
+            : isIconActive
+            ? customColor.bgUnHover
+            : customColor.bgHover
+        )!;
 
-        const hoverColor = !customColor && !isIconActive && maxEmphasisColor;
-        const classes = useStyles({ color, hoverColor, isIconActive });
+        const hoverColor = (customColor.isUseDefault && !isIconActive ? maxEmphasisColor : '')!;
+        const classes = useStyles({ color, hoverColor });
         //
 
         return (
@@ -56,13 +60,5 @@ const MoreUtils = ({ slicedArrAfter, customColor }) => {
     </>
   );
 };
-
-MoreUtils.propTypes = {
-  customColor: PropTypes.shape({
-    bgHover: PropTypes.any,
-    bgUnHover: PropTypes.any
-  }),
-  slicedArrAfter: PropTypes.array
-}
 
 export default MoreUtils;

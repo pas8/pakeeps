@@ -6,15 +6,17 @@ import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import ArrowLeftIcon from '@material-ui/icons/ArrowLeft';
 import { useAlpha } from 'hooks/useAlpha.hook';
 import { useMix } from 'hooks/useMix.hook';
+import { FC } from 'react';
+import { SteperOfDialogOfAddNewLabelPropsType, UseStylesOfSteperOfDialogOfAddNewLabelType } from './types';
 
 const useStyles = makeStyles(({ spacing }) => ({
-  container: ({ customColor }) => {
-    if (!customColor) return {};
+  container: ({ customColor }: UseStylesOfSteperOfDialogOfAddNewLabelType) => {
+    if (customColor.isUseDefault) return {};
     const customMixedColor = customColor?.secondaryColor;
 
     return {
       '& .Mui-disabled': {
-        color: ({ customColor }) => customColor && useAlpha(customColor?.bgUnHover, 0.42)
+        color: useAlpha(customColor?.bgUnHover, 0.42)
       },
       '& .MuiSwitch-switchBase,.MuiFormControlLabel-label': {
         color: customMixedColor
@@ -46,20 +48,19 @@ const useStyles = makeStyles(({ spacing }) => ({
     };
   },
 
-  buttonOfNextStep: {
-    color: ({ customColor }) => customColor && customColor?.secondaryColor,
+  buttonOfNextStep: ({ customColor }: UseStylesOfSteperOfDialogOfAddNewLabelType) => ({
+    color: !customColor.isUseDefault ? customColor?.secondaryColor : '',
     '&:hover': {
-      background: ({ customColor }) => customColor && useAlpha(customColor?.secondaryColor)
+      background: !customColor.isUseDefault ? useAlpha(customColor?.secondaryColor) : ''
     }
-  },
-  buttonOfPriviousStep: {
-   
-    color: ({ customColor }) => customColor && useAlpha(customColor?.bgUnHover, 0.6),
+  }),
+  buttonOfPriviousStep: ({ customColor }: UseStylesOfSteperOfDialogOfAddNewLabelType) => ({
+    color: !customColor.isUseDefault ? useAlpha(customColor?.bgUnHover, 0.6) : '',
     '&:hover': {
-      background: ({ customColor }) => customColor && useAlpha(customColor?.bgUnHover)
+      background: !customColor.isUseDefault ? useAlpha(customColor?.bgUnHover) : ''
     }
-  },
- 
+  }),
+
   buttonContainer: {
     margin: spacing(0, 0, 0, 1),
     maxWidth: spacing(12),
@@ -73,7 +74,11 @@ const useStyles = makeStyles(({ spacing }) => ({
     minWidth: spacing(28)
   }
 }));
-const SteperOfDialogOfAddNewLabel = ({ stepsArrOfDialogOfAddNewLabel, toNullityNewLabelState, customColor }) => {
+const SteperOfDialogOfAddNewLabel: FC<SteperOfDialogOfAddNewLabelPropsType> = ({
+  stepsArrOfDialogOfAddNewLabel,
+  toNullityNewLabelState,
+  customColor
+}) => {
   const classes = useStyles({ customColor });
 
   const [activeStep, { inc: incrementActiveStep, dec: decrimentActiveStep, set: setActiveStep, reset }] = useCounter(0);
@@ -169,13 +174,6 @@ const SteperOfDialogOfAddNewLabel = ({ stepsArrOfDialogOfAddNewLabel, toNullityN
       )}
     </Grid>
   );
-};
-
-SteperOfDialogOfAddNewLabel.propTypes = {
-  stepsArrOfDialogOfAddNewLabel: PropTypes.shape({
-    length: PropTypes.number,
-    map: PropTypes.func
-  })
 };
 
 export default SteperOfDialogOfAddNewLabel;

@@ -5,9 +5,12 @@ import ArrowBackOutlinedIcon from '@material-ui/icons/ArrowBackOutlined';
 import IconButtonByPas from 'components/IconButton';
 import { useAlpha } from 'hooks/useAlpha.hook';
 import { useMix } from 'hooks/useMix.hook';
+import { UseStylesCustomColorType } from 'models/types';
+import { FC } from 'react';
+import { DefaultMenuListOflabelListPropsType } from './types';
 
 const useStyles = makeStyles(({ spacing, palette }) => ({
-  container: ({ customColor }) => ({
+  container: ({ customColor }: UseStylesCustomColorType) => ({
     border: 0,
     color: customColor?.hover,
     borderBottomWidth: 2,
@@ -35,7 +38,11 @@ const useStyles = makeStyles(({ spacing, palette }) => ({
   }
 }));
 
-const DefaultMenuListOflabelList = ({ defaultMenuListArr, customColor, arrowButtonFunc }) => {
+const DefaultMenuListOflabelList: FC<DefaultMenuListOflabelListPropsType> = ({
+  defaultMenuListArr,
+  customColor,
+  arrowButtonFunc
+}) => {
   const classes = useStyles({ customColor });
 
   return (
@@ -57,12 +64,6 @@ const DefaultMenuListOflabelList = ({ defaultMenuListArr, customColor, arrowButt
       ))}
     </Grid>
   );
-};
-
-DefaultMenuListOflabelList.propTypes = {
-  arrowButtonFunc: PropTypes.func,
-  customColor: PropTypes.any,
-  defaultMenuListArr: PropTypes.array
 };
 
 export default DefaultMenuListOflabelList;

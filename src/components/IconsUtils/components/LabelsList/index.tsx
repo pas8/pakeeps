@@ -1,32 +1,34 @@
-import PropTypes from 'prop-types';
-import { useEffect, useState } from 'react';
-import { connect } from 'react-redux';
-import { Grid, makeStyles, MenuItem, Checkbox, ListItemText } from '@material-ui/core';
+import { FC, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { Grid } from '@material-ui/core';
 import VisibilityOutlinedIcon from '@material-ui/icons/VisibilityOutlined';
 import VisibilityOffOutlinedIcon from '@material-ui/icons/VisibilityOffOutlined';
 import AddCircleOutlineOutlinedIcon from '@material-ui/icons/AddCircleOutlineOutlined';
-import { getLabels } from 'store/modules/App/selectors';
-import { changeLabelItemThunk } from 'store/modules/App/operations';
 import WrapperOfMenuOfLabelPart from 'components/PakeepList/components/PakeepElement/components/AttributeGroup/components/LabelPart/components/MenuWrapper';
 import DialogOfAddNewLabel from './components/DialogOfAddNewLabel';
 import DefaultMenuListOflabelList from './components/DefaultMenuList';
 import GlobalLabelListOflabelList from './components/GlobalLabelList';
 import { SelectedLabels } from 'components/NewPakeep';
 import { useGetReversedCustomColor } from 'hooks/useGetReversedCustomColor.hook';
+import { HandleChangeNewLabelType, LabelsListPropsType, MenuStateOfLabelsListType } from './types';
+import { toChangeGlobalLabelItem, toDeleteLabelFromPakeep } from 'store/modules/App/actions';
+import { ILabelElement } from 'store/modules/App/types';
 
-const LabelsList = ({
+const LabelsList: FC<LabelsListPropsType> = ({
   handleAddNewLabel,
   handleDeleteNewLabel,
-  handleDeleteLabelFromPakeepFunc,
-  globalLabels,
   handleStatusOfHideLabelView,
   isLabelViewHidden,
-  changeLabelItemThunk,
+  pakeepId,
   isDefaultMenuListHidden = false,
   customColor: notReverseCustomColor,
-  // customColor,
   onMenuClose
 }) => {
+  const dispatch = useDispatch();
+  const handleChangeGlobalLabelItem = (changedLabel: ILabelElement) => {
+    dispatch(toChangeGlobalLabelItem({ changedLabel }));
+  };
+
   const customColor = useGetReversedCustomColor(notReverseCustomColor);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const handleOpenAddNewLabelDialog = () => setIsDialogOpen(true);
@@ -52,36 +54,36 @@ const LabelsList = ({
     customColor: notReverseCustomColor
   };
 
-  const handleChangeNewLabel = (isChecked, id) => {
+  const handleChangeNewLabel: HandleChangeNewLabelType = (isChecked, id) => {
     isChecked ? handleDeleteNewLabel(id) : handleAddNewLabel(id);
   };
 
   const nullityOfMenuState = {
-    mouseX: null,
-    mouseY: null,
+    mouseX: 0,
+    mouseY: 0,
     id: '',
     variant: '',
     labelIconName: '',
     title: '',
     color: ''
   };
-  const [menuState, setMenuState] = useState(nullityOfMenuState);
+  const [menuState, setMenuState] = useState<MenuStateOfLabelsListType>(nullityOfMenuState);
 
   const handleClose = () => setMenuState(nullityOfMenuState);
   const handleDeleteLabel = () => {
-    handleDeleteLabelFromPakeepFunc(pakeepId, menuState.id);
+    dispatch(toDeleteLabelFromPakeep({ currentPakeepId: pakeepId, labelIdWhichShouldBeDeleted: menuState.id }));
     handleClose();
   };
 
   const arrowButtonFunc = () => onMenuClose();
 
-  const globalLabelListProps = { globalLabels, handleChangeNewLabel, setMenuState, customColor };
+  const globalLabelListProps = { handleChangeNewLabel, setMenuState, customColor };
 
   const wrapperOfMenuOfLabelPartProps = {
     handleClose,
     handleDeleteLabel,
     menuState,
-    handleChangeGlobalLabelItem: changeLabelItemThunk,
+    handleChangeGlobalLabelItem,
     setMenuState,
     customColor: notReverseCustomColor,
     isThisMenuIsSecond: true
@@ -104,21 +106,4 @@ const LabelsList = ({
   );
 };
 
-LabelsList.propTypes = {
-  globalLabels: PropTypes.array,
-  handleAddNewLabel: PropTypes.func,
-  handleDeleteNewLabel: PropTypes.func,
-  handleStatusOfHideLabelView: PropTypes.func,
-  isLabelViewHidden: PropTypes.bool,
-  selectedLabels: PropTypes.array
-};
-
-const mapStateToProps = ({ app: { labels } }) => ({
-  globalLabels: getLabels(labels)
-});
-
-const mapDispatchToProps = dispatch => ({
-  changeLabelItemThunk: newLabel => dispatch(changeLabelItemThunk(newLabel))
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(LabelsList);
+export default LabelsList;

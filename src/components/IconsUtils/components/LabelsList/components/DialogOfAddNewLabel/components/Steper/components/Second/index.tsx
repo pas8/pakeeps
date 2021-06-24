@@ -1,13 +1,9 @@
 import { FormControlLabel, Switch } from '@material-ui/core';
 import PropTypes from 'prop-types';
+import { FC } from 'react';
 
-const SecondStepOfSteperOfDialogOfAddNewLabel = switchProps => (
+const SecondStepOfSteperOfDialogOfAddNewLabel: FC<any> = switchProps => (
   <FormControlLabel control={<Switch {...switchProps} />} label={'Is variant Outlined? '} />
 );
-
-SecondStepOfSteperOfDialogOfAddNewLabel.propTypes = {
-  onChange: PropTypes.func,
-  checked: PropTypes.bool
-};
 
 export default SecondStepOfSteperOfDialogOfAddNewLabel;

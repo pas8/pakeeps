@@ -1,9 +1,14 @@
 import { RadioGroup, FormControlLabel, Radio, Grid } from '@material-ui/core';
 import { nanoid } from 'nanoid';
-import PropTypes from 'prop-types';
+import { FC } from 'react';
+import { ThirdStepOfSteperOfDialogOfAddNewLabelPropsType } from '../../types';
 
-const ThirdStepOfSteperOfDialogOfAddNewLabel = ({ value, onChange, colorVariants }) => (
-  <RadioGroup  value={value} onChange={onChange}>
+const ThirdStepOfSteperOfDialogOfAddNewLabel: FC<ThirdStepOfSteperOfDialogOfAddNewLabelPropsType> = ({
+  value,
+  onChange,
+  colorVariants
+}) => (
+  <RadioGroup value={value} onChange={onChange}>
     {colorVariants.map(({ labelText, value }) => {
       const formControlLabelProps = { value, control: <Radio />, label: labelText };
 
@@ -15,13 +20,5 @@ const ThirdStepOfSteperOfDialogOfAddNewLabel = ({ value, onChange, colorVariants
     })}
   </RadioGroup>
 );
-
-ThirdStepOfSteperOfDialogOfAddNewLabel.propTypes = {
-  colorVariants: PropTypes.shape({
-    map: PropTypes.func
-  }),
-  onChange: PropTypes.func,
-  value: PropTypes.string
-};
 
 export default ThirdStepOfSteperOfDialogOfAddNewLabel;

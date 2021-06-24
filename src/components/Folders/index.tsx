@@ -1,15 +1,15 @@
-import { Grid, makeStyles, Tabs, Tab, Drawer, Typography, Collapse, Slide, useTheme, Menu } from '@material-ui/core';
+import { Grid, makeStyles, Slide, useTheme } from '@material-ui/core';
 import { useTakeIcon } from 'hooks/useTakeIcon.hook';
-import PropTypes from 'prop-types';
-import { useMeasure, usePrevious, useSize, useWindowSize, useCounter } from 'react-use';
-import { useEffect, useRef, useState } from 'react';
+import { useMeasure, useSize, useWindowSize } from 'react-use';
+import { useSelector } from 'react-redux';
+import { FC, MouseEventHandler, useEffect, useState } from 'react';
 import _ from 'lodash';
 import { ToggleButton, ToggleButtonGroup } from '@material-ui/lab';
-import { colord } from 'colord';
-import { nanoid } from 'nanoid';
-import ButtonItem from './components/ButtonItem';
-import MoreMenuOfFolders from './components/MoreMenu';
 import { useAlpha } from 'hooks/useAlpha.hook';
+import { getFolders } from 'store/modules/App/selectors';
+import { FoldersTypeProps, UseStylesOfFoldersType } from './types';
+import MoreMenuOfFolders from './components/MoreMenu';
+import { getNavigationViewLike } from 'store/modules/Settings/selectors';
 
 const marginOfToogleGroups = 1;
 
@@ -19,7 +19,7 @@ const useStyles = makeStyles(({ spacing, typography, palette: { primary } }) => 
     positionOfFolderViewWithPakeepViewIsBottom,
     isFolderViewWithPakeepViewAlignToCenter,
     positionOfFolderViewWithPakeepViewIsRight
-  }) => ({
+  }: UseStylesOfFoldersType) => ({
     // transform:'scale(0.8)',
 
     margin: spacing(positionOfFolderViewWithPakeepViewIsBottom ? 8 : 8 + 1.8, 0, 0, 0),
@@ -62,7 +62,7 @@ const useStyles = makeStyles(({ spacing, typography, palette: { primary } }) => 
       }
     }
   }),
-  textOfFolderWithPakeepsView: ({ positionOfFolderViewWithPakeepViewIsBottom }) =>
+  textOfFolderWithPakeepsView: ({ positionOfFolderViewWithPakeepViewIsBottom }: UseStylesOfFoldersType) =>
     !positionOfFolderViewWithPakeepViewIsBottom
       ? { padding: spacing(0, 0, 0, 0.8) }
       : {
@@ -116,13 +116,11 @@ const useStyles = makeStyles(({ spacing, typography, palette: { primary } }) => 
   }
 }));
 
-const Folders = ({
+const Folders: FC<FoldersTypeProps> = ({
   value,
   handleChange,
-  folders,
   handleDrawerWidth,
   isMenuOpen,
-  navigationViewLike,
   positionOfFolderViewWithPakeepViewIsBottom,
   positionOfFolderViewWithPakeepViewIsRight,
   isFolderOpen,
@@ -132,6 +130,9 @@ const Folders = ({
   isSizeOfFoldersMoreThanSize,
   setIsSizeOfFoldersMoreThanSize
 }) => {
+  const navigationViewLike = useSelector(getNavigationViewLike);
+  const folders = useSelector(getFolders);
+
   const classes = useStyles({
     isMenuOpen,
     positionOfFolderViewWithPakeepViewIsBottom,
@@ -161,7 +162,7 @@ const Folders = ({
 
   const flattenAllFolders = _.flatten(allFolders);
 
-  const [ref, { width: buttonWidth, height: buttonHeight }] = useMeasure();
+  const [ref, { width: buttonWidth, height: buttonHeight }] = useMeasure<HTMLDivElement>();
 
   const buttonSize = positionOfFolderViewWithPakeepViewIsBottom ? buttonWidth : buttonHeight;
   const avarageButtonSize = buttonSize / flattenAllFolders.length;
@@ -172,10 +173,10 @@ const Folders = ({
   const idxOfFolderItemWhichShouldBeInMenu =
     flattenAllFolders.length - ~~((foldersSize - windowSize) / avarageButtonSize);
 
-  const [menuAnchorEl, setMenuAnchorEl] = useState(null);
+  const [menuAnchorEl, setMenuAnchorEl] = useState<any>(null);
   const isMoreMenuopen = Boolean(menuAnchorEl);
 
-  const handleOpenMenu = ({ currentTarget }) => setMenuAnchorEl(currentTarget);
+  const handleOpenMenu: MouseEventHandler<HTMLButtonElement> = ({ currentTarget }) => setMenuAnchorEl(currentTarget);
   const handleCloseMenu = () => setMenuAnchorEl(null);
 
   const arrToMapOfMoreMenu = _.filter(flattenAllFolders, (el, idx) => idxOfFolderItemWhichShouldBeInMenu <= idx);
@@ -191,10 +192,12 @@ const Folders = ({
   };
   // console.log(isSizeOfFoldersMoreThanSize)
   useEffect(() => {
-    setMargin(
+    const MARGIN_VALUE = +(
       positionOfFolderViewWithPakeepViewIsBottom &&
-        buttonSize + (marginsOfToogleGroups * allFolders.length) / 2 - windowSize
+      buttonSize + (marginsOfToogleGroups * allFolders.length) / 2 - windowSize
     );
+
+    setMargin(MARGIN_VALUE);
     //! to improve better margin logic pl
   }, [buttonSize]);
 
@@ -208,7 +211,6 @@ const Folders = ({
         container
         ref={ref}
         justify={isFolderViewWithPakeepViewAlignToCenter ? 'center' : 'flex-start'}
-        // ref={!positionOfFolderViewWithPakeepViewIsBottom ? ref : placeholderRef}
         wrap={'nowrap'}
         direction={positionOfFolderViewWithPakeepViewIsBottom ? 'row' : 'column'}
         className={navigationViewLike === 'googleKeep' ? classes.container : classes.containerOfFolderWithPakeepsView}
@@ -223,7 +225,7 @@ const Folders = ({
                 unmountOnExit
                 direction={
                   positionOfFolderViewWithPakeepViewIsBottom
-                    ? 'bottom'
+                    ? 'down'
                     : positionOfFolderViewWithPakeepViewIsRight
                     ? 'left'
                     : 'right'
@@ -235,7 +237,6 @@ const Folders = ({
                   value={value}
                   exclusive
                   onChange={handleChange}
-                  exclusive
                 >
                   {arr?.map(({ title, iconName, property, id, onClick = null }, idx) => {
                     const findedIdx = _.findIndex(flattenAllFolders, ({ id: folderId }) => folderId === id);
@@ -259,6 +260,7 @@ const Folders = ({
                     const isButtonLastOfNotHiddenNotBottomArr =
                       !positionOfFolderViewWithPakeepViewIsBottom && inNextButtonIsMore;
                     return (
+                      //@ts-ignore
                       <ToggleButton
                         //  ref={ref}
                         style={{
@@ -313,18 +315,6 @@ const Folders = ({
   useEffect(() => handleDrawerWidth(0), [isMenuOpen]);
 
   return f;
-};
-
-Folders.propTypes = {
-  folders: PropTypes.shape({
-    map: PropTypes.func
-  }),
-  handleChange: PropTypes.func,
-  handleDrawerWidth: PropTypes.func,
-  isMenuOpen: PropTypes.bool,
-  navigationViewLike: PropTypes.string,
-  positionOfFolderViewWithPakeepViewIsBottom: PropTypes.bool,
-  value: PropTypes.any
 };
 
 export default Folders;

@@ -1,6 +1,8 @@
 import { TextField, makeStyles, Grid, withStyles } from '@material-ui/core';
 import PropTypes from 'prop-types';
 import { useAlpha } from 'hooks/useAlpha.hook';
+import { FC } from 'react';
+import { TitleChangerOfLabelPropsType, UseStylesOfTitleChangerOfLabelType } from './type';
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -9,7 +11,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const InputWithCustomColor = withStyles({
-  root: ({ customColor }) => ({
+  root: ({ customColor }: UseStylesOfTitleChangerOfLabelType) => ({
     // '& label.Mui-focused': {
     //   color: customColor
     // },
@@ -36,12 +38,12 @@ const InputWithCustomColor = withStyles({
   })
 })(TextField);
 
-const TitleChangerOfLabel = ({ value, onChange, customColor,...textFieldProps }) => {
+const TitleChangerOfLabel: FC<TitleChangerOfLabelPropsType> = ({ value, onChange, customColor, ...textFieldProps }) => {
   const classes = useStyles();
 
   const allTextFieldProps = {
     autoFocus: true,
-    variant: 'outlined',
+    variant: 'outlined' as 'outlined',
     // color: 'primary',
     fullWidth: true,
     value,
@@ -53,15 +55,9 @@ const TitleChangerOfLabel = ({ value, onChange, customColor,...textFieldProps })
   const InputTitleChangerOfLabel = !customColor?.isUseDefault ? InputWithCustomColor : TextField;
   return (
     <Grid className={classes.container}>
-      <InputTitleChangerOfLabel {...allTextFieldProps}  />
+      <InputTitleChangerOfLabel {...allTextFieldProps} />
     </Grid>
   );
-};
-
-TitleChangerOfLabel.propTypes = {
-  color: PropTypes.string,
-  onChange: PropTypes.func,
-  value: PropTypes.string
 };
 
 export default TitleChangerOfLabel;
