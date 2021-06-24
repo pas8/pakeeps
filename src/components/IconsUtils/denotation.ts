@@ -1,7 +1,7 @@
 export const iconsUtilsArrDenotation = {
   CHECKBOX: { name: 'checkbox', popoverText: 'Show a checkboxes' },
   BACKGROUND_COLOR: { name: 'backgroundColor', popoverText: 'Change backgroundColor' },
-  TEXT_COLOR: { name: 'backgroundColor', popoverText: 'Change text color' },
+  TEXT_COLOR: { name: 'textColor', popoverText: 'Change text color' },
   ARCHIVE: { name: 'ARCHIVE', popoverText: 'Archive pakeep' },
   EVENT: { name: 'event', popoverText: 'Add event to pakeep' },
   PICTURE: { name: 'picture', popoverText: 'Add picture' },

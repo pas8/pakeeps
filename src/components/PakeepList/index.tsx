@@ -173,16 +173,19 @@ const PakeepList: FC = () => {
   };
 
   return (
+    <>
     <PakeepHoveringContext.Provider value={pakeepHoveringContextPropviderPropsValue}>
       <Grid ref={scrollerRef} className={'selectoContainer'}>
         {isFolderPropertyIsAll && <WrapperOfContainerOfPakeepList {...wrapperOfContainerOfPinnedPakeepListProps} />}
 
         <WrapperOfContainerOfPakeepList {...wrapperOfContainerOfAllPakeepListProps} />
         {!isSelectoHidden && <SelectofFPakeepListContainer {...selectoOfPakeepListContainerProps} />}
-        <EditingDialogOfPakeepElement {...allPakeepDialogProps} />
       </Grid>
     </PakeepHoveringContext.Provider>
+    <EditingDialogOfPakeepElement {...allPakeepDialogProps} />
+
+    </>
   );
 };
 
-export default memo(PakeepList);
+export default PakeepList

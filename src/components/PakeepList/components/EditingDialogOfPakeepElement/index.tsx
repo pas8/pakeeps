@@ -1,4 +1,4 @@
-import { useState,  FC } from 'react';
+import { useState, FC, useEffect } from 'react';
 import { useMeasure } from 'react-use';
 import { useSelector } from 'react-redux';
 
@@ -53,17 +53,21 @@ const useStyles = makeStyles(({ typography: { h4, h6 }, spacing }) => {
 });
 
 const EditingDialogOfPakeepElement: FC<EditingDialogOfPakeepElementProps> = ({ id, handleClosePakeepDialog }) => {
-  const findedPakeep = useFindPakeepUsingId(useSelector(getPakeeps), id);
-  if (!findedPakeep) return null;
+  const findedPakeep = useFindPakeepUsingId(id);
+  // if (!findedPakeep) return null;
 
   const { backgroundColor, color, title, text } = findedPakeep;
-  const [ref, { width }] = useMeasure<HTMLDivElement>();
+
   const [state, setState] = useState({ title, text, backgroundColor, color });
+
+  useEffect(() => {
+    setState({ title, text, backgroundColor, color });
+  }, [findedPakeep]);
 
   const [customColor, isBackgroundColorDefault, isColorDefault] = useGetReadableColor(backgroundColor, color);
 
-  const correctBackgroundColor = isBackgroundColorDefault ? '#303030' : state.backgroundColor;
-  const correctColor = isColorDefault ? '#fff' : state.color;
+  const correctBackgroundColor = state.backgroundColor;
+  const correctColor = customColor.hover;
 
   const classes = useStyles({ backgroundColor: correctBackgroundColor, color: correctColor });
 
@@ -90,6 +94,7 @@ const EditingDialogOfPakeepElement: FC<EditingDialogOfPakeepElementProps> = ({ i
     value: state.text,
     multiline: true
   };
+  const [ref, { width }] = useMeasure<HTMLDivElement>();
 
   const JUST_PADDING_VALUE = 160;
   const widthOfContainer = width - JUST_PADDING_VALUE;
@@ -98,9 +103,20 @@ const EditingDialogOfPakeepElement: FC<EditingDialogOfPakeepElementProps> = ({ i
 
   const iconsUtilsFunc = usePakeepUtilsFunc(id);
 
+  const handleSetBackgroundColorPakeep = (backgroundColor:string) => {
+    setState(state => ({ ...state, backgroundColor }));
+  };
+  const handleSetColorPakeep = (color:string) => {
+    setState(state => ({ ...state, color }));
+  };
+  
+
   const iconsUtilsProps = {
     widthOfContainer,
     id,
+    customColor,
+    handleSetBackgroundColorPakeep,
+    handleSetColorPakeep,
     iconsUtilsFunc,
     arrOfButtonNamesWhichSholudBeHidden
   };

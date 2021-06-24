@@ -89,7 +89,7 @@ export type UseFindCurrentEventsType = (
 
 export type UsePakeepUtilsFuncType = (pakeepId: PakeepIdType) => IconsUtilsFunctionType;
 
-export type UseFindPakeepUsingIdType = (pakeeps: PakeepsType, id: PakeepIdType) => PakeepElementType | void;
+export type UseFindPakeepUsingIdType = ( id: PakeepIdType) => PakeepElementType ;
 
 export type IconType = typeof AddCircleOutlineOutlinedIcon;
 
