@@ -1,20 +1,18 @@
 import { ILabelElement } from './types';
 import { RootStoreType } from 'models/types';
-import _ from 'lodash';
+import { find } from 'lodash';
 import { createSelector } from 'reselect';
 import { createArraySelector } from 'reselect-map';
 
 // const getPakeeplLabels = ;
 // const getGlobalLabels = ;
 
-export const getFilteredLabels = createArraySelector(
-  [(labels: any) => labels, (__: never, { app: { labels } }: RootStoreType) => labels],
-  (pakeepId, globalLabels) => _.find(globalLabels, ({ id }) => id === pakeepId)
-);
+// export const getFilteredLabels = createArraySelector(
+//   [(labels: any) => labels, ({ app: { labels } }: RootStoreType) => labels],
+//   (pakeepId, globalLabels) => _.find(globalLabels, ({ id }) => id === pakeepId)
+// );
 
-
-
-
+export const getFilteredLabels = (h: any) => h;
 
 export const getCurrentFolderPropertyIdx = createSelector(
   [(state: RootStoreType) => state.app.currentFolderPropertyIdx],
@@ -55,17 +53,11 @@ export const getIsCancelSelectedPakeepsId = createSelector(
 
 export const getSelectedPakeeps = createArraySelector(
   [({ app }: RootStoreType) => app.selectedPakeepsId, ({ app: { pakeeps } }: RootStoreType) => pakeeps],
-  (selectedPakeepsId, pakeeps) => _.find(pakeeps, ({ id }) => id === selectedPakeepsId)
+  (selectedPakeepsId, pakeeps) => find(pakeeps, ({ id }) => id === selectedPakeepsId)
 );
 
 export const getGlobalEventsArr = createSelector(
-  [({ app }: RootStoreType) => app.events],
+  [({ app }: RootStoreType) => app?.events],
   globalEvents => globalEvents
 );
-
-
-
-
-
-
 

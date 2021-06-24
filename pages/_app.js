@@ -20,13 +20,13 @@ const Index = ({ Component, pageProps }) => {
     if (jssStyles) jssStyles.parentElement.removeChild(jssStyles);
   }, []);
 
-  // const layouts = [StoreLayout, ThemeLayout, DateLayout, AuthLayout, SnackBarLayout, FolderLayout, HeaderLayout];
-  const layouts = [StoreLayout,ThemeLayout];
+  const layouts = [StoreLayout, ThemeLayout, DateLayout, AuthLayout, SnackBarLayout, FolderLayout, HeaderLayout];
+  // const layouts = [StoreLayout,ThemeLayout];
 
   return (
     <ComposeLayouts layouts={layouts} pageProps={pageProps}>
-      <div>fuck</div>
-      {/* <Component {...pageProps} /> */}
+      {/* <div>fuck</div> */}
+      <Component {...pageProps} />
     </ComposeLayouts>
   );
 };

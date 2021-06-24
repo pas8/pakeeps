@@ -58,7 +58,7 @@ const SelectofFPakeepListContainer: FC<SelectofFPakeepListContainerPropsType> = 
     dragContainer: '.selectoContainer',
     selectableTargets: ['.selectoItem'],
     hitRate: 0,
-    container: document?.body,
+    // container: document?.body,
     selectByClick: false,
     selectFromInside: true,
     toggleContinueSelect: ['shift'],

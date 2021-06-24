@@ -41,7 +41,7 @@ export type IconsUtilsValuesType = {
 export type IconsUtilsPropetyiesType = {
   isBackgroundColorDefault?: boolean;
   backgroundColor?: any;
-  customColor?: CustomColorType;
+  customColor: CustomColorType;
   isAllIconsIsShown?: boolean;
   labelBargeNumber?: number;
   labelsListProps?: any;

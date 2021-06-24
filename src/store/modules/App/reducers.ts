@@ -133,7 +133,7 @@ const initialState: AppInitialStateInteface = {
       isInBookmark: false,
       events: [],
       isArchived: false,
-      isPinned: false,
+      isPinned: true,
       isCheckBoxes: false,
       isFavorite: false,
       color: 'default',
@@ -152,7 +152,7 @@ const initialState: AppInitialStateInteface = {
       events: [],
       color: 'default',
       labels: ['label1'],
-      isPinned: false,
+      isPinned: true,
       id: 'pakeep8'
     }
   ],
@@ -162,7 +162,12 @@ const initialState: AppInitialStateInteface = {
   isMenuOpen: false,
   currentFolderPropertyIdx: 0,
   drawerWidth: 0,
-  isCancelSelectedPakeepsId: false
+  isCancelSelectedPakeepsId: false,
+  // temproraryPakeepData: {
+  //   id: '',
+  //   labels: [],
+  //   events: []
+  // }
 };
 
 // console.log(TypeNames)

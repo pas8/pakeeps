@@ -180,6 +180,7 @@ const IconsUtils: FC<IconsUtilsPropsType> = ({
     widthOfContainer,
     correctIconButtonUtilsArr
   );
+
   const defaultWrapperOfPopoverAndMenuProps = { customColor };
 
   const nonSlicedwrapperOfPopoverAndMenuProps = {

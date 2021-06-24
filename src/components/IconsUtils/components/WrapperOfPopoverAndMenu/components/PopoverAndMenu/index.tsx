@@ -37,16 +37,16 @@ const PopoverAndMenu: FC<PopoverAndMenuType> = ({
 }) => {
   const classes = useStyles({ customColor });
 
-  // const defaultLocationOfPopoverToWitCentered = {
-  //   anchorOrigin: {
-  //     vertical: 'bottom',
-  //     horizontal: 'center'
-  //   },
-  //   transformOrigin: {
-  //     vertical: 'top',
-  //     horizontal: 'center'
-  //   }
-  // };
+  const defaultLocationOfPopoverToWitCentered = {
+    anchorOrigin: {
+      vertical: 'bottom',
+      horizontal: 'center'
+    },
+    transformOrigin: {
+      vertical: 'top',
+      horizontal: 'center'
+    }
+  };
 
   // const defaultLocationOfMenuToWitRightSite = {
   //   anchorOrigin: {
@@ -86,6 +86,7 @@ const PopoverAndMenu: FC<PopoverAndMenuType> = ({
 
   const popoverProps = {
     // ...locationOfPopover,
+    ...defaultLocationOfPopoverToWitCentered,
     className: classes.popover,
     classes: { paper: classes.paper },
 
@@ -97,6 +98,7 @@ const PopoverAndMenu: FC<PopoverAndMenuType> = ({
 
   const menuProps = {
     // ...locationOfMenu,
+    // ...defaultLocationOfMenuToWitRightSite,
     anchorEl: currentTarget,
     keepMounted: true,
     open: isMenuOpen,

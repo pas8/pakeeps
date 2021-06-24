@@ -8,7 +8,10 @@ import {
   GlobalEventsType,
   PakeepIdType,
   PakeepsType,
-  PakeepElementType
+  PakeepElementType,
+  PakeepEventInteface,
+  EventOfPakeepType,
+  EventsOfPakeepType
 } from 'store/modules/App/types';
 import { HandleSelectedPakeepsPropertyFuncType, PakeepPropertyiesType } from 'components/HeaderWhenActiveSelecto/types';
 import { IconsUtilsArrType, IconsUtilsFunctionType } from 'components/IconsUtils/types';
@@ -79,13 +82,15 @@ export type CurrentEventsArrType = CurrentEventsElementType[];
 
 export type UseFindCurrentEventsType = (
   globalEvents: GlobalEventsType,
-  events: GlobalEventsType,
+  events: EventsOfPakeepType,
   timeFormat: TimeFormatType,
   timeAndDateFromat: TimeAndDateFromatType
-) => CurrentEventsArrType;
+) => CurrentEventsArrType | null;
 
 export type UsePakeepUtilsFuncType = (pakeepId: PakeepIdType) => IconsUtilsFunctionType;
 
 export type UseFindPakeepUsingIdType = (pakeeps: PakeepsType, id: PakeepIdType) => PakeepElementType | void;
 
 export type IconType = typeof AddCircleOutlineOutlinedIcon;
+
+export type HandlePakeepEventsType = (pakeepId: PakeepIdType, events?: EventsOfPakeepType) => void;

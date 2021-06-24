@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, FC } from 'react';
 import { nanoid } from 'nanoid';
 import HeaderOfAddDateToPakeep from './components/HeaderOfAddDateToPakeep';
 import DynamicInputDateAndTimePickers from './components/DynamicComponents/components/DynamicInputDateAndTimePickers';
@@ -12,67 +12,75 @@ import { filter, mapKeys, map, mapValues, find } from 'lodash';
 import { useTakeIcon } from 'hooks/useTakeIcon.hook';
 import { useGetReversedCustomColor } from 'hooks/useGetReversedCustomColor.hook';
 import { useSnackbar } from 'notistack';
-import { handlePakeepEventsThunk, handleThemeColorsThunk } from 'store/modules/App/operations';
 import { useCurrentEvents } from 'hooks/useCurrentEvents.hook';
 import { useValidatedCurrentEvents } from 'hooks/useValidatedCurrentEvents.hook';
 import { Chip, Typography, Grid, makeStyles } from '@material-ui/core';
 import { format } from 'date-fns';
 import PreviewEventList from 'components/PakeepList/components/PakeepElement/components/AttributeGroup/components/EventsPart/components/PreviewEventList';
 import DialogOfEditingDate from 'components/PakeepList/components/PakeepElement/components/AttributeGroup/components/EventsPart/components/DialogOfEditingDate';
+import {
+  AddDateToPakeepPropsType,
+  ChosenItemArrType,
+  DateAndTimeInputsStateType,
+  DateListArrType,
+  HandleDateAndTimeInputsStateType
+} from './types';
 
-const AddDateToPakeep = ({
-  ampm = false,
+const AddDateToPakeep: FC<AddDateToPakeepPropsType> = ({
   onMenuClose,
   id,
   customColor: color,
-  timeFormat,
-  timeAndDateFromat,
-  globalEvents,
-  events,
-  handleThemeColorsThunk,
-  handlePakeepEventsThunk
+  currentEventsArr,
+  handlePakeepEvents
 }) => {
-  const currentEventsArr = useCurrentEvents(globalEvents, events, timeFormat, timeAndDateFromat);
+  const ampm = false;
+
+  if (!currentEventsArr) return null;
   // console.log(events);
 
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
   const FIRST_EVENT_ID = '1';
 
-  const TO_PUSH = 'TO_PUSH';
-  const SAVED = 'saved';
+  enum ButtonSaveStateDenotation {
+    NULLITY = '',
+    TO_PUSH = 'TO_PUSH',
+    SAVED = 'saved'
+  }
+
   const currentEventsObject = mapKeys(currentEventsArr, ({ id }) => id);
   const customColor = useGetReversedCustomColor(color);
 
-  const [buttonSaveState, setButtonSaveState] = useState(false);
+  const [buttonSaveState, setButtonSaveState] = useState<ButtonSaveStateDenotation>(ButtonSaveStateDenotation.NULLITY);
 
   const [focusedEventId, setFocusedEventId] = useState('');
 
-  const [dateAndTimeInputsState, setDateAndTimeInputsState] = useState({});
+  const [dateAndTimeInputsState, setDateAndTimeInputsState] = useState<DateAndTimeInputsStateType>({});
 
-  const handleDateAndTimeInputsState = (id, value, inputValue) => {
+  const handleDateAndTimeInputsState: HandleDateAndTimeInputsStateType = (id, value, inputValue) => {
     setFocusedEventId(id);
     setDateAndTimeInputsState(state => ({ ...state, [id]: { id, value, inputValue } }));
   };
 
-  const handleAddCustomEvent = newCustomEvent => {
-    setDateAndTimeInputsState(state => ({ ...state, addMoreEvents: [...state.addMoreEvents, newCustomEvent] }));
-  };
+  // const handleAddCustomEvent = newCustomEvent => {
+  //   setDateAndTimeInputsState(state => ({ ...state, addMoreEvents: [...state.addMoreEvents, newCustomEvent] }));
+  // };
 
   const defaultDateListArr = [
     {
       title: 'Add Custom Events',
       iconName: 'dateRange',
+      id:'2151152352rerwkfsdnj23',
       dynamicComponent: {
-        component: DynamicAddMoreEvents,
-        props: { handleAddCustomEvent }
+        component: DynamicAddMoreEvents
+        // props: { handleAddCustomEvent }
       }
     }
   ];
 
-  const dateListArr = [...currentEventsArr, ...defaultDateListArr];
+  const dateListArr:DateListArrType = [...currentEventsArr, ...defaultDateListArr];
 
-  const [chosenItemArr, setChosenItemArr] = useState([]);
+  const [chosenItemArr, setChosenItemArr] = useState<ChosenItemArrType>([]);
 
   useEffect(() => {
     const nullityOfDateAndTimeInputsState = mapValues(currentEventsObject, ({ id, value, inputValue }) => ({
@@ -80,34 +88,37 @@ const AddDateToPakeep = ({
       value,
       inputValue
     }));
+
     setDateAndTimeInputsState(nullityOfDateAndTimeInputsState);
 
-    const nulittyOfChosenItemArr = map(filter(dateListArr, 'isChosen'), 'id');
-    setChosenItemArr(nulittyOfChosenItemArr);
+    const nullityOfChosenItemArr = map(filter(dateListArr, 'isChosen'), 'id');
+    setChosenItemArr(nullityOfChosenItemArr);
   }, [currentEventsArr]);
 
   const validatedCurrentEvents = useValidatedCurrentEvents(dateAndTimeInputsState, chosenItemArr);
 
   useEffect(() => {
-    if (buttonSaveState !== TO_PUSH) return;
+    if (buttonSaveState !== ButtonSaveStateDenotation.TO_PUSH) return;
 
-    if (!validatedCurrentEvents.length)
-      return enqueueSnackbar({
+    if (!validatedCurrentEvents.length) {
+      enqueueSnackbar({
         message: `Can not add events`,
         severity: 'error'
       });
+      return;
+    }
 
-    handlePakeepEventsThunk(id, validatedCurrentEvents);
+    handlePakeepEvents(id, validatedCurrentEvents);
     onMenuClose();
 
     enqueueSnackbar({
       message: `You succsesfully added ${validatedCurrentEvents.length} events`
     });
 
-    return setButtonSaveState(SAVED);
+    return setButtonSaveState(ButtonSaveStateDenotation.SAVED);
   }, [buttonSaveState]);
 
-  const onClickOfSaveButton = () => setButtonSaveState(TO_PUSH);
+  const onClickOfSaveButton = () => setButtonSaveState(ButtonSaveStateDenotation.TO_PUSH);
 
   const previewEventListProps = { validatedCurrentEvents, currentEventsArr, customColor };
   const customTitle = <PreviewEventList {...previewEventListProps} />;
@@ -140,7 +151,7 @@ const AddDateToPakeep = ({
         const isChosen = includes(chosenItemArr, name);
         const isActiveIcon = isChosen;
 
-        const isDynamicComponentShouldBeShown = isChosen && DynamicComponent;
+        const isDynamicComponentShouldBeShown = !!(isChosen && DynamicComponent);
 
         const onClick = () => {
           const onDefaultClick = () => {
@@ -166,7 +177,6 @@ const AddDateToPakeep = ({
           onlyTime,
           onClickOfCloseIcon,
           title,
-          handleThemeColorsThunk,
           ampm,
           handleDateAndTimeInputsState,
           customColor,
@@ -192,25 +202,10 @@ const AddDateToPakeep = ({
 
         return <DynamicMenuItem {...dynamicMenuListProps} key={nanoid()} />;
       })}
+
       <DialogOfEditingDate {...dialogOfEditingDateProps} />
     </>
   );
 };
 
-AddDateToPakeep.propTypes = {
-  ampm: PropTypes.bool,
-  id: PropTypes.any,
-  onMenuClose: PropTypes.func
-};
-
-const mapStateToProps = ({ app: { events: globalEvents }, settings: { timeFormat, timeAndDateFromat } }) => ({
-  globalEvents: getGlobalEventsArr(globalEvents),
-  timeFormat,
-  timeAndDateFromat
-});
-const mapDispatchToProps = dispatch => ({
-  handlePakeepEventsThunk: (id, events) => dispatch(handlePakeepEventsThunk(id, events)),
-  handleThemeColorsThunk: newThemeColors => dispatch(handleThemeColorsThunk(newThemeColors))
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(AddDateToPakeep);
+export default AddDateToPakeep;

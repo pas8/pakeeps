@@ -49,7 +49,6 @@ const useStyles = makeStyles(theme => ({
 const HeaderByPas = ({
   operateToChangeMenuOpenStatus,
   isMenuOpen,
-
   drawerWidth,
   navigationViewLikeGoogleKeep,
   navigationViewLikeTelegram,

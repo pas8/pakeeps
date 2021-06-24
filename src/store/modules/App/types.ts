@@ -212,8 +212,7 @@ export interface PakeepEventInteface {
 // export type PakeepIdType = Brand<string, '_pakeepId'>;
 export type PakeepIdType = string;
 
-
-export type DefaultFolderElementPropertyNamesType = keyof typeof  pakeepPropertyiesNames;
+export type DefaultFolderElementPropertyNamesType = keyof typeof pakeepPropertyiesNames;
 export type DefaultFolderElementPropertyType = {
   [Property in DefaultFolderElementPropertyNamesType]: boolean;
 };
@@ -284,6 +283,11 @@ export interface AppInitialStateInteface {
   currentFolderPropertyIdx: number;
   drawerWidth: DrawerWidthType;
   isCancelSelectedPakeepsId: boolean;
+  // temproraryPakeepData: {
+  //   id: PakeepIdType;
+  //   labels: LabelsOfPakeepType;
+  //   events: EventsOfPakeepType;
+  // };
 }
 
 export type PakeepPropertyValueType = $Values<PakeepElementType>;

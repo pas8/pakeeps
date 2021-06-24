@@ -9,6 +9,6 @@ export type WrapperOfPopoverAndMenuType = {
   isIconNameExtended?: boolean;
   iconSize?: IconSizeType;
   handleAverageMainComponentWidth?: Function;
-  customColor?: CustomColorType;
+  customColor: CustomColorType;
   isCustomColorReversed?: boolean;
 };

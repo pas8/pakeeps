@@ -28,12 +28,13 @@ const WrapperOfPopoverAndMenu: FC<WrapperOfPopoverAndMenuType> = ({
     popoverText: '',
     menuComponentsProps: {},
     MenuComponents: null as ReactNode
-};
+  };
 
   const [anchorElState, setAnchorElState] = useState<Optional<typeof nullityOfAnchorEl>>(nullityOfAnchorEl);
 
-  const handleMenuClose:ClosePopoverOrMenuType = () => setAnchorElState(nullityOfAnchorEl);
-  const handlePopoverClose:ClosePopoverOrMenuType = () => setAnchorElState(state => ({ ...state, isPopoverOpen: false }));
+  const handleMenuClose: ClosePopoverOrMenuType = () => setAnchorElState(nullityOfAnchorEl);
+  const handlePopoverClose: ClosePopoverOrMenuType = () =>
+    setAnchorElState(state => ({ ...state, isPopoverOpen: false }));
 
   const popoverAndMenuProps = { ...anchorElState, handleMenuClose, handlePopoverClose, customColor };
   const anchorElRef = useRef<HTMLDivElement>(null);
@@ -123,7 +124,5 @@ const WrapperOfPopoverAndMenu: FC<WrapperOfPopoverAndMenuType> = ({
     </>
   );
 };
-
-
 
 export default WrapperOfPopoverAndMenu;

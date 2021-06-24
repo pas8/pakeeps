@@ -26,10 +26,10 @@ import {
 } from 'store/modules/Settings/selectors';
 import { useFilteredLabels } from 'hooks/useFilteredLabels.hook';
 import { toAddLabelToPakeep, toChangePakeepProperty, toDeleteLabelFromPakeep } from 'store/modules/App/actions';
-import { ColorType, LabelIdType } from 'store/modules/App/types';
+import { ColorType, EventsOfPakeepType, LabelIdType } from 'store/modules/App/types';
 import { usePakeepUtilsFunc } from 'hooks/usePakeepUtilsFunc.hook';
 
-export const Events = createContext<null | { events: any[] }>(null);
+export const Events = createContext<{ events: EventsOfPakeepType | [] }>({ events: [] });
 
 const useStyles = makeStyles(({ spacing, transitions, palette }: Theme) => ({
   paperClass: ({ customColor, backgroundColor, color, isUtilsHaveViewLikeInGoogleKeep }: UseStylesProps) => ({
@@ -52,6 +52,7 @@ const useStyles = makeStyles(({ spacing, transitions, palette }: Theme) => ({
       duration: transitions.duration.leavingScreen
     }),
     borderColor: customColor && useIsColorDark(customColor.unHover) ? customColor.unHover : palette?.highEmphasis?.main
+    // borderColor: palette.primary.main
   }),
 
   iconsUtilsClass: {
@@ -108,6 +109,7 @@ const PakeepElement: FC<PakeepElementPropsType> = ({
   const [, , maxEmphasisColor] = useThemeColors();
 
   const [customColor, isBackgroundColorDefault, isColorDefault] = useGetReadableColor(backgroundColor, color);
+
   const correctColor = customColor.isUseDefault ? maxEmphasisColor : customColor?.hover;
 
   const correctBackground = isBackgroundColorDefault ? '#303030' : backgroundColor;
@@ -124,7 +126,7 @@ const PakeepElement: FC<PakeepElementPropsType> = ({
     isLoaded: false
   };
   const [statusState, setStatusState] = useState<NullityStatusState>(nullityStatusState);
-  const [ref, { width: widthOfContainer }] = useMeasure();
+  const [ref, { width: widthOfContainer }] = useMeasure<HTMLDivElement>();
 
   const handleSetIsHovering = (): void => {
     setStatusState(state => ({ ...state, isHovered: true }));
@@ -234,7 +236,7 @@ const PakeepElement: FC<PakeepElementPropsType> = ({
             const pakeepGridContainerProps = {
               onMouseEnter,
               onMouseLeave,
-              // ref,
+              ref,
               className: clsx(classes.containerClass, className),
               id,
               open: true,

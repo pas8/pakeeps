@@ -29,9 +29,8 @@ const useStyles = makeStyles(({ spacing }) => ({
 const MoreUtils: FC<MoreUtilsPropsType> = ({ slicedArrAfter, customColor }) => {
   return (
     <>
-      {slicedArrAfter.map(({ popoverText, icon: Icon, isIconActive, onClick, ActiveIcon }) => {
+      {slicedArrAfter.map(({  icon: Icon, isIconActive, onClick, ActiveIcon,popoverText }) => {
         const [primaryColor, , maxEmphasisColor, highEmphasisColor] = useThemeColors();
-
         const color = (
           customColor.isUseDefault
             ? isIconActive

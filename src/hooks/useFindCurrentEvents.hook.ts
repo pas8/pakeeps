@@ -3,6 +3,8 @@ import { find } from 'lodash';
 import { UseFindCurrentEventsType } from 'models/types';
 
 export const useFindCurrentEvents: UseFindCurrentEventsType = (globalEvents, events, timeFormat, timeAndDateFromat) => {
+  if (!globalEvents || !events) return null;
+
   const eventsArr = globalEvents.map(({ id: globalId, ...globalEventsProps }) => {
     const findedEvent = find(events, ({ id }) => id === globalId);
     const isEventWasChosen = !!findedEvent;
@@ -16,7 +18,7 @@ export const useFindCurrentEvents: UseFindCurrentEventsType = (globalEvents, eve
       ...validatedFindedEvent,
       id: globalId,
       inputValue,
-      format,
+      format
     };
 
     return extendedCurrentEvent;
