@@ -1,5 +1,5 @@
 import { reverse } from 'lodash';
-import { FC } from 'react';
+import { FC, memo } from 'react';
 import { Grid, makeStyles } from '@material-ui/core';
 import LabelPart from './components/LabelPart';
 import EventsPart from './components/EventsPart';
@@ -32,7 +32,7 @@ const AttributeGroup: FC<AttributeGroupPropsType> = ({
   const isAttributeGroupOrderIsReverse = false;
 
   const partsArr = [
-    // { Component: EventsPart, props: eventsPartProps },
+    { Component: EventsPart, props: eventsPartProps },
     { Component: LabelPart, props: labelPartProps }
   ];
 
@@ -48,4 +48,4 @@ const AttributeGroup: FC<AttributeGroupPropsType> = ({
   );
 };
 
-export default AttributeGroup;
+export default memo(AttributeGroup);

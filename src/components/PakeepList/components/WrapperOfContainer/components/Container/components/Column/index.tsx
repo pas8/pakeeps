@@ -45,7 +45,8 @@ const ColumnOfPakeepListContainer: FC<ColumnOfPakeepListContainerPropsType> = ({
   folderProperty,
   folderId,
   isPakeepDragContextPinned,
-  isSelecting
+  isSelecting,
+  onClickOfPakeepElement
 }) => {
   const classes = useStyles();
   const [breakpoint] = useCustomBreakpoint();
@@ -66,14 +67,20 @@ const ColumnOfPakeepListContainer: FC<ColumnOfPakeepListContainerPropsType> = ({
       <Droppable droppableId={`${column.id}`} direction={'vertical'}>
         {provided => (
           <Grid innerRef={provided.innerRef} {...provided.droppableProps}>
-            {pakeepsInColumn.map((el, idx) => {
+            {pakeepsInColumn.map((el: any, idx: number) => {
               if (!el) return;
               const draggableProps = { key: el.id, index: idx, draggableId: el.id };
 
               const draggableContainerClassName = classes.columnElement;
               const isPinIconShouldBeShownInPakeep = folderProperty === 'ALL' && el.isPinned;
 
-              const pakeepElementProps = { ...el, idx, isPinIconShouldBeShownInPakeep, isSelecting };
+              const pakeepElementProps = {
+                ...el,
+                idx,
+                isPinIconShouldBeShownInPakeep,
+                isSelecting,
+                onClickOfPakeepElement
+              };
 
               const draggableContainerOfPakeepElementProps = {
                 draggableProps,

@@ -135,7 +135,7 @@ const HeaderWhenActiveSelecto: FC<HeaderWhenActiveSelectoPropsType> = ({ selecte
                 <Typography variant={'subtitle2'}>{selectedPakeeps.length} selected </Typography>
               </Grid>
             </Grid>
-            <Grid>
+            <Grid style={{marginRight:'8px'}}>
               <IconsUtils {...iconsUtilsProps} />
             </Grid>
           </Grid>

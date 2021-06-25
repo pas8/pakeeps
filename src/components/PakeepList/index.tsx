@@ -6,6 +6,7 @@ import {
   getCurrentFolderPropertyIdx,
   getFolders,
   getIsCancelSelectedPakeepsId,
+  getIsPakeepHovering,
   getPakeeps,
   getPakeepsOrderNames,
   getPinnedPakeepsOrderNames,
@@ -45,13 +46,14 @@ export const PakeepHoveringContext = createContext({} as PakeepHoveringContextPr
 
 const PakeepList: FC = () => {
   const dispatch = useDispatch();
-  const pakeeps: PakeepsType = useSelector(getPakeeps);
-  const selectedPakeepsId: SelectedPakeepsIdType = useSelector(getSelectedPakeepsId);
+  const pakeeps = useSelector(getPakeeps);
+  const selectedPakeepsId = useSelector(getSelectedPakeepsId);
   const pakeepsOrderNames = useSelector(getPakeepsOrderNames);
   const pinnedPakeepsOrderNames = useSelector(getPinnedPakeepsOrderNames);
-  const currentFolderPropertyIdx: number = useSelector(getCurrentFolderPropertyIdx);
+  const currentFolderPropertyIdx = useSelector(getCurrentFolderPropertyIdx);
   const folders: FoldersType = useSelector(getFolders);
   const isCancelSelectedPakeepsId = useSelector(getIsCancelSelectedPakeepsId);
+  const isPakeepHovering = useSelector(getIsPakeepHovering);
 
   const handleSetSelectedPakeepsId: HandleSetSelectedPakeepsIdType = selectedPakeepsId => {
     dispatch(toSetSelectedPakeepIdsArr({ selectedPakeepsId }));
@@ -71,7 +73,6 @@ const PakeepList: FC = () => {
   const SELECTED = 'selected';
   const [isPakeepDragging, setIsPakeepDragging] = useState(false);
   const [isSelecting, setIsSelecting] = useState(false);
-  const [isPakeepHovering, setIsPakeepHovering] = useState(false);
 
   const [pakeepDialogId, setPakeepDialogId] = useState<PakeepIdType>('');
 
@@ -82,9 +83,29 @@ const PakeepList: FC = () => {
   const isFolderPropertyIsAll = folderProperty === 'ALL';
   const pinnedPakeeps = filter(pakeeps, ({ isPinned }) => !!isPinned);
 
+  const onClickOfPakeepElement = (id: PakeepIdType) => {
+    // if (!isSomePakeepsSelected) return setPakeepDialogId(id);
+
+    // const newItem: HTMLElement = document.getElementById(id)!;
+
+    // const isSelected = includes(newItem.className, SELECTED);
+
+    // if (isSelected) {
+    //   const newSelectedPakeepsId = filter(selectedPakeepsId, pakeepId => pakeepId !== id);
+    //   newItem.classList.remove(SELECTED);
+
+    //   return handleSetSelectedPakeepsId(newSelectedPakeepsId);
+    // }
+
+    // const newSelectedPakeepsId = [...selectedPakeepsId, id];
+    // newItem.classList.add(SELECTED);
+
+    // return handleSetSelectedPakeepsId(newSelectedPakeepsId);
+  };
   const defaultPakeepListContainerProps = {
     folderProperty,
     folderId,
+    onClickOfPakeepElement,
     isSelecting
   };
 
@@ -114,7 +135,6 @@ const PakeepList: FC = () => {
     setIsSelecting,
     SELECTED
   };
-
   const isSelectoHidden = isPakeepHovering || isPakeepDragging;
 
   const cancelSelectedPakeepsId = () => {
@@ -133,29 +153,6 @@ const PakeepList: FC = () => {
   useKeyPressEvent('Escape', cancelSelectedPakeepsId);
   const isSomePakeepsSelected = selectedPakeepsId.length > 0;
 
-  const onClickOfPakeepElement = (id: PakeepIdType) => {
-    console.time('start');
-
-    if (!isSomePakeepsSelected) return setPakeepDialogId(id);
-
-    const newItem: HTMLElement = document.getElementById(id)!;
-
-    const isSelected = includes(newItem.className, SELECTED);
-
-    if (isSelected) {
-      const newSelectedPakeepsId = filter(selectedPakeepsId, pakeepId => pakeepId !== id);
-      newItem.classList.remove(SELECTED);
-
-      return handleSetSelectedPakeepsId(newSelectedPakeepsId);
-    }
-
-    const newSelectedPakeepsId = [...selectedPakeepsId, id];
-    newItem.classList.add(SELECTED);
-
-    handleSetSelectedPakeepsId(newSelectedPakeepsId);
-
-    return console.timeEnd('end');
-  };
   const handleClosePakeepDialog = () => setPakeepDialogId('');
 
   // const pakeepHoveringContextPropviderPropsValue = {
@@ -183,10 +180,11 @@ const PakeepList: FC = () => {
         {isFolderPropertyIsAll && <WrapperOfContainerOfPakeepList {...wrapperOfContainerOfPinnedPakeepListProps} />}
 
         <WrapperOfContainerOfPakeepList {...wrapperOfContainerOfAllPakeepListProps} />
-        {/* {!isSelectoHidden && <SelectofFPakeepListContainer {...selectoOfPakeepListContainerProps} />} */}
       </Grid>
+      {!isSelectoHidden && <SelectofFPakeepListContainer {...selectoOfPakeepListContainerProps} />}
+
       {/* </PakeepHoveringContext.Provider> */}
-      {/* <EditingDialogOfPakeepElement {...allPakeepDialogProps} /> */}
+      {!!pakeepDialogId && <EditingDialogOfPakeepElement {...allPakeepDialogProps} />}
     </>
   );
 };

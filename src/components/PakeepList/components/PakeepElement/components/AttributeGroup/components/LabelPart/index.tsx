@@ -1,11 +1,9 @@
-import React, { useState, FC, MouseEvent } from 'react';
+import React, { useState, FC, MouseEvent, memo } from 'react';
 import { nanoid } from 'nanoid';
 import { useDispatch } from 'react-redux';
 import { useFindIcon } from 'hooks/useFindIcon.hook';
-import { toChangeGlobalLabelItem } from 'store/modules/App/actions';
-import { ILabelElement } from 'store/modules/App/types';
+import {  toChangeTemporaryData } from 'store/modules/App/actions';
 import { useGetReversedCustomColor } from 'hooks/useGetReversedCustomColor.hook';
-import WrapperOfMenuOfLabelPart from './components/MenuWrapper';
 import LabelItem from './components/LabelItem';
 import { LabelPartPropsType } from './types';
 
@@ -18,12 +16,7 @@ const LabelPart: FC<LabelPartPropsType> = ({
 }) => {
   const dispatch = useDispatch();
 
-
-
   const customColor = useGetReversedCustomColor(notReversedCustomColor);
-
-
-
 
   return (
     <>
@@ -37,13 +30,17 @@ const LabelPart: FC<LabelPartPropsType> = ({
           variant,
           color,
           size: 'small',
-          key: nanoid()
+          key: id
         };
 
         const handleOpen = (e: MouseEvent<HTMLElement>) => {
           e.preventDefault();
+          const newTemporaryData = {
+            labelItem: { id },
+            defaultMenuProps: { mouseX: e.clientX, mouseY: e.clientY, customColor }
+          };
 
-          setMenuState({ mouseX: e.clientX, mouseY: e.clientY, id, variant, labelIconName, title, color });
+          dispatch(toChangeTemporaryData({ newTemporaryData }));
         };
 
         const labelItemProps = {
@@ -60,4 +57,4 @@ const LabelPart: FC<LabelPartPropsType> = ({
   );
 };
 
-export default LabelPart;
+export default memo( LabelPart);

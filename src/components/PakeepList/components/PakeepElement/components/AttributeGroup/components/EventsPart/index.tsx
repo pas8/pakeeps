@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, memo } from 'react';
 import PreviewEventList from './components/PreviewEventList';
 import compareFunc from 'compare-func';
 import { useFindCurrentEvents } from 'hooks/useFindCurrentEvents.hook';
@@ -17,7 +17,7 @@ const EventsPart: FC<EventsPartPropsType> = ({ events = [], customColor }) => {
   const currentEventsArr = useFindCurrentEvents(globalEvents, sortedEvents, timeFormat, timeAndDateFromat);
 
   if (!currentEventsArr) return null;
-  
+
   const allPreviewEventListProps = {
     customColor,
     validatedCurrentEvents: events,
@@ -27,4 +27,4 @@ const EventsPart: FC<EventsPartPropsType> = ({ events = [], customColor }) => {
   return <PreviewEventList {...allPreviewEventListProps} />;
 };
 
-export default EventsPart;
+export default memo(EventsPart);

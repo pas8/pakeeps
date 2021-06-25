@@ -10,6 +10,8 @@ const MenuesLayout: FC<MenuesLayoutPropsType> = ({ children }) => {
   const defaultMenuLayoutElemntProps = {
     ...defaultMenuProps
   };
+
+
   const labelChangindMenuProps = { ...defaultMenuLayoutElemntProps };
 
   const menuesComponentsArr = [{ Component: WrapperOfMenuOfLabelPart, props: labelChangindMenuProps }];

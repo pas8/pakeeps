@@ -64,6 +64,13 @@ export const toSetDrawerWidth = (payload: PayloadTypes[TypeNames.HANDLE_SET_DRAW
   payload
 });
 
+export const toChangeTemporaryData = (
+  payload: PayloadTypes[TypeNames.HANDLE_CHANGE_TEMPORARY_DATA]
+): AppActionTypes => ({
+  type: TypeNames.HANDLE_CHANGE_TEMPORARY_DATA,
+  payload
+});
+
 export const toAddNewGlobalLabel = (payload: PayloadTypes[TypeNames.HANDLE_ADD_NEW_GLOBAL_LABEL]): AppActionTypes => ({
   type: TypeNames.HANDLE_ADD_NEW_GLOBAL_LABEL,
   payload

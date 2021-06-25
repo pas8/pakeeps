@@ -23,7 +23,12 @@ import {
   getTimeFormat
 } from 'store/modules/Settings/selectors';
 import { useFilteredLabels } from 'hooks/useFilteredLabels.hook';
-import { toAddLabelToPakeep, toChangePakeepProperty, toDeleteLabelFromPakeep } from 'store/modules/App/actions';
+import {
+  toAddLabelToPakeep,
+  toChangePakeepProperty,
+  toChangeTemporaryData,
+  toDeleteLabelFromPakeep
+} from 'store/modules/App/actions';
 import { ColorType, EventsOfPakeepType, LabelIdType } from 'store/modules/App/types';
 import { usePakeepUtilsFunc } from 'hooks/usePakeepUtilsFunc.hook';
 import PakeepPropertyProvider from 'components/PakeepPropertyProviders';
@@ -93,6 +98,7 @@ const PakeepElement: FC<PakeepElementPropsType> = ({
   id,
   isPinIconShouldBeShownInPakeep = false,
   handlePinStatusPakeep,
+  onClickOfPakeepElement,
   isSelecting
 }) => {
   const dispatch = useDispatch();
@@ -127,6 +133,11 @@ const PakeepElement: FC<PakeepElementPropsType> = ({
     isLoaded: false
   };
   const [statusState, setStatusState] = useState<NullityStatusState>(nullityStatusState);
+
+  // useEffect(() => {
+  //   dispatch(toChangeTemporaryData({ newTemporaryData: { pakeep: { id, isHovering: statusState.isHovered } } }));
+  // }, [statusState.isHovered]);
+
   const [ref, { width: widthOfContainer }] = useMeasure<HTMLDivElement>();
 
   const handleSetIsHovering = (): void => {
@@ -164,6 +175,7 @@ const PakeepElement: FC<PakeepElementPropsType> = ({
   useEffect(() => setStatusState(state => ({ ...state, isLoaded: true })), []);
   // console.log(isSelecting)
   if (!statusState.isLoaded) return <SkeletonView />;
+  
   const AnimationElement = isUtilsHaveViewLikeInGoogleKeep ? Fade : Grow;
 
   const { handleDeleteNewLabel, handleAddNewLabel } = useLabelListFunc(id);
@@ -176,7 +188,7 @@ const PakeepElement: FC<PakeepElementPropsType> = ({
   //
   //
   //
-  //
+  //.
   const isSomePakeepsSelected = false;
 
   // const reversedColor = useGetReversedCustomColor(customColor);
@@ -195,13 +207,15 @@ const PakeepElement: FC<PakeepElementPropsType> = ({
   };
 
   const onMouseEnter = (e: any): void => {
-    console.log(e);
+    // console.log(e);
     // setIsPakeepHovering(!isSelecting);
     handleSetIsHovering();
+    // dispatch(toChangeTemporaryData({ newTemporaryData: { pakeep: { id, isHovering: true } } }));
   };
 
   const onMouseLeave = (): void => {
     // setIsPakeepHovering(false);
+
     handleSetIsUnHovering();
   };
   const className = 'selectoItem';
@@ -215,7 +229,7 @@ const PakeepElement: FC<PakeepElementPropsType> = ({
 
   const onClick = (): void => {
     console.log(id);
-    // onClickOfPakeepElement(id);
+    onClickOfPakeepElement(id);
   };
 
   const containerProps = {
@@ -252,19 +266,17 @@ const PakeepElement: FC<PakeepElementPropsType> = ({
     widthOfContainer,
     labelsListProps
   };
-
   return (
     <PakeepPropertyProvider.Provider value={{ events, labels }}>
-      {/* <PakeepHoveringContext.Consumer> */}
-      {/* {({ setIsPakeepHovering, onClickOfPakeepElement, isSomePakeepsSelected }) => { */}
-      {/* return ( */}
       <Grid {...pakeepGridContainerProps}>
         <MainDefaultPartOfPakeepElement {...containerProps}>
-          {/* <Grid>
-            <AttributeGroup {...attributeGroupProps} />
-          </Grid> */}
+          {!isDragging && (
+            <Grid>
+              <AttributeGroup {...attributeGroupProps} />
+            </Grid>
+          )}
 
-          {openIn && (
+          {openIn && !isDragging && (
             <AnimationElement in={openIn}>
               <Grid className={classes.iconsUtilsClass}>
                 <IconsUtils {...allIconsUtilsProps} />
@@ -273,9 +285,6 @@ const PakeepElement: FC<PakeepElementPropsType> = ({
           )}
         </MainDefaultPartOfPakeepElement>
       </Grid>
-      {/* ); */}
-      {/* }} */}
-      {/* </PakeepHoveringContext.Consumer> */}
     </PakeepPropertyProvider.Provider>
   );
 };

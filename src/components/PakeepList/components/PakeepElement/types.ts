@@ -19,9 +19,13 @@ export type PakeepElementPropsType = {
   id: PakeepIdType;
 } & TitleAndTextOfPakeepType &
   PropertyiesOfPakeepElement &
-  ColorOfPakeepType;
+  ColorOfPakeepType &
+  PropsFromPakeepListToPakeepElementType;
 
 export type NullityStatusState = {
   isHovered: boolean;
   isLoaded: boolean;
 };
+
+export type OnClickOfPakeepElementType = (id: PakeepIdType) => void;
+export type PropsFromPakeepListToPakeepElementType = { onClickOfPakeepElement: OnClickOfPakeepElementType };

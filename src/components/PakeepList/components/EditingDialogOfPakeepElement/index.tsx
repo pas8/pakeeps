@@ -120,7 +120,6 @@ const EditingDialogOfPakeepElement: FC<EditingDialogOfPakeepElementProps> = ({ i
     handleDeleteNewLabel, handleAddNewLabel
   };
 
-  console.log(iconsUtilsFunc);
 
   const iconsUtilsProps = {
     labelsListProps,

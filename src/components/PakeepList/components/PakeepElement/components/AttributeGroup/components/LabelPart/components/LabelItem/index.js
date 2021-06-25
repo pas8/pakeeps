@@ -1,7 +1,4 @@
 import { Chip, Grid, makeStyles } from '@material-ui/core';
-import PropTypes from 'prop-types';
-import { useIsColorDark } from 'hooks/useIsColorDark.hook';
-import { useThemeColors } from 'hooks/useThemeColors.hook';
 import { useAttributeGroupColor } from 'hooks/useAttributeGroupColor.hook';
 
 const useStyles = makeStyles(({ spacing }) => ({

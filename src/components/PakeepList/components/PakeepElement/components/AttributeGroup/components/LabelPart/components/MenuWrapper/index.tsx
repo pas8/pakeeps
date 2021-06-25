@@ -1,7 +1,7 @@
 import { useFindLabelItem } from 'hooks/useFindLabelItem.hook';
 import { useSnackbar } from 'notistack';
 import PropTypes from 'prop-types';
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { toChangeGlobalLabelItem } from 'store/modules/App/actions';
 import { getTemporaryDataOfLabelItem } from 'store/modules/App/selectors';
@@ -26,12 +26,21 @@ const WrapperOfMenuOfLabelPart: FC<WrapperOfMenuOfLabelPartPropsType> = ({ mouse
   };
 
   const nullityOfMenuState = {
-    mouseX,
-    mouseY,
-    ...findedLabel
+    iconName: '',
+    color: '',
+    variant: 'default' as 'default',
+    title: '',
+    mouseX: 0,
+    mouseY: 0,
+    id: ''
   };
 
   const [menuState, setMenuState] = useState<MenuStateOfChangingLabelMenuType>(nullityOfMenuState);
+
+  useEffect(() => {
+    setMenuState(state => ({ ...state, mouseX, mouseY, ...findedLabel }));
+  }, [mouseX, mouseY, findedLabel]);
+
 
   const handleClose = () => setMenuState(nullityOfMenuState);
 

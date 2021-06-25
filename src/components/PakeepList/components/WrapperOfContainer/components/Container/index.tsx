@@ -26,7 +26,7 @@ const PakeepListContainer: FC<PakeepListContainerPropsType> = ({
   onDragEnd,
   placeholderName,
   onDragStart,
-  columnOfPakeepListContainerProps
+  columnOfPakeepListContainerProps,
 }) => {
   const classes = useStyles();
 
@@ -65,7 +65,9 @@ const PakeepListContainer: FC<PakeepListContainerPropsType> = ({
 
   return (
     <DragDropContext onDragEnd={onDragEnd} onDragStart={onDragStart}>
-      <Grid container className={classes.containerClass}>{arr}</Grid>
+      <Grid container className={classes.containerClass}>
+        {arr}
+      </Grid>
     </DragDropContext>
   );
 };

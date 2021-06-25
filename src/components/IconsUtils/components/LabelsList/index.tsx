@@ -96,7 +96,7 @@ const LabelsList: FC<LabelsListPropsType> = ({
           {!isDefaultMenuListHidden && <DefaultMenuListOflabelList {...defaultMenuListOflabelListProps} />}
           <GlobalLabelListOflabelList {...globalLabelListProps} selectedLabels={labels} />
 
-          <WrapperOfMenuOfLabelPart {...wrapperOfMenuOfLabelPartProps} />
+          {/* <WrapperOfMenuOfLabelPart {...wrapperOfMenuOfLabelPartProps} /> */}
           <DialogOfAddNewLabel {...dialogOfAddNewLabelProps} />
         </Grid>
       )}

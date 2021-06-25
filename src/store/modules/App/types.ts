@@ -1,6 +1,6 @@
 import { pakeepPropertyiesNames } from 'models/denotation';
 import { CustomColorType, SelectedPakeepsIdType, SelectedPakeepsType } from 'models/types';
-import { $Keys, $Values, Brand } from 'utility-types';
+import { $Keys, $Values, Brand, Optional } from 'utility-types';
 import { TypeNames } from './enums';
 
 export type PayloadTypes = {
@@ -41,9 +41,15 @@ export type PayloadTypes = {
     property: PakeepPropertyType;
   };
   [TypeNames.HANDLE_CHANGE_THEME_COLORS]: { newThemeColors: DefaultThemeInterface };
+
+  [TypeNames.HANDLE_CHANGE_TEMPORARY_DATA]: { newTemporaryData: Optional<TemporaryDatatype> };
 };
 
 export type ActionsValueTypes = {
+  toChangeTemporaryData: {
+    type: typeof TypeNames.HANDLE_CHANGE_TEMPORARY_DATA;
+    payload: PayloadTypes[TypeNames.HANDLE_CHANGE_TEMPORARY_DATA];
+  };
   toChangePakeepCustomProperty: {
     type: typeof TypeNames.HANDLE_CHANGE_PAKEEP_CUSTOM_PROPERTY;
     payload: PayloadTypes[TypeNames.HANDLE_CHANGE_PAKEEP_CUSTOM_PROPERTY];
@@ -283,16 +289,7 @@ export interface AppInitialStateInteface {
   currentFolderPropertyIdx: number;
   drawerWidth: DrawerWidthType;
   isCancelSelectedPakeepsId: boolean;
-  temporaryData: {
-    defaultMenuProps: DefaultMenuPropsType;
-    pakeep: {
-      id: string;
-      isHovering: boolean;
-    };
-    labelItem: {
-      id: string;
-    };
-  };
+  temporaryData: TemporaryDatatype;
 }
 
 export type PakeepPropertyValueType = $Values<PakeepElementType>;
@@ -301,6 +298,17 @@ export type PakeepPropertyKeysType = $Keys<PakeepElementType>;
 export type PakeepPropertyType = { [Property in PakeepPropertyKeysType]?: PakeepPropertyValueType };
 
 export type OperateWOP<N> = (payload: N) => void;
+
+export type TemporaryDatatype = {
+  defaultMenuProps: DefaultMenuPropsType;
+  pakeep: {
+    id: string;
+    isHovering: boolean;
+  };
+  labelItem: {
+    id: string;
+  };
+};
 
 export type DefaultMenuPropsType = {
   customColor: CustomColorType;

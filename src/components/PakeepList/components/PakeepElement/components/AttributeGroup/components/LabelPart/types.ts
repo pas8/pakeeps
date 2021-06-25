@@ -8,13 +8,3 @@ export type LabelPartPropsType = {
   parentBackgrounColor: string;
   customColor: CustomColorType;
 };
-
-export type MenuStateType = {
-  mouseX: number;
-  mouseY: number;
-  id: string;
-  variant: string;
-  labelIconName: string;
-  title: string;
-  color: string;
-};

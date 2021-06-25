@@ -38,7 +38,7 @@ const PreviewEventList: FC<PreviewEventListPropsType> = ({ validatedCurrentEvent
 
           const eventItemProps = {
             icon,
-            // key,
+            key,
             title,
             customColor,
             value,

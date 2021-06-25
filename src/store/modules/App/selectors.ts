@@ -71,3 +71,7 @@ export const getDefaultMenuPropsOfTemporaryData = createSelector(
   defaultMenuProps => defaultMenuProps
 );
 
+export const getIsPakeepHovering = createSelector(
+  [({ app: { temporaryData } }: RootStoreType) => temporaryData.pakeep.isHovering],
+  isHovering => isHovering
+);

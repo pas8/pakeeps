@@ -27,7 +27,7 @@ const SelectofFPakeepListContainer: FC<SelectofFPakeepListContainerPropsType> = 
   useEffect(() => {
     setScrollOptions({
       container: scrollerRef.current,
-      throttleTime: 0,
+      throttleTime: 100,
       threshold: 100
     });
   }, []);
@@ -50,7 +50,7 @@ const SelectofFPakeepListContainer: FC<SelectofFPakeepListContainerPropsType> = 
     setSelectedIds(selectedIdArr);
   };
 
-  const onScroll = (e: OnScroll) => {
+  const onScroll = (e: any) => {
     scrollerRef.current.scrollBy(e.direction[0] * 10, e.direction[1] * 10);
   };
 
@@ -58,6 +58,7 @@ const SelectofFPakeepListContainer: FC<SelectofFPakeepListContainerPropsType> = 
     dragContainer: '.selectoContainer',
     selectableTargets: ['.selectoItem'],
     hitRate: 0,
+    //next
     // container: document?.body,
     selectByClick: false,
     selectFromInside: true,
@@ -73,7 +74,7 @@ const SelectofFPakeepListContainer: FC<SelectofFPakeepListContainerPropsType> = 
 
   return (
     <Grid className={classes.container}>
-      <Selecto {...selectoProps} />
+      <Selecto {...selectoProps} continueSelect />
     </Grid>
   );
 };
