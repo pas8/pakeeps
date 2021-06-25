@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { FC } from 'react';
+import { FC, memo } from 'react';
 import { useMakeDraggableArr } from 'hooks/useMakeDraggableArr.hook';
 import PakeepListContainer from './components/Container';
 import { NewOrderNamesReduceFunc, OnDragEndType, WrapperOfContainerOfPakeepListType } from './types';
@@ -24,10 +24,12 @@ const WrapperOfContainerOfPakeepList: FC<WrapperOfContainerOfPakeepListType> = (
   const onDragStart = () => setIsPakeepDragging(true);
 
   const onDragEnd: OnDragEndType = ({ destination, source }) => {
-    if (!destination) return;
-    if (destination.index === source.index) return;
-    setIsPakeepDragging(false);
+    var t0 = performance.now();
 
+    if (!destination) return;
+
+    // if (destination.index === source.index) return;
+    setIsPakeepDragging(false);
     const isSameColumn = source.droppableId === destination.droppableId;
     if (source.index === destination.index && isSameColumn) return;
 
@@ -115,6 +117,8 @@ const WrapperOfContainerOfPakeepList: FC<WrapperOfContainerOfPakeepListType> = (
     const filteredNewOrderArr = _.split(toSplitNewOrderString, uniqName);
 
     const newOrderNames = _.filter(filteredNewOrderArr, string => string !== toRemoveNameString);
+    var t1 = performance.now();
+    console.log('Call to doSomething took ' + (t1 - t0) + ' milliseconds.');
     return handleSetPakeepsOrderNames(newOrderNames);
   };
 
@@ -130,4 +134,4 @@ const WrapperOfContainerOfPakeepList: FC<WrapperOfContainerOfPakeepListType> = (
   return <PakeepListContainer {...allPakeepListContainerProps} />;
 };
 
-export default WrapperOfContainerOfPakeepList;
+export default memo(WrapperOfContainerOfPakeepList);

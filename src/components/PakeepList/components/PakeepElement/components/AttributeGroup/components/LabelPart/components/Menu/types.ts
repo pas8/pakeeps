@@ -2,12 +2,12 @@ import { ClosePopoverOrMenuType, CustomColorType } from 'models/types';
 import {
   HandleChangeLabelColorType,
   HandleChangeLabelIconNameType,
-  HandleChangeLabelTitleType
+  HandleChangeLabelTitleType,
+  MenuStateOfChangingLabelMenuType
 } from '../MenuWrapper/types';
-import { MenuStateType } from './../../types';
 
 export type MenuOfLabelPartPropsType = UseStylesType & {
-  menuState: MenuStateType;
+  menuState: MenuStateOfChangingLabelMenuType;
   handleDeleteLabel: Function;
   handleClose: ClosePopoverOrMenuType;
   handleChangeLabelColor: HandleChangeLabelColorType;

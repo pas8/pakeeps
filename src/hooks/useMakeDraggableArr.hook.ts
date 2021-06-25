@@ -41,5 +41,5 @@ export const useMakeDraggableArr = (
 
   const columns = pakeepsOrderNames.reduce(pakeepsReduceFunc, {});
 
-  return {columns, responsiveColumnOrder}
+  return { columns, responsiveColumnOrder };
 };

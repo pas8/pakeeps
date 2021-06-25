@@ -7,7 +7,7 @@ import { ILabelElement } from 'store/modules/App/types';
 import { useGetReversedCustomColor } from 'hooks/useGetReversedCustomColor.hook';
 import WrapperOfMenuOfLabelPart from './components/MenuWrapper';
 import LabelItem from './components/LabelItem';
-import { LabelPartPropsType, MenuStateType } from './types';
+import { LabelPartPropsType } from './types';
 
 const LabelPart: FC<LabelPartPropsType> = ({
   labels,
@@ -18,39 +18,12 @@ const LabelPart: FC<LabelPartPropsType> = ({
 }) => {
   const dispatch = useDispatch();
 
-  const handleChangeGlobalLabelItem = (changedLabel: ILabelElement) => {
-    dispatch(toChangeGlobalLabelItem({ changedLabel }));
-  };
+
 
   const customColor = useGetReversedCustomColor(notReversedCustomColor);
 
-  const nullityOfMenuState = {
-    mouseX: 0,
-    mouseY: 0,
-    id: '',
-    variant: '',
-    labelIconName: '',
-    title: '',
-    color: ''
-  };
 
-  const [menuState, setMenuState] = useState<MenuStateType>(nullityOfMenuState);
 
-  const handleClose = () => setMenuState(nullityOfMenuState);
-
-  const handleDeleteLabel = () => {
-    handleDeleteLabelFromPakeepFunc(pakeepId, menuState.id);
-    handleClose();
-  };
-
-  const wrapperOfMenuOfLabelPartProps = {
-    handleClose,
-    handleDeleteLabel,
-    menuState,
-    handleChangeGlobalLabelItem,
-    setMenuState,
-    customColor
-  };
 
   return (
     <>
@@ -69,6 +42,7 @@ const LabelPart: FC<LabelPartPropsType> = ({
 
         const handleOpen = (e: MouseEvent<HTMLElement>) => {
           e.preventDefault();
+
           setMenuState({ mouseX: e.clientX, mouseY: e.clientY, id, variant, labelIconName, title, color });
         };
 
@@ -82,7 +56,6 @@ const LabelPart: FC<LabelPartPropsType> = ({
 
         return <LabelItem {...labelItemProps} />;
       })}
-      <WrapperOfMenuOfLabelPart {...wrapperOfMenuOfLabelPartProps} />
     </>
   );
 };

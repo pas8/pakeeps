@@ -12,7 +12,8 @@ import {
   PakeepEventInteface,
   EventOfPakeepType,
   EventsOfPakeepType,
-  LabelIdType
+  LabelIdType,
+  ILabelElement
 } from 'store/modules/App/types';
 import { HandleSelectedPakeepsPropertyFuncType, PakeepPropertyiesType } from 'components/HeaderWhenActiveSelecto/types';
 import { IconsUtilsArrType, IconsUtilsFunctionType, NullityOfSlicedArrType } from 'components/IconsUtils/types';
@@ -106,3 +107,5 @@ export type UseLabelListFuncType = (id: PakeepIdType) => {
   handleAddNewLabel: HandleDeleteNewLabelType;
   handleDeleteNewLabel: HandleAddNewLabelType;
 };
+
+export type UseFindLabelItem = (labelId: LabelIdType) => ILabelElement;

@@ -1,5 +1,5 @@
 import { pakeepPropertyiesNames } from 'models/denotation';
-import { SelectedPakeepsIdType, SelectedPakeepsType } from 'models/types';
+import { CustomColorType, SelectedPakeepsIdType, SelectedPakeepsType } from 'models/types';
 import { $Keys, $Values, Brand } from 'utility-types';
 import { TypeNames } from './enums';
 
@@ -283,11 +283,16 @@ export interface AppInitialStateInteface {
   currentFolderPropertyIdx: number;
   drawerWidth: DrawerWidthType;
   isCancelSelectedPakeepsId: boolean;
-  // temproraryPakeepData: {
-  //   id: PakeepIdType;
-  //   labels: LabelsOfPakeepType;
-  //   events: EventsOfPakeepType;
-  // };
+  temporaryData: {
+    defaultMenuProps: DefaultMenuPropsType;
+    pakeep: {
+      id: string;
+      isHovering: boolean;
+    };
+    labelItem: {
+      id: string;
+    };
+  };
 }
 
 export type PakeepPropertyValueType = $Values<PakeepElementType>;
@@ -296,3 +301,12 @@ export type PakeepPropertyKeysType = $Keys<PakeepElementType>;
 export type PakeepPropertyType = { [Property in PakeepPropertyKeysType]?: PakeepPropertyValueType };
 
 export type OperateWOP<N> = (payload: N) => void;
+
+export type DefaultMenuPropsType = {
+  customColor: CustomColorType;
+} & CoordinatesType;
+
+export type CoordinatesType = {
+  mouseX: number;
+  mouseY: number;
+};

@@ -38,6 +38,7 @@ import WrapperOfAddDateToPakeep from './components/WrapperOfAddDateToPakeep';
 import { IconsUtilsArrDenotationNameType, IconsUtilsArrType, IconsUtilsPropsType } from './types';
 import { iconsUtilsArrDenotation } from './denotation';
 
+
 const IconsUtils: FC<IconsUtilsPropsType> = ({
   isAllIconsIsShown = true,
   handleSetEditTitleIsTrue,
@@ -133,7 +134,7 @@ const IconsUtils: FC<IconsUtilsPropsType> = ({
       isIconActive: !!labels?.length,
       menuComponents: LabelsList,
       badgeContent: labelBargeNumber,
-      menuComponentsProps: { ...labelsListProps,customColor }
+      menuComponentsProps: { ...labelsListProps, customColor }
     },
     {
       ...iconsUtilsArrDenotation.FAVORITE,

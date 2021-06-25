@@ -80,7 +80,7 @@ const MenuOfLabelPart: FC<MenuOfLabelPartPropsType> = ({
       onClick: handleChangeLabelVariant
     },
     {
-      title: menuState.labelIconName ? 'Change icon' : 'Add icon',
+      title: menuState.iconName ? 'Change icon' : 'Add icon',
       icon: CategoryOutlinedIcon,
       dynamicComponent: {
         component: PreparedColorExamples,
@@ -89,7 +89,7 @@ const MenuOfLabelPart: FC<MenuOfLabelPartPropsType> = ({
           isColor: false,
           customColumnElementProps: {
             handleChangeLabelIconName,
-            labelIconName: menuState.labelIconName,
+            labelIconName: menuState.iconName,
             color,
             customColor
           },
@@ -109,7 +109,7 @@ const MenuOfLabelPart: FC<MenuOfLabelPartPropsType> = ({
 
   const previewLabelProps = {
     ...menuState,
-    icon: useFindIcon(menuState.labelIconName),
+    icon: useFindIcon(menuState.iconName),
     label: menuState.title,
     size: 'small'
   };

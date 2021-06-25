@@ -32,7 +32,7 @@ const AttributeGroup: FC<AttributeGroupPropsType> = ({
   const isAttributeGroupOrderIsReverse = false;
 
   const partsArr = [
-    { Component: EventsPart, props: eventsPartProps },
+    // { Component: EventsPart, props: eventsPartProps },
     { Component: LabelPart, props: labelPartProps }
   ];
 

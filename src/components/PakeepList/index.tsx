@@ -134,6 +134,8 @@ const PakeepList: FC = () => {
   const isSomePakeepsSelected = selectedPakeepsId.length > 0;
 
   const onClickOfPakeepElement = (id: PakeepIdType) => {
+    console.time('start');
+
     if (!isSomePakeepsSelected) return setPakeepDialogId(id);
 
     const newItem: HTMLElement = document.getElementById(id)!;
@@ -150,15 +152,17 @@ const PakeepList: FC = () => {
     const newSelectedPakeepsId = [...selectedPakeepsId, id];
     newItem.classList.add(SELECTED);
 
-    return handleSetSelectedPakeepsId(newSelectedPakeepsId);
+    handleSetSelectedPakeepsId(newSelectedPakeepsId);
+
+    return console.timeEnd('end');
   };
   const handleClosePakeepDialog = () => setPakeepDialogId('');
 
-  const pakeepHoveringContextPropviderPropsValue = {
-    setIsPakeepHovering,
-    onClickOfPakeepElement,
-    isSomePakeepsSelected
-  };
+  // const pakeepHoveringContextPropviderPropsValue = {
+  //   setIsPakeepHovering,
+  //   onClickOfPakeepElement,
+  //   isSomePakeepsSelected
+  // };
   useEffect(() => {
     cancelSelectedPakeepsId();
   }, [currentFolderPropertyIdx]);
@@ -168,24 +172,23 @@ const PakeepList: FC = () => {
   }, [isSomePakeepsSelected]);
 
   const allPakeepDialogProps = {
-    id:pakeepDialogId,
+    id: pakeepDialogId,
     handleClosePakeepDialog
   };
 
   return (
     <>
-    <PakeepHoveringContext.Provider value={pakeepHoveringContextPropviderPropsValue}>
+      {/* <PakeepHoveringContext.Provider value={pakeepHoveringContextPropviderPropsValue}> */}
       <Grid ref={scrollerRef} className={'selectoContainer'}>
         {isFolderPropertyIsAll && <WrapperOfContainerOfPakeepList {...wrapperOfContainerOfPinnedPakeepListProps} />}
 
         <WrapperOfContainerOfPakeepList {...wrapperOfContainerOfAllPakeepListProps} />
-        {!isSelectoHidden && <SelectofFPakeepListContainer {...selectoOfPakeepListContainerProps} />}
+        {/* {!isSelectoHidden && <SelectofFPakeepListContainer {...selectoOfPakeepListContainerProps} />} */}
       </Grid>
-    </PakeepHoveringContext.Provider>
-    <EditingDialogOfPakeepElement {...allPakeepDialogProps} />
-
+      {/* </PakeepHoveringContext.Provider> */}
+      {/* <EditingDialogOfPakeepElement {...allPakeepDialogProps} /> */}
     </>
   );
 };
 
-export default PakeepList
+export default PakeepList;

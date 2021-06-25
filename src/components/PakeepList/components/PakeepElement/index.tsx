@@ -8,7 +8,6 @@ import { useMeasure } from 'react-use';
 import { connect, useDispatch, useSelector } from 'react-redux';
 import { getFilteredLabels, getGlobalEventsArr, getLabels } from 'store/modules/App/selectors';
 import { useGetReadableColor } from 'hooks/useGetReadableColor.hook';
-import IconsUtils from 'components/IconsUtils';
 import { useIsColorDark } from 'hooks/useIsColorDark.hook';
 import { PakeepHoveringContext } from 'components/PakeepList';
 import AttributeGroup from './components/AttributeGroup';
@@ -29,6 +28,9 @@ import { ColorType, EventsOfPakeepType, LabelIdType } from 'store/modules/App/ty
 import { usePakeepUtilsFunc } from 'hooks/usePakeepUtilsFunc.hook';
 import PakeepPropertyProvider from 'components/PakeepPropertyProviders';
 import { useLabelListFunc } from 'hooks/useLabelListFunc.hook';
+import dynamic from 'next/dynamic';
+
+const IconsUtils = dynamic(() => import('components/IconsUtils'), { loading: () => <p>loading</p> });
 
 const useStyles = makeStyles(({ spacing, transitions, palette }: Theme) => ({
   paperClass: ({ customColor, backgroundColor, color, isUtilsHaveViewLikeInGoogleKeep }: UseStylesProps) => ({
@@ -163,103 +165,117 @@ const PakeepElement: FC<PakeepElementPropsType> = ({
   // console.log(isSelecting)
   if (!statusState.isLoaded) return <SkeletonView />;
   const AnimationElement = isUtilsHaveViewLikeInGoogleKeep ? Fade : Grow;
-  
+
   const { handleDeleteNewLabel, handleAddNewLabel } = useLabelListFunc(id);
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  const isSomePakeepsSelected = false;
+
+  // const reversedColor = useGetReversedCustomColor(customColor);
+  const labelsListProps = {
+    handleDeleteNewLabel,
+    handleAddNewLabel
+  };
+  const attributeGroupProps = {
+    handleDeleteLabelFromPakeepFunc,
+    parentBackgrounColor: backgroundColor,
+    handleDeleteNewLabel,
+    customColor,
+    labels: filteredLabels!,
+    pakeepId: id,
+    events
+  };
+
+  const onMouseEnter = (e: any): void => {
+    console.log(e);
+    // setIsPakeepHovering(!isSelecting);
+    handleSetIsHovering();
+  };
+
+  const onMouseLeave = (): void => {
+    // setIsPakeepHovering(false);
+    handleSetIsUnHovering();
+  };
+  const className = 'selectoItem';
+
+  const isPinIconButtonHidden = !(
+    !isSomePakeepsSelected &&
+    !isSelecting &&
+    statusState.isHovered &&
+    isPinIconShouldBeShownInPakeep
+  );
+
+  const onClick = (): void => {
+    console.log(id);
+    // onClickOfPakeepElement(id);
+  };
+
+  const containerProps = {
+    title,
+    text,
+    isPinIconButtonHidden,
+    className: clsx(
+      classes.paperClass,
+      // isDragging && classes.isDraggingClass,
+      !isSomePakeepsSelected && statusState.isHovered && !isSelecting && classes.isHoveredClass,
+      isSelecting && classes.isSelectingClass,
+      isSomePakeepsSelected && classes.isSomePakeepsSelectedClass
+    ),
+    onClick,
+    onClickOfPinIconButton: handleSetIsPinnedPakeep,
+    customColor
+  };
+
+  const openIn = !isSomePakeepsSelected && statusState.isHovered && !isSelecting;
+
+  const pakeepGridContainerProps = {
+    onMouseEnter,
+    onMouseLeave,
+    ref,
+    className: clsx(classes.containerClass, className),
+    id,
+    open: true,
+    maxWidth: 'md'
+  };
+
+  const allIconsUtilsProps = {
+    ...iconsUtilsProps,
+    events,
+    widthOfContainer,
+    labelsListProps
+  };
+
   return (
     <PakeepPropertyProvider.Provider value={{ events, labels }}>
-      <PakeepHoveringContext.Consumer>
-        {({ setIsPakeepHovering, onClickOfPakeepElement, isSomePakeepsSelected }) => {
-      
+      {/* <PakeepHoveringContext.Consumer> */}
+      {/* {({ setIsPakeepHovering, onClickOfPakeepElement, isSomePakeepsSelected }) => { */}
+      {/* return ( */}
+      <Grid {...pakeepGridContainerProps}>
+        <MainDefaultPartOfPakeepElement {...containerProps}>
+          {/* <Grid>
+            <AttributeGroup {...attributeGroupProps} />
+          </Grid> */}
 
-          // const reversedColor = useGetReversedCustomColor(customColor);
-          const labelsListProps = {
-            handleDeleteNewLabel,
-            handleAddNewLabel
-          };
-          const attributeGroupProps = {
-            handleDeleteLabelFromPakeepFunc,
-            parentBackgrounColor: backgroundColor,
-            handleDeleteNewLabel,
-            customColor,
-            labels: filteredLabels!,
-            pakeepId: id,
-            events
-          };
-
-          const onMouseEnter = (): void => {
-            setIsPakeepHovering(!isSelecting);
-            handleSetIsHovering();
-          };
-
-          const onMouseLeave = (): void => {
-            setIsPakeepHovering(false);
-            handleSetIsUnHovering();
-          };
-          const className = 'selectoItem';
-
-          const isPinIconButtonHidden = !(
-            !isSomePakeepsSelected &&
-            !isSelecting &&
-            statusState.isHovered &&
-            isPinIconShouldBeShownInPakeep
-          );
-
-          const onClick = (): void => {
-            onClickOfPakeepElement(id);
-          };
-
-          const containerProps = {
-            title,
-            text,
-            isPinIconButtonHidden,
-            className: clsx(
-              classes.paperClass,
-              // isDragging && classes.isDraggingClass,
-              !isSomePakeepsSelected && statusState.isHovered && !isSelecting && classes.isHoveredClass,
-              isSelecting && classes.isSelectingClass,
-              isSomePakeepsSelected && classes.isSomePakeepsSelectedClass
-            ),
-            onClick,
-            onClickOfPinIconButton: handleSetIsPinnedPakeep,
-            customColor
-          };
-
-          const openIn = !isSomePakeepsSelected && statusState.isHovered && !isSelecting;
-
-          const pakeepGridContainerProps = {
-            onMouseEnter,
-            onMouseLeave,
-            ref,
-            className: clsx(classes.containerClass, className),
-            id,
-            open: true,
-            maxWidth: 'md'
-          };
-
-          const allIconsUtilsProps = {
-            ...iconsUtilsProps,
-            events,
-            widthOfContainer,
-            labelsListProps
-          };
-
-          return (
-            <Grid {...pakeepGridContainerProps}>
-              <MainDefaultPartOfPakeepElement {...containerProps}>
-                <Grid>
-                  <AttributeGroup {...attributeGroupProps} />
-                </Grid>
-
-                <AnimationElement in={openIn}>
-                  <Grid className={classes.iconsUtilsClass}>
-                    <IconsUtils {...allIconsUtilsProps} />
-                  </Grid>
-                </AnimationElement>
-              </MainDefaultPartOfPakeepElement>
-            </Grid>
-          );
-        }}
-      </PakeepHoveringContext.Consumer>
+          {openIn && (
+            <AnimationElement in={openIn}>
+              <Grid className={classes.iconsUtilsClass}>
+                <IconsUtils {...allIconsUtilsProps} />
+              </Grid>
+            </AnimationElement>
+          )}
+        </MainDefaultPartOfPakeepElement>
+      </Grid>
+      {/* ); */}
+      {/* }} */}
+      {/* </PakeepHoveringContext.Consumer> */}
     </PakeepPropertyProvider.Provider>
   );
 };

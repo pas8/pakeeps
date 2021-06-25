@@ -1,23 +1,46 @@
+import { useFindLabelItem } from 'hooks/useFindLabelItem.hook';
 import { useSnackbar } from 'notistack';
 import PropTypes from 'prop-types';
-import { FC } from 'react';
+import { FC, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { toChangeGlobalLabelItem } from 'store/modules/App/actions';
+import { getTemporaryDataOfLabelItem } from 'store/modules/App/selectors';
+import { ILabelElement } from 'store/modules/App/types';
 import MenuOfLabelPart from '../Menu';
 import {
   HandleChangeLabelColorType,
   HandleChangeLabelIconNameType,
   HandleChangeLabelTitleType,
+  MenuStateOfChangingLabelMenuType,
   WrapperOfMenuOfLabelPartPropsType
 } from './types';
 
-const WrapperOfMenuOfLabelPart: FC<WrapperOfMenuOfLabelPartPropsType> = ({
-  handleClose,
-  handleDeleteLabel,
-  menuState,
-  handleChangeGlobalLabelItem,
-  setMenuState,
-  isThisMenuIsSecond,
-  customColor
-}) => {
+const WrapperOfMenuOfLabelPart: FC<WrapperOfMenuOfLabelPartPropsType> = ({ mouseX, mouseY, customColor }) => {
+  const dispatch = useDispatch();
+
+  const { id } = useSelector(getTemporaryDataOfLabelItem);
+  const findedLabel = useFindLabelItem(id);
+
+  const handleChangeGlobalLabelItem = (changedLabel: ILabelElement) => {
+    dispatch(toChangeGlobalLabelItem({ changedLabel }));
+  };
+
+  const nullityOfMenuState = {
+    mouseX,
+    mouseY,
+    ...findedLabel
+  };
+
+  const [menuState, setMenuState] = useState<MenuStateOfChangingLabelMenuType>(nullityOfMenuState);
+
+  const handleClose = () => setMenuState(nullityOfMenuState);
+
+  const handleDeleteLabel = () => {
+    // handleDeleteLabelFromPakeepFunc(pakeepId, menuState.id);
+    console.log('should be dleted');
+    handleClose();
+  };
+
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
   const handleChangeLabelColor: HandleChangeLabelColorType = color => setMenuState(state => ({ ...state, color }));
@@ -38,7 +61,7 @@ const WrapperOfMenuOfLabelPart: FC<WrapperOfMenuOfLabelPartPropsType> = ({
   const onClickOfSaveButton = () => {
     const newLabel = {
       id: menuState.id,
-      iconName: menuState.labelIconName,
+      iconName: menuState.iconName,
       title: menuState.title,
       color: menuState.color,
       variant: menuState.variant
@@ -60,7 +83,7 @@ const WrapperOfMenuOfLabelPart: FC<WrapperOfMenuOfLabelPartPropsType> = ({
     handleChangeLabelIconName,
     handleChangeLabelTitle,
     onClickOfSaveButton,
-    isThisMenuIsSecond,
+    isThisMenuIsSecond: true,
     buttonSaveState: true,
     customColor
   };
