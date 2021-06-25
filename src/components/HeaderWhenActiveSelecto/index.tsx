@@ -9,7 +9,6 @@ import { useGetReadableColor } from 'hooks/useGetReadableColor.hook';
 import { usePropertiesToUtils } from 'hooks/usePropertiesToUtils.hook';
 import IconButtonByPas from 'components/IconButton';
 import IconsUtils from 'components/IconsUtils';
-import { SelectedLabels } from 'components/NewPakeep';
 import { useFindSelectedLabels } from 'hooks/useFindSelectedLabels.hook';
 import { useGetIsColorDefault } from 'hooks/useGetIsColorDefault.hook';
 import { useThemeColors } from 'hooks/useThemeColors.hook';
@@ -27,6 +26,8 @@ import {
   HeaderWhenActiveSelectoPropsType,
   PakeepPropertyiesType
 } from './types';
+import PakeepPropertyProvider from 'components/PakeepPropertyProviders';
+import { IconsUtilsArrDenotationNameType } from 'components/IconsUtils/types';
 
 const useStyles = makeStyles(({ spacing }) => ({
   containerClass: {
@@ -36,7 +37,6 @@ const useStyles = makeStyles(({ spacing }) => ({
 
 const { TOOGLE, VALUE } = VariantsOfropertiesToUtils;
 
-
 const HeaderWhenActiveSelecto: FC<HeaderWhenActiveSelectoPropsType> = ({ selectedPakeeps, selectedPakeepsId }) => {
   const dispatch = useDispatch();
 
@@ -45,7 +45,7 @@ const HeaderWhenActiveSelecto: FC<HeaderWhenActiveSelectoPropsType> = ({ selecte
   const [ref, { width: widthOfContainer }] = useMeasure();
   const [primaryColor] = useThemeColors();
 
-  const [customColor] = useGetReadableColor(primaryColor);
+  const [customColor] = useGetReadableColor(primaryColor!);
 
   const cancelSelectedPakeepsId = () => {
     dispatch(toCancelSelectingStatus({ isCancelSelectedPakeepsId: true }));
@@ -58,7 +58,6 @@ const HeaderWhenActiveSelecto: FC<HeaderWhenActiveSelectoPropsType> = ({ selecte
     );
     cancelSelectedPakeepsId();
   };
-
 
   const isColorDefault = useGetIsColorDefault(selectedPakeeps, 'color');
   const isBackgroundColorDefault = useGetIsColorDefault(selectedPakeeps, 'backgroundColor');
@@ -95,7 +94,7 @@ const HeaderWhenActiveSelecto: FC<HeaderWhenActiveSelectoPropsType> = ({ selecte
     });
   };
 
-  const selectedLabels = useFindSelectedLabels(selectedPakeeps);
+  const labels = useFindSelectedLabels(selectedPakeeps);
 
   const labelsListProps = {
     isDefaultMenuListHidden: true,
@@ -103,13 +102,20 @@ const HeaderWhenActiveSelecto: FC<HeaderWhenActiveSelectoPropsType> = ({ selecte
     handleDeleteNewLabel
   };
 
-  const arrOfButtonNamesWhichSholudBeHidden = ['picture', 'edit', 'checkbox', 'width', 'share'];
+  const arrOfButtonNamesWhichSholudBeHidden: IconsUtilsArrDenotationNameType[] = [
+    'picture',
+    'edit',
+    'checkbox',
+    'width',
+    'share'
+  ];
 
   const iconsUtilsProps = {
+    id: 'HeaderWhenActiveSelecto',
     widthOfContainer,
     isBackgroundColorDefault,
     isColorDefault,
-    labels: selectedLabels,
+    labels,
     iconsCloser: true,
     customColor,
     isUtilsReversed: true,
@@ -119,7 +125,7 @@ const HeaderWhenActiveSelecto: FC<HeaderWhenActiveSelectoPropsType> = ({ selecte
   };
 
   return (
-    <SelectedLabels.Provider value={{ selectedLabels }}>
+    <PakeepPropertyProvider.Provider value={{ labels, events: [] }}>
       <Slide in={true} direction={'down'}>
         <AppBar ref={ref} className={classes.containerClass}>
           <Grid container>
@@ -135,10 +141,8 @@ const HeaderWhenActiveSelecto: FC<HeaderWhenActiveSelectoPropsType> = ({ selecte
           </Grid>
         </AppBar>
       </Slide>
-    </SelectedLabels.Provider>
+    </PakeepPropertyProvider.Provider>
   );
 };
-
-
 
 export default HeaderWhenActiveSelecto;

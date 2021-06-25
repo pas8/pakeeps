@@ -1,7 +1,6 @@
-import { RootStoreType } from "models/interfaces";
-import { useSelector } from "react-redux";
+import { RootStoreType } from 'models/types';
+import { useSelector } from 'react-redux';
+import { createSelector } from 'reselect';
 
-export const useColorSelector = () => {
-  const color = useSelector(({ color }: RootStoreType) => color);
-  return color;
-};
+
+export const getColor = createSelector([({ color }: RootStoreType) => color], color => color);

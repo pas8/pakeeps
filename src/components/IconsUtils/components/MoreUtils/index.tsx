@@ -1,11 +1,13 @@
-import { Grid, makeStyles, MenuItem, Typography } from '@material-ui/core';
+import { Grid, makeStyles, Menu, MenuItem, Typography } from '@material-ui/core';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { nanoid } from 'nanoid';
 import { useThemeColors } from 'hooks/useThemeColors.hook';
 import { useAlpha } from 'hooks/useAlpha.hook';
-import { FC } from 'react';
+import { FC, MouseEvent, MouseEventHandler, ReactNode, useState } from 'react';
 import { MoreUtilsPropsType, UseStylesOfMoreUtilsType } from './types';
+import { ClosePopoverOrMenuType } from 'models/types';
+import { Optional } from 'utility-types';
 
 const useStyles = makeStyles(({ spacing }) => ({
   itemGrid: {
@@ -23,39 +25,93 @@ const useStyles = makeStyles(({ spacing }) => ({
       borderRight: 0,
       borderLeft: 0
     }
+  }),
+  menuContainer: ({ color }: UseStylesOfMoreUtilsType) => ({
+    '& > div': {
+      backgroundColor: color
+    }
   })
 }));
 
 const MoreUtils: FC<MoreUtilsPropsType> = ({ slicedArrAfter, customColor }) => {
+  const nullityOfAnchorEl = {
+    name: '',
+    menuComponentsProps: {},
+    currentTarget: null,
+    MenuComponents: null as ReactNode | any
+  };
+
+  const [anchorElState, setAnchorElState] = useState<Optional<typeof nullityOfAnchorEl>>(nullityOfAnchorEl);
+
+  const { MenuComponents, menuComponentsProps } = anchorElState;
+
+  const handleMenuClose: ClosePopoverOrMenuType = () => setAnchorElState(nullityOfAnchorEl);
+
+  const classes = useStyles({ color: customColor.isUseDefault ? '' : customColor.bgUnHover, hoverColor: '' });
   return (
     <>
-      {slicedArrAfter.map(({  icon: Icon, isIconActive, onClick, ActiveIcon,popoverText }) => {
-        const [primaryColor, , maxEmphasisColor, highEmphasisColor] = useThemeColors();
-        const color = (
-          customColor.isUseDefault
-            ? isIconActive
-              ? primaryColor
-              : highEmphasisColor
-            : isIconActive
-            ? customColor.bgUnHover
-            : customColor.bgHover
-        )!;
+      {slicedArrAfter.map(
+        ({
+          name,
+          icon: Icon,
+          isIconActive,
+          onClick: onCustomClick,
+          ActiveIcon,
+          popoverText,
+          menuComponents: MenuComponents,
+          menuComponentsProps
+        }) => {
+          const [primaryColor, , maxEmphasisColor, highEmphasisColor] = useThemeColors();
+          const color = (
+            customColor.isUseDefault
+              ? isIconActive
+                ? primaryColor
+                : highEmphasisColor
+              : isIconActive
+              ? customColor.bgUnHover
+              : customColor.bgHover
+          )!;
 
-        const hoverColor = (customColor.isUseDefault && !isIconActive ? maxEmphasisColor : '')!;
-        const classes = useStyles({ color, hoverColor });
-        //
+          const hoverColor = (customColor.isUseDefault && !isIconActive ? maxEmphasisColor : '')!;
+          const classes = useStyles({ color, hoverColor });
+          //
 
-        return (
-          <MenuItem disableGutters onClick={onClick} key={nanoid()} className={classes.container}>
-            <Grid className={clsx(classes.itemGrid)} container>
-              {isIconActive ? <ActiveIcon /> : <Icon />}
-              <Grid item className={classes.menuText}>
-                <Typography variant={'subtitle2'}>{popoverText}</Typography>
+          const handleMenuOpen: MouseEventHandler<HTMLLIElement> = ({ currentTarget }) => {
+
+            setAnchorElState(state => ({
+              ...state,
+              currentTarget,
+              handleMenuClose,
+              menuComponentsProps,
+              MenuComponents,
+              name,
+              isMenuOpen: true
+            }));
+          };
+          const onClick = onCustomClick ? onCustomClick : handleMenuOpen;
+
+          return (
+            <MenuItem disableGutters key={nanoid()} className={classes.container} onClick={onClick}>
+              <Grid className={clsx(classes.itemGrid)} container>
+                {isIconActive && !!ActiveIcon ? <ActiveIcon /> : <Icon />}
+                <Grid item className={classes.menuText}>
+                  <Typography variant={'subtitle2'}>{popoverText}</Typography>
+                </Grid>
               </Grid>
-            </Grid>
-          </MenuItem>
-        );
-      })}
+            </MenuItem>
+          );
+        }
+      )}
+
+      <Menu
+        anchorEl={anchorElState.currentTarget}
+        keepMounted
+        onClose={handleMenuClose}
+        open={!!anchorElState.name}
+        // className={classes.menuContainer}
+      >
+        {MenuComponents && <MenuComponents {...menuComponentsProps} onMenuClose={handleMenuClose} />}
+      </Menu>
     </>
   );
 };

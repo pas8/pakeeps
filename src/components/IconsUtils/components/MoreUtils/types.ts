@@ -1,3 +1,4 @@
+import { IconsUtilsArrType } from 'components/IconsUtils/types';
 import { CustomColorType, IconType } from 'models/types';
 
 export type UseStylesOfMoreUtilsType = {
@@ -6,12 +7,6 @@ export type UseStylesOfMoreUtilsType = {
 };
 
 export type MoreUtilsPropsType = {
-  slicedArrAfter: {
-    popoverText: string;
-    icon: IconType;
-    isIconActive?: boolean;
-    onClick: () => void;
-    ActiveIcon: IconType;
-  }[];
+  slicedArrAfter: IconsUtilsArrType
   customColor: CustomColorType;
 };

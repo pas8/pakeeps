@@ -86,7 +86,7 @@ const useStyles = makeStyles(({spacing, palette,transitions}) => ({
   }
 }));
 
-export const SelectedLabels = createContext();
+
 
 const NewPaKeep = ({ operateToAddNewPakeep }) => {
   const nulittyState = {
@@ -265,9 +265,9 @@ const NewPaKeep = ({ operateToAddNewPakeep }) => {
         )}
 
         {!statusState.isUtilsHidden && (
-          <SelectedLabels.Provider value={{ selectedLabels: state.labels }}>
+          <Labels.Provider value={{ selectedLabels: state.labels }}>
             <NewPakeepUtils {...newPakeepUtils} />
-          </SelectedLabels.Provider>
+          </Labels.Provider>
         )}
 
         <EyeIconButton {...eyeIconButtonProps} />

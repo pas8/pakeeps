@@ -37,7 +37,7 @@ const useStyles = makeStyles(({ spacing, palette }) => ({
       // background: customColor && !useIsColorDark( customColor?.bgUnHover) ?grey[50] :  customColor?.bgUnHover,
 
       '& .MuiDialogTitle-root, .MuiStepper-root,.MuiDialogActions-root': {
-        background: customColor.isUseDefault ? '' : customColor?.bgUnHover,
+        background: customColor?.isUseDefault ? '' : customColor?.bgUnHover,
         color: customColor?.hover
       },
       '& .MuiStepper-root': {

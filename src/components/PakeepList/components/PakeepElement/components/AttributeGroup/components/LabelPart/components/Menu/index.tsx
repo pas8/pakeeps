@@ -25,7 +25,7 @@ const useStyles = makeStyles(({ spacing }) => ({
     const colorOfThisMenuIsSecond = '#484848';
     return {
       padding: spacing(0, 0, 0, 0),
-      background: !customColor.isUseDefault ? customColor?.bgHover : isThisMenuIsSecond ? colorOfThisMenuIsSecond : ''
+      background: !customColor?.isUseDefault ? customColor?.bgHover : isThisMenuIsSecond ? colorOfThisMenuIsSecond : ''
     };
   }
 }));

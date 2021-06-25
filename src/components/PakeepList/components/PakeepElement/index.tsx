@@ -15,7 +15,6 @@ import AttributeGroup from './components/AttributeGroup';
 import SkeletonView from './components/SkeletonView';
 import MainDefaultPartOfPakeepElement from './components/MainDefaultPart';
 import MainDialogPartOfPakeepElement from '../EditingDialogOfPakeepElement';
-import { SelectedLabels } from 'components/NewPakeep';
 import { useGetReversedCustomColor } from 'hooks/useGetReversedCustomColor.hook';
 import { useThemeColors } from 'hooks/useThemeColors.hook';
 import { NullityStatusState, PakeepElementPropsType, UseStylesProps } from './types';
@@ -28,8 +27,8 @@ import { useFilteredLabels } from 'hooks/useFilteredLabels.hook';
 import { toAddLabelToPakeep, toChangePakeepProperty, toDeleteLabelFromPakeep } from 'store/modules/App/actions';
 import { ColorType, EventsOfPakeepType, LabelIdType } from 'store/modules/App/types';
 import { usePakeepUtilsFunc } from 'hooks/usePakeepUtilsFunc.hook';
-
-export const Events = createContext<{ events: EventsOfPakeepType | [] }>({ events: [] });
+import PakeepPropertyProvider from 'components/PakeepPropertyProviders';
+import { useLabelListFunc } from 'hooks/useLabelListFunc.hook';
 
 const useStyles = makeStyles(({ spacing, transitions, palette }: Theme) => ({
   paperClass: ({ customColor, backgroundColor, color, isUtilsHaveViewLikeInGoogleKeep }: UseStylesProps) => ({
@@ -164,111 +163,104 @@ const PakeepElement: FC<PakeepElementPropsType> = ({
   // console.log(isSelecting)
   if (!statusState.isLoaded) return <SkeletonView />;
   const AnimationElement = isUtilsHaveViewLikeInGoogleKeep ? Fade : Grow;
-
+  
+  const { handleDeleteNewLabel, handleAddNewLabel } = useLabelListFunc(id);
   return (
-    <SelectedLabels.Provider value={{ selectedLabels: labels }}>
-      <Events.Provider value={{ events }}>
-        <PakeepHoveringContext.Consumer>
-          {({ setIsPakeepHovering, onClickOfPakeepElement, isSomePakeepsSelected }) => {
-            const handleDeleteNewLabel = (labelIdWhichShouldBeDeleted: LabelIdType): void => {
-              dispatch(toDeleteLabelFromPakeep({ currentPakeepId: id, labelIdWhichShouldBeDeleted }));
-            };
+    <PakeepPropertyProvider.Provider value={{ events, labels }}>
+      <PakeepHoveringContext.Consumer>
+        {({ setIsPakeepHovering, onClickOfPakeepElement, isSomePakeepsSelected }) => {
+      
 
-            const handleAddNewLabel = (labelIdWhichShouldBeAdded: LabelIdType): void => {
-              dispatch(toAddLabelToPakeep({ currentPakeepId: id, labelIdWhichShouldBeAdded }));
-            };
-            // const reversedColor = useGetReversedCustomColor(customColor);
+          // const reversedColor = useGetReversedCustomColor(customColor);
+          const labelsListProps = {
+            handleDeleteNewLabel,
+            handleAddNewLabel
+          };
+          const attributeGroupProps = {
+            handleDeleteLabelFromPakeepFunc,
+            parentBackgrounColor: backgroundColor,
+            handleDeleteNewLabel,
+            customColor,
+            labels: filteredLabels!,
+            pakeepId: id,
+            events
+          };
 
-            const labelsListProps = {
-              handleAddNewLabel,
-              handleDeleteNewLabel
-            };
-            const attributeGroupProps = {
-              handleDeleteLabelFromPakeepFunc,
-              parentBackgrounColor: backgroundColor,
-              handleDeleteNewLabel,
-              customColor,
-              labels: filteredLabels,
-              pakeepId: id,
-              events
-            };
+          const onMouseEnter = (): void => {
+            setIsPakeepHovering(!isSelecting);
+            handleSetIsHovering();
+          };
 
-            const onMouseEnter = (): void => {
-              setIsPakeepHovering(!isSelecting);
-              handleSetIsHovering();
-            };
+          const onMouseLeave = (): void => {
+            setIsPakeepHovering(false);
+            handleSetIsUnHovering();
+          };
+          const className = 'selectoItem';
 
-            const onMouseLeave = (): void => {
-              setIsPakeepHovering(false);
-              handleSetIsUnHovering();
-            };
-            const className = 'selectoItem';
+          const isPinIconButtonHidden = !(
+            !isSomePakeepsSelected &&
+            !isSelecting &&
+            statusState.isHovered &&
+            isPinIconShouldBeShownInPakeep
+          );
 
-            const isPinIconButtonHidden = !(
-              !isSomePakeepsSelected &&
-              !isSelecting &&
-              statusState.isHovered &&
-              isPinIconShouldBeShownInPakeep
-            );
+          const onClick = (): void => {
+            onClickOfPakeepElement(id);
+          };
 
-            const onClick = (): void => {
-              onClickOfPakeepElement(id);
-            };
+          const containerProps = {
+            title,
+            text,
+            isPinIconButtonHidden,
+            className: clsx(
+              classes.paperClass,
+              // isDragging && classes.isDraggingClass,
+              !isSomePakeepsSelected && statusState.isHovered && !isSelecting && classes.isHoveredClass,
+              isSelecting && classes.isSelectingClass,
+              isSomePakeepsSelected && classes.isSomePakeepsSelectedClass
+            ),
+            onClick,
+            onClickOfPinIconButton: handleSetIsPinnedPakeep,
+            customColor
+          };
 
-            const containerProps = {
-              title,
-              text,
-              isPinIconButtonHidden,
-              className: clsx(
-                classes.paperClass,
-                // isDragging && classes.isDraggingClass,
-                !isSomePakeepsSelected && statusState.isHovered && !isSelecting && classes.isHoveredClass,
-                isSelecting && classes.isSelectingClass,
-                isSomePakeepsSelected && classes.isSomePakeepsSelectedClass
-              ),
-              onClick,
-              onClickOfPinIconButton: handleSetIsPinnedPakeep,
-              customColor
-            };
+          const openIn = !isSomePakeepsSelected && statusState.isHovered && !isSelecting;
 
-            const openIn = !isSomePakeepsSelected && statusState.isHovered && !isSelecting;
+          const pakeepGridContainerProps = {
+            onMouseEnter,
+            onMouseLeave,
+            ref,
+            className: clsx(classes.containerClass, className),
+            id,
+            open: true,
+            maxWidth: 'md'
+          };
 
-            const pakeepGridContainerProps = {
-              onMouseEnter,
-              onMouseLeave,
-              ref,
-              className: clsx(classes.containerClass, className),
-              id,
-              open: true,
-              maxWidth: 'md'
-            };
+          const allIconsUtilsProps = {
+            ...iconsUtilsProps,
+            events,
+            widthOfContainer,
+            labelsListProps
+          };
 
-            const allIconsUtilsProps = {
-              ...iconsUtilsProps,
-              events,
-              widthOfContainer,
-              labelsListProps
-            };
+          return (
+            <Grid {...pakeepGridContainerProps}>
+              <MainDefaultPartOfPakeepElement {...containerProps}>
+                <Grid>
+                  <AttributeGroup {...attributeGroupProps} />
+                </Grid>
 
-            return (
-              <Grid {...pakeepGridContainerProps}>
-                <MainDefaultPartOfPakeepElement {...containerProps}>
-                  <Grid>
-                    <AttributeGroup {...attributeGroupProps} />
+                <AnimationElement in={openIn}>
+                  <Grid className={classes.iconsUtilsClass}>
+                    <IconsUtils {...allIconsUtilsProps} />
                   </Grid>
-
-                  <AnimationElement in={openIn}>
-                    <Grid className={classes.iconsUtilsClass}>
-                      <IconsUtils {...allIconsUtilsProps} />
-                    </Grid>
-                  </AnimationElement>
-                </MainDefaultPartOfPakeepElement>
-              </Grid>
-            );
-          }}
-        </PakeepHoveringContext.Consumer>
-      </Events.Provider>
-    </SelectedLabels.Provider>
+                </AnimationElement>
+              </MainDefaultPartOfPakeepElement>
+            </Grid>
+          );
+        }}
+      </PakeepHoveringContext.Consumer>
+    </PakeepPropertyProvider.Provider>
   );
 };
 

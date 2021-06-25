@@ -16,7 +16,6 @@ const LabelPart: FC<LabelPartPropsType> = ({
   parentBackgrounColor,
   customColor: notReversedCustomColor
 }) => {
-  if (!labels) return null;
   const dispatch = useDispatch();
 
   const handleChangeGlobalLabelItem = (changedLabel: ILabelElement) => {

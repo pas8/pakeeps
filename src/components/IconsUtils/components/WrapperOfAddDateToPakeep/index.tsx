@@ -1,4 +1,4 @@
-import { Events } from 'components/PakeepList/components/PakeepElement';
+import PakeepPropertyProvider from 'components/PakeepPropertyProviders';
 import { useCurrentEvents } from 'hooks/useCurrentEvents.hook';
 import { useFindCurrentEvents } from 'hooks/useFindCurrentEvents.hook';
 import { HandlePakeepEventsType } from 'models/types';
@@ -21,7 +21,7 @@ const WrapperOfAddDateToPakeep: FC<WrapperOfAddDateToPakeepPropsType> = props =>
   };
 
   return (
-    <Events.Consumer>
+    <PakeepPropertyProvider.Consumer>
       {({ events }) => {
         const currentEventsArr = useFindCurrentEvents(globalEvents, events, timeFormat, timeAndDateFromat);
 
@@ -32,7 +32,7 @@ const WrapperOfAddDateToPakeep: FC<WrapperOfAddDateToPakeepPropsType> = props =>
         };
         return <AddDateToPakeep {...addDateToPakeepProps} />;
       }}
-    </Events.Consumer>
+    </PakeepPropertyProvider.Consumer>
   );
 };
 

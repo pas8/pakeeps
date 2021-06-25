@@ -1,4 +1,4 @@
-import { CustomColorType } from 'models/types';
+import { CustomColorType, IconType } from 'models/types';
 import { ReactNode } from 'react';
 import {
   EventsOfPakeepType,
@@ -9,7 +9,6 @@ import {
 } from 'store/modules/App/types';
 import { $Values } from 'utility-types';
 import { iconsUtilsArrDenotation } from './denotation';
-
 
 export type IconsUtilsFunctionKeyNameType =
   | 'handleSetBookmarkPakeep'
@@ -61,8 +60,8 @@ export type IconUtilElementOptionalPropertyiesType = {
   isIconActive?: boolean;
   menuComponentsProps?: object;
   menuComponents?: ReactNode;
-  ActiveIcon?: ReactNode;
-  onClick?: Function;
+  ActiveIcon?: IconType;
+  onClick?: ()=> void;
   popoverText?: string;
   activePopoverText?: string;
   badgeContent?: number | any;
@@ -71,7 +70,7 @@ export type IconUtilElementOptionalPropertyiesType = {
   hidden?: boolean;
 };
 
-export type IconUtilElementType = { icon: ReactNode } & IconUtilElementOptionalPropertyiesType &
+export type IconUtilElementType = { icon: IconType } & IconUtilElementOptionalPropertyiesType &
   IconsUtilsArrDenotationType;
 
 export type IconsUtilsArrType = IconUtilElementType[];

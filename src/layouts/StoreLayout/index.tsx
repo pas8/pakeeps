@@ -1,4 +1,4 @@
-import { LayoutChildrenType } from 'models/interfaces';
+import { LayoutChildrenType } from 'models/types';
 import PropTypes from 'prop-types';
 import { Provider as ReduxProvider } from 'react-redux';
 import store from 'store';

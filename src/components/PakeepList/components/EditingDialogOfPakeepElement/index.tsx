@@ -15,6 +15,7 @@ import { IconsUtilsArrDenotationNameType } from 'components/IconsUtils/types';
 // import AttributeGroup from '../PakeepElement/components/AttributeGroup';
 
 import { EditingDialogOfPakeepElementProps, onChangeType, UseStylesInteface } from './types';
+import { useLabelListFunc } from 'hooks/useLabelListFunc.hook';
 
 const useStyles = makeStyles(({ typography: { h4, h6 }, spacing }) => {
   return {
@@ -64,8 +65,10 @@ const EditingDialogOfPakeepElement: FC<EditingDialogOfPakeepElementProps> = ({ i
     setState({ title, text, backgroundColor, color });
   }, [findedPakeep]);
 
-  const [customColor, isBackgroundColorDefault, isColorDefault] = useGetReadableColor(backgroundColor, color);
-
+  const [customColor, isBackgroundColorDefault, isColorDefault] = useGetReadableColor(
+    state.backgroundColor,
+    state.color
+  );
   const correctBackgroundColor = state.backgroundColor;
   const correctColor = customColor.hover;
 
@@ -103,15 +106,24 @@ const EditingDialogOfPakeepElement: FC<EditingDialogOfPakeepElementProps> = ({ i
 
   const iconsUtilsFunc = usePakeepUtilsFunc(id);
 
-  const handleSetBackgroundColorPakeep = (backgroundColor:string) => {
+  const handleSetBackgroundColorPakeep = (backgroundColor: string) => {
     setState(state => ({ ...state, backgroundColor }));
   };
-  const handleSetColorPakeep = (color:string) => {
+  const handleSetColorPakeep = (color: string) => {
     setState(state => ({ ...state, color }));
   };
-  
+
+  const { handleDeleteNewLabel, handleAddNewLabel } = useLabelListFunc(id);
+
+  const labelsListProps = {
+    // customColor,
+    handleDeleteNewLabel, handleAddNewLabel
+  };
+
+  console.log(iconsUtilsFunc);
 
   const iconsUtilsProps = {
+    labelsListProps,
     widthOfContainer,
     id,
     customColor,

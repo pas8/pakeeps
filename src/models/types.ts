@@ -11,15 +11,19 @@ import {
   PakeepElementType,
   PakeepEventInteface,
   EventOfPakeepType,
-  EventsOfPakeepType
+  EventsOfPakeepType,
+  LabelIdType
 } from 'store/modules/App/types';
 import { HandleSelectedPakeepsPropertyFuncType, PakeepPropertyiesType } from 'components/HeaderWhenActiveSelecto/types';
-import { IconsUtilsArrType, IconsUtilsFunctionType } from 'components/IconsUtils/types';
+import { IconsUtilsArrType, IconsUtilsFunctionType, NullityOfSlicedArrType } from 'components/IconsUtils/types';
 
 export type SelectedPakeepsType = PakeepsType;
 export type SelectedPakeepsIdType = PakeepIdType[];
 
-export type useSlicedType = (widthOfContainer?: number, arrWhichShouldBeSliced?: IconsUtilsArrType) => any[];
+export type UseSlicedType = (
+  widthOfContainer?: number,
+  arrWhichShouldBeSliced?: IconsUtilsArrType
+) => [slicedArr: NullityOfSlicedArrType, isShouldBeSliced: boolean, handleConcatAverageWidth: (value: number) => void];
 
 export type UsePropertiesToUtilsType = (
   pakeepPropertyies: PakeepPropertyiesType,
@@ -89,8 +93,16 @@ export type UseFindCurrentEventsType = (
 
 export type UsePakeepUtilsFuncType = (pakeepId: PakeepIdType) => IconsUtilsFunctionType;
 
-export type UseFindPakeepUsingIdType = ( id: PakeepIdType) => PakeepElementType ;
+export type UseFindPakeepUsingIdType = (id: PakeepIdType) => PakeepElementType;
 
 export type IconType = typeof AddCircleOutlineOutlinedIcon;
 
 export type HandlePakeepEventsType = (pakeepId: PakeepIdType, events?: EventsOfPakeepType) => void;
+
+export type HandleDeleteNewLabelType = (labelIdWhichShouldBeDeleted: LabelIdType) => void;
+export type HandleAddNewLabelType = (labelIdWhichShouldBeAdded: LabelIdType) => void;
+
+export type UseLabelListFuncType = (id: PakeepIdType) => {
+  handleAddNewLabel: HandleDeleteNewLabelType;
+  handleDeleteNewLabel: HandleAddNewLabelType;
+};

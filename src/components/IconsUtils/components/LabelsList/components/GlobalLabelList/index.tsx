@@ -1,12 +1,9 @@
-import PropTypes from 'prop-types';
 import includes from 'lodash.includes';
 import { MenuItem, Checkbox, ListItemText, Grid, FormLabel, makeStyles, FormControl } from '@material-ui/core';
 import IconsUtilsOfGlobalLabelListOflabelList from './components/IconsUtils';
 import { useTakeIcon } from 'hooks/useTakeIcon.hook';
 import mixPlugin from 'colord/plugins/mix';
 import { colord, extend } from 'colord';
-import { useGetReversedCustomColor } from 'hooks/useGetReversedCustomColor.hook';
-import { useIsColorDark } from 'hooks/useIsColorDark.hook';
 import { useAlpha } from 'hooks/useAlpha.hook';
 import IndeterminateCheckBoxOutlinedIcon from '@material-ui/icons/IndeterminateCheckBoxOutlined';
 import { useMix } from 'hooks/useMix.hook';
@@ -19,15 +16,16 @@ const useStyles = makeStyles(({ spacing, palette: { secondary } }) => {
   return {
     container: ({ color, customColor }: UseStylesOfGlobalLabelListOflabelListType) => {
       return {
-        '&  p': { color },
+        // background:customColor.bgHover,
+        '&  p': { color:customColor?.isUseDefault ? secondary.main : color },
         padding: spacing(1.6, 0, 0, 0),
         '& legend': {
           padding: spacing(0, 1.6, 0.6, 1.6),
           color: customColor && useMix({ bgHover: customColor?.bgHover, hover: customColor?.hover }, 0.8)
         },
         '& li,span': {
-          '&:hover > .MuiTouchRipple-root': customColor && {
-            background: useAlpha(color)
+          '&:hover > .MuiTouchRipple-root':  {
+            background:  useAlpha(customColor.isUseDefault ? secondary.main :  color)
           }
         }
       };
@@ -35,12 +33,12 @@ const useStyles = makeStyles(({ spacing, palette: { secondary } }) => {
     menuElement: ({ color, customColor, isChecked }: UseStylesOfGlobalLabelListOflabelListType) => {
       // if(isChecked === undefined) return {}
       // if (customColor.isUseDefault) return {};
-      const correctColor = isChecked && !customColor ? secondary.main : color;
+      const correctColor = isChecked && customColor.isUseDefault ? secondary.main : color;
       return {
         padding: spacing(0.2, 0),
 
         color: correctColor,
-        '&:hover > .MuiTouchRipple-root': isChecked && !customColor ? { background: useAlpha(secondary.main) } : {},
+        '&:hover > .MuiTouchRipple-root': isChecked && customColor.isUseDefault ? { background: useAlpha(secondary.main) } : {},
         '& svg,p': { color: correctColor }
       };
     }
@@ -54,7 +52,6 @@ const GlobalLabelListOflabelList: FC<GlobalLabelListOflabelListPropsType> = ({
   customColor
 }) => {
   const globalLabels = useSelector(getLabels);
-
   // const customColor = useGetReversedCustomColor(notReverserCustomColor);
 
   extend([mixPlugin]);

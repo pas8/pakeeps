@@ -61,7 +61,7 @@ const HeaderLayout: FC<LayoutChildrenType> = ({ children }) => {
 
   const isMenuOpen = useSelector(getMenuOpenStatus);
   const drawerWidth = useSelector(getDrawerWidth);
-  const selectedPakeeps = useSelector(getSelectedPakeeps);
+  const selectedPakeeps = useSelector(getSelectedPakeeps)!;
   const navigationViewLike = useSelector(getNavigationViewLike);
   const selectedPakeepsId = useSelector(getSelectedPakeepsId);
 

@@ -133,7 +133,7 @@ const IconsUtils: FC<IconsUtilsPropsType> = ({
       isIconActive: !!labels?.length,
       menuComponents: LabelsList,
       badgeContent: labelBargeNumber,
-      menuComponentsProps: { ...labelsListProps }
+      menuComponentsProps: { ...labelsListProps,customColor }
     },
     {
       ...iconsUtilsArrDenotation.FAVORITE,
@@ -192,10 +192,9 @@ const IconsUtils: FC<IconsUtilsPropsType> = ({
     icon: PlayCircleOutlineOutlinedIcon,
     rotateDeg: 90,
     hidden: slicedArr?.after?.length === 0,
-    popoverText: 'Open more utils',
-    name: 'moreUtils',
     menuComponents: MoreUtils,
-    menuComponentsProps: { slicedArrAfter: slicedArr.after }
+    menuComponentsProps: { slicedArrAfter: slicedArr.after },
+    ...iconsUtilsArrDenotation.MORE_UTILS
   };
 
   const buttonUtilsSlicedAndConcatedWithMoreButtonArr = concat(slicedArr.before, buttonMoreOfItemOfArrWhichWasSliced);

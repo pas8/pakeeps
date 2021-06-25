@@ -53,7 +53,7 @@ export const getIsCancelSelectedPakeepsId = createSelector(
 
 export const getSelectedPakeeps = createArraySelector(
   [({ app }: RootStoreType) => app.selectedPakeepsId, ({ app: { pakeeps } }: RootStoreType) => pakeeps],
-  (selectedPakeepsId, pakeeps) => find(pakeeps, ({ id }) => id === selectedPakeepsId)
+  (selectedPakeepsId, pakeeps) => find(pakeeps, ({ id }) => id === selectedPakeepsId)!
 );
 
 export const getGlobalEventsArr = createSelector(

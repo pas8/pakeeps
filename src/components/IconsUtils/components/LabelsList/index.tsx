@@ -8,11 +8,11 @@ import WrapperOfMenuOfLabelPart from 'components/PakeepList/components/PakeepEle
 import DialogOfAddNewLabel from './components/DialogOfAddNewLabel';
 import DefaultMenuListOflabelList from './components/DefaultMenuList';
 import GlobalLabelListOflabelList from './components/GlobalLabelList';
-import { SelectedLabels } from 'components/NewPakeep';
 import { useGetReversedCustomColor } from 'hooks/useGetReversedCustomColor.hook';
 import { HandleChangeNewLabelType, LabelsListPropsType, MenuStateOfLabelsListType } from './types';
 import { toChangeGlobalLabelItem, toDeleteLabelFromPakeep } from 'store/modules/App/actions';
 import { ILabelElement } from 'store/modules/App/types';
+import PakeepPropertyProvider from 'components/PakeepPropertyProviders';
 
 const LabelsList: FC<LabelsListPropsType> = ({
   handleAddNewLabel,
@@ -21,7 +21,7 @@ const LabelsList: FC<LabelsListPropsType> = ({
   isLabelViewHidden,
   pakeepId,
   isDefaultMenuListHidden = false,
-  customColor: notReverseCustomColor,
+  customColor,
   onMenuClose
 }) => {
   const dispatch = useDispatch();
@@ -29,7 +29,7 @@ const LabelsList: FC<LabelsListPropsType> = ({
     dispatch(toChangeGlobalLabelItem({ changedLabel }));
   };
 
-  const customColor = useGetReversedCustomColor(notReverseCustomColor);
+  const reversedCustomColor = useGetReversedCustomColor(customColor);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const handleOpenAddNewLabelDialog = () => setIsDialogOpen(true);
   const handleCloseAddNewLabelDialog = () => setIsDialogOpen(false);
@@ -51,7 +51,7 @@ const LabelsList: FC<LabelsListPropsType> = ({
     isDialogOpen,
     handleCloseAddNewLabelDialog,
     handleOpenAddNewLabelDialog,
-    customColor: notReverseCustomColor
+    customColor: reversedCustomColor
   };
 
   const handleChangeNewLabel: HandleChangeNewLabelType = (isChecked, id) => {
@@ -74,7 +74,6 @@ const LabelsList: FC<LabelsListPropsType> = ({
     dispatch(toDeleteLabelFromPakeep({ currentPakeepId: pakeepId, labelIdWhichShouldBeDeleted: menuState.id }));
     handleClose();
   };
-
   const arrowButtonFunc = () => onMenuClose();
 
   const globalLabelListProps = { handleChangeNewLabel, setMenuState, customColor };
@@ -85,24 +84,23 @@ const LabelsList: FC<LabelsListPropsType> = ({
     menuState,
     handleChangeGlobalLabelItem,
     setMenuState,
-    customColor: notReverseCustomColor,
+    customColor: reversedCustomColor,
     isThisMenuIsSecond: true
   };
 
   const defaultMenuListOflabelListProps = { defaultMenuListArr, customColor, arrowButtonFunc };
-
   return (
-    <SelectedLabels.Consumer>
-      {({ selectedLabels }) => (
-        <Grid>
+    <PakeepPropertyProvider.Consumer>
+      {({ labels }) => (
+        <Grid style={{ background:!customColor.isUseDefault ?  customColor.bgHover : '' }}>
           {!isDefaultMenuListHidden && <DefaultMenuListOflabelList {...defaultMenuListOflabelListProps} />}
-          <GlobalLabelListOflabelList {...globalLabelListProps} selectedLabels={selectedLabels} />
+          <GlobalLabelListOflabelList {...globalLabelListProps} selectedLabels={labels} />
 
           <WrapperOfMenuOfLabelPart {...wrapperOfMenuOfLabelPartProps} />
           <DialogOfAddNewLabel {...dialogOfAddNewLabelProps} />
         </Grid>
       )}
-    </SelectedLabels.Consumer>
+    </PakeepPropertyProvider.Consumer>
   );
 };
 

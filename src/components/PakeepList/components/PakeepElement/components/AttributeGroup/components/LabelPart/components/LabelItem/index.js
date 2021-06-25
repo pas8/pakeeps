@@ -40,7 +40,6 @@ const LabelItem = ({
   aplyMargin = true
 }) => {
   const [color, isCustomColor, isDark] = useAttributeGroupColor(customColor, currentColor);
-
   const classes = useStyles({ color, isDark, currentColor, isCustomColor, parentBackgrounColor, aplyMargin });
 
   return (
@@ -50,10 +49,5 @@ const LabelItem = ({
   );
 };
 
-LabelItem.propTypes = {
-  currentColor: PropTypes.any,
-  handleOpen: PropTypes.func,
-  labelChipProps: PropTypes.object
-};
 
 export default LabelItem;

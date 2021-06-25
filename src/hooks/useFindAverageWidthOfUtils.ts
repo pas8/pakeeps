@@ -1,7 +1,7 @@
 import { concat, reduce } from 'lodash';
 import { useEffect, useState } from 'react';
 
-export const useFindAverageWidthOfUtils = (): [number, number, Function] => {
+export const useFindAverageWidthOfUtils = (): [number, number, (value: number) => void] => {
   const [averageWidth, setAverageWidth] = useState<number>(0);
   const [averageWidthArr, setAverageWidthArr] = useState<number[]>([]);
   const lengthOfUtilsArr = averageWidthArr.length;

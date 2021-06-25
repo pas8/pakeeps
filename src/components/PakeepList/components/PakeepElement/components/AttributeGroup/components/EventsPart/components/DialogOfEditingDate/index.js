@@ -6,7 +6,7 @@ import ChatOutlinedIcon from '@material-ui/icons/ChatOutlined';
 
 const useStyles = makeStyles(theme => ({}));
 
-const DialogOfEditingDate = ({ open, onClose, id, title = '' }) => {
+const DialogOfEditingDate = ({ open,}) => {
   const classes = useStyles();
 
   const [eventState, setEventState] = useState({
@@ -67,9 +67,8 @@ const DialogOfEditingDate = ({ open, onClose, id, title = '' }) => {
   //   }
   // ];
 
-  return <Dialog open={open} onClose={onClose}></Dialog>;
+  return <Dialog open={open} ></Dialog>;
 };
 
-DialogOfEditingDate.propTypes = {};
 
 export default DialogOfEditingDate;

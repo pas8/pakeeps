@@ -5,8 +5,8 @@ import { PopoverAndMenuType, UseStylesType } from './types';
 const useStyles = makeStyles(theme => ({
   paper: ({ customColor }: UseStylesType) => ({
     padding: theme.spacing(0.6, 0.8),
-    background: customColor && customColor?.hover,
-    color: customColor && customColor?.bgUnHover
+    background: !customColor?.isUseDefault ? customColor?.hover : '',
+    color: !customColor?.isUseDefault ? customColor?.bgUnHover : ''
     // border: '1px solid',
     // boxShadow: !useIsColorDark(customColor?.hover) && `0px 0px 2px 1px ${customColor?.bgUnHover}`,
     // borderColor:useIsColorDark(customColor?.hover) && customColor?.bgHover,
@@ -16,7 +16,7 @@ const useStyles = makeStyles(theme => ({
   },
   menuContainer: ({ customColor }: UseStylesType) => ({
     '& > div': {
-      backgroundColor: customColor?.hover
+      backgroundColor:  !customColor?.isUseDefault ? customColor?.hover : ''
     }
   })
 }));
@@ -39,12 +39,12 @@ const PopoverAndMenu: FC<PopoverAndMenuType> = ({
 
   const defaultLocationOfPopoverToWitCentered = {
     anchorOrigin: {
-      vertical: 'bottom',
-      horizontal: 'center'
+      vertical: 'bottom' as 'bottom',
+      horizontal: 'center' as 'center'
     },
     transformOrigin: {
-      vertical: 'top',
-      horizontal: 'center'
+      vertical: 'top' as 'top', 
+      horizontal: 'center' as 'center' 
     }
   };
 
@@ -90,7 +90,7 @@ const PopoverAndMenu: FC<PopoverAndMenuType> = ({
     className: classes.popover,
     classes: { paper: classes.paper },
 
-    open: isPopoverOpen,
+    open: isPopoverOpen!,
     anchorEl: currentTarget,
     onClose: handlePopoverClose,
     disableRestoreFocus: true
@@ -101,11 +101,10 @@ const PopoverAndMenu: FC<PopoverAndMenuType> = ({
     // ...defaultLocationOfMenuToWitRightSite,
     anchorEl: currentTarget,
     keepMounted: true,
-    open: isMenuOpen,
+    open: isMenuOpen!,
     onClose: handleMenuClose,
     className: classes.menuContainer
   };
-
   const allMenuComponentsProps = { ...menuComponentsProps, customColor };
   return (
     <>

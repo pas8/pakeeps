@@ -2,7 +2,7 @@ import { Button, Box, Divider } from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
 import { SnackbarProvider } from 'notistack';
 import IconButtonByPas from 'components/IconButton';
-import { LayoutChildrenType } from 'models/interfaces';
+import { LayoutChildrenType } from 'models/types';
 import { SnackbarProviderContentType } from './types';
 
 const SnackBarLayout = ({ children }: LayoutChildrenType) => {

@@ -1,8 +1,8 @@
 import { CurrentEventsArrType, CustomColorType } from 'models/types';
-import { GlobalEventsType } from 'store/modules/App/types';
+import { EventsOfPakeepType, GlobalEventsType } from 'store/modules/App/types';
 
 export type PreviewEventListPropsType = {
-  validatedCurrentEvents: GlobalEventsType;
+  validatedCurrentEvents: EventsOfPakeepType;
   currentEventsArr: CurrentEventsArrType;
   customColor: CustomColorType;
 };

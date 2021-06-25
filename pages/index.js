@@ -9,9 +9,9 @@ const PakeepList = dynamic(() => import('components/PakeepList'), {
 
 const Pakeeps = () => (
   <>
-    <Grid container justify={'center'} alignItems={'center'}>
+    {/* <Grid container justify={'center'} alignItems={'center'}>
       <NewPakeep />
-    </Grid>
+    </Grid> */}
     <PakeepList />
   </>
 );
