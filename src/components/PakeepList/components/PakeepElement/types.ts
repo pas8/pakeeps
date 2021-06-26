@@ -15,7 +15,7 @@ export type PropertyiesOfPakeepElement = {
 
 export type PakeepElementPropsType = {
   labels: LabelsOfPakeepType;
-  handlePinStatusPakeep: Function;
+  // handlePinStatusPakeep: Function;
   id: PakeepIdType;
 } & TitleAndTextOfPakeepType &
   PropertyiesOfPakeepElement &

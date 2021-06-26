@@ -1,5 +1,6 @@
-
 @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;1,100&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Vibur&display=swap');
+
 html,
 body {
   min-height: 116vh;
@@ -8,9 +9,7 @@ body {
   padding: 0 !important;
   background-color: #303030;
 
-
-
-  
+  height: 100000px;
 }
 
 a {
@@ -40,7 +39,7 @@ ul {
 }
 *::-webkit-scrollbar-thumb {
   background-color: rgba(255, 255, 255, 0.4);
-  border-radius :2em;
+  border-radius: 2em;
 }
 
 *::-webkit-scrollbar-thumb:hover {
@@ -62,12 +61,104 @@ ul {
 }
 
 .MuiSkeleton-root {
-
-  background-color: rgba(255, 255, 255, 0.08) !important
+  background-color: rgba(255, 255, 255, 0.08) !important;
 }
 
+.MuiPickersTimePickerToolbar-hourMinuteLabelReverse {
+  flex-direction: row !important;
+}
 
+:root {
+  --grid: 8px;
+  --pink: #fd3afd;
+  --pinkDark: #690169;
+  --greyLight: #515b7d;
+  --black: #1d212e;
+  --borderWidth: 4px;
+  --borderRadius: 8px;
+}
 
- .MuiPickersTimePickerToolbar-hourMinuteLabelReverse {
-  flex-direction: row  !important
+body {
+  background: var(--black);
+  font-family: 'Vibur', cursive;
+  user-select: none;
+}
+
+*,
+*::after,
+*::before {
+  box-sizing: border-box;
+}
+.app {
+  display: flex;
+  flex-direction: column;
+  margin-top: 100px;
+  align-items: center;
+}
+
+.columns {
+  display: flex;
+}
+
+.column {
+  margin: calc(var(--grid) / 2);
+  border: var(--borderWidth) solid #0ff0fc;
+  border-radius: var(--borderRadius);
+  background-color: #2a2f41;
+  overflow: hidden;
+}
+
+.column-title {
+  font-size: 40px;
+  color: var(--pink);
+  text-shadow: 0px 0px 2px var(--pinkDark), 0px 0px 15px rgba(255, 110, 255, 0.5);
+  text-align: center;
+  margin: 0;
+}
+
+.column-title:hover {
+  text-shadow: 0px 0px 2px var(--pinkDark), 0px 0px 15px rgba(255, 110, 255, 0.8);
+}
+
+.task-list {
+  /* this has no visible impact, but is in line with the absolute position spacing.
+  doing this ensures that dropping into an empty list will be in the correct visual position */
+  padding-left: var(--grid);
+  padding-right: var(--grid);
+  scrollbar-color: dark;
+  overflow: hidden !important;
+}
+
+.task-list::-webkit-scrollbar {
+  width: 1em;
+}
+
+.task-list::-webkit-scrollbar-track {
+  background-color: var(--greyLight);
+  borderradius: var(--borderRadius);
+}
+
+.task-list::-webkit-scrollbar-thumb {
+  background-color: var(--pink);
+}
+
+.item {
+  background: #333851;
+  border: var(--borderWidth) solid mediumpurple;
+  box-sizing: border-box;
+  border-radius: var(--borderRadius);
+  color: #cdd5ee;
+  font-size: 30px;
+  user-select: none;
+
+  /* center align text */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.item.is-dragging {
+  background: #515b7d;
+  border-color: #08ff08;
+  box-shadow: 0px 0px 2px rgb(8, 58, 30), 0px 0px 10px MediumSeaGreen;
 }

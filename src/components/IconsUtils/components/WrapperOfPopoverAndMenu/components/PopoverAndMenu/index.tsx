@@ -16,7 +16,7 @@ const useStyles = makeStyles(theme => ({
   },
   menuContainer: ({ customColor }: UseStylesType) => ({
     '& > div': {
-      backgroundColor:  !customColor?.isUseDefault ? customColor?.hover : ''
+      backgroundColor: !customColor?.isUseDefault ? customColor?.hover : ''
     }
   })
 }));
@@ -35,6 +35,7 @@ const PopoverAndMenu: FC<PopoverAndMenuType> = ({
   // popoverLocation = 'default',
   customColor
 }) => {
+  if (!currentTarget) return null;
   const classes = useStyles({ customColor });
 
   const defaultLocationOfPopoverToWitCentered = {
@@ -43,8 +44,8 @@ const PopoverAndMenu: FC<PopoverAndMenuType> = ({
       horizontal: 'center' as 'center'
     },
     transformOrigin: {
-      vertical: 'top' as 'top', 
-      horizontal: 'center' as 'center' 
+      vertical: 'top' as 'top',
+      horizontal: 'center' as 'center'
     }
   };
 

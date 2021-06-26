@@ -1,6 +1,6 @@
 import { Grid, makeStyles, Grow, Fade, Theme } from '@material-ui/core';
 import PropTypes from 'prop-types';
-import { useState, useEffect, createContext, FC, ContextType } from 'react';
+import { useState, useEffect, createContext, FC, ContextType, memo } from 'react';
 import { addDays, addHours, isValid } from 'date-fns';
 import clsx from 'clsx';
 import { useSwipeable } from 'react-swipeable';
@@ -97,7 +97,7 @@ const PakeepElement: FC<PakeepElementPropsType> = ({
   isDragging,
   id,
   isPinIconShouldBeShownInPakeep = false,
-  handlePinStatusPakeep,
+  // handlePinStatusPakeep,
   onClickOfPakeepElement,
   isSelecting
 }) => {
@@ -175,7 +175,7 @@ const PakeepElement: FC<PakeepElementPropsType> = ({
   useEffect(() => setStatusState(state => ({ ...state, isLoaded: true })), []);
   // console.log(isSelecting)
   if (!statusState.isLoaded) return <SkeletonView />;
-  
+
   const AnimationElement = isUtilsHaveViewLikeInGoogleKeep ? Fade : Grow;
 
   const { handleDeleteNewLabel, handleAddNewLabel } = useLabelListFunc(id);
@@ -270,7 +270,7 @@ const PakeepElement: FC<PakeepElementPropsType> = ({
     <PakeepPropertyProvider.Provider value={{ events, labels }}>
       <Grid {...pakeepGridContainerProps}>
         <MainDefaultPartOfPakeepElement {...containerProps}>
-          {!isDragging && (
+          {/* {!isDragging && (
             <Grid>
               <AttributeGroup {...attributeGroupProps} />
             </Grid>
@@ -282,11 +282,11 @@ const PakeepElement: FC<PakeepElementPropsType> = ({
                 <IconsUtils {...allIconsUtilsProps} />
               </Grid>
             </AnimationElement>
-          )}
+          )} */}
         </MainDefaultPartOfPakeepElement>
       </Grid>
     </PakeepPropertyProvider.Provider>
   );
 };
 
-export default PakeepElement;
+export default memo(PakeepElement);

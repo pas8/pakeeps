@@ -8,4 +8,5 @@ export type ColumnOfPakeepListContainerPropsType = PropsOfColumnOfPakeepListCont
   pakeepsInColumn: (PakeepElementType | null)[];
   isLastColumn: boolean;
   isFirstColumn: boolean;
+  containerWidth:number;
 } & PropsFromPakeepListToPakeepElementType

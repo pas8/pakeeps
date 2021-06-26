@@ -6,9 +6,11 @@ import ColumnOfPakeepListContainer from './components/Column/index';
 import { FC, memo, useMemo, useState } from 'react';
 import { PakeepListContainerPropsType } from './types';
 import { PakeepElementType, PakeepsType } from 'store/modules/App/types';
+import { useMeasure } from 'react-use';
 
 const useStyles = makeStyles(({ spacing, breakpoints: { between, down }, palette }) => ({
   containerClass: {
+    position: 'fixed',
     margin: spacing(4, 0, 0, 0),
     [between('xs', 'sm')]: { margin: spacing(2, 0, 0, 0) },
     [down('md')]: { margin: spacing(4, 0, 0, 0) },
@@ -26,46 +28,50 @@ const PakeepListContainer: FC<PakeepListContainerPropsType> = ({
   onDragEnd,
   placeholderName,
   onDragStart,
-  columnOfPakeepListContainerProps,
+  columnOfPakeepListContainerProps
 }) => {
   const classes = useStyles();
 
-  const [arr, setArr] = useState<any>(null);
+  const [ref, { x, y, width:containerWidth, height }] = useMeasure<HTMLDivElement>();
 
-  useMemo(() => {
-    const arr = responsiveColumnOrder?.map((columnId, idx) => {
-      const column = columns[columnId];
-      if (!column?.pakeepsId) return;
+  // const [arr, setArr] = useState<any>(null);
 
-      const filteredArrToMap = column.pakeepsId.filter(id => id !== placeholderName);
+  // useMemo(() => {
+  const arr = responsiveColumnOrder?.map((columnId, idx) => {
+    const column = columns[columnId];
+    if (!column?.pakeepsId) return;
 
-      const pakeepsInColumn = filteredArrToMap.map(pakeepId => {
-        const findedPakeep = find(pakeeps, ({ id }) => id === pakeepId);
-        if (!findedPakeep) return null;
-        const currentEl: PakeepElementType = findedPakeep;
-        return currentEl;
-      });
-      // if(pakeepsInColumn)
-      const isLastColumn = !!(idx + 1 === responsiveColumnOrder.length);
-      const isFirstColumn = !!(idx === 0);
+    const filteredArrToMap = column.pakeepsId.filter(id => id !== placeholderName);
 
-      const allColumnOfPakeepListContainerProps = {
-        ...columnOfPakeepListContainerProps,
-        key: column?.id,
-        column,
-        isFirstColumn,
-        isLastColumn,
-        pakeepsInColumn
-      };
-      return <ColumnOfPakeepListContainer {...allColumnOfPakeepListContainerProps} />;
+    const pakeepsInColumn = filteredArrToMap.map(pakeepId => {
+      const findedPakeep = find(pakeeps, ({ id }) => id === pakeepId);
+      if (!findedPakeep) return null;
+      const currentEl: PakeepElementType = findedPakeep;
+      return currentEl;
     });
+    // if(pakeepsInColumn)
+    const isLastColumn = !!(idx + 1 === responsiveColumnOrder.length);
+    const isFirstColumn = !!(idx === 0);
 
-    setArr(arr);
-  }, [pakeeps, responsiveColumnOrder, columns]);
+    const allColumnOfPakeepListContainerProps = {
+      ...columnOfPakeepListContainerProps,
+      key: column?.id,
+      column,
+      columnOrderIdx:idx,
+      isFirstColumn,
+      isLastColumn,
+      pakeepsInColumn,
+      containerWidth
+    };
+    return <ColumnOfPakeepListContainer {...allColumnOfPakeepListContainerProps} />;
+  });
+
+  // setArr(arr);
+  // }, [pakeeps, responsiveColumnOrder, columns]);
 
   return (
     <DragDropContext onDragEnd={onDragEnd} onDragStart={onDragStart}>
-      <Grid container className={classes.containerClass}>
+      <Grid container className={classes.containerClass} ref={ref}>
         {arr}
       </Grid>
     </DragDropContext>

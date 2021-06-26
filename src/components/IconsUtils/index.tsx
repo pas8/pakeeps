@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, memo } from 'react';
 import { Grid } from '@material-ui/core';
 import _, { concat, filter, includes, reverse } from 'lodash';
 //3-party-lib----------------------------------------------------------------------
@@ -37,7 +37,6 @@ import PinOutlinedIcon from 'components/Icons/components/PinOutlinedIcon';
 import WrapperOfAddDateToPakeep from './components/WrapperOfAddDateToPakeep';
 import { IconsUtilsArrDenotationNameType, IconsUtilsArrType, IconsUtilsPropsType } from './types';
 import { iconsUtilsArrDenotation } from './denotation';
-
 
 const IconsUtils: FC<IconsUtilsPropsType> = ({
   isAllIconsIsShown = true,
@@ -215,4 +214,4 @@ const IconsUtils: FC<IconsUtilsPropsType> = ({
   );
 };
 
-export default IconsUtils;
+export default memo(IconsUtils);

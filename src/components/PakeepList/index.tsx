@@ -179,9 +179,9 @@ const PakeepList: FC = () => {
       <Grid ref={scrollerRef} className={'selectoContainer'}>
         {isFolderPropertyIsAll && <WrapperOfContainerOfPakeepList {...wrapperOfContainerOfPinnedPakeepListProps} />}
 
-        <WrapperOfContainerOfPakeepList {...wrapperOfContainerOfAllPakeepListProps} />
+        {/* <WrapperOfContainerOfPakeepList {...wrapperOfContainerOfAllPakeepListProps} /> */}
       </Grid>
-      {!isSelectoHidden && <SelectofFPakeepListContainer {...selectoOfPakeepListContainerProps} />}
+      {/* {!isSelectoHidden && <SelectofFPakeepListContainer {...selectoOfPakeepListContainerProps} />} */}
 
       {/* </PakeepHoveringContext.Provider> */}
       {!!pakeepDialogId && <EditingDialogOfPakeepElement {...allPakeepDialogProps} />}
