@@ -1,11 +1,12 @@
 import { HandleSetSelectedPakeepsIdType } from 'components/PakeepList/types';
+import { FolderPropetyType } from 'models/types';
 import { DropResult, ResponderProvided } from 'react-beautiful-dnd';
 import { OrderNamesType, OrderNameType, PakeepsType } from 'store/modules/App/types';
 import { PropsFromPakeepListToPakeepElementType } from '../PakeepElement/types';
 
 export type PropsOfColumnOfPakeepListContainerPropsType =  {
   isPakeepDragContextPinned: boolean;
-  folderProperty: string;
+  folderProperty: FolderPropetyType;
   folderId: string;
   isSelecting: boolean;
 } & PropsFromPakeepListToPakeepElementType

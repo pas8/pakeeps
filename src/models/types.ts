@@ -1,3 +1,4 @@
+import { PropertyiesOfPakeepElement } from './../components/PakeepList/components/PakeepElement/types';
 import { TimeAndDateFromatType, TimeFormatType } from './../store/modules/Settings/types';
 import { SettingsInitialStateType } from 'store/modules/Settings/types';
 import AddCircleOutlineOutlinedIcon from '@material-ui/icons/AddCircleOutlineOutlined';
@@ -13,7 +14,8 @@ import {
   EventOfPakeepType,
   EventsOfPakeepType,
   LabelIdType,
-  ILabelElement
+  ILabelElement,
+  DefaultFolderElementPropertyNamesType
 } from 'store/modules/App/types';
 import { HandleSelectedPakeepsPropertyFuncType, PakeepPropertyiesType } from 'components/HeaderWhenActiveSelecto/types';
 import { IconsUtilsArrType, IconsUtilsFunctionType, NullityOfSlicedArrType } from 'components/IconsUtils/types';
@@ -109,3 +111,17 @@ export type UseLabelListFuncType = (id: PakeepIdType) => {
 };
 
 export type UseFindLabelItem = (labelId: LabelIdType) => ILabelElement;
+
+export type UseValidationOfPakeepsInColumnType = ({
+  notValidatedPakeepsInColumn,
+  folderProperty,
+  folderId,
+  isPakeepDragContextPinned
+}: {
+  notValidatedPakeepsInColumn: (PakeepElementType | null)[];
+  isPakeepDragContextPinned: boolean;
+  folderProperty: FolderPropetyType;
+  folderId: string;
+}) => PakeepsType | null;
+
+export type FolderPropetyType = DefaultFolderElementPropertyNamesType | 'label' | 'ALL';

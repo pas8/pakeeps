@@ -105,6 +105,7 @@ const PakeepList: FC = () => {
   const defaultPakeepListContainerProps = {
     folderProperty,
     folderId,
+    isPakeepDragging,
     onClickOfPakeepElement,
     isSelecting
   };

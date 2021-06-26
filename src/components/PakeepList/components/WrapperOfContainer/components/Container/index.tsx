@@ -3,14 +3,15 @@ import { Grid, makeStyles } from '@material-ui/core';
 import { DragDropContext } from 'react-beautiful-dnd';
 import { find } from 'lodash';
 import ColumnOfPakeepListContainer from './components/Column/index';
-import { FC, memo, useMemo, useState } from 'react';
+import { FC, memo, useEffect, useMemo, useState } from 'react';
 import { PakeepListContainerPropsType } from './types';
 import { PakeepElementType, PakeepsType } from 'store/modules/App/types';
-import { useMeasure } from 'react-use';
+import { useMeasure, useWindowScroll, useWindowSize } from 'react-use';
 
 const useStyles = makeStyles(({ spacing, breakpoints: { between, down }, palette }) => ({
-  containerClass: {
-    position: 'fixed',
+  containerClass: () => ({
+    // position: !isPakeepDragging ? 'fixed' : 'static',
+    // position:   'fixed' ,
     margin: spacing(4, 0, 0, 0),
     [between('xs', 'sm')]: { margin: spacing(2, 0, 0, 0) },
     [down('md')]: { margin: spacing(4, 0, 0, 0) },
@@ -18,7 +19,7 @@ const useStyles = makeStyles(({ spacing, breakpoints: { between, down }, palette
       boxShadow: `0px 0px 0px 1px ${palette?.maxEmphasis?.main}`,
       borderColor: palette?.maxEmphasis?.main
     }
-  }
+  })
 }));
 
 const PakeepListContainer: FC<PakeepListContainerPropsType> = ({
@@ -32,11 +33,26 @@ const PakeepListContainer: FC<PakeepListContainerPropsType> = ({
 }) => {
   const classes = useStyles();
 
-  const [ref, { x, y, width:containerWidth, height }] = useMeasure<HTMLDivElement>();
+  const [ref, { x, y, width: containerWidth, height }] = useMeasure<HTMLDivElement>();
 
-  // const [arr, setArr] = useState<any>(null);
+  const { height: windowHeigth } = useWindowSize();
+  const columnQuantity = responsiveColumnOrder.length;
 
+  const [arrOfRefs, setArrOfRefs] = useState<any[]>([]);
+
+  const { y: value } = useWindowScroll();
+  // useEffect(() => {
+  //   arrOfRefs.forEach(el => !!el.current.scrollTo && el.current.scrollTo(value));
+  // }, [value]);
+
+  const handleSetArrOfRefs = (newRef: any) => setArrOfRefs(state => [...state, newRef]);
   // useMemo(() => {
+  // console.log(arrOfRefs);
+  const pakeepListMeasure = {
+    height: (windowHeigth / 100) * 96,
+    width: 300
+  };
+
   const arr = responsiveColumnOrder?.map((columnId, idx) => {
     const column = columns[columnId];
     if (!column?.pakeepsId) return;
@@ -50,18 +66,20 @@ const PakeepListContainer: FC<PakeepListContainerPropsType> = ({
       return currentEl;
     });
     // if(pakeepsInColumn)
-    const isLastColumn = !!(idx + 1 === responsiveColumnOrder.length);
+    const isLastColumn = !!(idx + 1 === columnQuantity);
     const isFirstColumn = !!(idx === 0);
 
     const allColumnOfPakeepListContainerProps = {
       ...columnOfPakeepListContainerProps,
       key: column?.id,
       column,
-      columnOrderIdx:idx,
+      columnQuantity,
+      columnOrderIdx: idx,
       isFirstColumn,
       isLastColumn,
+      handleSetArrOfRefs,
       pakeepsInColumn,
-      containerWidth
+      pakeepListMeasure
     };
     return <ColumnOfPakeepListContainer {...allColumnOfPakeepListContainerProps} />;
   });
@@ -71,7 +89,7 @@ const PakeepListContainer: FC<PakeepListContainerPropsType> = ({
 
   return (
     <DragDropContext onDragEnd={onDragEnd} onDragStart={onDragStart}>
-      <Grid container className={classes.containerClass} ref={ref}>
+      <Grid container className={classes.containerClass} ref={ref} >
         {arr}
       </Grid>
     </DragDropContext>

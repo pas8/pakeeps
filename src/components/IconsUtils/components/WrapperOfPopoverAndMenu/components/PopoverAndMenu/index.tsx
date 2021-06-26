@@ -96,7 +96,6 @@ const PopoverAndMenu: FC<PopoverAndMenuType> = ({
     onClose: handlePopoverClose,
     disableRestoreFocus: true
   };
-
   const menuProps = {
     // ...locationOfMenu,
     // ...defaultLocationOfMenuToWitRightSite,
@@ -109,11 +108,11 @@ const PopoverAndMenu: FC<PopoverAndMenuType> = ({
   const allMenuComponentsProps = { ...menuComponentsProps, customColor };
   return (
     <>
-      <Popover {...popoverProps}>
+  {!!currentTarget &&    <Popover {...popoverProps}>
         <Typography variant={popoverTypographyVariant}>{popoverText}</Typography>
-      </Popover>
+      </Popover>}
 
-      {!!MenuComponents && (
+      {!!MenuComponents  && (
         <Menu {...menuProps}>
           <MenuComponents {...allMenuComponentsProps} />
         </Menu>

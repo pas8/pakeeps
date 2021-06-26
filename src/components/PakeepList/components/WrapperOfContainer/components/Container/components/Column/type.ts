@@ -3,10 +3,18 @@ import { PropsOfColumnOfPakeepListContainerPropsType } from 'components/PakeepLi
 import { ColumnElementType, SumOfPakeepsReduceFuncType } from 'models/types';
 import { DefaultFolderElementPropertyNamesType, PakeepElementType, PakeepsType } from 'store/modules/App/types';
 
-export type ColumnOfPakeepListContainerPropsType = PropsOfColumnOfPakeepListContainerPropsType &  {
+export type ColumnOfPakeepListContainerPropsType = PropsOfColumnOfPakeepListContainerPropsType & {
   column: ColumnElementType;
   pakeepsInColumn: (PakeepElementType | null)[];
   isLastColumn: boolean;
   isFirstColumn: boolean;
-  containerWidth:number;
-} & PropsFromPakeepListToPakeepElementType
+  columnOrderIdx: number;
+  pakeepListMeasure: {
+    height: number;
+    width: number | string;
+  };
+} & PropsFromPakeepListToPakeepElementType;
+
+export type HandleSetPakeepElementHeigthArrType = ({ id, height }: { id: string; height: number }) => void;
+
+export type PakeepElementHeigthArrType = { [key: string]: number };

@@ -99,8 +99,12 @@ const PakeepElement: FC<PakeepElementPropsType> = ({
   isPinIconShouldBeShownInPakeep = false,
   // handlePinStatusPakeep,
   onClickOfPakeepElement,
-  isSelecting
+  isSelecting,
+  handleSetPakeepElementHeigthArr,
+  handleResetItemSize,
+  pakeepElementHeigth
 }) => {
+  // if(!pakeepElementHeigth) return <></>
   const dispatch = useDispatch();
   const isUtilsHaveViewLikeInGoogleKeep = useSelector(getIsUtilsHaveViewLikeInGoogleKeep);
   const globalLabels = useSelector(getLabels);
@@ -138,8 +142,15 @@ const PakeepElement: FC<PakeepElementPropsType> = ({
   //   dispatch(toChangeTemporaryData({ newTemporaryData: { pakeep: { id, isHovering: statusState.isHovered } } }));
   // }, [statusState.isHovered]);
 
-  const [ref, { width: widthOfContainer }] = useMeasure<HTMLDivElement>();
+  const [ref, { width: widthOfContainer, height }] = useMeasure<HTMLDivElement>();
 
+  useEffect(() => {
+    if (pakeepElementHeigth !== height && !!height) {
+      handleSetPakeepElementHeigthArr({ id, height });
+    }
+  }, [height]);
+
+  // console.log(height)
   const handleSetIsHovering = (): void => {
     setStatusState(state => ({ ...state, isHovered: true }));
   };
@@ -165,7 +176,10 @@ const PakeepElement: FC<PakeepElementPropsType> = ({
     isColorDefault,
     customColor
   };
-
+  useEffect(() => {
+    !!pakeepElementHeigth && handleResetItemSize();
+    // console.log(';')
+  }, [pakeepElementHeigth]);
   // const handlers = useSwipeable({
   //   onSwiped: eventData => console.log('User Swiped!', eventData)
   // });
@@ -270,13 +284,13 @@ const PakeepElement: FC<PakeepElementPropsType> = ({
     <PakeepPropertyProvider.Provider value={{ events, labels }}>
       <Grid {...pakeepGridContainerProps}>
         <MainDefaultPartOfPakeepElement {...containerProps}>
-          {/* {!isDragging && (
+          {/* {  (
             <Grid>
               <AttributeGroup {...attributeGroupProps} />
             </Grid>
-          )}
+          )} */}
 
-          {openIn && !isDragging && (
+          {/* {openIn && !isDragging && (
             <AnimationElement in={openIn}>
               <Grid className={classes.iconsUtilsClass}>
                 <IconsUtils {...allIconsUtilsProps} />
