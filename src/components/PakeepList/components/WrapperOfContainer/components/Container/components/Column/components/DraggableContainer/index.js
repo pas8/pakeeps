@@ -14,6 +14,10 @@ function getStyle({ draggableStyle, virtualStyle, isDragging }) {
 
   const result = {
     ...combined,
+        left: isDragging ? combined.left : combined.left + grid,
+    height: isDragging ? combined.height : combined.height - grid,
+
+    width: isDragging ? draggableStyle.width : `calc(${combined.width} - ${grid * 2}px)`,
     marginBottom: grid
   };
 
@@ -32,6 +36,7 @@ const DraggableContainerOfPakeepElement = ({
       const draggableContainerProps = {
         ...provided.dragHandleProps,
         ...provided.draggableProps,
+        ref:provided.innerRef,
         innerRef: provided.innerRef,
         className: draggableContainerClassName
       };

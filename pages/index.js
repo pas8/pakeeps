@@ -18,10 +18,10 @@ const Pakeeps = () => (
 
 export default Pakeeps;
 
-// import React, { useState, useLayoutEffect, useRef, useEffect } from 'react';
+// @flow
+// import React, { useState, useLayoutEffect, useRef } from 'react';
 // import { FixedSizeList, areEqual } from 'react-window';
 // import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
-// import { useScroll, useWindowScroll } from 'react-use';
 
 // let uniqueId = 0;
 // function getItems(count) {
@@ -54,13 +54,13 @@ export default Pakeeps;
 //   return initial;
 // }
 
-// const reorderList = (list, startIndex, endIndex) => {
+// function reorderList(list, startIndex, endIndex) {
 //   const result = Array.from(list);
 //   const [removed] = result.splice(startIndex, 1);
 //   result.splice(endIndex, 0, removed);
 
 //   return result;
-// };
+// }
 
 // function getStyle({ draggableStyle, virtualStyle, isDragging }) {
 //   // If you don't want any spacing between your items
@@ -105,6 +105,8 @@ export default Pakeeps;
 //   );
 // }
 
+// // Recommended react-window performance optimisation: memoize the row render function
+// // Things are still pretty fast without this, but I am a sucker for making things faster
 // const Row = React.memo(function Row(props) {
 //   const { data: items, index, style } = props;
 //   const item = items[index];
@@ -127,21 +129,13 @@ export default Pakeeps;
 //   // I should raise an issue for this.
 //   // As a work around I am resetting the scroll to 0
 //   // on any list that changes it's index
-
 //   const listRef = useRef();
-//   console.log(listRef);
-//   const { x, y: value } = useWindowScroll();
-
 //   useLayoutEffect(() => {
 //     const list = listRef.current;
 //     if (list) {
 //       list.scrollTo(0);
 //     }
 //   }, [index]);
-
-//   useEffect(() => {
-//     listRef.current.scrollToItem(value);
-//   }, [value]);
 
 //   return (
 //     <Droppable
@@ -176,35 +170,24 @@ export default Pakeeps;
 //   );
 // });
 
-// const Column = React.memo(function Column({ column, index, value }) {
+// const Column = React.memo(function Column({ column, index }) {
 //   return (
-//     <>
-//       {/* <button>To move 250px</button> */}
-
-//       <Draggable draggableId={column.id} index={index}>
-//         {provided => (
-//           <div className="column" {...provided.draggableProps} ref={provided.innerRef}>
-//             <h3 className="column-title" {...provided.dragHandleProps}>
-//               {column.title}
-//             </h3>
-//             <ItemList column={column} index={index} value={value} />
-//           </div>
-//         )}
-//       </Draggable>
-//     </>
+//     <Draggable draggableId={column.id} index={index}>
+//       {provided => (
+//         <div className="column" {...provided.draggableProps} ref={provided.innerRef}>
+//           <h3 className="column-title" {...provided.dragHandleProps}>
+//             {column.title}
+//           </h3>
+//           <ItemList column={column} index={index} />
+//         </div>
+//       )}
+//     </Draggable>
 //   );
 // });
 
 // function App() {
 //   const [state, setState] = useState(() => getInitialData());
 
-//   // const [value, setValue] = useState(() => getInitialData());
-//   const value = 0
-//   // window.onscroll = function () { window.scrollTo(0, 0); };
-
-//   // const ref = useRef();
-//   // const { y: value } = useScroll(ref);
-//   // console.log(value)
 //   function onDragEnd(result) {
 //     if (!result.destination) {
 //       return;
@@ -275,23 +258,21 @@ export default Pakeeps;
 //   }
 
 //   return (
-//     // <div ref={ref} style={{ width: '100%', height: '10000px' }}>
-//       <DragDropContext onDragEnd={onDragEnd}>
-//         {/* <div className="app" style={{marginTop:`${value + 100}px`}}> */}
-//         <div className="app" style={{position:'fixed',top:'200px'}}>
-//           <Droppable droppableId="all-droppables" direction="horizontal" type="column">
-//             {provided => (
-//               <div className="columns" {...provided.droppableProps} ref={provided.innerRef}>
-//                 {state.columnOrder.map((columnId, index) => (
-//                   <Column key={columnId} column={state.columns[columnId]} index={index} value={value} />
-//                 ))}
-//                 {provided.placeholder}
-//               </div>
-//             )}
-//           </Droppable>
-//         </div>
-//       </DragDropContext>
-//     // </div>
+//     <DragDropContext onDragEnd={onDragEnd}>
+//       <div className="app">
+//         <Droppable droppableId="all-droppables" direction="horizontal" type="column">
+//           {provided => (
+//             <div className="columns" {...provided.droppableProps} ref={provided.innerRef}>
+//               {state.columnOrder.map((columnId, index) => (
+//                 <Column key={columnId} column={state.columns[columnId]} index={index} />
+//               ))}
+//               {provided.placeholder}
+//             </div>
+//           )}
+//         </Droppable>
+//       </div>
+//     </DragDropContext>
 //   );
 // }
-// export default App;
+
+// export default App

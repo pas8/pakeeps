@@ -26,7 +26,7 @@ const useStyles = makeStyles(({ spacing, breakpoints: { down } }) => ({
   column: () => ({
     padding: spacing(0, paddingValue),
     '& > div > div': {
-      overflow: 'hidden !important',
+      // overflow: 'hidden !important'
       // position: isPakeepDragging ? 'relative' : 'fixed'
     }
   }),
@@ -131,6 +131,7 @@ const ColumnOfPakeepListContainer: FC<ColumnOfPakeepListContainerPropsType & { h
       list.scrollTo(0);
     }
   }, [columnOrderIdx]);
+
   // useEffect(() => {
 
   //   ref.current.scrollTo(value);
@@ -166,6 +167,7 @@ const ColumnOfPakeepListContainer: FC<ColumnOfPakeepListContainerPropsType & { h
       innerRef: provided.innerRef
       // className: classes.columnElement
     };
+    console.log(draggableContainerProps,rubric,snapshot,provided)
 
     const allPakeepElementProps = {
       ...el,
@@ -191,7 +193,6 @@ const ColumnOfPakeepListContainer: FC<ColumnOfPakeepListContainerPropsType & { h
   const listProps = {
     ...pakeepListMeasure,
     ref,
-
     itemData: {
       pakeepsInColumn,
       folderProperty,
@@ -210,14 +211,16 @@ const ColumnOfPakeepListContainer: FC<ColumnOfPakeepListContainerPropsType & { h
     <Grid {...gridContainerProps}>
       {/* <button onClick={() =>}>FUCK</button> */}
       <Droppable {...droppableProps}>
-        {provided => (
-          <Grid innerRef={provided.innerRef} {...provided.droppableProps}>
-            <List {...listProps} outerRef={provided.innerRef}>
-              {RowOfColumnOfPakeepListContainer}
-            </List>
-            {provided.placeholder}
-          </Grid>
-        )}
+        {provided => {
+          return (
+            <Grid innerRef={provided.innerRef} {...provided.droppableProps}>
+              <List {...listProps} outerRef={provided.innerRef}>
+                {RowOfColumnOfPakeepListContainer}
+              </List>
+              {provided.placeholder}
+            </Grid>
+          );
+        }}
       </Droppable>
     </Grid>
   );

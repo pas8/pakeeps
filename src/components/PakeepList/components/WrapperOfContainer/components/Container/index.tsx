@@ -3,7 +3,7 @@ import { Grid, makeStyles } from '@material-ui/core';
 import { DragDropContext } from 'react-beautiful-dnd';
 import { find } from 'lodash';
 import ColumnOfPakeepListContainer from './components/Column/index';
-import { FC, memo, useEffect, useMemo, useState } from 'react';
+import { FC, memo, useEffect, useMemo, useRef, useState } from 'react';
 import { PakeepListContainerPropsType } from './types';
 import { PakeepElementType, PakeepsType } from 'store/modules/App/types';
 import { useMeasure, useWindowScroll, useWindowSize } from 'react-use';
@@ -11,7 +11,8 @@ import { useMeasure, useWindowScroll, useWindowSize } from 'react-use';
 const useStyles = makeStyles(({ spacing, breakpoints: { between, down }, palette }) => ({
   containerClass: () => ({
     // position: !isPakeepDragging ? 'fixed' : 'static',
-    // position:   'fixed' ,
+    position: 'fixed',
+    right: 0,
     margin: spacing(4, 0, 0, 0),
     [between('xs', 'sm')]: { margin: spacing(2, 0, 0, 0) },
     [down('md')]: { margin: spacing(4, 0, 0, 0) },
@@ -33,7 +34,8 @@ const PakeepListContainer: FC<PakeepListContainerPropsType> = ({
 }) => {
   const classes = useStyles();
 
-  const [ref, { x, y, width: containerWidth, height }] = useMeasure<HTMLDivElement>();
+  // const [ref, { x, y, width: containerWidth, height, top }] = useMeasure<HTMLDivElement>();
+  const ref = useRef<HTMLDivElement>(null);
 
   const { height: windowHeigth } = useWindowSize();
   const columnQuantity = responsiveColumnOrder.length;
@@ -41,16 +43,18 @@ const PakeepListContainer: FC<PakeepListContainerPropsType> = ({
   const [arrOfRefs, setArrOfRefs] = useState<any[]>([]);
 
   const { y: value } = useWindowScroll();
-  // useEffect(() => {
-  //   arrOfRefs.forEach(el => !!el.current.scrollTo && el.current.scrollTo(value));
-  // }, [value]);
+  useEffect(() => {
+    arrOfRefs.forEach(el => !!el?.current?.scrollTo && el.current.scrollTo(value));
+  }, [value]);
+
+// console.log(ref.current)
 
   const handleSetArrOfRefs = (newRef: any) => setArrOfRefs(state => [...state, newRef]);
   // useMemo(() => {
   // console.log(arrOfRefs);
   const pakeepListMeasure = {
-    height: (windowHeigth / 100) * 96,
-    width: 300
+    height: windowHeigth * 0.96,
+    width: '100%'
   };
 
   const arr = responsiveColumnOrder?.map((columnId, idx) => {
@@ -89,7 +93,7 @@ const PakeepListContainer: FC<PakeepListContainerPropsType> = ({
 
   return (
     <DragDropContext onDragEnd={onDragEnd} onDragStart={onDragStart}>
-      <Grid container className={classes.containerClass} ref={ref} >
+      <Grid container className={classes.containerClass} ref={ref}>
         {arr}
       </Grid>
     </DragDropContext>

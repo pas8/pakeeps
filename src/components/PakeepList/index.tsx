@@ -15,7 +15,7 @@ import {
 import { difference, filter, flatten, forEach, includes, map, words } from 'lodash';
 import WrapperOfContainerOfPakeepList from './components/WrapperOfContainer';
 import { createContext, FC, memo, useEffect, useRef, useState } from 'react';
-import SelectofFPakeepListContainer from './components/WrapperOfContainer/components/Container/components/Selecto';
+// import SelectofFPakeepListContainer from './components/WrapperOfContainer/components/Container/components/Selecto';
 import { useIsomorphicLayoutEffect, useKeyPressEvent } from 'react-use';
 import EditingDialogOfPakeepElement from './components/EditingDialogOfPakeepElement';
 import { FoldersType, PakeepElementType, PakeepIdType, PakeepsType } from 'store/modules/App/types';
@@ -177,11 +177,11 @@ const PakeepList: FC = () => {
   return (
     <>
       {/* <PakeepHoveringContext.Provider value={pakeepHoveringContextPropviderPropsValue}> */}
-      <Grid ref={scrollerRef} className={'selectoContainer'}>
+      {/* <Grid ref={scrollerRef} className={'selectoContainer'}> */}
         {isFolderPropertyIsAll && <WrapperOfContainerOfPakeepList {...wrapperOfContainerOfPinnedPakeepListProps} />}
 
         {/* <WrapperOfContainerOfPakeepList {...wrapperOfContainerOfAllPakeepListProps} /> */}
-      </Grid>
+      {/* </Grid> */}
       {/* {!isSelectoHidden && <SelectofFPakeepListContainer {...selectoOfPakeepListContainerProps} />} */}
 
       {/* </PakeepHoveringContext.Provider> */}
