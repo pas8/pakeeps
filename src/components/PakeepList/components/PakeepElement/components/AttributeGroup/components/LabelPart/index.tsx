@@ -2,7 +2,7 @@ import React, { useState, FC, MouseEvent, memo } from 'react';
 import { nanoid } from 'nanoid';
 import { useDispatch } from 'react-redux';
 import { useFindIcon } from 'hooks/useFindIcon.hook';
-import {  toChangeTemporaryData } from 'store/modules/App/actions';
+import { toChangeTemporaryData } from 'store/modules/App/actions';
 import { useGetReversedCustomColor } from 'hooks/useGetReversedCustomColor.hook';
 import LabelItem from './components/LabelItem';
 import { LabelPartPropsType } from './types';
@@ -51,10 +51,11 @@ const LabelPart: FC<LabelPartPropsType> = ({
           parentBackgrounColor
         };
 
+        //@ts-ignore
         return <LabelItem {...labelItemProps} />;
       })}
     </>
   );
 };
 
-export default memo( LabelPart);
+export default memo(LabelPart);

@@ -13,6 +13,7 @@ import {
 import PakeepElement from 'components/PakeepList/components/PakeepElement';
 
 import RowOfColumnOfPakeepListContainer from './components/Row';
+import { find, sum, values } from 'lodash';
 
 const paddingValue = 0.8;
 const paddingValueX = 0.8 * 2;
@@ -22,6 +23,9 @@ const useStyles = makeStyles(({ spacing, breakpoints: { down } }) => ({
   column: () => ({
     padding: spacing(0, paddingValue),
     '& > div > div': {
+      '&::-webkit-scrollbar': {
+        width: 0
+      }
       // overflow: 'hidden !important'
       // position: isPakeepDragging ? 'relative' : 'fixed'
     }
@@ -51,7 +55,8 @@ const useStyles = makeStyles(({ spacing, breakpoints: { down } }) => ({
 
 const ColumnOfPakeepListContainer: FC<ColumnOfPakeepListContainerPropsType & { handleSetArrOfRefs: any }> = ({
   column,
-  pakeepsInColumn: notValidatedPakeepsInColumn,
+  // pakeepsInColumn: notValidatedPakeepsInColumn,
+  pakeepsInColumn,
   isLastColumn,
   isFirstColumn,
   folderProperty,
@@ -63,12 +68,13 @@ const ColumnOfPakeepListContainer: FC<ColumnOfPakeepListContainerPropsType & { h
   columnOrderIdx,
   handleSetArrOfRefs
 }) => {
-  const pakeepsInColumn = useValidationOfPakeepsInColumn({
-    notValidatedPakeepsInColumn,
-    folderProperty,
-    folderId,
-    isPakeepDragContextPinned
-  });
+  // const pakeepsInColumn = useValidationOfPakeepsInColumn({
+  //   notValidatedPakeepsInColumn,
+  //   folderProperty,
+  //   folderId,
+  //   isPakeepDragContextPinned
+  // });
+
   if (!pakeepsInColumn) return null;
 
   const classes = useStyles();
@@ -125,9 +131,10 @@ const ColumnOfPakeepListContainer: FC<ColumnOfPakeepListContainerPropsType & { h
 
   const renderClone: DraggableChildrenFn = (provided, snapshot, rubric) => {
     const idx = rubric.source.index;
-    const el = notValidatedPakeepsInColumn[idx];
 
-    const pakeepElementHeigth = pakeepElementHeigthArr[el?.id!];
+    const el = find(pakeepsInColumn, ['id', rubric.draggableId]);
+
+    // const pakeepElementHeigth = pakeepsInColumn[el?.id!]!;
 
     if (!el) return <>null</>;
     const isPinIconShouldBeShownInPakeep = folderProperty === 'ALL' && el.isPinned;
@@ -137,15 +144,15 @@ const ColumnOfPakeepListContainer: FC<ColumnOfPakeepListContainerPropsType & { h
     const draggableContainerProps = {
       ...provided.dragHandleProps,
       ...provided.draggableProps,
-      innerRef: provided.innerRef
-      // ref: renderCloneRef
+      innerRef: provided.innerRef,
+      ref: provided.innerRef
       // className: classes.columnElement
     };
 
     const allPakeepElementProps = {
       ...el,
       ...defaultPakeepElementProps,
-      pakeepElementHeigth,
+      pakeepElementHeigth: pakeepElementHeigthArr[rubric.draggableId],
       handleResetItemSize,
       idx,
       isPinIconShouldBeShownInPakeep,

@@ -39,6 +39,8 @@ const PakeepListContainer: FC<PakeepListContainerPropsType> = ({
 
   const [arrOfRefs, setArrOfRefs] = useState<any[]>([]);
 
+  // const [heightOf, setArrOfRefs] = useState<number[]>([]);
+
   const { y: value } = useWindowScroll();
   useEffect(() => {
     arrOfRefs.forEach(el => !!el?.current?.scrollTo && el.current.scrollTo(value));
@@ -83,7 +85,7 @@ const PakeepListContainer: FC<PakeepListContainerPropsType> = ({
   });
 
   return (
-    <DragDropContext onDragEnd={onDragEnd}>
+    <DragDropContext onDragEnd={onDragEnd} onDragStart={onDragStart}>
       <Grid container className={classes.containerClass}>
         {arr}
       </Grid>

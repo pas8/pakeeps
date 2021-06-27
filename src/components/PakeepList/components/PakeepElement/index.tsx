@@ -284,19 +284,19 @@ const PakeepElement: FC<PakeepElementPropsType> = ({
     <PakeepPropertyProvider.Provider value={{ events, labels }}>
       <Grid {...pakeepGridContainerProps}>
         <MainDefaultPartOfPakeepElement {...containerProps}>
-          {/* {  (
+          {
             <Grid>
               <AttributeGroup {...attributeGroupProps} />
             </Grid>
-          )} */}
+          }
 
-          {/* {openIn && !isDragging && (
+          {openIn && !isDragging && (
             <AnimationElement in={openIn}>
               <Grid className={classes.iconsUtilsClass}>
                 <IconsUtils {...allIconsUtilsProps} />
               </Grid>
             </AnimationElement>
-          )} */}
+          )}
         </MainDefaultPartOfPakeepElement>
       </Grid>
     </PakeepPropertyProvider.Provider>

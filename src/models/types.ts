@@ -125,3 +125,8 @@ export type UseValidationOfPakeepsInColumnType = ({
 }) => PakeepsType | null;
 
 export type FolderPropetyType = DefaultFolderElementPropertyNamesType | 'label' | 'ALL';
+
+export type UseAttributeGroupColorType = (
+  customColor: CustomColorType,
+  currentColor: string
+) => [string, boolean, boolean];

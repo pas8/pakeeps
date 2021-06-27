@@ -16,8 +16,10 @@ const useStyles = makeStyles(({ spacing }) => ({
 
 const PreviewEventList: FC<PreviewEventListPropsType> = ({ validatedCurrentEvents, currentEventsArr, customColor }) => {
   const classes = useStyles();
-  const isFirstVariantOfEventItemView = !true;
+  const isFirstVariantOfEventItemView = true;
   const isInlineVariantOfEventItemView = true;
+
+  const isInputTextViewOfCaptionOfEventItem = !true;
 
   return (
     <Grid>
@@ -43,6 +45,7 @@ const PreviewEventList: FC<PreviewEventListPropsType> = ({ validatedCurrentEvent
             customColor,
             value,
             isOnlyTime,
+            isInputTextViewOfCaptionOfEventItem,
             isFirstVariantOfEventItemView,
             isInlineVariantOfEventItemView
           };
