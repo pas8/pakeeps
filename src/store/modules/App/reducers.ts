@@ -105,7 +105,7 @@ const initialState: AppInitialStateInteface = {
   pakeepsOrderNames: [],
   pinnedPakeepsOrderNames: [],
   notifinationCounter: 8,
-  isMenuOpen: false,
+  menuOpenStatus: 'HIDDEN',
   currentFolderPropertyIdx: 0,
   drawerWidth: 0,
   isCancelSelectedPakeepsId: false,

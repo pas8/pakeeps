@@ -1,3 +1,4 @@
+import { menuOpenStatusDenotation } from './../../../models/denotation';
 import { pakeepPropertyiesNames } from 'models/denotation';
 import { CustomColorType, SelectedPakeepsIdType, SelectedPakeepsType } from 'models/types';
 import { $Keys, $Values, Brand, Optional } from 'utility-types';
@@ -9,7 +10,7 @@ export type PayloadTypes = {
   };
   [TypeNames.HANDLE_DELETE_PAKEEP]: { pakeepId: string };
   [TypeNames.HANDLE_ADD_EVENT_TO_PAKEEP]: { newEvent: PakeepEventInteface; pakeepId: PakeepIdType };
-  [TypeNames.HANDLE_CHANGE_MENU_OPEN_STATUS]: { isMenuOpen: boolean };
+  [TypeNames.HANDLE_CHANGE_MENU_OPEN_STATUS]: { menuOpenStatus: IsMenuOpenType };
   [TypeNames.HANDLE_SET_CURRENT_FOLDER_PROPERTY_IDX]: { currentFolderPropertyIdx: number };
   [TypeNames.HANDLE_SET_NEW_ORDER_NAMES]: { newOrderNames: OrderNamesType };
   [TypeNames.HANDLE_CHANGE_FOLDERS]: { folders: FoldersType };
@@ -273,6 +274,7 @@ export type OrderNamesType = OrderNameType[];
 export type DrawerWidthType = number;
 export type PakeepsType = PakeepElementType[];
 
+export type IsMenuOpenType = keyof typeof menuOpenStatusDenotation;
 export interface AppInitialStateInteface {
   // breakpointsValues: BreakpointsValuesInterface<number>;
   // theme: DefaultThemeInterface;
@@ -285,7 +287,7 @@ export interface AppInitialStateInteface {
   pakeepsOrderNames: OrderNamesType;
   pinnedPakeepsOrderNames: OrderNamesType;
   notifinationCounter: number;
-  isMenuOpen: boolean;
+  menuOpenStatus: IsMenuOpenType;
   currentFolderPropertyIdx: number;
   drawerWidth: DrawerWidthType;
   isCancelSelectedPakeepsId: boolean;

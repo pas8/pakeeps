@@ -132,7 +132,6 @@ const Folders: FC<FoldersTypeProps> = ({
 }) => {
   const navigationViewLike = useSelector(getNavigationViewLike);
   const folders = useSelector(getFolders);
-
   const classes = useStyles({
     isMenuOpen,
     positionOfFolderViewWithPakeepViewIsBottom,

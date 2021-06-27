@@ -4,4 +4,10 @@ export const pakeepPropertyiesNames = {
   isArchived: 'isArchived',
   isPinned: 'isPinned',
   isCheckBoxes: 'isCheckBoxes'
-} as const 
+} as const;
+
+export const menuOpenStatusDenotation = {
+  HIDDEN: 'HIDDEN',
+  OPEN: 'OPEN',
+  EXTENDED: 'EXTENDED'
+} as const;

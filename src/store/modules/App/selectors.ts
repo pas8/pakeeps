@@ -21,7 +21,10 @@ export const getCurrentFolderPropertyIdx = createSelector(
 
 export const getFolders = createSelector([({ app }: RootStoreType) => app.folders], folders => folders);
 
-export const getMenuOpenStatus = createSelector([({ app }: RootStoreType) => app.isMenuOpen], isMenuOpen => isMenuOpen);
+export const getMenuOpenStatus = createSelector(
+  [({ app }: RootStoreType) => app.menuOpenStatus],
+  menuOpenStatus => menuOpenStatus
+);
 export const getDrawerWidth = createSelector([({ app }: RootStoreType) => app.drawerWidth], drawerWidth => drawerWidth);
 export const getLabels = createSelector([({ app }: RootStoreType) => app.labels], labels => labels);
 

@@ -15,6 +15,7 @@ import HeaderWhenActiveSelecto from 'components/HeaderWhenActiveSelecto';
 import { toCancelSelectingStatus, toChangePinStatusOfPakeeps } from 'store/modules/App/actions';
 import { FC } from 'react';
 import { LayoutChildrenType } from 'models/types';
+import { menuOpenStatusDenotation } from 'models/denotation';
 
 const useStyles = makeStyles(({ spacing, transitions, breakpoints }) => ({
   container: {
@@ -57,9 +58,9 @@ const useStyles = makeStyles(({ spacing, transitions, breakpoints }) => ({
 }));
 
 const HeaderLayout: FC<LayoutChildrenType> = ({ children }) => {
-  const dispatch = useDispatch();
 
-  const isMenuOpen = useSelector(getMenuOpenStatus);
+  const menuOpenStatus = useSelector(getMenuOpenStatus);
+  console.log(menuOpenStatus)
   const drawerWidth = useSelector(getDrawerWidth);
   const selectedPakeeps = useSelector(getSelectedPakeeps)!;
   const navigationViewLike = useSelector(getNavigationViewLike);
@@ -71,11 +72,15 @@ const HeaderLayout: FC<LayoutChildrenType> = ({ children }) => {
 
   const classes = useStyles({ drawerWidth, navigationViewLikeTelegram });
 
+  const isMenuExtended = menuOpenStatus === menuOpenStatusDenotation.EXTENDED;
+  const isMenuOpen = menuOpenStatus === menuOpenStatusDenotation.OPEN;
+
   const headerByPasProps = {
     navigationViewLikeGoogleKeep,
     navigationViewLikeTelegram,
     navigationViewLikePakeeps,
     isMenuOpen,
+    isMenuExtended,
     drawerWidth
   };
   const isShouldBeHeaderWhenActiveSelecto = selectedPakeeps.length > 0;

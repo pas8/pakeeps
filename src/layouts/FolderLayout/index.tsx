@@ -24,9 +24,15 @@ import {
 } from 'store/modules/Settings/selectors';
 import ArrowForwardIosOutlinedIcon from '@material-ui/icons/ArrowForwardIosOutlined';
 import { AllElementsIsBooleanType, LayoutChildrenType } from 'models/types';
-import { toChangeFolders, toSetCurrentFolderPropertyIdx, toSetDrawerWidth } from 'store/modules/App/actions';
+import {
+  toChangeFolders,
+  toChangeMenuOpenStatus,
+  toSetCurrentFolderPropertyIdx,
+  toSetDrawerWidth
+} from 'store/modules/App/actions';
 import { DrawerWidthType, FoldersType } from 'store/modules/App/types';
 import { HandleChangeOfFolders } from 'components/Folders/types';
+import { menuOpenStatusDenotation } from 'models/denotation';
 
 const useStyles = makeStyles(({ palette }) => ({
   container: ({
@@ -88,7 +94,11 @@ const FolderLayout = ({ children }: LayoutChildrenType) => {
   const labels = useSelector(getLabels);
   const defaultFolderArr = useSelector(getDefaultFolderArr);
 
-  const isMenuOpen = useSelector(getMenuOpenStatus);
+  const menuOpenStatus = useSelector(getMenuOpenStatus);
+
+  const isMenuOpen = menuOpenStatus === menuOpenStatusDenotation.EXTENDED;
+  const isFolderOpen = menuOpenStatus === menuOpenStatusDenotation.OPEN || isMenuOpen;
+
   const drawerWidth = useSelector(getDrawerWidth);
 
   const positionOfFolderViewWithPakeepView = useSelector(getPositionOfFolderViewWithPakeepView);
@@ -99,13 +109,16 @@ const FolderLayout = ({ children }: LayoutChildrenType) => {
   const positionOfFolderViewWithPakeepViewIsLeft = positionOfFolderViewWithPakeepView === 'left';
 
   const foldersArr = useFolders({ labels, defaultFolderArr });
-  const [isFolderOpen, setIsFolderOpen] = useState(false);
+
   const marginValue = 8;
 
   const handleChange: HandleChangeOfFolders = (__, idx) => {
     handleCurrentFolderPropertyIdx(idx);
   };
-  const handleHideFolder = () => setIsFolderOpen(false);
+
+  const handleHideFolder = () => {
+    dispatch(toChangeMenuOpenStatus({ menuOpenStatus: menuOpenStatusDenotation.HIDDEN }));
+  };
 
   const [margin, setMargin] = useState(0);
   const [isSizeOfFoldersMoreThanSize, setIsSizeOfFoldersMoreThanSize] = useState(false);
@@ -130,35 +143,22 @@ const FolderLayout = ({ children }: LayoutChildrenType) => {
 
   const classes = useStyles({ positionOfFolderViewWithPakeepViewIsBottom, positionOfFolderViewWithPakeepViewIsRight });
 
-const ref = useRef<HTMLDivElement>(null)
-
-// useEffect(()=>{
-
-
-
-  // offsetHeight
-// 
-
-// },[ref.current?.offsetHeight])
-
   return (
     <Grid
       container
-   
       className={classes.container}
       wrap={'nowrap'}
       alignItems={'center'}
       direction={positionOfFolderViewWithPakeepViewIsBottom ? 'column-reverse' : 'row'}
     >
-      {!isFolderOpen && (
+      {/* {!isFolderOpen && (
         <Grid className={classes.arrowButton}>
           <IconButton onClick={() => setIsFolderOpen(true)} size={'small'}>
             <ArrowForwardIosOutlinedIcon />
           </IconButton>
         </Grid>
-      )}
+      )} */}
       <nav
-         ref={ref}
         style={{
           minWidth: drawerWidth,
           marginLeft: isSizeOfFoldersMoreThanSize && positionOfFolderViewWithPakeepViewIsBottom ? margin : 0,
