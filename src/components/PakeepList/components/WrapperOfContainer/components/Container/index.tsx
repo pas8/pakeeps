@@ -34,9 +34,6 @@ const PakeepListContainer: FC<PakeepListContainerPropsType> = ({
 }) => {
   const classes = useStyles();
 
-  // const [ref, { x, y, width: containerWidth, height, top }] = useMeasure<HTMLDivElement>();
-  const ref = useRef<HTMLDivElement>(null);
-
   const { height: windowHeigth } = useWindowSize();
   const columnQuantity = responsiveColumnOrder.length;
 
@@ -47,11 +44,8 @@ const PakeepListContainer: FC<PakeepListContainerPropsType> = ({
     arrOfRefs.forEach(el => !!el?.current?.scrollTo && el.current.scrollTo(value));
   }, [value]);
 
-// console.log(ref.current)
-
   const handleSetArrOfRefs = (newRef: any) => setArrOfRefs(state => [...state, newRef]);
-  // useMemo(() => {
-  // console.log(arrOfRefs);
+
   const pakeepListMeasure = {
     height: windowHeigth * 0.96,
     width: '100%'
@@ -69,7 +63,7 @@ const PakeepListContainer: FC<PakeepListContainerPropsType> = ({
       const currentEl: PakeepElementType = findedPakeep;
       return currentEl;
     });
-    // if(pakeepsInColumn)
+
     const isLastColumn = !!(idx + 1 === columnQuantity);
     const isFirstColumn = !!(idx === 0);
 
@@ -88,12 +82,9 @@ const PakeepListContainer: FC<PakeepListContainerPropsType> = ({
     return <ColumnOfPakeepListContainer {...allColumnOfPakeepListContainerProps} />;
   });
 
-  // setArr(arr);
-  // }, [pakeeps, responsiveColumnOrder, columns]);
-
   return (
-    <DragDropContext onDragEnd={onDragEnd} onDragStart={onDragStart}>
-      <Grid container className={classes.containerClass} ref={ref}>
+    <DragDropContext onDragEnd={onDragEnd}>
+      <Grid container className={classes.containerClass}>
         {arr}
       </Grid>
     </DragDropContext>

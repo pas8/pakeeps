@@ -1,10 +1,9 @@
-import PropTypes from 'prop-types';
 import { makeStyles, Grid } from '@material-ui/core';
+import { VariableSizeList as List } from 'react-window';
 import React, { FC, memo, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { DraggableChildrenFn, Droppable } from 'react-beautiful-dnd';
 import clsx from 'clsx';
 import { useCustomBreakpoint } from 'hooks/useCustomBreakpoint';
-import DraggableContainerOfPakeepElement from './components/DraggableContainer';
 import { useValidationOfPakeepsInColumn } from 'hooks/useValidationOfPakeepsInColumn.hook';
 import {
   ColumnOfPakeepListContainerPropsType,
@@ -13,9 +12,6 @@ import {
 } from './type';
 import PakeepElement from 'components/PakeepList/components/PakeepElement';
 
-import { areEqual, VariableSizeList as List } from 'react-window';
-import { useIsomorphicLayoutEffect, useWindowScroll, useTimeout, useUpdate, useDebounce } from 'react-use';
-import { debounce, throttle } from 'lodash';
 import RowOfColumnOfPakeepListContainer from './components/Row';
 
 const paddingValue = 0.8;
@@ -65,7 +61,6 @@ const ColumnOfPakeepListContainer: FC<ColumnOfPakeepListContainerPropsType & { h
   onClickOfPakeepElement,
   pakeepListMeasure,
   columnOrderIdx,
-  // isPakeepDragging,
   handleSetArrOfRefs
 }) => {
   const pakeepsInColumn = useValidationOfPakeepsInColumn({
@@ -113,17 +108,9 @@ const ColumnOfPakeepListContainer: FC<ColumnOfPakeepListContainerPropsType & { h
     const id = pakeepsInColumn[index]?.id;
     const size = pakeepElementHeigthArr[id!];
 
-    // if (!size) {
-    // toggleResetItemSize(index)
-    // }
-    // console.log(pakeepElementHeigthArr);
-
     return (size || DEFAULT_PAKEEP_VALUE) + 16;
-    // return ( DEFAULT_PAKEEP_VALUE) + 100;
   };
   const ref = useRef<any>(null);
-
-  // const { x, y: value } = useWindowScroll();
 
   useLayoutEffect(() => {
     const list = ref?.current;
@@ -132,23 +119,9 @@ const ColumnOfPakeepListContainer: FC<ColumnOfPakeepListContainerPropsType & { h
     }
   }, [columnOrderIdx]);
 
-  // useEffect(() => {
-
-  //   ref.current.scrollTo(value);
-  // }, [value]);
-
   useEffect(() => {
     handleSetArrOfRefs(ref);
   }, []);
-
-  // const [, cancel] = useDebounce(
-  //   () => {
-  //   ref.current.scrollTo(value);
-
-  //   },
-  //   1000,
-  //   [value]
-  // );
 
   const renderClone: DraggableChildrenFn = (provided, snapshot, rubric) => {
     const idx = rubric.source.index;
@@ -165,9 +138,9 @@ const ColumnOfPakeepListContainer: FC<ColumnOfPakeepListContainerPropsType & { h
       ...provided.dragHandleProps,
       ...provided.draggableProps,
       innerRef: provided.innerRef
+      // ref: renderCloneRef
       // className: classes.columnElement
     };
-    console.log(draggableContainerProps,rubric,snapshot,provided)
 
     const allPakeepElementProps = {
       ...el,
@@ -178,7 +151,6 @@ const ColumnOfPakeepListContainer: FC<ColumnOfPakeepListContainerPropsType & { h
       isPinIconShouldBeShownInPakeep,
       isDragging: snapshot.isDragging
     };
-
     return (
       <Grid {...draggableContainerProps}>
         <PakeepElement {...allPakeepElementProps} />
@@ -207,9 +179,7 @@ const ColumnOfPakeepListContainer: FC<ColumnOfPakeepListContainerPropsType & { h
   };
 
   return (
-    //@ts-ignore
     <Grid {...gridContainerProps}>
-      {/* <button onClick={() =>}>FUCK</button> */}
       <Droppable {...droppableProps}>
         {provided => {
           return (
