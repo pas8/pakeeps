@@ -62,6 +62,7 @@ const MoreUtils: FC<MoreUtilsPropsType> = ({ slicedArrAfter, customColor }) => {
           menuComponentsProps
         }) => {
           const [primaryColor, , maxEmphasisColor, highEmphasisColor] = useThemeColors();
+          console.log(isIconActive)
           const color = (
             customColor.isUseDefault
               ? isIconActive

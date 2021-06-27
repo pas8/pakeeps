@@ -214,8 +214,10 @@ const DialogOfAddNewLabel: FC<DialogOfAddNewLabelPropsType> = ({
       <DialogTitle>Add new global label</DialogTitle>
       <SteperOfDialogOfAddNewLabel {...steperOfDialogOfAddNewLabelProps} />
       <DialogActions>
-        <LabelItem {...labelItemProps} />
-
+        {
+          //@ts-ignore
+          <LabelItem {...labelItemProps} />
+        }
         <ActionsButtonGroup {...actionsButtonGroupProps} />
       </DialogActions>
     </Dialog>

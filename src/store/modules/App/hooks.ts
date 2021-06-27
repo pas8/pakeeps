@@ -47,9 +47,9 @@ export const useChangePakeepProperty = ({
       ? [...findedPakeep[properyName], propertyValue]
       : !findedPakeep[properyName];
 
-  const newPakeep = { ...findedPakeep, properyName: property };
+  const newPakeep = { ...findedPakeep, [properyName]: property };
 
-  const filteredPakeeps = filter(pakeeps, ({ id }) => pakeepId === id);
+  const filteredPakeeps = filter(pakeeps, ({ id }) => pakeepId !== id);
   const variedPakeeps = [...filteredPakeeps, newPakeep];
 
   const variedState = { pakeeps: variedPakeeps };

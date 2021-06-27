@@ -129,6 +129,7 @@ const MenuOfLabelPart: FC<MenuOfLabelPartPropsType> = ({
     isSaveButtonHidden: false,
     onClickOfSaveButton,
     customColor,
+    //@ts-ignore
     customTitle: <LabelItem {...labelItemProps} />
   };
 

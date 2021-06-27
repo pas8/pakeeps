@@ -102,7 +102,8 @@ const PakeepElement: FC<PakeepElementPropsType> = ({
   isSelecting,
   handleSetPakeepElementHeigthArr,
   handleResetItemSize,
-  pakeepElementHeigth
+  pakeepElementHeigth,
+  ...propertyies
 }) => {
   // if(!pakeepElementHeigth) return <></>
   const dispatch = useDispatch();
@@ -166,6 +167,7 @@ const PakeepElement: FC<PakeepElementPropsType> = ({
 
   const iconsUtilsProps = {
     ...iconsUtilsFunc,
+    ...propertyies,
     handleSetIsPinnedPakeep,
     isAllIconsIsShown: false,
     // setEditTitleIsTrue,
@@ -289,14 +291,14 @@ const PakeepElement: FC<PakeepElementPropsType> = ({
               <AttributeGroup {...attributeGroupProps} />
             </Grid>
           }
-
+{/* 
           {openIn && !isDragging && (
             <AnimationElement in={openIn}>
               <Grid className={classes.iconsUtilsClass}>
                 <IconsUtils {...allIconsUtilsProps} />
               </Grid>
             </AnimationElement>
-          )}
+          )} */}
         </MainDefaultPartOfPakeepElement>
       </Grid>
     </PakeepPropertyProvider.Provider>

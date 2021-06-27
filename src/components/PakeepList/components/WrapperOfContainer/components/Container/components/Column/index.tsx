@@ -30,27 +30,27 @@ const useStyles = makeStyles(({ spacing, breakpoints: { down } }) => ({
       // position: isPakeepDragging ? 'relative' : 'fixed'
     }
   }),
-  columnFirst: {
-    padding: spacing(0),
-    paddingRight: spacing(paddingValue),
-    [down('sm')]: {
-      paddingRight: spacing(paddingValueX / 1.8)
-    }
-  },
-  columnLast: {
-    padding: spacing(0),
-    paddingLeft: spacing(paddingValue),
-    [down('sm')]: {
-      paddingLeft: spacing(paddingValue / 1.8)
-    }
-  },
-  columnElement: {
-    margin: spacing(0),
-    marginBottom: spacing(paddingValueOfElement),
-    [down('sm')]: {
-      marginBottom: spacing(paddingValueOfElement / 1.2)
-    }
-  }
+  // columnFirst: {
+  //   padding: spacing(0),
+  //   paddingRight: spacing(paddingValue),
+  //   [down('sm')]: {
+  //     paddingRight: spacing(paddingValueX / 1.8)
+  //   }
+  // },
+  // columnLast: {
+  //   padding: spacing(0),
+  //   paddingLeft: spacing(paddingValue),
+  //   [down('sm')]: {
+  //     paddingLeft: spacing(paddingValue / 1.8)
+  //   }
+  // },
+  // columnElement: {
+  //   margin: spacing(0),
+  //   marginBottom: spacing(paddingValueOfElement),
+  //   [down('sm')]: {
+  //     marginBottom: spacing(paddingValueOfElement / 1.2)
+  //   }
+  // }
 }));
 
 const ColumnOfPakeepListContainer: FC<ColumnOfPakeepListContainerPropsType & { handleSetArrOfRefs: any }> = ({
@@ -191,9 +191,12 @@ const ColumnOfPakeepListContainer: FC<ColumnOfPakeepListContainerPropsType & { h
         {provided => {
           return (
             <Grid innerRef={provided.innerRef} {...provided.droppableProps}>
-              <List {...listProps} outerRef={provided.innerRef}>
-                {RowOfColumnOfPakeepListContainer}
-              </List>
+              {
+                //@ts-ignore
+                <List {...listProps} outerRef={provided.innerRef}>
+                  {RowOfColumnOfPakeepListContainer}
+                </List>
+              }
               {provided.placeholder}
             </Grid>
           );

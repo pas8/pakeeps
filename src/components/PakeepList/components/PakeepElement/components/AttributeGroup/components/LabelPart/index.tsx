@@ -6,6 +6,7 @@ import { toChangeTemporaryData } from 'store/modules/App/actions';
 import { useGetReversedCustomColor } from 'hooks/useGetReversedCustomColor.hook';
 import LabelItem from './components/LabelItem';
 import { LabelPartPropsType } from './types';
+import { Grid } from '@material-ui/core';
 
 const LabelPart: FC<LabelPartPropsType> = ({
   labels,
@@ -19,7 +20,7 @@ const LabelPart: FC<LabelPartPropsType> = ({
   const customColor = useGetReversedCustomColor(notReversedCustomColor);
 
   return (
-    <>
+    <Grid container>
       {labels.map(({ title, iconName: labelIconName, id, color, variant }) => {
         const icon = useFindIcon(labelIconName);
 
@@ -54,7 +55,7 @@ const LabelPart: FC<LabelPartPropsType> = ({
         //@ts-ignore
         return <LabelItem {...labelItemProps} />;
       })}
-    </>
+    </Grid>
   );
 };
 

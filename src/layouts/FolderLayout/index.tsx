@@ -2,7 +2,7 @@ import { Grid, IconButton, makeStyles } from '@material-ui/core';
 import Folders from 'components/Folders';
 import { useFolders } from 'hooks/useFolders.hook';
 import PropTypes from 'prop-types';
-import { useCallback, useState, useEffect } from 'react';
+import { useCallback, useState, useEffect, useRef } from 'react';
 import { connect, useDispatch, useSelector } from 'react-redux';
 // import {
 //   handleChangeFolders,
@@ -130,9 +130,21 @@ const FolderLayout = ({ children }: LayoutChildrenType) => {
 
   const classes = useStyles({ positionOfFolderViewWithPakeepViewIsBottom, positionOfFolderViewWithPakeepViewIsRight });
 
+const ref = useRef<HTMLDivElement>(null)
+
+// useEffect(()=>{
+
+
+
+  // offsetHeight
+// 
+
+// },[ref.current?.offsetHeight])
+
   return (
     <Grid
       container
+   
       className={classes.container}
       wrap={'nowrap'}
       alignItems={'center'}
@@ -146,6 +158,7 @@ const FolderLayout = ({ children }: LayoutChildrenType) => {
         </Grid>
       )}
       <nav
+         ref={ref}
         style={{
           minWidth: drawerWidth,
           marginLeft: isSizeOfFoldersMoreThanSize && positionOfFolderViewWithPakeepViewIsBottom ? margin : 0,

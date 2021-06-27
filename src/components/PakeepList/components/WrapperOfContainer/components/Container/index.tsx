@@ -7,12 +7,14 @@ import { FC, memo, useEffect, useMemo, useRef, useState } from 'react';
 import { PakeepListContainerPropsType } from './types';
 import { PakeepElementType, PakeepsType } from 'store/modules/App/types';
 import { useMeasure, useWindowScroll, useWindowSize } from 'react-use';
+import { getDrawerWidth } from 'store/modules/App/selectors';
+import { useSelector } from 'react-redux';
 
 const useStyles = makeStyles(({ spacing, breakpoints: { between, down }, palette }) => ({
   containerClass: () => ({
     // position: !isPakeepDragging ? 'fixed' : 'static',
     position: 'fixed',
-    right: 0,
+    right: 4,
     margin: spacing(4, 0, 0, 0),
     [between('xs', 'sm')]: { margin: spacing(2, 0, 0, 0) },
     [down('md')]: { margin: spacing(4, 0, 0, 0) },
@@ -32,10 +34,14 @@ const PakeepListContainer: FC<PakeepListContainerPropsType> = ({
   onDragStart,
   columnOfPakeepListContainerProps
 }) => {
+  const drawerWidth = useSelector(getDrawerWidth);
+
   const classes = useStyles();
 
-  const { height: windowHeigth } = useWindowSize();
+  const { height: windowHeigth ,width} = useWindowSize();
   const columnQuantity = responsiveColumnOrder.length;
+
+  // const [ref, { width }] = useMeasure<HTMLDivElement>();
 
   const [arrOfRefs, setArrOfRefs] = useState<any[]>([]);
 
@@ -48,9 +54,11 @@ const PakeepListContainer: FC<PakeepListContainerPropsType> = ({
 
   const handleSetArrOfRefs = (newRef: any) => setArrOfRefs(state => [...state, newRef]);
 
+  const CONTAINER_WIDTH = width - drawerWidth -16;
+
   const pakeepListMeasure = {
     height: windowHeigth * 0.96,
-    width: '100%'
+    width: CONTAINER_WIDTH / columnQuantity
   };
 
   const arr = responsiveColumnOrder?.map((columnId, idx) => {
@@ -86,7 +94,7 @@ const PakeepListContainer: FC<PakeepListContainerPropsType> = ({
 
   return (
     <DragDropContext onDragEnd={onDragEnd} onDragStart={onDragStart}>
-      <Grid container className={classes.containerClass}>
+      <Grid container className={classes.containerClass}  style={{ width: CONTAINER_WIDTH - 4 }}>
         {arr}
       </Grid>
     </DragDropContext>
