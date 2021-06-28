@@ -11,6 +11,7 @@ import StoreLayout from 'layouts/StoreLayout';
 import AuthLayout from 'layouts/AuthLayout';
 import HeaderLayout from 'layouts/HeaderLayout';
 import '../styles/globals.css';
+import MenuesLayout from 'layouts/MenuesLayout';
 
 // LogRocket.init('b6se1p/pakeeps');
 
@@ -20,13 +21,26 @@ const Index = ({ Component, pageProps }) => {
     if (jssStyles) jssStyles.parentElement.removeChild(jssStyles);
   }, []);
 
-  // const layouts = [StoreLayout, ThemeLayout, DateLayout, AuthLayout, SnackBarLayout, FolderLayout, HeaderLayout];
-  const layouts = [StoreLayout,ThemeLayout];
+    
+
+
+
+  const layouts = [
+    StoreLayout,
+    ThemeLayout,
+    DateLayout,
+    AuthLayout,
+    SnackBarLayout,
+    MenuesLayout,
+    FolderLayout,
+    HeaderLayout,
+  ];
+  // const layouts = [StoreLayout,ThemeLayout];
 
   return (
     <ComposeLayouts layouts={layouts} pageProps={pageProps}>
-      <div>fuck</div>
-      {/* <Component {...pageProps} /> */}
+      {/* <div>fuck</div> */}
+      <Component {...pageProps} />
     </ComposeLayouts>
   );
 };

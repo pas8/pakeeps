@@ -1,3 +1,5 @@
+
+export const h = 'h'
 // export const addDateToPakeepThunk = (pakeepId, event) => dispatch => {
 //   dispatch(toAddDateToPakeep(pakeepId, event));
 // };
@@ -79,7 +81,7 @@
 //   dispatch(toSetNewPakeepsArr(newPakeeps));
 // };
 
-// export const handlePinStatusPakeepThunk = (pakeepId, isPakeepPinned) => dispatch => {
+// export const handlePinStatusPakeep = (pakeepId, isPakeepPinned) => dispatch => {
 //   dispatch(toHandlePinStatusPakeep(pakeepId, isPakeepPinned));
 // };
 

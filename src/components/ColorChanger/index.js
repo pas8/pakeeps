@@ -1,9 +1,20 @@
 import PropTypes from 'prop-types';
 import { useState } from 'react';
-import { Dialog, Grid, makeStyles } from '@material-ui/core';
+import { CircularProgress, Dialog, Grid, makeStyles } from '@material-ui/core';
 import _ from 'lodash';
-import CustomColor from './components/CustomColor';
+// import CustomColor from './components/CustomColor';
 import CustomGradient from './components/CustomGradient';
+
+import dynamic from 'next/dynamic';
+import { Skeleton } from '@material-ui/lab';
+
+const CustomColor = dynamic(() => import('./components/CustomColor'), {
+  loading: () => (
+    <Grid style={{width:'200px', height:'300px'}}>
+      <CircularProgress color={"secondary"} />
+    </Grid>
+  )
+});
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -20,7 +31,6 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const ColorPickerByPas = ({ handleSave = null, customColor }) => {
-
   const [gradientStatus, setGradientStatus] = useState(false);
   const classes = useStyles();
   const Container = gradientStatus ? Dialog : Grid;

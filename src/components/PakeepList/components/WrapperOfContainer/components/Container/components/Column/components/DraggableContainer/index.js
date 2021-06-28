@@ -2,13 +2,41 @@ import { Grid } from '@material-ui/core';
 import { Draggable } from 'react-beautiful-dnd';
 import PropTypes from 'prop-types';
 import PakeepElement from 'components/PakeepList/components/PakeepElement/index';
+import { memo } from 'react';
 
-const DraggableContainerOfPakeepElement = ({ draggableProps, draggableContainerClassName, pakeepElementProps }) => (
+function getStyle({ draggableStyle, virtualStyle, isDragging }) {
+  const combined = {
+    ...virtualStyle,
+    ...draggableStyle
+  };
+
+  const grid = 8;
+
+  const result = {
+    ...combined,
+        left: isDragging ? combined.left : combined.left + grid,
+    height: isDragging ? combined.height : combined.height - grid,
+
+    width: isDragging ? draggableStyle.width : `calc(${combined.width} - ${grid * 2}px)`,
+    marginBottom: grid
+  };
+
+  return result;
+}
+
+const DraggableContainerOfPakeepElement = ({
+  draggableProps,
+  draggableContainerClassName,
+  pakeepElementProps,
+  style
+}) => (
+  // const DraggableContainerOfPakeepElement = ({ draggableProps, draggableContainerClassName, children }) => (
   <Draggable {...draggableProps}>
     {(provided, { isDragging }) => {
       const draggableContainerProps = {
         ...provided.dragHandleProps,
         ...provided.draggableProps,
+        ref:provided.innerRef,
         innerRef: provided.innerRef,
         className: draggableContainerClassName
       };
@@ -16,10 +44,18 @@ const DraggableContainerOfPakeepElement = ({ draggableProps, draggableContainerC
       const allPakeepElementProps = { ...pakeepElementProps, isDragging };
 
       return (
-        <Grid {...draggableContainerProps}>
+        <Grid
+          {...draggableContainerProps}
+          style={getStyle({
+            draggableStyle: provided.draggableProps.style,
+            virtualStyle: style,
+            isDragging
+          })}
+        >
           <PakeepElement {...allPakeepElementProps} />
         </Grid>
       );
+      // return <Grid {...draggableContainerProps}>{/* <PakeepElement {...allPakeepElementProps} /> */}{children}</Grid>;
     }}
   </Draggable>
 );
@@ -30,4 +66,4 @@ DraggableContainerOfPakeepElement.propTypes = {
   pakeepElementProps: PropTypes.object
 };
 
-export default DraggableContainerOfPakeepElement;
+export default memo(DraggableContainerOfPakeepElement);

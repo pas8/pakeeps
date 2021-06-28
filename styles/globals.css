@@ -1,16 +1,14 @@
-
 @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;1,100&display=swap');
-html,
+@import url('https://fonts.googleapis.com/css?family=Vibur&display=swap');
+
+ html,
 body {
   min-height: 116vh;
   overflow: visible !important;
   overflow-x: hidden !important;
   padding: 0 !important;
   background-color: #303030;
-
-
-
-  
+  height: 100000px;
 }
 
 a {
@@ -40,7 +38,7 @@ ul {
 }
 *::-webkit-scrollbar-thumb {
   background-color: rgba(255, 255, 255, 0.4);
-  border-radius :2em;
+  border-radius: 2em;
 }
 
 *::-webkit-scrollbar-thumb:hover {
@@ -62,12 +60,11 @@ ul {
 }
 
 .MuiSkeleton-root {
-
-  background-color: rgba(255, 255, 255, 0.08) !important
+  background-color: rgba(255, 255, 255, 0.08) !important;
 }
 
+.MuiPickersTimePickerToolbar-hourMinuteLabelReverse {
+  flex-direction: row !important;
+} 
 
 
- .MuiPickersTimePickerToolbar-hourMinuteLabelReverse {
-  flex-direction: row  !important
-}

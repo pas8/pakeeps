@@ -1,35 +1,23 @@
-import PropTypes from 'prop-types';
-import { useState, useEffect, FC } from 'react';
+import { useState, FC, useEffect } from 'react';
 import { useMeasure } from 'react-use';
-import {
-  Grid,
-  makeStyles,
-  DialogTitle,
-  DialogContent,
-  TextField,
-  InputBase,
-  Button,
-  Dialog,
-  DialogActions,
-  IconButton,
-  Theme
-} from '@material-ui/core';
+import { useSelector } from 'react-redux';
+
+import { Grid, makeStyles, DialogTitle, DialogContent, InputBase, Dialog, DialogActions } from '@material-ui/core';
 import IconsUtils from 'components/IconsUtils';
 import { useAlpha } from 'hooks/useAlpha.hook';
-import AttributeGroup from '../PakeepElement/components/AttributeGroup';
 import ActionsButtonGroup from 'components/ActionsButtonGroup';
-import {
-  ActionsButtonGroupProps,
-  AllAttributeGroupProps,
-  EditingDialogOfPakeepElementProps,
-  IconsUtilsProps,
-  InputProps,
-  OnChangeInterface,
-  StateInteface,
-  UseStylesInteface
-} from './interface';
 
-const useStyles = makeStyles(({ typography: { h4, h6 }, spacing }: Theme) => {
+import { getPakeeps } from 'store/modules/App/selectors';
+import { useFindPakeepUsingId } from 'hooks/useFindPakeepUsingId.hook';
+import { useGetReadableColor } from 'hooks/useGetReadableColor.hook';
+import { usePakeepUtilsFunc } from 'hooks/usePakeepUtilsFunc.hook';
+import { IconsUtilsArrDenotationNameType } from 'components/IconsUtils/types';
+// import AttributeGroup from '../PakeepElement/components/AttributeGroup';
+
+import { EditingDialogOfPakeepElementProps, onChangeType, UseStylesInteface } from './types';
+import { useLabelListFunc } from 'hooks/useLabelListFunc.hook';
+
+const useStyles = makeStyles(({ typography: { h4, h6 }, spacing }) => {
   return {
     containerClass: ({ backgroundColor, color }: UseStylesInteface) => ({
       backgroundColor,
@@ -65,27 +53,32 @@ const useStyles = makeStyles(({ typography: { h4, h6 }, spacing }: Theme) => {
   };
 });
 
-const EditingDialogOfPakeepElement: FC<EditingDialogOfPakeepElementProps> = ({
-  title,
-  text,
-  correctColor,
-  correctBackground,
-  id,
-  dialogIconsUtilsProps,
-  customColor,
-  dialogAttributeGroupProps,
-  handleClosePakeepDialog
-}) => {
-  const classes = useStyles({ backgroundColor: correctBackground, color: correctColor });
-  const [ref, { width }] = useMeasure<HTMLDivElement>();
+const EditingDialogOfPakeepElement: FC<EditingDialogOfPakeepElementProps> = ({ id, handleClosePakeepDialog }) => {
+  const findedPakeep = useFindPakeepUsingId(id);
+  // if (!findedPakeep) return null;
 
-  const [state, setState] = useState<StateInteface>({ title, text });
+  const { backgroundColor, color, title, text } = findedPakeep;
 
-  useEffect(() => setState({ title, text }), [title, text]);
+  const [state, setState] = useState({ title, text, backgroundColor, color });
 
-  const onChange = ({ target: { name, value } }: OnChangeInterface) => setState(state => ({ ...state, [name]: value }));
+  useEffect(() => {
+    setState({ title, text, backgroundColor, color });
+  }, [findedPakeep]);
 
-  const titleInputProps: InputProps = {
+  const [customColor, isBackgroundColorDefault, isColorDefault] = useGetReadableColor(
+    state.backgroundColor,
+    state.color
+  );
+  const correctBackgroundColor = state.backgroundColor;
+  const correctColor = customColor.hover;
+
+  const classes = useStyles({ backgroundColor: correctBackgroundColor, color: correctColor });
+
+  const onChange: onChangeType = ({ target: { name, value } }) => {
+    setState(state => ({ ...state, [name]: value }));
+  };
+
+  const titleInputProps = {
     placeholder: 'Title',
     autoComplete: 'off',
     onChange,
@@ -95,7 +88,7 @@ const EditingDialogOfPakeepElement: FC<EditingDialogOfPakeepElementProps> = ({
     autoFocus: true
   };
 
-  const textInputProps: InputProps = {
+  const textInputProps = {
     placeholder: 'Text',
     autoComplete: 'off',
     onChange,
@@ -104,38 +97,60 @@ const EditingDialogOfPakeepElement: FC<EditingDialogOfPakeepElementProps> = ({
     value: state.text,
     multiline: true
   };
+  const [ref, { width }] = useMeasure<HTMLDivElement>();
 
-  const JUST_PADDING_VALUE: number = 160;
+  const JUST_PADDING_VALUE = 160;
+  const widthOfContainer = width - JUST_PADDING_VALUE;
 
-  const widthOfContainer: number = width - JUST_PADDING_VALUE;
+  const arrOfButtonNamesWhichSholudBeHidden: IconsUtilsArrDenotationNameType[] = ['width'];
 
-  const arrOfButtonNamesWhichSholudBeHidden: [string] = ['width'];
+  const iconsUtilsFunc = usePakeepUtilsFunc(id);
 
-  const iconsUtilsProps: IconsUtilsProps = {
+  const handleSetBackgroundColorPakeep = (backgroundColor: string) => {
+    setState(state => ({ ...state, backgroundColor }));
+  };
+  const handleSetColorPakeep = (color: string) => {
+    setState(state => ({ ...state, color }));
+  };
+
+  const { handleDeleteNewLabel, handleAddNewLabel } = useLabelListFunc(id);
+
+  const labelsListProps = {
+    // customColor,
+    handleDeleteNewLabel, handleAddNewLabel
+  };
+
+
+  const iconsUtilsProps = {
+    labelsListProps,
     widthOfContainer,
+    id,
+    customColor,
+    handleSetBackgroundColorPakeep,
+    handleSetColorPakeep,
+    iconsUtilsFunc,
     arrOfButtonNamesWhichSholudBeHidden
   };
-  const allIconsUtilsProps: AllAttributeGroupProps = { ...dialogIconsUtilsProps, ...iconsUtilsProps };
 
   const attributeGroupProps = {};
-  const allAttributeGroupProps = { ...dialogAttributeGroupProps, ...attributeGroupProps };
 
   const handleSubmit = () => {
     console.log(state);
   };
 
-  const isOpen: boolean = !!id;
+  const isOpen = !!id;
 
-  const actionsButtonGroupProps: ActionsButtonGroupProps = {
-    onSave: handleSubmit,
-    onClose: handleClosePakeepDialog,
-    colorOfCloseButton: customColor && useAlpha(customColor?.hover, 0.6),
-    colorOfSaveButton: customColor?.hover
-  };
-  
   const onClose = () => {
     handleClosePakeepDialog();
   };
+
+  const actionsButtonGroupProps = {
+    onSave: handleSubmit,
+    onClose,
+    colorOfCloseButton: customColor && useAlpha(customColor?.hover, 0.6),
+    colorOfSaveButton: customColor?.hover
+  };
+
   return (
     <Dialog open={isOpen} onClose={onClose}>
       <Grid className={classes.containerClass} ref={ref}>
@@ -149,12 +164,10 @@ const EditingDialogOfPakeepElement: FC<EditingDialogOfPakeepElementProps> = ({
         <DialogContent>
           <InputBase {...textInputProps} />
         </DialogContent>
-        <DialogContent>
-          <AttributeGroup {...allAttributeGroupProps} />
-        </DialogContent>
+        <DialogContent>{/* <AttributeGroup {...allAttributeGroupProps} /> */}</DialogContent>
 
         <DialogActions className={classes.dialogIconsUtilsClass}>
-          <IconsUtils {...allIconsUtilsProps} />
+          <IconsUtils {...iconsUtilsProps} />
           <ActionsButtonGroup {...actionsButtonGroupProps} />
         </DialogActions>
       </Grid>

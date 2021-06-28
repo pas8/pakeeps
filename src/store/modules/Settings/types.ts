@@ -4,7 +4,7 @@ export type TimeAndDateFromatType = string;
 export type SettingsInitialStateType = {
   viewOfThemeChangerButton: 'iconButton' | 'switch';
   maxSnack: number;
-  utilsViewLikeInGoogleKeep: number;
+  isUtilsHaveViewLikeInGoogleKeep: boolean;
   timeFormat: TimeFormatType;
   timeAndDateFromat: TimeAndDateFromatType;
   navigationViewLike: 'telegram' | 'googleKeep' | 'pakeeps';

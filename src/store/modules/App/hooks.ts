@@ -1,11 +1,10 @@
-import { RootStoreType } from 'models/interfaces';
+import { GlobalLabelsType } from 'store/modules/App/types';
 import { find, filter, includes } from 'lodash';
-import { useDispatch, useSelector } from 'react-redux';
 
 import {
   OnlyPakeepReturnType,
   OperateWOP,
-  PakeepElementInterface,
+  PakeepElementType,
   PakeepIdType,
   PakeepPropertyValueType,
   PakeepsType,
@@ -14,35 +13,24 @@ import {
 } from './types';
 import { TypeNames } from './enums';
 
-export const useGetCurrentPakeep = (pakeepId: string, getState: any): PakeepElementInterface => {
-  const {
-    app: { pakeeps }
-  } = getState();
-  const currentPakeep = find(pakeeps, ({ id }) => pakeepId === id);
-  return currentPakeep;
-};
-
-export const useOperateToDispatch = <P>(action: OperateWOP<P>, payload: P): void => {
-  const dispatch = useDispatch();
-  dispatch(action(payload));
-};
-
-export const useAppSelector = () => {
-  const app = useSelector(({ app }: RootStoreType) => app);
-  return app;
-};
-
-export const useOperate = () => {
-  const app = useAppSelector();
-  const dispatch = useDispatch();
-
-  return { app, dispatch };
-};
+// export const useGetCurrentPakeep = (pakeepId: string, getState: any): PakeepElementType => {
+//   const {
+//     app: { pakeeps }
+//   } = getState();
+//   const currentPakeep = find(pakeeps, ({ id }) => pakeepId === id);
+//   return currentPakeep;
+// };
 
 export const useFilterPakeeps = (pakeeps: PakeepsType, pakeepId: PakeepIdType): PakeepsType => {
   const filteredPakeeps = filter(pakeeps, ({ id }) => id !== pakeepId);
-
   return filteredPakeeps;
+};
+
+export const useFindPakeep = (pakeeps: PakeepsType, pakeepId: PakeepIdType): PakeepElementType | null => {
+  const findedPakeep = find(pakeeps, ({ id }) => id === pakeepId);
+
+  if (!findedPakeep) return null;
+  return findedPakeep;
 };
 
 export const useChangePakeepProperty = ({
@@ -59,7 +47,25 @@ export const useChangePakeepProperty = ({
       ? [...findedPakeep[properyName], propertyValue]
       : !findedPakeep[properyName];
 
-  const newPakeep = { ...findedPakeep, property };
+  const newPakeep = { ...findedPakeep, [properyName]: property };
+
+  const filteredPakeeps = filter(pakeeps, ({ id }) => pakeepId !== id);
+  const variedPakeeps = [...filteredPakeeps, newPakeep];
+
+  const variedState = { pakeeps: variedPakeeps };
+
+  return variedState;
+};
+
+export const useChangePakeepCustomProperty = ({
+  pakeepId,
+  property,
+  pakeeps
+}: useHooksTypes[TypeNames.HANDLE_CHANGE_PAKEEP_CUSTOM_PROPERTY]): OnlyPakeepReturnType => {
+  const findedPakeep = find(pakeeps, ({ id }) => pakeepId === id);
+  if (!findedPakeep) return { pakeeps };
+
+  const newPakeep = { ...findedPakeep, ...property };
 
   const filteredPakeeps = filter(pakeeps, ({ id }) => pakeepId === id);
   const variedPakeeps = [...filteredPakeeps, newPakeep];
@@ -98,14 +104,49 @@ export const useDeletePakeep = ({
   const variedState = { pakeeps: filteredPakeeps };
   return variedState;
 };
+export const useChangeGlobalLabelItem = ({
+  globalLabels,
+  changedLabel
+}: PayloadTypes[TypeNames.HANDLE_CHANGE_GLOBAL_LABEL_ITEM] & {
+  globalLabels: GlobalLabelsType;
+}): { labels: GlobalLabelsType } => {
+  const filteredLabels = filter(globalLabels, ({ id }) => id !== changedLabel.id);
+  const labels = [...filteredLabels, changedLabel];
+  const variedState = { labels };
+  return variedState;
+};
 
-export const useChangeLabelsInPakeep = ({
-  currentPakeep,
-  currentPakeepLabels,
+export const useDeleteLabelFromPakeep = ({
+  currentPakeepId,
+  labelIdWhichShouldBeDeleted,
   pakeeps
-}: useHooksTypes[TypeNames.HANDLE_CHANGE_LABELS_IN_PAKEEP]): OnlyPakeepReturnType => {
-  const filteredPakeeps = useFilterPakeeps(pakeeps, currentPakeep.id);
-  const newPakeeps = [...filteredPakeeps, { ...currentPakeep, currentPakeepLabels }];
+}: PayloadTypes[TypeNames.HANDLE_DELETE_LABEL_FROM_PAKEEP] & OnlyPakeepReturnType): OnlyPakeepReturnType => {
+  const findedPakeep = useFindPakeep(pakeeps, currentPakeepId);
+  if (!findedPakeep) return { pakeeps };
+
+  const labels = filter(findedPakeep.labels, id => labelIdWhichShouldBeDeleted !== id);
+  const newPakeep = { ...findedPakeep, labels };
+  const newPakeeps = [...pakeeps, newPakeep];
+
+  const variedState = { pakeeps: newPakeeps };
+  return variedState;
+};
+
+export const useAddLabelToPakeep = ({
+  currentPakeepId,
+  labelIdWhichShouldBeAdded,
+  pakeeps
+}: PayloadTypes[TypeNames.HANDLE_ADD_LABEL_TO_PAKEEP] & OnlyPakeepReturnType): OnlyPakeepReturnType => {
+  const findedPakeep = useFindPakeep(pakeeps, currentPakeepId);
+  if (!findedPakeep) return { pakeeps };
+
+  const isPakeepHaveThisLabel = includes(findedPakeep.labels, labelIdWhichShouldBeAdded);
+
+  const newLabels = [...findedPakeep?.labels, labelIdWhichShouldBeAdded];
+  const labels = isPakeepHaveThisLabel ? findedPakeep.labels : newLabels;
+
+  const newPakeep = { ...findedPakeep, labels };
+  const newPakeeps = [...pakeeps, newPakeep];
 
   const variedState = { pakeeps: newPakeeps };
   return variedState;

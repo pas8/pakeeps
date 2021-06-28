@@ -3,7 +3,7 @@ import { SettingsInitialStateType } from './types';
 const settingsInitialState: SettingsInitialStateType = {
   viewOfThemeChangerButton: 'iconButton', // 'iconButton' ||  'switch'
   maxSnack: 4,
-  utilsViewLikeInGoogleKeep: true,
+  isUtilsHaveViewLikeInGoogleKeep: true,
   timeFormat: 'hh:mm',
   timeAndDateFromat: 'yyyy / MM / dd / hh:mm',
   navigationViewLike: 'pakeeps', //'telegram' || 'googleKeep' || 'pakeeps'

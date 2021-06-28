@@ -1,5 +1,5 @@
 import { colord } from 'colord';
-import { CustomColorType } from 'models/interfaces';
+import { CustomColorType } from 'models/types';
 import { useIsColorDark } from './useIsColorDark.hook';
 import { useMix } from './useMix.hook';
 import { useSecondaryColor } from './useSecondaryColor.hook';
@@ -9,7 +9,7 @@ interface DefaultColors {
   color: string;
 }
 
-export const useGetColor = <T, N>(backgroundColor: string, color: string = 'default'): T => {
+export const useGetColor = (backgroundColor: string, color: string = 'default'): any => {
   const defaultColors: DefaultColors = { backgroundColor: '#303030', color: '#ffffff' };
   const isUseDefaultBackgroundColor: boolean = backgroundColor === 'default';
   const isUseDefaultColor: boolean = color === 'default';
@@ -51,9 +51,7 @@ export const useGetColor = <T, N>(backgroundColor: string, color: string = 'defa
 
   const secondaryColor: string = useSecondaryColor(newColor);
 
-  const newColorWithSecondaryColor = { ...newColor, secondaryColor };
-
-  const customColor = isUseDefault ? false : newColorWithSecondaryColor;
+  const newColorWithSecondaryColor:CustomColorType = { ...newColor, secondaryColor, isUseDefault };
 
   return [newColorWithSecondaryColor, isUseDefaultBackgroundColor, isUseDefaultColor];
 };

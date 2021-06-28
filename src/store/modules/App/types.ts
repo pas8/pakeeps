@@ -1,41 +1,68 @@
-import { $Keys, $Values, Brand } from 'utility-types';
+import { menuOpenStatusDenotation } from './../../../models/denotation';
+import { pakeepPropertyiesNames } from 'models/denotation';
+import { CustomColorType, SelectedPakeepsIdType, SelectedPakeepsType } from 'models/types';
+import { $Keys, $Values, Brand, Optional } from 'utility-types';
 import { TypeNames } from './enums';
 
 export type PayloadTypes = {
   [TypeNames.HANDLE_ADD_NEW_PAKEEP]: {
-    newPakeep: PakeepElementInterface;
+    newPakeep: PakeepElementType;
   };
   [TypeNames.HANDLE_DELETE_PAKEEP]: { pakeepId: string };
   [TypeNames.HANDLE_ADD_EVENT_TO_PAKEEP]: { newEvent: PakeepEventInteface; pakeepId: PakeepIdType };
-  [TypeNames.HANDLE_CHANGE_MENU_OPEN_STATUS]: { isMenuOpen: boolean };
+  [TypeNames.HANDLE_CHANGE_MENU_OPEN_STATUS]: { menuOpenStatus: IsMenuOpenType };
   [TypeNames.HANDLE_SET_CURRENT_FOLDER_PROPERTY_IDX]: { currentFolderPropertyIdx: number };
   [TypeNames.HANDLE_SET_NEW_ORDER_NAMES]: { newOrderNames: OrderNamesType };
   [TypeNames.HANDLE_CHANGE_FOLDERS]: { folders: FoldersType };
   [TypeNames.HANDLE_CHANGE_GLOBAL_LABELS]: { labels: GlobalLabelsType };
-  [TypeNames.HANDLE_CHANGE_LABELS_IN_PAKEEP]: {
-    currentPakeep: PakeepElementInterface;
-    currentPakeepLabels: LabelElementInterface[];
+  [TypeNames.HANDLE_CHANGE_GLOBAL_LABEL_ITEM]: { changedLabel: ILabelElement };
+  [TypeNames.HANDLE_DELETE_LABEL_FROM_PAKEEP]: {
+    currentPakeepId: PakeepIdType;
+    labelIdWhichShouldBeDeleted: LabelIdType;
+  };
+  [TypeNames.HANDLE_ADD_LABEL_TO_PAKEEP]: {
+    currentPakeepId: PakeepIdType;
+    labelIdWhichShouldBeAdded: LabelIdType;
   };
   [TypeNames.HANDLE_SET_DRAWER_WIDTH]: { drawerWidth: DrawerWidthType };
-  [TypeNames.HANDLE_ADD_NEW_GLOBAL_LABEL]: { newLabel: LabelElementInterface };
+  [TypeNames.HANDLE_ADD_NEW_GLOBAL_LABEL]: { newLabel: ILabelElement };
   [TypeNames.HANDLE_CHANGE_PAKEEPS]: { pakeeps: PakeepsType };
   [TypeNames.HANDLE_PIN_STATUS_OF_PAKEEPS]: { pakeepId: PakeepIdType; isPakeepPinned?: boolean };
   [TypeNames.HANDLE_SET_ORDER_NAMES_OF_PINNED_PAKEEPS]: { pinnedPakeepsOrderNames: OrderNamesType };
+  [TypeNames.HANDLE_SET_ORDER_NAMES]: { pakeepsOrderNames: OrderNamesType };
   [TypeNames.HANDLE_SET_SELECTED_PAKEEPIDS_ARR]: { selectedPakeepsId: SelectedPakeepsIdType };
   [TypeNames.HANDLE_CANCEL_SELECTING_STATUS]: { isCancelSelectedPakeepsId: boolean };
   [TypeNames.HANDLE_CHANGE_SELECTED_PAKEEPS_PROPERTY]: { newPakeeps: PakeepsType };
-  [TypeNames.HANDLE_ADD_LABEL_TO_PAKEEP]: { newPakeep: PakeepElementInterface };
   [TypeNames.HANDLE_CHANGE_PAKEEP_PROPERTY]: {
+    pakeepId: PakeepIdType;
+    properyName: PakeepPropertyKeysType;
+  };
+  [TypeNames.HANDLE_CHANGE_PAKEEP_CUSTOM_PROPERTY]: {
     pakeepId: PakeepIdType;
     property: PakeepPropertyType;
   };
   [TypeNames.HANDLE_CHANGE_THEME_COLORS]: { newThemeColors: DefaultThemeInterface };
+
+  [TypeNames.HANDLE_CHANGE_TEMPORARY_DATA]: { newTemporaryData: Optional<TemporaryDatatype> };
 };
 
 export type ActionsValueTypes = {
+  toChangeTemporaryData: {
+    type: typeof TypeNames.HANDLE_CHANGE_TEMPORARY_DATA;
+    payload: PayloadTypes[TypeNames.HANDLE_CHANGE_TEMPORARY_DATA];
+  };
+  toChangePakeepCustomProperty: {
+    type: typeof TypeNames.HANDLE_CHANGE_PAKEEP_CUSTOM_PROPERTY;
+    payload: PayloadTypes[TypeNames.HANDLE_CHANGE_PAKEEP_CUSTOM_PROPERTY];
+  };
+
   ToAddNewPakep: {
     type: typeof TypeNames.HANDLE_ADD_NEW_PAKEEP;
     payload: PayloadTypes[TypeNames.HANDLE_ADD_NEW_PAKEEP];
+  };
+  toChangeGlobalLabelItem: {
+    type: typeof TypeNames.HANDLE_CHANGE_GLOBAL_LABEL_ITEM;
+    payload: PayloadTypes[TypeNames.HANDLE_CHANGE_GLOBAL_LABEL_ITEM];
   };
 
   ToDeletePakeep: {
@@ -71,8 +98,8 @@ export type ActionsValueTypes = {
     payload: PayloadTypes[TypeNames.HANDLE_CHANGE_GLOBAL_LABELS];
   };
   ToChangeLabelsInPakeep: {
-    type: typeof TypeNames.HANDLE_CHANGE_LABELS_IN_PAKEEP;
-    payload: PayloadTypes[TypeNames.HANDLE_CHANGE_LABELS_IN_PAKEEP];
+    type: typeof TypeNames.HANDLE_DELETE_LABEL_FROM_PAKEEP;
+    payload: PayloadTypes[TypeNames.HANDLE_DELETE_LABEL_FROM_PAKEEP];
   };
 
   ToSetDrawerWidth: {
@@ -98,6 +125,10 @@ export type ActionsValueTypes = {
   ToSetOrderNamesOfPinnedPakeeps: {
     type: typeof TypeNames.HANDLE_SET_ORDER_NAMES_OF_PINNED_PAKEEPS;
     payload: PayloadTypes[TypeNames.HANDLE_SET_ORDER_NAMES_OF_PINNED_PAKEEPS];
+  };
+  ToSetOrderNames: {
+    type: typeof TypeNames.HANDLE_SET_ORDER_NAMES;
+    payload: PayloadTypes[TypeNames.HANDLE_SET_ORDER_NAMES];
   };
 
   ToSetSelectedPakeepIdsArr: {
@@ -140,39 +171,35 @@ export type useHooksTypes = {
   [TypeNames.HANDLE_ADD_EVENT_TO_PAKEEP]: {
     pakeepId: PakeepIdType;
     properyName: PakeepPropertyKeysType;
-    propertyValue: any;
+    propertyValue?: any;
     pakeeps: PakeepsType;
   };
   [TypeNames.HANDLE_DELETE_PAKEEP]: {
     pakeepId: PakeepIdType;
     pakeeps: PakeepsType;
   };
-  [TypeNames.HANDLE_CHANGE_LABELS_IN_PAKEEP]: {
-    currentPakeep: PakeepElementInterface;
+
+  [TypeNames.HANDLE_CHANGE_PAKEEP_CUSTOM_PROPERTY]: {
+    pakeepId: PakeepIdType;
+    property: any;
     pakeeps: PakeepsType;
-    currentPakeepLabels:GlobalLabelsType
-  };
-  [TypeNames.HANDLE_CHANGE_LABELS_IN_PAKEEP]: {
-    currentPakeep: PakeepElementInterface;
-    pakeeps: PakeepsType;
-    currentPakeepLabels:GlobalLabelsType
   };
 };
-export type OnlyPakeepReturnType=  { pakeeps: PakeepsType }
+export type OnlyPakeepReturnType = { pakeeps: PakeepsType };
 // export type ActionWithOnlyPayloadType<T> = (payload: T) => AppActionTypes;
 
-type ColorType = 'default' | string;
+export type ColorType = 'default' | string;
 export type LabelVariantType = 'default' | 'outlined';
 export type IconNameType = string;
 export type TitleType = string;
 
 export type FoldersType = any[][];
 
-export interface GlobalEventInteface {
+export interface IGlobalEvent {
   title: TitleType;
   iconName: IconNameType;
   id: string;
-  value: number | Date;
+  value: EventyValueType;
   onlyTime?: boolean;
   color: string;
 }
@@ -181,6 +208,7 @@ export interface DefaultFolderElementInterface {
   title: TitleType;
   iconName: string;
   id: string;
+  color: ColorType;
   property: string;
 }
 
@@ -192,30 +220,45 @@ export interface PakeepEventInteface {
 // export type PakeepIdType = Brand<string, '_pakeepId'>;
 export type PakeepIdType = string;
 
-export interface PakeepElementInterface {
-  title: TitleType;
-  text: string;
-  isInBookmark: boolean;
-  isFavorite: boolean;
-  color: ColorType;
-  labels: string[];
-  isArchived: boolean;
-  events: GlobalEventInteface[];
-  readonly id: PakeepIdType;
-  isPinned: boolean;
-  isCheckBoxes: boolean;
-  backgroundColor: ColorType;
-}
+export type DefaultFolderElementPropertyNamesType = keyof typeof pakeepPropertyiesNames;
+export type DefaultFolderElementPropertyType = {
+  [Property in DefaultFolderElementPropertyNamesType]: boolean;
+};
+export type LabelIdType = string;
+export type LabelsOfPakeepType = LabelIdType[];
 
-export interface LabelElementInterface {
+export type EventyValueType = number | Date;
+export type EventIdType = string;
+export type EventOfPakeepType = { id: EventIdType; value: EventyValueType };
+
+export type EventsOfPakeepType = EventOfPakeepType[];
+
+export type TitleOfPakeepType = string;
+export type TextOfPakeepType = string;
+
+export type TitleAndTextOfPakeepType = {
+  title: TitleOfPakeepType;
+  text: TextOfPakeepType;
+};
+
+export type PakeepElementType = DefaultFolderElementPropertyType &
+  TitleAndTextOfPakeepType & {
+    color: ColorType;
+    labels: LabelsOfPakeepType;
+    events: EventsOfPakeepType;
+    readonly id: PakeepIdType;
+    backgroundColor: ColorType;
+  };
+
+export interface ILabelElement {
   color: ColorType;
   title: string;
   iconName: IconNameType;
-  id: string;
+  id: LabelIdType;
   variant: LabelVariantType;
 }
-export type GlobalLabelsType = LabelElementInterface[];
-export type GlobalEventsType = GlobalEventInteface[];
+export type GlobalLabelsType = ILabelElement[];
+export type GlobalEventsType = IGlobalEvent[];
 
 export interface DefaultThemeInterface {
   primaryMain?: string;
@@ -229,14 +272,16 @@ export interface DefaultThemeInterface {
 }
 export type OrderNameType = string;
 export type OrderNamesType = OrderNameType[];
-export type DrawerWidthType = number ;
-export type PakeepsType = PakeepElementInterface[];
-export type SelectedPakeepsIdType = string[];
+export type DrawerWidthType = number;
+export type PakeepsType = PakeepElementType[];
+
+export type IsMenuOpenType = keyof typeof menuOpenStatusDenotation;
+export type DefaultFolderArrType = DefaultFolderElementInterface[];
 
 export interface AppInitialStateInteface {
   // breakpointsValues: BreakpointsValuesInterface<number>;
   // theme: DefaultThemeInterface;
-  defaultFolderArr: DefaultFolderElementInterface[];
+  defaultFolderArr: DefaultFolderArrType;
   labels: GlobalLabelsType;
   events: GlobalEventsType;
   selectedPakeepsId: SelectedPakeepsIdType;
@@ -245,15 +290,36 @@ export interface AppInitialStateInteface {
   pakeepsOrderNames: OrderNamesType;
   pinnedPakeepsOrderNames: OrderNamesType;
   notifinationCounter: number;
-  isMenuOpen: boolean;
+  menuOpenStatus: IsMenuOpenType;
   currentFolderPropertyIdx: number;
   drawerWidth: DrawerWidthType;
   isCancelSelectedPakeepsId: boolean;
+  temporaryData: TemporaryDatatype;
 }
 
-export type PakeepPropertyValueType = $Values<PakeepElementInterface>;
-export type PakeepPropertyKeysType = $Keys<PakeepElementInterface>;
+export type PakeepPropertyValueType = $Values<PakeepElementType>;
+export type PakeepPropertyKeysType = $Keys<PakeepElementType>;
 
-export type PakeepPropertyType = { [key: string]: PakeepElementInterface };
+export type PakeepPropertyType = { [Property in PakeepPropertyKeysType]?: PakeepPropertyValueType };
 
 export type OperateWOP<N> = (payload: N) => void;
+
+export type TemporaryDatatype = {
+  defaultMenuProps: DefaultMenuPropsType;
+  pakeep: {
+    id: string;
+    isHovering: boolean;
+  };
+  labelItem: {
+    id: string;
+  };
+};
+
+export type DefaultMenuPropsType = {
+  customColor: CustomColorType;
+} & CoordinatesType;
+
+export type CoordinatesType = {
+  mouseX: number;
+  mouseY: number;
+};

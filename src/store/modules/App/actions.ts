@@ -45,10 +45,17 @@ export const toChangeGlobalLabels = (payload: PayloadTypes[TypeNames.HANDLE_CHAN
   payload
 });
 
-export const toChangeLabelsInPakeep = (
-  payload: PayloadTypes[TypeNames.HANDLE_CHANGE_LABELS_IN_PAKEEP]
+export const toChangeGlobalLabelItem = (
+  payload: PayloadTypes[TypeNames.HANDLE_CHANGE_GLOBAL_LABEL_ITEM]
 ): AppActionTypes => ({
-  type: TypeNames.HANDLE_CHANGE_LABELS_IN_PAKEEP,
+  type: TypeNames.HANDLE_CHANGE_GLOBAL_LABEL_ITEM,
+  payload
+});
+
+export const toDeleteLabelFromPakeep = (
+  payload: PayloadTypes[TypeNames.HANDLE_DELETE_LABEL_FROM_PAKEEP]
+): AppActionTypes => ({
+  type: TypeNames.HANDLE_DELETE_LABEL_FROM_PAKEEP,
   payload
 });
 
@@ -57,15 +64,29 @@ export const toSetDrawerWidth = (payload: PayloadTypes[TypeNames.HANDLE_SET_DRAW
   payload
 });
 
+export const toChangeTemporaryData = (
+  payload: PayloadTypes[TypeNames.HANDLE_CHANGE_TEMPORARY_DATA]
+): AppActionTypes => ({
+  type: TypeNames.HANDLE_CHANGE_TEMPORARY_DATA,
+  payload
+});
+
 export const toAddNewGlobalLabel = (payload: PayloadTypes[TypeNames.HANDLE_ADD_NEW_GLOBAL_LABEL]): AppActionTypes => ({
   type: TypeNames.HANDLE_ADD_NEW_GLOBAL_LABEL,
   payload
 });
 
-export const toPinStatusOfPakeeps = (
+export const toChangePinStatusOfPakeeps = (
   payload: PayloadTypes[TypeNames.HANDLE_PIN_STATUS_OF_PAKEEPS]
 ): AppActionTypes => ({
   type: TypeNames.HANDLE_PIN_STATUS_OF_PAKEEPS,
+  payload
+});
+
+export const toChangePakeepCustomProperty = (
+  payload: PayloadTypes[TypeNames.HANDLE_CHANGE_PAKEEP_CUSTOM_PROPERTY]
+): AppActionTypes => ({
+  type: TypeNames.HANDLE_CHANGE_PAKEEP_CUSTOM_PROPERTY,
   payload
 });
 
@@ -73,6 +94,10 @@ export const toSetOrderNamesOfPinnedPakeeps = (
   payload: PayloadTypes[TypeNames.HANDLE_SET_ORDER_NAMES_OF_PINNED_PAKEEPS]
 ): AppActionTypes => ({
   type: TypeNames.HANDLE_SET_ORDER_NAMES_OF_PINNED_PAKEEPS,
+  payload
+});
+export const toSetOrderNamesOfPakeeps = (payload: PayloadTypes[TypeNames.HANDLE_SET_ORDER_NAMES]): AppActionTypes => ({
+  type: TypeNames.HANDLE_SET_ORDER_NAMES,
   payload
 });
 
