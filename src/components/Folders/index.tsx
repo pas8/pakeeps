@@ -175,7 +175,7 @@ const THEME_URL=  `${SETTING_URL}/theme`
 
 const handleOpenSetting = () => {
     handleChange('placeholder', 1);
-    router.push(SETTING_URL);
+    router.push(ACCOUNT_URL);
   };
 
   // const previuosValue = usePrevious(value)

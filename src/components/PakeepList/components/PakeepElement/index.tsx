@@ -226,6 +226,7 @@ const PakeepElement: FC<PakeepElementPropsType> = ({
   // const setLabelHoverStatus = () => setLabelHover({ title, isHovering: true });
   useEffect(() => setStatusState(state => ({ ...state, isLoaded: true })), []);
   // console.log(isSelecting)
+  console.log(statusState.isLoaded)
   if (!statusState.isLoaded) return <SkeletonView />;
 
   const AnimationElement = isUtilsHaveViewLikeInGoogleKeep ? Fade : Grow;

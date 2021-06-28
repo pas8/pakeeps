@@ -25,6 +25,7 @@ const useStyles = makeStyles(({ spacing, transitions, breakpoints }) => ({
   },
   content: {
     flexGrow: 1,
+    marginTop:24,
     padding: spacing(2.8),
     transition: transitions.create('margin', {
       easing: transitions.easing.sharp,
