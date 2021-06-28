@@ -68,12 +68,18 @@ const randomPakeeps = Array(8)
 
 const initialState: AppInitialStateInteface = {
   defaultFolderArr: [
-    { title: 'All pakeeps', iconName: '', id: 'folder-ALL', property: 'ALL' },
-    { title: 'Pined', iconName: 'pin', id: 'folder-isPinned', property: 'isPinned' },
-    { title: 'Bookmark', iconName: 'bookmark', id: 'folder-isInBookmark', property: 'isInBookmark' },
-    { title: 'Favorite', iconName: 'favorite', id: 'folder-isFavorite', property: 'isFavorite' },
-    { title: 'With chckebox', iconName: 'checkbox', id: 'folder-isCheckBoxes', property: 'isCheckBoxes' },
-    { title: 'Archiveted', iconName: 'archive', id: 'folder-isArchived', property: 'isArchived' }
+    { title: 'All pakeeps', iconName: '', id: 'folder-ALL', property: 'ALL', color: 'default' },
+    { title: 'Pined', iconName: 'pin', id: 'folder-isPinned', property: 'isPinned', color: 'default' },
+    { title: 'Bookmark', iconName: 'bookmark', id: 'folder-isInBookmark', property: 'isInBookmark', color: 'default' },
+    { title: 'Favorite', iconName: 'favorite', id: 'folder-isFavorite', property: 'isFavorite', color: 'default' },
+    {
+      title: 'With chckebox',
+      iconName: 'checkbox',
+      id: 'folder-isCheckBoxes',
+      property: 'isCheckBoxes',
+      color: 'default'
+    },
+    { title: 'Archiveted', iconName: 'archive', id: 'folder-isArchived', property: 'isArchived', color: 'default' }
   ],
 
   labels: labelsOfInitialState,
@@ -105,7 +111,8 @@ const initialState: AppInitialStateInteface = {
   pakeepsOrderNames: [],
   pinnedPakeepsOrderNames: [],
   notifinationCounter: 8,
-  menuOpenStatus: 'HIDDEN',
+  // menuOpenStatus: 'HIDDEN',
+  menuOpenStatus: 'EXTENDED',
   currentFolderPropertyIdx: 0,
   drawerWidth: 0,
   isCancelSelectedPakeepsId: false,

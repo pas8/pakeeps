@@ -23,6 +23,7 @@ const useStyles = makeStyles(theme => ({
   appBar: {
     backgroundColor: '#424242',
     color: 'white',
+    padding:0,  
     display: 'flex',
     transition: theme.transitions.create(['margin', 'width'], {
       easing: theme.transitions.easing.sharp,
@@ -72,8 +73,13 @@ const HeaderByPas: FC<HeaderByPasPropsType> = ({
   //@ts-ignore
   const classes = useStyles({ drawerWidth, navigationViewLikeTelegram, navigationViewLikePakeeps, isMenuOpen });
 
+  const isHeaderHavePakeepView = true;
+
   return (
     <Grid className={classes.root} container>
+      {/* {isHeaderHavePakeepView ? ( */}
+      <></>
+      {/* ) : ( */}
       <AppBar className={clsx(classes.appBar, { [classes.appBarShift]: isMenuOpen })}>
         <Toolbar className={classes.toolBar}>
           {(navigationViewLikePakeeps || navigationViewLikeGoogleKeep) && (
@@ -92,6 +98,7 @@ const HeaderByPas: FC<HeaderByPasPropsType> = ({
             )} */}
         </Toolbar>
       </AppBar>
+      {/* )} */}
       {/* {navigationViewLikeTelegram && <HeaderDrawer isMenuOpen={isMenuOpen} handleDrawerClose={handleDrawerClose} />} */}
     </Grid>
   );

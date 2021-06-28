@@ -60,7 +60,6 @@ const useStyles = makeStyles(({ spacing, transitions, breakpoints }) => ({
 const HeaderLayout: FC<LayoutChildrenType> = ({ children }) => {
 
   const menuOpenStatus = useSelector(getMenuOpenStatus);
-  console.log(menuOpenStatus)
   const drawerWidth = useSelector(getDrawerWidth);
   const selectedPakeeps = useSelector(getSelectedPakeeps)!;
   const navigationViewLike = useSelector(getNavigationViewLike);

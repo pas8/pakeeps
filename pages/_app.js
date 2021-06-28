@@ -21,6 +21,10 @@ const Index = ({ Component, pageProps }) => {
     if (jssStyles) jssStyles.parentElement.removeChild(jssStyles);
   }, []);
 
+    
+
+
+
   const layouts = [
     StoreLayout,
     ThemeLayout,

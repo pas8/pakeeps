@@ -34,32 +34,67 @@ import { usePakeepUtilsFunc } from 'hooks/usePakeepUtilsFunc.hook';
 import PakeepPropertyProvider from 'components/PakeepPropertyProviders';
 import { useLabelListFunc } from 'hooks/useLabelListFunc.hook';
 import dynamic from 'next/dynamic';
+import { useAlpha } from 'hooks/useAlpha.hook';
 
 const IconsUtils = dynamic(() => import('components/IconsUtils'), { loading: () => <p>loading</p> });
 
 const useStyles = makeStyles(({ spacing, transitions, palette }: Theme) => ({
-  paperClass: ({ customColor, backgroundColor, color, isUtilsHaveViewLikeInGoogleKeep }: UseStylesProps) => ({
-    padding: spacing(0.4, 1.96, isUtilsHaveViewLikeInGoogleKeep ? 8 * 0.8 : 1, 1.96),
-    cursor: 'grab',
-    position: 'relative',
+  paperClass: ({
+    customColor,
     backgroundColor,
     color,
-    transition: transitions.create('padding', {
-      easing: transitions.easing.sharp,
-      duration: transitions.duration.leavingScreen
-    }),
-    userSelect: 'none'
-  }),
+    isUtilsHaveViewLikeInGoogleKeep,
+  }: UseStylesProps) => {
+    const borderColor = useIsColorDark(backgroundColor) ? backgroundColor : color;
 
-  isHoveredClass: ({ customColor }: UseStylesProps) => ({
-    paddingBottom: `${spacing(8 * 0.8)}px !important`,
-    transition: transitions.create('all', {
-      easing: transitions.easing.sharp,
-      duration: transitions.duration.leavingScreen
-    }),
-    borderColor: customColor && useIsColorDark(customColor.unHover) ? customColor.unHover : palette?.highEmphasis?.main
-    // borderColor: palette.primary.main
-  }),
+    const insetborderColor = useIsColorDark(backgroundColor) ? '#303030' : backgroundColor;
+    // !customColor.isUseDefault
+    // ? useIsColorDark(customColor.unHover)
+    // ? customColor.unHover
+    // : customColor.unHover
+    // : palette?.highEmphasis?.main;
+
+    return {
+      marginTop:4,
+      padding: spacing(0.4, 1.96, isUtilsHaveViewLikeInGoogleKeep ? 8 * 0.8 : 1, 1.96),
+      cursor: 'grab',
+      position: 'relative',
+      backgroundColor,
+      border:`1px solid ${useAlpha(borderColor,0.2)}`,
+      color,
+      transition: transitions.create('padding', {
+        easing: transitions.easing.sharp,
+        duration: transitions.duration.leavingScreen
+      }),
+      userSelect: 'none',
+      '&:hover': {
+        paddingBottom: `${spacing(8 * 0.8)}px !important`,
+        transition: transitions.create('all', {
+          easing: transitions.easing.sharp,
+          duration: transitions.duration.leavingScreen
+        }),
+        borderColor:'',
+        // borderColor: palette.primary.main
+        boxShadow: `0px 0px  1px 1px ${borderColor} ,inset 0px 0px 1px 2px ${insetborderColor} `,
+        // borderStyle:  'dashed'
+      }
+    };
+  },
+
+  isHoveredClass: ({ customColor, backgroundColor, color }: UseStylesProps) => {
+    return {
+      // paddingBottom: `${spacing(8 * 0.8)}px !important`,
+      // transition: transitions.create('all', {
+      //   easing: transitions.easing.sharp,
+      //   duration: transitions.duration.leavingScreen
+      // }),
+      // borderColor,
+      // // borderColor: palette.primary.main
+      // boxShadow: `0px 0px  1px 1px ${borderColor} ,inset 0px 0px 1px 2px  #303030`,
+      // borderRadius: 8
+      // borderStyle:  'dashed'
+    };
+  },
 
   iconsUtilsClass: {
     position: 'absolute',
@@ -127,6 +162,7 @@ const PakeepElement: FC<PakeepElementPropsType> = ({
   const correctBackground = isBackgroundColorDefault ? '#303030' : backgroundColor;
 
   const classes = useStyles({
+    // isDragging,
     customColor,
     backgroundColor: correctBackground,
     isUtilsHaveViewLikeInGoogleKeep,
@@ -291,7 +327,7 @@ const PakeepElement: FC<PakeepElementPropsType> = ({
               <AttributeGroup {...attributeGroupProps} />
             </Grid>
           }
-{/* 
+          {/* 
           {openIn && !isDragging && (
             <AnimationElement in={openIn}>
               <Grid className={classes.iconsUtilsClass}>

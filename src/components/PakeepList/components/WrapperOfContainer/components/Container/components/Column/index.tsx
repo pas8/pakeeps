@@ -29,7 +29,7 @@ const useStyles = makeStyles(({ spacing, breakpoints: { down } }) => ({
       // overflow: 'hidden !important'
       // position: isPakeepDragging ? 'relative' : 'fixed'
     }
-  }),
+  })
   // columnFirst: {
   //   padding: spacing(0),
   //   paddingRight: spacing(paddingValue),
@@ -84,7 +84,8 @@ const ColumnOfPakeepListContainer: FC<ColumnOfPakeepListContainerPropsType & { h
   const gridContainerProps: any = {
     className:
       breakpoint !== 'xs' &&
-      clsx(classes.column, isLastColumn ? classes.columnLast : isFirstColumn && classes.columnFirst),
+      // clsx(classes.column, isLastColumn ? classes.columnLast : isFirstColumn && classes.columnFirst),
+      clsx(classes.column),
     //@ts-ignore
     [breakpoint]: breakpointValues[breakpoint],
     spacing: 8

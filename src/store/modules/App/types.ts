@@ -208,6 +208,7 @@ export interface DefaultFolderElementInterface {
   title: TitleType;
   iconName: string;
   id: string;
+  color: ColorType;
   property: string;
 }
 
@@ -275,10 +276,12 @@ export type DrawerWidthType = number;
 export type PakeepsType = PakeepElementType[];
 
 export type IsMenuOpenType = keyof typeof menuOpenStatusDenotation;
+export type DefaultFolderArrType = DefaultFolderElementInterface[];
+
 export interface AppInitialStateInteface {
   // breakpointsValues: BreakpointsValuesInterface<number>;
   // theme: DefaultThemeInterface;
-  defaultFolderArr: DefaultFolderElementInterface[];
+  defaultFolderArr: DefaultFolderArrType;
   labels: GlobalLabelsType;
   events: GlobalEventsType;
   selectedPakeepsId: SelectedPakeepsIdType;

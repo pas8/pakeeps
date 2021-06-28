@@ -41,15 +41,26 @@ import DashboardOutlinedIcon from '@material-ui/icons/DashboardOutlined';
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import DateRangeIcon from '@material-ui/icons/DateRange';
 import DateRangeOutlinedIcon from '@material-ui/icons/DateRangeOutlined';
+import AccountCircleOutlinedIcon from '@material-ui/icons/AccountCircleOutlined';
+import ColorLensOutlinedIcon from '@material-ui/icons/ColorLensOutlined';
+import ArrowBackOutlinedIcon from '@material-ui/icons/ArrowBackOutlined';
+import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import { $Values } from 'utility-types';
-
+import ViewColumnOutlinedIcon from '@material-ui/icons/ViewColumnOutlined';
+import { SvgIcon } from '@material-ui/core';
+import FolderOutlinedIcon from '@material-ui/icons/FolderOutlined';
 export const iconsArr = [
   { icon: <TodayOutlinedIcon />, iconName: 'tomorrow', id: 'random1', checkedIcon: <TodayIcon /> },
   { icon: <CalendarTodayOutlinedIcon />, iconName: 'today', id: 'random2', checkedIcon: <CalendarTodayIcon /> },
   { icon: <ViewWeekOutlinedIcon />, iconName: 'week', id: 'random3', checkedIcon: <ViewWeekIcon /> },
+  { icon: <ViewColumnOutlinedIcon />, iconName: 'view', id: 'view' },
+  { icon: <ArrowBackOutlinedIcon />, iconName: 'arrowBack', id: 'arrowBack' },
+  { icon: <LockOutlinedIcon />, iconName: 'security', id: 'security' },
   { icon: <DashboardOutlinedIcon />, iconName: 'dashboard', id: 'random4', checkedIcon: <DashboardIcon /> },
   { icon: <DateRangeOutlinedIcon />, iconName: 'dateRange', id: 'random10', checkedIcon: <DateRangeIcon /> },
   { icon: <AlarmOutlinedIcon />, iconName: 'alarm', id: '1' },
+  { icon: <AccountCircleOutlinedIcon />, iconName: 'account', id: '12dfqd1' },
+  { icon: <ColorLensOutlinedIcon />, iconName: 'color', id: 'color' },
   { icon: <FingerprintOutlinedIcon />, iconName: 'fingerprint', id: '2' },
   { icon: <CheckBoxOutlinedIcon />, iconName: 'checkbox', id: '3' },
   { icon: <DoneOutlineOutlinedIcon />, iconName: 'done', id: '4' },
@@ -70,9 +81,18 @@ export const iconsArr = [
   { icon: <SettingsOutlinedIcon />, iconName: 'settings', id: '80' },
   { icon: <LabelOutlinedIcon />, iconName: 'label', id: '100' },
   { icon: <VisibilityOutlinedIcon />, iconName: 'visibility', id: '104' },
+  {
+    icon: (
+      <SvgIcon viewBox={'0 0 24 24'}>
+        <path d={'M6,2H18A2,2 0 0,1 20,4V20A2,2 0 0,1 18,22H6A2,2 0 0,1 4,20V4A2,2 0 0,1 6,2M6,4V8H18V4H6Z'} />
+      </SvgIcon>
+    ),
+    iconName: 'header',
+    id: 'header'
+  },
   { icon: <MoreVertOutlinedIcon />, iconName: 'more', id: '104' },
   { icon: <BookmarkBorderOutlinedIcon />, iconName: 'bookmark', id: '964', checkedIcon: <BookmarkIcon /> },
+  { icon: <FolderOutlinedIcon />, iconName: 'folder', id: 'folder', },
   { icon: <FavoriteBorderOutlinedIcon />, iconName: 'favorite', id: '968', checkedIcon: <FavoriteIcon /> },
   { icon: <ArchiveOutlinedIcon />, iconName: 'archive', id: '928' }
-] as const 
-
+] as const;

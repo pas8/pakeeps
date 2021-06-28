@@ -1,6 +1,6 @@
 import { Grid, IconButton, makeStyles } from '@material-ui/core';
 import Folders from 'components/Folders';
-import { useFolders } from 'hooks/useFolders.hook';
+import { usePakeepFolders } from 'hooks/usePakeepFolders.hook';
 import PropTypes from 'prop-types';
 import { useCallback, useState, useEffect, useRef } from 'react';
 import { connect, useDispatch, useSelector } from 'react-redux';
@@ -33,6 +33,7 @@ import {
 import { DrawerWidthType, FoldersType } from 'store/modules/App/types';
 import { HandleChangeOfFolders } from 'components/Folders/types';
 import { menuOpenStatusDenotation } from 'models/denotation';
+import { useRouter } from 'next/dist/client/router';
 
 const useStyles = makeStyles(({ palette }) => ({
   container: ({
@@ -77,6 +78,7 @@ const useStyles = makeStyles(({ palette }) => ({
 
 const FolderLayout = ({ children }: LayoutChildrenType) => {
   const dispatch = useDispatch();
+  const router = useRouter();
 
   const handleDrawerWidth = (drawerWidth: number) => {
     dispatch(toSetDrawerWidth({ drawerWidth }));
@@ -108,7 +110,7 @@ const FolderLayout = ({ children }: LayoutChildrenType) => {
   const positionOfFolderViewWithPakeepViewIsRight = positionOfFolderViewWithPakeepView === 'right';
   const positionOfFolderViewWithPakeepViewIsLeft = positionOfFolderViewWithPakeepView === 'left';
 
-  const foldersArr = useFolders({ labels, defaultFolderArr });
+  const foldersArr = usePakeepFolders({ labels, defaultFolderArr });
 
   const marginValue = 8;
 

@@ -1,3 +1,4 @@
+import { DefaultFolderArrType, GlobalLabelsType } from './../store/modules/App/types';
 import { PropertyiesOfPakeepElement } from './../components/PakeepList/components/PakeepElement/types';
 import { TimeAndDateFromatType, TimeFormatType } from './../store/modules/Settings/types';
 import { SettingsInitialStateType } from 'store/modules/Settings/types';
@@ -130,3 +131,11 @@ export type UseAttributeGroupColorType = (
   customColor: CustomColorType,
   currentColor: string
 ) => [string, boolean, boolean];
+
+export type UsePakeepFoldersType = ({
+  labels,
+  defaultFolderArr
+}: {
+  labels: GlobalLabelsType;
+  defaultFolderArr: DefaultFolderArrType;
+}) => DefaultFolderArrType[];
