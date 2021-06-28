@@ -11,3 +11,7 @@ export const menuOpenStatusDenotation = {
   OPEN: 'OPEN',
   EXTENDED: 'EXTENDED'
 } as const;
+
+
+
+export const NONE = 'none';

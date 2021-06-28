@@ -78,3 +78,8 @@ export const getIsPakeepHovering = createSelector(
   [({ app: { temporaryData } }: RootStoreType) => temporaryData.pakeep.isHovering],
   isHovering => isHovering
 );
+
+export const getAvatarProperties = createSelector(
+  [({ app: { avatarProperties } }: RootStoreType) => avatarProperties],
+  avatarProperties => avatarProperties
+);

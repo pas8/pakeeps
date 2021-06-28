@@ -1,4 +1,4 @@
-import { menuOpenStatusDenotation } from './../../../models/denotation';
+import { menuOpenStatusDenotation, NONE } from './../../../models/denotation';
 import { pakeepPropertyiesNames } from 'models/denotation';
 import { CustomColorType, SelectedPakeepsIdType, SelectedPakeepsType } from 'models/types';
 import { $Keys, $Values, Brand, Optional } from 'utility-types';
@@ -24,6 +24,11 @@ export type PayloadTypes = {
     currentPakeepId: PakeepIdType;
     labelIdWhichShouldBeAdded: LabelIdType;
   };
+
+  [TypeNames.HANDLE_CHANGE_AVATAR_PROPERTIES]: {
+    avatarProperties: AvatarPropertiesType;
+  };
+
   [TypeNames.HANDLE_SET_DRAWER_WIDTH]: { drawerWidth: DrawerWidthType };
   [TypeNames.HANDLE_ADD_NEW_GLOBAL_LABEL]: { newLabel: ILabelElement };
   [TypeNames.HANDLE_CHANGE_PAKEEPS]: { pakeeps: PakeepsType };
@@ -47,6 +52,10 @@ export type PayloadTypes = {
 };
 
 export type ActionsValueTypes = {
+  toChangeAvatarProperties: {
+    type: typeof TypeNames.HANDLE_CHANGE_AVATAR_PROPERTIES;
+    payload: PayloadTypes[TypeNames.HANDLE_CHANGE_AVATAR_PROPERTIES];
+  };
   toChangeTemporaryData: {
     type: typeof TypeNames.HANDLE_CHANGE_TEMPORARY_DATA;
     payload: PayloadTypes[TypeNames.HANDLE_CHANGE_TEMPORARY_DATA];
@@ -278,10 +287,19 @@ export type PakeepsType = PakeepElementType[];
 export type IsMenuOpenType = keyof typeof menuOpenStatusDenotation;
 export type DefaultFolderArrType = DefaultFolderElementInterface[];
 
+export type AvatarPropertiesType = {
+  url: string;
+  borderRadius: number;
+  backgroundColor: string;
+};
+
 export interface AppInitialStateInteface {
   // breakpointsValues: BreakpointsValuesInterface<number>;
   // theme: DefaultThemeInterface;
   defaultFolderArr: DefaultFolderArrType;
+
+  avatarProperties: AvatarPropertiesType;
+
   labels: GlobalLabelsType;
   events: GlobalEventsType;
   selectedPakeepsId: SelectedPakeepsIdType;

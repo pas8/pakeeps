@@ -35,6 +35,15 @@ export const toSetCurrentFolderPropertyIdx = (
   payload
 });
 
+export const toChangeAvatarProperties = (
+  payload: PayloadTypes[TypeNames.HANDLE_CHANGE_AVATAR_PROPERTIES]
+): AppActionTypes => ({
+  type: TypeNames.HANDLE_CHANGE_AVATAR_PROPERTIES,
+  payload
+});
+
+
+
 export const toChangeFolders = (payload: PayloadTypes[TypeNames.HANDLE_CHANGE_FOLDERS]): AppActionTypes => ({
   type: TypeNames.HANDLE_CHANGE_FOLDERS,
   payload
