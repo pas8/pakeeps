@@ -67,6 +67,12 @@ const randomPakeeps = Array(8)
     };
   });
 
+export const defaultAvatarProperties = {
+  url: NONE,
+  borderRadius: 4,
+  backgroundColor: NONE
+};
+
 const initialState: AppInitialStateInteface = {
   defaultFolderArr: [
     { title: 'All pakeeps', iconName: '', id: 'folder-ALL', property: 'ALL', color: 'default' },
@@ -113,11 +119,7 @@ const initialState: AppInitialStateInteface = {
   pinnedPakeepsOrderNames: [],
   notifinationCounter: 8,
   // menuOpenStatus: 'HIDDEN',
-  avatarProperties: {
-    url: NONE,
-    borderRadius: 4,
-    backgroundColor: NONE
-  },
+  avatarProperties: defaultAvatarProperties,
   menuOpenStatus: 'EXTENDED',
   currentFolderPropertyIdx: 0,
   drawerWidth: 0,

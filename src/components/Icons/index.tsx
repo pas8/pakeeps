@@ -50,8 +50,8 @@ import ViewColumnOutlinedIcon from '@material-ui/icons/ViewColumnOutlined';
 import { SvgIcon } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 import FolderOutlinedIcon from '@material-ui/icons/FolderOutlined';
-
-
+import DeleteOutlinedIcon from '@material-ui/icons/DeleteOutlined';
+import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
 
 export const iconsArr = [
   { icon: <TodayOutlinedIcon />, iconName: 'tomorrow', id: 'random1', checkedIcon: <TodayIcon /> },
@@ -64,6 +64,8 @@ export const iconsArr = [
   { icon: <DashboardOutlinedIcon />, iconName: 'dashboard', id: 'random4', checkedIcon: <DashboardIcon /> },
   { icon: <DateRangeOutlinedIcon />, iconName: 'dateRange', id: 'random10', checkedIcon: <DateRangeIcon /> },
   { icon: <AlarmOutlinedIcon />, iconName: 'alarm', id: '1' },
+  { icon: <DeleteOutlinedIcon />, iconName: 'delete', id: 'delete' },
+  { icon: <EditOutlinedIcon />, iconName: 'edit', id: 'edit' },
   { icon: <AccountCircleOutlinedIcon />, iconName: 'account', id: '12dfqd1' },
   { icon: <ColorLensOutlinedIcon />, iconName: 'color', id: 'color' },
   { icon: <FingerprintOutlinedIcon />, iconName: 'fingerprint', id: '2' },

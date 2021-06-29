@@ -13,5 +13,5 @@ export const menuOpenStatusDenotation = {
 } as const;
 
 
-
+export const  TRANSPARENT = 'transparent'
 export const NONE = 'none';
