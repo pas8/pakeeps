@@ -211,14 +211,16 @@ export interface IGlobalEvent {
   value: EventyValueType;
   onlyTime?: boolean;
   color: string;
+  isFolderIsPlaceholder?:boolean
 }
 
 export interface DefaultFolderElementInterface {
   title: TitleType;
-  iconName: string;
+  iconName?: string;
   id: string;
-  color: ColorType;
-  property: string;
+  route?:string;
+  color?: ColorType;
+  property?: string;
 }
 
 export interface PakeepEventInteface {

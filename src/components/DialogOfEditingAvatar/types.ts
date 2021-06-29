@@ -6,6 +6,8 @@ export type SetAvatarEditorState = Dispatch<SetStateAction<AvatarEditorStateType
 
 export type DialogOfEditingAvatarPropsType = {
   image: any;
+  isDialogOpen: boolean,
+  setIsDialogOpen: any
 };
 
 export type AvatarEditorStateType = {

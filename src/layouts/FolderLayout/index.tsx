@@ -1,8 +1,8 @@
-import { Grid, IconButton, makeStyles } from '@material-ui/core';
+import { Grid, IconButton, makeStyles, SwipeableDrawer } from '@material-ui/core';
 import Folders from 'components/Folders';
 import { usePakeepFolders } from 'hooks/usePakeepFolders.hook';
 import PropTypes from 'prop-types';
-import { useCallback, useState, useEffect, useRef } from 'react';
+import { useCallback, useState, useEffect, useRef, ReactEventHandler, FC } from 'react';
 import { connect, useDispatch, useSelector } from 'react-redux';
 // import {
 //   handleChangeFolders,
@@ -34,6 +34,7 @@ import { DrawerWidthType, FoldersType } from 'store/modules/App/types';
 import { HandleChangeOfFolders } from 'components/Folders/types';
 import { menuOpenStatusDenotation } from 'models/denotation';
 import { useRouter } from 'next/dist/client/router';
+import { useCustomBreakpoint } from 'hooks/useCustomBreakpoint';
 
 const useStyles = makeStyles(({ palette }) => ({
   container: ({
@@ -80,6 +81,10 @@ const FolderLayout = ({ children }: LayoutChildrenType) => {
   const dispatch = useDispatch();
   const router = useRouter();
 
+  const [br] = useCustomBreakpoint();
+
+  const isVerySmall = br === 'xs';
+
   const handleDrawerWidth = (drawerWidth: number) => {
     dispatch(toSetDrawerWidth({ drawerWidth }));
   };
@@ -125,10 +130,18 @@ const FolderLayout = ({ children }: LayoutChildrenType) => {
   const [margin, setMargin] = useState(0);
   const [isSizeOfFoldersMoreThanSize, setIsSizeOfFoldersMoreThanSize] = useState(false);
 
+  const isFoldersHaveDraweView = isVerySmall && isMenuOpen;
+
+  const handleCloseFoldersWithDrawerView = () => {
+    dispatch(toChangeMenuOpenStatus({ menuOpenStatus: menuOpenStatusDenotation.OPEN }));
+  };
+
   const foldersProps = {
     handleChange,
+    handleCloseFoldersWithDrawerView,
     value: currentFolderPropertyIdx,
     handleDrawerWidth,
+    isFoldersHaveDraweView,
     isMenuOpen,
     isFolderOpen,
     handleHideFolder,
@@ -145,6 +158,16 @@ const FolderLayout = ({ children }: LayoutChildrenType) => {
 
   const classes = useStyles({ positionOfFolderViewWithPakeepViewIsBottom, positionOfFolderViewWithPakeepViewIsRight });
 
+  const NavContainer = isFoldersHaveDraweView ? SwipeableDrawer : Nav;
+
+  const anchor = positionOfFolderViewWithPakeepViewIsRight ? 'left' : ('right' as any);
+
+  const onOpen: ReactEventHandler<any> = e => console.log('onOpen');
+
+  const navContainerProps = isFoldersHaveDraweView
+    ? { anchor, open: isMenuOpen, onClose: handleCloseFoldersWithDrawerView, onOpen }
+    : {};
+
   return (
     <Grid
       container
@@ -160,17 +183,21 @@ const FolderLayout = ({ children }: LayoutChildrenType) => {
           </IconButton>
         </Grid>
       )} */}
-      <nav
-        style={{
-          minWidth: drawerWidth,
-          marginLeft: isSizeOfFoldersMoreThanSize && positionOfFolderViewWithPakeepViewIsBottom ? margin : 0,
-          display: 'flex',
-          // width:'100%',
-          marginRight: positionOfFolderViewWithPakeepViewIsRight ? marginValue : 0
-        }}
-      >
-        <Folders {...foldersProps} />
-      </nav>
+      {
+        //@ts-ignore
+        <NavContainer
+          {...navContainerProps}
+          style={{
+            minWidth: drawerWidth,
+            marginLeft: isSizeOfFoldersMoreThanSize && positionOfFolderViewWithPakeepViewIsBottom ? margin : 0,
+            display: 'flex',
+            // width:'100%',
+            marginRight: positionOfFolderViewWithPakeepViewIsRight ? marginValue : 0
+          }}
+        >
+          <Folders {...foldersProps} />
+        </NavContainer>
+      }
       <Grid
         item
         style={{
@@ -187,3 +214,5 @@ const FolderLayout = ({ children }: LayoutChildrenType) => {
 };
 
 export default FolderLayout;
+
+const Nav: FC<any> = ({ children, ...props }) => <nav {...props}>{children}</nav>;

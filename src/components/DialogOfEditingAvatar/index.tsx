@@ -8,8 +8,11 @@ import { useToggle } from 'react-use';
 import { toChangeAvatarProperties } from 'store/modules/App/actions';
 import { AvatarEditorStateType, DialogOfEditingAvatarPropsType } from './types';
 
-const DialogOfEditingAvatar: FC<DialogOfEditingAvatarPropsType> = ({ image }) => {
-  const [isOpen, setIsOpen] = useToggle(!!image);
+const DialogOfEditingAvatar: FC<DialogOfEditingAvatarPropsType> = ({
+  image,
+  isDialogOpen: isOpen,
+  setIsDialogOpen: setIsOpen
+}) => {
   const onClose = () => setIsOpen(false);
 
   const dispatch = useDispatch();
@@ -28,6 +31,7 @@ const DialogOfEditingAvatar: FC<DialogOfEditingAvatarPropsType> = ({ image }) =>
   });
 
   useEffect(() => {
+    console.log(image);
     setIsOpen(!!image);
     setAvatarEditorState(state => ({ ...state, image }));
   }, [image]);

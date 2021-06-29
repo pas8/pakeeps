@@ -115,7 +115,7 @@ const initialState: AppInitialStateInteface = {
   // menuOpenStatus: 'HIDDEN',
   avatarProperties: {
     url: NONE,
-    borderRadius: 8,
+    borderRadius: 4,
     backgroundColor: NONE
   },
   menuOpenStatus: 'EXTENDED',

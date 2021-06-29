@@ -11,123 +11,142 @@ import { FoldersTypeProps, UseStylesOfFoldersType } from './types';
 import MoreMenuOfFolders from './components/MoreMenu';
 import { getNavigationViewLike } from 'store/modules/Settings/selectors';
 import { useRouter } from 'next/dist/client/router';
-
 const marginOfToogleGroups = 1;
 
-const useStyles = makeStyles(({ spacing, typography, palette: { primary, secondary } }) => ({
-  containerOfFolderWithPakeepsView: ({
-    isMenuOpen,
-    positionOfFolderViewWithPakeepViewIsBottom,
-    isFolderViewWithPakeepViewAlignToCenter,
-    folderColor,
-    positionOfFolderViewWithPakeepViewIsRight
-  }: UseStylesOfFoldersType) => {
-    const color =
-      folderColor === 'default' || !folderColor || folderColor === 'primary'
-        ? primary.main
-        : folderColor === 'secondary'
-        ? secondary.main
-        : folderColor;
+const useStyles = makeStyles(
+  ({ spacing, typography, palette: { primary, secondary, background, mediumEmphasis } }) => ({
+    containerOfFolderWithPakeepsView: ({
+      isMenuOpen,
+      positionOfFolderViewWithPakeepViewIsBottom,
+      isFolderViewWithPakeepViewAlignToCenter,
+      folderColor,
+      isFoldersHaveDraweView,
+      positionOfFolderViewWithPakeepViewIsRight
+    }: UseStylesOfFoldersType) => {
+      const color =
+        folderColor === 'default' || !folderColor || folderColor === 'primary'
+          ? primary.main
+          : folderColor === 'secondary'
+          ? secondary.main
+          : folderColor;
 
-    return {
-      // transform:'scale(0.8)',
+      return {
+        // transform:'scale(0.8)',
 
-      margin: spacing(positionOfFolderViewWithPakeepViewIsBottom ? 8 : 8 + 1.8, 0, 0, 0),
-      // margin: spacing(positionOfFolderViewWithPakeepViewIsBottom ? -10 : -10 + 1.4, 0, 0, 0),
-      '& .MuiToggleButtonGroup-root': {
-        width: positionOfFolderViewWithPakeepViewIsBottom ? 'auto' : '100%',
-        margin: spacing(
-          marginOfToogleGroups,
-          positionOfFolderViewWithPakeepViewIsRight || positionOfFolderViewWithPakeepViewIsBottom
-            ? marginOfToogleGroups
-            : 0,
-          marginOfToogleGroups,
-          positionOfFolderViewWithPakeepViewIsBottom
-            ? 1.4
-            : !positionOfFolderViewWithPakeepViewIsBottom && !positionOfFolderViewWithPakeepViewIsRight
-            ? 1.4
-            : 0
-        ),
-        background: '#303030'
-      },
-      '& button': {
-        flexWrap: 'nowrap',
-        height: '100%',
-        padding: spacing(1.4, positionOfFolderViewWithPakeepViewIsBottom ? 1.4 : 1),
-
-        display: positionOfFolderViewWithPakeepViewIsBottom && isMenuOpen ? 'block' : 'flex',
-        whiteSpace: 'pre',
-        justifyContent: !isMenuOpen ? 'center' : 'flex-start',
-        flexDirection: 'column',
-        '& svg': {
-          fontSize: '2em'
-        }
-      },
-      '& .Mui-selected': {
-        background: useAlpha(color),
-        color,
-        '&:hover': { background: useAlpha(color, 0.2) },
-
-        '& svg': { color }
-      },
-      '& .folderIsPlaceholder:hover': {
-        background: 'transparent !important'
-      }
-    };
-  },
-  textOfFolderWithPakeepsView: ({ positionOfFolderViewWithPakeepViewIsBottom }: UseStylesOfFoldersType) =>
-    !positionOfFolderViewWithPakeepViewIsBottom
-      ? { padding: spacing(0, 0, 0, 0.8) }
-      : {
-          writingMode: 'vertical-rl',
-          textOrientation: 'upright',
-          flexWrap: positionOfFolderViewWithPakeepViewIsBottom ? 'wrap' : 'nowrap',
-          justifyContent: 'flex-end',
-          // width:'100%',
-          // height:'100%',
-          alignItems: 'center'
+        margin: spacing(isFoldersHaveDraweView ? 0 : positionOfFolderViewWithPakeepViewIsBottom ? 8 : 8 + 1.8, 0, 0, 0),
+        // margin: spacing(positionOfFolderViewWithPakeepViewIsBottom ? -10 : -10 + 1.4, 0, 0, 0),
+        '& .MuiToggleButtonGroup-root': {
+          width: positionOfFolderViewWithPakeepViewIsBottom ? 'auto' : '100%',
+          margin: spacing(
+            isFoldersHaveDraweView ? 0 : marginOfToogleGroups,
+            positionOfFolderViewWithPakeepViewIsRight || positionOfFolderViewWithPakeepViewIsBottom
+              ? marginOfToogleGroups
+              : 0,
+            isFoldersHaveDraweView ? 0 : marginOfToogleGroups,
+            isFoldersHaveDraweView
+              ? 0
+              : positionOfFolderViewWithPakeepViewIsBottom
+              ? 1.4
+              : !positionOfFolderViewWithPakeepViewIsBottom && !positionOfFolderViewWithPakeepViewIsRight
+              ? 1.4
+              : 0
+          ),
+          background: isFoldersHaveDraweView ? background.paper : '#303030'
         },
-  container: {
-    margin: spacing(10.32, 0, 0, 0),
-    height: '100vh',
-    // position: 'fixed',
-    '& button:first-of-type': {
-      borderTopRightRadius: 4
-    },
-    '& button:last-of-type': {
-      borderBottomRightRadius: 4
-    },
-    '& .MuiTabs-indicator': {
-      // height:'80%',
-      width: 2,
-      borderRadius: spacing(0.8)
-    },
+        '& button': {
+          flexWrap: 'nowrap',
+          height: '100%',
+          borderRadius: isFoldersHaveDraweView ? 0 : '',
+          padding: spacing(1.4, isFoldersHaveDraweView ? 1.42 : positionOfFolderViewWithPakeepViewIsBottom ? 1.4 : 1),
+          // background: isFoldersHaveDraweView ? `${background.paper}` : '',
+          border: isFoldersHaveDraweView ? 'none' : '',
+          color: isFoldersHaveDraweView ? mediumEmphasis?.main : '',
+          display: positionOfFolderViewWithPakeepViewIsBottom && isMenuOpen ? 'block' : 'flex',
+          whiteSpace: 'pre',
+          justifyContent: !isMenuOpen ? 'center' : 'flex-start',
+          flexDirection: 'column',
 
-    '& button': {
-      textTransform: 'none',
-      color: '#fff',
-      minWidth: '40px',
-      fontWeight: typography.fontWeightRegular,
-      fontSize: typography.pxToRem(16),
-      // borderRadius:8,
-      '&:focus': {
-        opacity: 1
+          '&:last-child': {
+            // background:'red',
+            borderBottom: isFoldersHaveDraweView ? `1px solid ${mediumEmphasis?.main}` : ''
+
+            // background: isFoldersHaveDraweView ? `${useAlpha(color)} !important` : ''
+          },
+          '& svg': {
+            fontSize: '2em'
+          }
+        },
+        '& .Mui-selected': {
+          background: useAlpha(color),
+          color,
+          '&:hover': { background: useAlpha(color, 0.2) },
+
+          '& svg': { color }
+        },
+        '& .folderIsPlaceholder':{
+          textTransform:'capitalize',
+          '&:hover': {
+            background: 'transparent !important'
+          }
+
+        },
+       
+      };
+    },
+    textOfFolderWithPakeepsView: ({ positionOfFolderViewWithPakeepViewIsBottom }: UseStylesOfFoldersType) =>
+      !positionOfFolderViewWithPakeepViewIsBottom
+        ? { padding: spacing(0, 0, 0, 0.8) }
+        : {
+            writingMode: 'vertical-rl',
+            textOrientation: 'upright',
+            flexWrap: positionOfFolderViewWithPakeepViewIsBottom ? 'wrap' : 'nowrap',
+            justifyContent: 'flex-end',
+            // width:'100%',
+            // height:'100%',
+            alignItems: 'center'
+          },
+    container: {
+      margin: spacing(10.32, 0, 0, 0),
+      height: '100vh',
+      // position: 'fixed',
+      '& button:first-of-type': {
+        borderTopRightRadius: 4
       },
-      minHeight: 0,
-      // marginTop: spacing(1.4),
-      // margin:spacing(2,0),
-      marginBottom: spacing(0.8),
-      padding: spacing(1.48, 2.6),
-      '& span': {
-        flexDirection: 'row',
-        '& svg': {
-          fontSize: '1.8em'
-          // margin: spacing(0.8, 0.4, 0, 0)
+      '& button:last-of-type': {
+        borderBottomRightRadius: 4
+      },
+      '& .MuiTabs-indicator': {
+        // height:'80%',
+        width: 2,
+        borderRadius: spacing(0.8)
+      },
+
+      '& button': {
+        textTransform: 'none',
+        color: '#fff',
+        minWidth: '40px',
+        fontWeight: typography.fontWeightRegular,
+        fontSize: typography.pxToRem(16),
+        // borderRadius:8,
+        '&:focus': {
+          opacity: 1
+        },
+        minHeight: 0,
+        // marginTop: spacing(1.4),
+        // margin:spacing(2,0),
+        marginBottom: spacing(0.8),
+        padding: spacing(1.48, 2.6),
+        '& span': {
+          flexDirection: 'row',
+          '& svg': {
+            fontSize: '1.8em'
+            // margin: spacing(0.8, 0.4, 0, 0)
+          }
         }
       }
     }
-  }
-}));
+  })
+);
 
 const Folders: FC<FoldersTypeProps> = ({
   value,
@@ -138,10 +157,12 @@ const Folders: FC<FoldersTypeProps> = ({
   positionOfFolderViewWithPakeepViewIsRight,
   isFolderOpen,
   handleHideFolder,
+  handleCloseFoldersWithDrawerView,
   isFolderViewWithPakeepViewAlignToCenter,
   setMargin,
   isSizeOfFoldersMoreThanSize,
-  setIsSizeOfFoldersMoreThanSize
+  setIsSizeOfFoldersMoreThanSize,
+  isFoldersHaveDraweView
 }) => {
   const router = useRouter();
 
@@ -152,6 +173,7 @@ const Folders: FC<FoldersTypeProps> = ({
   const classes = useStyles({
     folderColor,
     isMenuOpen,
+    isFoldersHaveDraweView,
     positionOfFolderViewWithPakeepViewIsBottom,
     positionOfFolderViewWithPakeepViewIsRight,
     isFolderViewWithPakeepViewAlignToCenter
@@ -171,9 +193,9 @@ const Folders: FC<FoldersTypeProps> = ({
 
   const ACCOUNT_URL = `${SETTING_URL}/account`;
   const SECURITY_URL = `${SETTING_URL}/security`;
-const THEME_URL=  `${SETTING_URL}/theme`
+  const THEME_URL = `${SETTING_URL}/theme`;
 
-const handleOpenSetting = () => {
+  const handleOpenSetting = () => {
     handleChange('placeholder', 1);
     router.push(ACCOUNT_URL);
   };
@@ -201,27 +223,27 @@ const handleOpenSetting = () => {
 
   const pakeepFolders = [...folders, ...utilsFolders];
 
+  const goToPakeepsArr = [
+    {
+      title: 'Go to pakeeps',
+      iconName: 'arrowBack',
+      id: 'folder-arrowBack',
+      onClick: handleGoToPakeep,
+      color: 'default'
+    }
+  ];
+
   const settingsFolders = [
     [
-      // { title: 'Go back', iconName: 'arrowBack', id: 'folder-arrowBack', onClick: handleGoBack, color: 'default' }
-      {
-        title: 'Go to pakeeps',
-        iconName: 'arrowBack',
-        id: 'folder-arrowBack',
-        onClick: handleGoToPakeep,
-        color: 'default'
-      }
-    ],
-    [
-      { title: 'Account', iconName: 'account', id: 'folder-account', color: 'default',route:ACCOUNT_URL },
+      { title: 'Account', iconName: 'account', id: 'folder-account', color: 'default', route: ACCOUNT_URL },
 
-      { title: 'Theme', iconName: 'color', id: 'folder-theme', color: 'default',route:THEME_URL },
+      { title: 'Theme', iconName: 'color', id: 'folder-theme', color: 'default', route: THEME_URL },
       {
         title: 'Security',
         iconName: 'security',
         id: 'folder-security',
         color: 'default',
-        route:SECURITY_URL
+        route: SECURITY_URL
       }
     ],
 
@@ -231,7 +253,7 @@ const handleOpenSetting = () => {
         isFolderIsPlaceholder: true,
         iconName: 'none',
         id: 'folder-appearance',
-        color: 'default',
+        color: 'default'
       },
       {
         title: 'Pakeeps',
@@ -258,21 +280,38 @@ const handleOpenSetting = () => {
       {
         title: 'Labels',
         iconName: 'label',
-        id: 'folder-pakeeps',
+        id: 'folder-labels',
         color: 'default',
         route: LABELS_URL
       },
       {
         title: 'Events',
         iconName: 'today',
-        id: 'folder-pakeeps',
+        id: 'folder-events',
         color: 'default',
         route: EVENTS_URL
       }
     ]
   ];
 
-  const allFolders = startsWith(router.pathname, SETTING_URL) ? settingsFolders : pakeepFolders;
+  const validatedSettingFolders = isFoldersHaveDraweView ? settingsFolders : [goToPakeepsArr, ...settingsFolders];
+
+  const defaultAllFolders = startsWith(router.pathname, SETTING_URL) ? validatedSettingFolders : pakeepFolders;
+
+  const allFoldersWithDrawerView = [
+    [
+      {
+        title: 'Close menu',
+        iconName: 'close',
+        id: 'folder-close',
+        onClick: handleCloseFoldersWithDrawerView,
+        color: 'default'
+      }
+    ],
+    ...defaultAllFolders
+  ];
+
+  const allFolders = isFoldersHaveDraweView ? allFoldersWithDrawerView : defaultAllFolders;
 
   const allMarginsOfBottomView = marginsOfToogleGroups * (allFolders.length + 1);
   const allMarginsOfNotBottomView = marginsOfToogleGroups * (allFolders.length + 4) + spacing(8);
@@ -282,7 +321,6 @@ const handleOpenSetting = () => {
     : allMarginsOfNotBottomView;
 
   const flattenAllFolders = _.flatten(allFolders);
-
   const [ref, { width: buttonWidth, height: buttonHeight }] = useMeasure<HTMLDivElement>();
 
   const buttonSize = positionOfFolderViewWithPakeepViewIsBottom ? buttonWidth : buttonHeight;
@@ -355,7 +393,7 @@ const handleOpenSetting = () => {
                 {/* <Grid container> */}
                 <ToggleButtonGroup
                   orientation={positionOfFolderViewWithPakeepViewIsBottom ? 'horizontal' : 'vertical'}
-                  value={value}
+                  value={ value}
                   exclusive
                   onChange={handleChange}
                 >
@@ -370,6 +408,8 @@ const handleOpenSetting = () => {
                       isFolderIsPlaceholder = false,
                       route
                     }) => {
+                      if (!isMenuOpen && isFolderIsPlaceholder) return null;
+
                       const findedIdx = _.findIndex(flattenAllFolders, ({ id: folderId }) => folderId === id);
 
                       const isShouldBeHidden =
@@ -449,7 +489,9 @@ const handleOpenSetting = () => {
   ));
   // useEffect(() =>  setButtonWidth(buttonW), [isFolderOpen])
 
-  useEffect(() => handleDrawerWidth(width), [width, isFolderOpen]);
+  useEffect(() => {
+    !isFoldersHaveDraweView && handleDrawerWidth(width);
+  }, [width, isFolderOpen]);
   useEffect(() => handleDrawerWidth(0), [isMenuOpen]);
 
   return f;
