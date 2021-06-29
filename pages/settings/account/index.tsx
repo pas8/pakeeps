@@ -1,9 +1,13 @@
 import { Grid, makeStyles, TextField, Typography } from '@material-ui/core';
 import DialogOfEditingAvatar from 'components/DialogOfEditingAvatar';
 import { useAlpha } from 'hooks/useAlpha.hook';
+import { useFromNameToText } from 'hooks/useFromNameToText.hook';
 import { capitalize, mapValues, snakeCase, values } from 'lodash';
+import { NONE } from 'models/denotation';
 import { ChangeEventHandler, FC, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
+import { useSelector } from 'react-redux';
+import { getAvatarProperties } from 'store/modules/App/selectors';
 
 const useStyles = makeStyles(({ spacing, transitions, breakpoints, palette: { secondary, maxEmphasis } }) => ({
   container: {
@@ -29,12 +33,11 @@ const useStyles = makeStyles(({ spacing, transitions, breakpoints, palette: { se
 }));
 
 const SettingAccount: FC<any> = () => {
-  const NONE = 'none';
+  const avatarProperties = useSelector(getAvatarProperties);
 
   const propsValue = {
     name: 'Pas',
-    userName: 'pas8',
-    avatar: NONE
+    userName: 'pas8'
   };
 
   const inputsDetonationOfSettingAccount = {
@@ -68,7 +71,7 @@ const SettingAccount: FC<any> = () => {
 
   const inputsNameArr = values(inputsDetonationOfSettingAccount);
 
-  const isAccountHaveAvatar = propsValue.avatar !== NONE;
+  const isAccountHaveAvatar = avatarProperties?.url !== NONE;
   const classes = useStyles({ isAccountHaveAvatar });
 
   const [files, setFiles] = useState<any>([]);
@@ -81,8 +84,7 @@ const SettingAccount: FC<any> = () => {
   });
 
   const image = files[0]?.preview;
-const onSave = () => console.log('log')
-  const dialogOfEditingAvatarProps = { image ,onSave};
+  const dialogOfEditingAvatarProps = { image };
 
   // const thumbs = files.map(file => (
   //   <div style={thumb} key={file.name}>
@@ -107,7 +109,7 @@ const onSave = () => console.log('log')
           {/* <Paper variant={'outlined'}> */}
           <Grid lg={6}>
             {inputsNameArr.map(({ name, helperText = '' }) => {
-              const label = capitalize(snakeCase(name));
+              const label = useFromNameToText(name);
               const value = inputsState[name].value;
 
               const textFieldProps = {
@@ -139,7 +141,10 @@ const onSave = () => console.log('log')
                 <>ava</>
               ) : (
                 <Grid>
-                  U can uplad avatar <input {...getInputProps()} />{' '}
+                  <Typography variant={'body2'} color={'textSecondary'}>
+                    U can uplad avatar
+                  </Typography>
+                  <input {...getInputProps()} />
                 </Grid>
               )}
             </Grid>
