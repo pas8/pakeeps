@@ -5,6 +5,8 @@ export type DefaultUseStylesOfFoldersType = {
   positionOfFolderViewWithPakeepViewIsBottom: boolean;
   positionOfFolderViewWithPakeepViewIsRight: boolean;
   isFolderViewWithPakeepViewAlignToCenter: boolean;
+  isFoldersHaveDraweView:boolean
+
 };
 
 export type UseStylesOfFoldersType = { folderColor: string } & DefaultUseStylesOfFoldersType;
@@ -14,8 +16,8 @@ export type FoldersTypeProps = {
   value: number;
   handleChange: HandleChangeOfFolders;
   handleDrawerWidth: (drawerWidth: number) => void;
-
   isFolderOpen: boolean;
+  handleCloseFoldersWithDrawerView:()=> void;
   handleHideFolder: () => void;
   setMargin: Dispatch<SetStateAction<number>>;
   isSizeOfFoldersMoreThanSize: boolean;

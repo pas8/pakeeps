@@ -4,7 +4,7 @@ import * as types from './types';
 export const defaultTheme: DefaultThemetype = {
   primaryMain: '#ffff8d',
   paperMain: '#424242',
-  defaultBackgroundMain: '#282828',
+  defaultBackgroundMain: '#303030',
   secondaryMain: '#00b0ff',
   type: 'dark',
   highEmphasis: 'rgba(255,255,255,0.8)',

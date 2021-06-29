@@ -8,7 +8,8 @@ const settingsInitialState: SettingsInitialStateType = {
   timeAndDateFromat: 'yyyy / MM / dd / hh:mm',
   navigationViewLike: 'pakeeps', //'telegram' || 'googleKeep' || 'pakeeps'
   positionOfFolderViewWithPakeepView: 'left', //'left' || 'bottom' || 'right'
-  isFolderViewWithPakeepViewAlignToCenter: !true
+  isFolderViewWithPakeepViewAlignToCenter: !true,
+  isMenuHaveGitHubView:true
 };
 
 // const settingsReducer = createReducer(settingsInitialState)({

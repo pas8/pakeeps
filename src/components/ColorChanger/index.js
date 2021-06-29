@@ -10,8 +10,8 @@ import { Skeleton } from '@material-ui/lab';
 
 const CustomColor = dynamic(() => import('./components/CustomColor'), {
   loading: () => (
-    <Grid style={{width:'200px', height:'300px'}}>
-      <CircularProgress color={"secondary"} />
+    <Grid style={{ width: '200px', height: '300px' }}>
+      <CircularProgress color={'secondary'} />
     </Grid>
   )
 });
@@ -30,7 +30,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const ColorPickerByPas = ({ handleSave = null, customColor }) => {
+const ColorPickerByPas = ({ handleSave, customColor }) => {
   const [gradientStatus, setGradientStatus] = useState(false);
   const classes = useStyles();
   const Container = gradientStatus ? Dialog : Grid;
@@ -48,10 +48,6 @@ const ColorPickerByPas = ({ handleSave = null, customColor }) => {
       )}
     </Container>
   );
-};
-
-ColorPickerByPas.propTypes = {
-  handleSave: PropTypes.func
 };
 
 export default ColorPickerByPas;

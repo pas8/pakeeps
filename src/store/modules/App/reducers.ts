@@ -18,6 +18,7 @@ import { random, sampleSize, words } from 'lodash';
 //@ts-ignore
 import randomSentence from 'random-sentence';
 import { colord } from 'colord';
+import { NONE } from 'models/denotation';
 
 const labelsOfInitialState: GlobalLabelsType = [
   { color: '', title: 'Day plans', iconName: 'category', id: 'label0', variant: 'outlined' },
@@ -66,6 +67,12 @@ const randomPakeeps = Array(8)
     };
   });
 
+export const defaultAvatarProperties = {
+  url: NONE,
+  borderRadius: 4,
+  backgroundColor: NONE
+};
+
 const initialState: AppInitialStateInteface = {
   defaultFolderArr: [
     { title: 'All pakeeps', iconName: '', id: 'folder-ALL', property: 'ALL', color: 'default' },
@@ -112,6 +119,7 @@ const initialState: AppInitialStateInteface = {
   pinnedPakeepsOrderNames: [],
   notifinationCounter: 8,
   // menuOpenStatus: 'HIDDEN',
+  avatarProperties: defaultAvatarProperties,
   menuOpenStatus: 'EXTENDED',
   currentFolderPropertyIdx: 0,
   drawerWidth: 0,
@@ -231,6 +239,8 @@ export const AppReducer = (state = initialState, action: AppActionTypes): AppIni
 
     case TypeNames.HANDLE_SET_ORDER_NAMES_OF_PINNED_PAKEEPS:
     case TypeNames.HANDLE_SET_ORDER_NAMES:
+    case TypeNames.HANDLE_CHANGE_AVATAR_PROPERTIES:
+
     case TypeNames.HANDLE_SET_NEW_ORDER_NAMES:
     case TypeNames.HANDLE_CHANGE_PAKEEPS:
     case TypeNames.HANDLE_SET_SELECTED_PAKEEPIDS_ARR:
