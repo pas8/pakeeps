@@ -1,4 +1,4 @@
-import { Button, ButtonGroup, Grid, Typography, Box, Slider } from '@material-ui/core';
+import { Button, ButtonGroup, Grid, Typography, Box, Slider, makeStyles } from '@material-ui/core';
 import React, { ChangeEventHandler, FC, useState } from 'react';
 import ReactAvatarEditor from 'react-avatar-editor';
 import RotateRightOutlinedIcon from '@material-ui/icons/RotateRightOutlined';
@@ -6,20 +6,35 @@ import RotateLeftOutlinedIcon from '@material-ui/icons/RotateLeftOutlined';
 import { useFromNameToText } from 'hooks/useFromNameToText.hook';
 import { useThemeColors } from 'hooks/useThemeColors.hook';
 import { colord } from 'colord';
-import { values } from 'lodash';
+import { includes, values } from 'lodash';
 import { AvatarEditorByPasPropsType } from './types';
+import ThirdStepOfSteperOfDialogOfAddNewLabel from 'components/IconsUtils/components/LabelsList/components/DialogOfAddNewLabel/components/Steper/components/Third';
+import ColorPickerByPas from 'components/ColorChanger';
+import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
+
+const useStyles = makeStyles(({ spacing, transitions, breakpoints, palette: { background } }) => ({
+  utilsContainer: {
+    margin: spacing(0, 0, 0, 4)
+  }
+}));
 
 const AvatarEditorByPas: FC<AvatarEditorByPasPropsType> = ({
   avatarEditorState: state,
   setAvatarEditorState: setState,
   setEditor
 }) => {
-  const [backgroundColor] = useThemeColors();
-  const color = values(colord(backgroundColor!).alpha(0.42).toRgb());
+  const classes = useStyles();
+
+  const [customColor, setCustomColor] = useState<boolean | string>(false);
+
+  const [isColorListHidden, setIsColorListHidden] = useState<boolean>(false);
+
+  const [primaryColor, secondaryColor] = useThemeColors();
+  const color = colord(primaryColor!).mix(secondaryColor!).toRgb();
+
+  const colorValues = values(color);
 
   const handleScale = (__: any, scale: any) => {
-    // __.preventDefault();
-    console.log(scale);
     setState(state => ({ ...state, scale }));
   };
 
@@ -58,7 +73,7 @@ const AvatarEditorByPas: FC<AvatarEditorByPasPropsType> = ({
 
   const slidersArr = [
     {
-      step: 0.1,
+      step: 0.01,
       min: 0,
       max: 2,
       // defaultValue: 0,
@@ -96,49 +111,119 @@ const AvatarEditorByPas: FC<AvatarEditorByPasPropsType> = ({
     }
   ] as const;
 
+  const CUSTOM_COLOR = 'customColor';
+  const TRANSPARENT = 'transparent';
+
+  const colorVariantsNames = [TRANSPARENT, primaryColor, secondaryColor];
+  const CUSTOM_COLOR_VALUE = includes(colorVariantsNames, state.backgroundColor)
+    ? 'customColor'
+    : state.backgroundColor;
+
+  const colorVariants = [
+    { labelText: 'Transparent color', value: colorVariantsNames[0]! },
+    { labelText: 'Primary color', value: colorVariantsNames[1]! },
+    { labelText: 'Secondary color', value: colorVariantsNames[2]! },
+    { labelText: 'Custom color', value: CUSTOM_COLOR_VALUE! }
+  ];
+  const onChangeOfLabelColorRadio: ChangeEventHandler<any> = ({ target: { value: backgroundColor } }) => {
+    const isCustomColor = backgroundColor === CUSTOM_COLOR;
+    setCustomColor(isCustomColor);
+    setIsColorListHidden(isCustomColor);
+    // const backgroundColor = isCustomColor ? 'transparent' : value;
+    setState(state => ({ ...state, backgroundColor }));
+  };
+  const thirdStepOfSteperOfDialogOfAddNewLabelProps = {
+    onChange: onChangeOfLabelColorRadio,
+    colorVariants,
+    value: state.backgroundColor
+  };
+  const handleSaveCustomColor = (backgroundColor: string) => {
+    setState(state => ({ ...state, backgroundColor }));
+  };
+  const backgroundColor =
+    CUSTOM_COLOR_VALUE === CUSTOM_COLOR && CUSTOM_COLOR_VALUE === state.backgroundColor
+      ? TRANSPARENT
+      : state.backgroundColor;
+
+  const isArrowListButtonShouldRotate = !!customColor && !isColorListHidden;
+
   return (
-    <Grid container>
+    <Grid container wrap={'nowrap'}>
       <Grid>
         <ReactAvatarEditor
           {...state}
           ref={setEditorRef}
           borderRadius={state.width / (100 / state.borderRadius)}
-          color={color}
-          // backgroundColor={state.backgroundColor}
+          color={colorValues}
+          //@ts-ignore
+          backgroundColor={backgroundColor}
           // onLoadFailure={logCallback.bind(this, 'onLoadFailed')}
           // onLoadSuccess={logCallback.bind(this, 'onLoadSuccess')}
           // onImageReady={logCallback.bind(this, 'onImageReady')}
           className={'editor-canvas'}
-          style={{ borderRadius: 4 }}
+          style={{
+            borderRadius: 4,
+            backgroundColor
+          }}
           // disableCanvasRotation={state.disableCanvasRotation}
         />
       </Grid>
-      <Box ml={4}>
-        <Box>
-          {slidersArr.map(el => (
-            <Grid key={el.name} container>
-              <Typography>{useFromNameToText(el.name)}</Typography>
+      <Grid className={classes.utilsContainer} container wrap={'nowrap'}>
+        <Grid>
+          <Box>
+            {slidersArr.map(el => (
+              <Grid key={el.name} container>
+                <Typography>{useFromNameToText(el.name)}</Typography>
 
-              <Slider {...el} color={'secondary'} valueLabelDisplay={'auto'} />
+                <Slider {...el} color={'secondary'} valueLabelDisplay={'auto'} track={'normal'} />
+              </Grid>
+            ))}
+          </Box>
+          <Box mt={0.8}>
+            <Grid container alignItems={'center'}>
+              <Box mr={2}>
+                <Typography variant={'subtitle1'}> Rotate: </Typography>
+              </Box>
+              <ButtonGroup color="secondary" aria-label="outlined secondary button group">
+                <Button endIcon={<RotateRightOutlinedIcon />} onClick={handleRotateToRight}>
+                  Right
+                </Button>
+                <Button endIcon={<RotateLeftOutlinedIcon />} onClick={handleRotateToLeft}>
+                  Left
+                </Button>
+              </ButtonGroup>
             </Grid>
-          ))}
-        </Box>
-        <Box mt={0.8}>
+          </Box>
+        </Grid>
+        <Box ml={4}>
           <Grid container alignItems={'center'}>
-            <Box mr={2}>
-              <Typography variant={'subtitle1'}> Rotate: </Typography>
-            </Box>
-            <ButtonGroup color="secondary" aria-label="outlined secondary button group">
-              <Button endIcon={<RotateRightOutlinedIcon />} onClick={handleRotateToRight}>
-                Right
-              </Button>
-              <Button endIcon={<RotateLeftOutlinedIcon />} onClick={handleRotateToLeft}>
-                Left
-              </Button>
-            </ButtonGroup>
+            <Grid
+              onClick={() => {
+                !!customColor && setIsColorListHidden(e => !e);
+              }}
+              style={{ cursor: !!customColor ? 'pointer' : 'auto' }}
+            >
+          <Grid container >
+
+              <Typography gutterBottom>Backgroung_color</Typography>
+              {!!customColor && <ArrowDropDownIcon style={{ transform: `rotate(${isArrowListButtonShouldRotate ? 180 : 0}deg)` }} />}
+              </Grid>
+            </Grid>
+            
+            
+            
+            
           </Grid>
+
+          {!isColorListHidden && (
+            <ThirdStepOfSteperOfDialogOfAddNewLabel {...thirdStepOfSteperOfDialogOfAddNewLabelProps} />
+          )}
+
+          {!!customColor && (
+            <ColorPickerByPas handleSave={handleSaveCustomColor} customColor={{ isUseDefault: true }} />
+          )}
         </Box>
-      </Box>
+      </Grid>
     </Grid>
   );
 };

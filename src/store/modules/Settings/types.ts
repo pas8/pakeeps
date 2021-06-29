@@ -10,4 +10,5 @@ export type SettingsInitialStateType = {
   navigationViewLike: 'telegram' | 'googleKeep' | 'pakeeps';
   positionOfFolderViewWithPakeepView: 'left' | 'bottom' | 'right';
   isFolderViewWithPakeepViewAlignToCenter: boolean;
+  isMenuHaveGitHubView: boolean;
 };

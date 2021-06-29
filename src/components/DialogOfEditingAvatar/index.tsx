@@ -20,18 +20,17 @@ const DialogOfEditingAvatar: FC<DialogOfEditingAvatarPropsType> = ({
   const [avatarEditorState, setAvatarEditorState] = useState<AvatarEditorStateType>({
     image,
     position: { x: 0.5, y: 0.5 },
-    scale: 0.8,
+    scale: 1,
     rotate: 0,
     borderRadius: 0,
-    width: 420,
-    height: 420,
+    width: 280,
+    height: 280,
     disableCanvasRotation: false,
     isTransparent: true,
-    backgroundColor: 'red'
+    backgroundColor: 'transparent'
   });
 
   useEffect(() => {
-    console.log(image);
     setIsOpen(!!image);
     setAvatarEditorState(state => ({ ...state, image }));
   }, [image]);
@@ -42,13 +41,14 @@ const DialogOfEditingAvatar: FC<DialogOfEditingAvatarPropsType> = ({
     const { borderRadius, backgroundColor } = avatarEditorState;
 
     dispatch(toChangeAvatarProperties({ avatarProperties: { backgroundColor, borderRadius, url } }));
+    onClose()
   };
 
   const [primaryColor, , , mediumEmphCOlor] = useThemeColors();
 
   const avatarEditorByPasProps = { setEditor, avatarEditorState, setAvatarEditorState };
   return (
-    <Dialog open={isOpen} fullWidth={true} maxWidth={'md'}>
+    <Dialog open={isOpen} fullWidth={true} maxWidth={'md'} onClose={onClose}>
       <DialogTitle>Avatar editing</DialogTitle>
       <DialogContent>
         <AvatarEditorByPas {...avatarEditorByPasProps} />
