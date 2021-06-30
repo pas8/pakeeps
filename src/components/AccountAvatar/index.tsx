@@ -45,7 +45,7 @@ const useStyles = makeStyles(
       };
     },
     containerOfUploadButton: {
-      marginTop: '6%',
+      // marginTop: '6%',
 
       '& button': {
         background: background.default,

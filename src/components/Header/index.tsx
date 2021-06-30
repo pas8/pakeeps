@@ -23,7 +23,7 @@ const useStyles = makeStyles(theme => ({
   appBar: {
     backgroundColor: '#424242',
     color: 'white',
-    padding:0,  
+    padding: 0,
     display: 'flex',
     transition: theme.transitions.create(['margin', 'width'], {
       easing: theme.transitions.easing.sharp,
@@ -85,12 +85,13 @@ const HeaderByPas: FC<HeaderByPasPropsType> = ({
           {(navigationViewLikePakeeps || navigationViewLikeGoogleKeep) && (
             <>
               <MainBar
+                isMenuExtended={isMenuExtended}
                 handleDrawerOpen={handleDrawerOpen}
-                isMenuOpen={navigationViewLikePakeeps ? false : isMenuOpen}
+                isMenuOpen={isMenuOpen}
                 isSmallSize={isSmallSize}
               />
               <HeaderSearch />
-              <HeaderProfileUtils isSmallSize={isSmallSize} />
+              <HeaderProfileUtils />
             </>
           )}
           {/* {navigationViewLikeTelegram && (

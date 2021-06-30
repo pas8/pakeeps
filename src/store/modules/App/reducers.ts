@@ -69,7 +69,7 @@ const randomPakeeps = Array(8)
 
 export const defaultAvatarProperties = {
   url: NONE,
-  borderRadius: 4,
+  borderRadius: 2,
   backgroundColor: TRANSPARENT
 };
 

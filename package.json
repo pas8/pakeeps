@@ -25,6 +25,7 @@
     "config": "^3.3.6",
     "date-fns": "^2.8.1",
     "dotenv": "^8.6.0",
+    "i18next": "^20.3.2",
     "jss-plugin-expand": "^10.6.0",
     "jss-plugin-global": "^10.6.0",
     "keyboardjs": "^2.6.4",

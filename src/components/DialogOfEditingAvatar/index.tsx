@@ -28,7 +28,7 @@ const DialogOfEditingAvatar: FC<DialogOfEditingAvatarPropsType> = ({
     position: { x: 0.5, y: 0.5 },
     scale: 1,
     rotate: 0,
-    borderRadius: 4,
+    borderRadius: 2,
     disableCanvasRotation: false,
     isTransparent: true,
     backgroundColor: 'transparent'

@@ -11,3 +11,10 @@ export type UseStylesOfHeaderByPasType = {
 export type HeaderByPasPropsType = {
   drawerWidth: number;
 } & UseStylesOfHeaderByPasType;
+
+export type MainBarPropsType = {
+  handleDrawerOpen: () => void;
+  isMenuOpen: boolean;
+  isSmallSize: boolean;
+  isMenuExtended: boolean;
+};
