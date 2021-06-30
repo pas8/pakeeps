@@ -85,8 +85,9 @@ const HeaderByPas: FC<HeaderByPasPropsType> = ({
           {(navigationViewLikePakeeps || navigationViewLikeGoogleKeep) && (
             <>
               <MainBar
+                isMenuExtended={isMenuExtended}
                 handleDrawerOpen={handleDrawerOpen}
-                isMenuOpen={navigationViewLikePakeeps ? false : isMenuOpen}
+                isMenuOpen={isMenuOpen}
                 isSmallSize={isSmallSize}
               />
               <HeaderSearch />

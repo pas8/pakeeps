@@ -18,8 +18,10 @@ import '../styles/globals.css';
 const Index: FC<any> = ({ Component, pageProps }) => {
   useUploadThemeSsr();
 
-  const loading = false;
-  // const loading = useLoading();
+
+
+  const isLoading = false;
+  // const isLoading = useLoading();
   const layouts = [
     StoreLayout,
     ThemeLayout,
@@ -34,7 +36,7 @@ const Index: FC<any> = ({ Component, pageProps }) => {
 
   return (
     <ComposeLayouts layouts={layouts} pageProps={pageProps}>
-      {loading && (
+      {isLoading && (
         <Grid style={{ position: 'fixed', top: 64, left: 0, right: 0, zIndex: 10000 }}>
           <LinearProgress color={'secondary'}/>
         </Grid>

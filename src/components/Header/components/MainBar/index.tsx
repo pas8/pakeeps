@@ -7,19 +7,19 @@ import { useRouter } from 'next/dist/client/router';
 import { capitalize, filter, map, split, values } from 'lodash';
 import { FC } from 'react';
 import NextLink from 'next/link';
+import MenuOpenOutlinedIcon from '@material-ui/icons/MenuOpenOutlined';
+import { MainBarPropsType } from '../types';
+
 const useStyles = makeStyles(theme => ({
   menuButton: {
     marginRight: theme.spacing(1)
-  },
-  hide: {
-    display: 'none'
   },
   typography: {
     flexGrow: 1
   }
 }));
 
-const MainBar: FC<any> = ({ handleDrawerOpen, isMenuOpen, isSmallSize }) => {
+const MainBar: FC<MainBarPropsType> = ({ handleDrawerOpen, isMenuOpen, isSmallSize, isMenuExtended }) => {
   const classes = useStyles();
   const { pathname } = useRouter();
 
@@ -45,16 +45,18 @@ const MainBar: FC<any> = ({ handleDrawerOpen, isMenuOpen, isSmallSize }) => {
         return { string, routeArr };
       });
 
+  const menuToolTipTitle = isMenuExtended ? 'Narrow down menu' : isMenuOpen ? 'Extend menu' : 'Open Menu';
+
   return (
     <>
-      <Tooltip title={'Open Menu'}>
+      <Tooltip title={menuToolTipTitle}>
         <IconButton
           aria-label={'open drawer'}
           onClick={handleDrawerOpen}
           edge={'start'}
-          className={clsx(classes.menuButton, isMenuOpen && classes.hide)}
+          className={clsx(classes.menuButton)}
         >
-          <MenuIcon />
+          {isMenuExtended ? <MenuOpenOutlinedIcon /> : <MenuIcon />}
         </IconButton>
       </Tooltip>
       {!isSmallSize && (
