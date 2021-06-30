@@ -13,7 +13,7 @@ const ThemeLayout = ({ children }: LayoutChildrenType) => {
   const breakpointsArr = [xl, lg, md, sm, xs];
 
   const dispatch = useDispatch();
-  
+
   const theme = responsiveFontSizes(
     createMuiTheme({
       breakpointsArr,
@@ -49,11 +49,7 @@ const ThemeLayout = ({ children }: LayoutChildrenType) => {
     })
   );
 
-  return (
-    <ThemeProvider theme={theme}>
-      {children}
-    </ThemeProvider>
-  );
+  return <ThemeProvider theme={theme}>{children}</ThemeProvider>;
 };
 
 export default ThemeLayout;

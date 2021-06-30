@@ -34,7 +34,7 @@ import {
 const useStyles = makeStyles(({ spacing, palette }) => ({
   container: ({ customColor }: UseStylesOfDialogOfAddNewLabelProps) => ({
     '& .MuiDialog-paper': {
-      // background: customColor && !useIsColorDark( customColor?.bgUnHover) ?grey[50] :  customColor?.bgUnHover,
+      // background: customColor && !useIsColorLight( customColor?.bgUnHover) ?grey[50] :  customColor?.bgUnHover,
 
       '& .MuiDialogTitle-root, .MuiStepper-root,.MuiDialogActions-root': {
         background: customColor?.isUseDefault ? '' : customColor?.bgUnHover,

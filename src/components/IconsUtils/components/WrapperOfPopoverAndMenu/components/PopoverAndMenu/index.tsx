@@ -8,8 +8,8 @@ const useStyles = makeStyles(theme => ({
     background: !customColor?.isUseDefault ? customColor?.hover : '',
     color: !customColor?.isUseDefault ? customColor?.bgUnHover : ''
     // border: '1px solid',
-    // boxShadow: !useIsColorDark(customColor?.hover) && `0px 0px 2px 1px ${customColor?.bgUnHover}`,
-    // borderColor:useIsColorDark(customColor?.hover) && customColor?.bgHover,
+    // boxShadow: !useIsColorLight(customColor?.hover) && `0px 0px 2px 1px ${customColor?.bgUnHover}`,
+    // borderColor:useIsColorLight(customColor?.hover) && customColor?.bgHover,
   }),
   popover: {
     pointerEvents: 'none'

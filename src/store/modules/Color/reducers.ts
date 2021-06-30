@@ -1,6 +1,17 @@
 import { TypeNames } from './enums';
 import { ColorActionTypes, DefaultThemeType } from './types';
 
+// export const defaultTheme: DefaultThemeType = {
+//   primaryMain: 'rgba(0,255,0,1)',
+//   paperMain: '#ffffffCC',
+//   defaultBackgroundMain: '#fff',
+//   secondaryMain: '#00b0ff',
+//   type: 'light',
+//   highEmphasis: 'rgba(0,0,0,0.8)',
+//   mediumEmphasis: 'rgba(0,0,0,0.6)',
+//   maxEmphasis: 'rgba(0,0,0,0.96)'
+// };
+
 export const defaultTheme: DefaultThemeType = {
   primaryMain: '#ffff8d',
   paperMain: '#424242',
@@ -57,6 +68,7 @@ export const ColorReducer = (state = colorInitialState, action: ColorActionTypes
       //@ts-ignore
       const x: never = action;
   }
+  return state
 };
 
 // const ColorReducer = (state = colorInitialState, action: AppActionTypes): AppInitialStateInteface => {

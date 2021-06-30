@@ -1,4 +1,4 @@
-import { Grid, makeStyles, Grow, Fade, Theme } from '@material-ui/core';
+import { Grid, makeStyles, Grow, Fade, Theme, useTheme } from '@material-ui/core';
 import PropTypes from 'prop-types';
 import { useState, useEffect, createContext, FC, ContextType, memo } from 'react';
 import { addDays, addHours, isValid } from 'date-fns';
@@ -8,7 +8,7 @@ import { useMeasure } from 'react-use';
 import { connect, useDispatch, useSelector } from 'react-redux';
 import { getFilteredLabels, getGlobalEventsArr, getLabels } from 'store/modules/App/selectors';
 import { useGetReadableColor } from 'hooks/useGetReadableColor.hook';
-import { useIsColorDark } from 'hooks/useIsColorDark.hook';
+import { useIsColorLight } from 'hooks/useIsColorLight.hook';
 import { PakeepHoveringContext } from 'components/PakeepList';
 import AttributeGroup from './components/AttributeGroup';
 import SkeletonView from './components/SkeletonView';
@@ -39,28 +39,25 @@ import { useAlpha } from 'hooks/useAlpha.hook';
 const IconsUtils = dynamic(() => import('components/IconsUtils'), { loading: () => <p>loading</p> });
 
 const useStyles = makeStyles(({ spacing, transitions, palette }: Theme) => ({
-  paperClass: ({
-    customColor,
-    backgroundColor,
-    color,
-    isUtilsHaveViewLikeInGoogleKeep,
-  }: UseStylesProps) => {
-    const borderColor = useIsColorDark(backgroundColor) ? backgroundColor : color;
+  paperClass: ({ customColor, backgroundColor, color, isUtilsHaveViewLikeInGoogleKeep }: UseStylesProps) => {
+const isTypeLight = palette.type === 'light' 
 
-    const insetborderColor = useIsColorDark(backgroundColor) ? '#303030' : backgroundColor;
+    const borderColor = isTypeLight ?   color :   useIsColorLight(backgroundColor) ? backgroundColor : color;
+
+    const insetborderColor =  useIsColorLight(backgroundColor) ? palette.background.default : backgroundColor;
     // !customColor.isUseDefault
-    // ? useIsColorDark(customColor.unHover)
+    // ? useIsColorLight(customColor.unHover)
     // ? customColor.unHover
     // : customColor.unHover
     // : palette?.highEmphasis?.main;
 
     return {
-      marginTop:4,
+      marginTop: 4,
       padding: spacing(0.4, 1.96, isUtilsHaveViewLikeInGoogleKeep ? 8 * 0.8 : 1, 1.96),
       cursor: 'grab',
       position: 'relative',
       backgroundColor,
-      border:`1px solid ${useAlpha(borderColor,0.2)}`,
+      border: `1px solid ${useAlpha(borderColor,isTypeLight ? 0.8 : 0.2)}`,
       color,
       transition: transitions.create('padding', {
         easing: transitions.easing.sharp,
@@ -73,9 +70,9 @@ const useStyles = makeStyles(({ spacing, transitions, palette }: Theme) => ({
           easing: transitions.easing.sharp,
           duration: transitions.duration.leavingScreen
         }),
-        borderColor:'',
+        borderColor: '',
         // borderColor: palette.primary.main
-        boxShadow: `0px 0px  1px 1px ${borderColor} ,inset 0px 0px 1px 2px ${insetborderColor} `,
+        boxShadow: `0px 0px  1px 1px ${borderColor} ,inset 0px 0px 1px 2px ${insetborderColor} `
         // borderStyle:  'dashed'
       }
     };
@@ -154,12 +151,15 @@ const PakeepElement: FC<PakeepElementPropsType> = ({
   ];
 
   const [, , maxEmphasisColor] = useThemeColors();
+  const {
+    palette: { background }
+  } = useTheme();
 
   const [customColor, isBackgroundColorDefault, isColorDefault] = useGetReadableColor(backgroundColor, color);
 
   const correctColor = customColor.isUseDefault ? maxEmphasisColor : customColor?.hover;
 
-  const correctBackground = isBackgroundColorDefault ? '#303030' : backgroundColor;
+  const correctBackground = isBackgroundColorDefault ? background.default : backgroundColor;
 
   const classes = useStyles({
     // isDragging,
@@ -226,7 +226,7 @@ const PakeepElement: FC<PakeepElementPropsType> = ({
   // const setLabelHoverStatus = () => setLabelHover({ title, isHovering: true });
   useEffect(() => setStatusState(state => ({ ...state, isLoaded: true })), []);
   // console.log(isSelecting)
-  console.log(statusState.isLoaded)
+  console.log(statusState.isLoaded);
   if (!statusState.isLoaded) return <SkeletonView />;
 
   const AnimationElement = isUtilsHaveViewLikeInGoogleKeep ? Fade : Grow;
@@ -328,7 +328,7 @@ const PakeepElement: FC<PakeepElementPropsType> = ({
               <AttributeGroup {...attributeGroupProps} />
             </Grid>
           }
-          
+
           {openIn && !isDragging && (
             <AnimationElement in={openIn}>
               <Grid className={classes.iconsUtilsClass}>

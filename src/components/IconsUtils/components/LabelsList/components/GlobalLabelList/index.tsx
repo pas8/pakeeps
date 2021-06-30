@@ -66,7 +66,7 @@ const GlobalLabelListOflabelList: FC<GlobalLabelListOflabelListPropsType> = ({
         const color = !isShoulColorBeChanged ? customColor?.unHover : customColor?.hover;
 
         const classes = useStyles({ color, isChecked, customColor });
-        // ||  useIsColorDark(customColor.bgUnHover)
+        // ||  useIsColorLight(customColor.bgUnHover)
         const onClickOfCheckBoxContainer = () => handleChangeNewLabel(isChecked, labelState.id);
         const onClickOfEditButton: MouseEventHandler<HTMLButtonElement> = e => {
           e.preventDefault();

@@ -3,7 +3,7 @@
 
 // export { authOperations };
 
-import { SettingsReducer as settings } from './reducers';
+import { SettingsReducer } from "./reducers";
 
-export default settings;
+export default SettingsReducer;
 // export default authReducer;

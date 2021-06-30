@@ -21,8 +21,8 @@ const useStyles = makeStyles(theme => ({
     marginBottom: navigationViewLikeTelegram ? theme.spacing(4) : 0
   }),
   appBar: {
-    backgroundColor: '#424242',
-    color: 'white',
+    backgroundColor: theme.palette.background.paper,
+    color: theme.palette.maxEmphasis?.main,
     padding: 0,
     display: 'flex',
     transition: theme.transitions.create(['margin', 'width'], {

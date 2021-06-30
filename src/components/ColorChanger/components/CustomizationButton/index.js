@@ -3,11 +3,11 @@ import ColorIcon from 'components/Icons/components/ColorIcon';
 import { useState } from 'react';
 import TuneOutlinedIcon from '@material-ui/icons/TuneOutlined';
 import DialogOfAddingCustomColorToColorLayouts from './components/DialogOfAddingCustomColorToColorLayouts';
-import { useIsColorDark } from 'hooks/useIsColorDark.hook';
+import { useIsColorLight } from 'hooks/useIsColorLight.hook';
 
 const useStyles = makeStyles(theme => ({
   button: ({ customColor, color, nullityColor, colorInHexFormat, }) => {
-    const isColorDark = !useIsColorDark(colorInHexFormat);
+    const isColorDark = !useIsColorLight(colorInHexFormat);
     console.log();
     const isColorDefault = colorInHexFormat === '#000000';
     // const color

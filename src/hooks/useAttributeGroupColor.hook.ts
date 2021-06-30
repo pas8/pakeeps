@@ -1,6 +1,6 @@
 import { UseAttributeGroupColorType } from 'models/types';
 import { useState, useEffect } from 'react';
-import { useIsColorDark } from './useIsColorDark.hook';
+import { useIsColorLight } from './useIsColorLight.hook';
 import { useThemeColors } from './useThemeColors.hook';
 
 export const defaultLabelColor = '#969696';
@@ -9,7 +9,7 @@ export const useAttributeGroupColor: UseAttributeGroupColorType = (customColor, 
   // const [color, setColor] = useState(false);
   const [primaryColor, secondaryColor] = useThemeColors();
 
-  const isDark = useIsColorDark(currentColor);
+  const isDark = useIsColorLight(currentColor);
 
   const isCustomColor = !customColor.isUseDefault;
 
