@@ -1,7 +1,7 @@
-import { ColorInitialStateType, DefaultThemetype } from './interfaces';
-import * as types from './types';
+import { TypeNames } from './enums';
+import { ColorActionTypes, DefaultThemeType } from './types';
 
-export const defaultTheme: DefaultThemetype = {
+export const defaultTheme: DefaultThemeType = {
   primaryMain: '#ffff8d',
   paperMain: '#424242',
   defaultBackgroundMain: '#303030',
@@ -40,10 +40,24 @@ export const colorInitialState = {
 //     }
 //   })
 // });
-export const ColorReducer = (state: ColorInitialStateType = colorInitialState, action: any): any => {
-  return state;
-};
+export const ColorReducer = (state = colorInitialState, action: ColorActionTypes): any => {
+  switch (action.type) {
+    case TypeNames.HANDLE_CHANGE_THEME_COLORS: {
+      const { newThemeColors } = action.payload;
 
+      const theme = { ...state.theme, ...newThemeColors };
+      return { ...state, theme };
+    }
+
+    // case '': {
+    // return { ...state, ...action.payload };
+    // }
+
+    default:
+      //@ts-ignore
+      const x: never = action;
+  }
+};
 
 // const ColorReducer = (state = colorInitialState, action: AppActionTypes): AppInitialStateInteface => {
 //   if (!('type' in action) || !TypeNames) return state;

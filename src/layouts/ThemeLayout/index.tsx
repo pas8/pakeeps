@@ -13,14 +13,12 @@ const ThemeLayout = ({ children }: LayoutChildrenType) => {
   const breakpointsArr = [xl, lg, md, sm, xs];
 
   const dispatch = useDispatch();
-  const onClick = () => {
-    dispatch(toDeletePakeep({ pakeepId: 'pakeep7' }));
-  };
-
+  
   const theme = responsiveFontSizes(
     createMuiTheme({
       breakpointsArr,
       breakpoints: {
+        //@ts-ignore
         values: breakpointsValues
       },
       direction: 'rtl',
@@ -53,7 +51,6 @@ const ThemeLayout = ({ children }: LayoutChildrenType) => {
 
   return (
     <ThemeProvider theme={theme}>
-      <Button onClick={onClick}>FUCK</Button>
       {children}
     </ThemeProvider>
   );

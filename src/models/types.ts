@@ -2,9 +2,10 @@ import { DefaultFolderArrType, GlobalLabelsType } from './../store/modules/App/t
 import { PropertyiesOfPakeepElement } from './../components/PakeepList/components/PakeepElement/types';
 import { TimeAndDateFromatType, TimeFormatType } from './../store/modules/Settings/types';
 import { SettingsInitialStateType } from 'store/modules/Settings/types';
+import { ColorInitialStateType } from 'store/modules/Color/types';
+
 import AddCircleOutlineOutlinedIcon from '@material-ui/icons/AddCircleOutlineOutlined';
 import { ReactNode } from 'react';
-import { ColorInitialStateType } from 'store/modules/Color/interfaces';
 import {
   AppInitialStateInteface,
   GlobalEventsType,

@@ -328,14 +328,14 @@ const PakeepElement: FC<PakeepElementPropsType> = ({
               <AttributeGroup {...attributeGroupProps} />
             </Grid>
           }
-          {/* 
+          
           {openIn && !isDragging && (
             <AnimationElement in={openIn}>
               <Grid className={classes.iconsUtilsClass}>
                 <IconsUtils {...allIconsUtilsProps} />
               </Grid>
             </AnimationElement>
-          )} */}
+          )}
         </MainDefaultPartOfPakeepElement>
       </Grid>
     </PakeepPropertyProvider.Provider>
