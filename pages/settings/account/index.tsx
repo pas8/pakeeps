@@ -1,16 +1,19 @@
 import { Button, Grid, makeStyles, TextField, Typography } from '@material-ui/core';
-import AccountAvatar from 'components/AccountAvatar';
 import DialogOfEditingAvatar from 'components/DialogOfEditingAvatar';
 import { useAlpha } from 'hooks/useAlpha.hook';
 import { useCustomBreakpoint } from 'hooks/useCustomBreakpoint';
 import { useFromNameToText } from 'hooks/useFromNameToText.hook';
 import { capitalize, mapValues, snakeCase, values } from 'lodash';
 import { NONE, TRANSPARENT } from 'models/denotation';
+import dynamic from 'next/dynamic';
 import { ChangeEventHandler, FC, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { useSelector } from 'react-redux';
 import { useToggle } from 'react-use';
 import { getAvatarProperties } from 'store/modules/App/selectors';
+
+const AccountAvatar = dynamic(() => import('components/AccountAvatar'), { ssr: false });
+
 const useStyles = makeStyles(
   ({ spacing, transitions, breakpoints, palette: { secondary, maxEmphasis, background } }) => ({
     container: {
@@ -23,12 +26,10 @@ const useStyles = makeStyles(
     conatinerOfAvatar: {
       padding: spacing(0, 0, 0, 8)
     },
-    avatar: ({ isAccountHaveAvatar, borderRadius, backgroundColor }: any) => {
-      const isHaveBgColor = backgroundColor !== TRANSPARENT;
+    avatar: ({ isAccountHaveAvatar, borderRadius, backgroundColor, isHaveBgColor }: any) => {
       const borderUnHoverColor = isHaveBgColor
         ? backgroundColor
         : useAlpha(isAccountHaveAvatar ? secondary.main : maxEmphasis?.main, 0.4);
-
       const borderHoverColor = isHaveBgColor
         ? backgroundColor
         : isAccountHaveAvatar
@@ -51,6 +52,8 @@ const useStyles = makeStyles(
           width: spacing(32),
           height: spacing(32)
         },
+        boxShadow: isHaveBgColor ? `0px 0px 1px 4px ${backgroundColor}` : '',
+
         outline: 'none',
         overflow: 'hidden',
         '& legend': {
@@ -60,7 +63,7 @@ const useStyles = makeStyles(
           borderRadius: 4
         },
         '&:hover': {
-          boxShadow: isHaveBgColor ? `0px 0px 1px 4px ${background.default}, 0px 0px 1px 6px ${backgroundColor}` : '',
+          boxShadow: isHaveBgColor ? `0px 0px 1px 2px ${background.default}, 0px 0px 1px 4px ${backgroundColor}` : '',
 
           border: `2px solid ${borderHoverColor}`,
           cursor: 'pointer'
@@ -123,7 +126,10 @@ const SettingAccount: FC<any> = () => {
   const inputsNameArr = values(inputsDetonationOfSettingAccount);
 
   const isAccountHaveAvatar = avatarProperties?.url !== NONE;
-  const classes = useStyles({ isAccountHaveAvatar, ...avatarProperties });
+
+  const isHaveBgColor = avatarProperties.backgroundColor !== TRANSPARENT;
+
+  const classes = useStyles({ isAccountHaveAvatar, ...avatarProperties, isHaveBgColor });
 
   const [files, setFiles] = useState<any>([]);
 
@@ -151,8 +157,9 @@ const SettingAccount: FC<any> = () => {
   const accountAvatarProps = {
     isAccountHaveAvatar,
     handleOpenDialog,
-    imageUrl: avatarProperties.url,
+    ...avatarProperties,
     getInputProps,
+    isHaveBgColor,
     handleDropZoneOpen
   };
 
@@ -186,14 +193,21 @@ const SettingAccount: FC<any> = () => {
           </Grid>
 
           <Grid className={classes.conatinerOfAvatar}>
-            <Grid style={{ position: 'relative' }}>
+            <Grid style={{ position: 'relative', padding: 4 }}>
               <fieldset className={classes.avatar} {...getRootProps()}>
-                <legend>
-                  <Typography variant={'body2'} color={'textSecondary'}>
-                    Avatar
-                  </Typography>
-                </legend>
-                <Grid container justify={'center'} alignItems={'center'}>
+                {!isAccountHaveAvatar && (
+                  <legend>
+                    <Typography variant={'body2'} color={'textSecondary'}>
+                      Avatar
+                    </Typography>
+                  </legend>
+                )}
+                <Grid
+                  container
+                  justify={'center'}
+                  alignItems={'center'}
+                  style={{ width: '100%', height: '100%', marginTop: '-6%' }}
+                >
                   <AccountAvatar {...accountAvatarProps} />
                 </Grid>
               </fieldset>

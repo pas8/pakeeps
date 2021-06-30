@@ -2,6 +2,7 @@ import { FC, MouseEventHandler, useState } from 'react';
 import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
 import { makeStyles, Grid, Button, Typography, MenuItem } from '@material-ui/core';
 import { AccountAvatarPropsType } from './types';
+import AccountCircleOutlinedIcon from '@material-ui/icons/AccountCircleOutlined';
 import MenuByPas from 'components/Menu';
 import { CustomColorType } from 'models/types';
 import { useDispatch } from 'react-redux';
@@ -9,7 +10,9 @@ import { toChangeAvatarProperties } from 'store/modules/App/actions';
 import { defaultAvatarProperties } from 'store/modules/App/reducers';
 import { useTakeIcon } from 'hooks/useTakeIcon.hook';
 import { useAlpha } from 'hooks/useAlpha.hook';
-
+import doodle from '@jalba/react-css-doodle';
+import { useThemeColors } from 'hooks/useThemeColors.hook';
+import { colord } from 'colord';
 export const customColorPlaceholder: CustomColorType = {
   bgHover: '',
   bgUnHover: '',
@@ -21,18 +24,8 @@ export const customColorPlaceholder: CustomColorType = {
 
 const useStyles = makeStyles(
   ({ spacing, transitions, breakpoints, palette: { secondary, maxEmphasis, background, highEmphasis } }) => ({
-    editButton: {
-      position: 'absolute',
-      bottom: 0,
-      background: background.default,
-
-      left: 0,
-      '& svg': {
-        marginRight: -4
-      }
-    },
     elementOfEditMenu: {
-      padding:spacing(1.2,2),
+      padding: spacing(1.2, 2),
       color: highEmphasis?.main,
       '& svg': {
         margin: spacing(0, 0.8, 0, -1)
@@ -41,6 +34,24 @@ const useStyles = makeStyles(
         color: useAlpha(secondary.main, 0.8),
         background: useAlpha(secondary.main)
       }
+    },
+    editButton: ({ backgroundColor, isHaveBgColor }: any) => {
+      const color = isHaveBgColor ? backgroundColor : '';
+      return {
+        position: 'absolute',
+        bottom: 8,
+        background: background.default,
+
+        left: 8,
+        '& svg': {
+          marginRight: -4
+        },
+
+        '& button': {
+          color,
+          borderColor: color
+        }
+      };
     }
   })
 );
@@ -48,12 +59,18 @@ const useStyles = makeStyles(
 const AccountAvatar: FC<AccountAvatarPropsType> = ({
   isAccountHaveAvatar,
   handleOpenDialog,
-  imageUrl,
+  url,
   getInputProps,
-  handleDropZoneOpen
+  handleDropZoneOpen,
+  backgroundColor,
+  isHaveBgColor,
+  borderRadius
 }) => {
-  const classes = useStyles();
+  const classes = useStyles({ backgroundColor, isHaveBgColor });
   const dispatch = useDispatch();
+
+  const [primaryColor, secondaryColor] = useThemeColors();
+  const color = colord(primaryColor!).mix(secondaryColor!).toHex();
 
   const [anchorEl, setAnchorEl] = useState<any>(null);
 
@@ -76,11 +93,52 @@ const AccountAvatar: FC<AccountAvatarPropsType> = ({
     { title: 'Delete avatar', onClick: handleDeleteAvatar, iconName: 'delete' }
   ];
 
+  // const FancyDoodle = doodle`
+  // :doodle {
+  //   @grid: 2 / 4vmax;
+  //   // background: ${primaryColor};
+  // }
+  // --hue: calc(180 + 1.5 * @row * @col);
+  // background: hsl(var(--hue), 50%, 70%);
+  // margin: -.2px;
+  // transition: @r(.5s) ease;
+  // clip-path: polygon(@pick(
+  //   '0 0, 100% 0, 100% 100%',
+  //   '0 0, 100% 0, 0 100%',
+  //   '0 0, 100% 100%, 0 100%',
+  //   '100% 0, 100% 100%, 0 100%'
+  // ));
+  // `;
+
+  // const FancyDoodle = doodle`
+  //   @grid: 8 / 16em;
+  //   background: linear-gradient(
+  //     @rand(360deg),
+  //     @stripe(${primaryColor!}, ${secondaryColor!}, ${color!})
+  //   );
+  // `;
+
+  const FancyDoodle = doodle`
+  @grid: 1 / 100% 100%;
+  background-size: 42% 80%;
+  background-color: ${color!};
+  background-image: @doodle(
+    @grid: 2 / 100%;
+    background: @pn(${primaryColor!}, ${secondaryColor!}, );
+    transform-origin:
+      @pn(100% 100%, 0 100%, 100% 0, 0 0);
+    transform:
+      rotateX(45deg)
+      skewY(@pn(34deg, -34deg, -34deg));
+  );
+  `;
+
   return (
     <>
+      {/* <FancyDoodle /> */}
       {isAccountHaveAvatar ? (
         <>
-          <img style={{ width: '100%', height: '100%', marginTop: '-6%' }} src={imageUrl} onClick={handleOpenDialog} />
+          <img style={{ width: '100%', height: '100%' }} src={url} onClick={handleOpenDialog} />
           <Grid className={classes.editButton}>
             <Button
               startIcon={<EditOutlinedIcon />}
@@ -95,17 +153,16 @@ const AccountAvatar: FC<AccountAvatarPropsType> = ({
         </>
       ) : (
         <Grid>
-          <Typography variant={'body2'} color={'textSecondary'}>
-            U can uplad avatar
-          </Typography>
-          <input {...getInputProps()} />
+          <Button startIcon={<AccountCircleOutlinedIcon />} color={'secondary'} variant={'outlined'}>
+            <Typography variant={'body2'}>upload avatar</Typography>
+
+            <input {...getInputProps()} />
+          </Button>
         </Grid>
       )}
       <MenuByPas open={!!anchorEl} customColor={customColorPlaceholder} anchorEl={anchorEl} onClose={onClose}>
         {editMenuArr.map(({ title, onClick, iconName }) => {
           const [icon] = useTakeIcon(iconName);
-
-
 
           return (
             <MenuItem onClick={onClick} className={classes.elementOfEditMenu}>

@@ -184,7 +184,7 @@ const AvatarEditorByPas: FC<AvatarEditorByPasPropsType> = ({
               <Box mr={2}>
                 <Typography variant={'subtitle1'}> Rotate: </Typography>
               </Box>
-              <ButtonGroup color="secondary" aria-label="outlined secondary button group">
+              <ButtonGroup color={'secondary'}>
                 <Button endIcon={<RotateRightOutlinedIcon />} onClick={handleRotateToRight}>
                   Right
                 </Button>
@@ -194,8 +194,13 @@ const AvatarEditorByPas: FC<AvatarEditorByPasPropsType> = ({
               </ButtonGroup>
             </Grid>
           </Box>
+          {/* <Box>
+            <Button color={'secondary'} variant={'outlined'}>
+              Generate doogle bgColor
+            </Button>
+          </Box> */}
         </Grid>
-        <Box ml={4}>
+        <Box ml={4} style={{ minWidth: '260px' }}>
           <Grid container alignItems={'center'}>
             <Grid
               onClick={() => {
@@ -203,16 +208,13 @@ const AvatarEditorByPas: FC<AvatarEditorByPasPropsType> = ({
               }}
               style={{ cursor: !!customColor ? 'pointer' : 'auto' }}
             >
-          <Grid container >
-
-              <Typography gutterBottom>Backgroung_color</Typography>
-              {!!customColor && <ArrowDropDownIcon style={{ transform: `rotate(${isArrowListButtonShouldRotate ? 180 : 0}deg)` }} />}
+              <Grid container>
+                <Typography gutterBottom>Backgroung_color</Typography>
+                {!!customColor && (
+                  <ArrowDropDownIcon style={{ transform: `rotate(${isArrowListButtonShouldRotate ? 180 : 0}deg)` }} />
+                )}
               </Grid>
             </Grid>
-            
-            
-            
-            
           </Grid>
 
           {!isColorListHidden && (
