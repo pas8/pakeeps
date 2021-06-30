@@ -11,10 +11,25 @@ import { AvatarEditorByPasPropsType } from './types';
 import ThirdStepOfSteperOfDialogOfAddNewLabel from 'components/IconsUtils/components/LabelsList/components/DialogOfAddNewLabel/components/Steper/components/Third';
 import ColorPickerByPas from 'components/ColorChanger';
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
+import { useCustomBreakpoint } from 'hooks/useCustomBreakpoint';
+import { useBreakpointNames } from 'hooks/useBreakpointNames.hook';
 
 const useStyles = makeStyles(({ spacing, transitions, breakpoints, palette: { background } }) => ({
   utilsContainer: {
-    margin: spacing(0, 0, 0, 4)
+    margin: spacing(0, 0, 0, 4),
+
+    [breakpoints.down('sm')]: {
+      margin: spacing(2, 0, 0, 0)
+    },
+
+  },
+  containerOfBgColorUtils: {
+    margin: spacing(0, 0, 0, 4),
+
+    [breakpoints.down('sm')]: {
+      margin: spacing(2, 0, 0, 0)
+    },
+    width: 260
   }
 }));
 
@@ -83,7 +98,7 @@ const AvatarEditorByPas: FC<AvatarEditorByPasPropsType> = ({
     },
     {
       step: 1,
-      min: 0,
+      min: 4,
       max: 50,
       defaultValue: 0,
       name: 'borderRadius',
@@ -147,8 +162,10 @@ const AvatarEditorByPas: FC<AvatarEditorByPasPropsType> = ({
 
   const isArrowListButtonShouldRotate = !!customColor && !isColorListHidden;
 
+  const { isSizeSmall } = useBreakpointNames();
+
   return (
-    <Grid container wrap={'nowrap'}>
+    <Grid container wrap={!isSizeSmall ? 'nowrap' : 'wrap'} direction={isSizeSmall ? 'column' : 'row'}>
       <Grid>
         <ReactAvatarEditor
           {...state}
@@ -168,7 +185,7 @@ const AvatarEditorByPas: FC<AvatarEditorByPasPropsType> = ({
           // disableCanvasRotation={state.disableCanvasRotation}
         />
       </Grid>
-      <Grid className={classes.utilsContainer} container wrap={'nowrap'}>
+      <Grid className={classes.utilsContainer} container wrap={'nowrap'} direction={isSizeSmall ? 'column' : 'row'}>
         <Grid>
           <Box>
             {slidersArr.map(el => (
@@ -200,7 +217,7 @@ const AvatarEditorByPas: FC<AvatarEditorByPasPropsType> = ({
             </Button>
           </Box> */}
         </Grid>
-        <Box ml={4} style={{ minWidth: '260px' }}>
+        <Box className={classes.containerOfBgColorUtils}>
           <Grid container alignItems={'center'}>
             <Grid
               onClick={() => {

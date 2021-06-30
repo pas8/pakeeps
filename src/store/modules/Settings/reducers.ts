@@ -9,7 +9,7 @@ const settingsInitialState: SettingsInitialStateType = {
   navigationViewLike: 'pakeeps', //'telegram' || 'googleKeep' || 'pakeeps'
   positionOfFolderViewWithPakeepView: 'left', //'left' || 'bottom' || 'right'
   isFolderViewWithPakeepViewAlignToCenter: !true,
-  isMenuHaveGitHubView:true
+  isMenuHaveGitHubView:!true
 };
 
 // const settingsReducer = createReducer(settingsInitialState)({
