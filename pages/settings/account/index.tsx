@@ -9,7 +9,7 @@ import dynamic from 'next/dynamic';
 import { ChangeEventHandler, FC, MouseEventHandler, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { useSelector } from 'react-redux';
-import { useToggle } from 'react-use';
+import { useToggle, useTitle } from 'react-use';
 import { getAvatarProperties } from 'store/modules/App/selectors';
 import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
 import { useIsColorDark } from 'hooks/useIsColorDark.hook';
@@ -146,6 +146,7 @@ const useStyles = makeStyles(
 );
 
 const SettingAccount: FC<any> = () => {
+
   const avatarProperties = useSelector(getAvatarProperties);
   const [br] = useCustomBreakpoint();
 
@@ -299,12 +300,7 @@ const SettingAccount: FC<any> = () => {
                     </Typography>
                   </legend>
                 )}
-                <Grid
-                  container
-                  justify={'center'}
-                  alignItems={'center'}
-                  style={{ width: '100%', height: '100%', marginTop: '-6%' }}
-                >
+                <Grid container justify={'center'} alignItems={'center'} style={{ width: '100%', height: '100%' }}>
                   <AccountAvatar {...accountAvatarProps} />
                 </Grid>
               </fieldset>

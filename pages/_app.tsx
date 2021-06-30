@@ -18,8 +18,8 @@ import '../styles/globals.css';
 const Index: FC<any> = ({ Component, pageProps }) => {
   useUploadThemeSsr();
 
-  const loading = useLoading();
-
+  const loading = false;
+  // const loading = useLoading();
   const layouts = [
     StoreLayout,
     ThemeLayout,

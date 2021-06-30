@@ -1,9 +1,10 @@
 import { IconButton, makeStyles } from '@material-ui/core';
 import AccountCircleOutlinedIcon from '@material-ui/icons/AccountCircleOutlined';
+import { FC } from 'react';
 
 const useStyles = makeStyles(theme => ({}));
 
-const AvatarButtor = () => {
+const AvatarButton: FC = () => {
   const classes = useStyles();
 
   return (
@@ -13,6 +14,4 @@ const AvatarButtor = () => {
   );
 };
 
-AvatarButtor.propTypes = {};
-
-export default AvatarButtor;
+export default AvatarButton;
