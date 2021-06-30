@@ -1,10 +1,11 @@
 import { Dialog, DialogActions, DialogContent, DialogTitle } from '@material-ui/core';
 import ActionsButtonGroup from 'components/ActionsButtonGroup';
 import AvatarEditorByPas from 'components/AvatarEditor';
+import { useBreakpointNames } from 'hooks/useBreakpointNames.hook';
 import { useThemeColors } from 'hooks/useThemeColors.hook';
 import { FC, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { useToggle } from 'react-use';
+import { useMeasure, useToggle, useWindowSize } from 'react-use';
 import { toChangeAvatarProperties } from 'store/modules/App/actions';
 import { AvatarEditorStateType, DialogOfEditingAvatarPropsType } from './types';
 
@@ -17,18 +18,26 @@ const DialogOfEditingAvatar: FC<DialogOfEditingAvatarPropsType> = ({
 
   const dispatch = useDispatch();
 
+  const [ref, { width }] = useMeasure();
+  const { isSizeSmall } = useBreakpointNames();
+
   const [avatarEditorState, setAvatarEditorState] = useState<AvatarEditorStateType>({
+    width: 280,
+    height: 280,
     image,
     position: { x: 0.5, y: 0.5 },
     scale: 1,
     rotate: 0,
-    borderRadius: 0,
-    width: 280,
-    height: 280,
+    borderRadius: 4,
     disableCanvasRotation: false,
     isTransparent: true,
     backgroundColor: 'transparent'
   });
+  useEffect(() => {
+    const unit = width - 48;
+    !!isSizeSmall && !!width && setAvatarEditorState(state => ({ ...state, width: unit, height: unit }));
+  }, [isSizeSmall, width]);
+
 
   useEffect(() => {
     setIsOpen(!!image);
@@ -41,16 +50,16 @@ const DialogOfEditingAvatar: FC<DialogOfEditingAvatarPropsType> = ({
     const { borderRadius, backgroundColor } = avatarEditorState;
 
     dispatch(toChangeAvatarProperties({ avatarProperties: { backgroundColor, borderRadius, url } }));
-    onClose()
+    onClose();
   };
 
   const [primaryColor, , , mediumEmphCOlor] = useThemeColors();
 
   const avatarEditorByPasProps = { setEditor, avatarEditorState, setAvatarEditorState };
   return (
-    <Dialog open={isOpen} fullWidth={true} maxWidth={'md'} onClose={onClose}>
+    <Dialog open={isOpen} fullWidth={true} maxWidth={isSizeSmall ? 'xs' : 'md'} onClose={onClose}>
       <DialogTitle>Avatar editing</DialogTitle>
-      <DialogContent>
+      <DialogContent ref={ref}>
         <AvatarEditorByPas {...avatarEditorByPasProps} />
       </DialogContent>
       <DialogActions>

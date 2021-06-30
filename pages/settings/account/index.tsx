@@ -1,18 +1,28 @@
 import { Button, Grid, makeStyles, TextField, Typography } from '@material-ui/core';
-import AccountAvatar from 'components/AccountAvatar';
 import DialogOfEditingAvatar from 'components/DialogOfEditingAvatar';
 import { useAlpha } from 'hooks/useAlpha.hook';
 import { useCustomBreakpoint } from 'hooks/useCustomBreakpoint';
 import { useFromNameToText } from 'hooks/useFromNameToText.hook';
 import { capitalize, mapValues, snakeCase, values } from 'lodash';
 import { NONE, TRANSPARENT } from 'models/denotation';
-import { ChangeEventHandler, FC, useState } from 'react';
+import dynamic from 'next/dynamic';
+import { ChangeEventHandler, FC, MouseEventHandler, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { useSelector } from 'react-redux';
 import { useToggle } from 'react-use';
 import { getAvatarProperties } from 'store/modules/App/selectors';
+import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
+import { useIsColorDark } from 'hooks/useIsColorDark.hook';
+
+const AccountAvatar = dynamic(() => import('components/AccountAvatar'), { ssr: false });
+
 const useStyles = makeStyles(
-  ({ spacing, transitions, breakpoints, palette: { secondary, maxEmphasis, background } }) => ({
+  ({
+    spacing,
+    transitions,
+    breakpoints,
+    palette: { secondary, maxEmphasis, background, mediumEmphasis, highEmphasis }
+  }) => ({
     container: {
       minHeight: '80vh',
       marginTop: spacing(2)
@@ -21,14 +31,39 @@ const useStyles = makeStyles(
       marginBottom: spacing(3.2)
     },
     conatinerOfAvatar: {
-      padding: spacing(0, 0, 0, 8)
+      padding: spacing(0, 0, 0, 8),
+
+      [breakpoints.down('md')]: {
+        padding: spacing(0, 0, 0, 6)
+      },
+
+      [breakpoints.down('sm')]: {
+        padding: spacing(0, 0, 0, 0),
+        maxHeight: spacing(42 + 6)
+      },
+
+      [breakpoints.down('xs')]: {
+        padding: spacing(0, 0, 0, 0),
+        // height: '60vw',
+        maxHeight: '76vw'
+      }
     },
-    avatar: ({ isAccountHaveAvatar, borderRadius, backgroundColor }: any) => {
-      const isHaveBgColor = backgroundColor !== TRANSPARENT;
+    containerOfInputs: {
+      [breakpoints.down('xs')]: {
+        maxWidth: '68vw'
+      }
+    },
+    avatar: ({
+      isAccountHaveAvatar,
+      borderRadius,
+      backgroundColor,
+      isHaveBgColor,
+      isDragActive,
+      isBgColorDark
+    }: any) => {
       const borderUnHoverColor = isHaveBgColor
         ? backgroundColor
         : useAlpha(isAccountHaveAvatar ? secondary.main : maxEmphasis?.main, 0.4);
-
       const borderHoverColor = isHaveBgColor
         ? backgroundColor
         : isAccountHaveAvatar
@@ -36,21 +71,31 @@ const useStyles = makeStyles(
         : maxEmphasis?.main;
 
       return {
-        border: `2px solid ${borderUnHoverColor}`,
+        border: `2px solid ${isDragActive ? secondary.main : borderUnHoverColor}`,
         borderRadius: `${borderRadius}%`,
         backgroundColor,
         padding: 4,
-        width: spacing(42),
-        marginTop: spacing(-0.8),
-        height: spacing(42),
-        [breakpoints.down('sm')]: {
-          width: spacing(24),
-          height: spacing(24)
-        },
+        position: 'relative',
+        width: spacing(36),
+        marginTop: spacing(isAccountHaveAvatar ? 2 : -1.4),
+        height: spacing(36),
+
         [breakpoints.down('md')]: {
           width: spacing(32),
           height: spacing(32)
         },
+
+        [breakpoints.down('sm')]: {
+          minWidth: spacing(42),
+          height: spacing(42)
+        },
+        [breakpoints.down('xs')]: {
+          minWidth: '68vw',
+          height: '68vw'
+        },
+
+        boxShadow: isHaveBgColor ? `0px 0px 1px 4px ${backgroundColor}` : '',
+
         outline: 'none',
         overflow: 'hidden',
         '& legend': {
@@ -60,22 +105,42 @@ const useStyles = makeStyles(
           borderRadius: 4
         },
         '&:hover': {
-          boxShadow: isHaveBgColor ? `0px 0px 1px 4px ${background.default}, 0px 0px 1px 6px ${backgroundColor}` : '',
+          boxShadow: isHaveBgColor
+            ? isBgColorDark
+              ? `0px 0px 1px 2px ${highEmphasis?.main}`
+              : `0px 0px 1px 2px ${background.default}, 0px 0px 1px 4px ${backgroundColor}`
+            : '',
 
           border: `2px solid ${borderHoverColor}`,
           cursor: 'pointer'
         }
       };
     },
-    editButton: {
-      position: 'absolute',
-      bottom: 24,
-      background: background.default,
 
-      left: 8,
-      '& svg': {
-        marginRight: -4
-      }
+    containerOfEditButton: ({ backgroundColor, isHaveBgColor, isBgColorDark }: any) => {
+      const color = isHaveBgColor ? (isBgColorDark ? maxEmphasis?.main : backgroundColor) : secondary.main;
+      const bg = !isBgColorDark ? background.default : backgroundColor;
+      return {
+        position: 'absolute',
+        bottom: 10,
+        zIndex: 1000,
+
+        left: 10,
+        '& svg': {
+          marginRight: -4
+        },
+
+        '& button': {
+          backgroundColor: bg,
+          color,
+          borderColor: useAlpha(color, 0.42),
+          '&:hover': {
+            backgroundColor: bg,
+            color,
+            borderColor: color
+          }
+        }
+      };
     }
   })
 );
@@ -84,7 +149,10 @@ const SettingAccount: FC<any> = () => {
   const avatarProperties = useSelector(getAvatarProperties);
   const [br] = useCustomBreakpoint();
 
-  const isSmall = br === 'sm' || br === 'xs';
+  const isSiveIsSm = br === 'sm';
+  const isSiveIsXs = br === 'xs';
+
+  const isSmall = isSiveIsSm || isSiveIsXs;
 
   const propsValue = {
     name: 'Pas',
@@ -123,15 +191,12 @@ const SettingAccount: FC<any> = () => {
   const inputsNameArr = values(inputsDetonationOfSettingAccount);
 
   const isAccountHaveAvatar = avatarProperties?.url !== NONE;
-  const classes = useStyles({ isAccountHaveAvatar, ...avatarProperties });
+
+  const isHaveBgColor = avatarProperties.backgroundColor !== TRANSPARENT;
 
   const [files, setFiles] = useState<any>([]);
 
-  const {
-    getRootProps,
-    getInputProps,
-    open: handleDropZoneOpen
-  } = useDropzone({
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
     accept: 'image/*',
     onDrop: (acceptedFiles: any) => {
       setFiles(acceptedFiles.map((file: any) => ({ file, preview: URL.createObjectURL(file) })));
@@ -148,20 +213,46 @@ const SettingAccount: FC<any> = () => {
     setIsDialogOpen(true);
   };
 
-  const accountAvatarProps = {
-    isAccountHaveAvatar,
-    handleOpenDialog,
-    imageUrl: avatarProperties.url,
-    getInputProps,
-    handleDropZoneOpen
+  const [anchorEl, setAnchorEl] = useState<any>(null);
+
+  const onClickOfEditButton: MouseEventHandler<HTMLButtonElement> = ({ currentTarget }) => {
+    setAnchorEl(currentTarget);
   };
 
+  const onClose = () => {
+    setAnchorEl(false);
+  };
+
+  const accountAvatarProps = {
+    ...avatarProperties,
+    isAccountHaveAvatar,
+    handleOpenDialog,
+    getInputProps,
+    onClose,
+    anchorEl,
+    isDragActive,
+    isHaveBgColor
+  };
+
+  const isBgColorDark = !useIsColorDark(avatarProperties.backgroundColor);
+
+  const classes = useStyles({ isAccountHaveAvatar, ...avatarProperties, isHaveBgColor, isDragActive, isBgColorDark });
   return (
     <>
       <Grid container justify={'center'} className={classes.container}>
-        <Grid sm={11} lg={8} container xl={6} md={11} xs={12} justify={'flex-start'} wrap={isSmall ? 'wrap' : 'nowrap'}>
+        <Grid
+          sm={11}
+          lg={8}
+          container
+          xl={6}
+          md={11}
+          xs={12}
+          alignItems={isSiveIsXs ? 'center' : 'flex-start'}
+          wrap={!isSmall ? 'wrap' : 'nowrap'}
+          direction={isSmall ? 'column-reverse' : 'row'}
+        >
           {/* <Paper variant={'outlined'}> */}
-          <Grid lg={6}>
+          <Grid lg={6} sm={12} md={6} xl={6} xs={11} className={classes.containerOfInputs}>
             {inputsNameArr.map(({ name, helperText = '' }) => {
               const label = useFromNameToText(name);
               const value = inputsState[name].value;
@@ -185,15 +276,35 @@ const SettingAccount: FC<any> = () => {
             })}
           </Grid>
 
-          <Grid className={classes.conatinerOfAvatar}>
-            <Grid style={{ position: 'relative' }}>
+          <Grid className={classes.conatinerOfAvatar} lg={6} sm={10} md={6} xl={6} xs={12}>
+            <Grid style={{ position: 'relative', padding: 4 }} container>
+              {isAccountHaveAvatar && (
+                <Grid className={classes.containerOfEditButton}>
+                  <Button
+                    startIcon={<EditOutlinedIcon />}
+                    color={'secondary'}
+                    variant={'outlined'}
+                    size={'small'}
+                    onClick={onClickOfEditButton}
+                  >
+                    Edit
+                  </Button>
+                </Grid>
+              )}
               <fieldset className={classes.avatar} {...getRootProps()}>
-                <legend>
-                  <Typography variant={'body2'} color={'textSecondary'}>
-                    Avatar
-                  </Typography>
-                </legend>
-                <Grid container justify={'center'} alignItems={'center'}>
+                {!isAccountHaveAvatar && (
+                  <legend>
+                    <Typography variant={'body2'} color={'textSecondary'}>
+                      Avatar
+                    </Typography>
+                  </legend>
+                )}
+                <Grid
+                  container
+                  justify={'center'}
+                  alignItems={'center'}
+                  style={{ width: '100%', height: '100%', marginTop: '-6%' }}
+                >
                   <AccountAvatar {...accountAvatarProps} />
                 </Grid>
               </fieldset>

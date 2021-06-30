@@ -18,7 +18,7 @@ import { random, sampleSize, words } from 'lodash';
 //@ts-ignore
 import randomSentence from 'random-sentence';
 import { colord } from 'colord';
-import { NONE } from 'models/denotation';
+import { NONE,TRANSPARENT } from 'models/denotation';
 
 const labelsOfInitialState: GlobalLabelsType = [
   { color: '', title: 'Day plans', iconName: 'category', id: 'label0', variant: 'outlined' },
@@ -70,7 +70,7 @@ const randomPakeeps = Array(8)
 export const defaultAvatarProperties = {
   url: NONE,
   borderRadius: 4,
-  backgroundColor: NONE
+  backgroundColor: TRANSPARENT
 };
 
 const initialState: AppInitialStateInteface = {
