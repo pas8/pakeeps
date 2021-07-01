@@ -9,7 +9,7 @@ import IconButtonByPas from 'components/IconButton';
 import { Typography } from '@material-ui/core';
 import { colord, extend } from 'colord';
 import mixPlugin from 'colord/plugins/mix';
-import { useIsColorDark } from 'hooks/useIsColorDark.hook';
+import { useIsColorLight } from 'hooks/useIsColorLight.hook';
 import { defaultTheme } from 'store/modules/App/reducers';
 import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
 
@@ -121,7 +121,7 @@ const DynamicInputDateAndTimePickers = ({
   onClickOfEditIcon
 }) => {
   extend([mixPlugin]);
-  const isDark = !useIsColorDark(customColor?.bgHover);
+  const isDark = !useIsColorLight(customColor?.bgHover);
 
   const classes = useStyles({ keyboardIconColor: customColor.hover, correctName, customColor, onlyTime, isDark });
 
@@ -145,7 +145,7 @@ const DynamicInputDateAndTimePickers = ({
       primaryMain: customColor.hover,
       // paperMain: 'green',
       paperMain: customColor?.bgHover,
-      // paperMain: useIsColorDark(customColor?.bgHover)
+      // paperMain: useIsColorLight(customColor?.bgHover)
       // ? colord(customColor?.bgHover).lighten(0.04).toHex()
       // : colord(customColor?.bgHover).darken(0.04).toHex(),
       defaultBackgroundMain: customColor?.bgUnHover

@@ -3,18 +3,24 @@ import ColorIcon from 'components/Icons/components/ColorIcon';
 import { useState } from 'react';
 import TuneOutlinedIcon from '@material-ui/icons/TuneOutlined';
 import DialogOfAddingCustomColorToColorLayouts from './components/DialogOfAddingCustomColorToColorLayouts';
+import { useIsColorLight } from 'hooks/useIsColorLight.hook';
 
 const useStyles = makeStyles(theme => ({
-  button: ({ customColor, color, nullityColor,colorInHexFormat }) => ({
-    border: '1px solid',
-    borderColor: color === nullityColor ? 'transparent' : colorInHexFormat,
-    '& h6':{
-
-    color: !!customColor && customColor.bgHover,
-    },
-    '& .MuiSvgIcon-root': { width: theme.spacing(2 / (0.8 + 0.1)) }
-
-  }),
+  button: ({ customColor, color, nullityColor, colorInHexFormat, }) => {
+    const isColorDark = !useIsColorLight(colorInHexFormat);
+    console.log();
+    const isColorDefault = colorInHexFormat === '#000000';
+    // const color
+    return {
+      border: '1px solid',
+      background: isColorDefault ? '' : isColorDark ? colorInHexFormat : '',
+      borderColor: isColorDefault ? 'white' : color === nullityColor ? 'transparent' : colorInHexFormat,
+      '& h6': {
+        color: !isColorDark ? colorInHexFormat : theme.palette.maxEmphasis.main ||  customColor.isUseDefault && customColor.bgHover
+      },
+      '& .MuiSvgIcon-root': { width: theme.spacing(2 / (0.8 + 0.1)) }
+    };
+  },
   // buttonGroupContainer: {
   //   '&  .MuiBadge-badge': {
   //     backgroundColor: ({ colorInHexFormat, hoverStatusOfButtonOfAddingCustomColorToColorLayouts }) =>
@@ -48,8 +54,7 @@ const useStyles = makeStyles(theme => ({
   //     })
   //   }
   // },
-  buttonWithBargeContainer: {
-  }
+  buttonWithBargeContainer: {}
 }));
 
 const CustomizationButton = ({ nullityColor, colorInHexFormat, setCustomizationsStatus, color, customColor }) => {
@@ -59,7 +64,7 @@ const CustomizationButton = ({ nullityColor, colorInHexFormat, setCustomizations
   // ] = useState(false);
   const [openStatusOfDialog, setOpenStatusOfDialog] = useState(false);
 
-  const classes = useStyles({ colorInHexFormat, customColor, color, nullityColor,colorInHexFormat });
+  const classes = useStyles({ colorInHexFormat, customColor, color, nullityColor, colorInHexFormat });
   // const classes = useStyles({ colorInHexFormat, hoverStatusOfButtonOfAddingCustomColorToColorLayouts });
 
   // const setHoverStatusOfButtonOfAddingCustomColorToColorLayoutsIsTrue = () =>

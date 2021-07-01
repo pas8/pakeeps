@@ -4,9 +4,7 @@ import DoneOutlineOutlinedIcon from '@material-ui/icons/DoneOutlineOutlined';
 import clsx from 'clsx';
 import _ from 'lodash';
 import CenteredGrid from 'components/CenteredGrid';
-import { colord } from 'colord';
-import { nanoid } from 'nanoid';
-import { useIsColorDark } from 'hooks/useIsColorDark.hook';
+import { useIsColorLight } from 'hooks/useIsColorLight.hook';
 
 const useStyles = makeStyles(theme => ({
   elementOfGridColorPicker: {
@@ -51,8 +49,8 @@ const useStyles = makeStyles(theme => ({
   // },
 }));
 const ColumnElementOfPreparedColorExamples = ({ handleSetColor, isExtended, color, colorName, customColor }, idx) => {
-  const isColorLight = useIsColorDark(color);
-  const isBgColorLight = useIsColorDark(customColor?.hover);
+  const isColorLight = useIsColorLight(color);
+  const isBgColorLight = useIsColorLight(customColor?.hover);
 
   const classes = useStyles({ isColorLight, customColor, isBgColorLight });
   const namesOfPartsOfGridElement = [, ['A100', 'A200'], ['A400', 'A700']];

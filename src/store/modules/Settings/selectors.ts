@@ -28,3 +28,8 @@ export const getIsUtilsHaveViewLikeInGoogleKeep = createSelector(
   [({ settings: { isUtilsHaveViewLikeInGoogleKeep } }: RootStoreType) => isUtilsHaveViewLikeInGoogleKeep],
   isUtilsHaveViewLikeInGoogleKeep => isUtilsHaveViewLikeInGoogleKeep
 );
+
+export const getIsHeaderHavePaperColor = createSelector(
+  [({ settings: { isHeaderHavePaperColor } }: RootStoreType) => isHeaderHavePaperColor],
+  isHeaderHavePaperColor => isHeaderHavePaperColor
+);

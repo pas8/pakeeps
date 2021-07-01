@@ -83,7 +83,9 @@ const FolderLayout = ({ children }: LayoutChildrenType) => {
 
   const [br] = useCustomBreakpoint();
 
-  const isVerySmall = br === 'xs';
+
+
+  const isVerySmall = br === 'xs' || br === 'sm'
 
   const handleDrawerWidth = (drawerWidth: number) => {
     dispatch(toSetDrawerWidth({ drawerWidth }));

@@ -12,7 +12,7 @@ import { useSelector } from 'react-redux';
 import { useToggle, useTitle } from 'react-use';
 import { getAvatarProperties } from 'store/modules/App/selectors';
 import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
-import { useIsColorDark } from 'hooks/useIsColorDark.hook';
+import { useIsColorLight } from 'hooks/useIsColorLight.hook';
 
 const AccountAvatar = dynamic(() => import('components/AccountAvatar'), { ssr: false });
 
@@ -235,7 +235,7 @@ const SettingAccount: FC<any> = () => {
     isHaveBgColor
   };
 
-  const isBgColorDark = !useIsColorDark(avatarProperties.backgroundColor);
+  const isBgColorDark = !useIsColorLight(avatarProperties.backgroundColor);
 
   const classes = useStyles({ isAccountHaveAvatar, ...avatarProperties, isHaveBgColor, isDragActive, isBgColorDark });
   return (

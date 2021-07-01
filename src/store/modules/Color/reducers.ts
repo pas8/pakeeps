@@ -1,11 +1,24 @@
-import { ColorInitialStateType, DefaultThemetype } from './interfaces';
-import * as types from './types';
+import { TypeNames } from './enums';
+import { ColorActionTypes, DefaultThemeType } from './types';
 
-export const defaultTheme: DefaultThemetype = {
+// export const defaultTheme: DefaultThemeType = {
+//   primaryMain: 'rgba(0,255,0,1)',
+//   paperMain: '#ffffffCC',
+//   defaultBackgroundMain: '#fff',
+//   secondaryMain: '#00b0ff',
+//   type: 'light',
+//   highEmphasis: 'rgba(0,0,0,0.8)',
+//   mediumEmphasis: 'rgba(0,0,0,0.6)',
+//   maxEmphasis: 'rgba(0,0,0,0.96)'
+// };
+
+export const defaultTheme: DefaultThemeType = {
   primaryMain: '#ffff8d',
+  caption: 'Classic',
   paperMain: '#424242',
   defaultBackgroundMain: '#303030',
   secondaryMain: '#00b0ff',
+  isColorRandom: false,
   type: 'dark',
   highEmphasis: 'rgba(255,255,255,0.8)',
   mediumEmphasis: 'rgba(255,255,255,0.6)',
@@ -40,10 +53,25 @@ export const colorInitialState = {
 //     }
 //   })
 // });
-export const ColorReducer = (state: ColorInitialStateType = colorInitialState, action: any): any => {
+export const ColorReducer = (state = colorInitialState, action: ColorActionTypes): any => {
+  switch (action.type) {
+    case TypeNames.HANDLE_CHANGE_THEME_COLORS: {
+      const { newThemeColors } = action.payload;
+
+      const theme = { ...state.theme, ...newThemeColors };
+      return { ...state, theme };
+    }
+
+    // case '': {
+    // return { ...state, ...action.payload };
+    // }
+
+    default:
+      //@ts-ignore
+      const x: never = action;
+  }
   return state;
 };
-
 
 // const ColorReducer = (state = colorInitialState, action: AppActionTypes): AppInitialStateInteface => {
 //   if (!('type' in action) || !TypeNames) return state;

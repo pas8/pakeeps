@@ -12,7 +12,7 @@ import { useCustomBreakpoint } from 'hooks/useCustomBreakpoint';
 import EyeIconButton from './components/EyeIconButton';
 import useKeyboardJs from 'react-use/lib/useKeyboardJs';
 import { colord } from 'colord';
-import { useIsColorDark } from 'hooks/useIsColorDark.hook';
+import { useIsColorLight } from 'hooks/useIsColorLight.hook';
 import { useGetReadableColor } from 'hooks/useGetReadableColor.hook';
 
 const useStyles = makeStyles(({spacing, palette,transitions}) => ({

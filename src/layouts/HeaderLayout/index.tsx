@@ -17,7 +17,16 @@ import { FC } from 'react';
 import { LayoutChildrenType } from 'models/types';
 import { menuOpenStatusDenotation } from 'models/denotation';
 
-const useStyles = makeStyles(({ spacing, transitions, breakpoints }) => ({
+const useStyles = makeStyles(({ spacing, transitions, breakpoints,palette }) => ({
+  '@global':{
+
+
+    body:{
+
+background:palette.background.default
+
+    }
+  },
   container: {
     '& header': {
       paddingRight: '0px !important'
@@ -25,7 +34,7 @@ const useStyles = makeStyles(({ spacing, transitions, breakpoints }) => ({
   },
   content: {
     flexGrow: 1,
-    marginTop:24,
+    marginTop:64,
     padding: spacing(2.8),
     transition: transitions.create('margin', {
       easing: transitions.easing.sharp,

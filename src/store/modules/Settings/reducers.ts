@@ -6,6 +6,7 @@ const settingsInitialState: SettingsInitialStateType = {
   isUtilsHaveViewLikeInGoogleKeep: true,
   timeFormat: 'hh:mm',
   timeAndDateFromat: 'yyyy / MM / dd / hh:mm',
+  isHeaderHavePaperColor:!true ,
   navigationViewLike: 'pakeeps', //'telegram' || 'googleKeep' || 'pakeeps'
   positionOfFolderViewWithPakeepView: 'left', //'left' || 'bottom' || 'right'
   isFolderViewWithPakeepViewAlignToCenter: !true,

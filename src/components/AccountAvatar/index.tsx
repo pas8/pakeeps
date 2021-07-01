@@ -12,7 +12,7 @@ import { useAlpha } from 'hooks/useAlpha.hook';
 import doodle from '@jalba/react-css-doodle';
 import { useThemeColors } from 'hooks/useThemeColors.hook';
 import { colord } from 'colord';
-import { useIsColorDark } from 'hooks/useIsColorDark.hook';
+import { useIsColorLight } from 'hooks/useIsColorLight.hook';
 export const customColorPlaceholder: CustomColorType = {
   bgHover: '',
   bgUnHover: '',
@@ -90,7 +90,7 @@ const AccountAvatar: FC<AccountAvatarPropsType> = ({
   onClose,
   anchorEl
 }) => {
-  const isBgColorDark = !useIsColorDark(backgroundColor);
+  const isBgColorDark = !useIsColorLight(backgroundColor);
 
   const classes = useStyles({ backgroundColor, isHaveBgColor, isDragActive, isBgColorDark });
   const dispatch = useDispatch();

@@ -51,7 +51,7 @@ const useStyles = makeStyles(
               ? 1.4
               : 0
           ),
-          background: isFoldersHaveDraweView ? background.paper : '#303030'
+          background: isFoldersHaveDraweView ? background.paper : background.default
         },
         '& button': {
           flexWrap: 'nowrap',

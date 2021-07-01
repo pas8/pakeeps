@@ -1,10 +1,12 @@
 import { createMuiTheme, Grid, makeStyles, responsiveFontSizes, ThemeProvider, Button } from '@material-ui/core';
+import { colord } from 'colord';
 import { LayoutChildrenType, RootStoreType } from 'models/types';
 import PropTypes from 'prop-types';
 import { ReactNode, useEffect } from 'react';
 import { connect, useDispatch, useSelector } from 'react-redux';
 import { toDeletePakeep } from 'store/modules/App/actions';
 import { getColor } from 'store/modules/Color/hooks';
+import mix from 'mix-color';
 
 const ThemeLayout = ({ children }: LayoutChildrenType) => {
   const { breakpointsValues, theme: themeColors } = useSelector(getColor);
@@ -12,15 +14,13 @@ const ThemeLayout = ({ children }: LayoutChildrenType) => {
   const { xs, sm, md, lg, xl } = breakpointsValues;
   const breakpointsArr = [xl, lg, md, sm, xs];
 
-  const dispatch = useDispatch();
-  const onClick = () => {
-    dispatch(toDeletePakeep({ pakeepId: 'pakeep7' }));
-  };
 
+  const dispatch = useDispatch();
   const theme = responsiveFontSizes(
     createMuiTheme({
       breakpointsArr,
       breakpoints: {
+        //@ts-ignore
         values: breakpointsValues
       },
       direction: 'rtl',
@@ -32,6 +32,10 @@ const ThemeLayout = ({ children }: LayoutChildrenType) => {
         },
         secondary: {
           main: themeColors.secondaryMain
+        },
+        //@ts-ignore
+        mixed: {
+          main:  mix( themeColors.primaryMain, themeColors.secondaryMain, 0.42)
         },
         //@ts-ignore
         highEmphasis: {
@@ -51,12 +55,7 @@ const ThemeLayout = ({ children }: LayoutChildrenType) => {
     })
   );
 
-  return (
-    <ThemeProvider theme={theme}>
-      <Button onClick={onClick}>FUCK</Button>
-      {children}
-    </ThemeProvider>
-  );
+  return <ThemeProvider theme={theme}>{children}</ThemeProvider>;
 };
 
 export default ThemeLayout;

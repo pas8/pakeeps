@@ -1,0 +1,4 @@
+export enum TypeNames {
+  HANDLE_CHANGE_THEME_COLORS = 'HANDLE_CHANGE_THEME_COLORS'
+}
+

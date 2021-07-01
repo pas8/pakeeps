@@ -2,10 +2,14 @@ import { colord } from 'colord';
 import { ColorStateType } from 'models/types';
 import { useEffect, useState } from 'react';
 import { useGetColor } from './useGetColor.hook';
-import { useIsColorDark } from './useIsColorDark.hook';
+import { useIsColorLight } from './useIsColorLight.hook';
 import { useMix } from './useMix.hook';
 
-export const useGetReadableColor = (backgroundColor: string, color = 'default'): ColorStateType => {
+export const useGetReadableColor = (
+  backgroundColor: string,
+  color = 'default',
+  isIgnoreValidation?: boolean
+): ColorStateType => {
   const nullityCustomColor = {
     isUseDefault: true,
     hover: '',
@@ -19,7 +23,7 @@ export const useGetReadableColor = (backgroundColor: string, color = 'default'):
   const [colorState, setColorState] = useState<ColorStateType>(nulittyColorState);
 
   useEffect(() => {
-    const newColor = useGetColor(backgroundColor, color);
+    const newColor = useGetColor(backgroundColor, color, isIgnoreValidation);
 
     setColorState(newColor);
   }, [backgroundColor, color]);
