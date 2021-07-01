@@ -15,7 +15,7 @@ const useStyles = makeStyles(({ spacing, palette, breakpoints }) => ({
     },
 
     [breakpoints.down('sm')]: {
-      width: '100%'
+      width: '48%'
     },
 
     [breakpoints.down('xs')]: {

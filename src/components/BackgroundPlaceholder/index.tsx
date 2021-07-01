@@ -27,6 +27,8 @@ const useStyles = makeStyles(
       '& p': {
         userSelect: 'none',
 // background:useAlpha(color,0.04),
+filter:'blur(1px)',
+
 borderRadius,
         color: color,
         width: '200%',
@@ -58,8 +60,8 @@ const BackgroundPlaceholderByPas: FC<{
   buttonText?: string;
   isButtonHidden?: boolean;
   ButtonIcon?: ReactNode;
-  onClick?: () => void;
-}> = ({ title, color, buttonText, ButtonIcon, isButtonHidden, onClick }) => {
+  onClick?: (e:any) => void;
+}> = ({ title, color, buttonText, ButtonIcon, isButtonHidden, onClick, }) => {
   const bgTextArr = Array(400).fill(title);
 
   const classes = useStyles({ color });

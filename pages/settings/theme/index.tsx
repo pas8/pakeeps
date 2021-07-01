@@ -22,6 +22,9 @@ import { colorColumnArr } from 'components/ColorChanger/components/CustomColor';
 import ColumnElementOfPreparedColorExamples from 'components/ColorChanger/components/PreparedColorExamples/components/Column/components/ColumnElement';
 import { useRandomColor } from 'hooks/useRandomColor.hook';
 import PickerOfThemeColor from 'components/PickerOfThemeColor';
+import clsx from 'clsx';
+import MenuByPas from 'components/Menu';
+
 const useStyles = makeStyles(({ spacing, palette, breakpoints, shape: { borderRadius } }) => ({
   colorContainer: {
     gap: spacing(0.4)
@@ -37,7 +40,7 @@ const useStyles = makeStyles(({ spacing, palette, breakpoints, shape: { borderRa
     },
 
     [breakpoints.down('sm')]: {
-      width: '100%'
+      width: '48%'
     },
 
     [breakpoints.down('xs')]: {
@@ -74,8 +77,14 @@ const useStyles = makeStyles(({ spacing, palette, breakpoints, shape: { borderRa
     '& legend': {
       padding: spacing(0, 0.8)
     }
-  }
+  },
+  containerOfRandomThemeGenerator: {
+    background: `${useAlpha(palette.maxEmphasis?.main, 0.04)} !important`,
 
+    '&:hover': {
+      background: `${useAlpha(palette.secondary.main, 0.2)}!important`
+    }
+  }
   // border: `2px solid ${colord(background.default).invert().alpha(0.32).toHex()}`
 }));
 
@@ -175,7 +184,10 @@ const Theme: FC<any> = () => {
   ];
 
   const [randomThemeGenerator] = useHover(isHovering => (
-    <Grid className={classes.defaultThemeElementContainer}>
+    <Grid
+      className={clsx(classes.defaultThemeElementContainer, classes.containerOfRandomThemeGenerator)}
+      onClick={handleGenegateRandomColor}
+    >
       <BackgroundPlaceholderByPas
         color={useAlpha(isHovering ? secondaryColor : maxEmph, isHovering ? 0.8 : 0.42)}
         title={'Generate random theme & '}
@@ -186,15 +198,32 @@ const Theme: FC<any> = () => {
     </Grid>
   ));
 
+  const [elStateOfThemePicker, setElStateOfThemePicker] = useState<any>({
+    anchorEl: null,
+    handleSave: null,
+    color: ''
+  });
+
+  const handleCloseMenuOfThemePicker = () => {
+    setElStateOfThemePicker(false);
+  };
+  const [customColorOfElOfThemePicker] = useGetReadableColor( elStateOfThemePicker.color);
   return (
     <Grid container justify={'center'}>
-      <Grid container className={classes.colorContainer} justify={'center'} lg={9} xl={8} md={8} xs={11} sm={11}>
-        {themePickersArr.map(props => {
-          return (
-            <PickerOfThemeColor key={`themePickersArr-${props.title}`} {...props} isColorRandom={theme.isColorRandom} />
-          );
-        })}
-        <Grid className={classes.defaultThemesContainer} component={'fieldset'} xl={10} lg={11} md={12} xs={12} sm={8}>
+      <Grid container className={classes.colorContainer} justify={'center'} lg={9} xl={8} md={8} xs={11} sm={12}>
+        <Grid xl={10} lg={11} md={12} xs={12} container sm={11} justify={'space-between'}>
+          {themePickersArr.map(props => {
+            return (
+              <PickerOfThemeColor
+                key={`themePickersArr-${props.title}`}
+                {...props}
+                isColorRandom={theme.isColorRandom}
+                setElStateOfThemePicker={setElStateOfThemePicker}
+              />
+            );
+          })}
+        </Grid>
+        <Grid className={classes.defaultThemesContainer} component={'fieldset'} xl={10} lg={11} md={12} xs={12} sm={11}>
           <legend>
             <Typography variant={'subtitle1'} color={'textSecondary'}>
               Default themes
@@ -225,6 +254,17 @@ const Theme: FC<any> = () => {
               return <DefaultThemePreview {...defaultThemePreviewProps} />;
             })}
           </Grid>
+
+          <MenuByPas
+            anchorEl={elStateOfThemePicker.anchorEl}
+            keepMounted
+            customColor={customColorPlaceholder}
+            onClose={handleCloseMenuOfThemePicker}
+            open={!!elStateOfThemePicker.anchorEl}
+            // className={classes.menuContainer}
+          >
+            <ColorPickerByPas handleSave={elStateOfThemePicker.handleSave} customColor={customColorOfElOfThemePicker} />
+          </MenuByPas>
         </Grid>
       </Grid>
     </Grid>
