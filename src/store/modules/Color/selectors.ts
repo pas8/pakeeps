@@ -10,3 +10,5 @@ export const getIsMenuHaveGitHubView = createSelector(
   isMenuHaveGitHubView => isMenuHaveGitHubView
 );
 
+
+export const getColorTheme = createSelector([({ color: { theme } }: RootStoreType) => theme], theme => theme);

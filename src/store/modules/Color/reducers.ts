@@ -14,6 +14,7 @@ import { ColorActionTypes, DefaultThemeType } from './types';
 
 export const defaultTheme: DefaultThemeType = {
   primaryMain: '#ffff8d',
+  caption:'Classic',
   paperMain: '#424242',
   defaultBackgroundMain: '#303030',
   secondaryMain: '#00b0ff',

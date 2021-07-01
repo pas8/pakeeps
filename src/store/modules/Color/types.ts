@@ -23,6 +23,7 @@ export type DefaultThemeType = {
   type: 'dark' | 'light';
   highEmphasis: string;
   mediumEmphasis: string;
+  caption: string;
   maxEmphasis: string;
 };
 
