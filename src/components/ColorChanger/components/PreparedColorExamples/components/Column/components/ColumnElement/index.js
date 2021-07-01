@@ -4,8 +4,6 @@ import DoneOutlineOutlinedIcon from '@material-ui/icons/DoneOutlineOutlined';
 import clsx from 'clsx';
 import _ from 'lodash';
 import CenteredGrid from 'components/CenteredGrid';
-import { colord } from 'colord';
-import { nanoid } from 'nanoid';
 import { useIsColorLight } from 'hooks/useIsColorLight.hook';
 
 const useStyles = makeStyles(theme => ({

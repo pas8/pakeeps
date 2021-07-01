@@ -1,4 +1,5 @@
 import { makeStyles, Grid, Typography, Button } from '@material-ui/core';
+import { useAlpha } from 'hooks/useAlpha.hook';
 import { FC, ReactNode } from 'react';
 
 const useStyles = makeStyles(
@@ -6,6 +7,7 @@ const useStyles = makeStyles(
     spacing,
     transitions,
     breakpoints,
+    shape:{borderRadius},
     palette: { secondary, maxEmphasis, background, highEmphasis, mediumEmphasis }
   }) => ({
     bg: ({ color }: { color: string }) => ({
@@ -13,13 +15,19 @@ const useStyles = makeStyles(
       top: 0,
       left: 0,
       overflow: 'hidden',
-      borderRadius: 16,
       right: 0,
       zIndex: 0,
+      // background:useAlpha(color,0.2),
       bottom: 0,
-
+      '&:hover': {
+        '& button': {
+          borderColor: color
+        }
+      },
       '& p': {
         userSelect: 'none',
+// background:useAlpha(color,0.04),
+borderRadius,
         color: color,
         width: '200%',
         height: '300%',
@@ -30,7 +38,8 @@ const useStyles = makeStyles(
         background: background.default,
         zIndex: 10,
         '&:hover': {
-          background: background.default
+          background: background.default,
+
         },
         left: '50%',
         top: '50%',
@@ -38,7 +47,7 @@ const useStyles = makeStyles(
       },
       '& svg': {
         margin: spacing(0, -0.4, 0, 0)
-      },
+      }
     })
   })
 );
@@ -49,7 +58,8 @@ const BackgroundPlaceholderByPas: FC<{
   buttonText?: string;
   isButtonHidden?: boolean;
   ButtonIcon?: ReactNode;
-}> = ({ title, color, buttonText, ButtonIcon, isButtonHidden }) => {
+  onClick?: () => void;
+}> = ({ title, color, buttonText, ButtonIcon, isButtonHidden, onClick }) => {
   const bgTextArr = Array(400).fill(title);
 
   const classes = useStyles({ color });
@@ -62,9 +72,12 @@ const BackgroundPlaceholderByPas: FC<{
           startIcon={ButtonIcon && <ButtonIcon />}
           color={'secondary'}
           variant={'outlined'}
+          onClick={onClick}
           size={'small'}
         >
-          <Typography variant={'body2'} component={'h6'}>{buttonText}</Typography>
+          <Typography variant={'body2'} component={'h6'}>
+            {buttonText}
+          </Typography>
         </Button>
       )}
       <Typography variant={'body2'}>{bgTextArr}</Typography>

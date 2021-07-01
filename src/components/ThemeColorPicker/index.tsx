@@ -8,12 +8,12 @@ import { useThemeColors } from 'hooks/useThemeColors.hook';
 import { FC } from 'react';
 import { ThemeColorPickerPropsType } from './types';
 
-const useStyles = makeStyles(({ shape, spacing }) => ({
+const useStyles = makeStyles(({ shape: { borderRadius }, spacing }) => ({
   colorContainer: ({ customColor }: any) => ({
     border: '1px solid ',
     padding: spacing(0.8, 0.4, 0.4),
     borderColor: customColor.bgHover,
-    borderRadius: 4,
+    borderRadius,
     // background:!useIsColorLight(customColor.bgUnHover) ? 'white' : '',
     '& >  h6': {
       padding: spacing(0, 0, 0, 1),

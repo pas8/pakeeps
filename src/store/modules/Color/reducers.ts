@@ -14,10 +14,11 @@ import { ColorActionTypes, DefaultThemeType } from './types';
 
 export const defaultTheme: DefaultThemeType = {
   primaryMain: '#ffff8d',
-  caption:'Classic',
+  caption: 'Classic',
   paperMain: '#424242',
   defaultBackgroundMain: '#303030',
   secondaryMain: '#00b0ff',
+  isColorRandom: false,
   type: 'dark',
   highEmphasis: 'rgba(255,255,255,0.8)',
   mediumEmphasis: 'rgba(255,255,255,0.6)',
@@ -69,7 +70,7 @@ export const ColorReducer = (state = colorInitialState, action: ColorActionTypes
       //@ts-ignore
       const x: never = action;
   }
-  return state
+  return state;
 };
 
 // const ColorReducer = (state = colorInitialState, action: AppActionTypes): AppInitialStateInteface => {

@@ -18,6 +18,7 @@ export type ColorActionTypes = $Values<ActionsValueTypes>;
 export type DefaultThemeType = {
   primaryMain: string;
   paperMain: string;
+  isColorRandom:boolean
   defaultBackgroundMain: string;
   secondaryMain: string;
   type: 'dark' | 'light';
