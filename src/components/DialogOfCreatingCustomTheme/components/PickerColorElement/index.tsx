@@ -15,10 +15,18 @@ import { dialogColorNames } from 'components/DialogOfCreatingCustomTheme';
 
 const useStyles = makeStyles(({ spacing, palette, breakpoints, shape: { borderRadius } }) => ({
   wrapperOfUtils: {
-    margin: spacing(1.4, 0, 0, 0)
+    margin: spacing(1, 0, 0, 0)
   },
   elementContainer: ({ backgroundColor, isHaveBorder, isColorReverse, isSelected }: any) => ({
     // margin: spacing(0, 0, 2, 0),
+
+    [breakpoints.down('sm')]: {
+      marginTop: spacing(1.4)
+    },
+
+    '& legend': {
+      padding: spacing(0, 0.6)
+    },
     borderRadius,
     padding: spacing(0.4, 0.8, 0.8),
     position: 'relative',
@@ -58,14 +66,17 @@ const PickerColorElement: FC<PickerColorElementPropsType> = ({
     setColor,
     inputColor: isColorReverse ? colorInHexFormat : secondaryColor,
     customFormatName: colorFormat,
-    colorInHexFormat
+    colorInHexFormat,
+    isUseAlpha:false
   };
 
   return (
-    <Grid className={classes.elementContainer} onClick={onClick}>
-      <Typography variant={'subtitle2'} color={'textSecondary'}>
-        {title}
-      </Typography>
+    <Grid className={classes.elementContainer} onClick={onClick} component={'fieldset'}>
+      <legend>
+        <Typography variant={'subtitle2'} color={'textSecondary'}>
+          {title}
+        </Typography>
+      </legend>
       <Grid className={classes.wrapperOfUtils}>
         <InputsColorUtilsOfCustomColorPicker isInputsHaveSameGap {...inputsColorUtilsOfCustomColorPickerProps} />
       </Grid>

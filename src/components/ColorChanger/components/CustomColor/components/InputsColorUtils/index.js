@@ -20,22 +20,42 @@ import _, { sum } from 'lodash';
 import NumberAdornment from '../NumberAdornment';
 import { useClickAway, useCustomCompareEffect, useDebounce, useUpdateEffect } from 'react-use';
 import { nanoid } from 'nanoid';
+import { useBreakpointNames } from 'hooks/useBreakpointNames.hook';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles(({ spacing, breakpoints }) => ({
   textFieldInHexFormat: ({ isInputsHaveSameGap, colorInHexFormat }) => ({
-    width: theme.spacing(isInputsHaveSameGap ? 18 : 8 + 4 + 2),
-    marginRight: theme.spacing(isInputsHaveSameGap ? 1.4 : 4 + 1.4),
+    width: spacing(isInputsHaveSameGap ? 18 : 8 + 4 + 2),
+
+
+    marginRight: spacing(isInputsHaveSameGap ? 1.4 : 4 + 1.4),
+
+    [breakpoints.down('xs')]: {
+      width: '100%',
+
+      marginRight: spacing(0),
+    },
+
     '& .MuiFormLabel-root.Mui-focused ': { color: colorInHexFormat },
     '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
       borderColor: colorInHexFormat
     }
   }),
   removeMarginFromTextFieldInHexFormat: {
-    width: theme.spacing(8 + 4 + 2),
-    marginRight: theme.spacing(1.4)
+    width: spacing(8 + 4 + 2),
+    marginRight: spacing(1.4),
+
+    [breakpoints.down('xs')]: {
+      width: '100%',
+
+      marginRight: spacing(0),
+    },
   },
   textField: {
-    width: theme.spacing(12)
+    width: spacing(12),
+
+    [breakpoints.down('xs')]: {
+      width: '32%'
+    }
     // transition: theme.transitions.create('all', {
     //   easing: theme.transitions.easing.sharp,
     //   duration: theme.transitions.duration.complex,
@@ -51,7 +71,7 @@ const useStyles = makeStyles(theme => ({
   },
 
   inputAdornmentArrowContainer: {
-    marginRight: theme.spacing(-0.8),
+    marginRight: spacing(-0.8),
     '& button': {
       padding: 0,
       border: 'none',
@@ -61,15 +81,18 @@ const useStyles = makeStyles(theme => ({
     }
   },
   textFieldUnfocused: {
-    // transition: theme.transitions.create('all', {
-    //   easing: theme.transitions.easing.easeOut,
-    //   duration: theme.transitions.duration.enteringScreen,
-
-    // }),
-    width: theme.spacing(8)
+    width: spacing(8),
+    [breakpoints.down('xs')]: {
+      width: '32%'
+    }
   },
   containerOfInputsGroupOfCustomFormatColor: {
-    gap: theme.spacing(1.4),
+    gap: spacing(1.4),
+    [breakpoints.down('xs')]: {
+      gap: spacing(0),
+      marginTop: spacing(1.8),
+    },
+    width: '100%',
 
     '& .MuiFormLabel-root.Mui-focused ': { color: ({ colorInHexFormat }) => colorInHexFormat },
     '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
@@ -110,10 +133,13 @@ const InputsColorUtilsOfCustomColorPicker = ({
   focusOfPicker,
   isHexInputHidden,
   isCustomFormatInputHidden,
-  inputColor = false
+  inputColor = false,
+  isUseAlpha = true
 }) => {
   const classes = useStyles({ colorInHexFormat: inputColor || colorInHexFormat, isInputsHaveSameGap });
   const colorInCorrectFormat = toCorrectFormat(color, customFormatName);
+
+  const { isSiveIsXs } = useBreakpointNames();
 
   const colorInCorrectFormatArr = _.valuesIn(colorInCorrectFormat);
 
@@ -139,10 +165,12 @@ const InputsColorUtilsOfCustomColorPicker = ({
       { maxLength: 360, shotName: 'H', name: 'Hue' }
     ]
   };
-  const correctFormatName = `${customFormatName}a`;
+  const correctFormatName = `${customFormatName}${isUseAlpha ? 'a' : ''}`;
 
   const alphaColorCanalProperty = { maxLength: 1, shotName: 'A', name: 'Alpha' };
-  const currentCustomFormatInputsGroupArr = _.concat(formatPropertiesArr[customFormatName], alphaColorCanalProperty);
+  const currentCustomFormatInputsGroupArr = !isUseAlpha
+    ? formatPropertiesArr[customFormatName]
+    : _.concat(formatPropertiesArr[customFormatName], alphaColorCanalProperty);
 
   const [hexColor, setHexColor] = useState(colorInHexFormat);
   const [customFormatState, setCustomFormatState] = useState(colorInCorrectFormatArr);
@@ -231,7 +259,7 @@ const InputsColorUtilsOfCustomColorPicker = ({
   return (
     <Grid className={classes.containerOfInputsOfColorPicker} container ref={refOfCustomFormatElementFocus}>
       {!isHexInputHidden && (
-        <Grid item>
+        <Grid item container={isSiveIsXs}>
           <FormControl
             variant={'outlined'}
             className={clsx(
@@ -247,11 +275,11 @@ const InputsColorUtilsOfCustomColorPicker = ({
       )}
 
       {!isCustomFormatInputHidden && (
-        <Grid item>
-          <Grid container className={classes.containerOfInputsGroupOfCustomFormatColor}>
+        <Grid item container={isSiveIsXs}>
+          <Grid container className={classes.containerOfInputsGroupOfCustomFormatColor} justify={'space-between'}>
             {currentCustomFormatInputsGroupArr.map(({ maxLength, shotName, name }, idx) => {
               const isFocused = customFormatElementFocusStatus === `${idx}`;
-              const currentLabelName = isFocused ? name : shotName;
+              const currentLabelName = isFocused || isSiveIsXs ? name : shotName;
               const onClick = () => onButtonClick(name);
               const labelWidth = currentLabelName.length * 9.6;
 

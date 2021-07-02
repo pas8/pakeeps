@@ -1,4 +1,4 @@
-import { Button, Box, Divider } from '@material-ui/core';
+import { Button, Box, Divider, useTheme } from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
 import { SnackbarProvider } from 'notistack';
 import IconButtonByPas from 'components/IconButton';
@@ -7,6 +7,10 @@ import { SnackbarProviderContentType } from './types';
 
 const SnackBarLayout = ({ children }: LayoutChildrenType) => {
   const maxSnack = 4;
+
+  const {
+    palette: { background }
+  } = useTheme();
 
   const content = (
     key: never,
@@ -22,9 +26,10 @@ const SnackBarLayout = ({ children }: LayoutChildrenType) => {
     <Alert
       variant={'outlined'}
       severity={severity}
+      style={{ background: background.default }}
       action={
         !!buttonText ? (
-          <Box pr={1}>
+          <Box pr={1} >
             <Button color={'inherit'} size={'small'} onClick={onClick} startIcon={Icon ? <Icon /> : null}>
               {buttonText}
             </Button>

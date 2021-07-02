@@ -34,7 +34,7 @@ borderRadius,
         width: '300%',
         height: '300%',
         lineHeight: '32px',
-        transform: 'rotate(42deg) translateX(-50%) translateY(-25%)'
+        transform: 'rotate(42deg) translateX(-50%) translateY(0%)'
       },
       '& button': {
         background: background.default,
@@ -60,9 +60,10 @@ const BackgroundPlaceholderByPas: FC<{
   buttonText?: string;
   isButtonHidden?: boolean;
   ButtonIcon?: ReactNode;
+  size?:number;
   onClick?: (e:any) => void;
-}> = ({ title, color, buttonText, ButtonIcon, isButtonHidden, onClick, }) => {
-  const bgTextArr = Array(480).fill(title);
+}> = ({ title, color, buttonText, ButtonIcon, isButtonHidden, onClick, size}) => {
+  const bgTextArr = Array(size || 480).fill(title);
 
   const classes = useStyles({ color });
 

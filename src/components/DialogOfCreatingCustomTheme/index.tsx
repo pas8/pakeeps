@@ -1,4 +1,4 @@
-import { FC, MouseEventHandler, useState } from 'react';
+import { FC, MouseEventHandler, useEffect, useState } from 'react';
 import { DialogOfCreatingCustomThemePropsType } from './types';
 import {
   Grid,
@@ -22,13 +22,14 @@ import InputsColorUtilsOfCustomColorPicker from 'components/ColorChanger/compone
 import { colord } from 'colord';
 import ArrowDropDownCircleOutlinedIcon from '@material-ui/icons/ArrowDropDownCircleOutlined';
 import { keys, map, mapValues, values } from 'lodash';
+import useKeyboardJs from 'react-use/lib/useKeyboardJs';
 
 import PickerColorElement from './components/PickerColorElement';
 import { useFromNameToText } from 'hooks/useFromNameToText.hook';
 import DefaultThemePreview from 'components/DefaultThemePreview';
 import { getIsHeaderHavePaperColor } from 'store/modules/Settings/selectors';
 import DraggablePaperComponent from 'components/DraggablePaperComponent';
-import { useHover, useToggle } from 'react-use';
+import { useCopyToClipboard, useHover, useToggle } from 'react-use';
 import { useContrastText } from 'hooks/useContrastText.hook';
 import ColorPickerByPas from 'components/ColorChanger';
 import SelectColorFormat from 'components/ColorChanger/components/CustomColor/components/SelectColorFormat';
@@ -36,11 +37,17 @@ import MenuByPas from 'components/Menu';
 import { customColorPlaceholder } from 'components/AccountAvatar';
 import { useGetReadableColor } from 'hooks/useGetReadableColor.hook';
 import { useBreakpointNames } from 'hooks/useBreakpointNames.hook';
+import { useSnackbar } from 'notistack';
 const useStyles = makeStyles(({ spacing, palette, breakpoints, shape: { borderRadius } }) => ({
   contentContainer: {},
 
   wrapperOfElementOfContent: {
     borderRadius,
+
+    [breakpoints.down('sm')]: {
+      padding: spacing(1, 0, 0, 0)
+    },
+
     // borderColor: useAlpha(palette.mediumEmphasis.main, 0),
 
     padding: spacing(0, 0.4, 0, 2.8)
@@ -53,7 +60,7 @@ const useStyles = makeStyles(({ spacing, palette, breakpoints, shape: { borderRa
   elementContainer: {
     margin: spacing(0, 0, 2, 0),
     '& legend': {
-      padding: spacing(0, 0.4)
+      padding: spacing(0, 0.8)
     }
   },
   wrapperOfColorPreview: {
@@ -61,10 +68,18 @@ const useStyles = makeStyles(({ spacing, palette, breakpoints, shape: { borderRa
   },
   wraperOfThemePreview: {
     width: spacing(36),
-
+    [breakpoints.down('xs')]: {
+      width: '100%'
+    },
     '& > div': {
       width: '100% !important',
       height: spacing(34),
+
+      [breakpoints.down('xs')]: {
+        height: spacing(36),
+        // height: '100%',
+        width: '100%'
+      },
 
       position: 'relative',
       zIndex: 10000000
@@ -78,6 +93,7 @@ const useStyles = makeStyles(({ spacing, palette, breakpoints, shape: { borderRa
   containerOfButtonUtilsElement: ({ color }: { color: string }) => ({
     // background: color,
     // width: 140,
+
     position: 'relative',
     // margin: spacing(0, 0.6, 0, 0),
     height: spacing(12 * 0.42),
@@ -105,7 +121,16 @@ const useStyles = makeStyles(({ spacing, palette, breakpoints, shape: { borderRa
         borderColor: color
       }
     }
-  })
+  }),
+  containerWithButtonUtilsAndThemePreview: {
+    height: '100%',
+    [breakpoints.down('sm')]: {
+      width: '50%'
+    },
+    [breakpoints.down('xs')]: {
+      width: '100%'
+    }
+  }
 }));
 
 export const dialogColorNames = {
@@ -117,6 +142,10 @@ export const dialogColorNames = {
 const DialogOfCreatingCustomTheme: FC<DialogOfCreatingCustomThemePropsType> = ({ isOpen, onClose, theme }) => {
   const [primaryColor, secondaryColor, , mediumEmph] = useThemeColors();
   const isHeaderHavePaperColor = useSelector(getIsHeaderHavePaperColor);
+  const [state, copyToClipboard] = useCopyToClipboard();
+
+  const { enqueueSnackbar } = useSnackbar();
+
   const classes = useStyles({ color: secondaryColor! });
 
   const { isSizeSmall } = useBreakpointNames();
@@ -147,11 +176,39 @@ const DialogOfCreatingCustomTheme: FC<DialogOfCreatingCustomThemePropsType> = ({
     color => colord(color).toHex()
   );
 
+  const handleCopyToClipboardColorState = () => {
+    copyToClipboard(JSON.stringify(colorState));
+    enqueueSnackbar({
+      message: 'Theme was copied'
+    });
+  };
+
+  const [isPressed] = useKeyboardJs('ctrl + v');
+
+  useEffect(() => {
+    isPressed &&
+      navigator.clipboard
+        .readText()
+        .then(json => {
+          console.log(JSON.parse(json))
+          setColorState(JSON.parse(json));
+          enqueueSnackbar({
+            message: 'Theme was pasted'
+          });
+        })
+        .catch(err => {
+          enqueueSnackbar({
+            message: err + 'Something went wrong' ,
+            severity: 'error'
+          });
+        });
+  }, [isPressed]);
+  // console.log(isPressed);
   const defaultThemePreviewProps = {
     background,
     caption: CAPTION,
     isThemeSelected: true,
-    onClick: null,
+    onClick: handleCopyToClipboardColorState,
     isHeaderHavePaperColor
   };
 
@@ -216,7 +273,6 @@ const DialogOfCreatingCustomTheme: FC<DialogOfCreatingCustomThemePropsType> = ({
     </Grid>
   ));
   const MenuChildren = elStateOfButtonUtilMenu.props.children;
-
   return (
     <Dialog
       open={isOpen}
@@ -233,12 +289,25 @@ const DialogOfCreatingCustomTheme: FC<DialogOfCreatingCustomThemePropsType> = ({
       >
         {!!elStateOfButtonUtilMenu?.props?.children && <MenuChildren {...elStateOfButtonUtilMenu.props} />}
       </MenuByPas>
-      <BackgroundPlaceholderByPas isButtonHidden={true} title={TITLE} color={useAlpha(mediumEmph, 0.04)} />
+      {!isSizeSmall && (
+        <BackgroundPlaceholderByPas
+          isButtonHidden={true}
+          title={TITLE}
+          color={useAlpha(mediumEmph, 0.04)}
+          size={1000}
+        />
+      )}
+
       <DialogTitle>{TITLE}</DialogTitle>
       <DialogContent className={classes.contentContainer}>
-        <Grid container>
+        <Grid container={!isSizeSmall}>
           <Grid>
-            <Grid container justify={'space-between'} direction={'column'} style={{ height: '100%' }}>
+            <Grid
+              container
+              justify={'space-between'}
+              direction={'column'}
+              className={classes.containerWithButtonUtilsAndThemePreview}
+            >
               <Grid>
                 <Grid className={classes.wraperOfThemePreview} container>
                   <DefaultThemePreview {...defaultThemePreviewProps} />
