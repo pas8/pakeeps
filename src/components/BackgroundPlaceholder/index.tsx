@@ -34,7 +34,7 @@ borderRadius,
         width: '200%',
         height: '300%',
         lineHeight: '32px',
-        transform: 'rotate(42deg) translateX(-42%) translateY(-8%)'
+        transform: 'rotate(42deg) translateX(-60%) translateY(-8%)'
       },
       '& button': {
         background: background.default,

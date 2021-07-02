@@ -160,7 +160,7 @@ const PickerOfThemeColor: FC<PickerOfThemeColorPropsType> = ({
   const [extendButton] = useHover(isHovering => (
     <Grid
       className={clsx(classes.buttonContainerOfRandomColorGenerator)}
-      onClick={handelOpenMoreMenu}
+      onClick={handleChangeExtendStatus}
       // style={{ width: 106 }}
     >
       <BackgroundPlaceholderByPas

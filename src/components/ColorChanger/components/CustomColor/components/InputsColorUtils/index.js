@@ -106,9 +106,12 @@ const InputsColorUtilsOfCustomColorPicker = ({
   colorInHexFormat,
   customFormatName,
   gradientStatus,
-  focusOfPicker
+  focusOfPicker,
+  isHexInputHidden,
+  isCustomFormatInputHidden,
+  inputColor = false
 }) => {
-  const classes = useStyles({ colorInHexFormat });
+  const classes = useStyles({ colorInHexFormat: inputColor || colorInHexFormat });
   const colorInCorrectFormat = toCorrectFormat(color, customFormatName);
 
   const colorInCorrectFormatArr = _.valuesIn(colorInCorrectFormat);
@@ -142,11 +145,13 @@ const InputsColorUtilsOfCustomColorPicker = ({
 
   const [hexColor, setHexColor] = useState(colorInHexFormat);
   const [customFormatState, setCustomFormatState] = useState(colorInCorrectFormatArr);
+
   const [customFormatElementFocusStatus, setCustomFormatElementFocus] = useState(false);
 
   const onChangeOfColorInHexFormat = ({ target: { value } }) => {
     setHexColor(value);
   };
+  // console.log(colorInHexFormat)
 
   // console.log(colorInHexFormat)
   const onChangeOfCustomFormatState = ({ target: { value, name: idx } }) => {
@@ -160,14 +165,13 @@ const InputsColorUtilsOfCustomColorPicker = ({
     setCustomFormatState(clonedCustomFormatState);
   };
 
-  //!!!! useEffect(() => setColor(hexColor), [hexColor]);
+  useEffect(() => {
+    setColor(hexColor);
+  }, [hexColor]);
 
-
-
-    // useCustomCompareEffect(() => {
-    //   setHexColor(colorInHexFormat)
-    // }, [colorInHexFormat], () => _.isEqual(hexColor, colorInHexFormat));
-
+  // useCustomCompareEffect(() => {
+  //   setHexColor(colorInHexFormat)
+  // }, [colorInHexFormat], () => _.isEqual(hexColor, colorInHexFormat));
 
   //!!!! const [, cancel] = useDebounce(() => setCustomFormatState(colorInCorrectFormatArr), 80, [color]);
 
@@ -179,7 +183,7 @@ const InputsColorUtilsOfCustomColorPicker = ({
   // }, [colorInHexFormat]);
 
   // useEffect(() => {
-  //   !gradientStatus && setFocusStatusOfPicker(false);
+  //   !gradientStatus && setFocusStatusOfPicker(false);onChangeOfCustomFormatState
   //   // !focusOfPicker && setColor(colorInHexFormat);
   //   // !focusOfPicker && console.log(colorInHexFormat,color);
   //   focusOfPicker && console.log('focusOfPicker is' + focusOfPicker);
@@ -219,52 +223,67 @@ const InputsColorUtilsOfCustomColorPicker = ({
 
   return (
     <Grid className={classes.containerOfInputsOfColorPicker} container ref={refOfCustomFormatElementFocus}>
-      <Grid item>
-        <FormControl
-          variant={'outlined'}
-          className={clsx(
-            customFormatElementFocusStatus && customFormatElementFocusStatus !== 'hex'
-              ? classes.removeMarginFromTextFieldInHexFormat
-              : classes.textFieldInHexFormat
-          )}
-        >
-          <InputLabel>Hex</InputLabel>
-          <OutlinedInput {...inputInHexFormatProps} />
-        </FormControl>
-      </Grid>
-
-      <Grid item>
-        <Grid container className={classes.containerOfInputsGroupOfCustomFormatColor}>
-          {currentCustomFormatInputsGroupArr.map(({ maxLength, shotName, name }, idx) => {
-            const isFocused = customFormatElementFocusStatus === `${idx}`;
-            const currentLabelName = isFocused ? name : shotName;
-            const onClick = () => onButtonClick(name);
-            const labelWidth = currentLabelName.length * 9.6;
-
-            const outlinedInputProps = {
-              type: 'number',
-              onChange: onChangeOfCustomFormatState,
-              name: idx,
-              labelWidth,
-              value: customFormatState[idx],
-              endAdornment: isFocused ? <NumberAdornment /> : null
-            };
-
-            return (
-              <FormControl
-                variant={'outlined'}
-                key={nanoid()}
-                className={clsx(isFocused ? classes.textField : classes.textFieldUnfocused)}
-                onFocus={onInputFocus}
-                onBlur={onInputBlur}
-              >
-                <InputLabel className={classes.toUpperCase}>{currentLabelName}</InputLabel>
-                <OutlinedInput {...outlinedInputProps} />
-              </FormControl>
-            );
-          })}
+      {!isHexInputHidden && (
+        <Grid item>
+          <FormControl
+            variant={'outlined'}
+            className={clsx(
+              (customFormatElementFocusStatus && customFormatElementFocusStatus !== 'hex') || isCustomFormatInputHidden
+                ? classes.removeMarginFromTextFieldInHexFormat
+                : classes.textFieldInHexFormat
+            )}
+          >
+            <InputLabel>Hex</InputLabel>
+            <OutlinedInput {...inputInHexFormatProps} />
+          </FormControl>
         </Grid>
-      </Grid>
+      )}
+
+      {!isCustomFormatInputHidden && (
+        <Grid item>
+          <Grid container className={classes.containerOfInputsGroupOfCustomFormatColor}>
+            {currentCustomFormatInputsGroupArr.map(({ maxLength, shotName, name }, idx) => {
+              const isFocused = customFormatElementFocusStatus === `${idx}`;
+              const currentLabelName = isFocused ? name : shotName;
+              const onClick = () => onButtonClick(name);
+              const labelWidth = currentLabelName.length * 9.6;
+
+              const handleIncrement = () => {
+                const value = customFormatState[idx] + 1;
+                onChangeOfCustomFormatState({ target: { name: idx, value } });
+              };
+              const handleDecrement = () => {
+                const value = customFormatState[idx] - 1;
+                onChangeOfCustomFormatState({ target: { name: idx, value } });
+              };
+
+              const outlinedInputProps = {
+                type: 'number',
+                onChange: onChangeOfCustomFormatState,
+                name: idx,
+                labelWidth,
+                value: customFormatState[idx],
+                endAdornment: isFocused ? (
+                  <NumberAdornment handleIncrement={handleIncrement} handleDecrement={handleDecrement} />
+                ) : null
+              };
+
+              return (
+                <FormControl
+                  variant={'outlined'}
+                  key={name}
+                  className={clsx(isFocused ? classes.textField : classes.textFieldUnfocused)}
+                  onFocus={onInputFocus}
+                  onBlur={onInputBlur}
+                >
+                  <InputLabel className={classes.toUpperCase}>{currentLabelName}</InputLabel>
+                  <OutlinedInput {...outlinedInputProps} />
+                </FormControl>
+              );
+            })}
+          </Grid>
+        </Grid>
+      )}
     </Grid>
   );
 };

@@ -1,6 +1,7 @@
 import { makeStyles, Grid, Typography } from '@material-ui/core';
 import { colord } from 'colord';
 import { useAlpha } from 'hooks/useAlpha.hook';
+import { useContrastText } from 'hooks/useContrastText.hook';
 import { FC } from 'react';
 import { DefaultThemePreviewPropsType } from './types';
 
@@ -106,7 +107,7 @@ const useStyles = makeStyles(({ spacing, palette, breakpoints }) => ({
   }),
 
   pakeepPrevier: ({ background }: any) => ({
-    height: spacing(18 + 0.8),
+    height: spacing(22  ),
     margin: spacing(0, 0, 0, 2),
     padding: spacing(1),
     borderRadius: 4,
@@ -131,16 +132,23 @@ const useStyles = makeStyles(({ spacing, palette, breakpoints }) => ({
     background: background.paper,
 
     '& .titleOfPakeepPrevier': {
-      height: spacing(2.8)
+      height: spacing(2.8),
+      
     },
     '& .textOfPakeepPrevier': {
       borderRadius: 2,
+padding:spacing(0.4,0.8),
+
+      '& p':{
+        color: useContrastText(background.default)
+
+      },
 
       background: colord(background.default).invert().alpha(0.32).toHex(),
       width: '100%',
       margin: spacing(1, 0, 0, 0),
 
-      height: spacing(6.8)
+      height: spacing(10)
     }
   }),
   eventsContainerOfPakeepPrevier: ({ background }: any) => ({
@@ -198,7 +206,7 @@ const useStyles = makeStyles(({ spacing, palette, breakpoints }) => ({
     padding: spacing(0.4, 0.8),
     borderRadius: 2,
     background: colord(background.default).invert().alpha(0.32).toHex(),
-    color: colord(background.default).invert().alpha(0.8).toHex()
+    color: useContrastText(background.default)
   }),
   randomBgContainer: () => ({
     position: 'absolute',
@@ -260,7 +268,15 @@ const DefaultThemePreview: FC<DefaultThemePreviewPropsType> = ({
               {caption}{' '}
             </Typography>
           </Grid>
-          <Grid className={'textOfPakeepPrevier'}></Grid>
+          <Grid className={'textOfPakeepPrevier'}>
+            <Typography variant={'body2'}>
+              Background: {background.default}
+            </Typography>
+
+              <Typography variant={'body2'}>
+              Paper: {background.paper} 
+            </Typography>
+          </Grid>
 
           <Grid className={classes.eventsContainerOfPakeepPrevier} container justify={'space-between'}>
             {Array(2).fill(

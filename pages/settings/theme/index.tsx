@@ -9,9 +9,10 @@ import { useGetReadableColor } from 'hooks/useGetReadableColor.hook';
 import { useThemeColors } from 'hooks/useThemeColors.hook';
 import { FC, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import AddCircleOutlineOutlinedIcon from '@material-ui/icons/AddCircleOutlineOutlined';
 import { useHover } from 'react-use';
-import { toChangeThemeColors } from 'store/modules/Color/actions';
-import { getColorTheme } from 'store/modules/Color/selectors';
+import { toChangeDefaultThemesArr, toChangeThemeColors } from 'store/modules/Color/actions';
+import { getColorTheme, getDefaultThemesArr } from 'store/modules/Color/selectors';
 import { getIsHeaderHavePaperColor } from 'store/modules/Settings/selectors';
 import OfflineBoltOutlinedIcon from '@material-ui/icons/OfflineBoltOutlined';
 import { useCustomBreakpoint } from 'hooks/useCustomBreakpoint';
@@ -24,10 +25,11 @@ import { useRandomColor } from 'hooks/useRandomColor.hook';
 import PickerOfThemeColor from 'components/PickerOfThemeColor';
 import clsx from 'clsx';
 import MenuByPas from 'components/Menu';
+import DialogOfCreatingCustomTheme from 'components/DialogOfCreatingCustomTheme';
 
 const useStyles = makeStyles(({ spacing, palette, breakpoints, shape: { borderRadius } }) => ({
   colorContainer: {
-    gap: spacing(0.4)
+    gap: spacing(1)
   },
 
   defaultThemeElementContainer: ({ background, isThemeSelected }: any) => ({
@@ -91,47 +93,10 @@ const useStyles = makeStyles(({ spacing, palette, breakpoints, shape: { borderRa
 const Theme: FC<any> = () => {
   const dispatch = useDispatch();
   const [primaryColor, secondaryColor, maxEmph] = useThemeColors();
-
-  const [customColor] = useGetReadableColor(primaryColor!);
-
   const isHeaderHavePaperColor = useSelector(getIsHeaderHavePaperColor);
-
   const theme = useSelector(getColorTheme);
 
-  const [br] = useCustomBreakpoint();
-  console.log(br);
-
-  const defaultThemesArr: { caption: string; background: { default: string; paper: string; type: string } }[] = [
-    {
-      caption: 'Classic',
-      background: { default: '#303030', paper: '#424242', type: 'dark' }
-    },
-    {
-      caption: 'Full dark',
-      background: { default: '#080808', paper: '#202020', type: 'dark' }
-    },
-
-    {
-      caption: 'Dark blue',
-      background: { default: '#000016', paper: '#000042', type: 'dark' }
-    },
-
-    {
-      caption: 'Dark red',
-      background: { default: '#160000', paper: '#420000', type: 'dark' }
-    },
-
-    {
-      caption: 'Full White',
-      background: { default: 'rgb(242, 242, 242)', paper: 'rgb(220, 220, 220)', type: 'light' }
-    }
-    // {
-    //   caption: '',
-    //   background: { default: 'rgb(242, 242, 242)', paper: 'rgb(220, 220, 220)', type: 'light' }
-    // }
-  ];
-
-  const [themeArr, setThemeArr] = useState(defaultThemesArr);
+  const defaultThemesToChoseArr = useSelector(getDefaultThemesArr);
 
   const {
     palette: { background }
@@ -139,27 +104,29 @@ const Theme: FC<any> = () => {
 
   const classes = useStyles({ background });
 
-  // const bgTextArr = Array(400).fill(' ');
-
   const handleGenegateRandomColor = () => {
     const randomColor = useRandomColor();
 
     const isColorLight = useIsColorLight(randomColor);
 
     const defaultColor = isColorLight
-      ? colord(randomColor).lighten(0.28).toHex()
-      : colord(randomColor).darken(0.28).toHex();
+      ? colord(randomColor).lighten(0.18).toHex()
+      : colord(randomColor).darken(0.18).toHex();
 
     const paperColor = isColorLight
-      ? colord(randomColor).lighten(0.2).toHex()
-      : colord(randomColor).darken(0.2).toHex();
+      ? colord(randomColor).lighten(0.1).toHex()
+      : colord(randomColor).darken(0.1).toHex();
 
-    const randomTheme = {
+    const color = isColorLight
+      ? colord(randomColor).invert().lighten(0.4).toHex()
+      : colord(randomColor).invert().darken(0.1).toHex();
+
+    const newThemeElement = {
       caption: randomColor,
-      background: { default: defaultColor, paper: paperColor, type: isColorLight ? 'light' : 'dark' }
+      background: { default: defaultColor, paper: paperColor, type: isColorLight ? 'light' : 'dark', color }
     };
 
-    setThemeArr(state => [randomTheme, ...state]);
+    dispatch(toChangeDefaultThemesArr({ newThemeElement }));
   };
 
   const handleSaveSecondaryColor = (secondaryMain: string, isColorRandom = false) => {
@@ -183,6 +150,16 @@ const Theme: FC<any> = () => {
     }
   ];
 
+  const [isCustomThemeDialogOpen, setIsCustomThemeDialogOpen] = useState(false);
+
+  const handleOpenCustomThemeDialogOpen = () => {
+    setIsCustomThemeDialogOpen(true);
+  };
+
+  const handleCloseCustomThemeDialogOpen = () => {
+    setIsCustomThemeDialogOpen(false);
+  };
+
   const [randomThemeGenerator] = useHover(isHovering => (
     <Grid
       className={clsx(classes.defaultThemeElementContainer, classes.containerOfRandomThemeGenerator)}
@@ -198,6 +175,21 @@ const Theme: FC<any> = () => {
     </Grid>
   ));
 
+  const [customThemeButton] = useHover(isHovering => (
+    <Grid
+      className={clsx(classes.defaultThemeElementContainer, classes.containerOfRandomThemeGenerator)}
+      onClick={handleOpenCustomThemeDialogOpen}
+    >
+      <BackgroundPlaceholderByPas
+        color={useAlpha(isHovering ? secondaryColor : maxEmph, isHovering ? 0.8 : 0.42)}
+        title={'Create custom theme & '}
+        ButtonIcon={AddCircleOutlineOutlinedIcon}
+        buttonText={'Create custom theme'}
+        onClick={handleOpenCustomThemeDialogOpen}
+      />
+    </Grid>
+  ));
+
   const [elStateOfThemePicker, setElStateOfThemePicker] = useState<any>({
     anchorEl: null,
     handleSave: null,
@@ -207,7 +199,7 @@ const Theme: FC<any> = () => {
   const handleCloseMenuOfThemePicker = () => {
     setElStateOfThemePicker(false);
   };
-  const [customColorOfElOfThemePicker] = useGetReadableColor( elStateOfThemePicker.color);
+  const [customColorOfElOfThemePicker] = useGetReadableColor(elStateOfThemePicker.color);
   return (
     <Grid container justify={'center'}>
       <Grid container className={classes.colorContainer} justify={'center'} lg={9} xl={8} md={8} xs={11} sm={12}>
@@ -232,8 +224,8 @@ const Theme: FC<any> = () => {
 
           <Grid container justify={'space-between'}>
             {randomThemeGenerator}
-
-            {themeArr.map(({ caption, background }) => {
+            {customThemeButton}
+            {defaultThemesToChoseArr?.map(({ caption, background }) => {
               const isThemeSelected = caption === theme.caption;
 
               const onClick = () => {
@@ -265,6 +257,14 @@ const Theme: FC<any> = () => {
           >
             <ColorPickerByPas handleSave={elStateOfThemePicker.handleSave} customColor={customColorOfElOfThemePicker} />
           </MenuByPas>
+
+          {isCustomThemeDialogOpen && (
+            <DialogOfCreatingCustomTheme
+              onClose={handleCloseCustomThemeDialogOpen}
+              isOpen={isCustomThemeDialogOpen}
+              theme={theme}
+            />
+          )}
         </Grid>
       </Grid>
     </Grid>
