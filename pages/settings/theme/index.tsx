@@ -117,13 +117,13 @@ const Theme: FC<any> = () => {
       ? colord(randomColor).lighten(0.1).toHex()
       : colord(randomColor).darken(0.1).toHex();
 
-    const color = isColorLight
+    const textColor = isColorLight
       ? colord(randomColor).invert().lighten(0.4).toHex()
-      : colord(randomColor).invert().darken(0.1).toHex();
+      : colord(randomColor).invert().darken(0.4).toHex();
 
     const newThemeElement = {
       caption: randomColor,
-      background: { default: defaultColor, paper: paperColor, type: isColorLight ? 'light' : 'dark', color }
+      background: { default: defaultColor, paper: paperColor, type: isColorLight ? 'light' : 'dark', textColor }
     };
 
     dispatch(toChangeDefaultThemesArr({ newThemeElement }));
@@ -202,7 +202,7 @@ const Theme: FC<any> = () => {
   const [customColorOfElOfThemePicker] = useGetReadableColor(elStateOfThemePicker.color);
   return (
     <Grid container justify={'center'}>
-      <Grid container className={classes.colorContainer} justify={'center'} lg={9} xl={8} md={8} xs={11} sm={12}>
+      <Grid container className={classes.colorContainer} justify={'center'} lg={9} xl={8} md={8} xs={12} sm={12}>
         <Grid xl={10} lg={11} md={12} xs={12} container sm={11} justify={'space-between'}>
           {themePickersArr.map(props => {
             return (
@@ -215,7 +215,7 @@ const Theme: FC<any> = () => {
             );
           })}
         </Grid>
-        <Grid className={classes.defaultThemesContainer} component={'fieldset'} xl={10} lg={11} md={12} xs={12} sm={11}>
+        <Grid className={classes.defaultThemesContainer} component={'fieldset'} xl={10} lg={11} md={12}  sm={11} xs={12}>
           <legend>
             <Typography variant={'subtitle1'} color={'textSecondary'}>
               Default themes

@@ -20,6 +20,16 @@ const useStyles = makeStyles(({ spacing, palette, breakpoints, shape: { borderRa
   colorPaletteContainer: {
     borderRadius,
 
+    '@media  (max-width: 480px)': {
+      '& .advancedButton': {
+        marginTop:spacing(0.8),
+        width: '100% !important'
+      },
+      '& .randomThemeButton,.extendButton': {
+        width: '46%'
+      }
+    },
+
     width: '49.4%',
 
     [breakpoints.down('md')]: {
@@ -130,7 +140,10 @@ const PickerOfThemeColor: FC<PickerOfThemeColorPropsType> = ({
   };
 
   const [randomThemeGenerator] = useHover(isHovering => (
-    <Grid className={classes.buttonContainerOfRandomColorGenerator} onClick={handleGenegateRandomColor}>
+    <Grid
+      className={clsx(classes.buttonContainerOfRandomColorGenerator, 'randomThemeButton')}
+      onClick={handleGenegateRandomColor}
+    >
       <BackgroundPlaceholderByPas
         color={useAlpha(color, isHovering || isColorRandom ? 0.8 : 0.42)}
         title={' Generate random color '}
@@ -143,7 +156,7 @@ const PickerOfThemeColor: FC<PickerOfThemeColorPropsType> = ({
 
   const [moreButton] = useHover(isHovering => (
     <Grid
-      className={clsx(classes.buttonContainerOfRandomColorGenerator)}
+      className={clsx(classes.buttonContainerOfRandomColorGenerator, 'advancedButton')}
       onClick={handelOpenMoreMenu}
       // style={{ width: 126 }}
     >
@@ -159,7 +172,7 @@ const PickerOfThemeColor: FC<PickerOfThemeColorPropsType> = ({
 
   const [extendButton] = useHover(isHovering => (
     <Grid
-      className={clsx(classes.buttonContainerOfRandomColorGenerator)}
+      className={clsx(classes.buttonContainerOfRandomColorGenerator, 'extendButton')}
       onClick={handleChangeExtendStatus}
       // style={{ width: 106 }}
     >

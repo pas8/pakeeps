@@ -13,14 +13,14 @@ const useStyles = makeStyles(theme => ({
       padding: 0,
       border: 'none',
       '&:hover': {
-        color: 'white'
+        color: ({ color }) => color
       }
     }
   }
 }));
 
-const NumberAdornment = ({ handleIncrement, handleDecrement }) => {
-  const classes = useStyles();
+const NumberAdornment = ({ handleIncrement, handleDecrement, color }) => {
+  const classes = useStyles({ color });
   const preventDefaultFunc = e => e.preventDefault();
 
   return (
@@ -29,7 +29,12 @@ const NumberAdornment = ({ handleIncrement, handleDecrement }) => {
         <ToggleButton value={'plus'} aria-label={'plus one'} onClick={handleIncrement} onMouseDown={preventDefaultFunc}>
           <AddOutlinedIcon />
         </ToggleButton>
-        <ToggleButton value={'minus'} aria-label={'minus one'} onClick={handleDecrement} onMouseDown={preventDefaultFunc}>
+        <ToggleButton
+          value={'minus'}
+          aria-label={'minus one'}
+          onClick={handleDecrement}
+          onMouseDown={preventDefaultFunc}
+        >
           <RemoveOutlinedIcon />
         </ToggleButton>
       </ToggleButtonGroup>

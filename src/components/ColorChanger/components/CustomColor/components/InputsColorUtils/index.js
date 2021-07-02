@@ -22,14 +22,14 @@ import { useClickAway, useCustomCompareEffect, useDebounce, useUpdateEffect } fr
 import { nanoid } from 'nanoid';
 
 const useStyles = makeStyles(theme => ({
-  textFieldInHexFormat: {
-    width: theme.spacing(8 + 4 + 2),
-    marginRight: theme.spacing(1.4 + 4),
-    '& .MuiFormLabel-root.Mui-focused ': { color: ({ colorInHexFormat }) => colorInHexFormat },
+  textFieldInHexFormat: ({ isInputsHaveSameGap, colorInHexFormat }) => ({
+    width: theme.spacing(isInputsHaveSameGap ? 18 : 8 + 4 + 2),
+    marginRight: theme.spacing(isInputsHaveSameGap ? 1.4 : 4 + 1.4),
+    '& .MuiFormLabel-root.Mui-focused ': { color: colorInHexFormat },
     '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
-      borderColor: ({ colorInHexFormat }) => colorInHexFormat
+      borderColor: colorInHexFormat
     }
-  },
+  }),
   removeMarginFromTextFieldInHexFormat: {
     width: theme.spacing(8 + 4 + 2),
     marginRight: theme.spacing(1.4)
@@ -105,13 +105,14 @@ const InputsColorUtilsOfCustomColorPicker = ({
   setColor,
   colorInHexFormat,
   customFormatName,
+  isInputsHaveSameGap = false,
   gradientStatus,
   focusOfPicker,
   isHexInputHidden,
   isCustomFormatInputHidden,
   inputColor = false
 }) => {
-  const classes = useStyles({ colorInHexFormat: inputColor || colorInHexFormat });
+  const classes = useStyles({ colorInHexFormat: inputColor || colorInHexFormat, isInputsHaveSameGap });
   const colorInCorrectFormat = toCorrectFormat(color, customFormatName);
 
   const colorInCorrectFormatArr = _.valuesIn(colorInCorrectFormat);
@@ -145,11 +146,11 @@ const InputsColorUtilsOfCustomColorPicker = ({
 
   const [hexColor, setHexColor] = useState(colorInHexFormat);
   const [customFormatState, setCustomFormatState] = useState(colorInCorrectFormatArr);
-
   const [customFormatElementFocusStatus, setCustomFormatElementFocus] = useState(false);
 
   const onChangeOfColorInHexFormat = ({ target: { value } }) => {
     setHexColor(value);
+    setCustomFormatState(_.valuesIn(toCorrectFormat(value, customFormatName)));
   };
   // console.log(colorInHexFormat)
 
@@ -161,8 +162,9 @@ const InputsColorUtilsOfCustomColorPicker = ({
     const currentValue = isValid ? value : maxLength;
     const clonedCustomFormatState = _.clone(customFormatState);
     clonedCustomFormatState.splice(idx, 1, currentValue);
-
+    // setHexColor()
     setCustomFormatState(clonedCustomFormatState);
+    setHexColor(colord(useFromCustomFormatToCorrectFormat(clonedCustomFormatState)).toHex());
   };
 
   useEffect(() => {
@@ -190,8 +192,13 @@ const InputsColorUtilsOfCustomColorPicker = ({
   //   !focusOfPicker && console.log('focusOfPicker is' + focusOfPicker);
   // }, [colorInHexFormat, gradientStatus, color]);
 
+  const useFromCustomFormatToCorrectFormat = arr => {
+    const colorIsCorrectFormatObj = _.mapKeys(arr, (el, idx) => correctFormatName[idx]);
+    return colorIsCorrectFormatObj;
+  };
+
   useEffect(() => {
-    const colorIsCorrectFormatObj = _.mapKeys(customFormatState, (el, idx) => correctFormatName[idx]);
+    const colorIsCorrectFormatObj = useFromCustomFormatToCorrectFormat(customFormatState);
     const colordWhichShouldBeSet = colord(colorIsCorrectFormatObj).toRgb();
     setColor(colordWhichShouldBeSet);
   }, [customFormatName, customFormatState]);
@@ -264,7 +271,11 @@ const InputsColorUtilsOfCustomColorPicker = ({
                 labelWidth,
                 value: customFormatState[idx],
                 endAdornment: isFocused ? (
-                  <NumberAdornment handleIncrement={handleIncrement} handleDecrement={handleDecrement} />
+                  <NumberAdornment
+                    handleIncrement={handleIncrement}
+                    handleDecrement={handleDecrement}
+                    color={inputColor || colorInHexFormat}
+                  />
                 ) : null
               };
 

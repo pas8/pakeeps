@@ -1,5 +1,11 @@
+import { RgbaColor } from "colord";
+
 export type PickerColorElementPropsType = {
   name: string;
   setColor: (color: string) => void;
-  color: string;
+  color: RgbaColor;
+  isSelected:boolean
+  onClick:()=> void;
+  colorFormat:string
 };
+

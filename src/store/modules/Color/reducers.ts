@@ -41,26 +41,26 @@ export const colorInitialState = {
   defaultThemesToChoseArr: [
     {
       caption: 'Classic',
-      background: { default: '#303030', paper: '#424242', type: 'dark', color: '#ffffff' }
+      background: { default: '#303030', paper: '#424242', type: 'dark', textColor: '#ffffff' }
     },
     {
       caption: 'Full dark',
-      background: { default: '#080808', paper: '#202020', type: 'dark', color: '#ffffff' }
+      background: { default: '#080808', paper: '#202020', type: 'dark', textColor: '#ffffff' }
     },
 
     {
       caption: 'Dark blue',
-      background: { default: '#000016', paper: '#000042', type: 'dark', color: '#ffffff' }
+      background: { default: '#000016', paper: '#000042', type: 'dark', textColor: '#ffffff' }
     },
 
     {
       caption: 'Dark red',
-      background: { default: '#160000', paper: '#420000', type: 'dark', color: '#ffffff' }
+      background: { default: '#160000', paper: '#420000', type: 'dark', textColor: '#ffffff' }
     },
 
     {
       caption: 'Full White',
-      background: { default: 'rgb(242, 242, 242)', paper: 'rgb(220, 220, 220)', type: 'light', color: '#000000' }
+      background: { default: '#ffffff', paper: '#dcdcdc', type: 'light', textColor: '#000000' }
     }
     // {
     //   caption: '',

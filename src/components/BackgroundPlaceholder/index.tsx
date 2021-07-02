@@ -31,10 +31,10 @@ filter:'blur(1px)',
 
 borderRadius,
         color: color,
-        width: '200%',
+        width: '300%',
         height: '300%',
         lineHeight: '32px',
-        transform: 'rotate(42deg) translateX(-60%) translateY(-8%)'
+        transform: 'rotate(42deg) translateX(-50%) translateY(-25%)'
       },
       '& button': {
         background: background.default,
@@ -62,7 +62,7 @@ const BackgroundPlaceholderByPas: FC<{
   ButtonIcon?: ReactNode;
   onClick?: (e:any) => void;
 }> = ({ title, color, buttonText, ButtonIcon, isButtonHidden, onClick, }) => {
-  const bgTextArr = Array(400).fill(title);
+  const bgTextArr = Array(480).fill(title);
 
   const classes = useStyles({ color });
 

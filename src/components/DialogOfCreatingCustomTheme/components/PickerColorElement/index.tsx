@@ -14,54 +14,61 @@ import { useFromNameToText } from 'hooks/useFromNameToText.hook';
 import { dialogColorNames } from 'components/DialogOfCreatingCustomTheme';
 
 const useStyles = makeStyles(({ spacing, palette, breakpoints, shape: { borderRadius } }) => ({
-  wrapperOfColorPreview: {
-    margin: spacing(0, 0, 2, 0),
-    '& legend': {
-      padding: spacing(0, 0.4)
-    }
+  wrapperOfUtils: {
+    margin: spacing(1.4, 0, 0, 0)
   },
-  elementContainer: ({ backgroundColor,isHaveBorder }) => ({
-    margin: spacing(0, 0, 2, 0),
+  elementContainer: ({ backgroundColor, isHaveBorder, isColorReverse, isSelected }: any) => ({
+    // margin: spacing(0, 0, 2, 0),
     borderRadius,
     padding: spacing(0.4, 0.8, 0.8),
     position: 'relative',
     zIndex: 10000,
-    border:isHaveBorder ?`1px solid ${palette.mediumEmphasis.main}` : '',
-    backgroundColor
+    border:
+      isHaveBorder || isColorReverse || isSelected
+        ? `1px solid ${isSelected ? palette.primary.main : isColorReverse ? backgroundColor : palette.text.hint}`
+        : `1px solid transparent`,
+    '&:hover': {
+      border: `1px solid ${palette.secondary.main}`
+    },
+    backgroundColor: isColorReverse ? palette.background.paper : backgroundColor
   })
 }));
 
-const PickerColorElement: FC<PickerColorElementPropsType> = ({ name, setColor, color }) => {
+const PickerColorElement: FC<PickerColorElementPropsType> = ({
+  name,
+  setColor,
+  color,
+  isSelected,
+  onClick,
+  colorFormat
+}) => {
   const colorInHexFormat = colord(color).toHex();
+  const [, secondaryColor] = useThemeColors();
 
-  const [,secondaryColor] = useThemeColors();
-
+  const isItemTextColor = name === dialogColorNames.TEXT_COLOR;
   const isHaveBorder = name === dialogColorNames.PAPER_COLOR;
+  const isColorReverse = isItemTextColor;
 
-  console.log(color);
-
-  const classes = useStyles({ backgroundColor: colorInHexFormat,isHaveBorder });
+  const classes = useStyles({ backgroundColor: colorInHexFormat, isHaveBorder, isColorReverse, isSelected });
 
   const title = useFromNameToText(name);
 
   const inputsColorUtilsOfCustomColorPickerProps = {
     color,
     setColor,
-    inputColor:secondaryColor,
-    customFormatName: 'rgb',
+    inputColor: isColorReverse ? colorInHexFormat : secondaryColor,
+    customFormatName: colorFormat,
     colorInHexFormat
   };
 
   return (
-    <Grid className={classes.elementContainer}>
+    <Grid className={classes.elementContainer} onClick={onClick}>
       <Typography variant={'subtitle2'} color={'textSecondary'}>
         {title}
       </Typography>
-      <Grid className={classes.wrapperOfColorPreview}></Grid>
-      <InputsColorUtilsOfCustomColorPicker
-        {...inputsColorUtilsOfCustomColorPickerProps}
-        isCustomFormatInputHidden={false}
-      />
+      <Grid className={classes.wrapperOfUtils}>
+        <InputsColorUtilsOfCustomColorPicker isInputsHaveSameGap {...inputsColorUtilsOfCustomColorPickerProps} />
+      </Grid>
     </Grid>
   );
 };
