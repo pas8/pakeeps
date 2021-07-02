@@ -1,7 +1,7 @@
 export type DefaultThemePreviewPropsType = {
   caption: string;
-  isHeaderHavePaperColor:boolean
+  isHeaderHavePaperColor: boolean;
   background: any;
   isThemeSelected: boolean;
-  onClick: () => void;
+  onClick: (() => void) | null;
 };

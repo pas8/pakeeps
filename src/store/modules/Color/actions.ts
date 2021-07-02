@@ -17,3 +17,10 @@ export const toChangeThemeColors = (payload: PayloadTypes[TypeNames.HANDLE_CHANG
   type: TypeNames.HANDLE_CHANGE_THEME_COLORS,
   payload
 });
+
+
+export const toChangeDefaultThemesArr = (payload: PayloadTypes[TypeNames.HANDLE_CHANGE_DEFAULT_THEMES_ARR]): ColorActionTypes => ({
+  type: TypeNames.HANDLE_CHANGE_DEFAULT_THEMES_ARR,
+  payload
+});
+

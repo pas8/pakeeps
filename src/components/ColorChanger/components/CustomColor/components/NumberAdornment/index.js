@@ -5,6 +5,7 @@ import RemoveOutlinedIcon from '@material-ui/icons/RemoveOutlined';
 import AddOutlinedIcon from '@material-ui/icons/AddOutlined';
 import { useState } from 'react';
 import _ from 'lodash';
+
 const useStyles = makeStyles(theme => ({
   inputAdornmentArrowContainer: {
     marginRight: theme.spacing(-0.8),
@@ -12,17 +13,15 @@ const useStyles = makeStyles(theme => ({
       padding: 0,
       border: 'none',
       '&:hover': {
-        color: 'white'
+        color: ({ color }) => color
       }
     }
   }
 }));
 
-const NumberAdornment = ({ setStateFunc }) => {
-  const classes = useStyles();
+const NumberAdornment = ({ handleIncrement, handleDecrement, color }) => {
+  const classes = useStyles({ color });
   const preventDefaultFunc = e => e.preventDefault();
-  const handleDecrement = () => setStateFunc(number => number - 1);
-  const handleIncrement = () => setStateFunc(number => number + 1);
 
   return (
     <InputAdornment position={'end'} className={classes.inputAdornmentArrowContainer}>
@@ -34,16 +33,13 @@ const NumberAdornment = ({ setStateFunc }) => {
           value={'minus'}
           aria-label={'minus one'}
           onClick={handleDecrement}
+          onMouseDown={preventDefaultFunc}
         >
           <RemoveOutlinedIcon />
         </ToggleButton>
       </ToggleButtonGroup>
     </InputAdornment>
   );
-};
-
-NumberAdornment.propTypes = {
-  setStateFunc: PropTypes.func
 };
 
 export default NumberAdornment;
