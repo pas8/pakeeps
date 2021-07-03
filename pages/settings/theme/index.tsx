@@ -27,6 +27,7 @@ import clsx from 'clsx';
 import MenuByPas from 'components/Menu';
 import DialogOfCreatingCustomTheme from 'components/DialogOfCreatingCustomTheme';
 import { nanoid } from 'nanoid';
+import { themeAnchorArr } from 'components/Folders';
 
 const useStyles = makeStyles(({ spacing, palette, breakpoints, shape: { borderRadius } }) => ({
   colorContainer: {
@@ -201,11 +202,12 @@ const Theme: FC<any> = () => {
   const handleCloseMenuOfThemePicker = () => {
     setElStateOfThemePicker(false);
   };
+  console.log(themeAnchorArr.DEFAULT_THEMES_ID);
   const [customColorOfElOfThemePicker] = useGetReadableColor(elStateOfThemePicker.color);
   return (
     <Grid container justify={'center'}>
       <Grid container className={classes.colorContainer} justify={'center'} lg={9} xl={8} md={8} xs={12} sm={12}>
-        <Grid xl={10} lg={11} md={12} xs={12} container sm={11} justify={'space-between'}>
+        <Grid xl={10} lg={11} md={12} xs={12} container sm={11} justify={'space-between'} id={themeAnchorArr.COLORS_ID}>
           {themePickersArr.map(props => {
             return (
               <PickerOfThemeColor
@@ -217,7 +219,16 @@ const Theme: FC<any> = () => {
             );
           })}
         </Grid>
-        <Grid className={classes.defaultThemesContainer} component={'fieldset'} xl={10} lg={11} md={12} sm={11} xs={12}>
+        <Grid
+          className={classes.defaultThemesContainer}
+          component={'fieldset'}
+          xl={10}
+          lg={11}
+          md={12}
+          sm={11}
+          xs={12}
+          id={themeAnchorArr.DEFAULT_THEMES_ID}
+        >
           <legend>
             <Typography variant={'subtitle1'} color={'textSecondary'}>
               Default themes

@@ -3,7 +3,7 @@ import { useTakeIcon } from 'hooks/useTakeIcon.hook';
 import { useMeasure, usePrevious, useSize, useWindowSize } from 'react-use';
 import { useSelector } from 'react-redux';
 import { FC, MouseEventHandler, useEffect, useState } from 'react';
-import _, { startsWith } from 'lodash';
+import _, { flatten, mapValues, startsWith } from 'lodash';
 import { ToggleButton, ToggleButtonGroup } from '@material-ui/lab';
 import { useAlpha } from 'hooks/useAlpha.hook';
 import { getFolders } from 'store/modules/App/selectors';
@@ -11,10 +11,14 @@ import { FoldersTypeProps, UseStylesOfFoldersType } from './types';
 import MoreMenuOfFolders from './components/MoreMenu';
 import { getNavigationViewLike } from 'store/modules/Settings/selectors';
 import { useRouter } from 'next/dist/client/router';
+import ArrowDropDownOutlinedIcon from '@material-ui/icons/ArrowDropDownOutlined';
+import ArrowDropUpOutlinedIcon from '@material-ui/icons/ArrowDropUpOutlined';
+import { useValidateColor } from 'hooks/useValidateColor.hook';
+
 const marginOfToogleGroups = 1;
 
 const useStyles = makeStyles(
-  ({ spacing, typography, palette: { primary, secondary, background, mediumEmphasis } }) => ({
+  ({ spacing, typography, palette: { primary, secondary, background, mediumEmphasis, text } }) => ({
     containerOfFolderWithPakeepsView: ({
       isMenuOpen,
       positionOfFolderViewWithPakeepViewIsBottom,
@@ -23,13 +27,7 @@ const useStyles = makeStyles(
       isFoldersHaveDraweView,
       positionOfFolderViewWithPakeepViewIsRight
     }: UseStylesOfFoldersType) => {
-      const color =
-        folderColor === 'default' || !folderColor || folderColor === 'primary'
-          ? primary.main
-          : folderColor === 'secondary'
-          ? secondary.main
-          : folderColor;
-
+      const color = folderColor;
       return {
         // transform:'scale(0.8)',
 
@@ -59,12 +57,15 @@ const useStyles = makeStyles(
           borderRadius: isFoldersHaveDraweView ? 0 : '',
           padding: spacing(1.4, isFoldersHaveDraweView ? 1.42 : positionOfFolderViewWithPakeepViewIsBottom ? 1.4 : 1),
           // background: isFoldersHaveDraweView ? `${background.paper}` : '',
-          border: isFoldersHaveDraweView ? 'none' : '',
-          color: isFoldersHaveDraweView ? mediumEmphasis?.main : '',
+          border: isFoldersHaveDraweView ? 'none' : `1px solid ${useAlpha(text.primary)}`,
+          color: isFoldersHaveDraweView ? text.hint : text.hint,
           display: positionOfFolderViewWithPakeepViewIsBottom && isMenuOpen ? 'block' : 'flex',
           whiteSpace: 'pre',
           justifyContent: !isMenuOpen ? 'center' : 'flex-start',
           flexDirection: 'column',
+          '&:hover': {
+            background: useAlpha(text.primary)
+          },
 
           '&:last-child': {
             // background:'red',
@@ -79,18 +80,17 @@ const useStyles = makeStyles(
         '& .Mui-selected': {
           background: useAlpha(color),
           color,
+          borderColor: useAlpha(color),
           '&:hover': { background: useAlpha(color, 0.2) },
 
           '& svg': { color }
         },
-        '& .folderIsPlaceholder':{
-          textTransform:'capitalize',
+        '& .folderIsPlaceholder': {
+          textTransform: 'capitalize',
           '&:hover': {
             background: 'transparent !important'
           }
-
-        },
-       
+        }
       };
     },
     textOfFolderWithPakeepsView: ({ positionOfFolderViewWithPakeepViewIsBottom }: UseStylesOfFoldersType) =>
@@ -148,6 +148,32 @@ const useStyles = makeStyles(
   })
 );
 
+const SETTING_URL = '/settings';
+
+const THEME = 'theme';
+const APPEARANCE = 'appearance';
+
+const APPEARANCE_URL = `${SETTING_URL}/${APPEARANCE}`;
+const THEME_URL = `${SETTING_URL}/${THEME}`;
+const ACCOUNT_URL = `${SETTING_URL}/account`;
+const SECURITY_URL = `${SETTING_URL}/security`;
+
+export const themeAnchorArr = {
+  COLORS_ID: `${THEME}_colors`,
+  DEFAULT_THEMES_ID: `${THEME}_defaultThemes`,
+  BORDER_RADIUS: `${THEME}_borderRadius`
+};
+
+export const themeAnchorIdArr = mapValues(themeAnchorArr, el => '#' + el);
+
+const appearanceAnchorArr = {
+  FOLDERS_ID: `#${APPEARANCE}_folders`,
+  PAKEEPS_ID: `#${APPEARANCE}_pakeeps`,
+  HEADER_ID: `#${APPEARANCE}_header`,
+  LABELS_ID: `#${APPEARANCE}_labels`,
+  EVENTS_ID: `#${APPEARANCE}_events`
+};
+
 const Folders: FC<FoldersTypeProps> = ({
   value,
   handleChange,
@@ -166,34 +192,33 @@ const Folders: FC<FoldersTypeProps> = ({
 }) => {
   const router = useRouter();
 
+  const {
+    spacing,
+    shape,
+    palette: { text, primary, secondary }
+  } = useTheme();
   const [folderColor, setFolderColor] = useState('default');
+
+  const validatedFolderColor =
+    folderColor === 'default' || !folderColor || folderColor === 'primary'
+      ? primary.main
+      : folderColor === 'secondary'
+      ? secondary.main
+      : folderColor;
 
   const navigationViewLike = useSelector(getNavigationViewLike);
   const folders = useSelector(getFolders);
   const classes = useStyles({
-    folderColor,
+    folderColor: validatedFolderColor,
     isMenuOpen,
     isFoldersHaveDraweView,
     positionOfFolderViewWithPakeepViewIsBottom,
     positionOfFolderViewWithPakeepViewIsRight,
     isFolderViewWithPakeepViewAlignToCenter
   });
-  const { spacing } = useTheme();
+
   const { width: windowWidth, height: windowHeight } = useWindowSize();
   // console.log(value)
-  const SETTING_URL = '/settings';
-
-  const APPEARANCE_URL = `${SETTING_URL}/appearance`;
-
-  const FOLDERS_URL = `${APPEARANCE_URL}/folders`;
-  const PAKEEPS_URL = `${APPEARANCE_URL}/pakeeps`;
-  const HEADER_URL = `${APPEARANCE_URL}/header`;
-  const LABELS_URL = `${APPEARANCE_URL}/labels`;
-  const EVENTS_URL = `${APPEARANCE_URL}/events`;
-
-  const ACCOUNT_URL = `${SETTING_URL}/account`;
-  const SECURITY_URL = `${SETTING_URL}/security`;
-  const THEME_URL = `${SETTING_URL}/theme`;
 
   const handleOpenSetting = () => {
     handleChange('placeholder', 1);
@@ -225,7 +250,7 @@ const Folders: FC<FoldersTypeProps> = ({
 
   const goToPakeepsArr = [
     {
-      title: 'Go to pakeeps',
+      title: 'To_pakeeps',
       iconName: 'arrowBack',
       id: 'folder-arrowBack',
       onClick: handleGoToPakeep,
@@ -238,65 +263,96 @@ const Folders: FC<FoldersTypeProps> = ({
       { title: 'Account', iconName: 'account', id: 'folder-account', color: 'default', route: ACCOUNT_URL },
 
       { title: 'Theme', iconName: 'color', id: 'folder-theme', color: 'default', route: THEME_URL },
+
+      {
+        title: 'Colors',
+        iconName: 'none',
+        parentRoute: THEME_URL,
+        id: themeAnchorIdArr.COLORS_ID,
+        color: 'default',
+        route: themeAnchorIdArr.COLORS_ID
+      },
+      {
+        title: 'Themes',
+        iconName: 'none',
+        parentRoute: THEME_URL,
+        id: themeAnchorIdArr.DEFAULT_THEMES_ID,
+        color: 'default',
+        route: themeAnchorIdArr.DEFAULT_THEMES_ID
+      },
+      {
+        title: 'Border_Radius',
+        iconName: 'none',
+        parentRoute: THEME_URL,
+        id: themeAnchorIdArr.BORDER_RADIUS,
+        color: 'default',
+        route: themeAnchorIdArr.BORDER_RADIUS,
+        isAncholElementLast: true
+      },
+
       {
         title: 'Security',
         iconName: 'security',
         id: 'folder-security',
         color: 'default',
         route: SECURITY_URL
-      }
-    ],
-
-    [
+      },
       {
         title: 'Appearance',
-        isFolderIsPlaceholder: true,
+        // isFolderIsPlaceholder: true,
         iconName: 'none',
         id: 'folder-appearance',
-        color: 'default'
+        color: 'default',
+        route: APPEARANCE_URL
       },
       {
         title: 'Pakeeps',
         iconName: '',
-        id: 'folder-pakeeps',
+        parentRoute: APPEARANCE_URL,
+        id: 'folder-appearance-pakeeps',
         color: 'default',
-        route: PAKEEPS_URL
+        route: appearanceAnchorArr.PAKEEPS_ID
       },
-      {
-        title: 'Header',
-        // iconName: 'header',
-        id: 'folder-header',
-        color: 'default',
-        route: HEADER_URL
-      },
+      // {
+      //   title: 'Header',
+      //   // iconName: 'header',
+      //   id: 'folder-appearance-header',
+      //   color: 'default',
+      //   route: appearanceAnchorArr.Head
+      // },
       {
         title: 'Folders',
+        parentRoute: APPEARANCE_URL,
         iconName: 'folder',
-        id: 'folder-folder',
+        id: 'folder-appearance-folder',
         color: 'default',
-        route: FOLDERS_URL
+        route: appearanceAnchorArr.FOLDERS_ID
       },
 
       {
         title: 'Labels',
+        parentRoute: APPEARANCE_URL,
         iconName: 'label',
-        id: 'folder-labels',
+        id: 'folder-appearance-labels',
         color: 'default',
-        route: LABELS_URL
+        route: appearanceAnchorArr.LABELS_ID
       },
       {
         title: 'Events',
+        parentRoute: APPEARANCE_URL,
         iconName: 'today',
-        id: 'folder-events',
+        id: 'folder-appearance-events',
         color: 'default',
-        route: EVENTS_URL
+        route: appearanceAnchorArr.EVENTS_ID
       }
     ]
   ];
 
+  // const settingsFoldersRouteArr =  flatten(settingsFolders).map(({route}))
+
   const validatedSettingFolders = isFoldersHaveDraweView ? settingsFolders : [goToPakeepsArr, ...settingsFolders];
 
-  const defaultAllFolders = startsWith(router.pathname, SETTING_URL) ? validatedSettingFolders : pakeepFolders;
+  const defaultAllFolders = _.startsWith(router.pathname, SETTING_URL) ? validatedSettingFolders : pakeepFolders;
 
   const allFoldersWithDrawerView = [
     [
@@ -312,6 +368,16 @@ const Folders: FC<FoldersTypeProps> = ({
   ];
 
   const allFolders = isFoldersHaveDraweView ? allFoldersWithDrawerView : defaultAllFolders;
+  const flattenAllFolders = _.flatten(allFolders);
+
+  const findedElement = _.find(flattenAllFolders, el => _.startsWith(router.route, el?.route));
+
+  useEffect(() => {
+    const findedElementIdx = _.findIndex(flattenAllFolders, ({ id }) => findedElement?.id === id);
+    findedElementIdx && handleChange(null, findedElementIdx);
+  }, [router, findedElement]);
+
+  const FOLDER_WITHOUT_ROUTE = 'FOLDER_WITHOUT_ROUTE';
 
   const allMarginsOfBottomView = marginsOfToogleGroups * (allFolders.length + 1);
   const allMarginsOfNotBottomView = marginsOfToogleGroups * (allFolders.length + 4) + spacing(8);
@@ -320,7 +386,6 @@ const Folders: FC<FoldersTypeProps> = ({
     ? allMarginsOfBottomView
     : allMarginsOfNotBottomView;
 
-  const flattenAllFolders = _.flatten(allFolders);
   const [ref, { width: buttonWidth, height: buttonHeight }] = useMeasure<HTMLDivElement>();
 
   const buttonSize = positionOfFolderViewWithPakeepViewIsBottom ? buttonWidth : buttonHeight;
@@ -364,6 +429,12 @@ const Folders: FC<FoldersTypeProps> = ({
     setIsSizeOfFoldersMoreThanSize(foldersSize > windowSize);
   }, [foldersSize, avarageButtonSize, windowSize]);
 
+  const [isAncholElHidden, setIsAncholElHidden] = useState(false);
+
+  const handleChangeAncholElHiddenStatus = () => {
+    setIsAncholElHidden(prev => !prev);
+  };
+
   const [f, { width }] = useSize(() => (
     <Grid container>
       <Grid
@@ -393,7 +464,7 @@ const Folders: FC<FoldersTypeProps> = ({
                 {/* <Grid container> */}
                 <ToggleButtonGroup
                   orientation={positionOfFolderViewWithPakeepViewIsBottom ? 'horizontal' : 'vertical'}
-                  value={ value}
+                  value={value}
                   exclusive
                   onChange={handleChange}
                 >
@@ -401,13 +472,18 @@ const Folders: FC<FoldersTypeProps> = ({
                     ({
                       title,
                       iconName,
+                      isAncholElementLast = false,
                       property,
                       id,
                       onClick = null,
                       color,
                       isFolderIsPlaceholder = false,
-                      route
+                      route,
+                      parentRoute = 'isParent'
                     }) => {
+                      const isHaveParentRoute = parentRoute !== 'isParent';
+
+                      if ((parentRoute !== router.route || isAncholElHidden) && isHaveParentRoute) return null;
                       if (!isMenuOpen && isFolderIsPlaceholder) return null;
 
                       const findedIdx = _.findIndex(flattenAllFolders, ({ id: folderId }) => folderId === id);
@@ -423,25 +499,40 @@ const Folders: FC<FoldersTypeProps> = ({
 
                       const onClickOfToggleButton = isButtonIsMore ? handleOpenMenu : onClick;
                       const inNextButtonIsMore = findedIdx + 1 === idxOfFolderItemWhichShouldBeInMenu;
-                      const borderRadiusValue = spacing(0.6);
+                      const borderRadiusValue = shape.borderRadius;
 
                       const isButtonLastOfNotHiddenBottomArr =
                         positionOfFolderViewWithPakeepViewIsBottom && inNextButtonIsMore;
 
                       const isButtonLastOfNotHiddenNotBottomArr =
                         !positionOfFolderViewWithPakeepViewIsBottom && inNextButtonIsMore;
+
+                      // const validatedColor = useValidateColor(findedElement.color);
+                      const isButtonActive = findedElement.id === id;
+                      const borderColor = useAlpha(validatedFolderColor, 0.6);
                       return (
                         //@ts-ignore
                         <ToggleButton
                           //  ref={ref}
                           className={isFolderIsPlaceholder ? 'folderIsPlaceholder' : ''}
                           style={{
+                            textTransform: isHaveParentRoute ? 'capitalize' : '',
                             padding: isFolderIsPlaceholder ? 6 : '',
                             cursor: isFolderIsPlaceholder ? 'auto' : 'pointer',
                             opacity: isButtonIsMore ? 1 : isShouldBeHidden ? 0 : 1,
                             marginLeft: positionOfFolderViewWithPakeepViewIsBottom && isButtonIsMore && spacing(2.8),
-                            borderLeft: isButtonIsMore && '1px solid rgba(255, 255, 255, 0.12)',
-                            borderTop: isButtonIsMore && '1px solid rgba(255, 255, 255, 0.12)',
+                            borderTop: isButtonActive
+                              ? `2px solid ${borderColor}`
+                              : isButtonIsMore && `1px solid ${useAlpha(text.primary)}`,
+                            borderLeft:
+                              isHaveParentRoute || isButtonActive
+                                ? `2px solid ${borderColor}`
+                                : isButtonIsMore && `1px solid ${useAlpha(text.primary)}`,
+                            borderRight: isHaveParentRoute || isButtonActive ? `2px solid ${borderColor}` : '',
+                            borderBottom:
+                              (isButtonActive && isAncholElHidden) || isAncholElementLast
+                                ? `2px solid ${borderColor}`
+                                : '',
 
                             borderTopRightRadius:
                               (isButtonLastOfNotHiddenBottomArr || isButtonIsMore) && borderRadiusValue,
@@ -450,6 +541,8 @@ const Folders: FC<FoldersTypeProps> = ({
                                 isButtonLastOfNotHiddenBottomArr ||
                                 isButtonIsMore) &&
                               borderRadiusValue,
+
+                            // isAncholElementLast
 
                             borderBottomLeftRadius:
                               (isButtonLastOfNotHiddenNotBottomArr || isButtonIsMore) && borderRadiusValue,
@@ -466,13 +559,20 @@ const Folders: FC<FoldersTypeProps> = ({
                             route && router.push(route);
                             onClickOfToggleButton && e.preventDefault();
                             onClickOfToggleButton && onClickOfToggleButton(e);
+                            findedElement.id === id && handleChangeAncholElHiddenStatus();
                           }}
                           key={id}
                         >
+                          {/* {findedElement.id !== id && iconName !== 'none' && icon} */}
                           {iconName !== 'none' && icon}
                           {isMenuOpen && (
                             <Grid className={classes.textOfFolderWithPakeepsView} container>
-                              {isButtonIsMore ? moreButtonTitle : title}
+                              {isButtonIsMore ? moreButtonTitle : isHaveParentRoute ? `# ${title}` : title}
+                            </Grid>
+                          )}
+                          {isButtonActive && (
+                            <Grid container alignItems={'flex-end'} justify={'flex-end'}>
+                              {isAncholElHidden ? <ArrowDropDownOutlinedIcon /> : <ArrowDropUpOutlinedIcon />}
                             </Grid>
                           )}
                         </ToggleButton>
@@ -492,7 +592,9 @@ const Folders: FC<FoldersTypeProps> = ({
   useEffect(() => {
     !isFoldersHaveDraweView && handleDrawerWidth(width);
   }, [width, isFolderOpen]);
-  useEffect(() => handleDrawerWidth(0), [isMenuOpen]);
+  useEffect(() => {
+    handleDrawerWidth(0);
+  }, [isMenuOpen]);
 
   return f;
 };
