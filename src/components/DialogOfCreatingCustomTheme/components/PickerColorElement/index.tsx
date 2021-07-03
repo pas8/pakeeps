@@ -33,7 +33,7 @@ const useStyles = makeStyles(({ spacing, palette, breakpoints, shape: { borderRa
     zIndex: 10000,
     border:
       isHaveBorder || isColorReverse || isSelected
-        ? `1px solid ${isSelected ? palette.primary.main : isColorReverse ? backgroundColor : palette.text.hint}`
+        ? `1px solid ${isSelected ? palette.primary.main : isColorReverse ? backgroundColor : palette.text.disabled}`
         : `1px solid transparent`,
     '&:hover': {
       border: `1px solid ${palette.secondary.main}`

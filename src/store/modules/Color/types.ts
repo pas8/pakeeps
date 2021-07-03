@@ -41,6 +41,7 @@ export type OptionalDefaultThemeType = Optional<DefaultThemeType>;
 
 export type ElementOfDefaultThemeToChoseArr = {
   caption: string;
+  id:string;
   background: { default: string; paper: string; type: string; textColor: string };
 };
 

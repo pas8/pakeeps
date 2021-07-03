@@ -26,6 +26,7 @@ import PickerOfThemeColor from 'components/PickerOfThemeColor';
 import clsx from 'clsx';
 import MenuByPas from 'components/Menu';
 import DialogOfCreatingCustomTheme from 'components/DialogOfCreatingCustomTheme';
+import { nanoid } from 'nanoid';
 
 const useStyles = makeStyles(({ spacing, palette, breakpoints, shape: { borderRadius } }) => ({
   colorContainer: {
@@ -123,6 +124,7 @@ const Theme: FC<any> = () => {
 
     const newThemeElement = {
       caption: randomColor,
+      id: nanoid(),
       background: { default: defaultColor, paper: paperColor, type: isColorLight ? 'light' : 'dark', textColor }
     };
 
@@ -215,7 +217,7 @@ const Theme: FC<any> = () => {
             );
           })}
         </Grid>
-        <Grid className={classes.defaultThemesContainer} component={'fieldset'} xl={10} lg={11} md={12}  sm={11} xs={12}>
+        <Grid className={classes.defaultThemesContainer} component={'fieldset'} xl={10} lg={11} md={12} sm={11} xs={12}>
           <legend>
             <Typography variant={'subtitle1'} color={'textSecondary'}>
               Default themes

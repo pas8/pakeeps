@@ -134,7 +134,7 @@ const useStyles = makeStyles(({ spacing, palette, breakpoints,shape:{borderRadiu
     '& .titleOfPakeepPrevier': {
       height: spacing(2.8),
       
-      
+      minWidth:'42%',
     },
     '& .textOfPakeepPrevier': {
       borderRadius: borderRadius / 2,

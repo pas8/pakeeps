@@ -16,3 +16,10 @@ export const getDefaultThemesArr = createSelector(
   defaultThemesToChoseArr => defaultThemesToChoseArr
 );
 
+export const getCapionsOfDefaultThemesArr = createSelector(
+  [({ color: { defaultThemesToChoseArr } }: RootStoreType) => defaultThemesToChoseArr],
+  defaultThemesToChoseArr => {
+    const capitons = defaultThemesToChoseArr.map(el => el.caption);
+    return capitons
+  }
+);
