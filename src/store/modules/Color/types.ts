@@ -33,6 +33,7 @@ export type DefaultThemeType = {
   // highEmphasis: string;
   // mediumEmphasis: string;
   caption: string;
+  borderRadius: number;
   textColor: string;
   // maxEmphasis: string;
 };
@@ -41,7 +42,7 @@ export type OptionalDefaultThemeType = Optional<DefaultThemeType>;
 
 export type ElementOfDefaultThemeToChoseArr = {
   caption: string;
-  id:string;
+  id: string;
   background: { default: string; paper: string; type: string; textColor: string };
 };
 

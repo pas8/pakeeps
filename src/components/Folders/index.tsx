@@ -508,7 +508,7 @@ const Folders: FC<FoldersTypeProps> = ({
                         !positionOfFolderViewWithPakeepViewIsBottom && inNextButtonIsMore;
 
                       // const validatedColor = useValidateColor(findedElement.color);
-                      const isButtonActive = findedElement.id === id;
+                      const isButtonActive = findedElement?.id === id;
                       const borderColor = useAlpha(validatedFolderColor, 0.6);
                       return (
                         //@ts-ignore
@@ -559,7 +559,7 @@ const Folders: FC<FoldersTypeProps> = ({
                             route && router.push(route);
                             onClickOfToggleButton && e.preventDefault();
                             onClickOfToggleButton && onClickOfToggleButton(e);
-                            findedElement.id === id && handleChangeAncholElHiddenStatus();
+                            isButtonActive && handleChangeAncholElHiddenStatus();
                           }}
                           key={id}
                         >
