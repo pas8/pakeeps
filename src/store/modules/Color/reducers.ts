@@ -19,6 +19,7 @@ export const defaultTheme: DefaultThemeType = {
   defaultBackgroundMain: '#303030',
   secondaryMain: '#00b0ff',
   isColorRandom: false,
+  borderRadius:4,
   type: 'dark',
   textColor: '#ffffff'
 };

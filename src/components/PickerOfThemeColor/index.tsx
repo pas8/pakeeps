@@ -33,7 +33,7 @@ const useStyles = makeStyles(({ spacing, palette, breakpoints, shape: { borderRa
     width: '49.4%',
 
     [breakpoints.down('md')]: {
-      width: '98%'
+      width: '100%'
     },
     padding: spacing(0, 1, 0.8),
     borderColor: useAlpha(palette.mediumEmphasis?.main, 0.2),

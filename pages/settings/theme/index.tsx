@@ -1,4 +1,4 @@
-import { Grid, Typography, makeStyles, useTheme, Button } from '@material-ui/core';
+import { Grid, Typography, makeStyles, useTheme, Button, Slider } from '@material-ui/core';
 import { colord } from 'colord';
 import { customColorPlaceholder } from 'components/AccountAvatar';
 import BackgroundPlaceholderByPas from 'components/BackgroundPlaceholder';
@@ -7,7 +7,7 @@ import ThemeColorPicker from 'components/ThemeColorPicker';
 import { useAlpha } from 'hooks/useAlpha.hook';
 import { useGetReadableColor } from 'hooks/useGetReadableColor.hook';
 import { useThemeColors } from 'hooks/useThemeColors.hook';
-import { FC, useState } from 'react';
+import { ChangeEventHandler, FC, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import AddCircleOutlineOutlinedIcon from '@material-ui/icons/AddCircleOutlineOutlined';
 import { useHover } from 'react-use';
@@ -16,7 +16,7 @@ import { getColorTheme, getDefaultThemesArr } from 'store/modules/Color/selector
 import { getIsHeaderHavePaperColor } from 'store/modules/Settings/selectors';
 import OfflineBoltOutlinedIcon from '@material-ui/icons/OfflineBoltOutlined';
 import { useCustomBreakpoint } from 'hooks/useCustomBreakpoint';
-import { random } from 'lodash';
+import { debounce, random } from 'lodash';
 import { useIsColorLight } from 'hooks/useIsColorLight.hook';
 import DefaultThemePreview from 'components/DefaultThemePreview';
 import { colorColumnArr } from 'components/ColorChanger/components/CustomColor';
@@ -28,6 +28,7 @@ import MenuByPas from 'components/Menu';
 import DialogOfCreatingCustomTheme from 'components/DialogOfCreatingCustomTheme';
 import { nanoid } from 'nanoid';
 import { themeAnchorArr } from 'components/Folders';
+import SliderByPas from 'components/Slider';
 
 const useStyles = makeStyles(({ spacing, palette, breakpoints, shape: { borderRadius } }) => ({
   colorContainer: {
@@ -65,18 +66,17 @@ const useStyles = makeStyles(({ spacing, palette, breakpoints, shape: { borderRa
 
   defaultThemesContainer: {
     padding: spacing(1),
-    borderRadius: 4,
+    borderRadius,
     border: '2px solid',
-    borderColor: useAlpha(palette.mediumEmphasis?.main, 0.2),
+    borderColor: useAlpha(palette.mediumEmphasis?.main),
     '& legend': {
       padding: spacing(0, 0.8)
     }
     // width: spacing(160)
   },
 
-  colorPaletteContainer: {
+  fieldsetContainer: {
     borderRadius,
-    padding: spacing(0, 1, 0.8),
     borderColor: useAlpha(palette.mediumEmphasis?.main, 0.2),
     '& legend': {
       padding: spacing(0, 0.8)
@@ -88,6 +88,9 @@ const useStyles = makeStyles(({ spacing, palette, breakpoints, shape: { borderRa
     '&:hover': {
       background: `${useAlpha(palette.secondary.main, 0.2)}!important`
     }
+  },
+  borderRadiusContainer: {
+    padding: spacing(0.4, 0.8, 0.8, 0.8)
   }
   // border: `2px solid ${colord(background.default).invert().alpha(0.32).toHex()}`
 }));
@@ -202,7 +205,10 @@ const Theme: FC<any> = () => {
   const handleCloseMenuOfThemePicker = () => {
     setElStateOfThemePicker(false);
   };
-  console.log(themeAnchorArr.DEFAULT_THEMES_ID);
+
+  const handleChangeBorderRadius = (__: any, borderRadius: number) => {
+    dispatch(toChangeThemeColors({ newThemeColors: { borderRadius } }));
+  };
   const [customColorOfElOfThemePicker] = useGetReadableColor(elStateOfThemePicker.color);
   return (
     <Grid container justify={'center'}>
@@ -211,8 +217,8 @@ const Theme: FC<any> = () => {
           {themePickersArr.map(props => {
             return (
               <PickerOfThemeColor
-                key={`themePickersArr-${props.title}`}
                 {...props}
+                key={`themePickersArr-${props.title}`}
                 isColorRandom={theme.isColorRandom}
                 setElStateOfThemePicker={setElStateOfThemePicker}
               />
@@ -259,27 +265,57 @@ const Theme: FC<any> = () => {
               return <DefaultThemePreview {...defaultThemePreviewProps} />;
             })}
           </Grid>
+        
+        </Grid>
+        <Grid
+            xl={10}
+            lg={11}
+            md={12}
+            sm={11}
+            xs={12}
+          container
+          item
+          id={themeAnchorArr.BORDER_RADIUS}
+          component={'fieldset'}
+          className={clsx(classes.fieldsetContainer, classes.borderRadiusContainer)}
+        >
+          <legend>
+            <Typography variant={'subtitle1'} color={'textSecondary'}>
+              Border_Radius
+            </Typography>
+          </legend>
 
-          <MenuByPas
-            anchorEl={elStateOfThemePicker.anchorEl}
-            keepMounted
-            customColor={customColorPlaceholder}
-            onClose={handleCloseMenuOfThemePicker}
-            open={!!elStateOfThemePicker.anchorEl}
-            // className={classes.menuContainer}
-          >
-            <ColorPickerByPas handleSave={elStateOfThemePicker.handleSave} customColor={customColorOfElOfThemePicker} />
-          </MenuByPas>
-
-          {isCustomThemeDialogOpen && (
-            <DialogOfCreatingCustomTheme
-              onClose={handleCloseCustomThemeDialogOpen}
-              isOpen={isCustomThemeDialogOpen}
-              theme={theme}
-            />
-          )}
+          <SliderByPas
+            step={1}
+            value={theme.borderRadius}
+            // valueLabelDisplay={'on'}
+            //@ts-ignore
+            onChange={handleChangeBorderRadius}
+            max={16}
+            defaultValue={4}
+            min={0}
+            // track={'inverted'}
+          />
         </Grid>
       </Grid>
+      <MenuByPas
+        anchorEl={elStateOfThemePicker.anchorEl}
+        keepMounted
+        customColor={customColorPlaceholder}
+        onClose={handleCloseMenuOfThemePicker}
+        open={!!elStateOfThemePicker.anchorEl}
+        // className={classes.menuContainer}
+      >
+        <ColorPickerByPas handleSave={elStateOfThemePicker.handleSave} customColor={customColorOfElOfThemePicker} />
+      </MenuByPas>
+
+      {isCustomThemeDialogOpen && (
+        <DialogOfCreatingCustomTheme
+          onClose={handleCloseCustomThemeDialogOpen}
+          isOpen={isCustomThemeDialogOpen}
+          theme={theme}
+        />
+      )}
     </Grid>
   );
 };
