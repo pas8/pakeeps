@@ -11,7 +11,7 @@ import { mapValues } from 'lodash';
 import { useAlpha } from 'hooks/useAlpha.hook';
 
 const ThemeLayout = ({ children }: LayoutChildrenType) => {
-  const { breakpointsValues, theme: themeColors,  textColorCoefficients } = useSelector(getColor);
+  const { breakpointsValues, theme: themeColors, textColorCoefficients } = useSelector(getColor);
 
   const { xs, sm, md, lg, xl } = breakpointsValues;
   const breakpointsArr = [xl, lg, md, sm, xs];
@@ -19,7 +19,6 @@ const ThemeLayout = ({ children }: LayoutChildrenType) => {
   const dispatch = useDispatch();
 
   const textColors = mapValues(textColorCoefficients, coefficient => useAlpha(themeColors.textColor, coefficient));
-console.log(textColors)
   const theme = responsiveFontSizes(
     createMuiTheme({
       breakpointsArr,
@@ -27,10 +26,12 @@ console.log(textColors)
         //@ts-ignore
         values: breakpointsValues
       },
-      direction: 'rtl',
+      // direction: 'rtl',
+      shape: { borderRadius: themeColors.borderRadius },
       palette: {
         success: { main: '#4caf50' },
         type: themeColors.type,
+
         text: {
           primary: textColors.max,
           secondary: textColors.high,

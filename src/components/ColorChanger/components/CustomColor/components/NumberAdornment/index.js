@@ -7,20 +7,29 @@ import { useState } from 'react';
 import _ from 'lodash';
 
 const useStyles = makeStyles(theme => ({
-  inputAdornmentArrowContainer: {
-    marginRight: theme.spacing(-0.8),
+  inputAdornmentArrowContainer: ({ isSizeSmall }) => ({
+    marginRight: isSizeSmall ? theme.spacing(0.2) : theme.spacing(-1),
     '& button': {
       padding: 0,
+      borderRadius: 0,
+      '& svg': {
+        width: isSizeSmall ? '0.76em' : '',
+        height: isSizeSmall ? '0.76em' : ''
+      },
       border: 'none',
       '&:hover': {
         color: ({ color }) => color
+      },
+      '&:first-child': {
+        marginBottom: isSizeSmall ? '-4px' : ''
       }
     }
-  }
+  })
 }));
 
-const NumberAdornment = ({ handleIncrement, handleDecrement, color }) => {
-  const classes = useStyles({ color });
+const NumberAdornment = ({ handleIncrement, handleDecrement, color, size = 'normal' }) => {
+  const isSizeSmall = size === 'small';
+  const classes = useStyles({ color, isSizeSmall });
   const preventDefaultFunc = e => e.preventDefault();
 
   return (

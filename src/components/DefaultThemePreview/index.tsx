@@ -38,7 +38,7 @@ const useStyles = makeStyles(({ spacing, palette, breakpoints,shape:{borderRadiu
   headerOfThemePrewier: ({ background, isHeaderHavePaperColor }: any) => ({
     height: spacing(4.4),
     width: '100%',
-    margin: spacing(-0.2, 0, 0),
+    // margin: spacing(-0.2, 0, 0),
     padding: spacing(0, 2),
     background: isHeaderHavePaperColor ? palette.primary.main : background.paper,
     '& > div': {
@@ -110,7 +110,7 @@ const useStyles = makeStyles(({ spacing, palette, breakpoints,shape:{borderRadiu
     // height: spacing(24),
     margin: spacing(0, 0, 0, 2),
     padding: spacing(1),
-    borderRadius: 4,
+    borderRadius: borderRadius ,
 
     [breakpoints.down('xl')]: {
       width: '48%'
@@ -134,7 +134,7 @@ const useStyles = makeStyles(({ spacing, palette, breakpoints,shape:{borderRadiu
     '& .titleOfPakeepPrevier': {
       height: spacing(2.8),
       
-      
+      minWidth:'42%',
     },
     '& .textOfPakeepPrevier': {
       borderRadius: borderRadius / 2,
@@ -167,7 +167,7 @@ background: colord(background.default).invert().alpha(0.16).toHex(),
     },
 
     '& > div': {
-      borderRadius: 2,
+      borderRadius: borderRadius /2,
       width: '46.8%',
       height: '100%',
       background: colord(background.default).invert().alpha(0.32).toHex()
@@ -191,7 +191,7 @@ background: colord(background.default).invert().alpha(0.16).toHex(),
     },
 
     '& > div': {
-      borderRadius: 2,
+      borderRadius: borderRadius /2,
 
       width: '30%',
       height: '100%',

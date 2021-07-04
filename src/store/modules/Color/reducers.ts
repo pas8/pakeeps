@@ -19,6 +19,7 @@ export const defaultTheme: DefaultThemeType = {
   defaultBackgroundMain: '#303030',
   secondaryMain: '#00b0ff',
   isColorRandom: false,
+  borderRadius:4,
   type: 'dark',
   textColor: '#ffffff'
 };
@@ -40,25 +41,32 @@ export const colorInitialState = {
   },
   defaultThemesToChoseArr: [
     {
+      id: 'defaultThemesToChoseArr-1',
       caption: 'Classic',
       background: { default: '#303030', paper: '#424242', type: 'dark', textColor: '#ffffff' }
     },
     {
+      id: 'defaultThemesToChoseArr-2',
       caption: 'Full dark',
       background: { default: '#080808', paper: '#202020', type: 'dark', textColor: '#ffffff' }
     },
 
     {
+      id: 'defaultThemesToChoseArr-3',
       caption: 'Dark blue',
       background: { default: '#000016', paper: '#000042', type: 'dark', textColor: '#ffffff' }
     },
 
     {
+      id: 'defaultThemesToChoseArr-4',
+
       caption: 'Dark red',
       background: { default: '#160000', paper: '#420000', type: 'dark', textColor: '#ffffff' }
     },
 
     {
+      id: 'defaultThemesToChoseArr-5',
+
       caption: 'Full White',
       background: { default: '#ffffff', paper: '#dcdcdc', type: 'light', textColor: '#000000' }
     }
@@ -98,7 +106,7 @@ export const ColorReducer = (state = colorInitialState, action: ColorActionTypes
     case TypeNames.HANDLE_CHANGE_DEFAULT_THEMES_ARR: {
       const { newThemeElement } = action.payload;
 
-      const defaultThemesToChoseArr = [...state.defaultThemesToChoseArr, newThemeElement];
+      const defaultThemesToChoseArr = [newThemeElement, ...state.defaultThemesToChoseArr];
       return { ...state, defaultThemesToChoseArr };
     }
     // case '': {

@@ -1,35 +1,28 @@
-import { FC, MouseEventHandler, useEffect, useState } from 'react';
-import { DialogOfCreatingCustomThemePropsType } from './types';
+import { ChangeEventHandler, FC, MouseEventHandler, useEffect, useState } from 'react';
 import {
   Grid,
-  Typography,
   makeStyles,
-  useTheme,
-  Button,
   Dialog,
   DialogTitle,
   DialogContent,
-  DialogActions
+  DialogActions,
+  InputBase,
+  FormHelperText
 } from '@material-ui/core';
+import useKeyboardJs from 'react-use/lib/useKeyboardJs';
+import { useCopyToClipboard, useHover } from 'react-use';
+import ArrowDropDownCircleOutlinedIcon from '@material-ui/icons/ArrowDropDownCircleOutlined';
+import { useSnackbar } from 'notistack';
+import { colord } from 'colord';
+import { includes, map, mapValues } from 'lodash';
 import ExtensionIcon from '@material-ui/icons/Extension';
 import ActionsButtonGroup from 'components/ActionsButtonGroup';
 import { useDispatch, useSelector } from 'react-redux';
 import { useThemeColors } from 'hooks/useThemeColors.hook';
 import BackgroundPlaceholderByPas from 'components/BackgroundPlaceholder';
-import ExtensionOutlinedIcon from '@material-ui/icons/ExtensionOutlined';
 import { useAlpha } from 'hooks/useAlpha.hook';
-import InputsColorUtilsOfCustomColorPicker from 'components/ColorChanger/components/CustomColor/components/InputsColorUtils';
-import { colord } from 'colord';
-import ArrowDropDownCircleOutlinedIcon from '@material-ui/icons/ArrowDropDownCircleOutlined';
-import { keys, map, mapValues, values } from 'lodash';
-import useKeyboardJs from 'react-use/lib/useKeyboardJs';
-
-import PickerColorElement from './components/PickerColorElement';
-import { useFromNameToText } from 'hooks/useFromNameToText.hook';
 import DefaultThemePreview from 'components/DefaultThemePreview';
-import { getIsHeaderHavePaperColor } from 'store/modules/Settings/selectors';
 import DraggablePaperComponent from 'components/DraggablePaperComponent';
-import { useCopyToClipboard, useHover, useToggle } from 'react-use';
 import { useContrastText } from 'hooks/useContrastText.hook';
 import ColorPickerByPas from 'components/ColorChanger';
 import SelectColorFormat from 'components/ColorChanger/components/CustomColor/components/SelectColorFormat';
@@ -37,24 +30,39 @@ import MenuByPas from 'components/Menu';
 import { customColorPlaceholder } from 'components/AccountAvatar';
 import { useGetReadableColor } from 'hooks/useGetReadableColor.hook';
 import { useBreakpointNames } from 'hooks/useBreakpointNames.hook';
-import { useSnackbar } from 'notistack';
-const useStyles = makeStyles(({ spacing, palette, breakpoints, shape: { borderRadius } }) => ({
+import { getCapionsOfDefaultThemesArr } from 'store/modules/Color/selectors';
+import { ColorStateType } from './components/PickerColorElement/types';
+import PickerColorElement from './components/PickerColorElement';
+import { DialogOfCreatingCustomThemePropsType } from './types';
+import { getIsHeaderHavePaperColor } from 'store/modules/Settings/selectors';
+import { toChangeDefaultThemesArr } from 'store/modules/Color/actions';
+import { nanoid } from 'nanoid';
+import { useToHex } from 'hooks/useToHex.hook';
+
+const useStyles = makeStyles(({ spacing, palette, breakpoints, shape: { borderRadius }, typography }) => ({
   contentContainer: {},
 
   wrapperOfElementOfContent: {
     borderRadius,
-
     [breakpoints.down('sm')]: {
       padding: spacing(1, 0, 0, 0)
     },
-
-    // borderColor: useAlpha(palette.mediumEmphasis.main, 0),
-
     padding: spacing(0, 0.4, 0, 2.8)
   },
   container: {
     '& .MuiPaper-root': {
       position: 'relative'
+    },
+    '& .MuiDialogTitle-root': {
+      position: 'relative',
+      '& input': {
+        ...typography.h6
+      },
+      '& p': {
+        position: 'absolute',
+        bottom: spacing(0.4),
+        left: spacing(3.2)
+      }
     }
   },
   elementContainer: {
@@ -67,7 +75,7 @@ const useStyles = makeStyles(({ spacing, palette, breakpoints, shape: { borderRa
     borderColor: useAlpha(palette.text.primary, 0.2)
   },
   wraperOfThemePreview: {
-    width: spacing(36),
+    width: spacing(38),
     [breakpoints.down('xs')]: {
       width: '100%'
     },
@@ -77,7 +85,6 @@ const useStyles = makeStyles(({ spacing, palette, breakpoints, shape: { borderRa
 
       [breakpoints.down('xs')]: {
         height: spacing(36),
-        // height: '100%',
         width: '100%'
       },
 
@@ -91,31 +98,17 @@ const useStyles = makeStyles(({ spacing, palette, breakpoints, shape: { borderRa
   },
 
   containerOfButtonUtilsElement: ({ color }: { color: string }) => ({
-    // background: color,
-    // width: 140,
-
     position: 'relative',
-    // margin: spacing(0, 0.6, 0, 0),
     height: spacing(12 * 0.42),
     width: '48%',
-
-    // [breakpoints.down('lg')]: {
-    //   width: '31%'
-    // },
-
     color: useContrastText(color),
-    // '&:hover': {
     background: useAlpha(color, 0.42),
-    // }
-
     border: `2px solid`,
     borderRadius,
     borderColor: useAlpha(color, 0.42),
     '&:hover': {
       cursor: 'pointer',
-      // background: useAlpha(color, 0.6),
       background: useAlpha(color, 0.6),
-
       borderColor: color,
       '& button': {
         borderColor: color
@@ -133,16 +126,18 @@ const useStyles = makeStyles(({ spacing, palette, breakpoints, shape: { borderRa
   }
 }));
 
-export const dialogColorNames = {
-  PAPER_COLOR: 'paperColor',
-  BACKGROUND_COLOR: 'backgroundColor',
-  TEXT_COLOR: 'textColor'
-};
+export enum dialogColorNames {
+  PAPER_COLOR = 'paperColor',
+  BACKGROUND_COLOR = 'backgroundColor',
+  TEXT_COLOR = 'textColor'
+}
 
 const DialogOfCreatingCustomTheme: FC<DialogOfCreatingCustomThemePropsType> = ({ isOpen, onClose, theme }) => {
   const [primaryColor, secondaryColor, , mediumEmph] = useThemeColors();
   const isHeaderHavePaperColor = useSelector(getIsHeaderHavePaperColor);
   const [state, copyToClipboard] = useCopyToClipboard();
+
+  const capionsOfDefaultThemesArr = useSelector(getCapionsOfDefaultThemesArr);
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -151,21 +146,51 @@ const DialogOfCreatingCustomTheme: FC<DialogOfCreatingCustomThemePropsType> = ({
   const { isSizeSmall } = useBreakpointNames();
 
   const dispatch = useDispatch();
-
-  const [colorState, setColorState] = useState({
+  const [colorState, setColorState] = useState<ColorStateType>({
     [dialogColorNames.PAPER_COLOR]: theme.paperMain,
     [dialogColorNames.BACKGROUND_COLOR]: theme.defaultBackgroundMain,
     [dialogColorNames.TEXT_COLOR]: theme.textColor
   });
 
+  const [caption, setCaption] = useState({ isValid: false, value: theme.caption });
+
   const onSave = () => {
-    console.log(colorState);
+    if (!caption.isValid)
+      return enqueueSnackbar({
+        message: 'Caption Of theme is not uniq',
+        severity: 'error'
+      });
+
+    try {
+      dispatch(
+        toChangeDefaultThemesArr({
+          newThemeElement: {
+            id: nanoid(),
+            caption: caption.value,
+            background: {
+              default: useToHex(colorState[dialogColorNames.BACKGROUND_COLOR]),
+              paper: useToHex(colorState[dialogColorNames.PAPER_COLOR]),
+              textColor: useToHex(colorState[dialogColorNames.TEXT_COLOR]),
+              type: 'any'
+            }
+          }
+        })
+      );
+      onClose();
+      return enqueueSnackbar({
+        message: 'Theme was succsesfully added'
+      });
+    } catch (err) {
+      return enqueueSnackbar({
+        message: err + 'Something went wrong',
+        severity: 'error'
+      });
+    }
   };
 
   const [selectedPreviewElementId, setSelectedPreviewElementId] = useState<string>('');
 
   const TITLE = 'Create custom theme';
-  const CAPTION = 'Custom theme';
 
   const background = mapValues(
     {
@@ -183,6 +208,10 @@ const DialogOfCreatingCustomTheme: FC<DialogOfCreatingCustomThemePropsType> = ({
     });
   };
 
+  const handleChangeCaption: ChangeEventHandler<HTMLInputElement> = ({ target: { value } }) => {
+    setCaption(state => ({ ...state, value, isValid: !includes(capionsOfDefaultThemesArr, value) }));
+  };
+
   const [isPressed] = useKeyboardJs('ctrl + v');
 
   useEffect(() => {
@@ -190,7 +219,7 @@ const DialogOfCreatingCustomTheme: FC<DialogOfCreatingCustomThemePropsType> = ({
       navigator.clipboard
         .readText()
         .then(json => {
-          console.log(JSON.parse(json))
+          console.log(JSON.parse(json));
           setColorState(JSON.parse(json));
           enqueueSnackbar({
             message: 'Theme was pasted'
@@ -198,15 +227,15 @@ const DialogOfCreatingCustomTheme: FC<DialogOfCreatingCustomThemePropsType> = ({
         })
         .catch(err => {
           enqueueSnackbar({
-            message: err + 'Something went wrong' ,
+            message: err + 'Something went wrong',
             severity: 'error'
           });
         });
   }, [isPressed]);
-  // console.log(isPressed);
+
   const defaultThemePreviewProps = {
     background,
-    caption: CAPTION,
+    caption: caption.value,
     isThemeSelected: true,
     onClick: handleCopyToClipboardColorState,
     isHeaderHavePaperColor
@@ -273,6 +302,7 @@ const DialogOfCreatingCustomTheme: FC<DialogOfCreatingCustomThemePropsType> = ({
     </Grid>
   ));
   const MenuChildren = elStateOfButtonUtilMenu.props.children;
+
   return (
     <Dialog
       open={isOpen}
@@ -298,7 +328,10 @@ const DialogOfCreatingCustomTheme: FC<DialogOfCreatingCustomThemePropsType> = ({
         />
       )}
 
-      <DialogTitle>{TITLE}</DialogTitle>
+      <DialogTitle>
+        <InputBase value={caption.value} onChange={handleChangeCaption} fullWidth />
+        {!caption.isValid && <FormHelperText error={!caption.isValid}>Theme caption is not uniq</FormHelperText>}
+      </DialogTitle>
       <DialogContent className={classes.contentContainer}>
         <Grid container={!isSizeSmall}>
           <Grid>
@@ -331,8 +364,8 @@ const DialogOfCreatingCustomTheme: FC<DialogOfCreatingCustomThemePropsType> = ({
               justify={'space-between'}
               style={{ height: '100%' }}
             >
-              {/* <Grid > */}
               {map(colorState, (el, name) => {
+                //@ts-ignore
                 const color = colord(colorState[name]).toRgb();
                 const isSelected = name === selectedPreviewElementId;
 
