@@ -7,7 +7,7 @@ const useStyles = makeStyles(
     spacing,
     transitions,
     breakpoints,
-    shape:{borderRadius},
+    shape: { borderRadius },
     palette: { secondary, maxEmphasis, background, highEmphasis, mediumEmphasis }
   }) => ({
     bg: ({ color }: { color: string }) => ({
@@ -26,10 +26,10 @@ const useStyles = makeStyles(
       },
       '& p': {
         userSelect: 'none',
-// background:useAlpha(color,0.04),
-filter:'blur(1px)',
+        // background:useAlpha(color,0.04),
+        filter: 'blur(1px)',
 
-borderRadius,
+        borderRadius,
         color: color,
         width: '300%',
         height: '300%',
@@ -40,8 +40,7 @@ borderRadius,
         background: background.default,
         zIndex: 10,
         '&:hover': {
-          background: background.default,
-
+          background: background.default
         },
         left: '50%',
         top: '50%',
@@ -60,25 +59,37 @@ const BackgroundPlaceholderByPas: FC<{
   buttonText?: string;
   isButtonHidden?: boolean;
   ButtonIcon?: ReactNode;
-  size?:number;
-  onClick?: (e:any) => void;
-}> = ({ title, color, buttonText, ButtonIcon, isButtonHidden, onClick, size}) => {
+  size?: number;
+  isButtonIconIsComponent?: boolean;
+  onClick?: (e: any) => void;
+  isButtonBig:boolean
+}> = ({
+  title,
+  color,
+  buttonText,
+  ButtonIcon,
+  isButtonHidden,
+  onClick,
+  size,
+  isButtonIconIsComponent = false,
+  isButtonBig = false
+}) => {
   const bgTextArr = Array(size || 480).fill(title);
 
-  const classes = useStyles({ color });
+  const classes = useStyles({ color ,isButtonBig});
 
   return (
     <Grid className={classes.bg}>
       {!isButtonHidden && (
         <Button
           //@ts-ignore
-          startIcon={ButtonIcon && <ButtonIcon />}
+          startIcon={ButtonIcon && isButtonIconIsComponent ? ButtonIcon : <ButtonIcon />}
           color={'secondary'}
           variant={'outlined'}
           onClick={onClick}
           size={'small'}
         >
-          <Typography variant={'body2'} component={'h6'}>
+          <Typography variant={ isButtonBig ? 'subtitle1' :'body2'} component={'h6'}>
             {buttonText}
           </Typography>
         </Button>

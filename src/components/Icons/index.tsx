@@ -52,7 +52,8 @@ import CloseIcon from '@material-ui/icons/Close';
 import FolderOutlinedIcon from '@material-ui/icons/FolderOutlined';
 import DeleteOutlinedIcon from '@material-ui/icons/DeleteOutlined';
 import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
-
+import GitHubIcon from '@material-ui/icons/GitHub';
+import FacebookIcon from '@material-ui/icons/Facebook';
 export const iconsArr = [
   { icon: <TodayOutlinedIcon />, iconName: 'tomorrow', id: 'random1', checkedIcon: <TodayIcon /> },
   { icon: <CalendarTodayOutlinedIcon />, iconName: 'today', id: 'random2', checkedIcon: <CalendarTodayIcon /> },
@@ -69,8 +70,23 @@ export const iconsArr = [
   { icon: <AccountCircleOutlinedIcon />, iconName: 'account', id: '12dfqd1' },
   { icon: <ColorLensOutlinedIcon />, iconName: 'color', id: 'color' },
   { icon: <FingerprintOutlinedIcon />, iconName: 'fingerprint', id: '2' },
-  { icon: <CheckBoxOutlinedIcon />, iconName: 'checkbox', id: '3' },
   { icon: <DoneOutlineOutlinedIcon />, iconName: 'done', id: '4' },
+  { icon: <GitHubIcon />, iconName: 'GitHub', id: 'GitHub' },
+  { icon: <FacebookIcon />, iconName: 'Facebook', id: 'Facebook' },
+  {
+    icon: (
+      <SvgIcon viewBox={'0 0 24 24'}>
+        <path
+          d={
+            'M13 2V3H12V9H11V10H9V11H8V12H7V13H5V12H4V11H3V9H2V15H3V16H4V17H5V18H6V22H8V21H7V20H8V19H9V18H10V19H11V22H13V21H12V17H13V16H14V15H15V12H16V13H17V11H15V9H20V8H17V7H22V3H21V2M14 3H15V4H14Z'
+          }
+        />
+      </SvgIcon>
+    ),
+    iconName: 'Google',
+    id: 'Google'
+  },
+  
   { icon: <KeyboardVoiceOutlinedIcon />, iconName: 'keyboard', id: '5', checkedIcon: <KeyboardVoiceIcon /> },
   { icon: <BookOutlinedIcon />, iconName: 'book', id: '6' },
   { icon: <LocalPostOfficeOutlinedIcon />, iconName: 'mail', id: '7' },
@@ -99,7 +115,7 @@ export const iconsArr = [
   },
   { icon: <MoreVertOutlinedIcon />, iconName: 'more', id: '104' },
   { icon: <BookmarkBorderOutlinedIcon />, iconName: 'bookmark', id: '964', checkedIcon: <BookmarkIcon /> },
-  { icon: <FolderOutlinedIcon />, iconName: 'folder', id: 'folder', },
+  { icon: <FolderOutlinedIcon />, iconName: 'folder', id: 'folder' },
   { icon: <FavoriteBorderOutlinedIcon />, iconName: 'favorite', id: '968', checkedIcon: <FavoriteIcon /> },
   { icon: <ArchiveOutlinedIcon />, iconName: 'archive', id: '928' }
 ] as const;

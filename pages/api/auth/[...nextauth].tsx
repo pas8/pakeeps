@@ -1,16 +1,28 @@
 import NextAuth from 'next-auth';
 import Providers from 'next-auth/providers';
-require('dotenv').config()
+require('dotenv').config();
 import config from 'config';
 
-  console.log(); 
 
 const options = {
+  pages: {
+    signIn: '/signin'
+  },
   providers: [
-    // Providers.GitHub({
-    //   clientId: config.get('github.id'),
-    //   clientSecret: config.get('github.secret'),
-    // }),
+    Providers.GitHub({
+      clientId: config.get('github.id'),
+      clientSecret: config.get('github.secret')
+    }),
+
+    Providers.Google({
+      clientId: config.get('google.id'),
+      clientSecret: config.get('google.secret')
+    }),
+    Providers.Facebook({
+      clientId: config.get('facebook.id'),
+      clientSecret: config.get('facebook.secret')
+    }),
+
     // Providers.Email({
     //   server: {
     //     host: '',
@@ -20,9 +32,9 @@ const options = {
     //   from: ''
     // })
   ]
-}; 
+};
 
-export default (req,res)=> NextAuth(req,res,options)
+export default (req:any, res:any) => NextAuth(req, res, options);
 
 // const MongoClient = require('mongodb').MongoClient;
 // const uri = ";
