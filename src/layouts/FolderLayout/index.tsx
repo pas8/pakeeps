@@ -83,9 +83,7 @@ const FolderLayout = ({ children }: LayoutChildrenType) => {
 
   const [br] = useCustomBreakpoint();
 
-
-
-  const isVerySmall = br === 'xs' || br === 'sm'
+  const isVerySmall = br === 'xs' || br === 'sm';
 
   const handleDrawerWidth = (drawerWidth: number) => {
     dispatch(toSetDrawerWidth({ drawerWidth }));
@@ -162,7 +160,7 @@ const FolderLayout = ({ children }: LayoutChildrenType) => {
 
   const NavContainer = isFoldersHaveDraweView ? SwipeableDrawer : Nav;
 
-  const anchor = positionOfFolderViewWithPakeepViewIsRight ? 'left' : ('right' as any);
+  const anchor = positionOfFolderViewWithPakeepViewIsRight ? 'right' : 'left';
 
   const onOpen: ReactEventHandler<any> = e => console.log('onOpen');
 

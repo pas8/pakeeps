@@ -14,6 +14,7 @@ import { toChangeMenuOpenStatus } from 'store/modules/App/actions';
 import { getMenuOpenStatus } from 'store/modules/App/selectors';
 import { HeaderByPasPropsType, UseStylesOfHeaderByPasType } from './components/types';
 import { menuOpenStatusDenotation } from 'models/denotation';
+import { useRouter } from 'next/dist/client/router';
 
 const useStyles = makeStyles(theme => ({
   root: ({ navigationViewLikeTelegram }: HeaderByPasPropsType) => ({
@@ -59,7 +60,7 @@ const HeaderByPas: FC<HeaderByPasPropsType> = ({
   navigationViewLikePakeeps
 }) => {
   const [breakpoint] = useCustomBreakpoint();
-
+  const { pathname } = useRouter();
   const dispatch = useDispatch();
 
   const handleDrawerOpen = () => {
@@ -74,6 +75,8 @@ const HeaderByPas: FC<HeaderByPasPropsType> = ({
   const classes = useStyles({ drawerWidth, navigationViewLikeTelegram, navigationViewLikePakeeps, isMenuOpen });
 
   const isHeaderHavePakeepView = true;
+
+  const isRouteIsSignIn = pathname === '/signin';
 
   return (
     <Grid className={classes.root} container>
@@ -90,8 +93,12 @@ const HeaderByPas: FC<HeaderByPasPropsType> = ({
                 isMenuOpen={isMenuOpen}
                 isSmallSize={isSmallSize}
               />
-              <HeaderSearch />
-              <HeaderProfileUtils />
+              {!isRouteIsSignIn && (
+                <>
+                  <HeaderSearch />
+                  <HeaderProfileUtils />
+                </>
+              )}
             </>
           )}
           {/* {navigationViewLikeTelegram && (

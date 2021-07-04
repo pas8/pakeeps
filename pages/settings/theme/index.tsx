@@ -265,14 +265,13 @@ const Theme: FC<any> = () => {
               return <DefaultThemePreview {...defaultThemePreviewProps} />;
             })}
           </Grid>
-        
         </Grid>
         <Grid
-            xl={10}
-            lg={11}
-            md={12}
-            sm={11}
-            xs={12}
+          xl={10}
+          lg={11}
+          md={12}
+          sm={11}
+          xs={12}
           container
           item
           id={themeAnchorArr.BORDER_RADIUS}

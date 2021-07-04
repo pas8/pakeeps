@@ -46,39 +46,46 @@ const MainBar: FC<MainBarPropsType> = ({ handleDrawerOpen, isMenuOpen, isSmallSi
       });
 
   const menuToolTipTitle = isMenuExtended ? 'Narrow down menu' : isMenuOpen ? 'Extend menu' : 'Open Menu';
+  const isRouteIsSignIn = pathname === '/signin';
 
   return (
     <>
-      <Tooltip title={menuToolTipTitle}>
-        <IconButton
-          aria-label={'open drawer'}
-          onClick={handleDrawerOpen}
-          edge={'start'}
-          className={clsx(classes.menuButton)}
-        >
-          {isMenuExtended ? <MenuOpenOutlinedIcon /> : <MenuIcon />}
-        </IconButton>
-      </Tooltip>
-      {!isSmallSize && (
-        <Typography variant={'h6'} className={classes.typography}>
-          {/* {headerTitle} */}
+      {isRouteIsSignIn ? (
+        <Typography variant={'h6'}>Sign In</Typography>
+      ) : (
+        <>
+          <Tooltip title={menuToolTipTitle}>
+            <IconButton
+              aria-label={'open drawer'}
+              onClick={handleDrawerOpen}
+              edge={'start'}
+              className={clsx(classes.menuButton)}
+            >
+              {isMenuExtended ? <MenuOpenOutlinedIcon /> : <MenuIcon />}
+            </IconButton>
+          </Tooltip>
+          {!isSmallSize && (
+            <Typography variant={'h6'} className={classes.typography}>
+              {/* {headerTitle} */}
 
-          {headerArr.map((el, idx) => {
-            if (!el) return;
+              {headerArr.map((el, idx) => {
+                if (!el) return;
 
-            const href = el.routeArr.join('');
-            const isLast = idx + 1 === splitedPathName.length;
+                const href = el.routeArr.join('');
+                const isLast = idx + 1 === splitedPathName.length;
 
-            return (
-              <>
-                <Link color={'inherit'} onClick={event => event.preventDefault()} style={{ cursor: 'pointer ' }}>
-                  <NextLink href={href}>{el.string}</NextLink>
-                </Link>
-                {isLast ? '' : ' / '}
-              </>
-            );
-          })}
-        </Typography>
+                return (
+                  <>
+                    <Link color={'inherit'} onClick={event => event.preventDefault()} style={{ cursor: 'pointer ' }}>
+                      <NextLink href={href}>{el.string}</NextLink>
+                    </Link>
+                    {isLast ? '' : ' / '}
+                  </>
+                );
+              })}
+            </Typography>
+          )}
+        </>
       )}
     </>
   );

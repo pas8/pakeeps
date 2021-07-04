@@ -14,6 +14,7 @@ import { useRouter } from 'next/dist/client/router';
 import ArrowDropDownOutlinedIcon from '@material-ui/icons/ArrowDropDownOutlined';
 import ArrowDropUpOutlinedIcon from '@material-ui/icons/ArrowDropUpOutlined';
 import { useValidateColor } from 'hooks/useValidateColor.hook';
+import { useBreakpointNames } from 'hooks/useBreakpointNames.hook';
 
 const marginOfToogleGroups = 1;
 
@@ -300,7 +301,7 @@ const Folders: FC<FoldersTypeProps> = ({
       {
         title: 'Appearance',
         // isFolderIsPlaceholder: true,
-        iconName: 'none',
+        iconName: 'view',
         id: 'folder-appearance',
         color: 'default',
         route: APPEARANCE_URL
@@ -435,6 +436,8 @@ const Folders: FC<FoldersTypeProps> = ({
     setIsAncholElHidden(prev => !prev);
   };
 
+  const { isSizeSmall } = useBreakpointNames();
+
   const [f, { width }] = useSize(() => (
     <Grid container>
       <Grid
@@ -483,7 +486,8 @@ const Folders: FC<FoldersTypeProps> = ({
                     }) => {
                       const isHaveParentRoute = parentRoute !== 'isParent';
 
-                      if ((parentRoute !== router.route || isAncholElHidden) && isHaveParentRoute) return null;
+                      if ((parentRoute !== router.route || isAncholElHidden || isSizeSmall) && isHaveParentRoute)
+                        return null;
                       if (!isMenuOpen && isFolderIsPlaceholder) return null;
 
                       const findedIdx = _.findIndex(flattenAllFolders, ({ id: folderId }) => folderId === id);
@@ -570,7 +574,7 @@ const Folders: FC<FoldersTypeProps> = ({
                               {isButtonIsMore ? moreButtonTitle : isHaveParentRoute ? `# ${title}` : title}
                             </Grid>
                           )}
-                          {isButtonActive && (
+                          {isMenuOpen &&  isButtonActive && (
                             <Grid container alignItems={'flex-end'} justify={'flex-end'}>
                               {isAncholElHidden ? <ArrowDropDownOutlinedIcon /> : <ArrowDropUpOutlinedIcon />}
                             </Grid>
