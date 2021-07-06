@@ -18,7 +18,7 @@ import { random, sampleSize, words } from 'lodash';
 //@ts-ignore
 import randomSentence from 'random-sentence';
 import { colord } from 'colord';
-import { NONE,TRANSPARENT } from 'models/denotation';
+import { NONE, TRANSPARENT } from 'models/denotation';
 
 const labelsOfInitialState: GlobalLabelsType = [
   { color: '', title: 'Day plans', iconName: 'category', id: 'label0', variant: 'outlined' },
@@ -118,6 +118,7 @@ const initialState: AppInitialStateInteface = {
   pakeepsOrderNames: [],
   pinnedPakeepsOrderNames: [],
   notifinationCounter: 8,
+  email: NONE,
   // menuOpenStatus: 'HIDDEN',
   avatarProperties: defaultAvatarProperties,
   menuOpenStatus: 'EXTENDED',

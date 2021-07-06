@@ -22,6 +22,8 @@ import {
 import { HandleSelectedPakeepsPropertyFuncType, PakeepPropertyiesType } from 'components/HeaderWhenActiveSelecto/types';
 import { IconsUtilsArrType, IconsUtilsFunctionType, NullityOfSlicedArrType } from 'components/IconsUtils/types';
 import { AuthInitialStateType } from 'store/modules/Auth/types';
+import { ThunkAction } from 'redux-thunk';
+import { Action } from 'redux';
 
 export type SelectedPakeepsType = PakeepsType;
 export type SelectedPakeepsIdType = PakeepIdType[];
@@ -142,3 +144,4 @@ export type UsePakeepFoldersType = ({
   labels: GlobalLabelsType;
   defaultFolderArr: DefaultFolderArrType;
 }) => DefaultFolderArrType[];
+export type ThunkType<P> = ThunkAction<any, RootStoreType, null, Action<P>>;

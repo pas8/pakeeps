@@ -84,8 +84,8 @@ export const useAddNewPakeep = ({
   const isPinned = newPakeep?.isPinned;
 
   const newPakeeps = [...pakeeps, newPakeep];
-  const newPakeepsOrderNames = isPinned ? pakeepsOrderNames : [...pakeepsOrderNames, newPakeep.id];
-  const newPinnedPakeepsOrderNames = isPinned ? [...pinnedPakeepsOrderNames, newPakeep.id] : pinnedPakeepsOrderNames;
+  const newPakeepsOrderNames = isPinned ? pakeepsOrderNames : [newPakeep.id, ...pakeepsOrderNames];
+  const newPinnedPakeepsOrderNames = isPinned ? [newPakeep.id, ...pinnedPakeepsOrderNames] : pinnedPakeepsOrderNames;
 
   const variedState = {
     pinnedPakeepsOrderNames: newPinnedPakeepsOrderNames,
