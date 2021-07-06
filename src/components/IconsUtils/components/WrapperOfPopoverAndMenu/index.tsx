@@ -36,7 +36,7 @@ const WrapperOfPopoverAndMenu: FC<WrapperOfPopoverAndMenuType> = ({
   const handlePopoverClose: ClosePopoverOrMenuType = () =>
     setAnchorElState(state => ({ ...state, isPopoverOpen: false }));
 
-  const popoverAndMenuProps = { ...anchorElState, handleMenuClose, handlePopoverClose, customColor };
+  const popoverAndMenuProps = { ...anchorElState, handleMenuClose, handlePopoverClose, customColor ,reversedColor};
   const anchorElRef = useRef<HTMLDivElement>(null);
 
   return (

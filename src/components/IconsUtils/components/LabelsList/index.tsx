@@ -1,6 +1,6 @@
-import { FC, useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { Grid } from '@material-ui/core';
+import { FC, useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Grid, makeStyles } from '@material-ui/core';
 import VisibilityOutlinedIcon from '@material-ui/icons/VisibilityOutlined';
 import VisibilityOffOutlinedIcon from '@material-ui/icons/VisibilityOffOutlined';
 import AddCircleOutlineOutlinedIcon from '@material-ui/icons/AddCircleOutlineOutlined';
@@ -10,11 +10,25 @@ import DefaultMenuListOflabelList from './components/DefaultMenuList';
 import GlobalLabelListOflabelList from './components/GlobalLabelList';
 import { useGetReversedCustomColor } from 'hooks/useGetReversedCustomColor.hook';
 import { HandleChangeNewLabelType, LabelsListPropsType, MenuStateOfLabelsListType } from './types';
-import { toChangeGlobalLabelItem, toDeleteLabelFromPakeep } from 'store/modules/App/actions';
+import {
+  toChangeGlobalLabelItem,
+  toChangeGlobalLabelListTemproparyData,
+  toChangeTemporaryData,
+  toDeleteLabelFromPakeep
+} from 'store/modules/App/actions';
 import { ILabelElement } from 'store/modules/App/types';
 import PakeepPropertyProvider from 'components/PakeepPropertyProviders';
+import { getGlobalLabelListTemproparyData, getTemporaryDataOfLabelItem } from 'store/modules/App/selectors';
+import { filter } from 'lodash';
+
+const useStyles = makeStyles(({ spacing, palette: { secondary }, shape: { borderRadius } }) => {
+  return {
+    container: ({ backgroundColor }: any) => ({ backgroundColor, borderRadius })
+  };
+});
 
 const LabelsList: FC<LabelsListPropsType> = ({
+  labels,
   handleAddNewLabel,
   handleDeleteNewLabel,
   handleStatusOfHideLabelView,
@@ -25,11 +39,20 @@ const LabelsList: FC<LabelsListPropsType> = ({
   onMenuClose
 }) => {
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(toChangeGlobalLabelListTemproparyData({ globalLabelList: labels }));
+  }, []);
+
+  const selectedLabels = useSelector(getGlobalLabelListTemproparyData);
+  // console.log(selectedLabels);
   const handleChangeGlobalLabelItem = (changedLabel: ILabelElement) => {
     dispatch(toChangeGlobalLabelItem({ changedLabel }));
   };
 
   const reversedCustomColor = useGetReversedCustomColor(customColor);
+  const classes = useStyles({ backgroundColor: reversedCustomColor.isUseDefault ? '' : reversedCustomColor.bgHover });
+
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const handleOpenAddNewLabelDialog = () => setIsDialogOpen(true);
   const handleCloseAddNewLabelDialog = () => setIsDialogOpen(false);
@@ -51,11 +74,26 @@ const LabelsList: FC<LabelsListPropsType> = ({
     isDialogOpen,
     handleCloseAddNewLabelDialog,
     handleOpenAddNewLabelDialog,
-    customColor: reversedCustomColor
+    customColor
   };
 
   const handleChangeNewLabel: HandleChangeNewLabelType = (isChecked, id) => {
-    isChecked ? handleDeleteNewLabel(id) : handleAddNewLabel(id);
+
+    if (isChecked) {
+      dispatch(
+        toChangeGlobalLabelListTemproparyData({
+          globalLabelList: filter(selectedLabels, idWhichShouldBeDeleted => id !== idWhichShouldBeDeleted)
+        })
+      );
+
+      return handleDeleteNewLabel(id);
+    }
+    dispatch(
+      toChangeGlobalLabelListTemproparyData({
+        globalLabelList: [...selectedLabels, id]
+      })
+    );
+    return handleAddNewLabel(id);
   };
 
   const nullityOfMenuState = {
@@ -76,7 +114,7 @@ const LabelsList: FC<LabelsListPropsType> = ({
   };
   const arrowButtonFunc = () => onMenuClose();
 
-  const globalLabelListProps = { handleChangeNewLabel, setMenuState, customColor };
+  const globalLabelListProps = { handleChangeNewLabel, setMenuState, customColor: reversedCustomColor, selectedLabels };
 
   const wrapperOfMenuOfLabelPartProps = {
     handleClose,
@@ -84,23 +122,19 @@ const LabelsList: FC<LabelsListPropsType> = ({
     menuState,
     handleChangeGlobalLabelItem,
     setMenuState,
-    customColor: reversedCustomColor,
+    customColor,
     isThisMenuIsSecond: true
   };
 
-  const defaultMenuListOflabelListProps = { defaultMenuListArr, customColor, arrowButtonFunc };
+  const defaultMenuListOflabelListProps = { defaultMenuListArr, customColor: reversedCustomColor, arrowButtonFunc };
   return (
-    <PakeepPropertyProvider.Consumer>
-      {({ labels }) => (
-        <Grid style={{ background:!customColor.isUseDefault ?  customColor.bgHover : '' }}>
-          {!isDefaultMenuListHidden && <DefaultMenuListOflabelList {...defaultMenuListOflabelListProps} />}
-          <GlobalLabelListOflabelList {...globalLabelListProps} selectedLabels={labels} />
+    <Grid className={classes.container}>
+      {!isDefaultMenuListHidden && <DefaultMenuListOflabelList {...defaultMenuListOflabelListProps} />}
+      <GlobalLabelListOflabelList {...globalLabelListProps} />
 
-          {/* <WrapperOfMenuOfLabelPart {...wrapperOfMenuOfLabelPartProps} /> */}
-          <DialogOfAddNewLabel {...dialogOfAddNewLabelProps} />
-        </Grid>
-      )}
-    </PakeepPropertyProvider.Consumer>
+      <WrapperOfMenuOfLabelPart {...wrapperOfMenuOfLabelPartProps} />
+      <DialogOfAddNewLabel {...dialogOfAddNewLabelProps} />
+    </Grid>
   );
 };
 

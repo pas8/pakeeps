@@ -55,7 +55,11 @@ export type PayloadTypes = {
   [TypeNames.HANDLE_CHANGE_THEME_COLORS]: { newThemeColors: DefaultThemeInterface };
 
   [TypeNames.HANDLE_CHANGE_TEMPORARY_DATA]: { newTemporaryData: Optional<TemporaryDatatype> };
+
   [TypeNames.HANDLE_CHANGE_USER_DATA]: { userData: UserDataType };
+
+  [TypeNames.HANDLE_CHANGE_GLOBAL_LABEL_LIST_TEMPROPARY_DATA]: { globalLabelList: LabelsOfPakeepType };
+  [TypeNames.HANDLE_CHANGE_GLOBAL_EVENT_LIST_TEMPROPARY_DATA]: { globalEventList: EventsOfPakeepType };
 };
 
 export type ActionsValueTypes = {
@@ -177,6 +181,16 @@ export type ActionsValueTypes = {
   ToChangePakeepProperty: {
     type: typeof TypeNames.HANDLE_CHANGE_PAKEEP_PROPERTY;
     payload: PayloadTypes[TypeNames.HANDLE_CHANGE_PAKEEP_PROPERTY];
+  };
+
+  ToChangeGlobalLabelListTemproparyData: {
+    type: typeof TypeNames.HANDLE_CHANGE_GLOBAL_LABEL_LIST_TEMPROPARY_DATA;
+    payload: PayloadTypes[TypeNames.HANDLE_CHANGE_GLOBAL_LABEL_LIST_TEMPROPARY_DATA];
+  };
+
+  toChangeGlobalEventListTemproparyData: {
+    type: typeof TypeNames.HANDLE_CHANGE_GLOBAL_EVENT_LIST_TEMPROPARY_DATA;
+    payload: PayloadTypes[TypeNames.HANDLE_CHANGE_GLOBAL_EVENT_LIST_TEMPROPARY_DATA];
   };
 
   ToChangeThemeColors: {
@@ -355,6 +369,8 @@ export type TemporaryDatatype = {
   labelItem: {
     id: string;
   };
+  globalLabelList: LabelsOfPakeepType;
+  globalEventList: EventsOfPakeepType;
 };
 
 export type DefaultMenuPropsType = {

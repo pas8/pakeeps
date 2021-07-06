@@ -1,6 +1,19 @@
 import { TypeNames } from './enums';
 import { AppActionTypes, PayloadTypes } from './types';
 
+export const toChangeGlobalLabelListTemproparyData = (
+  payload: PayloadTypes[TypeNames.HANDLE_CHANGE_GLOBAL_LABEL_LIST_TEMPROPARY_DATA]
+): AppActionTypes => ({
+  type: TypeNames.HANDLE_CHANGE_GLOBAL_LABEL_LIST_TEMPROPARY_DATA,
+  payload
+});
+export const toChangeGlobalEventListTemproparyData = (
+  payload: PayloadTypes[TypeNames.HANDLE_CHANGE_GLOBAL_EVENT_LIST_TEMPROPARY_DATA]
+): AppActionTypes => ({
+  type: TypeNames.HANDLE_CHANGE_GLOBAL_EVENT_LIST_TEMPROPARY_DATA,
+  payload
+});
+
 export const toAddNewPakeep = (payload: PayloadTypes[TypeNames.HANDLE_ADD_NEW_PAKEEP]): AppActionTypes => ({
   type: TypeNames.HANDLE_ADD_NEW_PAKEEP,
   payload

@@ -11,37 +11,29 @@ import { useSelector } from 'react-redux';
 import { getGlobalEventsArr, getLabels } from 'store/modules/App/selectors';
 import { FC, MouseEvent, MouseEventHandler } from 'react';
 import { GlobalLabelListOflabelListPropsType, UseStylesOfGlobalLabelListOflabelListType } from './types';
+import LabelElementOfGlobalLabelListOflabelList from './components/LabelElement';
 
-const useStyles = makeStyles(({ spacing, palette: { secondary } }) => {
+const useStyles = makeStyles(({ spacing, palette: { secondary }, typography: { subtitle2 } }) => {
   return {
     container: ({ color, customColor }: UseStylesOfGlobalLabelListOflabelListType) => {
       return {
         // background:customColor.bgHover,
-        '&  p': { color:customColor?.isUseDefault ? secondary.main : color },
+        '&  p': { ...subtitle2 },
+
         padding: spacing(1.6, 0, 0, 0),
         '& legend': {
           padding: spacing(0, 1.6, 0.6, 1.6),
-          color: customColor && useMix({ bgHover: customColor?.bgHover, hover: customColor?.hover }, 0.8)
+          color: !customColor.isUseDefault
+            ? useMix({ bgHover: customColor?.bgHover, hover: customColor?.hover }, 0.8)
+            : ''
         },
         '& li,span': {
-          '&:hover > .MuiTouchRipple-root':  {
-            background:  useAlpha(customColor.isUseDefault ? secondary.main :  color)
+          '&:hover > .MuiTouchRipple-root': {
+            background: useAlpha(customColor.isUseDefault ? secondary.main : color, 0.42)
           }
         }
       };
     },
-    menuElement: ({ color, customColor, isChecked }: UseStylesOfGlobalLabelListOflabelListType) => {
-      // if(isChecked === undefined) return {}
-      // if (customColor.isUseDefault) return {};
-      const correctColor = isChecked && customColor.isUseDefault ? secondary.main : color;
-      return {
-        padding: spacing(0.2, 0),
-
-        color: correctColor,
-        '&:hover > .MuiTouchRipple-root': isChecked && customColor.isUseDefault ? { background: useAlpha(secondary.main) } : {},
-        '& svg,p': { color: correctColor }
-      };
-    }
   };
 });
 
@@ -62,10 +54,10 @@ const GlobalLabelListOflabelList: FC<GlobalLabelListOflabelListPropsType> = ({
       <FormLabel component={'legend'}>All labels</FormLabel>
       {globalLabels.map(labelState => {
         const isChecked = includes(selectedLabels, labelState.id);
-        const isShoulColorBeChanged = !!customColor && isChecked;
-        const color = !isShoulColorBeChanged ? customColor?.unHover : customColor?.hover;
+        const isShoulColorBeChanged = !customColor.isUseDefault && isChecked;
+        // console.log(isChecked,selectedLabels)
 
-        const classes = useStyles({ color, isChecked, customColor });
+        const color = !isShoulColorBeChanged ? customColor?.unHover : customColor?.hover;
         // ||  useIsColorLight(customColor.bgUnHover)
         const onClickOfCheckBoxContainer = () => handleChangeNewLabel(isChecked, labelState.id);
         const onClickOfEditButton: MouseEventHandler<HTMLButtonElement> = e => {
@@ -79,20 +71,21 @@ const GlobalLabelListOflabelList: FC<GlobalLabelListOflabelListPropsType> = ({
 
         const isIndeterminate = !checkedIcon;
         const isIndeterminateChecked = isIndeterminate && isShoulColorBeChanged;
+        const Icon = isIndeterminate && !isIndeterminateChecked ? <IndeterminateCheckBoxOutlinedIcon /> : icon;
 
+        const labelItemProps = {
+          isIndeterminateChecked,
+          iconsUtilsOfGlobalLabelListOflabelListProps,
+          Icon,
+          onClickOfCheckBoxContainer,
+          checkedIcon,
+          color,
+          isChecked,
+          title:labelState.title,
+          customColor
+        };
         return (
-          <MenuItem disableGutters key={`newPakeep-label-${labelState.id}`} className={classes.menuElement}>
-            <Grid container alignItems={'center'} onClick={onClickOfCheckBoxContainer}>
-              <Checkbox
-                checked={isChecked}
-                checkedIcon={checkedIcon}
-                icon={isIndeterminate && !isIndeterminateChecked ? <IndeterminateCheckBoxOutlinedIcon /> : icon}
-                indeterminate={isIndeterminateChecked}
-              />
-              <ListItemText secondary={labelState.title} />
-            </Grid>
-            <IconsUtilsOfGlobalLabelListOflabelList {...iconsUtilsOfGlobalLabelListOflabelListProps} />
-          </MenuItem>
+          <LabelElementOfGlobalLabelListOflabelList key={`newPakeep-label-${labelState.id}`} {...labelItemProps} />
         );
       })}
     </Grid>

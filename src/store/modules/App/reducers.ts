@@ -144,7 +144,9 @@ export const initialState: AppInitialStateInteface = {
 
     labelItem: {
       id: ''
-    }
+    },
+    globalEventList: [],
+    globalLabelList: []
   }
 };
 
@@ -241,6 +243,18 @@ export const AppReducer = (state = initialState, action: AppActionTypes): AppIni
       const temporaryData = { ...state.temporaryData, ...newTemporaryData };
 
       return { ...state, temporaryData };
+    }
+
+    case TypeNames.HANDLE_CHANGE_GLOBAL_LABEL_LIST_TEMPROPARY_DATA: {
+      const { globalLabelList } = action.payload;
+      console.log(globalLabelList)
+
+      return { ...state, temporaryData: { ...state.temporaryData, globalLabelList } };
+    }
+
+    case TypeNames.HANDLE_CHANGE_GLOBAL_EVENT_LIST_TEMPROPARY_DATA: {
+      const { globalEventList } = action.payload;
+      return { ...state, temporaryData: { ...state.temporaryData, globalEventList } };
     }
 
     case TypeNames.HANDLE_SET_ORDER_NAMES_OF_PINNED_PAKEEPS:

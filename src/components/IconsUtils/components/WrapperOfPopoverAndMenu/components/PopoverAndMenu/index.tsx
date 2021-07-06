@@ -30,6 +30,7 @@ const PopoverAndMenu: FC<PopoverAndMenuType> = ({
   popoverText,
   menuComponentsProps,
   MenuComponents,
+  reversedColor,
   popoverTypographyVariant = 'subtitle2',
   // menuLocation = 'default',
   // popoverLocation = 'default',

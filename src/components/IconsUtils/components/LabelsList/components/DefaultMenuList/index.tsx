@@ -9,31 +9,37 @@ import { UseStylesCustomColorType } from 'models/types';
 import { FC } from 'react';
 import { DefaultMenuListOflabelListPropsType } from './types';
 
-const useStyles = makeStyles(({ spacing, palette }) => ({
+export const useStyles = makeStyles(({ spacing, palette, typography: { subtitle2 } }) => ({
   container: ({ customColor }: UseStylesCustomColorType) => ({
     border: 0,
     color: customColor?.hover,
     borderBottomWidth: 2,
-    borderColor: customColor ? useMix(customColor, 0.8) : palette?.mediumEmphasis?.main,
+    borderColor: !customColor.isUseDefault ? useMix(customColor, 0.8) : palette?.mediumEmphasis?.main,
     borderStyle: 'solid',
 
     '& li:hover .MuiTouchRipple-root': {
-      background: useAlpha(customColor.isUseDefault ? palette.secondary.main : customColor?.unHover)
+      background: useAlpha(customColor.isUseDefault ? palette.secondary.main : customColor?.unHover, 0.42)
     },
     '& svg,p': {
-      color: customColor ? customColor?.unHover : palette?.highEmphasis?.main
+      color: !customColor.isUseDefault ? customColor?.unHover : palette?.highEmphasis?.main
     },
     margin: spacing(0, 0, 0.4, 0),
     '& legend': {
-      color: customColor && useMix(customColor, 0.8),
+      color: !customColor.isUseDefault ?  useMix(customColor, 0.8) : '',
       padding: spacing(0.8, 1.6, 0.8, 0)
     }
   }),
   defaultMenuListItem: {
     padding: spacing(1, 1),
-    fontSize: '10px',
     '& svg': {
-      margin: spacing(0, 1.08, 0, 0.2)
+      margin: spacing(0.4, 1.08, 0, 0.2)
+    },
+    '& p': {
+      ...subtitle2
+    },
+    '& div': {
+      postion: 'relative',
+      zIndex: 100000000
     }
   }
 }));
@@ -58,8 +64,15 @@ const DefaultMenuListOflabelList: FC<DefaultMenuListOflabelListPropsType> = ({
         <FormLabel component={'legend'}>All Utils</FormLabel>
       </Grid>
       {defaultMenuListArr.map(({ title, Icon, onClick }) => (
-        <MenuItem disableGutters onClick={onClick} className={classes.defaultMenuListItem} key={nanoid()}>
-          <Icon /> <ListItemText secondary={title} />
+        <MenuItem
+          disableGutters
+          onClick={onClick}
+          className={classes.defaultMenuListItem}
+          key={`DefaultMenuListOflabelList_${title}`}
+        >
+          <Grid container justify={'center'}>
+            <Icon /> <ListItemText secondary={title} />
+          </Grid>
         </MenuItem>
       ))}
     </Grid>

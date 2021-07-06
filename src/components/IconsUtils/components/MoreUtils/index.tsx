@@ -9,14 +9,14 @@ import { MoreUtilsPropsType, UseStylesOfMoreUtilsType } from './types';
 import { ClosePopoverOrMenuType } from 'models/types';
 import { Optional } from 'utility-types';
 
-const useStyles = makeStyles(({ spacing }) => ({
+const useStyles = makeStyles(({ spacing, shape: { borderRadius } }) => ({
   itemGrid: {
     margin: spacing(0.4, 0.8 * 4, 0, 1.4),
     padding: spacing(0.8, 0)
   },
   menuText: { marginLeft: spacing(1.4) },
 
-  container: ({ color, hoverColor }: UseStylesOfMoreUtilsType) => ({
+  menuItemContainer: ({ color, hoverColor }: UseStylesOfMoreUtilsType) => ({
     '& svg,h6': { color },
     '&:hover svg,h6': { color: hoverColor },
     '&:hover .MuiTouchRipple-root': {
@@ -26,11 +26,8 @@ const useStyles = makeStyles(({ spacing }) => ({
       borderLeft: 0
     }
   }),
-  menuContainer: ({ color }: UseStylesOfMoreUtilsType) => ({
-    '& > div': {
-      backgroundColor: color
-    }
-  })
+
+  container: { borderRadius }
 }));
 
 const MoreUtils: FC<MoreUtilsPropsType> = ({ slicedArrAfter, customColor }) => {
@@ -49,7 +46,7 @@ const MoreUtils: FC<MoreUtilsPropsType> = ({ slicedArrAfter, customColor }) => {
 
   const classes = useStyles({ color: customColor.isUseDefault ? '' : customColor.bgUnHover, hoverColor: '' });
   return (
-    <>
+    <Grid className={classes.container}>
       {slicedArrAfter.map(
         ({
           name,
@@ -62,7 +59,7 @@ const MoreUtils: FC<MoreUtilsPropsType> = ({ slicedArrAfter, customColor }) => {
           menuComponentsProps
         }) => {
           const [primaryColor, , maxEmphasisColor, highEmphasisColor] = useThemeColors();
-          console.log(isIconActive)
+
           const color = (
             customColor.isUseDefault
               ? isIconActive
@@ -78,7 +75,6 @@ const MoreUtils: FC<MoreUtilsPropsType> = ({ slicedArrAfter, customColor }) => {
           //
 
           const handleMenuOpen: MouseEventHandler<HTMLLIElement> = ({ currentTarget }) => {
-
             setAnchorElState(state => ({
               ...state,
               currentTarget,
@@ -92,7 +88,7 @@ const MoreUtils: FC<MoreUtilsPropsType> = ({ slicedArrAfter, customColor }) => {
           const onClick = onCustomClick ? onCustomClick : handleMenuOpen;
 
           return (
-            <MenuItem disableGutters key={nanoid()} className={classes.container} onClick={onClick}>
+            <MenuItem disableGutters key={nanoid()} className={classes.menuItemContainer} onClick={onClick}>
               <Grid className={clsx(classes.itemGrid)} container>
                 {isIconActive && !!ActiveIcon ? <ActiveIcon /> : <Icon />}
                 <Grid item className={classes.menuText}>
@@ -109,11 +105,10 @@ const MoreUtils: FC<MoreUtilsPropsType> = ({ slicedArrAfter, customColor }) => {
         keepMounted
         onClose={handleMenuClose}
         open={!!anchorElState.name}
-        // className={classes.menuContainer}
       >
         {MenuComponents && <MenuComponents {...menuComponentsProps} onMenuClose={handleMenuClose} />}
       </Menu>
-    </>
+    </Grid>
   );
 };
 

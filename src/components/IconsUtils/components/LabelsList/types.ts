@@ -1,5 +1,5 @@
 import { CustomColorType } from 'models/types';
-import { LabelIdType, PakeepIdType } from 'store/modules/App/types';
+import { LabelIdType, LabelsOfPakeepType, PakeepIdType } from 'store/modules/App/types';
 
 export type HandleAddNewLabelType = (id: LabelIdType) => void;
 export type HandleDeleteNewLabelType = (id: LabelIdType) => void;
@@ -11,6 +11,7 @@ export type LabelsListPropsType = {
   isLabelViewHidden?: boolean;
   isDefaultMenuListHidden?: boolean;
   customColor: CustomColorType;
+  labels: LabelsOfPakeepType;
   onMenuClose: () => void;
   pakeepId: PakeepIdType;
 };

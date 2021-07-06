@@ -41,10 +41,10 @@ const useStyles = makeStyles(({ spacing, transitions, breakpoints, palette }) =>
 
     // marginLeft: ({ isMenuNavigationHasDialogView, drawerWidth }) => isMenuNavigationHasDialogView && drawerWidth,
     [breakpoints.between('xs', 'sm')]: {
-      padding: spacing(1.8)
+      padding: spacing(0,1.8)
     },
     [breakpoints.down('md')]: {
-      padding: spacing(2)
+      padding: spacing(0,2)
     }
     // [breakpoints.down('sm')]: {
     //   padding: spacing(1.8),

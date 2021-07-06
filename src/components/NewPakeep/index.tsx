@@ -1,5 +1,5 @@
 import { ChangeEventHandler, createContext, useEffect, useState } from 'react';
-import { connect, useDispatch } from 'react-redux';
+import { connect, useDispatch, useSelector } from 'react-redux';
 import _ from 'lodash';
 import clsx from 'clsx';
 import {
@@ -34,9 +34,12 @@ import useKeyboardJs from 'react-use/lib/useKeyboardJs';
 import { colord } from 'colord';
 import { useIsColorLight } from 'hooks/useIsColorLight.hook';
 import { useGetReadableColor } from 'hooks/useGetReadableColor.hook';
-import { ColorType, PakeepElementType } from 'store/modules/App/types';
+import { ColorType, LabelIdType, PakeepElementType } from 'store/modules/App/types';
 import { useAlpha } from 'hooks/useAlpha.hook';
 import firebase from 'firebase';
+import AttributeGroup from 'components/PakeepList/components/PakeepElement/components/AttributeGroup';
+import { useFilteredLabels } from 'hooks/useFilteredLabels.hook';
+import { getLabels } from 'store/modules/App/selectors';
 
 const useStyles = makeStyles(
   ({ spacing, palette, transitions, typography: { subtitle1, h5 }, shape: { borderRadius } }) => ({
@@ -112,6 +115,9 @@ const useStyles = makeStyles(
         easing: transitions.easing.easeInOut,
         duration: transitions.duration.complex
       })
+    },
+    attributeGroupContainer: {
+      margin: spacing(0, 1.8)
     }
   })
 );
@@ -133,7 +139,7 @@ const NewPaKeep = () => {
   };
   const [state, setState] = useState(nulittyState);
   const [value, updateCookie, deleteCookie] = useCookie(JSON.stringify(state));
-
+  console.log(state.labels);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -147,6 +153,7 @@ const NewPaKeep = () => {
 
   const nullityStatusState = {
     isTextHidden: true,
+    isLabelViewHidden: false,
     isNewPakeepContainerHaveFullWidth: true
   };
   const [statusState, setStatusState] = useState(nullityStatusState);
@@ -159,10 +166,10 @@ const NewPaKeep = () => {
     setState(state => ({ ...state, backgroundColor }));
   const handleSetIsCheckBoxesPakeep = () => setState(state => ({ ...state, isCheckBoxes: !state.isCheckBoxes }));
 
-  const handleAddNewLabel = idWhichShouldBeAdded => {
+  const handleAddNewLabel = (idWhichShouldBeAdded: LabelIdType) => {
     setState(state => ({ ...state, labels: [...state.labels, idWhichShouldBeAdded] }));
   };
-  const handleDeleteNewLabel = idWhichShouldBeDeleted => {
+  const handleDeleteNewLabel = (idWhichShouldBeDeleted: LabelIdType) => {
     setState(state => ({ ...state, labels: _.filter(state.labels, id => id !== idWhichShouldBeDeleted) }));
   };
 
@@ -197,6 +204,9 @@ const NewPaKeep = () => {
   );
 
   // useLockBodyScroll(true);
+  const handleStatusOfHideLabelView = () => {
+    setStatusState(state => ({ ...state, isLabelViewHidden: !state.isLabelViewHidden }));
+  };
 
   const classes = useStyles({
     isLabelViewHidden: statusState.isLabelViewHidden,
@@ -206,21 +216,20 @@ const NewPaKeep = () => {
   });
 
   const labelsListProps = {
-    // handleStatusOfHideLabelView,
-    selectedLabels: state.labels,
+    handleStatusOfHideLabelView,
+    labels: state.labels,
     handleAddNewLabel,
-    // isLabelViewHidden: statusState.isLabelViewHidden,
-    isLabelViewHidden: true,
+    isLabelViewHidden: statusState.isLabelViewHidden,
     handleDeleteLabelFromPakeepFunc,
     handleDeleteNewLabel
   };
   const handleUndo = () => back(4);
   const handleRedo = () => forward(4);
-  // const labelBargeNumber = statusState.isLabelViewHidden ? state.labels.length : 0;
+  const labelBargeNumber = statusState.isLabelViewHidden ? state.labels.length : 0;
   const newPakeepUtils = {
     ...state,
     ...statusState,
-    // labelBargeNumber,
+    labelBargeNumber,
     handleSetFavoritePakeep,
     handleSetBookmarkPakeep,
     handleSetColorPakeep,
@@ -237,11 +246,17 @@ const NewPaKeep = () => {
     // isBackgroundColorDefault,
     // isColorDefault
   };
-  const attributesOfNewPakeepProps = {
-    pakeepId: state.id,
+
+  const globalLabels = useSelector(getLabels);
+  const labels = useFilteredLabels(state.labels, globalLabels);
+
+  const attributeGroupProps = {
+    labels,
     handleDeleteLabelFromPakeepFunc,
-    labels: state.labels
-    // customColor
+    pakeepId: state.id,
+    customColor: customColor,
+    parentBackgrounColor: state.backgroundColor,
+    events: state.events
   };
 
   const fullWidthValue = statusState.isNewPakeepContainerHaveFullWidth && 12;
@@ -314,6 +329,11 @@ const NewPaKeep = () => {
             </Grid>
           )}
         </Grid>
+        {(!statusState.isTextHidden &&  !statusState.isLabelViewHidden) && (
+          <Grid container className={classes.attributeGroupContainer}>
+            <AttributeGroup {...attributeGroupProps} />
+          </Grid>
+        )}
 
         {!statusState.isTextHidden && <NewPakeepUtils {...newPakeepUtils} />}
       </Grid>
