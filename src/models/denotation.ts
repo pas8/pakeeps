@@ -13,5 +13,9 @@ export const menuOpenStatusDenotation = {
 } as const;
 
 
+
+export const SIGN_IN_URL = '/auth';
+export const NEW_USER_URL = '/auth/register'
+
 export const  TRANSPARENT = 'transparent'
 export const NONE = 'none';

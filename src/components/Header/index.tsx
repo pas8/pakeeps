@@ -13,7 +13,7 @@ import ViewLikeInTelegram from './components/ViewLikeInTelegram';
 import { toChangeMenuOpenStatus } from 'store/modules/App/actions';
 import { getMenuOpenStatus } from 'store/modules/App/selectors';
 import { HeaderByPasPropsType, UseStylesOfHeaderByPasType } from './components/types';
-import { menuOpenStatusDenotation } from 'models/denotation';
+import { menuOpenStatusDenotation, SIGN_IN_URL ,NEW_USER_URL} from 'models/denotation';
 import { useRouter } from 'next/dist/client/router';
 
 const useStyles = makeStyles(theme => ({
@@ -76,7 +76,7 @@ const HeaderByPas: FC<HeaderByPasPropsType> = ({
 
   const isHeaderHavePakeepView = true;
 
-  const isRouteIsSignIn = pathname === '/signin';
+  const isRouteIsSignIn = pathname === SIGN_IN_URL || pathname === NEW_USER_URL
 
   return (
     <Grid className={classes.root} container>

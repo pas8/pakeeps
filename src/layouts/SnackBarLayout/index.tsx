@@ -9,6 +9,7 @@ const SnackBarLayout = ({ children }: LayoutChildrenType) => {
   const maxSnack = 4;
 
   const {
+    shape: { borderRadius },
     palette: { background }
   } = useTheme();
 
@@ -29,7 +30,7 @@ const SnackBarLayout = ({ children }: LayoutChildrenType) => {
       style={{ background: background.default }}
       action={
         !!buttonText ? (
-          <Box pr={1} >
+          <Box pr={1}>
             <Button color={'inherit'} size={'small'} onClick={onClick} startIcon={Icon ? <Icon /> : null}>
               {buttonText}
             </Button>
@@ -39,7 +40,7 @@ const SnackBarLayout = ({ children }: LayoutChildrenType) => {
         )
       }
     >
-      <Box borderRight={buttonText && 1} pr={buttonText && 2.4}>
+      <Box borderRight={buttonText && 1} pr={buttonText && 2.4} style={{ borderRadius }}>
         {message}
         <Divider orientation={'vertical'} flexItem />
       </Box>
