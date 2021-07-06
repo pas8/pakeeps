@@ -21,7 +21,7 @@ const paddingValueOfElement = 0.8 * (2 + 1);
 
 const useStyles = makeStyles(({ spacing, breakpoints: { down } }) => ({
   column: () => ({
-    padding: spacing(0, paddingValue),
+    // padding: spacing(0, paddingValue),
     '& > div > div': {
       '&::-webkit-scrollbar': {
         width: 0
@@ -55,8 +55,8 @@ const useStyles = makeStyles(({ spacing, breakpoints: { down } }) => ({
 
 const ColumnOfPakeepListContainer: FC<ColumnOfPakeepListContainerPropsType & { handleSetArrOfRefs: any }> = ({
   column,
-  // pakeepsInColumn: notValidatedPakeepsInColumn,
-  pakeepsInColumn,
+  pakeepsInColumn: notValidatedPakeepsInColumn,
+  // pakeepsInColumn,
   isLastColumn,
   isFirstColumn,
   folderProperty,
@@ -68,13 +68,12 @@ const ColumnOfPakeepListContainer: FC<ColumnOfPakeepListContainerPropsType & { h
   columnOrderIdx,
   handleSetArrOfRefs
 }) => {
-  // const pakeepsInColumn = useValidationOfPakeepsInColumn({
-  //   notValidatedPakeepsInColumn,
-  //   folderProperty,
-  //   folderId,
-  //   isPakeepDragContextPinned
-  // });
-
+  const pakeepsInColumn = useValidationOfPakeepsInColumn({
+    notValidatedPakeepsInColumn,
+    folderProperty,
+    folderId,
+    isPakeepDragContextPinned
+  });
   if (!pakeepsInColumn) return null;
 
   const classes = useStyles();

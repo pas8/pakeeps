@@ -281,9 +281,13 @@ export type TitleAndTextOfPakeepType = {
   text: TextOfPakeepType;
 };
 
+export type CheckBoxElementType = { color: ColorType; value: string; isAccomplished: boolean; id: string };
+export type CheckBoxesArrtype = CheckBoxElementType[];
+
 export type PakeepElementType = DefaultFolderElementPropertyType &
   TitleAndTextOfPakeepType & {
     color: ColorType;
+    checkBoxes?: CheckBoxesArrtype;
     labels: LabelsOfPakeepType;
     events: EventsOfPakeepType;
     readonly id: PakeepIdType;

@@ -40,7 +40,7 @@ import firebase from 'firebase';
 import AttributeGroup from 'components/PakeepList/components/PakeepElement/components/AttributeGroup';
 import { useFilteredLabels } from 'hooks/useFilteredLabels.hook';
 import { getLabels } from 'store/modules/App/selectors';
-
+import compareFunc from 'compare-func'
 const useStyles = makeStyles(
   ({ spacing, palette, transitions, typography: { subtitle1, h5 }, shape: { borderRadius } }) => ({
     container: ({ customColor, isLabelViewHidden, backgroundColor }) => ({
@@ -119,11 +119,20 @@ const useStyles = makeStyles(
     attributeGroupContainer: {
       margin: spacing(0, 1.8)
     }
+,
+    checkBoxContainer:{
+
+
+
+    }
   })
 );
 
 const NewPaKeep = () => {
   const [inputState, setInputState, { back, forward }] = useStateWithHistory({ title: '', text: '' }, 42);
+
+  const [ checkBoxes, setCheckBoxes, { back, forward }] = useStateWithHistory({ title: '', text: '' }, 42);
+
 
   const nulittyState = {
     isCheckBoxes: false,
@@ -137,6 +146,10 @@ const NewPaKeep = () => {
     backgroundColor: 'default',
     labels: ['label1']
   };
+
+   
+
+
   const [state, setState] = useState(nulittyState);
   const [value, updateCookie, deleteCookie] = useCookie(JSON.stringify(state));
   console.log(state.labels);
@@ -239,6 +252,7 @@ const NewPaKeep = () => {
     widthOfContainer,
     handleSetIsPinnedPakeep,
     handleUndo,
+    isEditingUtilsHidden: false,
     handleRedo,
     labelsListProps,
     customColor,
@@ -315,21 +329,26 @@ const NewPaKeep = () => {
           </Grid>
           {!statusState.isTextHidden && (
             <Grid className={classes.textContainer}>
-              <InputBase
-                onChange={handleChangeInputsValue}
-                autoComplete={'off'}
-                fullWidth
-                name={'text'}
-                value={inputState.text}
-                placeholder={'Text'}
-                multiline
-                rowsMax={12}
-                rows={4}
-              />
+              {state.isCheckBoxes ? (
+               
+              ) : (
+                <InputBase
+                  onChange={handleChangeInputsValue}
+                  autoComplete={'off'}
+                  fullWidth
+                  name={'text'}
+                  value={inputState.text}
+                  autoFocus
+                  placeholder={'Text'}
+                  multiline
+                  rowsMax={12}
+                  rows={4}
+                />
+              )}
             </Grid>
           )}
         </Grid>
-        {(!statusState.isTextHidden &&  !statusState.isLabelViewHidden) && (
+        {!statusState.isTextHidden && !statusState.isLabelViewHidden && (
           <Grid container className={classes.attributeGroupContainer}>
             <AttributeGroup {...attributeGroupProps} />
           </Grid>

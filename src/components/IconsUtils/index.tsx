@@ -68,11 +68,15 @@ const IconsUtils: FC<IconsUtilsPropsType> = ({
   arrOfButtonNamesWhichSholudBeHidden = [],
   isUtilsReversed,
   events = [],
-
+  isEditingUtilsHidden = true,
   handleRedo,
   handleUndo,
   handleSetArhivedPakeep
 }) => {
+  const namesOfEditingUtils = isEditingUtilsHidden
+    ? [iconsUtilsArrDenotation.CHECKBOX.name, iconsUtilsArrDenotation.UNDO.name, iconsUtilsArrDenotation.REDO.name]
+    : [];
+
   const iconsUtilsArr: IconsUtilsArrType = [
     {
       icon: CheckBoxOutlinedIcon,
@@ -80,6 +84,7 @@ const IconsUtils: FC<IconsUtilsPropsType> = ({
       onClick: handleSetIsCheckBoxesPakeep,
       isIconActive: isCheckBoxes,
       ...iconsUtilsArrDenotation.CHECKBOX
+      // hidden: isEditingUtilsHidden
     },
     {
       icon: FormatColorFillOutlinedIcon,
@@ -93,17 +98,20 @@ const IconsUtils: FC<IconsUtilsPropsType> = ({
       isIconActive: !isColorDefault,
       menuComponentsProps: { handleSave: handleSetColorPakeep },
       menuComponents: ColorPickerByPas,
+
       ...iconsUtilsArrDenotation.TEXT_COLOR
     },
     {
       icon: UndoOutlinedIcon,
       isIconActive: false,
       onClick: handleUndo,
+      // hidden: isEditingUtilsHidden,
       ...iconsUtilsArrDenotation.UNDO
     },
     {
       icon: RedoOutlinedIcon,
       isIconActive: false,
+      // hidden: isEditingUtilsHidden,
       onClick: handleRedo,
 
       ...iconsUtilsArrDenotation.REDO
@@ -191,7 +199,8 @@ const IconsUtils: FC<IconsUtilsPropsType> = ({
 
   const correctIconButtonUtilsArr: IconsUtilsArrType = filter(
     reverseValidatedIconButtonUtilsArr,
-    ({ name }: { name: IconsUtilsArrDenotationNameType }) => !includes(arrOfButtonNamesWhichSholudBeHidden, name)
+    ({ name }: { name: IconsUtilsArrDenotationNameType }) =>
+      !includes([...arrOfButtonNamesWhichSholudBeHidden, ...namesOfEditingUtils], name)
   );
 
   // useEffect(() => setPopoverAndMenuState(nullityOfPopoverAndMenuState), [color]);

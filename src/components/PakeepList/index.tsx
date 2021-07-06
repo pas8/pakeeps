@@ -172,9 +172,9 @@ const PakeepList: FC = () => {
     <>
       {/* <PakeepHoveringContext.Provider value={pakeepHoveringContextPropviderPropsValue}> */}
       <Grid ref={scrollerRef} className={'selectoContainer'}>
-        {isFolderPropertyIsAll && <WrapperOfContainerOfPakeepList {...wrapperOfContainerOfPinnedPakeepListProps} />}
+        {/* {isFolderPropertyIsAll && <WrapperOfContainerOfPakeepList {...wrapperOfContainerOfPinnedPakeepListProps} />} */}
 
-        {/* <WrapperOfContainerOfPakeepList {...wrapperOfContainerOfAllPakeepListProps} /> */}
+        <WrapperOfContainerOfPakeepList {...wrapperOfContainerOfAllPakeepListProps} />
       </Grid>
       {/* {!isSelectoHidden && <SelectofFPakeepListContainer {...selectoOfPakeepListContainerProps} />} */}
       {/* <SelectofFPakeepListContainer {...selectoOfPakeepListContainerProps} /> */}

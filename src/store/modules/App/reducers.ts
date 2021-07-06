@@ -60,6 +60,7 @@ const randomPakeeps = Array(8)
       isArchived: !!random(1),
       events: [],
       id,
+      checkBoxes: [],
       isPinned: !!random(1),
       backgroundColor,
       color,
@@ -80,8 +81,8 @@ export const initialState: AppInitialStateInteface = {
     { title: 'Bookmark', iconName: 'bookmark', id: 'folder-isInBookmark', property: 'isInBookmark', color: 'default' },
     { title: 'Favorite', iconName: 'favorite', id: 'folder-isFavorite', property: 'isFavorite', color: 'default' },
     {
-      title: 'With chckebox',
-      iconName: 'checkbox',
+      title: 'With checkBoxes',
+      iconName: 'checkBox',
       id: 'folder-isCheckBoxes',
       property: 'isCheckBoxes',
       color: 'default'
@@ -108,6 +109,7 @@ export const initialState: AppInitialStateInteface = {
       labels: ['label3', 'label1', 'label0', 'label2'],
       isArchived: false,
       events: [],
+      checkBoxes: [],
       id: 'pakeep1',
       isPinned: true,
       isCheckBoxes: true,
@@ -247,7 +249,7 @@ export const AppReducer = (state = initialState, action: AppActionTypes): AppIni
 
     case TypeNames.HANDLE_CHANGE_GLOBAL_LABEL_LIST_TEMPROPARY_DATA: {
       const { globalLabelList } = action.payload;
-      console.log(globalLabelList)
+      console.log(globalLabelList);
 
       return { ...state, temporaryData: { ...state.temporaryData, globalLabelList } };
     }

@@ -29,6 +29,7 @@ export type IconsUtilsFunctionType = {
 
 export type IconsUtilsValuesType = {
   isCheckBoxes?: boolean;
+  isEditingUtilsHidden?: boolean;
   isColorDefault?: boolean;
   isFavorite?: boolean;
   isInBookmark?: boolean;

@@ -12,7 +12,7 @@ export const useValidationOfPakeepsInColumn: UseValidationOfPakeepsInColumnType 
 
   const validatedPakeepsInColumn: (PakeepElementType | null)[] = notValidatedPakeepsInColumn.map(el => {
     if (!el) return null;
-
+    if (folderProperty === 'ALL') return el;
     if (folderProperty === 'isArchived' && el[folderProperty]) return el;
     if (el?.isArchived) return null;
     if (folderProperty !== 'label' && folderProperty !== 'ALL' && el[folderProperty]) return el;
@@ -24,7 +24,6 @@ export const useValidationOfPakeepsInColumn: UseValidationOfPakeepsInColumnType 
     if (isPakeepDragContextPinned && !el.isPinned) return null;
     if (folderProperty !== 'isPinned' && el?.isPinned) return null;
 
-    if (folderProperty === 'ALL') return el;
     return null;
   });
   //@ts-ignore

@@ -73,6 +73,8 @@ export const iconsArr = [
   { icon: <AccountCircleOutlinedIcon />, iconName: 'account', id: '12dfqd1' },
   { icon: <ColorLensOutlinedIcon />, iconName: 'color', id: 'color' },
   { icon: <FingerprintOutlinedIcon />, iconName: 'fingerprint', id: '2' },
+  { icon: <CheckBoxOutlinedIcon />, iconName: 'checkBox', id: 'checkBox' },
+  
   { icon: <DoneOutlineOutlinedIcon />, iconName: 'done', id: '4' },
   { icon: <GitHubIcon />, iconName: 'GitHub', id: 'GitHub' },
   { icon: <FacebookIcon />, iconName: 'Facebook', id: 'Facebook' },
