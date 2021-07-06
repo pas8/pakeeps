@@ -85,7 +85,8 @@ const AuthForm: FC<AuthFormPropsType> = ({ isPageIsRegisted = false }) => {
   const handleRegistred = () => {
     dispatch(
       operateToHandleRegister({ email: formState.email.value, password: formState.password.value, enqueueSnackbar })
-    );
+    )
+    // router.push(SIGN_IN_URL);
 
     // firebase
     //   .auth()
@@ -105,16 +106,11 @@ const AuthForm: FC<AuthFormPropsType> = ({ isPageIsRegisted = false }) => {
   };
 
   const handleSignIn = () => {
-    firebase
-      .auth()
-      .signInWithEmailAndPassword(formState.email.value, formState.password.value)
-      .then(result => {
-        enqueueSnackbar({ message: result + 'You successfully Log in' });
-        console.log(result);
-      })
-      .catch(error => {
-        enqueueSnackbar({ message: error.message || 'Something went wrong', severity: 'error' });
-      });
+    dispatch(
+      operateToHandleRegister({ email: formState.email.value, password: formState.password.value, enqueueSnackbar })
+    );
+
+    router.push('/');
   };
 
   const authFormDenotation = {

@@ -1,8 +1,26 @@
+import { toAddNewPakeep } from './actions';
+import { PakeepElementType } from 'store/modules/App/types';
+import { ThunkType } from 'models/types';
+import firebase from 'firebase';
 
-export const h = 'h'
-// export const addDateToPakeepThunk = (pakeepId, event) => dispatch => {
-//   dispatch(toAddDateToPakeep(pakeepId, event));
-// };
+export const operateToAddNewPakeep =
+  (newPakeep: PakeepElementType): ThunkType<PakeepElementType> =>
+  dispatch => {
+    firebase
+      .firestore()
+      .collection('users')
+      .doc(firebase?.auth()?.currentUser?.uid)
+      .collection('pakeeps')
+      .add(newPakeep)
+      .then(snapshot => {
+        if (snapshot.exists) {
+          let newPakeep = snapshot.data();
+          console.log(newPakeep);
+          //  dispatch(toAddNewPakeep({newPakeep}))
+        }
+        console.log(snapshot)
+      });
+  };
 
 // export const operateToChangeMenuOpenStatus: OperateWOP<
 //   PayloadTypes[TypeNames.HANDLE_CHANGE_MENU_OPEN_STATUS]

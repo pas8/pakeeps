@@ -1,5 +1,5 @@
 import { createContext, useEffect, useState } from 'react';
-import { connect } from 'react-redux';
+import { connect, useDispatch } from 'react-redux';
 import _ from 'lodash';
 import clsx from 'clsx';
 import { useCookie, useKeyPressEvent, useMeasure, usePageLeave } from 'react-use';
@@ -14,49 +14,50 @@ import useKeyboardJs from 'react-use/lib/useKeyboardJs';
 import { colord } from 'colord';
 import { useIsColorLight } from 'hooks/useIsColorLight.hook';
 import { useGetReadableColor } from 'hooks/useGetReadableColor.hook';
+import { ColorType, PakeepElementType } from 'store/modules/App/types';
 
-const useStyles = makeStyles(({spacing, palette,transitions}) => ({
+const useStyles = makeStyles(({ spacing, palette, transitions }) => ({
   container: ({ customColor, isLabelViewHidden, backgroundColor }) => ({
-    marginTop: spacing(8),
+    marginTop: spacing(8)
 
-    '& .MuiInputBase-root': {
-      paddingRight: spacing(4.8)
-    },
-
-    '&  .MuiFormLabel-root.Mui-focused': {
-      color: !customColor ? palette.primary.main : customColor.hover,
-      padding: customColor && spacing(0.4, 1.8),
-      border: !customColor ? 0 : `2px solid ${customColor.hover}`,
-      // borderLeft: customColor && 0,
-      borderRadius: customColor && '2px',
-      borderTopLeftRadius: customColor && '6px',
-      // background: `${backgroundColor} !important`,
-
-      transform: !customColor ? 'translate(14px, -6px) scale(0.75)' : 'translate(-2px, -8px) scale(0.75)'
-    },
-
-    '& label': {
-      color: !customColor ? palette?.mediumEmphasis?.main : customColor.hover,
-
-      background: !customColor ? 'transparent !important' : `${backgroundColor} !important`
-    },
-    // '& legend': {
-    //   transform: !customColor ? 'translate(4px, -8px) scale(0.75)' : 'translate(0px, 0px) scale(0.75)'
+    // '& .MuiInputBase-root': {
+    //   paddingRight: spacing(4.8)
     // },
-    '& .MuiOutlinedInput-multiline': {
-      padding: spacing(!customColor ? 2 : 2.8, 6, isLabelViewHidden ? 6 : 10, 1.4)
-    },
-    '& input,textarea': {
-      caretColor: !customColor ?  palette.primary.main : customColor.hover,
-      color: !customColor ?  palette?.maxEmphasis?.main : customColor.hover
-    },
-    '& .MuiFormLabel-root.Mui-focused': {
-      color: !customColor ?  palette.primary.main : customColor.hover
-    },
 
-    '& fieldset': {
-      display: !customColor ? 'block' : 'none '
-    }
+    // '&  .MuiFormLabel-root.Mui-focused': {
+    //   color: !customColor ? palette.primary.main : customColor.hover,
+    //   padding: customColor && spacing(0.4, 1.8),
+    //   border: !customColor ? 0 : `2px solid ${customColor.hover}`,
+    //   // borderLeft: customColor && 0,
+    //   borderRadius: customColor && '2px',
+    //   borderTopLeftRadius: customColor && '6px',
+    //   // background: `${backgroundColor} !important`,
+
+    //   transform: !customColor ? 'translate(14px, -6px) scale(0.75)' : 'translate(-2px, -8px) scale(0.75)'
+    // },
+
+    // '& label': {
+    //   color: !customColor ? palette?.mediumEmphasis?.main : customColor.hover,
+
+    //   background: !customColor ? 'transparent !important' : `${backgroundColor} !important`
+    // },
+    // // '& legend': {
+    // //   transform: !customColor ? 'translate(4px, -8px) scale(0.75)' : 'translate(0px, 0px) scale(0.75)'
+    // // },
+    // '& .MuiOutlinedInput-multiline': {
+    //   padding: spacing(!customColor ? 2 : 2.8, 6, isLabelViewHidden ? 6 : 10, 1.4)
+    // },
+    // '& input,textarea': {
+    //   caretColor: !customColor ? palette.primary.main : customColor.hover,
+    //   color: !customColor ? palette?.maxEmphasis?.main : customColor.hover
+    // },
+    // '& .MuiFormLabel-root.Mui-focused': {
+    //   color: !customColor ? palette.primary.main : customColor.hover
+    // },
+
+    // '& fieldset': {
+    //   display: !customColor ? 'block' : 'none '
+    // }
   }),
   wrapper: ({ backgroundColor, customColor }) => ({
     padding: spacing(0),
@@ -86,27 +87,33 @@ const useStyles = makeStyles(({spacing, palette,transitions}) => ({
   }
 }));
 
-
-
-const NewPaKeep = ({ operateToAddNewPakeep }) => {
-  const nulittyState = {
+const NewPaKeep = () => {
+  const nulittyState: PakeepElementType = {
     title: '',
     text: '',
-    isCheckBoxes: '',
+    isCheckBoxes: false,
     isInBookmark: false,
+    isArchived: false,
     isFavorite: false,
     isPinned: false,
     id: nanoid(),
+    events: [],
     color: 'default',
     backgroundColor: 'default',
     labels: ['label1']
   };
   const [state, setState] = useState(nulittyState);
-  const [value, updateCookie, deleteCookie] = useCookie(state);
+  const [value, updateCookie, deleteCookie] = useCookie(JSON.stringify(state));
 
-  useEffect(() => _.isEqual(state, nulittyState) && setState(JSON.parse(value)), []);
+  const dispatch = useDispatch();
 
-  usePageLeave(() => updateCookie(state));
+  useEffect(() => {
+    _.isEqual(state, nulittyState) && setState(JSON.parse(value!));
+  }, []);
+
+  usePageLeave(() => {
+    updateCookie(JSON.stringify(state));
+  });
 
   const nullityStatusState = {
     isFocused: false,
@@ -134,8 +141,9 @@ const NewPaKeep = ({ operateToAddNewPakeep }) => {
   const handleSetFavoritePakeep = () => setState(state => ({ ...state, isFavorite: !state.isFavorite }));
   const handleSetBookmarkPakeep = () => setState(state => ({ ...state, isInBookmark: !state.isInBookmark }));
   const handleSetIsPinnedPakeep = () => setState(state => ({ ...state, isPinned: !state.isPinned }));
-  const handleSetColorPakeep = color => setState(state => ({ ...state, color }));
-  const handleSetBackgroundColorPakeep = backgroundColor => setState(state => ({ ...state, backgroundColor }));
+  const handleSetColorPakeep = (color: ColorType) => setState(state => ({ ...state, color }));
+  const handleSetBackgroundColorPakeep = (backgroundColor: ColorType) =>
+    setState(state => ({ ...state, backgroundColor }));
   const handleSetIsCheckBoxesPakeep = () => setState(state => ({ ...state, isCheckBoxes: !state.isCheckBoxes }));
 
   const handleAddNewLabel = idWhichShouldBeAdded => {
@@ -147,7 +155,7 @@ const NewPaKeep = ({ operateToAddNewPakeep }) => {
 
   const handleNewPakeepSave = () => {
     setState(nulittyState);
-    operateToAddNewPakeep(state);
+    dispatch(operateToAddNewPakeep(state));
   };
 
   const handleStatusOfHideLabelView = () =>
@@ -164,21 +172,21 @@ const NewPaKeep = ({ operateToAddNewPakeep }) => {
 
   const [ref, { width: widthOfContainer }] = useMeasure();
 
-  const onKeyDown = e => {
-    if (!e?.shiftKey && e?.code === 'Enter') {
-      e?.preventDefault();
-      return setStatusState(state => ({ ...state, isWritingText: !state.isWritingText }));
-    }
-  };
-  const [customColor, isBackgroundColorDefault, isColorDefault] = useGetReadableColor(
-    state.backgroundColor,
-    state.color
-  );
+  // const onKeyDown = e => {
+  //   if (!e?.shiftKey && e?.code === 'Enter') {
+  //     e?.preventDefault();
+  //     return setStatusState(state => ({ ...state, isWritingText: !state.isWritingText }));
+  //   }
+  // };
+  // const [customColor, isBackgroundColorDefault, isColorDefault] = useGetReadableColor(
+  //   state.backgroundColor,
+  //   state.color
+  // );
 
   const classes = useStyles({
     isLabelViewHidden: statusState.isLabelViewHidden,
     color: state.color,
-    customColor,
+    // customColor,
     backgroundColor: state.backgroundColor
   });
 
@@ -205,16 +213,16 @@ const NewPaKeep = ({ operateToAddNewPakeep }) => {
     widthOfContainer,
     handleSetIsPinnedPakeep,
     labelsListProps,
-    customColor,
-    handleSetIsCheckBoxesPakeep,
-    isBackgroundColorDefault,
-    isColorDefault
+    // customColor,
+    handleSetIsCheckBoxesPakeep
+    // isBackgroundColorDefault,
+    // isColorDefault
   };
   const attributesOfNewPakeepProps = {
     pakeepId: state.id,
     handleDeleteLabelFromPakeepFunc,
-    labels: state.labels,
-    customColor
+    labels: state.labels
+    // customColor
   };
 
   const rowsNumber = statusState.isWritingText ? 4 : !statusState.isUtilsHidden ? 6 : 1;
@@ -234,7 +242,7 @@ const NewPaKeep = ({ operateToAddNewPakeep }) => {
     rowsMax: 42,
     onFocus: setFocusIsTrue,
     onBlur: setFocusIsFalse,
-    onKeyDown
+    // onKeyDown
   };
   const fullWidthValue = statusState.isNewPakeepContainerHaveFullWidth && 12;
 
@@ -243,14 +251,14 @@ const NewPaKeep = ({ operateToAddNewPakeep }) => {
 
   const gridContainerProps = {
     className: clsx(classes.container, statusState.isNewPakeepContainerHaveFullWidth ? classes.full : classes.unFull),
-    [breakpoint]: fullWidthValue || breakpointsValues[breakpoint],
+    // [breakpoint]: fullWidthValue || breakpointsValues[breakpoint],
     ref
   };
 
   const eyeIconButtonProps = {
     onClickOfEyeIconButton: handleChangeUtilsVisibility,
-    isUtilsHidden: statusState.isUtilsHidden,
-    customColor
+    isUtilsHidden: statusState.isUtilsHidden
+    // customColor
   };
 
   return (
@@ -260,22 +268,20 @@ const NewPaKeep = ({ operateToAddNewPakeep }) => {
           <TextField {...textFieldProps} />
         </Box>
 
-        {!statusState.isUtilsHidden && !statusState.isLabelViewHidden && (
+        {/* {!statusState.isUtilsHidden && !statusState.isLabelViewHidden && (
           <AttributesOfNewPakeep {...attributesOfNewPakeepProps} />
-        )}
+        )} */}
 
-        {!statusState.isUtilsHidden && (
+        {/* {!statusState.isUtilsHidden && (
           <Labels.Provider value={{ selectedLabels: state.labels }}>
             <NewPakeepUtils {...newPakeepUtils} />
           </Labels.Provider>
-        )}
+        )} */}
 
-        <EyeIconButton {...eyeIconButtonProps} />
+        {/* <EyeIconButton {...eyeIconButtonProps} /> */}
       </Grid>
     </Grid>
   );
 };
 
-const mapDispatchToProps = dispatch => ({ operateToAddNewPakeep: data => dispatch(operateToAddNewPakeep(data)) });
-
-export default connect(null, mapDispatchToProps)(NewPaKeep);
+export default NewPaKeep;

@@ -8,7 +8,7 @@ export const toChangeAnonymousStatus = (
   payload
 });
 
-export const tpChangeLoginStatus = (payload: PayloadTypes[TypeNames.HANDLE_CHANGE_LOGIN_STATUS]): AuthActionTypes => ({
+export const toChangeLoginStatus = (payload: PayloadTypes[TypeNames.HANDLE_CHANGE_LOGIN_STATUS]): AuthActionTypes => ({
   type: TypeNames.HANDLE_CHANGE_LOGIN_STATUS,
   payload
 });

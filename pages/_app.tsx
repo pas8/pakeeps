@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 import { LinearProgress, Grid } from '@material-ui/core';
 import { ComposeLayouts } from 'layouts';
 import SnackBarLayout from 'layouts/SnackBarLayout';
@@ -21,11 +21,11 @@ const Index: FC<any> = ({ Component, pageProps }) => {
   useUploadThemeSsr();
 
   const router = useRouter();
-
+  // const isLoading = useLoading();
   const isLoading = false;
   const isFolderLayoutHidden = router.route === SIGN_IN_URL || router.route === NEW_USER_URL;
 
-  const defaultLayouts = [StoreLayout, ThemeLayout, DateLayout, AuthLayout, SnackBarLayout, MenuesLayout, HeaderLayout];
+  const defaultLayouts = [StoreLayout, AuthLayout, ThemeLayout, DateLayout, SnackBarLayout, MenuesLayout, HeaderLayout];
   const layouts = isFolderLayoutHidden ? defaultLayouts : [...defaultLayouts, FolderLayout];
 
   return (
