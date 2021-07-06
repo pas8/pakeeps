@@ -26,6 +26,11 @@ export const toChangePakeeps = (payload: PayloadTypes[TypeNames.HANDLE_CHANGE_PA
   payload
 });
 
+export const toChangeUserData = (payload: PayloadTypes[TypeNames.HANDLE_CHANGE_USER_DATA]): AppActionTypes => ({
+  type: TypeNames.HANDLE_CHANGE_USER_DATA,
+  payload
+});
+
 export const toChangeMenuOpenStatus = (
   payload: PayloadTypes[TypeNames.HANDLE_CHANGE_MENU_OPEN_STATUS]
 ): AppActionTypes => ({

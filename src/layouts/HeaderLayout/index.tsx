@@ -68,7 +68,7 @@ const HeaderLayout: FC<LayoutChildrenType> = ({ children }) => {
   const navigationViewLike = useSelector(getNavigationViewLike);
   const selectedPakeepsId = useSelector(getSelectedPakeepsId);
   const headerHeight = useSelector(getHeaderHeight);
-console.log(headerHeight)
+
   const navigationViewLikeTelegram = navigationViewLike === 'telegram';
   const navigationViewLikeGoogleKeep = navigationViewLike === 'googleKeep';
   const navigationViewLikePakeeps = navigationViewLike === 'pakeeps';

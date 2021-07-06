@@ -12,3 +12,14 @@ export const toChangeLoginStatus = (payload: PayloadTypes[TypeNames.HANDLE_CHANG
   type: TypeNames.HANDLE_CHANGE_LOGIN_STATUS,
   payload
 });
+export const toChangeErrorStatus = (payload: PayloadTypes[TypeNames.HANDLE_CHANGE_ERROR_STATUS]): AuthActionTypes => ({
+  type: TypeNames.HANDLE_CHANGE_ERROR_STATUS,
+  payload
+});
+
+export const toChangeErrorMessage = (
+  payload: PayloadTypes[TypeNames.HANDLE_CHANGE_ERROR_MESSAGE]
+): AuthActionTypes => ({
+  type: TypeNames.HANDLE_CHANGE_ERROR_MESSAGE,
+  payload
+});

@@ -11,3 +11,9 @@ export const getLoginedStatus = createSelector(
   [({ auth: { isLogined } }: RootStoreType) => isLogined],
   isLogined => isLogined
 );
+
+export const getErrorStatus = createSelector([({ auth: { isError } }: RootStoreType) => isError], isError => isError);
+export const getErrorMessage = createSelector(
+  [({ auth: { errorMessage } }: RootStoreType) => errorMessage],
+  errorMessage => errorMessage
+);

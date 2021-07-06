@@ -25,7 +25,7 @@ const Index: FC<any> = ({ Component, pageProps }) => {
   const isLoading = false;
   const isFolderLayoutHidden = router.route === SIGN_IN_URL || router.route === NEW_USER_URL;
 
-  const defaultLayouts = [StoreLayout, AuthLayout, ThemeLayout, DateLayout, SnackBarLayout, MenuesLayout, HeaderLayout];
+  const defaultLayouts = [StoreLayout, ThemeLayout, SnackBarLayout, AuthLayout, DateLayout, MenuesLayout, HeaderLayout];
   const layouts = isFolderLayoutHidden ? defaultLayouts : [...defaultLayouts, FolderLayout];
 
   return (

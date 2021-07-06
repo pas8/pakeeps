@@ -5,24 +5,22 @@ import { Action } from 'redux';
 import { ThunkAction } from 'redux-thunk';
 import { AuthInitialStateType } from './types';
 import firebase from 'firebase';
-import { toChangeLoginStatus } from './actions';
+import { toChangeErrorMessage, toChangeErrorStatus, toChangeLoginStatus } from './actions';
 import { TRANSPARENT } from 'models/denotation';
 // export const changeOneColorColumnThunk = (columnId, newArr) => dispatch => {
 //   dispatch(toChangeOneColorColumn(columnId, newArr));
 // };
 
-export type ParamsOfOperateToHandleRegisterType = { email: string; password: string; enqueueSnackbar: any };
+export type ParamsOfOperateToHandleRegisterType = { email: string; password: string };
 export type OperateToHandleRegisterType = ThunkType<ParamsOfOperateToHandleRegisterType>;
 
 export const operateToHandleRegister =
-  ({ email, password, enqueueSnackbar }: ParamsOfOperateToHandleRegisterType): OperateToHandleRegisterType =>
+  ({ email, password }: ParamsOfOperateToHandleRegisterType): OperateToHandleRegisterType =>
   async dispatch => {
     firebase
       .auth()
       .createUserWithEmailAndPassword(email, password)
       .then(result => {
-        enqueueSnackbar({ message: 'You successfully creataed an acount' });
-        // console.log(result);
         firebase
           .firestore()
           .collection('users')
@@ -39,24 +37,24 @@ export const operateToHandleRegister =
 
       .catch(error => {
         // throw new Error(error);
-
-        enqueueSnackbar({ message: error.message || 'Something went wrong', severity: 'error' });
+        dispatch(toChangeErrorStatus({ isError: true }));
+        dispatch(toChangeErrorMessage({ errorMessage: error?.message }));
       });
   };
 export const operateToHandleSignIn =
-  ({ email, password, enqueueSnackbar }: ParamsOfOperateToHandleRegisterType): OperateToHandleRegisterType =>
+  ({ email, password }: ParamsOfOperateToHandleRegisterType): OperateToHandleRegisterType =>
   async dispatch => {
     firebase
       .auth()
       .signInWithEmailAndPassword(email, password)
       .then(result => {
-        enqueueSnackbar({ message: result + 'You successfully Log in' });
         console.log(result);
 
         // dispatch(toChangeLoginStatus({ isLogined: true }));
       })
       .catch(error => {
-        enqueueSnackbar({ message: error.message || 'Something went wrong', severity: 'error' });
+        dispatch(toChangeErrorStatus({ isError: true }));
+        dispatch(toChangeErrorMessage({ errorMessage: error?.message }));
       });
   };
 

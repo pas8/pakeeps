@@ -30,7 +30,7 @@ const useStyles = makeStyles(({ spacing, typography: { h4 }, palette }) => ({
       color: ({ customColor, isDark }) => `${customColor && isDark && customColor.hover} !important`
     },
     '.MuiPickersModal-dialogRoot': {
-      borderRadius: ({ customColor }) => customColor && '6px'
+      // borderRadius: ({ customColor }) => customColor && '6px'
     }
   },
   container: ({ customColor, onlyTime, isDark }) => {

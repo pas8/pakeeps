@@ -73,7 +73,7 @@ export const defaultAvatarProperties = {
   backgroundColor: TRANSPARENT
 };
 
-const initialState: AppInitialStateInteface = {
+export const initialState: AppInitialStateInteface = {
   defaultFolderArr: [
     { title: 'All pakeeps', iconName: '', id: 'folder-ALL', property: 'ALL', color: 'default' },
     { title: 'Pined', iconName: 'pin', id: 'folder-isPinned', property: 'isPinned', color: 'default' },
@@ -118,7 +118,11 @@ const initialState: AppInitialStateInteface = {
   pakeepsOrderNames: [],
   pinnedPakeepsOrderNames: [],
   notifinationCounter: 8,
-  email: NONE,
+  userData: {
+    email: NONE,
+    userName: NONE,
+    name: NONE
+  },
   headerHeight: 0,
   // menuOpenStatus: 'HIDDEN',
   avatarProperties: defaultAvatarProperties,
@@ -245,6 +249,7 @@ export const AppReducer = (state = initialState, action: AppActionTypes): AppIni
     case TypeNames.HANDLE_CHANGE_HEADER_HEIGTH:
     case TypeNames.HANDLE_SET_NEW_ORDER_NAMES:
     case TypeNames.HANDLE_CHANGE_PAKEEPS:
+    case TypeNames.HANDLE_CHANGE_USER_DATA:
     case TypeNames.HANDLE_SET_SELECTED_PAKEEPIDS_ARR:
     case TypeNames.HANDLE_CANCEL_SELECTING_STATUS:
     case TypeNames.HANDLE_CHANGE_GLOBAL_LABELS:

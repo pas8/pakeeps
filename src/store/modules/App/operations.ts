@@ -9,7 +9,7 @@ export const operateToAddNewPakeep =
     firebase
       .firestore()
       .collection('users')
-      .doc(firebase?.auth()?.currentUser?.uid)
+      .doc('pas8')
       .collection('pakeeps')
       .add(newPakeep)
       .then(snapshot => {
@@ -18,7 +18,6 @@ export const operateToAddNewPakeep =
           console.log(newPakeep);
           //  dispatch(toAddNewPakeep({newPakeep}))
         }
-        console.log(snapshot)
       });
   };
 

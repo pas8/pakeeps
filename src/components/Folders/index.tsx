@@ -166,7 +166,7 @@ const APPEARANCE = 'appearance';
 
 const APPEARANCE_URL = `${SETTING_URL}/${APPEARANCE}`;
 const THEME_URL = `${SETTING_URL}/${THEME}`;
-const ACCOUNT_URL = `${SETTING_URL}/account`;
+export const ACCOUNT_URL = `${SETTING_URL}/account`;
 const SECURITY_URL = `${SETTING_URL}/security`;
 
 export const themeAnchorArr = {
@@ -387,7 +387,7 @@ const Folders: FC<FoldersTypeProps> = ({
 
   useEffect(() => {
     const findedElementIdx = _.findIndex(flattenAllFolders, ({ id }) => findedElement?.id === id);
-    findedElementIdx && handleChange(null, findedElementIdx);
+    router.pathname !== '/' &&   findedElementIdx && handleChange(null, findedElementIdx);
   }, [router, findedElement]);
 
   const FOLDER_WITHOUT_ROUTE = 'FOLDER_WITHOUT_ROUTE';
@@ -427,7 +427,6 @@ const Folders: FC<FoldersTypeProps> = ({
     handleChange,
     value
   };
-  // console.log(isSizeOfFoldersMoreThanSize)
   useEffect(() => {
     const MARGIN_VALUE = +(
       positionOfFolderViewWithPakeepViewIsBottom &&

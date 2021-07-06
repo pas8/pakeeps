@@ -54,8 +54,11 @@ import DeleteOutlinedIcon from '@material-ui/icons/DeleteOutlined';
 import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
 import GitHubIcon from '@material-ui/icons/GitHub';
 import FacebookIcon from '@material-ui/icons/Facebook';
+import ExitToAppOutlinedIcon from '@material-ui/icons/ExitToAppOutlined';
+
 export const iconsArr = [
   { icon: <TodayOutlinedIcon />, iconName: 'tomorrow', id: 'random1', checkedIcon: <TodayIcon /> },
+  { icon: <ExitToAppOutlinedIcon />, iconName: 'signout', id: 'signout' },
   { icon: <CalendarTodayOutlinedIcon />, iconName: 'today', id: 'random2', checkedIcon: <CalendarTodayIcon /> },
   { icon: <ViewWeekOutlinedIcon />, iconName: 'week', id: 'random3', checkedIcon: <ViewWeekIcon /> },
   { icon: <ViewColumnOutlinedIcon />, iconName: 'view', id: 'view' },

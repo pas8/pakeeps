@@ -1,9 +1,11 @@
 import { TypeNames } from './enums';
-import { AuthActionTypes, AuthInitialStateType,  } from './types';
+import { AuthActionTypes, AuthInitialStateType } from './types';
 
-const authInitialState:AuthInitialStateType = {
+const authInitialState: AuthInitialStateType = {
   isLogined: false,
-  isAnonymous: false
+  isAnonymous: false,
+  isError: false,
+  errorMessage: ''
 };
 
 export const ColorReducer = (state = authInitialState, action: AuthActionTypes): any => {
@@ -16,6 +18,8 @@ export const ColorReducer = (state = authInitialState, action: AuthActionTypes):
     // }
 
     case TypeNames.HANDLE_CHANGE_LOGIN_STATUS:
+    case TypeNames.HANDLE_CHANGE_ERROR_MESSAGE:
+    case TypeNames.HANDLE_CHANGE_ERROR_STATUS:
     case TypeNames.HANDLE_CHANGE_ANONYMOUS_STATUS:
       return { ...state, ...action.payload };
 

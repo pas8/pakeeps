@@ -87,3 +87,9 @@ export const getHeaderHeight = createSelector(
   [({ app: { headerHeight } }: RootStoreType) => headerHeight],
   headerHeight => headerHeight
 );
+export const getUserData = createSelector(
+  [({ app: { userData } }: RootStoreType) => userData],
+  userData => userData
+);
+
+

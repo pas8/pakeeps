@@ -55,10 +55,15 @@ export type PayloadTypes = {
   [TypeNames.HANDLE_CHANGE_THEME_COLORS]: { newThemeColors: DefaultThemeInterface };
 
   [TypeNames.HANDLE_CHANGE_TEMPORARY_DATA]: { newTemporaryData: Optional<TemporaryDatatype> };
+  [TypeNames.HANDLE_CHANGE_USER_DATA]: { userData: UserDataType };
 };
 
 export type ActionsValueTypes = {
-  HANDLE_CHANGE_HEADER_WIDTH: {
+  toChangeUserData: {
+    type: typeof TypeNames.HANDLE_CHANGE_USER_DATA;
+    payload: PayloadTypes[TypeNames.HANDLE_CHANGE_USER_DATA];
+  };
+  toChangeHeaderHeigth: {
     type: typeof TypeNames.HANDLE_CHANGE_HEADER_HEIGTH;
     payload: PayloadTypes[TypeNames.HANDLE_CHANGE_HEADER_HEIGTH];
   };
@@ -305,6 +310,12 @@ export type AvatarPropertiesType = {
   backgroundColor: string;
 };
 
+export type UserDataType = {
+  email: string;
+  userName: string;
+  name: string;
+};
+
 export interface AppInitialStateInteface {
   // breakpointsValues: BreakpointsValuesInterface<number>;
   // theme: DefaultThemeInterface;
@@ -312,12 +323,12 @@ export interface AppInitialStateInteface {
 
   avatarProperties: AvatarPropertiesType;
   headerHeight: number;
-  email: string;
   labels: GlobalLabelsType;
   events: GlobalEventsType;
   selectedPakeepsId: SelectedPakeepsIdType;
   folders: FoldersType;
   pakeeps: PakeepsType;
+  userData: UserDataType;
   pakeepsOrderNames: OrderNamesType;
   pinnedPakeepsOrderNames: OrderNamesType;
   notifinationCounter: number;

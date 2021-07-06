@@ -36,6 +36,7 @@ import { useIsColorLight } from 'hooks/useIsColorLight.hook';
 import { useGetReadableColor } from 'hooks/useGetReadableColor.hook';
 import { ColorType, PakeepElementType } from 'store/modules/App/types';
 import { useAlpha } from 'hooks/useAlpha.hook';
+import firebase from 'firebase';
 
 const useStyles = makeStyles(
   ({ spacing, palette, transitions, typography: { subtitle1, h5 }, shape: { borderRadius } }) => ({
@@ -116,8 +117,6 @@ const useStyles = makeStyles(
 );
 
 const NewPaKeep = () => {
-
-
   const [inputState, setInputState, { back, forward }] = useStateWithHistory({ title: '', text: '' }, 42);
 
   const nulittyState = {
@@ -151,7 +150,6 @@ const NewPaKeep = () => {
     isNewPakeepContainerHaveFullWidth: true
   };
   const [statusState, setStatusState] = useState(nullityStatusState);
-
 
   const handleSetFavoritePakeep = () => setState(state => ({ ...state, isFavorite: !state.isFavorite }));
   const handleSetBookmarkPakeep = () => setState(state => ({ ...state, isInBookmark: !state.isInBookmark }));
@@ -262,7 +260,15 @@ const NewPaKeep = () => {
     setInputState(state => ({ ...state, [name]: value }));
   };
 
+  // console.log(
+  //   firebase
+  //     .firestore()
+  //     .collection('users')
+  //     .get()
+  //     .then(r => console.log(r.exists))
+  // );
 
+  // console.log(  firebase?.auth()?.currentUser?.uid)
   return (
     <Grid {...gridContainerProps}>
       <Grid className={classes.wrapper}>
