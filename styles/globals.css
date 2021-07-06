@@ -3,13 +3,13 @@
 
 html,
 body {
-  min-height: 116vh;
+  min-height: 80vh;
   overflow: visible !important;
   overflow-x: hidden !important;
   padding: 0 !important;
     scroll-behavior: smooth;
   /* background-color: #303030; */
-  height: 100000px;
+  /* height: 100000px; */
 }
 
 a {

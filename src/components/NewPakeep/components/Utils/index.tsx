@@ -9,31 +9,18 @@ import IconsUtils from 'components/IconsUtils';
 import ActionsButtonGroup from 'components/ActionsButtonGroup/index';
 
 // import SaveOutlinedIcon from '@material-ui/icons/SaveOutlined';
-const useStyles = makeStyles(({spacing}) => ({
-  container: {
-    display: 'flex',
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 8,
-    // '& button:hover': {
-    //   background: ({ customColor }) => (customColor ? useAlpha(customColor.hover) : null)
-    // }
-  
-  },
+const useStyles = makeStyles(({ spacing }) => ({
+  container: {},
   buttonWrapper: { display: 'flex', alignItems: 'center', justifyContent: 'flex-end' },
   buttonGroupWrapper: {
-    '& svg':{
-
-      margin:spacing(0,0,0,-0.42)
-  
+    '& svg': {
+      margin: spacing(0, 0, 0, -0.42)
     },
     display: 'flex',
     justifyContent: 'flex-end',
     flexGrow: 1,
-    marginBottom:spacing(-0.42)
+    marginBottom: spacing(-0.42)
   },
-  
 
   button: { justifyContent: 'flex-end' }
 }));
@@ -43,16 +30,14 @@ const NewPakeepUtils = ({ customColor, handleNewPakeepSave, widthOfContainer, ..
   const [, , , , mediumEmphasisColor] = useThemeColors();
 
   const handleNewPakeepSubmit = () => {
-    try {
-      enqueueSnackbar({ message: 'Processing...', severity: 'info' });
+    // try {
       handleNewPakeepSave();
-      // closeSnackbar();
-      enqueueSnackbar({ message: 'New pakeep was succsesfully added' });
-    } catch (error) {
-      enqueueSnackbar({ message: !!error ? error : 'Something went wrong', severity: 'error' });
-    }
+      // enqueueSnackbar({ message: 'New pakeep was succsesfully added' });
+    // } catch (error) {
+      // enqueueSnackbar({ message: !!error ? error : 'Something went wrong', severity: 'error' });
+    // }
   };
-  const [ref, { width: widthOfCButtonConatiner }] = useMeasure();
+  const [ref, { width: widthOfCButtonConatiner }] = useMeasure<HTMLDivElement>();
 
   const correctWidthOfContainer = widthOfContainer - widthOfCButtonConatiner;
   const iconUtilsProps = {
@@ -66,29 +51,18 @@ const NewPakeepUtils = ({ customColor, handleNewPakeepSave, widthOfContainer, ..
   const actionsButtonGroupProps = {
     onSave: handleNewPakeepSubmit,
     onClose: null,
-    colorOfCloseButton:customColor &&  useAlpha(customColor?.hover, 0.6),
+    colorOfCloseButton: customColor && useAlpha(customColor?.hover, 0.6),
     colorOfSaveButton: customColor?.hover
   };
 
   return (
-    <Box className={clsx(classes.container)}>
+    <Grid className={clsx(classes.container)}>
       <IconsUtils {...iconUtilsProps} />
-      <Box className={classes.buttonGroupWrapper} ref={ref}>
-        <Box className={classes.buttonWrapper}>
-          <ActionsButtonGroup {...actionsButtonGroupProps} />
-        </Box>
-      </Box>
-    </Box>
+      <Grid className={classes.buttonGroupWrapper} ref={ref}>
+        <ActionsButtonGroup {...actionsButtonGroupProps} />
+      </Grid>
+    </Grid>
   );
-};
-
-NewPakeepUtils.propTypes = {
-  customColor: PropTypes.shape({
-    hover: PropTypes.any,
-    unHover: PropTypes.any
-  }),
-  handleNewPakeepSave: PropTypes.func,
-  widthOfContainer: PropTypes.oneOf(['string', 'number'])
 };
 
 export default NewPakeepUtils;

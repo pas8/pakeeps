@@ -1,91 +1,108 @@
-import { createContext, useEffect, useState } from 'react';
+import { ChangeEventHandler, createContext, useEffect, useState } from 'react';
 import { connect, useDispatch } from 'react-redux';
 import _ from 'lodash';
 import clsx from 'clsx';
-import { useCookie, useKeyPressEvent, useMeasure, usePageLeave } from 'react-use';
+import { useCookie, useKeyPressEvent, useLockBodyScroll, useMeasure, usePageLeave } from 'react-use';
 import { nanoid } from 'nanoid';
-import { Box, Grid, IconButton, makeStyles, Paper, TextField, withStyles } from '@material-ui/core';
+import {
+  Box,
+  Grid,
+  IconButton,
+  InputAdornment,
+  InputBase,
+  makeStyles,
+  Paper,
+  TextField,
+  withStyles
+} from '@material-ui/core';
 import { operateToAddNewPakeep } from 'store/modules/App/operations';
 import NewPakeepUtils from './components/Utils';
 import AttributesOfNewPakeep from './components/Attributes';
 import { useCustomBreakpoint } from 'hooks/useCustomBreakpoint';
 import EyeIconButton from './components/EyeIconButton';
+import Visibility from '@material-ui/icons/Visibility';
+import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import useKeyboardJs from 'react-use/lib/useKeyboardJs';
 import { colord } from 'colord';
 import { useIsColorLight } from 'hooks/useIsColorLight.hook';
 import { useGetReadableColor } from 'hooks/useGetReadableColor.hook';
 import { ColorType, PakeepElementType } from 'store/modules/App/types';
+import { useAlpha } from 'hooks/useAlpha.hook';
 
-const useStyles = makeStyles(({ spacing, palette, transitions }) => ({
-  container: ({ customColor, isLabelViewHidden, backgroundColor }) => ({
-    marginTop: spacing(8)
+const useStyles = makeStyles(
+  ({ spacing, palette, transitions, typography: { subtitle1, h5 }, shape: { borderRadius } }) => ({
+    container: ({ customColor, isLabelViewHidden, backgroundColor }) => ({
+      borderRadius,
+      padding: spacing(1),
+      border: '1px solid',
+      borderColor: useAlpha(palette.text.primary, 0.2),
+      // marginTop: spacing(8)
+      // '& .MuiInputBase-root': {
+      //   paddingRight: spacing(4.8)
+      // },
+      // '&  .MuiFormLabel-root.Mui-focused': {
+      //   color: !customColor ? palette.primary.main : customColor.hover,
+      //   padding: customColor && spacing(0.4, 1.8),
+      //   border: !customColor ? 0 : `2px solid ${customColor.hover}`,
+      //   // borderLeft: customColor && 0,
+      //   borderRadius: customColor && '2px',
+      //   borderTopLeftRadius: customColor && '6px',
+      //   // background: `${backgroundColor} !important`,
+      //   transform: !customColor ? 'translate(14px, -6px) scale(0.75)' : 'translate(-2px, -8px) scale(0.75)'
+      // },
+      // '& label': {
+      //   color: !customColor ? palette?.mediumEmphasis?.main : customColor.hover,
+      //   background: !customColor ? 'transparent !important' : `${backgroundColor} !important`
+      // },
+      // // '& legend': {
+      // //   transform: !customColor ? 'translate(4px, -8px) scale(0.75)' : 'translate(0px, 0px) scale(0.75)'
+      // // },
+      // '& .MuiOutlinedInput-multiline': {
+      //   padding: spacing(!customColor ? 2 : 2.8, 6, isLabelViewHidden ? 6 : 10, 1.4)
+      // },
+      '& input,textarea': {
+        // caretColor: !customColor ? palette.primary.main : customColor.hover,
+        caretColor: palette.primary.main
+        // color: !customColor ? palette?.maxEmphasis?.main : customColor.hover
+      }
+      // '& .MuiFormLabel-root.Mui-focused': {
+      //   color: !customColor ? palette.primary.main : customColor.hover
+      // },
+      // '& fieldset': {
+      //   display: !customColor ? 'block' : 'none '
+      // }
+    }),
 
-    // '& .MuiInputBase-root': {
-    //   paddingRight: spacing(4.8)
-    // },
-
-    // '&  .MuiFormLabel-root.Mui-focused': {
-    //   color: !customColor ? palette.primary.main : customColor.hover,
-    //   padding: customColor && spacing(0.4, 1.8),
-    //   border: !customColor ? 0 : `2px solid ${customColor.hover}`,
-    //   // borderLeft: customColor && 0,
-    //   borderRadius: customColor && '2px',
-    //   borderTopLeftRadius: customColor && '6px',
-    //   // background: `${backgroundColor} !important`,
-
-    //   transform: !customColor ? 'translate(14px, -6px) scale(0.75)' : 'translate(-2px, -8px) scale(0.75)'
-    // },
-
-    // '& label': {
-    //   color: !customColor ? palette?.mediumEmphasis?.main : customColor.hover,
-
-    //   background: !customColor ? 'transparent !important' : `${backgroundColor} !important`
-    // },
-    // // '& legend': {
-    // //   transform: !customColor ? 'translate(4px, -8px) scale(0.75)' : 'translate(0px, 0px) scale(0.75)'
-    // // },
-    // '& .MuiOutlinedInput-multiline': {
-    //   padding: spacing(!customColor ? 2 : 2.8, 6, isLabelViewHidden ? 6 : 10, 1.4)
-    // },
-    // '& input,textarea': {
-    //   caretColor: !customColor ? palette.primary.main : customColor.hover,
-    //   color: !customColor ? palette?.maxEmphasis?.main : customColor.hover
-    // },
-    // '& .MuiFormLabel-root.Mui-focused': {
-    //   color: !customColor ? palette.primary.main : customColor.hover
-    // },
-
-    // '& fieldset': {
-    //   display: !customColor ? 'block' : 'none '
-    // }
-  }),
-  wrapper: ({ backgroundColor, customColor }) => ({
-    padding: spacing(0),
-    backgroundColor: colord(backgroundColor).isValid() ? backgroundColor : 'transparent',
-    position: 'relative',
-    borderRadius: '4px',
-    borderWidth: !customColor ? 0 : 2,
-    '&:hover': {
-      boxShadow: customColor && `0px 0px 4px ${backgroundColor}`,
-      border: customColor && customColor.unHover
+    titleContainer: {
+      '& input': {
+        ...h5
+      }
+    },
+    wrapper: ({ backgroundColor, customColor }) => ({
+      padding: spacing(0),
+      backgroundColor: colord(backgroundColor).isValid() ? backgroundColor : 'transparent',
+      position: 'relative',
+      borderRadius: '4px',
+      borderWidth: !customColor ? 0 : 2,
+      '&:hover': {
+        boxShadow: customColor && `0px 0px 4px ${backgroundColor}`,
+        border: customColor && customColor.unHover
+      }
+    }),
+    full: {
+      transition: transitions.create('all', {
+        easing: transitions.easing.easeIn,
+        duration: transitions.duration.complex
+      })
+    },
+    unFull: {
+      transition: transitions.create('all', {
+        easing: transitions.easing.easeInOut,
+        duration: transitions.duration.complex
+      })
     }
-  }),
-  hidden: { display: 'none' },
-  inputTitle: { padding: 0 },
-  textField: { paddingBottom: 0 },
-  full: {
-    transition: transitions.create('all', {
-      easing: transitions.easing.easeIn,
-      duration: transitions.duration.complex
-    })
-  },
-  unFull: {
-    transition: transitions.create('all', {
-      easing: transitions.easing.easeInOut,
-      duration: transitions.duration.complex
-    })
-  }
-}));
+  })
+);
 
 const NewPaKeep = () => {
   const nulittyState: PakeepElementType = {
@@ -108,7 +125,8 @@ const NewPaKeep = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    _.isEqual(state, nulittyState) && setState(JSON.parse(value!));
+    console.log(JSON.parse(value!));
+    // _.isEqual(state, nulittyState) && setState(JSON.parse(value!));
   }, []);
 
   usePageLeave(() => {
@@ -116,26 +134,13 @@ const NewPaKeep = () => {
   });
 
   const nullityStatusState = {
-    isFocused: false,
-    placeholder: 'Write a title or press ctrl + Alt + 8 to skip a title',
-    isEnter: false,
-    isWritingText: false,
-    isChangingTitle: false,
-    isUtilsHidden: !true,
-    isNewPakeepContainerHaveFullWidth: true,
-    isLabelViewHidden: false
+    isTextHidden: true,
+    isNewPakeepContainerHaveFullWidth: true
   };
   const [statusState, setStatusState] = useState(nullityStatusState);
 
-  const handleState = ({ target: { name, value } }) => {
+  const handleChangeInputsValue: ChangeEventHandler<HTMLInputElement> = ({ target: { name, value } }) => {
     setState(state => ({ ...state, [name]: value }));
-  };
-
-  const setFocusIsTrue = () => setStatusState(state => ({ ...state, isFocused: true }));
-  const setFocusIsFalse = () => setStatusState(state => ({ ...state, isFocused: false }));
-
-  const handleChangeUtilsVisibility = () => {
-    setStatusState(state => ({ ...state, isUtilsHidden: !state.isUtilsHidden }));
   };
 
   const handleSetFavoritePakeep = () => setState(state => ({ ...state, isFavorite: !state.isFavorite }));
@@ -158,8 +163,8 @@ const NewPaKeep = () => {
     dispatch(operateToAddNewPakeep(state));
   };
 
-  const handleStatusOfHideLabelView = () =>
-    setStatusState(state => ({ ...state, isLabelViewHidden: !state.isLabelViewHidden }));
+  const hanldeChangeTextVisiblittyStatus = () =>
+    setStatusState(state => ({ ...state, isTextHidden: !state.isTextHidden }));
 
   const handleSetWidthInNewPakeep = () => {
     setStatusState(state => ({
@@ -170,7 +175,7 @@ const NewPaKeep = () => {
 
   const handleDeleteLabelFromPakeepFunc = (placeholder, labelId) => handleDeleteNewLabel(labelId);
 
-  const [ref, { width: widthOfContainer }] = useMeasure();
+  const [ref, { width: widthOfContainer }] = useMeasure<HTMLDivElement>(null);
 
   // const onKeyDown = e => {
   //   if (!e?.shiftKey && e?.code === 'Enter') {
@@ -183,6 +188,8 @@ const NewPaKeep = () => {
   //   state.color
   // );
 
+  // useLockBodyScroll(true);
+
   const classes = useStyles({
     isLabelViewHidden: statusState.isLabelViewHidden,
     color: state.color,
@@ -191,19 +198,20 @@ const NewPaKeep = () => {
   });
 
   const labelsListProps = {
-    handleStatusOfHideLabelView,
+    // handleStatusOfHideLabelView,
     selectedLabels: state.labels,
     handleAddNewLabel,
-    isLabelViewHidden: statusState.isLabelViewHidden,
+    // isLabelViewHidden: statusState.isLabelViewHidden,
+    isLabelViewHidden: true,
     handleDeleteLabelFromPakeepFunc,
     handleDeleteNewLabel
   };
 
-  const labelBargeNumber = statusState.isLabelViewHidden ? state.labels.length : 0;
+  // const labelBargeNumber = statusState.isLabelViewHidden ? state.labels.length : 0;
   const newPakeepUtils = {
     ...state,
     ...statusState,
-    labelBargeNumber,
+    // labelBargeNumber,
     handleSetFavoritePakeep,
     handleSetBookmarkPakeep,
     handleSetColorPakeep,
@@ -225,25 +233,6 @@ const NewPaKeep = () => {
     // customColor
   };
 
-  const rowsNumber = statusState.isWritingText ? 4 : !statusState.isUtilsHidden ? 6 : 1;
-
-  const textFieldProps = {
-    className: classes.textField,
-    label: statusState.isWritingText ? state.title : statusState.placeholder,
-    variant: 'outlined',
-    value: statusState.isWritingText ? state.text : state.title,
-    onChange: handleState,
-    name: statusState.isWritingText ? 'text' : 'title',
-    rows: rowsNumber,
-    multiline: statusState.isWritingText ? true : !statusState.isUtilsHidden ? true : false,
-    fullWidth: true,
-    autoFocus: true,
-    autoComplete: false,
-    rowsMax: 42,
-    onFocus: setFocusIsTrue,
-    onBlur: setFocusIsFalse,
-    // onKeyDown
-  };
   const fullWidthValue = statusState.isNewPakeepContainerHaveFullWidth && 12;
 
   const breakpoint = useCustomBreakpoint();
@@ -251,34 +240,53 @@ const NewPaKeep = () => {
 
   const gridContainerProps = {
     className: clsx(classes.container, statusState.isNewPakeepContainerHaveFullWidth ? classes.full : classes.unFull),
-    // [breakpoint]: fullWidthValue || breakpointsValues[breakpoint],
+    //@ts-ignore
+    [breakpoint]: fullWidthValue || breakpointsValues[breakpoint],
     ref
-  };
-
-  const eyeIconButtonProps = {
-    onClickOfEyeIconButton: handleChangeUtilsVisibility,
-    isUtilsHidden: statusState.isUtilsHidden
-    // customColor
   };
 
   return (
     <Grid {...gridContainerProps}>
       <Grid className={classes.wrapper}>
-        <Box>
-          <TextField {...textFieldProps} />
-        </Box>
+        <Grid className={classes.titleContainer}>
+          <InputBase
+            onChange={handleChangeInputsValue}
+            fullWidth
+            autoFocus
+            name={'title'}
+            value={state.title}
+            placeholder={'Title'}
+            endAdornment={
+              <InputAdornment position={'end'}>
+                <IconButton
+                  aria-label={'toggle text visibility'}
+                  onClick={hanldeChangeTextVisiblittyStatus}
+                  style={{ width: 48, marginRight: -8 }}
+                  // onMouseDown={handleMouseDownPassword}
+                  edge={'end'}
+                >
+                  {!statusState.isTextHidden ? <Visibility /> : <VisibilityOff />}
+                </IconButton>
+              </InputAdornment>
+            }
+          />
+        </Grid>
+        {!statusState.isTextHidden && (
+          <Grid className={classes.textContainer}>
+            <InputBase
+              onChange={handleChangeInputsValue}
+              fullWidth
+              name={'text'}
+              value={state.text}
+              placeholder={'Text'}
+              multiline
+              rowsMax={12}
+              rows={4}
+            />
+          </Grid>
+        )}
 
-        {/* {!statusState.isUtilsHidden && !statusState.isLabelViewHidden && (
-          <AttributesOfNewPakeep {...attributesOfNewPakeepProps} />
-        )} */}
-
-        {/* {!statusState.isUtilsHidden && (
-          <Labels.Provider value={{ selectedLabels: state.labels }}>
-            <NewPakeepUtils {...newPakeepUtils} />
-          </Labels.Provider>
-        )} */}
-
-        {/* <EyeIconButton {...eyeIconButtonProps} /> */}
+        {/* {!statusState.isTextHidden && <NewPakeepUtils {...newPakeepUtils} />} */}
       </Grid>
     </Grid>
   );
