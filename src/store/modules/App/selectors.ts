@@ -83,3 +83,7 @@ export const getAvatarProperties = createSelector(
   [({ app: { avatarProperties } }: RootStoreType) => avatarProperties],
   avatarProperties => avatarProperties
 );
+export const getHeaderHeight = createSelector(
+  [({ app: { headerHeight } }: RootStoreType) => headerHeight],
+  headerHeight => headerHeight
+);

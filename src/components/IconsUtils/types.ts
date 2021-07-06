@@ -19,7 +19,9 @@ export type IconsUtilsFunctionKeyNameType =
   | 'handleSetIsPinnedPakeep'
   | 'handleSetWidth'
   | 'handleSetEditTitleIsTrue'
-  | 'handleSetArhivedPakeep';
+  | 'handleSetArhivedPakeep'
+  | 'handleUndo'
+  | 'handleRedo';
 
 export type IconsUtilsFunctionType = {
   [Property in IconsUtilsFunctionKeyNameType]?: (any?: any) => void;
@@ -45,6 +47,7 @@ export type IconsUtilsPropetyiesType = {
   labelBargeNumber?: number;
   labelsListProps?: any;
   open?: boolean;
+
   widthOfContainer?: number;
   isUtilsReversed?: boolean;
   arrOfButtonNamesWhichSholudBeHidden?: IconsUtilsArrDenotationNameType[];
@@ -61,7 +64,7 @@ export type IconUtilElementOptionalPropertyiesType = {
   menuComponentsProps?: object;
   menuComponents?: ReactNode;
   ActiveIcon?: IconType;
-  onClick?: ()=> void;
+  onClick?: () => void;
   popoverText?: string;
   activePopoverText?: string;
   badgeContent?: number | any;

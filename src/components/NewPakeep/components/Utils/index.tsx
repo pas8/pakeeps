@@ -7,39 +7,24 @@ import { useAlpha } from 'hooks/useAlpha.hook';
 import { useThemeColors } from 'hooks/useThemeColors.hook';
 import IconsUtils from 'components/IconsUtils';
 import ActionsButtonGroup from 'components/ActionsButtonGroup/index';
+import { FC } from 'react';
+import { NewPakeepUtilsType } from './types';
 
 // import SaveOutlinedIcon from '@material-ui/icons/SaveOutlined';
 const useStyles = makeStyles(({ spacing }) => ({
-  container: {},
-  buttonWrapper: { display: 'flex', alignItems: 'center', justifyContent: 'flex-end' },
-  buttonGroupWrapper: {
-    '& svg': {
-      margin: spacing(0, 0, 0, -0.42)
-    },
-    display: 'flex',
-    justifyContent: 'flex-end',
-    flexGrow: 1,
-    marginBottom: spacing(-0.42)
-  },
-
-  button: { justifyContent: 'flex-end' }
+  container: {
+    paddingRight: spacing(0.8)
+  }
 }));
 
-const NewPakeepUtils = ({ customColor, handleNewPakeepSave, widthOfContainer, ...newPakeepUtilsProps }) => {
+const NewPakeepUtils: FC<NewPakeepUtilsType> = ({ customColor, onSave, widthOfContainer, ...newPakeepUtilsProps }) => {
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
-  const [, , , , mediumEmphasisColor] = useThemeColors();
+  const [primaryColor, , , , mediumEmphasisColor] = useThemeColors();
 
-  const handleNewPakeepSubmit = () => {
-    // try {
-      handleNewPakeepSave();
-      // enqueueSnackbar({ message: 'New pakeep was succsesfully added' });
-    // } catch (error) {
-      // enqueueSnackbar({ message: !!error ? error : 'Something went wrong', severity: 'error' });
-    // }
-  };
   const [ref, { width: widthOfCButtonConatiner }] = useMeasure<HTMLDivElement>();
 
   const correctWidthOfContainer = widthOfContainer - widthOfCButtonConatiner;
+
   const iconUtilsProps = {
     ...newPakeepUtilsProps,
     customColor,
@@ -49,15 +34,18 @@ const NewPakeepUtils = ({ customColor, handleNewPakeepSave, widthOfContainer, ..
   const classes = useStyles({ customColor });
 
   const actionsButtonGroupProps = {
-    onSave: handleNewPakeepSubmit,
+    onSave,
     onClose: null,
-    colorOfCloseButton: customColor && useAlpha(customColor?.hover, 0.6),
-    colorOfSaveButton: customColor?.hover
+    colorOfCloseButton: customColor.isUseDefault ? mediumEmphasisColor : useAlpha(customColor?.hover, 0.6),
+    colorOfSaveButton: customColor.isUseDefault ? primaryColor : customColor?.hover
   };
 
   return (
-    <Grid className={clsx(classes.container)}>
-      <IconsUtils {...iconUtilsProps} />
+    <Grid className={clsx(classes.container)} container alignItems={'center'} justify={'space-between'}>
+      <Grid>
+        <IconsUtils {...iconUtilsProps} />
+      </Grid>
+
       <Grid className={classes.buttonGroupWrapper} ref={ref}>
         <ActionsButtonGroup {...actionsButtonGroupProps} />
       </Grid>

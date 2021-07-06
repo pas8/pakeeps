@@ -16,6 +16,11 @@ export const toAddEventToPakeep = (payload: PayloadTypes[TypeNames.HANDLE_ADD_EV
   payload
 });
 
+export const toChangeHeaderHeigth = (payload: PayloadTypes[TypeNames.HANDLE_CHANGE_HEADER_HEIGTH]): AppActionTypes => ({
+  type: TypeNames.HANDLE_CHANGE_HEADER_HEIGTH,
+  payload
+});
+
 export const toChangePakeeps = (payload: PayloadTypes[TypeNames.HANDLE_CHANGE_PAKEEPS]): AppActionTypes => ({
   type: TypeNames.HANDLE_CHANGE_PAKEEPS,
   payload
@@ -41,8 +46,6 @@ export const toChangeAvatarProperties = (
   type: TypeNames.HANDLE_CHANGE_AVATAR_PROPERTIES,
   payload
 });
-
-
 
 export const toChangeFolders = (payload: PayloadTypes[TypeNames.HANDLE_CHANGE_FOLDERS]): AppActionTypes => ({
   type: TypeNames.HANDLE_CHANGE_FOLDERS,

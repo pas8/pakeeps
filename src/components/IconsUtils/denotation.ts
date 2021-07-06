@@ -12,5 +12,7 @@ export const iconsUtilsArrDenotation = {
   BOOKMARK: { name: 'bookmark', popoverText: 'Add to bookmark' },
   PINNED: { name: 'pinned', popoverText: 'Pin pakeep' },
   WIDTH: { name: 'width', popoverText: 'To full width', activePopoverText: 'To smaller width' },
-  MORE_UTILS: { name: 'moreUtils', popoverText: 'Open more utils' }
+  MORE_UTILS: { name: 'moreUtils', popoverText: 'Open more utils' },
+  UNDO: { name: 'undo', popoverText: 'Undo' },
+  REDO: { name: 'redo', popoverText: 'Redo' }
 } as const;

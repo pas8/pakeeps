@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React, { FC } from 'react';
+import React, { FC, useEffect } from 'react';
 import clsx from 'clsx';
 import { connect, useDispatch, useSelector } from 'react-redux';
 import { AppBar, makeStyles, Toolbar, Grid } from '@material-ui/core';
@@ -10,11 +10,12 @@ import HeaderDrawer from './components/Drawer';
 import HeaderProfileUtils from './components/ProfileUtils';
 import MainBar from './components/MainBar';
 import ViewLikeInTelegram from './components/ViewLikeInTelegram';
-import { toChangeMenuOpenStatus } from 'store/modules/App/actions';
+import { toChangeHeaderHeigth, toChangeMenuOpenStatus } from 'store/modules/App/actions';
 import { getMenuOpenStatus } from 'store/modules/App/selectors';
 import { HeaderByPasPropsType, UseStylesOfHeaderByPasType } from './components/types';
 import { menuOpenStatusDenotation, SIGN_IN_URL ,NEW_USER_URL} from 'models/denotation';
 import { useRouter } from 'next/dist/client/router';
+import { useMeasure } from 'react-use';
 
 const useStyles = makeStyles(theme => ({
   root: ({ navigationViewLikeTelegram }: HeaderByPasPropsType) => ({
@@ -77,13 +78,17 @@ const HeaderByPas: FC<HeaderByPasPropsType> = ({
   const isHeaderHavePakeepView = true;
 
   const isRouteIsSignIn = pathname === SIGN_IN_URL || pathname === NEW_USER_URL
+  const [ref, { height: headerHeight }] = useMeasure<HTMLDivElement>();
 
+  useEffect(() => {
+    dispatch(toChangeHeaderHeigth({ headerHeight:headerHeight + 16 }));
+  }, [headerHeight]);
   return (
     <Grid className={classes.root} container>
       {/* {isHeaderHavePakeepView ? ( */}
       <></>
       {/* ) : ( */}
-      <AppBar className={clsx(classes.appBar, { [classes.appBarShift]: isMenuOpen })}>
+      <AppBar className={clsx(classes.appBar, { [classes.appBarShift]: isMenuOpen })} ref={ref}>
         <Toolbar className={classes.toolBar}>
           {(navigationViewLikePakeeps || navigationViewLikeGoogleKeep) && (
             <>

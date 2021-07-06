@@ -6,25 +6,23 @@ import { connect, useDispatch, useSelector } from 'react-redux';
 import { getNavigationViewLike } from 'store/modules/Settings/selectors';
 import {
   getDrawerWidth,
+  getHeaderHeight,
   getMenuOpenStatus,
   getPakeeps,
   getSelectedPakeeps,
   getSelectedPakeepsId
 } from 'store/modules/App/selectors';
 import HeaderWhenActiveSelecto from 'components/HeaderWhenActiveSelecto';
-import { toCancelSelectingStatus, toChangePinStatusOfPakeeps } from 'store/modules/App/actions';
-import { FC } from 'react';
+import { toCancelSelectingStatus, toChangeHeaderHeigth, toChangePinStatusOfPakeeps } from 'store/modules/App/actions';
+import { FC, useEffect } from 'react';
 import { LayoutChildrenType } from 'models/types';
 import { menuOpenStatusDenotation } from 'models/denotation';
+import { useMeasure } from 'react-use';
 
-const useStyles = makeStyles(({ spacing, transitions, breakpoints,palette }) => ({
-  '@global':{
-
-
-    body:{
-
-background:palette.background.default
-
+const useStyles = makeStyles(({ spacing, transitions, breakpoints, palette }) => ({
+  '@global': {
+    body: {
+      background: palette.background.default
     }
   },
   container: {
@@ -34,8 +32,8 @@ background:palette.background.default
   },
   content: {
     flexGrow: 1,
-    marginTop:64,
-    padding: spacing(2.8),
+    marginTop: ({ headerHeight }: any) => headerHeight,
+    padding: spacing(0,2.8),
     transition: transitions.create('margin', {
       easing: transitions.easing.sharp,
       duration: transitions.duration.leavingScreen
@@ -57,29 +55,25 @@ background:palette.background.default
       easing: transitions.easing.easeOut,
       duration: transitions.duration.enteringScreen
     }),
-    marginLeft: ({
-      drawerWidth,
-      navigationViewLikeTelegram
-    }: {
-      drawerWidth: number;
-      navigationViewLikeTelegram: boolean;
-    }) => (navigationViewLikeTelegram ? drawerWidth : 0)
+    marginLeft: ({ drawerWidth, navigationViewLikeTelegram }: any) => (navigationViewLikeTelegram ? drawerWidth : 0)
   }
 }));
 
 const HeaderLayout: FC<LayoutChildrenType> = ({ children }) => {
+  const dispatch = useDispatch();
 
   const menuOpenStatus = useSelector(getMenuOpenStatus);
   const drawerWidth = useSelector(getDrawerWidth);
   const selectedPakeeps = useSelector(getSelectedPakeeps)!;
   const navigationViewLike = useSelector(getNavigationViewLike);
   const selectedPakeepsId = useSelector(getSelectedPakeepsId);
-
+  const headerHeight = useSelector(getHeaderHeight);
+console.log(headerHeight)
   const navigationViewLikeTelegram = navigationViewLike === 'telegram';
   const navigationViewLikeGoogleKeep = navigationViewLike === 'googleKeep';
   const navigationViewLikePakeeps = navigationViewLike === 'pakeeps';
 
-  const classes = useStyles({ drawerWidth, navigationViewLikeTelegram });
+  const classes = useStyles({ drawerWidth, navigationViewLikeTelegram, headerHeight });
 
   const isMenuExtended = menuOpenStatus === menuOpenStatusDenotation.EXTENDED;
   const isMenuOpen = menuOpenStatus === menuOpenStatusDenotation.OPEN;
@@ -99,13 +93,15 @@ const HeaderLayout: FC<LayoutChildrenType> = ({ children }) => {
     selectedPakeepsId
   };
 
+
+
   return (
     <Grid className={classes.container}>
-      {isShouldBeHeaderWhenActiveSelecto ? (
-        <HeaderWhenActiveSelecto {...headerWhenActiveSelectoProps} />
-      ) : (
-        <HeaderByPas {...headerByPasProps} />
-      )}
+        {isShouldBeHeaderWhenActiveSelecto ? (
+          <HeaderWhenActiveSelecto {...headerWhenActiveSelectoProps} />
+        ) : (
+          <HeaderByPas {...headerByPasProps} />
+        )}
       <main
         className={clsx(classes.content, {
           [classes.contentShift]: isMenuOpen

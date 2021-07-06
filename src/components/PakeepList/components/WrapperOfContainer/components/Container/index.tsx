@@ -13,6 +13,7 @@ import { useSelector } from 'react-redux';
 const useStyles = makeStyles(({ spacing, breakpoints: { between, down }, palette }) => ({
   containerClass: () => ({
     // position: !isPakeepDragging ? 'fixed' : 'static',
+    paddingRight:spacing(2.8),
     position: 'fixed',
     right: 4,
     margin: spacing(4, 0, 0, 0),

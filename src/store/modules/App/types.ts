@@ -28,6 +28,12 @@ export type PayloadTypes = {
   [TypeNames.HANDLE_CHANGE_AVATAR_PROPERTIES]: {
     avatarProperties: AvatarPropertiesType;
   };
+  [TypeNames.HANDLE_CHANGE_AVATAR_PROPERTIES]: {
+    avatarProperties: AvatarPropertiesType;
+  };
+  [TypeNames.HANDLE_CHANGE_HEADER_HEIGTH]: {
+    headerHeight: number;
+  };
 
   [TypeNames.HANDLE_SET_DRAWER_WIDTH]: { drawerWidth: DrawerWidthType };
   [TypeNames.HANDLE_ADD_NEW_GLOBAL_LABEL]: { newLabel: ILabelElement };
@@ -52,6 +58,10 @@ export type PayloadTypes = {
 };
 
 export type ActionsValueTypes = {
+  HANDLE_CHANGE_HEADER_WIDTH: {
+    type: typeof TypeNames.HANDLE_CHANGE_HEADER_HEIGTH;
+    payload: PayloadTypes[TypeNames.HANDLE_CHANGE_HEADER_HEIGTH];
+  };
   toChangeAvatarProperties: {
     type: typeof TypeNames.HANDLE_CHANGE_AVATAR_PROPERTIES;
     payload: PayloadTypes[TypeNames.HANDLE_CHANGE_AVATAR_PROPERTIES];
@@ -211,14 +221,14 @@ export interface IGlobalEvent {
   value: EventyValueType;
   onlyTime?: boolean;
   color: string;
-  isFolderIsPlaceholder?:boolean
+  isFolderIsPlaceholder?: boolean;
 }
 
 export interface DefaultFolderElementInterface {
   title: TitleType;
   iconName?: string;
   id: string;
-  route?:string;
+  route?: string;
   color?: ColorType;
   property?: string;
 }
@@ -301,7 +311,8 @@ export interface AppInitialStateInteface {
   defaultFolderArr: DefaultFolderArrType;
 
   avatarProperties: AvatarPropertiesType;
-
+  headerHeight: number;
+  email: string;
   labels: GlobalLabelsType;
   events: GlobalEventsType;
   selectedPakeepsId: SelectedPakeepsIdType;

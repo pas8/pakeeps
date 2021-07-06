@@ -2,7 +2,14 @@ import { ChangeEventHandler, createContext, useEffect, useState } from 'react';
 import { connect, useDispatch } from 'react-redux';
 import _ from 'lodash';
 import clsx from 'clsx';
-import { useCookie, useKeyPressEvent, useLockBodyScroll, useMeasure, usePageLeave } from 'react-use';
+import {
+  useCookie,
+  useKeyPressEvent,
+  useLockBodyScroll,
+  useMeasure,
+  usePageLeave,
+  useStateWithHistory
+} from 'react-use';
 import { nanoid } from 'nanoid';
 import {
   Box,
@@ -10,6 +17,7 @@ import {
   IconButton,
   InputAdornment,
   InputBase,
+  Button,
   makeStyles,
   Paper,
   TextField,
@@ -33,7 +41,6 @@ const useStyles = makeStyles(
   ({ spacing, palette, transitions, typography: { subtitle1, h5 }, shape: { borderRadius } }) => ({
     container: ({ customColor, isLabelViewHidden, backgroundColor }) => ({
       borderRadius,
-      padding: spacing(1),
       border: '1px solid',
       borderColor: useAlpha(palette.text.primary, 0.2),
       // marginTop: spacing(8)
@@ -74,9 +81,13 @@ const useStyles = makeStyles(
     }),
 
     titleContainer: {
+      marginTop: spacing(-0.4),
       '& input': {
         ...h5
       }
+    },
+    inputsContainer: {
+      padding: spacing(1)
     },
     wrapper: ({ backgroundColor, customColor }) => ({
       padding: spacing(0),
@@ -105,9 +116,11 @@ const useStyles = makeStyles(
 );
 
 const NewPaKeep = () => {
-  const nulittyState: PakeepElementType = {
-    title: '',
-    text: '',
+
+
+  const [inputState, setInputState, { back, forward }] = useStateWithHistory({ title: '', text: '' }, 42);
+
+  const nulittyState = {
     isCheckBoxes: false,
     isInBookmark: false,
     isArchived: false,
@@ -139,9 +152,6 @@ const NewPaKeep = () => {
   };
   const [statusState, setStatusState] = useState(nullityStatusState);
 
-  const handleChangeInputsValue: ChangeEventHandler<HTMLInputElement> = ({ target: { name, value } }) => {
-    setState(state => ({ ...state, [name]: value }));
-  };
 
   const handleSetFavoritePakeep = () => setState(state => ({ ...state, isFavorite: !state.isFavorite }));
   const handleSetBookmarkPakeep = () => setState(state => ({ ...state, isInBookmark: !state.isInBookmark }));
@@ -158,9 +168,9 @@ const NewPaKeep = () => {
     setState(state => ({ ...state, labels: _.filter(state.labels, id => id !== idWhichShouldBeDeleted) }));
   };
 
-  const handleNewPakeepSave = () => {
+  const handleAddNewPakeep = () => {
     setState(nulittyState);
-    dispatch(operateToAddNewPakeep(state));
+    dispatch(operateToAddNewPakeep({ ...state, ...inputState }));
   };
 
   const hanldeChangeTextVisiblittyStatus = () =>
@@ -175,7 +185,7 @@ const NewPaKeep = () => {
 
   const handleDeleteLabelFromPakeepFunc = (placeholder, labelId) => handleDeleteNewLabel(labelId);
 
-  const [ref, { width: widthOfContainer }] = useMeasure<HTMLDivElement>(null);
+  const [ref, { width: widthOfContainer }] = useMeasure<HTMLDivElement>();
 
   // const onKeyDown = e => {
   //   if (!e?.shiftKey && e?.code === 'Enter') {
@@ -183,10 +193,10 @@ const NewPaKeep = () => {
   //     return setStatusState(state => ({ ...state, isWritingText: !state.isWritingText }));
   //   }
   // };
-  // const [customColor, isBackgroundColorDefault, isColorDefault] = useGetReadableColor(
-  //   state.backgroundColor,
-  //   state.color
-  // );
+  const [customColor, isBackgroundColorDefault, isColorDefault] = useGetReadableColor(
+    state.backgroundColor,
+    state.color
+  );
 
   // useLockBodyScroll(true);
 
@@ -206,7 +216,8 @@ const NewPaKeep = () => {
     handleDeleteLabelFromPakeepFunc,
     handleDeleteNewLabel
   };
-
+  const handleUndo = () => back(4);
+  const handleRedo = () => forward(4);
   // const labelBargeNumber = statusState.isLabelViewHidden ? state.labels.length : 0;
   const newPakeepUtils = {
     ...state,
@@ -215,13 +226,15 @@ const NewPaKeep = () => {
     handleSetFavoritePakeep,
     handleSetBookmarkPakeep,
     handleSetColorPakeep,
-    handleNewPakeepSave,
+    onSave: handleAddNewPakeep,
     handleSetWidth: handleSetWidthInNewPakeep,
     handleSetBackgroundColorPakeep,
     widthOfContainer,
     handleSetIsPinnedPakeep,
+    handleUndo,
+    handleRedo,
     labelsListProps,
-    // customColor,
+    customColor,
     handleSetIsCheckBoxesPakeep
     // isBackgroundColorDefault,
     // isColorDefault
@@ -245,48 +258,58 @@ const NewPaKeep = () => {
     ref
   };
 
+  const handleChangeInputsValue: ChangeEventHandler<HTMLInputElement> = ({ target: { name, value } }) => {
+    setInputState(state => ({ ...state, [name]: value }));
+  };
+
+
   return (
     <Grid {...gridContainerProps}>
       <Grid className={classes.wrapper}>
-        <Grid className={classes.titleContainer}>
-          <InputBase
-            onChange={handleChangeInputsValue}
-            fullWidth
-            autoFocus
-            name={'title'}
-            value={state.title}
-            placeholder={'Title'}
-            endAdornment={
-              <InputAdornment position={'end'}>
-                <IconButton
-                  aria-label={'toggle text visibility'}
-                  onClick={hanldeChangeTextVisiblittyStatus}
-                  style={{ width: 48, marginRight: -8 }}
-                  // onMouseDown={handleMouseDownPassword}
-                  edge={'end'}
-                >
-                  {!statusState.isTextHidden ? <Visibility /> : <VisibilityOff />}
-                </IconButton>
-              </InputAdornment>
-            }
-          />
-        </Grid>
-        {!statusState.isTextHidden && (
-          <Grid className={classes.textContainer}>
+        <Grid className={classes.inputsContainer}>
+          <Grid className={classes.titleContainer}>
             <InputBase
               onChange={handleChangeInputsValue}
               fullWidth
-              name={'text'}
-              value={state.text}
-              placeholder={'Text'}
-              multiline
-              rowsMax={12}
-              rows={4}
+              autoFocus
+              autoComplete={'off'}
+              name={'title'}
+              value={inputState.title}
+              placeholder={'Title'}
+              endAdornment={
+                <InputAdornment position={'end'}>
+                  <IconButton
+                    aria-label={'toggle text visibility'}
+                    color={'default'}
+                    onClick={hanldeChangeTextVisiblittyStatus}
+                    style={{ width: 48, marginRight: -8 }}
+                    // onMouseDown={handleMouseDownPassword}
+                    edge={'end'}
+                  >
+                    {!statusState.isTextHidden ? <Visibility /> : <VisibilityOff />}
+                  </IconButton>
+                </InputAdornment>
+              }
             />
           </Grid>
-        )}
+          {!statusState.isTextHidden && (
+            <Grid className={classes.textContainer}>
+              <InputBase
+                onChange={handleChangeInputsValue}
+                autoComplete={'off'}
+                fullWidth
+                name={'text'}
+                value={inputState.text}
+                placeholder={'Text'}
+                multiline
+                rowsMax={12}
+                rows={4}
+              />
+            </Grid>
+          )}
+        </Grid>
 
-        {/* {!statusState.isTextHidden && <NewPakeepUtils {...newPakeepUtils} />} */}
+        {!statusState.isTextHidden && <NewPakeepUtils {...newPakeepUtils} />}
       </Grid>
     </Grid>
   );

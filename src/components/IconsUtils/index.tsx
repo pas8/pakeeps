@@ -10,6 +10,8 @@ import FavoriteBorderOutlinedIcon from '@material-ui/icons/FavoriteBorderOutline
 import WallpaperOutlinedIcon from '@material-ui/icons/WallpaperOutlined';
 import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
 import LabelOutlinedIcon from '@material-ui/icons/LabelOutlined';
+import UndoOutlinedIcon from '@material-ui/icons/UndoOutlined';
+import RedoOutlinedIcon from '@material-ui/icons/RedoOutlined';
 import UnfoldMoreOutlinedIcon from '@material-ui/icons/UnfoldMoreOutlined';
 import UnfoldLessOutlinedIcon from '@material-ui/icons/UnfoldLessOutlined';
 import PlayCircleOutlineOutlinedIcon from '@material-ui/icons/PlayCircleOutlineOutlined';
@@ -66,6 +68,9 @@ const IconsUtils: FC<IconsUtilsPropsType> = ({
   arrOfButtonNamesWhichSholudBeHidden = [],
   isUtilsReversed,
   events = [],
+
+  handleRedo,
+  handleUndo,
   handleSetArhivedPakeep
 }) => {
   const iconsUtilsArr: IconsUtilsArrType = [
@@ -90,40 +95,18 @@ const IconsUtils: FC<IconsUtilsPropsType> = ({
       menuComponents: ColorPickerByPas,
       ...iconsUtilsArrDenotation.TEXT_COLOR
     },
+    {
+      icon: UndoOutlinedIcon,
+      isIconActive: false,
+      onClick: handleUndo,
+      ...iconsUtilsArrDenotation.UNDO
+    },
+    {
+      icon: RedoOutlinedIcon,
+      isIconActive: false,
+      onClick: handleRedo,
 
-    {
-      icon: ArchiveOutlinedIcon,
-      onClick: handleSetArhivedPakeep,
-      ActiveIcon: ArchiveIcon,
-      ...iconsUtilsArrDenotation.ARCHIVE
-    },
-    {
-      icon: EventAvailableOutlinedIcon,
-      // onClick: handleClick,
-      ActiveIcon: EventAvailableIcon,
-      isIconActive: !!events?.length,
-      menuComponentsProps: { id },
-      menuComponents: WrapperOfAddDateToPakeep,
-      ...iconsUtilsArrDenotation.EVENT
-    },
-    {
-      ...iconsUtilsArrDenotation.PICTURE,
-      icon: WallpaperOutlinedIcon,
-      // onClick: handleClick,
-      ActiveIcon: InsertPhotoIcon
-    },
-    {
-      icon: ShareOutlinedIcon,
-      //  onClick: handleClick,
-      ActiveIcon: ShareIcon,
-      ...iconsUtilsArrDenotation.SHARE
-    },
-    {
-      ...iconsUtilsArrDenotation.EDIT,
-      icon: EditOutlinedIcon,
-      onClick: handleSetEditTitleIsTrue,
-      isIconActive: isChangingTitle,
-      ActiveIcon: EditIcon
+      ...iconsUtilsArrDenotation.REDO
     },
 
     {
@@ -135,6 +118,37 @@ const IconsUtils: FC<IconsUtilsPropsType> = ({
       badgeContent: labelBargeNumber,
       menuComponentsProps: { ...labelsListProps, customColor }
     },
+    {
+      icon: EventAvailableOutlinedIcon,
+      // onClick: handleClick,
+      ActiveIcon: EventAvailableIcon,
+      isIconActive: !!events?.length,
+      menuComponentsProps: { id },
+      menuComponents: WrapperOfAddDateToPakeep,
+      ...iconsUtilsArrDenotation.EVENT
+    },
+
+    {
+      ...iconsUtilsArrDenotation.PICTURE,
+      icon: WallpaperOutlinedIcon,
+      // onClick: handleClick,
+      ActiveIcon: InsertPhotoIcon
+    },
+    {
+      icon: ArchiveOutlinedIcon,
+      onClick: handleSetArhivedPakeep,
+      ActiveIcon: ArchiveIcon,
+      ...iconsUtilsArrDenotation.ARCHIVE
+    },
+
+    // {
+    //   ...iconsUtilsArrDenotation.EDIT,
+    //   icon: EditOutlinedIcon,
+    //   onClick: handleSetEditTitleIsTrue,
+    //   isIconActive: isChangingTitle,
+    //   ActiveIcon: EditIcon
+    // },
+
     {
       ...iconsUtilsArrDenotation.FAVORITE,
       icon: FavoriteBorderOutlinedIcon,
@@ -163,6 +177,12 @@ const IconsUtils: FC<IconsUtilsPropsType> = ({
       isIconActive: isNewPakeepContainerHaveFullWidth,
       rotateDeg: 90,
       ActiveIcon: UnfoldLessOutlinedIcon
+    },
+    {
+      icon: ShareOutlinedIcon,
+      //  onClick: handleClick,
+      ActiveIcon: ShareIcon,
+      ...iconsUtilsArrDenotation.SHARE
     }
   ];
   const reverseValidatedIconButtonUtilsArr: IconsUtilsArrType = isUtilsReversed

@@ -119,6 +119,7 @@ const initialState: AppInitialStateInteface = {
   pinnedPakeepsOrderNames: [],
   notifinationCounter: 8,
   email: NONE,
+  headerHeight: 0,
   // menuOpenStatus: 'HIDDEN',
   avatarProperties: defaultAvatarProperties,
   menuOpenStatus: 'EXTENDED',
@@ -241,7 +242,7 @@ export const AppReducer = (state = initialState, action: AppActionTypes): AppIni
     case TypeNames.HANDLE_SET_ORDER_NAMES_OF_PINNED_PAKEEPS:
     case TypeNames.HANDLE_SET_ORDER_NAMES:
     case TypeNames.HANDLE_CHANGE_AVATAR_PROPERTIES:
-
+    case TypeNames.HANDLE_CHANGE_HEADER_HEIGTH:
     case TypeNames.HANDLE_SET_NEW_ORDER_NAMES:
     case TypeNames.HANDLE_CHANGE_PAKEEPS:
     case TypeNames.HANDLE_SET_SELECTED_PAKEEPIDS_ARR:
