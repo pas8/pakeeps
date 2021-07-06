@@ -21,6 +21,7 @@ import {
 } from 'store/modules/App/types';
 import { HandleSelectedPakeepsPropertyFuncType, PakeepPropertyiesType } from 'components/HeaderWhenActiveSelecto/types';
 import { IconsUtilsArrType, IconsUtilsFunctionType, NullityOfSlicedArrType } from 'components/IconsUtils/types';
+import { AuthInitialStateType } from 'store/modules/Auth/types';
 
 export type SelectedPakeepsType = PakeepsType;
 export type SelectedPakeepsIdType = PakeepIdType[];
@@ -38,6 +39,7 @@ export type UsePropertiesToUtilsType = (
 ) => Object;
 
 export type RootStoreType = {
+  auth: AuthInitialStateType;
   app: AppInitialStateInteface;
   color: ColorInitialStateType;
   settings: SettingsInitialStateType;

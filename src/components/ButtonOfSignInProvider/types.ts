@@ -5,4 +5,6 @@ export type UseStylesOfButtonOfSignInProviderType = {
 export type ButtonOfSignInProviderPropsType = {
   onClick: (e: any) => void;
   name: string;
+  isProvider?: boolean;
+  isProvidersButtonHaveCustomView?:boolean
 } & UseStylesOfButtonOfSignInProviderType;

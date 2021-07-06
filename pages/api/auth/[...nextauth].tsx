@@ -2,27 +2,32 @@ import NextAuth from 'next-auth';
 import Providers from 'next-auth/providers';
 require('dotenv').config();
 import config from 'config';
-
+import { SIGN_IN_URL, NEW_USER_URL } from 'models/denotation';
 
 const options = {
   pages: {
-    signIn: '/signin'
+    signIn: SIGN_IN_URL,
+    newUser: NEW_USER_URL
   },
   providers: [
     Providers.GitHub({
-      clientId: config.get('github.id'),
-      clientSecret: config.get('github.secret')
+      clientId: process.env.GITHUB_ID,
+      clientSecret: process.env.GITHUB_SECRET
     }),
 
     Providers.Google({
-      clientId: config.get('google.id'),
-      clientSecret: config.get('google.secret')
+      clientId: process.env.GOOGLE_ID,
+      clientSecret: process.env.GOOGLE_SECRET
     }),
     Providers.Facebook({
-      clientId: config.get('facebook.id'),
-      clientSecret: config.get('facebook.secret')
+      clientId: process.env.FACEBOOK_ID,
+      clientSecret: process.env.FACEBOOK_SECRET
     }),
 
+    Providers.GitLab({
+      clientId: process.env.GTILAB_ID,
+      clientSecret: process.env.GTILAB_SECRET
+    })
     // Providers.Email({
     //   server: {
     //     host: '',
@@ -34,7 +39,7 @@ const options = {
   ]
 };
 
-export default (req:any, res:any) => NextAuth(req, res, options);
+export default (req: any, res: any) => NextAuth(req, res, options);
 
 // const MongoClient = require('mongodb').MongoClient;
 // const uri = ";
