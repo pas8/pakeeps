@@ -16,7 +16,7 @@ import { FC } from 'react';
 import { MainDefaultPartOfPakeepElementPropsType, UseStylesOfMainDefaultPartOfPakeepElementType } from './types';
 import { useAlpha } from 'hooks/useAlpha.hook';
 import compareFunc from 'compare-func';
-const useStyles = makeStyles(({ spacing, palette: { highEmphasis, mediumEmphasis },typography }) => ({
+const useStyles = makeStyles(({ spacing, palette: { highEmphasis, mediumEmphasis }, typography }) => ({
   titleClass: {
     textOverflow: 'ellipsis',
     overflow: 'hidden',
@@ -39,10 +39,9 @@ const useStyles = makeStyles(({ spacing, palette: { highEmphasis, mediumEmphasis
   mainPartContainer: ({ customColor }: UseStylesOfMainDefaultPartOfPakeepElementType) => ({
     '& .MuiCheckbox-root': {
       position: 'absolute',
-      '& svg':{
-width:'0.8em',
-height:'0.8em',
-
+      '& svg': {
+        width: '0.8em',
+        height: '0.8em'
       },
       top: -8,
       left: -8,
@@ -53,12 +52,12 @@ height:'0.8em',
     }
   }),
   checkBoxesItemContainer: {
-    marginBottom:spacing(0.8),
+    marginBottom: spacing(0.8),
     position: 'relative',
     '& p': {
-      textIndent:28,
+      textIndent: 28
       // '&::first-line': {
-        // marginLeft: 100
+      // marginLeft: 100
       // }
     },
     '& .accomplished': {
@@ -103,8 +102,14 @@ const MainDefaultPartOfPakeepElement: FC<MainDefaultPartOfPakeepElementPropsType
                     key={`mainDefaultPartOfPakeepElement-${id}`}
                     className={classes.checkBoxesItemContainer}
                   >
-                    <Checkbox checked={isAccomplished}  />
-                    <Typography className={isAccomplished ? 'accomplished' : 'notAccomplished'} variant={'body2'} component={'p'}>{value}</Typography>
+                    <Checkbox checked={isAccomplished} />
+                    <Typography
+                      className={isAccomplished ? 'accomplished' : 'notAccomplished'}
+                      variant={'body2'}
+                      component={'p'}
+                    >
+                      {value}
+                    </Typography>
                   </Grid>
                 );
               })}

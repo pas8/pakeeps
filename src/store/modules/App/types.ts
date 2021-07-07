@@ -273,8 +273,8 @@ export type EventOfPakeepType = { id: EventIdType; value: EventyValueType };
 
 export type EventsOfPakeepType = EventOfPakeepType[];
 
-export type TitleOfPakeepType = string;
-export type TextOfPakeepType = string;
+export type TitleOfPakeepType = string | string[];
+export type TextOfPakeepType = string | string[];
 
 export type TitleAndTextOfPakeepType = {
   title: TitleOfPakeepType;

@@ -1,6 +1,6 @@
-import { ChangeEventHandler, createContext, useEffect, useState } from 'react';
+import { ChangeEventHandler, createContext, KeyboardEventHandler, useEffect, useState } from 'react';
 import { connect, useDispatch, useSelector } from 'react-redux';
-import _ from 'lodash';
+import _, { dropRight, startsWith } from 'lodash';
 import clsx from 'clsx';
 import {
   useCookie,
@@ -34,7 +34,7 @@ import useKeyboardJs from 'react-use/lib/useKeyboardJs';
 import { colord } from 'colord';
 import { useIsColorLight } from 'hooks/useIsColorLight.hook';
 import { useGetReadableColor } from 'hooks/useGetReadableColor.hook';
-import { ColorType, LabelIdType, PakeepElementType } from 'store/modules/App/types';
+import { ColorType, LabelIdType, PakeepElementType, TitleAndTextOfPakeepType } from 'store/modules/App/types';
 import { useAlpha } from 'hooks/useAlpha.hook';
 import firebase from 'firebase';
 import AttributeGroup from 'components/PakeepList/components/PakeepElement/components/AttributeGroup';
@@ -45,7 +45,7 @@ import CheckBoxContainer from 'components/CheckBoxContainer';
 import IconButtonByPas from 'components/IconButton';
 const useStyles = makeStyles(
   ({ spacing, palette, transitions, typography: { subtitle1, h5 }, shape: { borderRadius } }) => ({
-    container: ({ customColor, isLabelViewHidden, backgroundColor }:any) => ({
+    container: ({ customColor, isLabelViewHidden, backgroundColor }: any) => ({
       borderRadius,
       border: '1px solid',
       borderColor: useAlpha(palette.text.primary, 0.2),
@@ -74,8 +74,15 @@ const useStyles = makeStyles(
       //   padding: spacing(!customColor ? 2 : 2.8, 6, isLabelViewHidden ? 6 : 10, 1.4)
       // },
       '& input,textarea': {
-        // caretColor: !customColor ? palette.primary.main : customColor.hover,
-        caretColor: palette.primary.main
+        '&::selection':{
+
+          background:customColor.isUseDefault ? '' : customColor.hover,
+          color:customColor.isUseDefault ? '' : customColor.bgHover,
+
+        },
+        color:customColor.isUseDefault ? '' : customColor.hover,
+        caretColor: customColor.isUseDefault ? palette.primary.main : customColor.hover,
+        // caretColor: palette.primary.main
         // color: !customColor ? palette?.maxEmphasis?.main : customColor.hover
       }
       // '& .MuiFormLabel-root.Mui-focused': {
@@ -93,9 +100,9 @@ const useStyles = makeStyles(
       }
     },
     inputsContainer: {
-      padding: spacing(1,0.4,1,1)
+      padding: spacing(1, 0.4, 1, 1)
     },
-    wrapper: ({ backgroundColor, customColor }:any) => ({
+    wrapper: ({ backgroundColor, customColor }: any) => ({
       padding: spacing(0),
       backgroundColor: colord(backgroundColor).isValid() ? backgroundColor : 'transparent',
       position: 'relative',
@@ -126,11 +133,10 @@ const useStyles = makeStyles(
 );
 
 const NewPaKeep = () => {
-  const [inputState, setInputState, { back: inputsBack, forward: unputsForward }] = useStateWithHistory(
+  const [inputState, setInputState, { back: inputsBack, forward: inputsForward }] = useStateWithHistory(
     { title: '', text: '' },
     42
   );
-
   const [checkBoxes, setCheckBoxes, { back: checkBoxesBack, forward: checkBoxesForward }] = useStateWithHistory(
     [
       { color: 'default', value: 'Randomn0 ewjknv sdv wqdvjqw', isAccomplished: false, id: '0' },
@@ -141,6 +147,8 @@ const NewPaKeep = () => {
     ],
     42
   );
+
+  // console.log(checkBoxes);
 
   const nulittyState = {
     isCheckBoxes: !false,
@@ -169,7 +177,7 @@ const NewPaKeep = () => {
     updateCookie(JSON.stringify(state));
   });
 
-  const nullityStatusState = {
+  const nullityStatusState: { [key: string]: boolean } = {
     isTextHidden: true,
     isLabelViewHidden: false,
     isNewPakeepContainerHaveFullWidth: true,
@@ -190,7 +198,32 @@ const NewPaKeep = () => {
   const handleSetColorPakeep = (color: ColorType) => setState(state => ({ ...state, color }));
   const handleSetBackgroundColorPakeep = (backgroundColor: ColorType) =>
     setState(state => ({ ...state, backgroundColor }));
-  const handleSetIsCheckBoxesPakeep = () => setState(state => ({ ...state, isCheckBoxes: !state.isCheckBoxes }));
+  const handleSetIsCheckBoxesPakeep = () => {
+    const text = checkBoxes
+      .map(({ value }) => {
+        return `${value} \n`;
+      })
+      .join('');
+    const checkBoxe = dropRight(
+      inputState.text
+        .toString()
+        .split('\n')
+        .map(value => ({
+          value,
+          id: nanoid(),
+          color: 'default',
+          isAccomplished: false
+        }))
+    );
+
+    state.isCheckBoxes
+      ? setInputState(state => ({
+          ...state,
+          text
+        }))
+      : setCheckBoxes(checkBoxe);
+    setState(state => ({ ...state, isCheckBoxes: !state.isCheckBoxes }));
+  };
 
   const handleAddNewLabel = (idWhichShouldBeAdded: LabelIdType) => {
     setState(state => ({ ...state, labels: [...state.labels, idWhichShouldBeAdded] }));
@@ -214,16 +247,18 @@ const NewPaKeep = () => {
     }));
   };
 
-  const handleDeleteLabelFromPakeepFunc = (placeholder, labelId) => handleDeleteNewLabel(labelId);
+  const handleDeleteLabelFromPakeepFunc = (placeholder: any, labelId: LabelIdType) => handleDeleteNewLabel(labelId);
 
   const [ref, { width: widthOfContainer }] = useMeasure<HTMLDivElement>();
 
-  // const onKeyDown = e => {
-  //   if (!e?.shiftKey && e?.code === 'Enter') {
-  //     e?.preventDefault();
-  //     return setStatusState(state => ({ ...state, isWritingText: !state.isWritingText }));
-  //   }
-  // };
+  const onKeyDown: KeyboardEventHandler<HTMLElement> = e => {
+    if (!e?.shiftKey && e?.code === 'Enter') {
+      e?.preventDefault();
+      // console.log(';');
+      hanldeChangeTextVisiblittyStatus();
+      // return setStatusState(state => ({ ...state, isWritingText: !state.isWritingText }));
+    }
+  };
   const [customColor, isBackgroundColorDefault, isColorDefault] = useGetReadableColor(
     state.backgroundColor,
     state.color
@@ -237,7 +272,7 @@ const NewPaKeep = () => {
   const classes = useStyles({
     isLabelViewHidden: statusState.isLabelViewHidden,
     color: state.color,
-    // customColor,
+    customColor,
     backgroundColor: state.backgroundColor
   });
 
@@ -250,7 +285,7 @@ const NewPaKeep = () => {
     handleDeleteNewLabel
   };
   const handleUndo = () => (!state.isCheckBoxes ? inputsBack(4) : checkBoxesBack(4));
-  const handleRedo = () => (!state.isCheckBoxes ? checkBoxesBack(4) : checkBoxesForward(4));
+  const handleRedo = () => (!state.isCheckBoxes ? inputsForward(4) : checkBoxesForward(4));
   const labelBargeNumber = statusState.isLabelViewHidden ? state.labels.length : 0;
   const newPakeepUtils = {
     ...state,
@@ -258,6 +293,8 @@ const NewPaKeep = () => {
     labelBargeNumber,
     handleSetFavoritePakeep,
     handleSetBookmarkPakeep,
+    isBackgroundColorDefault,
+    isColorDefault,
     handleSetColorPakeep,
     onSave: handleAddNewPakeep,
     handleSetWidth: handleSetWidthInNewPakeep,
@@ -324,6 +361,7 @@ const NewPaKeep = () => {
               name={'title'}
               value={inputState.title}
               placeholder={'Title'}
+              onKeyDown={onKeyDown}
               endAdornment={
                 <InputAdornment position={'end'}>
                   <IconButtonByPas
@@ -341,11 +379,11 @@ const NewPaKeep = () => {
             />
           </Grid>
           {!statusState.isTextHidden && (
-            <Grid className={classes.textContainer}>
+            // <Grid className={classes.textContainer}>
+            <Grid>
               {state.isCheckBoxes ? (
                 <CheckBoxContainer
-            
-                checkBoxesArr={checkBoxes}
+                  checkBoxesArr={checkBoxes}
                   setCheckBoxes={setCheckBoxes}
                   customColor={customColor}
                   isAccomplishedCheckBoxesHidden={statusState.isAccomplishedCheckBoxesHidden}

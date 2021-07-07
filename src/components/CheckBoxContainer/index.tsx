@@ -1,5 +1,6 @@
 import { makeStyles, Grid, InputBase, Checkbox, Typography, Button, IconButton } from '@material-ui/core';
 import { filter, findIndex } from 'lodash';
+import clsx from 'clsx';
 import { ChangeEventHandler, FC } from 'react';
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
 import DragIndicatorIcon from '@material-ui/icons/DragIndicator';
@@ -13,16 +14,25 @@ import { useAlpha } from 'hooks/useAlpha.hook';
 import { CheckBoxItemPropsType } from './types';
 import { nanoid } from 'nanoid';
 import IconButtonByPas from 'components/IconButton';
+import { CustomColorType, UseStylesCustomColorType } from 'models/types';
 const useStyles = makeStyles(
   ({ spacing, palette, transitions, typography: { subtitle1, h5 }, shape: { borderRadius } }) => ({
-    checkBoxContainer: {
+    checkBoxContainer: ({ customColor }: UseStylesCustomColorType) => ({
       marginRight: spacing(-0.6),
+      '& .dragging': {
+        background: customColor.isUseDefault ? palette.background.paper : customColor.bgUnHover
+      },
+      '& button,.MuiCheckbox-root': {
+        color: customColor.isUseDefault ? '' : customColor.hover,
+        '&:hover .MuiTouchRipple-root': {
+          background: customColor.isUseDefault ? '' : useAlpha(customColor.hover,0.2)
+        }
+      },
       '& svg': {
-        color: palette.text.secondary
+        color: customColor.isUseDefault ? palette.text.secondary : customColor.hover
       }
-    },
-    notAccomplishedCheckBoxContainer: {
-      background: palette.background.default,
+    }),
+    notAccomplishedCheckBoxContainer: ({ customColor }: UseStylesCustomColorType) => ({
       borderRadius,
       // '&:': {
       // border: '1px solid',
@@ -32,7 +42,7 @@ const useStyles = makeStyles(
       '& .text': {
         width: 'calc(100% - 106px)'
       }
-    },
+    }),
     accomplishedCheckBoxesContainer: {
       textDecoration: 'line-through',
 
@@ -52,7 +62,7 @@ const CheckBoxContainer: FC<CheckBoxItemPropsType> = ({
   isAccomplishedCheckBoxesHidden,
   handleAccomplishedCheckBoxesHiddenStatus
 }) => {
-  const classes = useStyles();
+  const classes = useStyles({ customColor });
 
   const accomplishedCheckBoxes = filter(checkBoxesArr, ({ isAccomplished }) => !!isAccomplished);
   const notAccomplishedCheckBoxes = filter(checkBoxesArr, ({ isAccomplished }) => !isAccomplished);
@@ -111,7 +121,7 @@ const CheckBoxContainer: FC<CheckBoxItemPropsType> = ({
                   {(provided, snapshot) => (
                     <Grid
                       {...provided.draggableProps}
-                      className={classes.notAccomplishedCheckBoxContainer}
+                      className={clsx(classes.notAccomplishedCheckBoxContainer, snapshot.isDragging && 'dragging')}
                       container
                       // style={{borderColor:snapshot.isDragging ? 'red' : ''}}
                       ref={provided.innerRef}
