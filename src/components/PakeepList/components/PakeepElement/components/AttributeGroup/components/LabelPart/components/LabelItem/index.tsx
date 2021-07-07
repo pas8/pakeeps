@@ -6,8 +6,8 @@ import { LabelItemPropsType, UseStylesOfLabelItemType } from './types';
 const useStyles = makeStyles(({ spacing }) => ({
   container: ({ color, isDark, isCustomColor, parentBackgrounColor, aplyMargin }: UseStylesOfLabelItemType) => ({
     cursor: 'pointer',
-    marginRight: spacing(aplyMargin ? 1 : 0),
-    marginBottom: spacing(aplyMargin ? 1 : 0),
+    marginRight: spacing(aplyMargin ? 0.8 : 0),
+    marginBottom: spacing(aplyMargin ? 0.8 : 0),
     '& .MuiChip-root': {
       cursor: 'pointer',
       background: color,

@@ -42,9 +42,10 @@ import { useFilteredLabels } from 'hooks/useFilteredLabels.hook';
 import { getLabels } from 'store/modules/App/selectors';
 import compareFunc from 'compare-func';
 import CheckBoxContainer from 'components/CheckBoxContainer';
+import IconButtonByPas from 'components/IconButton';
 const useStyles = makeStyles(
   ({ spacing, palette, transitions, typography: { subtitle1, h5 }, shape: { borderRadius } }) => ({
-    container: ({ customColor, isLabelViewHidden, backgroundColor }) => ({
+    container: ({ customColor, isLabelViewHidden, backgroundColor }:any) => ({
       borderRadius,
       border: '1px solid',
       borderColor: useAlpha(palette.text.primary, 0.2),
@@ -92,9 +93,9 @@ const useStyles = makeStyles(
       }
     },
     inputsContainer: {
-      padding: spacing(1)
+      padding: spacing(1,0.4,1,1)
     },
-    wrapper: ({ backgroundColor, customColor }) => ({
+    wrapper: ({ backgroundColor, customColor }:any) => ({
       padding: spacing(0),
       backgroundColor: colord(backgroundColor).isValid() ? backgroundColor : 'transparent',
       position: 'relative',
@@ -176,13 +177,12 @@ const NewPaKeep = () => {
   };
   const [statusState, setStatusState] = useState(nullityStatusState);
 
-const handleAccomplishedCheckBoxesHiddenStatus = () => {
-  setStatusState(state => ({
-    ...state,
-    isAccomplishedCheckBoxesHidden: !state.isAccomplishedCheckBoxesHidden
-  }));
-
-}
+  const handleAccomplishedCheckBoxesHiddenStatus = () => {
+    setStatusState(state => ({
+      ...state,
+      isAccomplishedCheckBoxesHidden: !state.isAccomplishedCheckBoxesHidden
+    }));
+  };
 
   const handleSetFavoritePakeep = () => setState(state => ({ ...state, isFavorite: !state.isFavorite }));
   const handleSetBookmarkPakeep = () => setState(state => ({ ...state, isInBookmark: !state.isInBookmark }));
@@ -326,16 +326,16 @@ const handleAccomplishedCheckBoxesHiddenStatus = () => {
               placeholder={'Title'}
               endAdornment={
                 <InputAdornment position={'end'}>
-                  <IconButton
+                  <IconButtonByPas
                     aria-label={'toggle text visibility'}
-                    color={'default'}
+                    size={'small'}
+                    customColor={customColor}
+                    icon={!statusState.isTextHidden ? Visibility : VisibilityOff}
                     onClick={hanldeChangeTextVisiblittyStatus}
-                    style={{ width: 48, marginRight: -8 }}
+                    // style={{ width: 48, marginRight: -8 }}
                     // onMouseDown={handleMouseDownPassword}
-                    edge={'end'}
-                  >
-                    {!statusState.isTextHidden ? <Visibility /> : <VisibilityOff />}
-                  </IconButton>
+                    // edge={'end'}
+                  />
                 </InputAdornment>
               }
             />
@@ -344,8 +344,10 @@ const handleAccomplishedCheckBoxesHiddenStatus = () => {
             <Grid className={classes.textContainer}>
               {state.isCheckBoxes ? (
                 <CheckBoxContainer
-                  checkBoxesArr={checkBoxes}
+            
+                checkBoxesArr={checkBoxes}
                   setCheckBoxes={setCheckBoxes}
+                  customColor={customColor}
                   isAccomplishedCheckBoxesHidden={statusState.isAccomplishedCheckBoxesHidden}
                   handleAccomplishedCheckBoxesHiddenStatus={handleAccomplishedCheckBoxesHiddenStatus}
                 />

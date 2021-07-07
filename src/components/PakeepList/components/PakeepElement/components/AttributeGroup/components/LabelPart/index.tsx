@@ -20,7 +20,7 @@ const LabelPart: FC<LabelPartPropsType> = ({
   const customColor = useGetReversedCustomColor(notReversedCustomColor);
 
   return (
-    <Grid container>
+    <Grid container style={{marginLeft:4,}}>
       {labels.map(({ title, iconName: labelIconName, id, color, variant }) => {
         const icon = useFindIcon(labelIconName);
 
