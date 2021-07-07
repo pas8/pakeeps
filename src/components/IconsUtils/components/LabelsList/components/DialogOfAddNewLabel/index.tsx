@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import { ChangeEvent, FC, KeyboardEvent, useState } from 'react';
 import { usePrevious } from 'react-use';
 import { connect, useDispatch } from 'react-redux';
@@ -7,7 +6,7 @@ import { nanoid } from 'nanoid';
 import { isEqual } from 'lodash';
 import { useSnackbar } from 'notistack';
 import { useFindIcon } from 'hooks/useFindIcon.hook';
-import { Dialog, DialogActions, DialogTitle, Button, makeStyles } from '@material-ui/core';
+import { Dialog, DialogActions, DialogTitle, Button, makeStyles, Grid ,Box} from '@material-ui/core';
 import RestoreOutlinedIcon from '@material-ui/icons/RestoreOutlined';
 import { toAddNewGlobalLabel } from 'store/modules/App/actions';
 import { ColorType, IconNameType, LabelVariantType } from 'store/modules/App/types';
@@ -31,10 +30,10 @@ import {
   UseStylesOfDialogOfAddNewLabelProps
 } from './types';
 
-const useStyles = makeStyles(({ spacing, palette }) => ({
+export const useStyles = makeStyles(({ spacing, palette }) => ({
   container: ({ customColor }: UseStylesOfDialogOfAddNewLabelProps) => ({
     '& .MuiDialog-paper': {
-      // background: customColor && !useIsColorLight( customColor?.bgUnHover) ?grey[50] :  customColor?.bgUnHover,
+      background: customColor?.isUseDefault ? '' : customColor?.bgUnHover,
 
       '& .MuiDialogTitle-root, .MuiStepper-root,.MuiDialogActions-root': {
         background: customColor?.isUseDefault ? '' : customColor?.bgUnHover,
@@ -214,10 +213,11 @@ const DialogOfAddNewLabel: FC<DialogOfAddNewLabelPropsType> = ({
       <DialogTitle>Add new global label</DialogTitle>
       <SteperOfDialogOfAddNewLabel {...steperOfDialogOfAddNewLabelProps} />
       <DialogActions>
-        {
-          //@ts-ignore
+        <Box ml={2.4}>
+        {          //@ts-ignore
           <LabelItem {...labelItemProps} />
         }
+        </Box>
         <ActionsButtonGroup {...actionsButtonGroupProps} />
       </DialogActions>
     </Dialog>

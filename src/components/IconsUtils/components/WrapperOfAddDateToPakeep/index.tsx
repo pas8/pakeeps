@@ -15,7 +15,6 @@ const WrapperOfAddDateToPakeep: FC<WrapperOfAddDateToPakeepPropsType & EventsLis
   const globalEvents = useSelector(getGlobalEventsArr);
   const timeFormat = useSelector(getTimeFormat);
   const timeAndDateFromat = useSelector(getTimeAndDateFromat);
-
   const currentEventsArr = useFindCurrentEvents(globalEvents, events, timeFormat, timeAndDateFromat);
 
   const addDateToPakeepProps = {

@@ -17,7 +17,7 @@ import { useValidatedCurrentEvents } from 'hooks/useValidatedCurrentEvents.hook'
 import { Chip, Typography, Grid, makeStyles } from '@material-ui/core';
 import { format } from 'date-fns';
 import PreviewEventList from 'components/PakeepList/components/PakeepElement/components/AttributeGroup/components/EventsPart/components/PreviewEventList';
-import DialogOfEditingDate from 'components/PakeepList/components/PakeepElement/components/AttributeGroup/components/EventsPart/components/DialogOfEditingDate';
+import DialogOfAddingNewGlobalEvent from 'components/PakeepList/components/PakeepElement/components/AttributeGroup/components/EventsPart/components/DialogOfAddingNewGlobalEvent';
 import {
   AddDateToPakeepPropsType,
   ChosenItemArrType,
@@ -34,9 +34,7 @@ const AddDateToPakeep: FC<AddDateToPakeepPropsType> = ({
   handleSaveEvents
 }) => {
   const ampm = false;
-console.log(currentEventsArr)
   if (!currentEventsArr) return null;
-  // console.log(events);
 
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
@@ -47,21 +45,29 @@ console.log(currentEventsArr)
     TO_PUSH = 'TO_PUSH',
     SAVED = 'saved'
   }
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+
+
 
   const currentEventsObject = mapKeys(currentEventsArr, ({ id }) => id);
   const customColor = useGetReversedCustomColor(color);
 
+
+  const dialogOfAddingNewGlobalEventProps = {
+    open: isEditDialogOpen,
+    customColor:color,
+    onClose:()=> setIsEditDialogOpen(false)
+  };
   const [buttonSaveState, setButtonSaveState] = useState<ButtonSaveStateDenotation>(ButtonSaveStateDenotation.NULLITY);
 
   const [focusedEventId, setFocusedEventId] = useState('');
 
   const [dateAndTimeInputsState, setDateAndTimeInputsState] = useState<DateAndTimeInputsStateType>({});
-
+  // console.log(dateAndTimeInputsState)
   const handleDateAndTimeInputsState: HandleDateAndTimeInputsStateType = (id, value, inputValue) => {
     setFocusedEventId(id);
     setDateAndTimeInputsState(state => ({ ...state, [id]: { id, value, inputValue } }));
   };
-
   // const handleAddCustomEvent = newCustomEvent => {
   //   setDateAndTimeInputsState(state => ({ ...state, addMoreEvents: [...state.addMoreEvents, newCustomEvent] }));
   // };
@@ -71,10 +77,7 @@ console.log(currentEventsArr)
       title: 'Add Custom Events',
       iconName: 'dateRange',
       id: '2151152352rerwkfsdnj23',
-      dynamicComponent: {
-        component: DynamicAddMoreEvents
-        // props: { handleAddCustomEvent }
-      }
+      onClick: () => setIsEditDialogOpen(true)
     }
   ];
 
@@ -93,12 +96,12 @@ console.log(currentEventsArr)
 
     const nullityOfChosenItemArr = map(filter(dateListArr, 'isChosen'), 'id');
     setChosenItemArr(nullityOfChosenItemArr);
-  }, [currentEventsArr]);
+  }, []);
 
   const validatedCurrentEvents = useValidatedCurrentEvents(dateAndTimeInputsState, chosenItemArr);
-
   useEffect(() => {
     if (buttonSaveState !== ButtonSaveStateDenotation.TO_PUSH) return;
+    console.log(validatedCurrentEvents);
 
     if (!validatedCurrentEvents.length) {
       enqueueSnackbar({
@@ -108,7 +111,7 @@ console.log(currentEventsArr)
       return;
     }
     handleSaveEvents(validatedCurrentEvents);
-    // onMenuClose();
+    onMenuClose();
 
     enqueueSnackbar({
       message: `You succsesfully added ${validatedCurrentEvents.length} events`
@@ -125,7 +128,7 @@ console.log(currentEventsArr)
   const customTitle = !!validatedCurrentEvents.length ? (
     <PreviewEventList {...previewEventListProps} />
   ) : (
-    <Typography> Events</Typography>
+    <Typography style={{ color: customColor.isUseDefault ? '' : customColor.unHover }}> Events</Typography>
   );
 
   const headerOfAddDateToPakeepProps = {
@@ -135,12 +138,6 @@ console.log(currentEventsArr)
     customColor,
     customTitle,
     isHideBorder: includes(chosenItemArr, FIRST_EVENT_ID)
-  };
-
-  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
-
-  const dialogOfEditingDateProps = {
-    open: isEditDialogOpen
   };
 
   return (
@@ -208,7 +205,7 @@ console.log(currentEventsArr)
         return <DynamicMenuItem {...dynamicMenuListProps} key={nanoid()} />;
       })}
 
-      <DialogOfEditingDate {...dialogOfEditingDateProps} />
+      <DialogOfAddingNewGlobalEvent {...dialogOfAddingNewGlobalEventProps} />
     </>
   );
 };

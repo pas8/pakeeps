@@ -14,6 +14,8 @@ import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
 import { DynamicInputDateAndTimePickersPropsType, UseStylesOfDynamicInputDateAndTimePickersPropsType } from './types';
 import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date';
 import { defaultTheme } from 'store/modules/Color/reducers';
+import { useDispatch } from 'react-redux';
+import { toChangeThemeColors } from 'store/modules/App/actions';
 
 const EditIcon = () => {
   return (
@@ -23,24 +25,27 @@ const EditIcon = () => {
   );
 };
 
-const useStyles = makeStyles(({ spacing, typography: { h4 }, palette }) => ({
+export const useStyles = makeStyles(({ spacing, typography: { h4 }, palette }) => ({
   '@global': {
     '.MuiPickersToolbarText-toolbarTxt,.MuiPickersToolbarText-toolbarBtnSelected': {
-      color: ({ customColor, isDark }: UseStylesOfDynamicInputDateAndTimePickersPropsType) =>
-        `${customColor.isUseDefault && isDark && customColor.unHover} !important`
+      color: ({ customColor }: UseStylesOfDynamicInputDateAndTimePickersPropsType) =>
+        `${customColor.isUseDefault && !useIsColorLight(customColor?.bgHover) && customColor.unHover} !important`
     },
     '.MuiPickersModal-dialogRoot': {
       // borderRadius: ({ customColor }) => customColor && '6px'
     }
   },
-  container: ({ customColor, onlyTime, isDark,error }: UseStylesOfDynamicInputDateAndTimePickersPropsType) => {
-    const defaultColor =   customColor.isUseDefault ? palette?.mediumEmphasis?.main : customColor.unHover;
+  container: ({ customColor, onlyTime = false,  error }: UseStylesOfDynamicInputDateAndTimePickersPropsType) => {
+    const defaultColor = customColor.isUseDefault ? palette?.mediumEmphasis?.main : customColor.unHover;
     const defaultHoverColor = customColor.isUseDefault ? palette?.maxEmphasis?.main : useAlpha(customColor.hover, 0.8);
-    const focusedColor = error ? palette.error.main : customColor.isUseDefault ? palette?.primary?.main : customColor.hover;
+    const focusedColor = error
+      ? palette.error.main
+      : customColor.isUseDefault
+      ? palette?.primary?.main
+      : customColor.hover;
 
     return {
       marginRight: spacing(-0.4),
-
       '& button': {
         margin: spacing(0, -0.8, 0, -1.42)
       },
@@ -95,7 +100,7 @@ const useStyles = makeStyles(({ spacing, typography: { h4 }, palette }) => ({
       }
     };
   },
-  containerOfEndAdornment: ({ onlyTime }: UseStylesOfDynamicInputDateAndTimePickersPropsType) => ({
+  containerOfEndAdornment: ({ onlyTime = false}: UseStylesOfDynamicInputDateAndTimePickersPropsType) => ({
     // maxWidth: spacing(10),
     marginLeft: onlyTime ? spacing(-2) : spacing(-18),
     width: '100%',
@@ -120,17 +125,20 @@ const DynamicInputDateAndTimePickers: FC<DynamicInputDateAndTimePickersPropsType
   handleThemeColorsThunk,
   onClickOfEditIcon
 }) => {
-  extend([mixPlugin]);
-  const isDark = !useIsColorLight(customColor?.bgHover);
-  const error = !isValid(value)  
+  const dispatch = useDispatch();
 
-  const classes = useStyles({ customColor, onlyTime, isDark,error });
+  extend([mixPlugin]);
+  const error = !isValid(value);
+
+  const classes = useStyles({ customColor, onlyTime, error });
 
   const onChange = (date: MaterialUiPickersDate, value: string | null | undefined) => {
     handleDateAndTimeInputsState(name, date, value);
   };
 
-  const handleSetDefaultTheme = () => handleThemeColorsThunk(defaultTheme);
+  const handleSetDefaultTheme = () => {
+    dispatch(toChangeThemeColors({ newThemeColors: defaultTheme }));
+  };
 
   const onAccept = (date: MaterialUiPickersDate) => {
     handleSetDefaultTheme();
@@ -139,28 +147,36 @@ const DynamicInputDateAndTimePickers: FC<DynamicInputDateAndTimePickersPropsType
   };
 
   const autoFocus = focusedEventId === name;
-  const onOpen = () =>
-    !customColor.isUseDefault &&
-    handleThemeColorsThunk({
-      type: isDark ? 'dark' : 'light',
-      primaryMain: customColor.hover,
-      // paperMain: 'green',
-      paperMain: customColor?.bgHover,
-      // paperMain: useIsColorLight(customColor?.bgHover)
-      // ? colord(customColor?.bgHover).lighten(0.04).toHex()
-      // : colord(customColor?.bgHover).darken(0.04).toHex(),
-      defaultBackgroundMain: customColor?.bgUnHover
-    });
-  const onClose = () => handleSetDefaultTheme();
+  const onOpen = () => {
+    console.log(';')
+    // !customColor.isUseDefault &&
+    //   dispatch(
+    //     toChangeThemeColors({
+    //       newThemeColors: {
+    //         type: isDark ? 'dark' : 'light',
+    //         primaryMain: customColor.hover,
+    //         // paperMain: 'green',
+    //         textColor: customColor.hover!,
+    //         paperMain: customColor?.bgHover,
+    //         // paperMain: useIsColorLight(customColor?.bgHover)
+    //         // ? colord(customColor?.bgHover).lighten(0.04).toHex()
+    //         // : colord(customColor?.bgHover).darken(0.04).toHex(),
+    //         defaultBackgroundMain: customColor?.bgUnHover
+    //       }
+    //     })
+    //   );
+  };
+  // const onClose = () => handleSetDefaultTheme();
 
   const InputProps = {
     endAdornment: (
       <InputAdornment position={'end'} className={classes.containerOfEndAdornment}>
         <Typography component={'p'}> {title}</Typography>
         <Box ml={1.4} display={'flex'}>
-          {/* <IconButtonByPas icon={CloseIcon} size={'small'} onClick={onClickOfCloseIcon} /> */}
-
           <IconButtonByPas icon={EditIcon} size={'small'} onClick={onClickOfEditIcon} />
+        </Box>
+        <Box ml={1.4} display={'flex'} mr={-0.4}>
+          <IconButtonByPas icon={CloseIcon} size={'small'} onClick={onClickOfCloseIcon} />
         </Box>
       </InputAdornment>
     )
@@ -171,7 +187,7 @@ const DynamicInputDateAndTimePickers: FC<DynamicInputDateAndTimePickersPropsType
     inputValue,
     onChange,
     key: name,
-    onOpen,
+    // onOpen,
     todayButton: !onlyTime,
     inputVariant: 'outlined',
     keyboardIcon: icon,
@@ -179,7 +195,7 @@ const DynamicInputDateAndTimePickers: FC<DynamicInputDateAndTimePickersPropsType
     format,
     disablePast: true,
     customColor,
-    onClose,
+    // onClose,
     error,
     autoFocus,
     onAccept,

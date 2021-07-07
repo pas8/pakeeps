@@ -1,9 +1,5 @@
-import PropTypes from 'prop-types';
 import { makeStyles, Button, Stepper, StepLabel, StepContent, Step, Grid, Box, Typography } from '@material-ui/core';
 import { useCounter } from 'react-use';
-import SubdirectoryArrowLeftIcon from '@material-ui/icons/SubdirectoryArrowLeft';
-import ArrowBackIcon from '@material-ui/icons/ArrowBack';
-import ArrowLeftIcon from '@material-ui/icons/ArrowLeft';
 import { useAlpha } from 'hooks/useAlpha.hook';
 import { useMix } from 'hooks/useMix.hook';
 import { FC } from 'react';
@@ -61,15 +57,17 @@ const useStyles = makeStyles(({ spacing }) => ({
     }
   }),
 
-  buttonContainer: {
+  buttonContainer: ({ customColor }: UseStylesOfSteperOfDialogOfAddNewLabelType) => ({
     margin: spacing(0, 0, 0, 1),
     maxWidth: spacing(12),
+    // background: !customColor.isUseDefault ? customColor?.hover : '',
+
     height: '100%',
 
     '& button': {
       float: 'right'
     }
-  },
+  }),
   componentContainer: {
     minWidth: spacing(28)
   }

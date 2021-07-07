@@ -48,9 +48,12 @@ const EventItem: FC<EventItemPropsType> = ({
   title,
   customColor,
   value,
-  isFirstVariantOfEventItemView,
-  isInputTextViewOfCaptionOfEventItem
 }) => {
+
+  const isFirstVariantOfEventItemView = true;
+  const isInlineVariantOfEventItemView = true;
+
+  const isInputTextViewOfCaptionOfEventItem = !true;
   const classes = useStyles({ customColor });
   return (
     <>

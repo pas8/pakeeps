@@ -16,22 +16,17 @@ const useStyles = makeStyles(({ spacing }) => ({
 
 const PreviewEventList: FC<PreviewEventListPropsType> = ({ validatedCurrentEvents, currentEventsArr, customColor }) => {
   const classes = useStyles();
-  const isFirstVariantOfEventItemView = true;
-  const isInlineVariantOfEventItemView = true;
-
-  const isInputTextViewOfCaptionOfEventItem = !true;
 
   return (
     <Grid>
       <Grid container className={classes.container}>
-        {validatedCurrentEvents.map(({ id }, idx) => {
+        {validatedCurrentEvents.map(({ id, value }, idx) => {
           const findedEl: CurrentEventsElementType = find(currentEventsArr, ['id', id])!;
 
           const [icon] = useTakeIcon(findedEl?.iconName);
-
           const format = findedEl?.format;
-          const value = isValid(findedEl?.value)
-            ? toFormat(findedEl.value, format, { useAdditionalDayOfYearTokens: true })
+          const validatedValue = isValid(value)
+            ? toFormat(value, format, { useAdditionalDayOfYearTokens: true })
             : 'Invalid date';
           const title = findedEl?.title;
 
@@ -43,11 +38,8 @@ const PreviewEventList: FC<PreviewEventListPropsType> = ({ validatedCurrentEvent
             key,
             title,
             customColor,
-            value,
-            isOnlyTime,
-            isInputTextViewOfCaptionOfEventItem,
-            isFirstVariantOfEventItemView,
-            isInlineVariantOfEventItemView
+            value: validatedValue,
+            isOnlyTime
           };
           return <EventItem {...eventItemProps} />;
         })}

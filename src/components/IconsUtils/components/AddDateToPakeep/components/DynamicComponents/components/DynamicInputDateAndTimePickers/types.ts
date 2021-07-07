@@ -18,7 +18,6 @@ export type DynamicInputDateAndTimePickersPropsType = {
 
 export type UseStylesOfDynamicInputDateAndTimePickersPropsType = {
   customColor: CustomColorType;
-  onlyTime: boolean;
-  error?:boolean
-  isDark?: boolean;
+  onlyTime?: boolean;
+  error: boolean;
 };
