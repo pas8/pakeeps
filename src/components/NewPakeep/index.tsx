@@ -40,7 +40,8 @@ import firebase from 'firebase';
 import AttributeGroup from 'components/PakeepList/components/PakeepElement/components/AttributeGroup';
 import { useFilteredLabels } from 'hooks/useFilteredLabels.hook';
 import { getLabels } from 'store/modules/App/selectors';
-import compareFunc from 'compare-func'
+import compareFunc from 'compare-func';
+import CheckBoxContainer from 'components/CheckBoxContainer';
 const useStyles = makeStyles(
   ({ spacing, palette, transitions, typography: { subtitle1, h5 }, shape: { borderRadius } }) => ({
     container: ({ customColor, isLabelViewHidden, backgroundColor }) => ({
@@ -118,24 +119,30 @@ const useStyles = makeStyles(
     },
     attributeGroupContainer: {
       margin: spacing(0, 1.8)
-    }
-,
-    checkBoxContainer:{
-
-
-
-    }
+    },
+    checkBoxContainer: {}
   })
 );
 
 const NewPaKeep = () => {
-  const [inputState, setInputState, { back, forward }] = useStateWithHistory({ title: '', text: '' }, 42);
+  const [inputState, setInputState, { back: inputsBack, forward: unputsForward }] = useStateWithHistory(
+    { title: '', text: '' },
+    42
+  );
 
-  const [ checkBoxes, setCheckBoxes, { back, forward }] = useStateWithHistory({ title: '', text: '' }, 42);
-
+  const [checkBoxes, setCheckBoxes, { back: checkBoxesBack, forward: checkBoxesForward }] = useStateWithHistory(
+    [
+      { color: 'default', value: 'Randomn0 ewjknv sdv wqdvjqw', isAccomplished: false, id: '0' },
+      { color: 'default', value: 'Randomn1 ewjknv sdv wqdvjqw', isAccomplished: false, id: '1' },
+      { color: 'default', value: 'Randomn2 ewjknv sdv wqdvjqw', isAccomplished: false, id: '2' },
+      { color: 'default', value: 'Randomn3 ewjknv sdv wqdvjqw', isAccomplished: false, id: '3' },
+      { color: 'default', value: 'Randomn4 ewjknv sdv wqdvjqw', isAccomplished: false, id: '4' }
+    ],
+    42
+  );
 
   const nulittyState = {
-    isCheckBoxes: false,
+    isCheckBoxes: !false,
     isInBookmark: false,
     isArchived: false,
     isFavorite: false,
@@ -147,12 +154,9 @@ const NewPaKeep = () => {
     labels: ['label1']
   };
 
-   
-
-
   const [state, setState] = useState(nulittyState);
   const [value, updateCookie, deleteCookie] = useCookie(JSON.stringify(state));
-  console.log(state.labels);
+
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -167,9 +171,18 @@ const NewPaKeep = () => {
   const nullityStatusState = {
     isTextHidden: true,
     isLabelViewHidden: false,
-    isNewPakeepContainerHaveFullWidth: true
+    isNewPakeepContainerHaveFullWidth: true,
+    isAccomplishedCheckBoxesHidden: false
   };
   const [statusState, setStatusState] = useState(nullityStatusState);
+
+const handleAccomplishedCheckBoxesHiddenStatus = () => {
+  setStatusState(state => ({
+    ...state,
+    isAccomplishedCheckBoxesHidden: !state.isAccomplishedCheckBoxesHidden
+  }));
+
+}
 
   const handleSetFavoritePakeep = () => setState(state => ({ ...state, isFavorite: !state.isFavorite }));
   const handleSetBookmarkPakeep = () => setState(state => ({ ...state, isInBookmark: !state.isInBookmark }));
@@ -236,8 +249,8 @@ const NewPaKeep = () => {
     handleDeleteLabelFromPakeepFunc,
     handleDeleteNewLabel
   };
-  const handleUndo = () => back(4);
-  const handleRedo = () => forward(4);
+  const handleUndo = () => (!state.isCheckBoxes ? inputsBack(4) : checkBoxesBack(4));
+  const handleRedo = () => (!state.isCheckBoxes ? checkBoxesBack(4) : checkBoxesForward(4));
   const labelBargeNumber = statusState.isLabelViewHidden ? state.labels.length : 0;
   const newPakeepUtils = {
     ...state,
@@ -330,7 +343,12 @@ const NewPaKeep = () => {
           {!statusState.isTextHidden && (
             <Grid className={classes.textContainer}>
               {state.isCheckBoxes ? (
-               
+                <CheckBoxContainer
+                  checkBoxesArr={checkBoxes}
+                  setCheckBoxes={setCheckBoxes}
+                  isAccomplishedCheckBoxesHidden={statusState.isAccomplishedCheckBoxesHidden}
+                  handleAccomplishedCheckBoxesHiddenStatus={handleAccomplishedCheckBoxesHiddenStatus}
+                />
               ) : (
                 <InputBase
                   onChange={handleChangeInputsValue}
