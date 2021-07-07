@@ -1,5 +1,5 @@
 import { CustomColorType } from './../../../models/types';
-import { addDays } from 'date-fns';
+import { addDays, addHours } from 'date-fns';
 import { nanoid } from 'nanoid';
 import { TypeNames } from './enums';
 import {
@@ -49,9 +49,15 @@ const randomPakeeps = Array(8)
       .toString()}-${id}`;
 
     const isCheckBoxes = !!random(1);
-    const checkBoxes = Array(random(4, 10))
+    const checkBoxes = Array(random(2,4))
       .fill('')
       .map(() => ({ value: randomSentence(), isAccomplished: !!random(1), id: nanoid(), color: 'default' }));
+
+    const events = [
+      { id: '1', value: addHours(new Date(), 2) },
+      { id: '2', value: addHours(new Date(), 32) },
+      { id: '3', value: addHours(new Date(), 100) }
+    ];
 
     return {
       title: randomSentence({ words: random(4, 8) }),
@@ -63,7 +69,7 @@ const randomPakeeps = Array(8)
         random(labelsOfInitialState.length)
       ),
       isArchived: !!random(1),
-      events: [],
+      events,
       id,
       checkBoxes: isCheckBoxes ? checkBoxes : [],
       isPinned: !!random(1),
@@ -233,12 +239,6 @@ export const AppReducer = (state = initialState, action: AppActionTypes): AppIni
       return { ...state, ...variedState };
     }
 
-    case TypeNames.HANDLE_CHANGE_PAKEEP_CUSTOM_PROPERTY: {
-      const { pakeeps } = state;
-      const variedState = useChangePakeepCustomProperty({ pakeeps, ...action.payload });
-
-      return { ...state, ...variedState };
-    }
 
     case TypeNames.HANDLE_ADD_NEW_GLOBAL_LABEL: {
       const { newLabel } = action.payload;

@@ -28,6 +28,7 @@ const useStyles = makeStyles(({ spacing, palette: { highEmphasis, mediumEmphasis
     position: 'absolute',
     top: spacing(0.8),
     right: spacing(0.2),
+    color: !customColor.isUseDefault ? customColor.unHover : mediumEmphasis?.main,
 
     '&:hover': {
       background: colord(!customColor.isUseDefault ? customColor.hover : highEmphasis ? highEmphasis.main : '')
@@ -94,25 +95,26 @@ const MainDefaultPartOfPakeepElement: FC<MainDefaultPartOfPakeepElementPropsType
         <Grid className={classes.mainPartContainer} container>
           {isCheckBoxes ? (
             <>
-              {checkBoxes.sort(compareFunc('isAccomplished')).map(({ id, value, isAccomplished }) => {
-                return (
-                  <Grid
-                    // item
-                    container
-                    key={`mainDefaultPartOfPakeepElement-${id}`}
-                    className={classes.checkBoxesItemContainer}
-                  >
-                    <Checkbox checked={isAccomplished} />
-                    <Typography
-                      className={isAccomplished ? 'accomplished' : 'notAccomplished'}
-                      variant={'body2'}
-                      component={'p'}
+              {checkBoxes &&
+                checkBoxes.sort(compareFunc('isAccomplished')).map(({ id, value, isAccomplished }) => {
+                  return (
+                    <Grid
+                      // item
+                      container
+                      key={`mainDefaultPartOfPakeepElement-${id}`}
+                      className={classes.checkBoxesItemContainer}
                     >
-                      {value}
-                    </Typography>
-                  </Grid>
-                );
-              })}
+                      <Checkbox checked={isAccomplished} />
+                      <Typography
+                        className={isAccomplished ? 'accomplished' : 'notAccomplished'}
+                        variant={'body2'}
+                        component={'p'}
+                      >
+                        {value}
+                      </Typography>
+                    </Grid>
+                  );
+                })}
             </>
           ) : (
             <Typography variant={'body2'} component={'p'}>

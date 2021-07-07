@@ -18,7 +18,7 @@ export const useStyles = makeStyles(({ spacing, palette, typography: { subtitle2
     borderStyle: 'solid',
 
     '& li:hover .MuiTouchRipple-root': {
-      background: useAlpha(customColor.isUseDefault ? palette.secondary.main : customColor?.unHover, 0.42)
+      background: useAlpha(customColor.isUseDefault ? palette.secondary.main : customColor?.hover, 0.42)
     },
     '& svg,p': {
       color: !customColor.isUseDefault ? customColor?.unHover : palette?.highEmphasis?.main

@@ -10,10 +10,10 @@ const DialogOfEditingDate = ({ open,}) => {
   const classes = useStyles();
 
   const [eventState, setEventState] = useState({
-    title,
+    title:'',
     iconName: '',
     color: '',
-    id
+    id:''
   });
 
   // const menuLabelListArr = [

@@ -55,7 +55,7 @@ const useStyles = makeStyles(({ typography: { h4, h6 }, spacing }) => {
 
 const EditingDialogOfPakeepElement: FC<EditingDialogOfPakeepElementProps> = ({ id, handleClosePakeepDialog }) => {
   const findedPakeep = useFindPakeepUsingId(id);
-  // if (!findedPakeep) return null;
+  if (!findedPakeep) return null;
 
   const { backgroundColor, color, title, text } = findedPakeep;
 
@@ -117,9 +117,9 @@ const EditingDialogOfPakeepElement: FC<EditingDialogOfPakeepElementProps> = ({ i
 
   const labelsListProps = {
     // customColor,
-    handleDeleteNewLabel, handleAddNewLabel
+    handleDeleteNewLabel,
+    handleAddNewLabel
   };
-
 
   const iconsUtilsProps = {
     labelsListProps,

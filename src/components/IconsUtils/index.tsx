@@ -67,6 +67,7 @@ const IconsUtils: FC<IconsUtilsPropsType> = ({
   isBackgroundColorDefault,
   arrOfButtonNamesWhichSholudBeHidden = [],
   isUtilsReversed,
+  eventsListProps,
   events = [],
   isEditingUtilsHidden = true,
   handleRedo,
@@ -131,7 +132,7 @@ const IconsUtils: FC<IconsUtilsPropsType> = ({
       // onClick: handleClick,
       ActiveIcon: EventAvailableIcon,
       isIconActive: !!events?.length,
-      menuComponentsProps: { id },
+      menuComponentsProps: {...eventsListProps, id ,},
       menuComponents: WrapperOfAddDateToPakeep,
       ...iconsUtilsArrDenotation.EVENT
     },

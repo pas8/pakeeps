@@ -6,7 +6,7 @@ import { EventItemPropsType, UseStylesOfEventItemType } from './types';
 import clsx from 'clsx';
 const useStyles = makeStyles(({ spacing, transitions, palette, shape: { borderRadius } }) => ({
   containerOfDateItem: ({ customColor }: UseStylesOfEventItemType) => {
-    const color = !customColor ? palette?.highEmphasis?.main : customColor?.hover;
+    const color = customColor.isUseDefault ? palette?.highEmphasis?.main : customColor?.hover;
     return {
       position: 'relative',
       padding: spacing(0.32, 0.8, 0.16, 0.8),
@@ -27,12 +27,10 @@ const useStyles = makeStyles(({ spacing, transitions, palette, shape: { borderRa
   containeOfInputTextViewOfCaptionOfEventItem: {
     margin: spacing(0, 0.4),
     '& legend': {
-      padding: spacing(0,0.32,0,0.08)
+      padding: spacing(0, 0.32, 0, 0.08)
     },
-    '& .mainPart':{
-
-margin:spacing(-0.32,0,0,0)
-
+    '& .mainPart': {
+      margin: spacing(-0.32, 0, 0, 0)
     }
   },
 

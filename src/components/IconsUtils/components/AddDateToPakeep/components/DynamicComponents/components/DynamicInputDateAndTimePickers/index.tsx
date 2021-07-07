@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types';
 import { KeyboardDateTimePicker, KeyboardTimePicker } from '@material-ui/pickers';
 import { Grid, InputAdornment, makeStyles, Box, SvgIcon } from '@material-ui/core';
-import { memo } from 'react';
-import { format as toFormat } from 'date-fns';
+import { FC, memo, useState } from 'react';
+import { format as toFormat, isValid } from 'date-fns';
 import { useAlpha } from 'hooks/useAlpha.hook';
 import CloseIcon from '@material-ui/icons/Close';
 import IconButtonByPas from 'components/IconButton';
@@ -10,12 +10,14 @@ import { Typography } from '@material-ui/core';
 import { colord, extend } from 'colord';
 import mixPlugin from 'colord/plugins/mix';
 import { useIsColorLight } from 'hooks/useIsColorLight.hook';
-import { defaultTheme } from 'store/modules/App/reducers';
 import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
+import { DynamicInputDateAndTimePickersPropsType, UseStylesOfDynamicInputDateAndTimePickersPropsType } from './types';
+import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date';
+import { defaultTheme } from 'store/modules/Color/reducers';
 
 const EditIcon = () => {
   return (
-    <SvgIcon viewBox="0 0 24 24">
+    <SvgIcon viewBox={'0 0 24 24'}>
       <path d="M19,3H18V1H16V3H8V1H6V3H5A2,2 0 0,0 3,5V19A2,2 0 0,0 5,21H10V19H5V8H19V9H21V5A2,2 0 0,0 19,3M21.7,13.35L20.7,14.35L18.65,12.35L19.65,11.35C19.85,11.14 20.19,11.13 20.42,11.35L21.7,12.63C21.89,12.83 21.89,13.15 21.7,13.35M12,18.94L18.07,12.88L20.12,14.88L14.06,21H12V18.94Z" />
     </SvgIcon>
   );
@@ -23,20 +25,18 @@ const EditIcon = () => {
 
 const useStyles = makeStyles(({ spacing, typography: { h4 }, palette }) => ({
   '@global': {
-    '.MuiPickersToolbarText-toolbarTxt': {
-      color: ({ customColor, isDark }) => `${customColor && isDark && customColor.unHover} !important`
-    },
-    '.MuiPickersToolbarText-toolbarBtnSelected': {
-      color: ({ customColor, isDark }) => `${customColor && isDark && customColor.hover} !important`
+    '.MuiPickersToolbarText-toolbarTxt,.MuiPickersToolbarText-toolbarBtnSelected': {
+      color: ({ customColor, isDark }: UseStylesOfDynamicInputDateAndTimePickersPropsType) =>
+        `${customColor.isUseDefault && isDark && customColor.unHover} !important`
     },
     '.MuiPickersModal-dialogRoot': {
       // borderRadius: ({ customColor }) => customColor && '6px'
     }
   },
-  container: ({ customColor, onlyTime, isDark }) => {
-    const defaultColor = !customColor ? palette?.mediumEmphasis?.main : customColor.unHover;
-    const defaultHoverColor = !customColor ? palette?.maxEmphasis?.main : useAlpha(customColor.hover, 0.8);
-    const focusedColor = !customColor ? palette?.primary?.main : customColor.hover;
+  container: ({ customColor, onlyTime, isDark,error }: UseStylesOfDynamicInputDateAndTimePickersPropsType) => {
+    const defaultColor =   customColor.isUseDefault ? palette?.mediumEmphasis?.main : customColor.unHover;
+    const defaultHoverColor = customColor.isUseDefault ? palette?.maxEmphasis?.main : useAlpha(customColor.hover, 0.8);
+    const focusedColor = error ? palette.error.main : customColor.isUseDefault ? palette?.primary?.main : customColor.hover;
 
     return {
       marginRight: spacing(-0.4),
@@ -48,11 +48,11 @@ const useStyles = makeStyles(({ spacing, typography: { h4 }, palette }) => ({
         color: defaultColor
       },
       '& p': {
-        color: customColor.unHover
+        color: defaultColor
       },
 
       '& input': {
-        color: customColor.hover,
+        color: defaultHoverColor,
 
         // color: correctName ? 'rgba(255,255,255,0.96)' : 'rgba(255,255,255,0.8)',
         width: onlyTime ? spacing(10) : spacing(42)
@@ -66,7 +66,7 @@ const useStyles = makeStyles(({ spacing, typography: { h4 }, palette }) => ({
         '& svg': {
           color: defaultHoverColor
         },
-        background: useAlpha(defaultColor, 0.2)
+        background: useAlpha(defaultColor!, 0.2)
       },
       '& .MuiOutlinedInput-root': {
         color: customColor.bgHover,
@@ -80,11 +80,11 @@ const useStyles = makeStyles(({ spacing, typography: { h4 }, palette }) => ({
         },
         '&:hover fieldset': {
           borderColor: defaultHoverColor,
-          boxShadow: customColor && `0px 0px 4px 1px ${defaultHoverColor}`
+          boxShadow: customColor.isUseDefault ? '' : `0px 0px 4px 1px ${defaultHoverColor}`
         },
         '&.Mui-focused fieldset': {
           borderColor: focusedColor,
-          boxShadow: customColor && `0px 0px 4px 1px ${focusedColor}`
+          boxShadow: customColor ? '' : `0px 0px 4px 1px ${focusedColor}`
         },
         '&.Mui-focused ': {
           color: customColor.bgUnHover
@@ -95,7 +95,7 @@ const useStyles = makeStyles(({ spacing, typography: { h4 }, palette }) => ({
       }
     };
   },
-  containerOfEndAdornment: ({ onlyTime }) => ({
+  containerOfEndAdornment: ({ onlyTime }: UseStylesOfDynamicInputDateAndTimePickersPropsType) => ({
     // maxWidth: spacing(10),
     marginLeft: onlyTime ? spacing(-2) : spacing(-18),
     width: '100%',
@@ -103,7 +103,7 @@ const useStyles = makeStyles(({ spacing, typography: { h4 }, palette }) => ({
   })
 }));
 
-const DynamicInputDateAndTimePickers = ({
+const DynamicInputDateAndTimePickers: FC<DynamicInputDateAndTimePickersPropsType> = ({
   onlyTime,
   icon,
   name,
@@ -122,24 +122,25 @@ const DynamicInputDateAndTimePickers = ({
 }) => {
   extend([mixPlugin]);
   const isDark = !useIsColorLight(customColor?.bgHover);
+  const error = !isValid(value)  
 
-  const classes = useStyles({ keyboardIconColor: customColor.hover, correctName, customColor, onlyTime, isDark });
+  const classes = useStyles({ customColor, onlyTime, isDark,error });
 
-  const onChange = (date, value) => {
+  const onChange = (date: MaterialUiPickersDate, value: string | null | undefined) => {
     handleDateAndTimeInputsState(name, date, value);
   };
 
   const handleSetDefaultTheme = () => handleThemeColorsThunk(defaultTheme);
 
-  const onAccept = date => {
+  const onAccept = (date: MaterialUiPickersDate) => {
     handleSetDefaultTheme();
-    const inputValue = toFormat(date, format);
+    const inputValue = toFormat(date!, format);
     handleDateAndTimeInputsState(name, date, inputValue);
   };
 
   const autoFocus = focusedEventId === name;
   const onOpen = () =>
-    customColor &&
+    !customColor.isUseDefault &&
     handleThemeColorsThunk({
       type: isDark ? 'dark' : 'light',
       primaryMain: customColor.hover,
@@ -151,6 +152,20 @@ const DynamicInputDateAndTimePickers = ({
       defaultBackgroundMain: customColor?.bgUnHover
     });
   const onClose = () => handleSetDefaultTheme();
+
+  const InputProps = {
+    endAdornment: (
+      <InputAdornment position={'end'} className={classes.containerOfEndAdornment}>
+        <Typography component={'p'}> {title}</Typography>
+        <Box ml={1.4} display={'flex'}>
+          {/* <IconButtonByPas icon={CloseIcon} size={'small'} onClick={onClickOfCloseIcon} /> */}
+
+          <IconButtonByPas icon={EditIcon} size={'small'} onClick={onClickOfEditIcon} />
+        </Box>
+      </InputAdornment>
+    )
+  };
+
   const keyboardPickerState = {
     value,
     inputValue,
@@ -165,26 +180,16 @@ const DynamicInputDateAndTimePickers = ({
     disablePast: true,
     customColor,
     onClose,
-    error: false,
+    error,
     autoFocus,
     onAccept,
+    // onError: () => setError(true),
     ampm,
     variant: 'dialog',
     InputAdornmentProps: { position: 'start' },
-    InputProps: {
-      endAdornment: (
-        <InputAdornment position={'end'} className={classes.containerOfEndAdornment}>
-          <Typography component={'p'}> {title}</Typography>
-          <Box ml={1.4} display={'flex'}>
-          {/* <IconButtonByPas icon={CloseIcon} size={'small'} onClick={onClickOfCloseIcon} /> */}
-
-            <IconButtonByPas icon={EditIcon} size={'small'} onClick={onClickOfEditIcon} />
-          </Box>
-        </InputAdornment>
-      )
-    },
+    InputProps,
     fullWidth: true
-  };
+  } as const;
 
   const KeyboardPicker = onlyTime ? KeyboardTimePicker : KeyboardDateTimePicker;
 
@@ -195,28 +200,6 @@ const DynamicInputDateAndTimePickers = ({
       </Grid>
     </Grid>
   );
-};
-
-DynamicInputDateAndTimePickers.propTypes = {
-  KeyboardIcon: PropTypes.node,
-  ampm: PropTypes.bool,
-  clickStatus: PropTypes.bool,
-  correctName: PropTypes.any,
-  customColor: PropTypes.shape({
-    hover: PropTypes.any
-  }),
-  focusedEventId: PropTypes.string,
-  format: PropTypes.string,
-  handleDateAndTimeInputsState: PropTypes.func,
-  icon: PropTypes.any,
-  inputValue: PropTypes.any,
-  name: PropTypes.string,
-  onChange: PropTypes.func,
-  onClickOfCloseIcon: PropTypes.func,
-  onlyTime: PropTypes.bool,
-  savedStatus: PropTypes.bool,
-  title: PropTypes.string,
-  value: PropTypes.string
 };
 
 export default memo(DynamicInputDateAndTimePickers);

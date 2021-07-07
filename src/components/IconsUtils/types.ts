@@ -40,6 +40,11 @@ export type IconsUtilsValuesType = {
   isChangingTitle?: boolean;
 };
 
+export type EventsListProps = {
+  handleSaveEvents: (events: any) => void;
+  events: EventsOfPakeepType;
+};
+
 export type IconsUtilsPropetyiesType = {
   isBackgroundColorDefault?: boolean;
   backgroundColor?: any;
@@ -48,7 +53,7 @@ export type IconsUtilsPropetyiesType = {
   labelBargeNumber?: number;
   labelsListProps?: any;
   open?: boolean;
-
+  eventsListProps: EventsListProps;
   widthOfContainer?: number;
   isUtilsReversed?: boolean;
   arrOfButtonNamesWhichSholudBeHidden?: IconsUtilsArrDenotationNameType[];

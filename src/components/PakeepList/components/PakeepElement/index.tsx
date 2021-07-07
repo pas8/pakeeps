@@ -1,6 +1,6 @@
 import { Grid, makeStyles, Grow, Fade, Theme, useTheme } from '@material-ui/core';
 import PropTypes from 'prop-types';
-import { useState, useEffect, createContext, FC, ContextType, memo } from 'react';
+import { useState, useEffect, createContext, FC, ContextType, memo, MouseEventHandler, useRef } from 'react';
 import { addDays, addHours, isValid } from 'date-fns';
 import clsx from 'clsx';
 import { useSwipeable } from 'react-swipeable';
@@ -35,6 +35,7 @@ import PakeepPropertyProvider from 'components/PakeepPropertyProviders';
 import { useLabelListFunc } from 'hooks/useLabelListFunc.hook';
 import dynamic from 'next/dynamic';
 import { useAlpha } from 'hooks/useAlpha.hook';
+import { HandleSaveEventsType } from 'components/IconsUtils/components/AddDateToPakeep/types';
 
 const IconsUtils = dynamic(() => import('components/IconsUtils'), { loading: () => <p>loading</p> });
 
@@ -57,7 +58,7 @@ const useStyles = makeStyles(({ spacing, transitions, palette }: Theme) => ({
       cursor: 'grab',
       position: 'relative',
       backgroundColor,
-      border: `1px solid ${useAlpha(borderColor, isTypeLight ? 0.8 : 0.2)}`,
+      border: `1px solid ${useAlpha(borderColor!, isTypeLight ? 0.8 : 0.2)}`,
       color,
       transition: transitions.create('padding', {
         easing: transitions.easing.sharp,
@@ -120,9 +121,6 @@ const useStyles = makeStyles(({ spacing, transitions, palette }: Theme) => ({
   }
 }));
 
-
-
-
 const PakeepElement: FC<PakeepElementPropsType> = ({
   title,
   text,
@@ -134,7 +132,7 @@ const PakeepElement: FC<PakeepElementPropsType> = ({
   checkBoxes,
   isPinIconShouldBeShownInPakeep = false,
   // handlePinStatusPakeep,
-
+  events,
   onClickOfPakeepElement,
   isSelecting,
   handleSetPakeepElementHeigthArr,
@@ -149,12 +147,6 @@ const PakeepElement: FC<PakeepElementPropsType> = ({
   const globalLabels = useSelector(getLabels);
 
   const filteredLabels = useFilteredLabels(labels, globalLabels);
-
-  const events = [
-    { id: '1', value: addHours(new Date(), 2) },
-    { id: '2', value: addHours(new Date(), 32) },
-    { id: '3', value: addHours(new Date(), 100) }
-  ];
 
   const [, , maxEmphasisColor] = useThemeColors();
   const {
@@ -185,7 +177,7 @@ const PakeepElement: FC<PakeepElementPropsType> = ({
   //   dispatch(toChangeTemporaryData({ newTemporaryData: { pakeep: { id, isHovering: statusState.isHovered } } }));
   // }, [statusState.isHovered]);
 
-  const [ref, { width: widthOfContainer, height }] = useMeasure<HTMLDivElement>();
+  const [ref, { width: widthOfContainer, height, x, y }] = useMeasure<HTMLDivElement>();
 
   useEffect(() => {
     if (pakeepElementHeigth !== height && !!height) {
@@ -207,19 +199,6 @@ const PakeepElement: FC<PakeepElementPropsType> = ({
 
   const { handleSetIsPinnedPakeep, ...iconsUtilsFunc } = usePakeepUtilsFunc(id);
 
-  const iconsUtilsProps = {
-    ...iconsUtilsFunc,
-    ...propertyies,
-    handleSetIsPinnedPakeep,
-    isAllIconsIsShown: false,
-    // setEditTitleIsTrue,
-    changingTitle: false,
-    labels,
-    id,
-    isBackgroundColorDefault,
-    isColorDefault,
-    customColor
-  };
   useEffect(() => {
     !!pakeepElementHeigth && handleResetItemSize();
     // console.log(';')
@@ -235,7 +214,6 @@ const PakeepElement: FC<PakeepElementPropsType> = ({
   if (!statusState.isLoaded) return <SkeletonView />;
 
   const AnimationElement = isUtilsHaveViewLikeInGoogleKeep ? Fade : Grow;
-
   const { handleDeleteNewLabel, handleAddNewLabel } = useLabelListFunc(id);
   //
   //
@@ -264,9 +242,18 @@ const PakeepElement: FC<PakeepElementPropsType> = ({
     events
   };
 
-  const onMouseEnter = (e: any): void => {
+//   function getPos(el) {
+//     var rect=el.getBoundingClientRect();
+//     return {x:rect.left,y:rect.top};
+// }
+
+
+  const onMouseEnter: MouseEventHandler<HTMLDivElement> = e => {
     // console.log(e);
     // setIsPakeepHovering(!isSelecting);
+    // console.log(getPos(document?.getElementById(id)));
+  //   dispatch(toChangeTemporaryData({ newTemporaryData: { pakeep: { id, isHovering: statusState.isHovered } } }));
+
     handleSetIsHovering();
     // dispatch(toChangeTemporaryData({ newTemporaryData: { pakeep: { id, isHovering: true } } }));
   };
@@ -292,7 +279,7 @@ const PakeepElement: FC<PakeepElementPropsType> = ({
 
   const containerProps = {
     title,
-    isCheckBoxes:propertyies.isCheckBoxes,
+    isCheckBoxes: propertyies.isCheckBoxes,
     checkBoxes,
     text,
     isPinIconButtonHidden,
@@ -314,38 +301,56 @@ const PakeepElement: FC<PakeepElementPropsType> = ({
     onMouseEnter,
     onMouseLeave,
     ref,
+  
     className: clsx(classes.containerClass, className),
     id,
     open: true,
     maxWidth: 'md'
   };
-
-  const allIconsUtilsProps = {
-    ...iconsUtilsProps,
-    events,
-    widthOfContainer,
-    labelsListProps
+  const handleSaveEvents: HandleSaveEventsType = events => {
+    dispatch(toChangePakeepProperty({ pakeepId: id, property: { events } }));
   };
-  return (
-    <PakeepPropertyProvider.Provider value={{ events, labels }}>
-      <Grid {...pakeepGridContainerProps}>
-        <MainDefaultPartOfPakeepElement {...containerProps}>
-          {
-            <Grid>
-              <AttributeGroup {...attributeGroupProps} />
-            </Grid>
-          }
 
-          {openIn && !isDragging && (
-            <AnimationElement in={openIn}>
-              <Grid className={classes.iconsUtilsClass}>
-                <IconsUtils {...allIconsUtilsProps} />
-              </Grid>
-            </AnimationElement>
-          )}
-        </MainDefaultPartOfPakeepElement>
-      </Grid>
-    </PakeepPropertyProvider.Provider>
+  const eventsListProps = {
+    events,
+    handleSaveEvents
+  };
+
+  const iconsUtilsProps = {
+    ...iconsUtilsFunc,
+    ...propertyies,
+    eventsListProps,
+    labelsListProps,
+    handleSetIsPinnedPakeep,
+    isAllIconsIsShown: false,
+    changingTitle: false,
+    labels,
+    id,
+    isBackgroundColorDefault,
+    isColorDefault,
+    customColor,
+    events,
+    widthOfContainer
+  };
+
+  return (
+    <Grid {...pakeepGridContainerProps}   >
+      <MainDefaultPartOfPakeepElement {...containerProps}>
+        {
+          <Grid>
+            <AttributeGroup {...attributeGroupProps} />
+          </Grid>
+        }
+
+        {openIn && !isDragging && (
+          <AnimationElement in={openIn}>
+            <Grid className={classes.iconsUtilsClass}>
+              <IconsUtils {...iconsUtilsProps} />
+            </Grid>
+          </AnimationElement>
+        )}
+      </MainDefaultPartOfPakeepElement>
+    </Grid>
   );
 };
 

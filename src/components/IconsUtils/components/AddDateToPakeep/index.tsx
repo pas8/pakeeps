@@ -31,10 +31,10 @@ const AddDateToPakeep: FC<AddDateToPakeepPropsType> = ({
   id,
   customColor: color,
   currentEventsArr,
-  handlePakeepEvents
+  handleSaveEvents
 }) => {
   const ampm = false;
-
+console.log(currentEventsArr)
   if (!currentEventsArr) return null;
   // console.log(events);
 
@@ -70,7 +70,7 @@ const AddDateToPakeep: FC<AddDateToPakeepPropsType> = ({
     {
       title: 'Add Custom Events',
       iconName: 'dateRange',
-      id:'2151152352rerwkfsdnj23',
+      id: '2151152352rerwkfsdnj23',
       dynamicComponent: {
         component: DynamicAddMoreEvents
         // props: { handleAddCustomEvent }
@@ -78,7 +78,7 @@ const AddDateToPakeep: FC<AddDateToPakeepPropsType> = ({
     }
   ];
 
-  const dateListArr:DateListArrType = [...currentEventsArr, ...defaultDateListArr];
+  const dateListArr: DateListArrType = [...currentEventsArr, ...defaultDateListArr];
 
   const [chosenItemArr, setChosenItemArr] = useState<ChosenItemArrType>([]);
 
@@ -107,9 +107,8 @@ const AddDateToPakeep: FC<AddDateToPakeepPropsType> = ({
       });
       return;
     }
-
-    handlePakeepEvents(id, validatedCurrentEvents);
-    onMenuClose();
+    handleSaveEvents(validatedCurrentEvents);
+    // onMenuClose();
 
     enqueueSnackbar({
       message: `You succsesfully added ${validatedCurrentEvents.length} events`
@@ -118,10 +117,16 @@ const AddDateToPakeep: FC<AddDateToPakeepPropsType> = ({
     return setButtonSaveState(ButtonSaveStateDenotation.SAVED);
   }, [buttonSaveState]);
 
-  const onClickOfSaveButton = () => setButtonSaveState(ButtonSaveStateDenotation.TO_PUSH);
+  const onClickOfSaveButton = () => {
+    setButtonSaveState(ButtonSaveStateDenotation.TO_PUSH);
+  };
 
   const previewEventListProps = { validatedCurrentEvents, currentEventsArr, customColor };
-  const customTitle = <PreviewEventList {...previewEventListProps} />;
+  const customTitle = !!validatedCurrentEvents.length ? (
+    <PreviewEventList {...previewEventListProps} />
+  ) : (
+    <Typography> Events</Typography>
+  );
 
   const headerOfAddDateToPakeepProps = {
     buttonSaveState,

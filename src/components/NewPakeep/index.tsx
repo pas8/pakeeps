@@ -43,6 +43,7 @@ import { getLabels } from 'store/modules/App/selectors';
 import compareFunc from 'compare-func';
 import CheckBoxContainer from 'components/CheckBoxContainer';
 import IconButtonByPas from 'components/IconButton';
+import { HandleSaveEventsType } from 'components/IconsUtils/components/AddDateToPakeep/types';
 const useStyles = makeStyles(
   ({ spacing, palette, transitions, typography: { subtitle1, h5 }, shape: { borderRadius } }) => ({
     container: ({ customColor, isLabelViewHidden, backgroundColor }: any) => ({
@@ -74,14 +75,12 @@ const useStyles = makeStyles(
       //   padding: spacing(!customColor ? 2 : 2.8, 6, isLabelViewHidden ? 6 : 10, 1.4)
       // },
       '& input,textarea': {
-        '&::selection':{
-
-          background:customColor.isUseDefault ? '' : customColor.hover,
-          color:customColor.isUseDefault ? '' : customColor.bgHover,
-
+        '&::selection': {
+          background: customColor.isUseDefault ? '' : customColor.hover,
+          color: customColor.isUseDefault ? '' : customColor.bgHover
         },
-        color:customColor.isUseDefault ? '' : customColor.hover,
-        caretColor: customColor.isUseDefault ? palette.primary.main : customColor.hover,
+        color: customColor.isUseDefault ? '' : customColor.hover,
+        caretColor: customColor.isUseDefault ? palette.primary.main : customColor.hover
         // caretColor: palette.primary.main
         // color: !customColor ? palette?.maxEmphasis?.main : customColor.hover
       }
@@ -287,9 +286,20 @@ const NewPaKeep = () => {
   const handleUndo = () => (!state.isCheckBoxes ? inputsBack(4) : checkBoxesBack(4));
   const handleRedo = () => (!state.isCheckBoxes ? inputsForward(4) : checkBoxesForward(4));
   const labelBargeNumber = statusState.isLabelViewHidden ? state.labels.length : 0;
+
+  const handleSaveEvents: HandleSaveEventsType = events => {
+    setState(state => ({ ...state, events }));
+  };
+
+  const eventsListProps = {
+    events: state.events,
+    handleSaveEvents
+  };
+
   const newPakeepUtils = {
     ...state,
     ...statusState,
+    eventsListProps,
     labelBargeNumber,
     handleSetFavoritePakeep,
     handleSetBookmarkPakeep,

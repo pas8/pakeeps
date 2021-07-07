@@ -35,23 +35,17 @@ export const useFindPakeep = (pakeeps: PakeepsType, pakeepId: PakeepIdType): Pak
 
 export const useChangePakeepProperty = ({
   pakeepId,
-  properyName,
-  propertyValue,
+  property,
   pakeeps
-}: useHooksTypes[TypeNames.HANDLE_ADD_EVENT_TO_PAKEEP]): OnlyPakeepReturnType => {
+}: useHooksTypes[TypeNames.HANDLE_CHANGE_PAKEEP_PROPERTY]): OnlyPakeepReturnType => {
   const findedPakeep = find(pakeeps, ({ id }) => pakeepId === id);
   if (!findedPakeep) return { pakeeps };
 
-  const property: PakeepPropertyValueType =
-    properyName === 'events' || properyName === 'labels'
-      ? [...findedPakeep[properyName], propertyValue]
-      : !findedPakeep[properyName];
-
-  const newPakeep = { ...findedPakeep, [properyName]: property };
+  const newPakeep = { ...findedPakeep,  ...property };
 
   const filteredPakeeps = filter(pakeeps, ({ id }) => pakeepId !== id);
   const variedPakeeps = [...filteredPakeeps, newPakeep];
-
+console.log(newPakeep)
   const variedState = { pakeeps: variedPakeeps };
 
   return variedState;

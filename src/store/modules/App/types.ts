@@ -46,10 +46,6 @@ export type PayloadTypes = {
   [TypeNames.HANDLE_CHANGE_SELECTED_PAKEEPS_PROPERTY]: { newPakeeps: PakeepsType };
   [TypeNames.HANDLE_CHANGE_PAKEEP_PROPERTY]: {
     pakeepId: PakeepIdType;
-    properyName: PakeepPropertyKeysType;
-  };
-  [TypeNames.HANDLE_CHANGE_PAKEEP_CUSTOM_PROPERTY]: {
-    pakeepId: PakeepIdType;
     property: PakeepPropertyType;
   };
   [TypeNames.HANDLE_CHANGE_THEME_COLORS]: { newThemeColors: DefaultThemeInterface };
@@ -78,10 +74,6 @@ export type ActionsValueTypes = {
   toChangeTemporaryData: {
     type: typeof TypeNames.HANDLE_CHANGE_TEMPORARY_DATA;
     payload: PayloadTypes[TypeNames.HANDLE_CHANGE_TEMPORARY_DATA];
-  };
-  toChangePakeepCustomProperty: {
-    type: typeof TypeNames.HANDLE_CHANGE_PAKEEP_CUSTOM_PROPERTY;
-    payload: PayloadTypes[TypeNames.HANDLE_CHANGE_PAKEEP_CUSTOM_PROPERTY];
   };
 
   ToAddNewPakep: {
@@ -212,6 +204,12 @@ export type useHooksTypes = {
     propertyValue?: any;
     pakeeps: PakeepsType;
   };
+
+  [TypeNames.HANDLE_CHANGE_PAKEEP_PROPERTY]: {
+    pakeepId: PakeepIdType;
+    pakeeps: PakeepsType;
+    property: PakeepPropertyType;
+  };
   [TypeNames.HANDLE_DELETE_PAKEEP]: {
     pakeepId: PakeepIdType;
     pakeeps: PakeepsType;
@@ -225,7 +223,7 @@ export type useHooksTypes = {
 };
 export type OnlyPakeepReturnType = { pakeeps: PakeepsType };
 // export type ActionWithOnlyPayloadType<T> = (payload: T) => AppActionTypes;
-
+export type PakeepPropertyType = Optional<PakeepElementType>;
 export type ColorType = 'default' | string;
 export type LabelVariantType = 'default' | 'outlined';
 export type IconNameType = string;
@@ -360,7 +358,6 @@ export interface AppInitialStateInteface {
 export type PakeepPropertyValueType = $Values<PakeepElementType>;
 export type PakeepPropertyKeysType = $Keys<PakeepElementType>;
 
-export type PakeepPropertyType = { [Property in PakeepPropertyKeysType]?: PakeepPropertyValueType };
 
 export type OperateWOP<N> = (payload: N) => void;
 

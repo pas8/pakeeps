@@ -106,7 +106,7 @@ export type UseFindPakeepUsingIdType = (id: PakeepIdType) => PakeepElementType;
 
 export type IconType = typeof AddCircleOutlineOutlinedIcon;
 
-export type HandlePakeepEventsType = (pakeepId: PakeepIdType, events?: EventsOfPakeepType) => void;
+export type HandlePakeepEventsType = (events: EventsOfPakeepType) => void;
 
 export type HandleDeleteNewLabelType = (labelIdWhichShouldBeDeleted: LabelIdType) => void;
 export type HandleAddNewLabelType = (labelIdWhichShouldBeAdded: LabelIdType) => void;
