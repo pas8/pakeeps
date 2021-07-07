@@ -36,12 +36,12 @@ const NewPakeepUtils: FC<NewPakeepUtilsType> = ({ customColor, onSave, widthOfCo
   const actionsButtonGroupProps = {
     onSave,
     onClose: null,
-    colorOfCloseButton: customColor.isUseDefault ? mediumEmphasisColor : useAlpha(customColor?.hover, 0.6),
-    colorOfSaveButton: customColor.isUseDefault ? primaryColor : customColor?.hover
+    colorOfCloseButton: customColor.isUseDefault ? mediumEmphasisColor! : useAlpha(customColor?.hover, 0.6),
+    colorOfSaveButton: customColor.isUseDefault ? primaryColor! : customColor?.hover
   };
 
   return (
-    <Grid className={clsx(classes.container)} container alignItems={'center'} justify={'space-between'}>
+    <Grid className={clsx(classes.container)} container alignItems={'center'} justify={'space-between'} wrap={'nowrap'}>
       <Grid>
         <IconsUtils {...iconUtilsProps} />
       </Grid>

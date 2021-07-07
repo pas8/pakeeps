@@ -126,7 +126,7 @@ const CheckBoxContainer: FC<CheckBoxItemPropsType> = ({
                           <Checkbox checked={false} onChange={onChangeOfCheckBox} name={item.id} />
                         </Grid>
                       </Grid>
-                      <Grid className={'text'} item container   >
+                      <Grid className={'text'} item container>
                         <InputBase
                           name={item.id}
                           value={item.value}
@@ -136,7 +136,7 @@ const CheckBoxContainer: FC<CheckBoxItemPropsType> = ({
                           placeholder={'Write something...'}
                         />
                       </Grid>
-                      <Grid >
+                      <Grid>
                         <IconButtonByPas
                           onClick={() => handleDeleteCheckBoxItem(item.id)}
                           icon={CloseOutlinedIcon}
@@ -169,7 +169,7 @@ const CheckBoxContainer: FC<CheckBoxItemPropsType> = ({
       {!isAccomplishedCheckBoxesHidden &&
         accomplishedCheckBoxes.map(({ value, id }) => {
           return (
-            <Grid container className={classes.accomplishedCheckBoxesContainer}>
+            <Grid container className={classes.accomplishedCheckBoxesContainer} key={`accomplishedCheckBoxes-${id}`}>
               <Grid>
                 <Grid container justify={'center'} alignItems={'center'}>
                   <Checkbox checked={true} onChange={onChangeOfCheckBox} name={id} />

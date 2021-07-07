@@ -48,6 +48,11 @@ const randomPakeeps = Array(8)
       .map(() => randomSentence())
       .toString()}-${id}`;
 
+    const isCheckBoxes = !!random(1);
+    const checkBoxes = Array(random(4, 10))
+      .fill('')
+      .map(() => ({ value: randomSentence(), isAccomplished: !!random(1), id: nanoid(), color: 'default' }));
+
     return {
       title: randomSentence({ words: random(4, 8) }),
       text,
@@ -60,11 +65,11 @@ const randomPakeeps = Array(8)
       isArchived: !!random(1),
       events: [],
       id,
-      checkBoxes: [],
+      checkBoxes: isCheckBoxes ? checkBoxes : [],
       isPinned: !!random(1),
       backgroundColor,
       color,
-      isCheckBoxes: !!random(1)
+      isCheckBoxes
     };
   });
 
@@ -109,7 +114,9 @@ export const initialState: AppInitialStateInteface = {
       labels: ['label3', 'label1', 'label0', 'label2'],
       isArchived: false,
       events: [],
-      checkBoxes: [],
+      checkBoxes: Array(random(4, 10))
+        .fill('')
+        .map(() => ({ value: randomSentence(), isAccomplished: !!random(1), id: nanoid(), color: 'default' })),
       id: 'pakeep1',
       isPinned: true,
       isCheckBoxes: true,

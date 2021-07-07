@@ -40,11 +40,11 @@ const IconsUtils = dynamic(() => import('components/IconsUtils'), { loading: () 
 
 const useStyles = makeStyles(({ spacing, transitions, palette }: Theme) => ({
   paperClass: ({ customColor, backgroundColor, color, isUtilsHaveViewLikeInGoogleKeep }: UseStylesProps) => {
-const isTypeLight = palette.type === 'light' 
+    const isTypeLight = palette.type === 'light';
 
-    const borderColor = isTypeLight ?   color :   useIsColorLight(backgroundColor) ? backgroundColor : color;
+    const borderColor = isTypeLight ? color : useIsColorLight(backgroundColor) ? backgroundColor : color;
 
-    const insetborderColor =  useIsColorLight(backgroundColor) ? palette.background.default : backgroundColor;
+    const insetborderColor = useIsColorLight(backgroundColor) ? palette.background.default : backgroundColor;
     // !customColor.isUseDefault
     // ? useIsColorLight(customColor.unHover)
     // ? customColor.unHover
@@ -53,11 +53,11 @@ const isTypeLight = palette.type === 'light'
 
     return {
       marginTop: 4,
-      padding: spacing(0.4, 1.96, isUtilsHaveViewLikeInGoogleKeep ? 8 * 0.8 : 1, 1.96),
+      padding: spacing(0.4, 1.4, isUtilsHaveViewLikeInGoogleKeep ? 8 * 0.8 : 1, 1.4),
       cursor: 'grab',
       position: 'relative',
       backgroundColor,
-      border: `1px solid ${useAlpha(borderColor,isTypeLight ? 0.8 : 0.2)}`,
+      border: `1px solid ${useAlpha(borderColor, isTypeLight ? 0.8 : 0.2)}`,
       color,
       transition: transitions.create('padding', {
         easing: transitions.easing.sharp,
@@ -120,6 +120,9 @@ const isTypeLight = palette.type === 'light'
   }
 }));
 
+
+
+
 const PakeepElement: FC<PakeepElementPropsType> = ({
   title,
   text,
@@ -128,12 +131,15 @@ const PakeepElement: FC<PakeepElementPropsType> = ({
   labels,
   isDragging,
   id,
+  checkBoxes,
   isPinIconShouldBeShownInPakeep = false,
   // handlePinStatusPakeep,
+
   onClickOfPakeepElement,
   isSelecting,
   handleSetPakeepElementHeigthArr,
   handleResetItemSize,
+
   pakeepElementHeigth,
   ...propertyies
 }) => {
@@ -286,6 +292,8 @@ const PakeepElement: FC<PakeepElementPropsType> = ({
 
   const containerProps = {
     title,
+    isCheckBoxes:propertyies.isCheckBoxes,
+    checkBoxes,
     text,
     isPinIconButtonHidden,
     className: clsx(
