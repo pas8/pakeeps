@@ -2,6 +2,7 @@ import { IconSizeType } from './../IconsUtils/components/WrapperOfPopoverAndMenu
 import { ReactNode, ReactElement, FC } from 'react';
 import { CustomColorType } from 'models/types';
 import { IconsUtilsArrDenotationNameType } from 'components/IconsUtils/types';
+import { IconButtonProps } from '@material-ui/core';
 export type IconColorType = string;
 
 export type IconClassType = {
@@ -14,15 +15,16 @@ export type IconClassType = {
 
 type IconType = any;
 
-export type IconButtonByPasType = IconClassType & {
-  badgeContent?: number;
-  onClick?: any;
-  rotateDeg?: number;
-  icon: IconType;
-  iconName?:  any | string ;
-  activeIconName?: string;
-  activeProperty?: boolean;
-  size?: IconSizeType;
-  customColor?: CustomColorType;
-  handleAverageMainComponentWidth?: Function;
-};
+export type IconButtonByPasType = IconButtonProps &
+  IconClassType & {
+    badgeContent?: number;
+    onClick?: any;
+    rotateDeg?: number;
+    icon: IconType;
+    iconName?: any | string;
+    activeIconName?: string;
+    activeProperty?: boolean;
+    size?: IconSizeType;
+    customColor?: CustomColorType;
+    handleAverageMainComponentWidth?: Function;
+  };

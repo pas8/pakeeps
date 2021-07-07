@@ -1,4 +1,4 @@
-import { makeStyles, Grid, InputBase, Checkbox, Typography, Button } from '@material-ui/core';
+import { makeStyles, Grid, InputBase, Checkbox, Typography, Button, IconButton } from '@material-ui/core';
 import { filter, findIndex } from 'lodash';
 import { ChangeEventHandler, FC } from 'react';
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
@@ -6,14 +6,17 @@ import DragIndicatorIcon from '@material-ui/icons/DragIndicator';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 import AddOutlinedIcon from '@material-ui/icons/AddOutlined';
+import CloseOutlinedIcon from '@material-ui/icons/CloseOutlined';
 import { OnDragEndType } from 'components/PakeepList/components/WrapperOfContainer/types';
 import { useAlpha } from 'hooks/useAlpha.hook';
 
 import { CheckBoxItemPropsType } from './types';
 import { nanoid } from 'nanoid';
+import IconButtonByPas from 'components/IconButton';
 const useStyles = makeStyles(
   ({ spacing, palette, transitions, typography: { subtitle1, h5 }, shape: { borderRadius } }) => ({
     checkBoxContainer: {
+      marginRight: spacing(-0.6),
       '& svg': {
         color: palette.text.secondary
       }
@@ -27,7 +30,7 @@ const useStyles = makeStyles(
       // },
 
       '& .text': {
-        width: '80%'
+        width: 'calc(100% - 106px)'
       }
     },
     accomplishedCheckBoxesContainer: {
@@ -36,7 +39,7 @@ const useStyles = makeStyles(
       marginLeft: spacing(-0.6),
       color: palette.text.secondary,
       '& .text': {
-        width: '80%'
+        width: 'calc(100% - 80px)'
       }
     }
   })
@@ -45,6 +48,7 @@ const useStyles = makeStyles(
 const CheckBoxContainer: FC<CheckBoxItemPropsType> = ({
   checkBoxesArr,
   setCheckBoxes,
+  customColor,
   isAccomplishedCheckBoxesHidden,
   handleAccomplishedCheckBoxesHiddenStatus
 }) => {
@@ -91,9 +95,11 @@ const CheckBoxContainer: FC<CheckBoxItemPropsType> = ({
   };
 
   const handleAddCheckBoxItem = () => {
-    setCheckBoxes(state => [...state, { id: nanoid(), value: '', isAccomplished: false, color: 'default' }]);
+    setCheckBoxes((state: any) => [...state, { id: nanoid(), value: '', isAccomplished: false, color: 'default' }]);
   };
-
+  const handleDeleteCheckBoxItem = (id: string) => {
+    setCheckBoxes(state => state.filter(el => el.id !== id));
+  };
   return (
     <Grid className={classes.checkBoxContainer} container>
       <DragDropContext onDragEnd={onDragEnd}>
@@ -105,7 +111,6 @@ const CheckBoxContainer: FC<CheckBoxItemPropsType> = ({
                   {(provided, snapshot) => (
                     <Grid
                       {...provided.draggableProps}
-                      {...provided.dragHandleProps}
                       className={classes.notAccomplishedCheckBoxContainer}
                       container
                       // style={{borderColor:snapshot.isDragging ? 'red' : ''}}
@@ -113,12 +118,31 @@ const CheckBoxContainer: FC<CheckBoxItemPropsType> = ({
                     >
                       <Grid>
                         <Grid container justify={'center'} alignItems={'center'}>
-                          <DragIndicatorIcon />
+                          <Grid {...provided.dragHandleProps}>
+                            <Grid container justify={'center'} alignItems={'center'}>
+                              <DragIndicatorIcon />
+                            </Grid>
+                          </Grid>
                           <Checkbox checked={false} onChange={onChangeOfCheckBox} name={item.id} />
                         </Grid>
                       </Grid>
-                      <Grid className={'text'} item container justify={'center'} alignItems={'center'}>
-                        <InputBase name={item.id} value={item.value} onChange={onChangeOfInput} multiline fullWidth placeholder={'Write something...'}/>
+                      <Grid className={'text'} item container   >
+                        <InputBase
+                          name={item.id}
+                          value={item.value}
+                          onChange={onChangeOfInput}
+                          multiline
+                          fullWidth
+                          placeholder={'Write something...'}
+                        />
+                      </Grid>
+                      <Grid >
+                        <IconButtonByPas
+                          onClick={() => handleDeleteCheckBoxItem(item.id)}
+                          icon={CloseOutlinedIcon}
+                          customColor={customColor}
+                          size={'small'}
+                        />
                       </Grid>
                     </Grid>
                   )}
@@ -142,21 +166,22 @@ const CheckBoxContainer: FC<CheckBoxItemPropsType> = ({
         </Button>
       </Grid>
 
-      {!isAccomplishedCheckBoxesHidden && accomplishedCheckBoxes.map(({ value, id }) => {
-        return (
-          <Grid container className={classes.accomplishedCheckBoxesContainer}>
-            <Grid>
-              <Grid container justify={'center'} alignItems={'center'}>
-                <Checkbox checked={true} onChange={onChangeOfCheckBox} name={id} />
+      {!isAccomplishedCheckBoxesHidden &&
+        accomplishedCheckBoxes.map(({ value, id }) => {
+          return (
+            <Grid container className={classes.accomplishedCheckBoxesContainer}>
+              <Grid>
+                <Grid container justify={'center'} alignItems={'center'}>
+                  <Checkbox checked={true} onChange={onChangeOfCheckBox} name={id} />
+                </Grid>
+              </Grid>
+
+              <Grid className={'text'} item container alignItems={'center'}>
+                <Typography color={'textSecondary'}>{value}</Typography>
               </Grid>
             </Grid>
-
-            <Grid className={'text'} item container alignItems={'center'}>
-              <Typography color={'textSecondary'}>{value}</Typography>
-            </Grid>
-          </Grid>
-        );
-      })}
+          );
+        })}
     </Grid>
   );
 };
