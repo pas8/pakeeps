@@ -1,4 +1,4 @@
-import { DefaultFolderArrType, GlobalLabelsType } from './../store/modules/App/types';
+import { DefaultFolderArrType, GlobalLabelsType, LabelVariantType } from './../store/modules/App/types';
 import { PropertyiesOfPakeepElement } from './../components/PakeepList/components/PakeepElement/types';
 import { TimeAndDateFromatType, TimeFormatType } from './../store/modules/Settings/types';
 import { SettingsInitialStateType } from 'store/modules/Settings/types';
@@ -86,6 +86,7 @@ export type CurrentEventsElementType = {
   value: number | Date;
   isChosen: boolean;
   title: string;
+  variant: LabelVariantType;
   iconName: string;
   onlyTime?: boolean;
   color: string;

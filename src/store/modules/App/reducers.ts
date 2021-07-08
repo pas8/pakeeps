@@ -18,7 +18,7 @@ import { random, sampleSize, words } from 'lodash';
 //@ts-ignore
 import randomSentence from 'random-sentence';
 import { colord } from 'colord';
-import { NONE, TRANSPARENT } from 'models/denotation';
+import { DEFAULT, NONE, OUTLINED, PRIMARY, SECONDARY, TRANSPARENT } from 'models/denotation';
 
 const labelsOfInitialState: GlobalLabelsType = [
   { color: '', title: 'Day plans', iconName: 'category', id: 'label0', variant: 'outlined' },
@@ -33,8 +33,6 @@ const labelsOfInitialState: GlobalLabelsType = [
 const randomPakeeps = Array(8)
   .fill('pakeepID')
   .map((el, idx) => {
-    const DEFAULT = 'default';
-
     const randomColor = colord({ r: random(256), g: random(256), b: random(256) }).toHex();
     const anotherRandomcolor = colord({ r: random(256), g: random(256), b: random(256) }).toHex();
 
@@ -49,7 +47,7 @@ const randomPakeeps = Array(8)
       .toString()}-${id}`;
 
     const isCheckBoxes = !!random(1);
-    const checkBoxes = Array(random(2,4))
+    const checkBoxes = Array(random(2, 4))
       .fill('')
       .map(() => ({ value: randomSentence(), isAccomplished: !!random(1), id: nanoid(), color: 'default' }));
 
@@ -103,9 +101,25 @@ export const initialState: AppInitialStateInteface = {
 
   labels: labelsOfInitialState,
   events: [
-    { title: 'Later today', iconName: 'today', id: '1', value: Date.now(), onlyTime: true, color: '' },
-    { title: 'Tomorrow', iconName: 'tomorrow', id: '2', value: addDays(Date.now(), 1), onlyTime: true, color: '' },
-    { title: 'Next week', iconName: 'week', id: '3', value: addDays(Date.now(), 7), color: '' }
+    {
+      title: 'Later today',
+      iconName: 'today',
+      id: '1',
+      value: Date.now(),
+      onlyTime: true,
+      color: PRIMARY,
+      variant: DEFAULT
+    },
+    {
+      title: 'Tomorrow',
+      iconName: 'tomorrow',
+      id: '2',
+      value: addDays(Date.now(), 1),
+      onlyTime: true,
+      color: SECONDARY,
+      variant: OUTLINED
+    },
+    { title: 'Next week', iconName: 'week', id: '3', value: addDays(Date.now(), 7), color: DEFAULT, variant: OUTLINED }
   ],
   selectedPakeepsId: [],
   folders: [[]],
@@ -119,7 +133,11 @@ export const initialState: AppInitialStateInteface = {
       color: 'default',
       labels: ['label3', 'label1', 'label0', 'label2'],
       isArchived: false,
-      events: [],
+      events: [
+        { id: '1', value: addHours(new Date(), 2) },
+        { id: '2', value: addHours(new Date(), 32) },
+        { id: '3', value: addHours(new Date(), 100) }
+      ],
       checkBoxes: Array(random(4, 10))
         .fill('')
         .map(() => ({ value: randomSentence(), isAccomplished: !!random(1), id: nanoid(), color: 'default' })),
@@ -176,16 +194,6 @@ export const AppReducer = (state = initialState, action: AppActionTypes): AppIni
       return { ...state, ...variedState };
     }
 
-    case TypeNames.HANDLE_ADD_EVENT_TO_PAKEEP: {
-      const { pakeeps } = state;
-      const { newEvent: propertyValue, pakeepId } = action.payload;
-      const properyName = 'events';
-
-      const variedState = useChangePakeepProperty({ pakeepId, properyName, propertyValue, pakeeps });
-
-      return { ...state, ...variedState };
-    }
-
     case TypeNames.HANDLE_DELETE_PAKEEP: {
       const { pakeeps } = state;
       const variedState = useDeletePakeep({ pakeeps, ...action.payload });
@@ -198,6 +206,11 @@ export const AppReducer = (state = initialState, action: AppActionTypes): AppIni
       const variedState = useDeleteLabelFromPakeep({ pakeeps, ...action.payload });
 
       return { ...state, ...variedState };
+    }
+    case TypeNames.HANDLE_ADD_GLOBAL_EVENT: {
+      const { newEvent } = action.payload;
+      console.log([...state.events, newEvent]);
+      return { ...state, events: [...state.events, newEvent] };
     }
 
     case TypeNames.HANDLE_ADD_LABEL_TO_PAKEEP: {
@@ -239,7 +252,6 @@ export const AppReducer = (state = initialState, action: AppActionTypes): AppIni
       return { ...state, ...variedState };
     }
 
-
     case TypeNames.HANDLE_ADD_NEW_GLOBAL_LABEL: {
       const { newLabel } = action.payload;
       const labels = [...state.labels, newLabel];
@@ -256,8 +268,6 @@ export const AppReducer = (state = initialState, action: AppActionTypes): AppIni
 
     case TypeNames.HANDLE_CHANGE_GLOBAL_LABEL_LIST_TEMPROPARY_DATA: {
       const { globalLabelList } = action.payload;
-      console.log(globalLabelList);
-
       return { ...state, temporaryData: { ...state.temporaryData, globalLabelList } };
     }
 

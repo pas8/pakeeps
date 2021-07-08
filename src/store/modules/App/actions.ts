@@ -101,6 +101,11 @@ export const toChangeTemporaryData = (
   payload
 });
 
+export const toAddGlobalEvent = (payload: PayloadTypes[TypeNames.HANDLE_ADD_GLOBAL_EVENT]): AppActionTypes => ({
+  type: TypeNames.HANDLE_ADD_GLOBAL_EVENT,
+  payload
+});
+
 export const toAddNewGlobalLabel = (payload: PayloadTypes[TypeNames.HANDLE_ADD_NEW_GLOBAL_LABEL]): AppActionTypes => ({
   type: TypeNames.HANDLE_ADD_NEW_GLOBAL_LABEL,
   payload
@@ -112,7 +117,6 @@ export const toChangePinStatusOfPakeeps = (
   type: TypeNames.HANDLE_PIN_STATUS_OF_PAKEEPS,
   payload
 });
-
 
 export const toSetOrderNamesOfPinnedPakeeps = (
   payload: PayloadTypes[TypeNames.HANDLE_SET_ORDER_NAMES_OF_PINNED_PAKEEPS]

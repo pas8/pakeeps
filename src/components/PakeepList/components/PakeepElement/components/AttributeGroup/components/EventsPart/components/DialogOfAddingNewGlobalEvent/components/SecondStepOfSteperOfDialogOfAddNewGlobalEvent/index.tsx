@@ -8,6 +8,7 @@ const SecondStepOfSteperOfDialogOfAddNewGlobalEvent: FC<SecondStepOfSteperOfDial
   props => {
     const classes = useStyles({
       customColor: {
+        ...props.customColor,
         bgHover: props.customColor.hover,
         hover: props.customColor.bgUnHover,
         unHover: props.customColor.secondaryColor,

@@ -56,9 +56,15 @@ export type PayloadTypes = {
 
   [TypeNames.HANDLE_CHANGE_GLOBAL_LABEL_LIST_TEMPROPARY_DATA]: { globalLabelList: LabelsOfPakeepType };
   [TypeNames.HANDLE_CHANGE_GLOBAL_EVENT_LIST_TEMPROPARY_DATA]: { globalEventList: EventsOfPakeepType };
+
+  [TypeNames.HANDLE_ADD_GLOBAL_EVENT]: { newEvent: IGlobalEvent };
 };
 
 export type ActionsValueTypes = {
+  toAddGlobalEvent: {
+    type: typeof TypeNames.HANDLE_ADD_GLOBAL_EVENT;
+    payload: PayloadTypes[TypeNames.HANDLE_ADD_GLOBAL_EVENT];
+  };
   toChangeUserData: {
     type: typeof TypeNames.HANDLE_CHANGE_USER_DATA;
     payload: PayloadTypes[TypeNames.HANDLE_CHANGE_USER_DATA];
@@ -237,6 +243,7 @@ export interface IGlobalEvent {
   id: string;
   value: EventyValueType;
   onlyTime?: boolean;
+  variant:LabelVariantType
   color: string;
   isFolderIsPlaceholder?: boolean;
 }
@@ -357,7 +364,6 @@ export interface AppInitialStateInteface {
 
 export type PakeepPropertyValueType = $Values<PakeepElementType>;
 export type PakeepPropertyKeysType = $Keys<PakeepElementType>;
-
 
 export type OperateWOP<N> = (payload: N) => void;
 

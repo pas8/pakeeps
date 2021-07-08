@@ -4,16 +4,27 @@ import PropTypes from 'prop-types';
 import { FC } from 'react';
 import { EventItemPropsType, UseStylesOfEventItemType } from './types';
 import clsx from 'clsx';
+import { DEFAULT, PRIMARY, SECONDARY } from 'models/denotation';
 const useStyles = makeStyles(({ spacing, transitions, palette, shape: { borderRadius } }) => ({
-  containerOfDateItem: ({ customColor }: UseStylesOfEventItemType) => {
-    const color = customColor.isUseDefault ? palette?.highEmphasis?.main : customColor?.hover;
+  containerOfDateItem: ({ customColor, color: eventColor, variant,parentBackgroundColor }: UseStylesOfEventItemType) => {
+    const color = customColor.isUseDefault 
+      ? eventColor === DEFAULT
+        ? palette?.highEmphasis?.main
+        : eventColor === PRIMARY
+        ? palette.primary.main
+        : eventColor === SECONDARY
+        ? palette.secondary.main
+        : eventColor
+      : customColor?.hover;
+      console.log(parentBackgroundColor === DEFAULT )
     return {
       position: 'relative',
       padding: spacing(0.32, 0.8, 0.16, 0.8),
       margin: spacing(0.4, 0.4),
       border: '1px solid',
       borderColor: color,
-      color,
+      color: variant === DEFAULT ? parentBackgroundColor === DEFAULT ? palette.background.default : parentBackgroundColor : color,
+      background: variant === DEFAULT ? color : '',
       borderRadius
     };
   },
@@ -21,7 +32,7 @@ const useStyles = makeStyles(({ spacing, transitions, palette, shape: { borderRa
   containerOfFirstVariantOfEventItemView: {
     '& svg': {
       fontSize: spacing(2.16),
-      margin: spacing(0, 0.4, 0.4, 0)
+      margin: spacing(0.2, 0.4, 0.4, 0)
     }
   },
   containeOfInputTextViewOfCaptionOfEventItem: {
@@ -46,15 +57,17 @@ const useStyles = makeStyles(({ spacing, transitions, palette, shape: { borderRa
 const EventItem: FC<EventItemPropsType> = ({
   icon,
   title,
+  color,
+  variant,
   customColor,
   value,
+  parentBackgroundColor
 }) => {
-
   const isFirstVariantOfEventItemView = true;
   const isInlineVariantOfEventItemView = true;
 
   const isInputTextViewOfCaptionOfEventItem = !true;
-  const classes = useStyles({ customColor });
+  const classes = useStyles({ customColor, color, variant, parentBackgroundColor });
   return (
     <>
       {isInputTextViewOfCaptionOfEventItem ? (

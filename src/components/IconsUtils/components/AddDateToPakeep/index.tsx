@@ -17,7 +17,7 @@ import { useValidatedCurrentEvents } from 'hooks/useValidatedCurrentEvents.hook'
 import { Chip, Typography, Grid, makeStyles } from '@material-ui/core';
 import { format } from 'date-fns';
 import PreviewEventList from 'components/PakeepList/components/PakeepElement/components/AttributeGroup/components/EventsPart/components/PreviewEventList';
-import DialogOfAddingNewGlobalEvent from 'components/PakeepList/components/PakeepElement/components/AttributeGroup/components/EventsPart/components/DialogOfAddingNewGlobalEvent';
+import { DialogOfAddingNewGlobalEvent } from 'components/PakeepList/components/PakeepElement/components/AttributeGroup/components/EventsPart/components/DialogOfAddingNewGlobalEvent';
 import {
   AddDateToPakeepPropsType,
   ChosenItemArrType,
@@ -47,16 +47,13 @@ const AddDateToPakeep: FC<AddDateToPakeepPropsType> = ({
   }
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
 
-
-
   const currentEventsObject = mapKeys(currentEventsArr, ({ id }) => id);
   const customColor = useGetReversedCustomColor(color);
 
-
   const dialogOfAddingNewGlobalEventProps = {
     open: isEditDialogOpen,
-    customColor:color,
-    onClose:()=> setIsEditDialogOpen(false)
+    customColor: color,
+    onClose: () => setIsEditDialogOpen(false)
   };
   const [buttonSaveState, setButtonSaveState] = useState<ButtonSaveStateDenotation>(ButtonSaveStateDenotation.NULLITY);
 
@@ -124,7 +121,12 @@ const AddDateToPakeep: FC<AddDateToPakeepPropsType> = ({
     setButtonSaveState(ButtonSaveStateDenotation.TO_PUSH);
   };
 
-  const previewEventListProps = { validatedCurrentEvents, currentEventsArr, customColor };
+  const previewEventListProps = {
+    validatedCurrentEvents,
+    currentEventsArr,
+    customColor,
+    parentBackgroundColor: customColor.bgHover
+  };
   const customTitle = !!validatedCurrentEvents.length ? (
     <PreviewEventList {...previewEventListProps} />
   ) : (

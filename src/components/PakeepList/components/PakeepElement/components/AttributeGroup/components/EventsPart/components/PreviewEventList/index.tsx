@@ -9,12 +9,17 @@ import { PreviewEventListPropsType } from './types';
 
 const useStyles = makeStyles(({ spacing }) => ({
   container: {
-    // maxWidth: spacing(38),
+    maxWidth: spacing(36),
     margin: spacing(0.4, 0)
   }
 }));
 
-const PreviewEventList: FC<PreviewEventListPropsType> = ({ validatedCurrentEvents, currentEventsArr, customColor }) => {
+const PreviewEventList: FC<PreviewEventListPropsType> = ({
+  validatedCurrentEvents,
+  currentEventsArr,
+  customColor,
+  parentBackgroundColor
+}) => {
   const classes = useStyles();
 
   return (
@@ -36,7 +41,10 @@ const PreviewEventList: FC<PreviewEventListPropsType> = ({ validatedCurrentEvent
           const eventItemProps = {
             icon,
             key,
+            color: findedEl.color,
+            variant: findedEl.variant,
             title,
+            parentBackgroundColor,
             customColor,
             value: validatedValue,
             isOnlyTime

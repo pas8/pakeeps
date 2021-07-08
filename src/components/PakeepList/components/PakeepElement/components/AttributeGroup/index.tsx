@@ -27,7 +27,7 @@ const AttributeGroup: FC<AttributeGroupPropsType> = ({
     parentBackgrounColor
   };
 
-  const eventsPartProps = { events, customColor };
+  const eventsPartProps = { events, customColor, parentBackgroundColor: parentBackgrounColor };
 
   const isAttributeGroupOrderIsReverse = false;
 
