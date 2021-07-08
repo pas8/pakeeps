@@ -100,6 +100,7 @@ export const initialState: AppInitialStateInteface = {
   ],
 
   labels: labelsOfInitialState,
+
   events: [
     {
       title: 'Later today',
@@ -119,7 +120,16 @@ export const initialState: AppInitialStateInteface = {
       color: SECONDARY,
       variant: OUTLINED
     },
-    { title: 'Next week', iconName: 'week', id: '3', value: addDays(Date.now(), 7), color: DEFAULT, variant: OUTLINED }
+    { title: 'Next week', iconName: 'week', id: '3', value: addDays(Date.now(), 7), color: DEFAULT, variant: OUTLINED },
+    {
+      title: 'Next Mouth',
+      iconName: 'alarm',
+      id: '4',
+      value: addDays(Date.now(), 30),
+      onlyTime: false,
+      color: '#fbbc49',
+      variant: DEFAULT
+    }
   ],
   selectedPakeepsId: [],
   folders: [[]],

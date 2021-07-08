@@ -35,13 +35,21 @@ export const useStyles = makeStyles(({ spacing, typography: { h4 }, palette }) =
       // borderRadius: ({ customColor }) => customColor && '6px'
     }
   },
-  container: ({ customColor, onlyTime = false,  error }: UseStylesOfDynamicInputDateAndTimePickersPropsType) => {
+  container: ({
+    customColor,
+    onlyTime = false,
+    error,
+    color = '',
+    isSizeSmaller = false
+  }: UseStylesOfDynamicInputDateAndTimePickersPropsType) => {
     const defaultColor = customColor.isUseDefault ? palette?.mediumEmphasis?.main : customColor.unHover;
     const defaultHoverColor = customColor.isUseDefault ? palette?.maxEmphasis?.main : useAlpha(customColor.hover, 0.8);
     const focusedColor = error
       ? palette.error.main
       : customColor.isUseDefault
-      ? palette?.primary?.main
+      ? !!color
+        ? color
+        : palette?.primary?.main
       : customColor.hover;
 
     return {
@@ -55,12 +63,15 @@ export const useStyles = makeStyles(({ spacing, typography: { h4 }, palette }) =
       '& p': {
         color: defaultColor
       },
+      '& .MuiFormHelperText-root': {
+        display: error ? 'block' : 'none'
+      },
 
       '& input': {
         color: defaultHoverColor,
 
         // color: correctName ? 'rgba(255,255,255,0.96)' : 'rgba(255,255,255,0.8)',
-        width: onlyTime ? spacing(10) : spacing(42)
+        width: onlyTime ? spacing(isSizeSmaller ? 8 : 10) : spacing(isSizeSmaller ? 24 : 42)
       },
 
       // '& label.Mui-focused': {
@@ -100,7 +111,7 @@ export const useStyles = makeStyles(({ spacing, typography: { h4 }, palette }) =
       }
     };
   },
-  containerOfEndAdornment: ({ onlyTime = false}: UseStylesOfDynamicInputDateAndTimePickersPropsType) => ({
+  containerOfEndAdornment: ({ onlyTime = false }: UseStylesOfDynamicInputDateAndTimePickersPropsType) => ({
     // maxWidth: spacing(10),
     marginLeft: onlyTime ? spacing(-2) : spacing(-18),
     width: '100%',
@@ -115,6 +126,7 @@ const DynamicInputDateAndTimePickers: FC<DynamicInputDateAndTimePickersPropsType
   customColor,
   inputValue,
   ampm = false,
+  color,
   value,
   format,
   correctName,
@@ -130,7 +142,7 @@ const DynamicInputDateAndTimePickers: FC<DynamicInputDateAndTimePickersPropsType
   extend([mixPlugin]);
   const error = !isValid(value);
 
-  const classes = useStyles({ customColor, onlyTime, error });
+  const classes = useStyles({ customColor, onlyTime, error, color });
 
   const onChange = (date: MaterialUiPickersDate, value: string | null | undefined) => {
     handleDateAndTimeInputsState(name, date, value);
@@ -148,7 +160,7 @@ const DynamicInputDateAndTimePickers: FC<DynamicInputDateAndTimePickersPropsType
 
   const autoFocus = focusedEventId === name;
   const onOpen = () => {
-    console.log(';')
+    console.log(';');
     // !customColor.isUseDefault &&
     //   dispatch(
     //     toChangeThemeColors({

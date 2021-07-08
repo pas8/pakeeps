@@ -40,7 +40,7 @@ const SnackBarLayout = ({ children }: LayoutChildrenType) => {
         )
       }
     >
-      <Box borderRight={buttonText && 1} pr={buttonText && 2.4} style={{ borderRadius }}>
+      <Box borderRight={buttonText && 1} pr={buttonText && 2.4}>
         {message}
         <Divider orientation={'vertical'} flexItem />
       </Box>

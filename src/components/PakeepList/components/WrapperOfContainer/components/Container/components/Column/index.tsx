@@ -23,6 +23,7 @@ const useStyles = makeStyles(({ spacing, breakpoints: { down } }) => ({
   column: () => ({
     // padding: spacing(0, paddingValue),
     '& > div > div': {
+      scrollbarColor:'red',
       '&::-webkit-scrollbar': {
         width: 0
       }

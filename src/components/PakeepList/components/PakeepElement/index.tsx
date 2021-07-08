@@ -46,12 +46,6 @@ const useStyles = makeStyles(({ spacing, transitions, palette }: Theme) => ({
     const borderColor = isTypeLight ? color : useIsColorLight(backgroundColor) ? backgroundColor : color;
 
     const insetborderColor = useIsColorLight(backgroundColor) ? palette.background.default : backgroundColor;
-    // !customColor.isUseDefault
-    // ? useIsColorLight(customColor.unHover)
-    // ? customColor.unHover
-    // : customColor.unHover
-    // : palette?.highEmphasis?.main;
-
     return {
       marginTop: 4,
       padding: spacing(0.4, 1.4, isUtilsHaveViewLikeInGoogleKeep ? 8 * 0.8 : 1, 1.4),
@@ -72,7 +66,6 @@ const useStyles = makeStyles(({ spacing, transitions, palette }: Theme) => ({
           duration: transitions.duration.leavingScreen
         }),
         borderColor: '',
-        // borderColor: palette.primary.main
         boxShadow: `0px 0px  1px 1px ${borderColor} ,inset 0px 0px 1px 2px ${insetborderColor} `
         // borderStyle:  'dashed'
       }
@@ -120,6 +113,7 @@ const useStyles = makeStyles(({ spacing, transitions, palette }: Theme) => ({
     }
   }
 }));
+
 
 const PakeepElement: FC<PakeepElementPropsType> = ({
   title,

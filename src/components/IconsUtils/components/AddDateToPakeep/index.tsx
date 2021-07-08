@@ -25,6 +25,7 @@ import {
   DateListArrType,
   HandleDateAndTimeInputsStateType
 } from './types';
+import { DEFAULT } from 'models/denotation';
 
 const AddDateToPakeep: FC<AddDateToPakeepPropsType> = ({
   onMenuClose,
@@ -49,9 +50,11 @@ const AddDateToPakeep: FC<AddDateToPakeepPropsType> = ({
 
   const currentEventsObject = mapKeys(currentEventsArr, ({ id }) => id);
   const customColor = useGetReversedCustomColor(color);
+  const handleOpenDialog = () => setIsEditDialogOpen(true);
 
   const dialogOfAddingNewGlobalEventProps = {
     open: isEditDialogOpen,
+    handleOpenDialog,
     customColor: color,
     onClose: () => setIsEditDialogOpen(false)
   };
@@ -125,10 +128,13 @@ const AddDateToPakeep: FC<AddDateToPakeepPropsType> = ({
     validatedCurrentEvents,
     currentEventsArr,
     customColor,
-    parentBackgroundColor: customColor.bgHover
+    parentBackgroundColor: customColor.isUseDefault ? DEFAULT : customColor.bgHover
   };
   const customTitle = !!validatedCurrentEvents.length ? (
-    <PreviewEventList {...previewEventListProps} />
+    <Grid style={{ maxWidth: 292 }}>
+      {' '}
+      <PreviewEventList {...previewEventListProps} />
+    </Grid>
   ) : (
     <Typography style={{ color: customColor.isUseDefault ? '' : customColor.unHover }}> Events</Typography>
   );

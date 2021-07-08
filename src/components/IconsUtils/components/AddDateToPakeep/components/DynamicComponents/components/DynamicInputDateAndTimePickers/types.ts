@@ -1,4 +1,5 @@
 import { CustomColorType } from 'models/types';
+import { ColorType } from 'store/modules/App/types';
 
 export type DynamicInputDateAndTimePickersPropsType = {
   icon: any;
@@ -20,4 +21,6 @@ export type UseStylesOfDynamicInputDateAndTimePickersPropsType = {
   customColor: CustomColorType;
   onlyTime?: boolean;
   error: boolean;
+  color?:ColorType
+  isSizeSmaller?:boolean
 };

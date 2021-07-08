@@ -5,4 +5,5 @@ export type UseStylesOfDialogOfAddingNewGlobalEventType = UseStylesCustomColorTy
 export type DialogOfAddingNewGlobalEventPropsType = {
   open: boolean;
   onClose:()=> void
+  handleOpenDialog:()=> void
 } & UseStylesCustomColorType;

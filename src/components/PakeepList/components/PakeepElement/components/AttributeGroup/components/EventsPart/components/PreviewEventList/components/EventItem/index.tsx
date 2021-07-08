@@ -5,9 +5,15 @@ import { FC } from 'react';
 import { EventItemPropsType, UseStylesOfEventItemType } from './types';
 import clsx from 'clsx';
 import { DEFAULT, PRIMARY, SECONDARY } from 'models/denotation';
+import { useIsColorLight } from 'hooks/useIsColorLight.hook';
 const useStyles = makeStyles(({ spacing, transitions, palette, shape: { borderRadius } }) => ({
-  containerOfDateItem: ({ customColor, color: eventColor, variant,parentBackgroundColor }: UseStylesOfEventItemType) => {
-    const color = customColor.isUseDefault 
+  containerOfDateItem: ({
+    customColor,
+    color: eventColor,
+    variant,
+    parentBackgroundColor
+  }: UseStylesOfEventItemType) => {
+    const color = customColor.isUseDefault
       ? eventColor === DEFAULT
         ? palette?.highEmphasis?.main
         : eventColor === PRIMARY
@@ -16,15 +22,20 @@ const useStyles = makeStyles(({ spacing, transitions, palette, shape: { borderRa
         ? palette.secondary.main
         : eventColor
       : customColor?.hover;
-      console.log(parentBackgroundColor === DEFAULT )
-    return {
+
+      return {
       position: 'relative',
       padding: spacing(0.32, 0.8, 0.16, 0.8),
       margin: spacing(0.4, 0.4),
       border: '1px solid',
       borderColor: color,
-      color: variant === DEFAULT ? parentBackgroundColor === DEFAULT ? palette.background.default : parentBackgroundColor : color,
-      background: variant === DEFAULT ? color : '',
+      color:
+        variant === DEFAULT
+          ? parentBackgroundColor === DEFAULT
+            ? palette.background.default
+            : parentBackgroundColor
+          : color,
+      background: variant === DEFAULT ? (!!color ? color : palette?.highEmphasis?.main) : '',
       borderRadius
     };
   },

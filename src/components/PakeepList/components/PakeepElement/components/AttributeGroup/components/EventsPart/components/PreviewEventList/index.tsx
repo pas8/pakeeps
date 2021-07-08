@@ -9,7 +9,7 @@ import { PreviewEventListPropsType } from './types';
 
 const useStyles = makeStyles(({ spacing }) => ({
   container: {
-    maxWidth: spacing(36),
+    // maxWidth: spacing(36),
     margin: spacing(0.4, 0)
   }
 }));
