@@ -1,25 +1,25 @@
 import { FC, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { filter } from 'lodash';
 import { Grid, makeStyles } from '@material-ui/core';
 import VisibilityOutlinedIcon from '@material-ui/icons/VisibilityOutlined';
 import VisibilityOffOutlinedIcon from '@material-ui/icons/VisibilityOffOutlined';
 import AddCircleOutlineOutlinedIcon from '@material-ui/icons/AddCircleOutlineOutlined';
+
+import {
+  toChangeGlobalLabelItem,
+  toChangeGlobalLabelListTemproparyData,
+  toDeleteLabelFromPakeep
+} from 'store/modules/App/actions';
+import { ILabelElement } from 'store/modules/App/types';
+import { getGlobalLabelListTemproparyData } from 'store/modules/App/selectors';
+
 import WrapperOfMenuOfLabelPart from 'components/PakeepList/components/PakeepElement/components/AttributeGroup/components/LabelPart/components/MenuWrapper';
 import DialogOfAddNewLabel from './components/DialogOfAddNewLabel';
 import DefaultMenuListOflabelList from './components/DefaultMenuList';
 import GlobalLabelListOflabelList from './components/GlobalLabelList';
 import { useGetReversedCustomColor } from 'hooks/useGetReversedCustomColor.hook';
 import { HandleChangeNewLabelType, LabelsListPropsType, MenuStateOfLabelsListType } from './types';
-import {
-  toChangeGlobalLabelItem,
-  toChangeGlobalLabelListTemproparyData,
-  toChangeTemporaryData,
-  toDeleteLabelFromPakeep
-} from 'store/modules/App/actions';
-import { ILabelElement } from 'store/modules/App/types';
-import PakeepPropertyProvider from 'components/PakeepPropertyProviders';
-import { getGlobalLabelListTemproparyData, getTemporaryDataOfLabelItem } from 'store/modules/App/selectors';
-import { filter } from 'lodash';
 
 const useStyles = makeStyles(({ spacing, palette: { secondary }, shape: { borderRadius } }) => {
   return {
@@ -78,7 +78,6 @@ const LabelsList: FC<LabelsListPropsType> = ({
   };
 
   const handleChangeNewLabel: HandleChangeNewLabelType = (isChecked, id) => {
-
     if (isChecked) {
       dispatch(
         toChangeGlobalLabelListTemproparyData({
@@ -132,7 +131,7 @@ const LabelsList: FC<LabelsListPropsType> = ({
       {!isDefaultMenuListHidden && <DefaultMenuListOflabelList {...defaultMenuListOflabelListProps} />}
       <GlobalLabelListOflabelList {...globalLabelListProps} />
 
-      <WrapperOfMenuOfLabelPart {...wrapperOfMenuOfLabelPartProps} />
+      <WrapperOfMenuOfLabelPart {...wrapperOfMenuOfLabelPartProps} mouseX={0} mouseY={0}/>
       <DialogOfAddNewLabel {...dialogOfAddNewLabelProps} />
     </Grid>
   );

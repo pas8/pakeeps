@@ -287,7 +287,7 @@ const NewPaKeep = () => {
   const handleRedo = () => (!state.isCheckBoxes ? inputsForward(4) : checkBoxesForward(4));
   const labelBargeNumber = statusState.isLabelViewHidden ? state.labels.length : 0;
 
-  const handleSaveEvents: HandleSaveEventsType = events => {
+  const handleSaveEvents: HandleSaveEventsType = (events:any) => {
     setState(state => ({ ...state, events }));
   };
 
@@ -296,6 +296,8 @@ const NewPaKeep = () => {
     handleSaveEvents
   };
 
+const onClose = () => console.log('onClose')
+
   const newPakeepUtils = {
     ...state,
     ...statusState,
@@ -303,6 +305,7 @@ const NewPaKeep = () => {
     labelBargeNumber,
     handleSetFavoritePakeep,
     handleSetBookmarkPakeep,
+    onClose,
     isBackgroundColorDefault,
     isColorDefault,
     handleSetColorPakeep,

@@ -37,7 +37,9 @@ export const operateToHandleRegister =
 
       .catch(error => {
         // throw new Error(error);
+        //@ts-ignore
         dispatch(toChangeErrorStatus({ isError: true }));
+        //@ts-ignore
         dispatch(toChangeErrorMessage({ errorMessage: error?.message }));
       });
   };
@@ -53,7 +55,9 @@ export const operateToHandleSignIn =
         // dispatch(toChangeLoginStatus({ isLogined: true }));
       })
       .catch(error => {
+        //@ts-ignore
         dispatch(toChangeErrorStatus({ isError: true }));
+        //@ts-ignore
         dispatch(toChangeErrorMessage({ errorMessage: error?.message }));
       });
   };

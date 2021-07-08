@@ -1,11 +1,7 @@
-import * as types from './types';
+import { TypeNames } from './enums';
+import { PayloadTypes, SettingsActionTypes } from './types';
 
-export const toChangeViewOfThemeChangerButton = data => ({
-  type: types.VIEW_OF_THEME_CHANGER_BUTTON,
-  data
-});
-
-export const toChangeMaxSnackValue = snackNumber => ({
-  type: types.MAX_SNACK_VALUE,
-  snackNumber
+export const toChangeLoginStatus = (payload: PayloadTypes[TypeNames.HANDLE_SETTING_PROPERTY]): SettingsActionTypes => ({
+  type: TypeNames.HANDLE_SETTING_PROPERTY,
+  payload
 });

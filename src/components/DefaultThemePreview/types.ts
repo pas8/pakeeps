@@ -3,5 +3,5 @@ export type DefaultThemePreviewPropsType = {
   isHeaderHavePaperColor: boolean;
   background: any;
   isThemeSelected: boolean;
-  onClick: (() => void) | null;
+  onClick: (() => void) ;
 };

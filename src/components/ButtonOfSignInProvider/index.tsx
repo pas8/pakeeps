@@ -62,7 +62,7 @@ const useStyles = makeStyles(({ spacing, shape: { borderRadius }, typography: { 
     }
   }),
 
-  buttonContainer: ({ color }) => ({
+  buttonContainer: ({ color }:UseStylesOfButtonOfSignInProviderType) => ({
     '& button': {
       width: '100%',
 

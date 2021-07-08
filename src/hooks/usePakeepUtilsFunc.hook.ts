@@ -2,34 +2,30 @@ import { IconsUtilsFunctionType } from 'components/IconsUtils/types';
 import { pakeepPropertyiesNames } from 'models/denotation';
 import { UsePakeepUtilsFuncType } from 'models/types';
 import { useDispatch } from 'react-redux';
-import {
-  toChangePakeepCustomProperty,
-  toChangePakeepProperty,
-  toChangePinStatusOfPakeeps
-} from 'store/modules/App/actions';
+import { toChangePakeepProperty, toChangePinStatusOfPakeeps } from 'store/modules/App/actions';
 import { ColorType } from 'store/modules/App/types';
 
-export const usePakeepUtilsFunc: UsePakeepUtilsFuncType = pakeepId => {
+export const usePakeepUtilsFunc: UsePakeepUtilsFuncType = (pakeepId, propertyies) => {
   const dispatch = useDispatch();
 
   const handleSetColorPakeep = (color: ColorType): void => {
-    dispatch(toChangePakeepCustomProperty({ pakeepId, property: { color } }));
+    dispatch(toChangePakeepProperty({ pakeepId, property: { color } }));
   };
 
   const handleSetBackgroundColorPakeep = (backgroundColor: ColorType): void => {
-    dispatch(toChangePakeepCustomProperty({ pakeepId, property: { backgroundColor } }));
+    dispatch(toChangePakeepProperty({ pakeepId, property: { backgroundColor } }));
   };
 
   const handleSetBookmarkPakeep = (): void => {
-    dispatch(toChangePakeepProperty({ pakeepId, properyName: pakeepPropertyiesNames.isInBookmark }));
+    dispatch(toChangePakeepProperty({ pakeepId, property: { isInBookmark: !propertyies.isInBookmark } }));
   };
 
   const handleSetFavoritePakeep = (): void => {
-    dispatch(toChangePakeepProperty({ pakeepId, properyName: pakeepPropertyiesNames.isFavorite }));
+    dispatch(toChangePakeepProperty({ pakeepId, property: { isInBookmark: !propertyies.isFavorite } }));
   };
 
   const handleSetArhivedPakeep = (): void => {
-    dispatch(toChangePakeepProperty({ pakeepId, properyName: pakeepPropertyiesNames.isArchived }));
+    dispatch(toChangePakeepProperty({ pakeepId, property: { isInBookmark: !propertyies.isArchived } }));
   };
 
   const handleSetIsPinnedPakeep = (): void => {

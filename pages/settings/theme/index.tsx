@@ -1,13 +1,12 @@
-import { Grid, Typography, makeStyles, useTheme, Button, Slider } from '@material-ui/core';
+import { Grid, Typography, makeStyles, useTheme,  } from '@material-ui/core';
 import { colord } from 'colord';
 import { customColorPlaceholder } from 'components/AccountAvatar';
 import BackgroundPlaceholderByPas from 'components/BackgroundPlaceholder';
 import ColorPickerByPas from 'components/ColorChanger';
-import ThemeColorPicker from 'components/ThemeColorPicker';
 import { useAlpha } from 'hooks/useAlpha.hook';
 import { useGetReadableColor } from 'hooks/useGetReadableColor.hook';
 import { useThemeColors } from 'hooks/useThemeColors.hook';
-import { ChangeEventHandler, FC, useState } from 'react';
+import {  FC, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import AddCircleOutlineOutlinedIcon from '@material-ui/icons/AddCircleOutlineOutlined';
 import { useHover } from 'react-use';
@@ -15,12 +14,8 @@ import { toChangeDefaultThemesArr, toChangeThemeColors } from 'store/modules/Col
 import { getColorTheme, getDefaultThemesArr } from 'store/modules/Color/selectors';
 import { getIsHeaderHavePaperColor } from 'store/modules/Settings/selectors';
 import OfflineBoltOutlinedIcon from '@material-ui/icons/OfflineBoltOutlined';
-import { useCustomBreakpoint } from 'hooks/useCustomBreakpoint';
-import { debounce, random } from 'lodash';
 import { useIsColorLight } from 'hooks/useIsColorLight.hook';
 import DefaultThemePreview from 'components/DefaultThemePreview';
-import { colorColumnArr } from 'components/ColorChanger/components/CustomColor';
-import ColumnElementOfPreparedColorExamples from 'components/ColorChanger/components/PreparedColorExamples/components/Column/components/ColumnElement';
 import { useRandomColor } from 'hooks/useRandomColor.hook';
 import PickerOfThemeColor from 'components/PickerOfThemeColor';
 import clsx from 'clsx';
@@ -68,7 +63,7 @@ const useStyles = makeStyles(({ spacing, palette, breakpoints, shape: { borderRa
     padding: spacing(1),
     borderRadius,
     border: '2px solid',
-    borderColor: useAlpha(palette.mediumEmphasis?.main,0.2),
+    borderColor: useAlpha(palette.mediumEmphasis?.main!,0.2),
     '& legend': {
       padding: spacing(0, 0.8)
     }
@@ -77,13 +72,13 @@ const useStyles = makeStyles(({ spacing, palette, breakpoints, shape: { borderRa
 
   fieldsetContainer: {
     borderRadius,
-    borderColor: useAlpha(palette.mediumEmphasis?.main, 0.2),
+    borderColor: useAlpha(palette.mediumEmphasis?.main!, 0.2),
     '& legend': {
       padding: spacing(0, 0.8)
     }
   },
   containerOfRandomThemeGenerator: {
-    background: `${useAlpha(palette.maxEmphasis?.main, 0.04)} !important`,
+    background: `${useAlpha(palette.maxEmphasis?.main!, 0.04)} !important`,
 
     '&:hover': {
       background: `${useAlpha(palette.secondary.main, 0.2)}!important`
@@ -172,7 +167,7 @@ const Theme: FC<any> = () => {
       onClick={handleGenegateRandomColor}
     >
       <BackgroundPlaceholderByPas
-        color={useAlpha(isHovering ? secondaryColor : maxEmph, isHovering ? 0.8 : 0.42)}
+        color={useAlpha(isHovering ? secondaryColor! : maxEmph!, isHovering ? 0.8 : 0.42)}
         title={'Generate random theme & '}
         ButtonIcon={OfflineBoltOutlinedIcon}
         buttonText={'Generate random theme'}
@@ -187,7 +182,7 @@ const Theme: FC<any> = () => {
       onClick={handleOpenCustomThemeDialogOpen}
     >
       <BackgroundPlaceholderByPas
-        color={useAlpha(isHovering ? secondaryColor : maxEmph, isHovering ? 0.8 : 0.42)}
+        color={useAlpha(isHovering ? secondaryColor! : maxEmph!, isHovering ? 0.8 : 0.42)}
         title={'Create custom theme & '}
         ButtonIcon={AddCircleOutlineOutlinedIcon}
         buttonText={'Create custom theme'}
@@ -244,7 +239,7 @@ const Theme: FC<any> = () => {
           <Grid container justify={'space-between'}>
             {randomThemeGenerator}
             {customThemeButton}
-            {defaultThemesToChoseArr?.map(({ caption, background }) => {
+            {defaultThemesToChoseArr?.map(({ caption, background,id }) => {
               const isThemeSelected = caption === theme.caption;
 
               const onClick = () => {
@@ -262,7 +257,7 @@ const Theme: FC<any> = () => {
                 onClick,
                 isHeaderHavePaperColor
               };
-              return <DefaultThemePreview {...defaultThemePreviewProps} />;
+              return <DefaultThemePreview {...defaultThemePreviewProps} key={`defaultThemesToChoseArr-${id}`}/>;
             })}
           </Grid>
         </Grid>

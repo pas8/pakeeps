@@ -53,11 +53,14 @@ const useStyles = makeStyles(({ typography: { h4, h6 }, spacing }) => {
   };
 });
 
-const EditingDialogOfPakeepElement: FC<EditingDialogOfPakeepElementProps> = ({ id, handleClosePakeepDialog }) => {
-  const findedPakeep = useFindPakeepUsingId(id);
+const EditingDialogOfPakeepElement: FC<EditingDialogOfPakeepElementProps> = ({
+  id: pakeepId,
+  handleClosePakeepDialog
+}) => {
+  const findedPakeep = useFindPakeepUsingId(pakeepId);
   if (!findedPakeep) return null;
 
-  const { backgroundColor, color, title, text } = findedPakeep;
+  const { backgroundColor, color, title, text, checkBoxes, id, labels, events, ...properties } = findedPakeep;
 
   const [state, setState] = useState({ title, text, backgroundColor, color });
 
@@ -104,7 +107,7 @@ const EditingDialogOfPakeepElement: FC<EditingDialogOfPakeepElementProps> = ({ i
 
   const arrOfButtonNamesWhichSholudBeHidden: IconsUtilsArrDenotationNameType[] = ['width'];
 
-  const iconsUtilsFunc = usePakeepUtilsFunc(id);
+  const iconsUtilsFunc = usePakeepUtilsFunc(id, properties);
 
   const handleSetBackgroundColorPakeep = (backgroundColor: string) => {
     setState(state => ({ ...state, backgroundColor }));
@@ -125,6 +128,7 @@ const EditingDialogOfPakeepElement: FC<EditingDialogOfPakeepElementProps> = ({ i
     labelsListProps,
     widthOfContainer,
     id,
+    eventsListProps: { events: findedPakeep.events, handleSaveEvents: (events: any) => console.log(events) },
     customColor,
     handleSetBackgroundColorPakeep,
     handleSetColorPakeep,

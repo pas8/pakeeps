@@ -62,7 +62,7 @@ const BackgroundPlaceholderByPas: FC<{
   size?: number;
   isButtonIconIsComponent?: boolean;
   onClick?: (e: any) => void;
-  isButtonBig:boolean
+  isButtonBig?:boolean
 }> = ({
   title,
   color,
@@ -76,7 +76,7 @@ const BackgroundPlaceholderByPas: FC<{
 }) => {
   const bgTextArr = Array(size || 480).fill(title);
 
-  const classes = useStyles({ color ,isButtonBig});
+  const classes = useStyles({ color });
 
   return (
     <Grid className={classes.bg}>

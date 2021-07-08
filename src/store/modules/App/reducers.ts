@@ -30,7 +30,7 @@ const labelsOfInitialState: GlobalLabelsType = [
   { color: '#afa646', title: 'Eco', iconName: 'eco', id: 'label8', variant: 'default' }
 ];
 
-const randomPakeeps = Array(8)
+const randomPakeeps = Array(800)
   .fill('pakeepID')
   .map((el, idx) => {
     const randomColor = colord({ r: random(256), g: random(256), b: random(256) }).toHex();

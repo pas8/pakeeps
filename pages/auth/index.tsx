@@ -112,6 +112,7 @@ const Auth: FC<{ providers: AppProviders }> = ({ providers }) => {
             <ButtonOfSignInProvider
               onClick={e => signIn(id)}
               name={name}
+              //@ts-ignore
               color={providersColor[name]}
               isProvidersButtonHaveCustomView={isProvidersButtonHaveCustomView}
             />

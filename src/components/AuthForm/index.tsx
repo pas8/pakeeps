@@ -1,19 +1,17 @@
 import { Grid, TextField, makeStyles, Button, InputAdornment, IconButton } from '@material-ui/core';
-import ButtonOfSignInProvider from 'components/ButtonOfSignInProvider';
-import { useAlpha } from 'hooks/useAlpha.hook';
-import { useThemeColors } from 'hooks/useThemeColors.hook';
-import Visibility from '@material-ui/icons/Visibility';
-import VisibilityOff from '@material-ui/icons/VisibilityOff';
-import firebase from 'firebase';
-import { NEW_USER_URL, SIGN_IN_URL } from 'models/denotation';
-import { ChangeEventHandler, FC, MouseEvent, useState } from 'react';
-import { useRouter } from 'next/dist/client/router';
-import { AuthFormPropsType } from './types';
 import { capitalize, mapValues, values } from 'lodash';
 import { useSnackbar } from 'notistack';
 import { useDispatch } from 'react-redux';
+import Visibility from '@material-ui/icons/Visibility';
+import VisibilityOff from '@material-ui/icons/VisibilityOff';
+import { NEW_USER_URL, SIGN_IN_URL } from 'models/denotation';
+import { ChangeEventHandler, FC, MouseEvent, useState } from 'react';
+import { useRouter } from 'next/dist/client/router';
+
 import { operateToHandleRegister } from 'store/modules/Auth/operations';
 import { toChangeAnonymousStatus } from 'store/modules/Auth/actions';
+import { AuthFormPropsType } from './types';
+
 const useStyles = makeStyles(({ spacing, shape: { borderRadius }, palette }) => ({
   footerButton: {
     width: '48%'
@@ -43,8 +41,6 @@ const useStyles = makeStyles(({ spacing, shape: { borderRadius }, palette }) => 
 
 const AuthForm: FC<AuthFormPropsType> = ({ isPageIsRegisted = false }) => {
   const classes = useStyles();
-
-  const [primary, secondary] = useThemeColors();
   const router = useRouter();
 
   const { enqueueSnackbar } = useSnackbar();
@@ -83,9 +79,7 @@ const AuthForm: FC<AuthFormPropsType> = ({ isPageIsRegisted = false }) => {
   });
 
   const handleRegistred = () => {
-    dispatch(
-      operateToHandleRegister({ email: formState.email.value, password: formState.password.value, enqueueSnackbar })
-    )
+    dispatch(operateToHandleRegister({ email: formState.email.value, password: formState.password.value }));
     // router.push(SIGN_IN_URL);
 
     // firebase
@@ -106,9 +100,7 @@ const AuthForm: FC<AuthFormPropsType> = ({ isPageIsRegisted = false }) => {
   };
 
   const handleSignIn = () => {
-    dispatch(
-      operateToHandleRegister({ email: formState.email.value, password: formState.password.value, enqueueSnackbar })
-    );
+    dispatch(operateToHandleRegister({ email: formState.email.value, password: formState.password.value }));
 
     router.push('/');
   };

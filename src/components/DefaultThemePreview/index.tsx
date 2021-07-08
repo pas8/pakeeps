@@ -1,11 +1,10 @@
 import { makeStyles, Grid, Typography } from '@material-ui/core';
+import { FC } from 'react';
 import { colord } from 'colord';
 import { useAlpha } from 'hooks/useAlpha.hook';
-import { useContrastText } from 'hooks/useContrastText.hook';
-import { FC } from 'react';
 import { DefaultThemePreviewPropsType } from './types';
 
-const useStyles = makeStyles(({ spacing, palette, breakpoints,shape:{borderRadius} }) => ({
+const useStyles = makeStyles(({ spacing, palette, breakpoints, shape: { borderRadius } }) => ({
   defaultThemeElementContainer: ({ background, isThemeSelected }: any) => ({
     background: background.default,
     height: spacing(32),
@@ -32,13 +31,11 @@ const useStyles = makeStyles(({ spacing, palette, breakpoints,shape:{borderRadiu
       borderColor: palette.secondary.main
     }
 
-    // padding:spacing(1)
   }),
 
   headerOfThemePrewier: ({ background, isHeaderHavePaperColor }: any) => ({
     height: spacing(4.4),
     width: '100%',
-    // margin: spacing(-0.2, 0, 0),
     padding: spacing(0, 2),
     background: isHeaderHavePaperColor ? palette.primary.main : background.paper,
     '& > div': {
@@ -67,7 +64,6 @@ const useStyles = makeStyles(({ spacing, palette, breakpoints,shape:{borderRadiu
   bodyOfThemePrevier: {
     height: '80%',
     margin: spacing(2, 0, 0, 0)
-    // width: '100%'
   },
   navOfThemePrevier: ({ background }: any) => ({
     borderRadius,
@@ -78,7 +74,6 @@ const useStyles = makeStyles(({ spacing, palette, breakpoints,shape:{borderRadiu
       width: '16%'
     },
     height: spacing(14),
-    // border: `1px solid ${colord(background.default).invert().alpha(0.32).toHex()}`,
     '& > div': {
       height: '20%',
       width: '100%',
@@ -95,12 +90,9 @@ const useStyles = makeStyles(({ spacing, palette, breakpoints,shape:{borderRadiu
         background: colord(background.default).invert().alpha(0.32).toHex()
       }
     }
-
-    // background:background.pa
   }),
 
   activeFolderPrevier: ({ background }: any) => ({
-    // background: background.paper
     '& > div': {
       background: `${palette.primary.main} !important`
     }
@@ -110,7 +102,7 @@ const useStyles = makeStyles(({ spacing, palette, breakpoints,shape:{borderRadiu
     // height: spacing(24),
     margin: spacing(0, 0, 0, 2),
     padding: spacing(1),
-    borderRadius: borderRadius ,
+    borderRadius: borderRadius,
 
     [breakpoints.down('xl')]: {
       width: '48%'
@@ -133,25 +125,19 @@ const useStyles = makeStyles(({ spacing, palette, breakpoints,shape:{borderRadiu
 
     '& .titleOfPakeepPrevier': {
       height: spacing(2.8),
-      
-      minWidth:'42%',
+
+      minWidth: '42%'
     },
     '& .textOfPakeepPrevier': {
       borderRadius: borderRadius / 2,
-padding:spacing(0.4,0.4,0.2,0.8),
+      padding: spacing(0.4, 0.4, 0.2, 0.8),
 
-      '& p':{
+      '& p': {
         color: background.textColor
-
       },
-// border:'1px solid',
-background: colord(background.default).invert().alpha(0.16).toHex(),
-
-      // borderColor: colord(background.default).invert().alpha(0.32).toHex(),
+      background: colord(background.default).invert().alpha(0.16).toHex(),
       width: '100%',
-      margin: spacing(1, 0, 0, 0),
-
-      // height: spacing(12)
+      margin: spacing(1, 0, 0, 0)
     }
   }),
   eventsContainerOfPakeepPrevier: ({ background }: any) => ({
@@ -167,7 +153,7 @@ background: colord(background.default).invert().alpha(0.16).toHex(),
     },
 
     '& > div': {
-      borderRadius: borderRadius /2,
+      borderRadius: borderRadius / 2,
       width: '46.8%',
       height: '100%',
       background: colord(background.default).invert().alpha(0.32).toHex()
@@ -191,25 +177,17 @@ background: colord(background.default).invert().alpha(0.16).toHex(),
     },
 
     '& > div': {
-      borderRadius: borderRadius /2,
-
+      borderRadius: borderRadius / 2,
       width: '30%',
       height: '100%',
-
-      // margin: spacing(0, 0.6, 0, 0),
-
       background: colord(background.default).invert().alpha(0.32).toHex()
     }
   }),
   caption: ({ background }: any) => ({
-    // position:'absolute',
-    // bottom:0,
-    // left:0,
-
     padding: spacing(0.4, 0.8),
-    borderRadius: borderRadius /2 ,
+    borderRadius: borderRadius / 2,
     background: colord(background.default).invert().alpha(0.16).toHex(),
-    color:background.textColor
+    color: background.textColor
   }),
   randomBgContainer: () => ({
     position: 'absolute',
@@ -223,20 +201,19 @@ background: colord(background.default).invert().alpha(0.16).toHex(),
 
     '& p': {
       userSelect: 'none',
-      color: useAlpha(palette.mediumEmphasis?.main, 0.42),
+      color: useAlpha(palette.mediumEmphasis?.main!, 0.42),
       width: '200%',
       height: '300%',
       lineHeight: '32px',
       transform: 'rotate(42deg) translateX(-42%) translateY(-8%)'
     }
   })
-  // border: `2px solid ${colord(background.default).invert().alpha(0.32).toHex()}`
 }));
 
 const DefaultThemePreview: FC<DefaultThemePreviewPropsType> = ({
   caption,
   background,
-  
+
   isThemeSelected,
   onClick,
   isHeaderHavePaperColor
@@ -248,7 +225,6 @@ const DefaultThemePreview: FC<DefaultThemePreviewPropsType> = ({
       <Grid>
         <Grid className={classes.headerOfThemePrewier} justify={'space-between'} alignItems={'center'} container>
           <Grid className={classes.leftPartPreviewOfHeaderOfThemePrewier}>
-            {/* <Typography variant={'body2'}>{caption}</Typography> */}
           </Grid>
           <Grid className={classes.rightPartPreviewOfHeaderOfThemePrewier}></Grid>
         </Grid>
@@ -268,21 +244,14 @@ const DefaultThemePreview: FC<DefaultThemePreviewPropsType> = ({
         <Grid className={classes.pakeepPrevier}>
           <Grid className={'titleOfPakeepPrevier'}>
             <Typography variant={'button'} className={classes.caption}>
-              {' '}
-              {caption}{' '}
+              {caption}
             </Typography>
           </Grid>
           <Grid className={'textOfPakeepPrevier'}>
-            <Typography variant={'body2'}>
-              Background: {background.default}
-            </Typography>
+            <Typography variant={'body2'}>Background: {background.default}</Typography>
 
-              <Typography variant={'body2'}>
-              Paper: {background.paper} 
-            </Typography>
-            <Typography variant={'body2'}>
-              Text: {background.textColor} 
-            </Typography>
+            <Typography variant={'body2'}>Paper: {background.paper}</Typography>
+            <Typography variant={'body2'}>Text: {background.textColor}</Typography>
           </Grid>
 
           <Grid className={classes.eventsContainerOfPakeepPrevier} container justify={'space-between'}>

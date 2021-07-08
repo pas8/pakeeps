@@ -13,11 +13,11 @@ export const operateToAddNewPakeep =
       .collection('pakeeps')
       .add(newPakeep)
       .then(snapshot => {
-        if (snapshot.exists) {
-          let newPakeep = snapshot.data();
-          console.log(newPakeep);
+        // if (snapshot.exists) {
+          // let newPakeep = snapshot.data();
+          console.log(snapshot);
           //  dispatch(toAddNewPakeep({newPakeep}))
-        }
+        // }
       });
   };
 

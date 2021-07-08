@@ -1,15 +1,14 @@
 import includes from 'lodash.includes';
-import { MenuItem, Checkbox, ListItemText, Grid, FormLabel, makeStyles, FormControl } from '@material-ui/core';
-import IconsUtilsOfGlobalLabelListOflabelList from './components/IconsUtils';
+import {  Grid, FormLabel, makeStyles,  } from '@material-ui/core';
 import { useTakeIcon } from 'hooks/useTakeIcon.hook';
 import mixPlugin from 'colord/plugins/mix';
-import { colord, extend } from 'colord';
+import {  extend } from 'colord';
 import { useAlpha } from 'hooks/useAlpha.hook';
 import IndeterminateCheckBoxOutlinedIcon from '@material-ui/icons/IndeterminateCheckBoxOutlined';
 import { useMix } from 'hooks/useMix.hook';
 import { useSelector } from 'react-redux';
-import { getGlobalEventsArr, getLabels } from 'store/modules/App/selectors';
-import { FC, MouseEvent, MouseEventHandler } from 'react';
+import {  getLabels } from 'store/modules/App/selectors';
+import { FC, MouseEventHandler } from 'react';
 import { GlobalLabelListOflabelListPropsType, UseStylesOfGlobalLabelListOflabelListType } from './types';
 import LabelElementOfGlobalLabelListOflabelList from './components/LabelElement';
 
@@ -80,9 +79,9 @@ const GlobalLabelListOflabelList: FC<GlobalLabelListOflabelListPropsType> = ({
           onClickOfCheckBoxContainer,
           checkedIcon,
           color,
+          customColor,
           isChecked,
           title:labelState.title,
-          customColor
         };
         return (
           <LabelElementOfGlobalLabelListOflabelList key={`newPakeep-label-${labelState.id}`} {...labelItemProps} />

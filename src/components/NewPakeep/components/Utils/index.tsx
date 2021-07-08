@@ -17,7 +17,13 @@ const useStyles = makeStyles(({ spacing }) => ({
   }
 }));
 
-const NewPakeepUtils: FC<NewPakeepUtilsType> = ({ customColor, onSave, widthOfContainer, ...newPakeepUtilsProps }) => {
+const NewPakeepUtils: FC<NewPakeepUtilsType> = ({
+  customColor,
+  onSave,
+  widthOfContainer,
+  onClose,
+  ...newPakeepUtilsProps
+}) => {
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const [primaryColor, , , , mediumEmphasisColor] = useThemeColors();
 
@@ -35,7 +41,7 @@ const NewPakeepUtils: FC<NewPakeepUtilsType> = ({ customColor, onSave, widthOfCo
 
   const actionsButtonGroupProps = {
     onSave,
-    onClose: null,
+    onClose,
     colorOfCloseButton: customColor.isUseDefault ? mediumEmphasisColor! : useAlpha(customColor?.hover, 0.6),
     colorOfSaveButton: customColor.isUseDefault ? primaryColor! : customColor?.hover
   };
@@ -46,7 +52,7 @@ const NewPakeepUtils: FC<NewPakeepUtilsType> = ({ customColor, onSave, widthOfCo
         <IconsUtils {...iconUtilsProps} />
       </Grid>
 
-      <Grid className={classes.buttonGroupWrapper} ref={ref}>
+      <Grid ref={ref}>
         <ActionsButtonGroup {...actionsButtonGroupProps} />
       </Grid>
     </Grid>

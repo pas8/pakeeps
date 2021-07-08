@@ -1,17 +1,15 @@
 import { FC } from 'react';
-import { ListItemText, Checkbox, MenuItem, Grid ,makeStyles} from '@material-ui/core';
+import { ListItemText, Checkbox, MenuItem, Grid, makeStyles } from '@material-ui/core';
 import { useAlpha } from 'hooks/useAlpha.hook';
 import { useMix } from 'hooks/useMix.hook';
 import { LabelElementOfGlobalLabelListOflabelListPropsType } from './types';
 import IconsUtilsOfGlobalLabelListOflabelList from '../IconsUtils';
 import { UseStylesOfGlobalLabelListOflabelListType } from '../../types';
 
-
 const useStyles = makeStyles(({ spacing, palette: { secondary }, typography: { subtitle2 } }) => {
   return {
     container: ({ color, customColor }: UseStylesOfGlobalLabelListOflabelListType) => {
       return {
-        // background:customColor.bgHover,
         '&  p': { ...subtitle2 },
 
         padding: spacing(1.6, 0, 0, 0),
@@ -29,8 +27,6 @@ const useStyles = makeStyles(({ spacing, palette: { secondary }, typography: { s
       };
     },
     menuElement: ({ color, customColor, isChecked }: UseStylesOfGlobalLabelListOflabelListType) => {
-      // if(isChecked === undefined) return {}
-      // if (customColor.isUseDefault) return {};
       const correctColor = customColor.isUseDefault ? (isChecked ? secondary.main : '') : color;
       return {
         '& div': {
@@ -66,7 +62,10 @@ const LabelElementOfGlobalLabelListOflabelList: FC<LabelElementOfGlobalLabelList
         <Checkbox checked={isChecked} checkedIcon={checkedIcon} icon={Icon} indeterminate={isIndeterminateChecked} />
         <ListItemText secondary={title} />
       </Grid>
-      <IconsUtilsOfGlobalLabelListOflabelList {...iconsUtilsOfGlobalLabelListOflabelListProps} />
+      <IconsUtilsOfGlobalLabelListOflabelList
+        {...iconsUtilsOfGlobalLabelListOflabelListProps}
+        customColor={customColor}
+      />
     </MenuItem>
   );
 };

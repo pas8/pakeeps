@@ -1,7 +1,7 @@
 import { IconsUtilsArrType } from 'components/IconsUtils/types';
 import { CustomColorType } from 'models/types';
 
-export type IconSizeType = 'default' | 'small';
+export type IconSizeType = 'medium' | 'small';
 
 export type WrapperOfPopoverAndMenuType = {
   buttonUtilsArr: IconsUtilsArrType;

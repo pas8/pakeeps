@@ -11,7 +11,7 @@ const WrapperOfPopoverAndMenu: FC<WrapperOfPopoverAndMenuType> = ({
   buttonUtilsArr,
   keyName,
   isIconNameExtended = false,
-  iconSize = 'default',
+  iconSize = 'medium',
   handleAverageMainComponentWidth,
   customColor: notReversedCustomColor,
   isCustomColorReversed = false

@@ -1,4 +1,10 @@
-import { DefaultFolderArrType, GlobalLabelsType, LabelVariantType } from './../store/modules/App/types';
+import { Optional } from 'utility-types';
+import {
+  DefaultFolderArrType,
+  DefaultFolderElementPropertyType,
+  GlobalLabelsType,
+  LabelVariantType
+} from './../store/modules/App/types';
 import { PropertyiesOfPakeepElement } from './../components/PakeepList/components/PakeepElement/types';
 import { TimeAndDateFromatType, TimeFormatType } from './../store/modules/Settings/types';
 import { SettingsInitialStateType } from 'store/modules/Settings/types';
@@ -101,7 +107,10 @@ export type UseFindCurrentEventsType = (
   timeAndDateFromat: TimeAndDateFromatType
 ) => CurrentEventsArrType | null;
 
-export type UsePakeepUtilsFuncType = (pakeepId: PakeepIdType) => IconsUtilsFunctionType;
+export type UsePakeepUtilsFuncType = (
+  pakeepId: PakeepIdType,
+  propetyies: DefaultFolderElementPropertyType
+) => IconsUtilsFunctionType;
 
 export type UseFindPakeepUsingIdType = (id: PakeepIdType) => PakeepElementType;
 

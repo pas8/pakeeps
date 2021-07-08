@@ -1,13 +1,15 @@
-import { AppBar, Grid, makeStyles, Typography, Toolbar, Zoom, Collapse, Slide } from '@material-ui/core';
+import { AppBar, Grid, makeStyles, Typography, Slide } from '@material-ui/core';
 import { every } from 'lodash';
 import { FC } from 'react';
 import { useMeasure } from 'react-use';
-import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
 import CloseOutlinedIcon from '@material-ui/icons/CloseOutlined';
+
 import { useGetReadableColor } from 'hooks/useGetReadableColor.hook';
 import { usePropertiesToUtils } from 'hooks/usePropertiesToUtils.hook';
 import IconButtonByPas from 'components/IconButton';
+import PakeepPropertyProvider from 'components/PakeepPropertyProviders';
+import { IconsUtilsArrDenotationNameType } from 'components/IconsUtils/types';
 import IconsUtils from 'components/IconsUtils';
 import { useFindSelectedLabels } from 'hooks/useFindSelectedLabels.hook';
 import { useGetIsColorDefault } from 'hooks/useGetIsColorDefault.hook';
@@ -26,8 +28,6 @@ import {
   HeaderWhenActiveSelectoPropsType,
   PakeepPropertyiesType
 } from './types';
-import PakeepPropertyProvider from 'components/PakeepPropertyProviders';
-import { IconsUtilsArrDenotationNameType } from 'components/IconsUtils/types';
 
 const useStyles = makeStyles(({ spacing }) => ({
   containerClass: {
@@ -120,6 +120,7 @@ const HeaderWhenActiveSelecto: FC<HeaderWhenActiveSelectoPropsType> = ({ selecte
     customColor,
     isUtilsReversed: true,
     labelsListProps,
+    eventsListProps: { events: [], handleSaveEvents: (events: any) => console.log(events) },
     arrOfButtonNamesWhichSholudBeHidden,
     ...propertiesArrToUtils
   };
@@ -135,7 +136,7 @@ const HeaderWhenActiveSelecto: FC<HeaderWhenActiveSelectoPropsType> = ({ selecte
                 <Typography variant={'subtitle2'}>{selectedPakeeps.length} selected </Typography>
               </Grid>
             </Grid>
-            <Grid style={{marginRight:'8px'}}>
+            <Grid style={{ marginRight: '8px' }}>
               <IconsUtils {...iconsUtilsProps} />
             </Grid>
           </Grid>

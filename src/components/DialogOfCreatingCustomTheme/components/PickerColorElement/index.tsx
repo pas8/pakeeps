@@ -1,29 +1,20 @@
-import { PickerColorElementPropsType } from './types';
-
-import { FC, useState } from 'react';
-import { Grid, Typography, makeStyles, DialogActions } from '@material-ui/core';
-import ActionsButtonGroup from 'components/ActionsButtonGroup';
-import { useDispatch } from 'react-redux';
-import { useThemeColors } from 'hooks/useThemeColors.hook';
-import BackgroundPlaceholderByPas from 'components/BackgroundPlaceholder';
-import { useAlpha } from 'hooks/useAlpha.hook';
-import InputsColorUtilsOfCustomColorPicker from 'components/ColorChanger/components/CustomColor/components/InputsColorUtils';
 import { colord } from 'colord';
-import { keys, map, values } from 'lodash';
+import { FC } from 'react';
+import { Grid, Typography, makeStyles, } from '@material-ui/core';
+import { useThemeColors } from 'hooks/useThemeColors.hook';
+import InputsColorUtilsOfCustomColorPicker from 'components/ColorChanger/components/CustomColor/components/InputsColorUtils';
 import { useFromNameToText } from 'hooks/useFromNameToText.hook';
 import { dialogColorNames } from 'components/DialogOfCreatingCustomTheme';
+import { PickerColorElementPropsType } from './types';
 
 const useStyles = makeStyles(({ spacing, palette, breakpoints, shape: { borderRadius } }) => ({
   wrapperOfUtils: {
     margin: spacing(1, 0, 0, 0)
   },
   elementContainer: ({ backgroundColor, isHaveBorder, isColorReverse, isSelected }: any) => ({
-    // margin: spacing(0, 0, 2, 0),
-
     [breakpoints.down('sm')]: {
       marginTop: spacing(1.4)
     },
-
     '& legend': {
       padding: spacing(0, 0.6)
     },
@@ -67,7 +58,7 @@ const PickerColorElement: FC<PickerColorElementPropsType> = ({
     inputColor: isColorReverse ? colorInHexFormat : secondaryColor,
     customFormatName: colorFormat,
     colorInHexFormat,
-    isUseAlpha:false
+    isUseAlpha: false
   };
 
   return (
@@ -78,7 +69,10 @@ const PickerColorElement: FC<PickerColorElementPropsType> = ({
         </Typography>
       </legend>
       <Grid className={classes.wrapperOfUtils}>
-        <InputsColorUtilsOfCustomColorPicker isInputsHaveSameGap {...inputsColorUtilsOfCustomColorPickerProps} />
+        {
+          //@ts-ignore
+          <InputsColorUtilsOfCustomColorPicker isInputsHaveSameGap {...inputsColorUtilsOfCustomColorPickerProps} />
+        }
       </Grid>
     </Grid>
   );

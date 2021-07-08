@@ -85,7 +85,6 @@ const PopoverAndMenu: FC<PopoverAndMenuType> = ({
   //     : menuLocation === 'center'
   //     ? defaultLocationOfPopoverToWitCentered
   //     : leftSiteLocation;
-
   const popoverProps = {
     // ...locationOfPopover,
     ...defaultLocationOfPopoverToWitCentered,

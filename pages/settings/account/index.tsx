@@ -63,7 +63,7 @@ const useStyles = makeStyles(
     }: any) => {
       const borderUnHoverColor = isHaveBgColor
         ? backgroundColor
-        : useAlpha(isAccountHaveAvatar ? secondary.main : maxEmphasis?.main, 0.4);
+        : useAlpha(isAccountHaveAvatar ? secondary.main! : maxEmphasis?.main!, 0.4);
       const borderHoverColor = isHaveBgColor
         ? backgroundColor
         : isAccountHaveAvatar
