@@ -24,6 +24,11 @@ export const toDeletePakeep = (payload: PayloadTypes[TypeNames.HANDLE_DELETE_PAK
   payload
 });
 
+export const toEditPakeep = (payload: PayloadTypes[TypeNames.HANDLE_EDIT_PAKEEP]): AppActionTypes => ({
+  type: TypeNames.HANDLE_EDIT_PAKEEP,
+  payload
+});
+
 export const toDeleteGlobalLabel = (payload: PayloadTypes[TypeNames.HANDLE_DELETE_GLOBAL_LABEL]): AppActionTypes => ({
   type: TypeNames.HANDLE_DELETE_GLOBAL_LABEL,
   payload

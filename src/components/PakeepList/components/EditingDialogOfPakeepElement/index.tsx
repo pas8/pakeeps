@@ -1,6 +1,8 @@
 import { useState, FC, useEffect } from 'react';
+import { usePrevious } from 'react-use';
+import RestoreOutlinedIcon from '@material-ui/icons/RestoreOutlined';
 import { useMeasure } from 'react-use';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { Grid, makeStyles, DialogTitle, DialogContent, InputBase, Dialog, DialogActions } from '@material-ui/core';
 import IconsUtils from 'components/IconsUtils';
@@ -20,6 +22,9 @@ import { useNewPakeepUtility } from 'hooks/useNewPakeepUtility.hook';
 import CheckBoxContainer from 'components/CheckBoxContainer';
 import { useNewPakeepStatuses } from 'hooks/useNewPakeepStatuses.hook';
 import AttributeGroup from '../PakeepElement/components/AttributeGroup';
+import { toEditPakeep } from 'store/modules/App/actions';
+import { useSnackbar } from 'notistack';
+import { isEqual } from 'lodash';
 
 const useStyles = makeStyles(({ typography: { h4, h6, body1, h5 }, spacing }) => {
   return {
@@ -33,7 +38,7 @@ const useStyles = makeStyles(({ typography: { h4, h6, body1, h5 }, spacing }) =>
         paddingBottom: 0,
         paddingRight: spacing(1.8),
         '& input': {
-          ...h5
+          ...h4
           // fontSize: spacing(2.8),
           // fontSize: h4.fontSize
         }
@@ -47,15 +52,18 @@ const useStyles = makeStyles(({ typography: { h4, h6, body1, h5 }, spacing }) =>
         }
       },
       '& textarea': {
-        ...body1,
+        ...body1
         // lineHeight: spacing(0.2),
         // fontWeight: 200,
         // fontSize: h6.fontSize,
-        marginTop: spacing(0.4),
+        // marginTop: spacing(0.4)
         // marginBottom: spacing(-2)
       }
-    })
-    // dialogIconsUtilsClass: { margin: spacing(-2, 0.4, 0), padding: spacing(0,4) }
+    }),
+    attributeGroupContainer: {
+      padding: spacing(0, 1.8, 0.8),
+      marginTop: spacing(-2)
+    }
   };
 });
 
@@ -64,9 +72,12 @@ const EditingDialogOfPakeepElement: FC<EditingDialogOfPakeepElementProps> = ({
   handleClosePakeepDialog
 }) => {
   if (!pakeepId) return null;
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
   const findedPakeep = useFindPakeepUsingId(pakeepId);
   if (!findedPakeep) return null;
+
+  const dispatch = useDispatch();
 
   const { backgroundColor, color, title, text, checkBoxes, id, labels, events, ...properties } = findedPakeep;
 
@@ -75,11 +86,10 @@ const EditingDialogOfPakeepElement: FC<EditingDialogOfPakeepElementProps> = ({
     id,
     labels,
     events,
-    checkBoxes,
+
     color,
     backgroundColor
   };
-
   const {
     setState,
     iconUtilsFuncs,
@@ -91,7 +101,7 @@ const EditingDialogOfPakeepElement: FC<EditingDialogOfPakeepElementProps> = ({
     setCheckBoxes
   } = useNewPakeepUtility({
     defaultState,
-    defaultCheckBoxesValue: [],
+    defaultCheckBoxesValue: checkBoxes,
     defaultInputState: { title, text }
   });
   const {
@@ -114,6 +124,8 @@ const EditingDialogOfPakeepElement: FC<EditingDialogOfPakeepElementProps> = ({
   const correctColor = customColor.hover;
 
   const classes = useStyles({ backgroundColor: correctBackgroundColor, color: correctColor });
+
+  const TITLE = 'Title';
 
   const titleInputProps = {
     placeholder: 'Title',
@@ -171,14 +183,34 @@ const EditingDialogOfPakeepElement: FC<EditingDialogOfPakeepElementProps> = ({
     events: state.events
   };
 
+  const previuosState = usePrevious(state);
+
+  const handleRestoreLastGlobalLabel = () => {
+    if (!previuosState) return;
+
+    !isEqual(findedPakeep, previuosState) && setState(previuosState);
+    closeSnackbar();
+  };
+
   const handleSubmit = () => {
-    console.log(state);
+    dispatch(toEditPakeep({ editedPakeep: state }));
+
+    enqueueSnackbar({ message: 'Global label was successfully added' });
+    handleClosePakeepDialog();
   };
 
   const isOpen = !!id;
 
   const onClose = () => {
     handleClosePakeepDialog();
+    !isEqual(findedPakeep, previuosState) &&
+      enqueueSnackbar({
+        message: 'Dialog of creating label was closed',
+        severity: 'warning',
+        buttonText: 'Restore',
+        onClick: handleRestoreLastGlobalLabel,
+        icon: RestoreOutlinedIcon
+      });
   };
 
   const actionsButtonGroupProps = {
@@ -189,7 +221,12 @@ const EditingDialogOfPakeepElement: FC<EditingDialogOfPakeepElementProps> = ({
   };
 
   return (
-    <Dialog open={isOpen} onClose={onClose} maxWidth={'md'} fullWidth={statusState.isNewPakeepContainerHaveFullWidth}>
+    <Dialog
+      open={isOpen}
+      onClose={onClose}
+      maxWidth={statusState.isNewPakeepContainerHaveFullWidth ? 'xl' : 'sm'}
+      fullWidth={statusState.isNewPakeepContainerHaveFullWidth}
+    >
       <Grid className={classes.containerClass} ref={ref}>
         <DialogTitle>
           <Grid container>
@@ -212,20 +249,28 @@ const EditingDialogOfPakeepElement: FC<EditingDialogOfPakeepElementProps> = ({
           )}
         </DialogContent>
 
-        {!statusState.isTextHidden && !statusState.isLabelViewHidden && (
-          <Grid container>
-            {/* <Grid container className={classes.attributeGroupContainer}> */}
-            <AttributeGroup {...attributeGroupProps} />
-          </Grid>
-        )}
+        {/* {!statusState.isTextHidden && !statusState.isLabelViewHidden && ( */}
+
+        {/* )} */}
 
         <DialogActions>
-          <Grid className={classes.dialogIconsUtilsClass} container alignItems={'center'} justify={'space-between'}>
-            <Grid>
-              <IconsUtils {...iconsUtilsProps} />
+          <Grid container>
+            <Grid container className={classes.attributeGroupContainer}>
+              <AttributeGroup {...attributeGroupProps} />
             </Grid>
-            <Grid>
-              <ActionsButtonGroup {...actionsButtonGroupProps} />
+            <Grid
+              // className={classes.dialogIconsUtilsClass}
+              container
+              alignItems={'center'}
+              justify={'space-between'}
+              wrap={'nowrap'}
+            >
+              <Grid>
+                <IconsUtils {...iconsUtilsProps} />
+              </Grid>
+              <Grid>
+                <ActionsButtonGroup {...actionsButtonGroupProps} />
+              </Grid>
             </Grid>
           </Grid>
         </DialogActions>

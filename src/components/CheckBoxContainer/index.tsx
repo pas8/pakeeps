@@ -22,7 +22,7 @@ const useStyles = makeStyles(
       '& .dragging': {
         background: customColor.isUseDefault ? palette.background.paper : customColor.bgUnHover
       },
-      '& button,.MuiCheckbox-root': {
+      '& button,.MuiCheckbox-root,p': {
         color: customColor.isUseDefault ? '' : customColor.hover,
         '&:hover .MuiTouchRipple-root': {
           background: customColor.isUseDefault ? '' : useAlpha(customColor.hover, 0.2)
@@ -140,6 +140,7 @@ const CheckBoxContainer: FC<CheckBoxItemPropsType> = ({
                         <InputBase
                           name={item.id}
                           value={item.value}
+                          autoFocus
                           onChange={onChangeOfInput}
                           multiline
                           fullWidth
@@ -187,7 +188,7 @@ const CheckBoxContainer: FC<CheckBoxItemPropsType> = ({
               </Grid>
 
               <Grid className={'text'} item container alignItems={'center'}>
-                <Typography color={'textSecondary'}>{!!value ? value : 'Empty element'}</Typography>
+                <Typography >{!!value ? value : 'Empty element'}</Typography>
               </Grid>
             </Grid>
           );

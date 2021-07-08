@@ -41,11 +41,11 @@ export const useChangePakeepProperty = ({
   const findedPakeep = find(pakeeps, ({ id }) => pakeepId === id);
   if (!findedPakeep) return { pakeeps };
 
-  const newPakeep = { ...findedPakeep,  ...property };
+  const newPakeep = { ...findedPakeep, ...property };
 
   const filteredPakeeps = filter(pakeeps, ({ id }) => pakeepId !== id);
   const variedPakeeps = [...filteredPakeeps, newPakeep];
-console.log(newPakeep)
+  console.log(newPakeep);
   const variedState = { pakeeps: variedPakeeps };
 
   return variedState;
@@ -77,7 +77,7 @@ export const useAddNewPakeep = ({
 }: useHooksTypes[TypeNames.HANDLE_ADD_NEW_PAKEEP] & PayloadTypes[TypeNames.HANDLE_ADD_NEW_PAKEEP]): any => {
   const isPinned = newPakeep?.isPinned;
 
-  const newPakeeps = [...pakeeps, newPakeep];
+  const newPakeeps = [newPakeep, ...pakeeps];
   const newPakeepsOrderNames = isPinned ? pakeepsOrderNames : [newPakeep.id, ...pakeepsOrderNames];
   const newPinnedPakeepsOrderNames = isPinned ? [newPakeep.id, ...pinnedPakeepsOrderNames] : pinnedPakeepsOrderNames;
 

@@ -59,9 +59,18 @@ export type PayloadTypes = {
 
   [TypeNames.HANDLE_ADD_GLOBAL_EVENT]: { newEvent: IGlobalEvent };
   [TypeNames.HANDLE_DELETE_GLOBAL_LABEL]: { labelId: LabelIdType };
+  [TypeNames.HANDLE_EDIT_PAKEEP]: { editedPakeep: PakeepElementType };
+
+  
 };
 
+
 export type ActionsValueTypes = {
+  toEditPakeep:{
+    type: typeof TypeNames.HANDLE_EDIT_PAKEEP;
+    payload: PayloadTypes[TypeNames.HANDLE_EDIT_PAKEEP];
+
+  }
   toDeleteGlobalLabel: {
     type: typeof TypeNames.HANDLE_DELETE_GLOBAL_LABEL;
     payload: PayloadTypes[TypeNames.HANDLE_DELETE_GLOBAL_LABEL];

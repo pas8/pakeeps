@@ -21,7 +21,7 @@ export type LabelsListPropsType = {
 } & IconUtilsLabelsListPropsType;
 
 export type IconUtilsLabelsListPropsType = {
-  handleStatusOfHideLabelView: () => void;
+  handleStatusOfHideLabelView?: () => void;
   isLabelViewHidden?: boolean;
 } & DefaultLabelListPropsType;
 

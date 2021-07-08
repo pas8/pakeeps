@@ -41,11 +41,11 @@ const useStyles = makeStyles(({ spacing, palette: { highEmphasis, mediumEmphasis
     '& .MuiCheckbox-root': {
       position: 'absolute',
       '& svg': {
-        width: '0.8em',
-        height: '0.8em'
+        width: '0.92em',
+        height: '0.92em'
       },
       top: -8,
-      left: -8,
+      left: -10,
       color: !customColor.isUseDefault ? customColor.unHover : mediumEmphasis?.main,
       '&:hover .MuiTouchRipple-root': {
         background: useAlpha(!customColor.isUseDefault ? customColor.unHover! : mediumEmphasis?.main!, 0.2)
@@ -56,7 +56,8 @@ const useStyles = makeStyles(({ spacing, palette: { highEmphasis, mediumEmphasis
     marginBottom: spacing(0.8),
     position: 'relative',
     '& p': {
-      textIndent: 28
+      padding:spacing(0,0.6,0,3.6)
+      // textIndent: 28
       // '&::first-line': {
       // marginLeft: 100
       // }

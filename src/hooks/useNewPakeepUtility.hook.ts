@@ -38,7 +38,7 @@ export const useNewPakeepUtility: UseNewPakeepUtilityType = ({
         return `${value} \n`;
       })
       .join('');
-    const newCheckBoxes = 
+    const newCheckBoxes = dropRight(
       inputState.text
         .toString()
         .split('\n')
@@ -48,7 +48,8 @@ export const useNewPakeepUtility: UseNewPakeepUtilityType = ({
           color: 'default',
           isAccomplished: false
         }))
-    
+    );
+// console.log(newCheckBoxes)
     state.isCheckBoxes
       ? setInputState(state => ({
           ...state,

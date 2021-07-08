@@ -285,6 +285,14 @@ export const AppReducer = (state = initialState, action: AppActionTypes): AppIni
       const { globalEventList } = action.payload;
       return { ...state, temporaryData: { ...state.temporaryData, globalEventList } };
     }
+
+    case TypeNames.HANDLE_EDIT_PAKEEP: {
+      const { editedPakeep } = action.payload;
+      const pakeeps = [editedPakeep, ...filter(state.pakeeps, ({ id }) => id !== editedPakeep.id)];
+
+      return { ...state, pakeeps };
+    }
+
     case TypeNames.HANDLE_DELETE_GLOBAL_LABEL: {
       const { labelId } = action.payload;
       const labels = filter(state.labels, ({ id }) => id !== labelId);

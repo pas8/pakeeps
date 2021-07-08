@@ -22,6 +22,7 @@ import { DEFAULT } from 'models/denotation';
 import { useNewPakeepUtility } from 'hooks/useNewPakeepUtility.hook';
 import { useNewPakeepStatuses } from 'hooks/useNewPakeepStatuses.hook';
 import NewPakeepUtils from './components/Utils';
+import { toAddNewPakeep } from 'store/modules/App/actions';
 
 const useStyles = makeStyles(
   ({ spacing, palette, transitions, typography: { subtitle1, h5 }, shape: { borderRadius } }) => ({
@@ -182,8 +183,8 @@ const NewPaKeep: FC = () => {
   });
 
   const handleAddNewPakeep = () => {
-    setState(defaultState);
-    dispatch(operateToAddNewPakeep(state));
+    setState({ ...defaultState, ...defaultInputState, checkBoxes: [] });
+    dispatch(toAddNewPakeep({ newPakeep: state }));
   };
 
   const newPakeepUtils = {
