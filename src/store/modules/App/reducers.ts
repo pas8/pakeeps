@@ -14,7 +14,7 @@ import {
   usePinStatusOfPakeeps
 } from './hooks';
 import { AppActionTypes, AppInitialStateInteface, GlobalLabelsType } from './types';
-import { random, sampleSize, words } from 'lodash';
+import { random, sampleSize, words, filter } from 'lodash';
 //@ts-ignore
 import randomSentence from 'random-sentence';
 import { colord } from 'colord';
@@ -30,7 +30,7 @@ const labelsOfInitialState: GlobalLabelsType = [
   { color: '#afa646', title: 'Eco', iconName: 'eco', id: 'label8', variant: 'default' }
 ];
 
-const randomPakeeps = Array(800)
+const randomPakeeps = Array(8)
   .fill('pakeepID')
   .map((el, idx) => {
     const randomColor = colord({ r: random(256), g: random(256), b: random(256) }).toHex();
@@ -285,12 +285,18 @@ export const AppReducer = (state = initialState, action: AppActionTypes): AppIni
       const { globalEventList } = action.payload;
       return { ...state, temporaryData: { ...state.temporaryData, globalEventList } };
     }
+    case TypeNames.HANDLE_DELETE_GLOBAL_LABEL: {
+      const { labelId } = action.payload;
+      const labels = filter(state.labels, ({ id }) => id !== labelId);
+      return { ...state, labels };
+    }
 
     case TypeNames.HANDLE_SET_ORDER_NAMES_OF_PINNED_PAKEEPS:
     case TypeNames.HANDLE_SET_ORDER_NAMES:
     case TypeNames.HANDLE_CHANGE_AVATAR_PROPERTIES:
     case TypeNames.HANDLE_CHANGE_HEADER_HEIGTH:
     case TypeNames.HANDLE_SET_NEW_ORDER_NAMES:
+
     case TypeNames.HANDLE_CHANGE_PAKEEPS:
     case TypeNames.HANDLE_CHANGE_USER_DATA:
     case TypeNames.HANDLE_SET_SELECTED_PAKEEPIDS_ARR:

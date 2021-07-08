@@ -1,13 +1,13 @@
 import { Grid, makeStyles, Menu, MenuItem, Typography } from '@material-ui/core';
-import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { nanoid } from 'nanoid';
+import { Optional } from 'utility-types';
+import { FC, MouseEvent, MouseEventHandler, ReactNode, useState } from 'react';
 import { useThemeColors } from 'hooks/useThemeColors.hook';
 import { useAlpha } from 'hooks/useAlpha.hook';
-import { FC, MouseEvent, MouseEventHandler, ReactNode, useState } from 'react';
-import { MoreUtilsPropsType, UseStylesOfMoreUtilsType } from './types';
 import { ClosePopoverOrMenuType } from 'models/types';
-import { Optional } from 'utility-types';
+import { useGetReversedCustomColor } from 'hooks/useGetReversedCustomColor.hook';
+import { MoreUtilsPropsType, UseStylesOfMoreUtilsType } from './types';
 
 const useStyles = makeStyles(({ spacing, shape: { borderRadius } }) => ({
   itemGrid: {
@@ -21,7 +21,6 @@ const useStyles = makeStyles(({ spacing, shape: { borderRadius } }) => ({
     '&:hover svg,h6': { color: hoverColor },
     '&:hover .MuiTouchRipple-root': {
       background: useAlpha(color),
-      // borderBottom:isIconActive && `2px solid ${color}`,
       borderRight: 0,
       borderLeft: 0
     }
@@ -34,17 +33,25 @@ const MoreUtils: FC<MoreUtilsPropsType> = ({ slicedArrAfter, customColor }) => {
   const nullityOfAnchorEl = {
     name: '',
     menuComponentsProps: {},
-    currentTarget: null,
+    coordinates: { top: 0, left: 0 },
     MenuComponents: null as ReactNode | any
   };
 
   const [anchorElState, setAnchorElState] = useState<Optional<typeof nullityOfAnchorEl>>(nullityOfAnchorEl);
-
-  const { MenuComponents, menuComponentsProps } = anchorElState;
+  const { MenuComponents } = anchorElState;
 
   const handleMenuClose: ClosePopoverOrMenuType = () => setAnchorElState(nullityOfAnchorEl);
 
   const classes = useStyles({ color: customColor.isUseDefault ? '' : customColor.bgUnHover, hoverColor: '' });
+
+  const anchorPosition =
+    !!anchorElState?.coordinates?.top && !!anchorElState?.coordinates?.left ? anchorElState.coordinates : undefined;
+
+  const menuComponentsProps = {
+    ...anchorElState.menuComponentsProps,
+    customColor: useGetReversedCustomColor(customColor)
+  };
+
   return (
     <Grid className={classes.container}>
       {slicedArrAfter.map(
@@ -74,10 +81,10 @@ const MoreUtils: FC<MoreUtilsPropsType> = ({ slicedArrAfter, customColor }) => {
           const classes = useStyles({ color, hoverColor });
           //
 
-          const handleMenuOpen: MouseEventHandler<HTMLLIElement> = ({ currentTarget }) => {
+          const handleMenuOpen: MouseEventHandler<HTMLLIElement> = ({ clientX: left, clientY: top }) => {
             setAnchorElState(state => ({
               ...state,
-              currentTarget,
+              coordinates: { top, left },
               handleMenuClose,
               menuComponentsProps,
               MenuComponents,
@@ -101,10 +108,11 @@ const MoreUtils: FC<MoreUtilsPropsType> = ({ slicedArrAfter, customColor }) => {
       )}
 
       <Menu
-        anchorEl={anchorElState.currentTarget}
+        anchorReference={'anchorPosition'}
         keepMounted
         onClose={handleMenuClose}
         open={!!anchorElState.name}
+        anchorPosition={anchorPosition}
       >
         {MenuComponents && <MenuComponents {...menuComponentsProps} onMenuClose={handleMenuClose} />}
       </Menu>

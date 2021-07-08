@@ -8,6 +8,7 @@ import {
   PakeepIdType
 } from 'store/modules/App/types';
 import { $Values } from 'utility-types';
+import { IconUtilsLabelsListPropsType, LabelsListPropsType } from './components/LabelsList/types';
 import { iconsUtilsArrDenotation } from './denotation';
 
 export type IconsUtilsFunctionKeyNameType =
@@ -51,7 +52,7 @@ export type IconsUtilsPropetyiesType = {
   customColor: CustomColorType;
   isAllIconsIsShown?: boolean;
   labelBargeNumber?: number;
-  labelsListProps?: any;
+  labelsListProps?: IconUtilsLabelsListPropsType;
   open?: boolean;
   eventsListProps: EventsListProps;
   widthOfContainer?: number;

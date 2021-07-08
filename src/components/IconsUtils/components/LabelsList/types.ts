@@ -4,17 +4,27 @@ import { LabelIdType, LabelsOfPakeepType, PakeepIdType } from 'store/modules/App
 export type HandleAddNewLabelType = (id: LabelIdType) => void;
 export type HandleDeleteNewLabelType = (id: LabelIdType) => void;
 
-export type LabelsListPropsType = {
+export type HandleLabelFuncsOfLabelListType = {
   handleAddNewLabel: HandleAddNewLabelType;
   handleDeleteNewLabel: HandleDeleteNewLabelType;
-  handleStatusOfHideLabelView: () => void;
-  isLabelViewHidden?: boolean;
+};
+
+export type DefaultLabelListPropsType = {
+  labels: LabelsOfPakeepType;
+  pakeepId: PakeepIdType;
+} & HandleLabelFuncsOfLabelListType;
+
+export type LabelsListPropsType = {
   isDefaultMenuListHidden?: boolean;
   customColor: CustomColorType;
-  labels: LabelsOfPakeepType;
   onMenuClose: () => void;
-  pakeepId: PakeepIdType;
-};
+} & IconUtilsLabelsListPropsType;
+
+export type IconUtilsLabelsListPropsType = {
+  handleStatusOfHideLabelView: () => void;
+  isLabelViewHidden?: boolean;
+} & DefaultLabelListPropsType;
+
 export type MenuStateOfLabelsListType = {
   mouseX: number;
   mouseY: number;

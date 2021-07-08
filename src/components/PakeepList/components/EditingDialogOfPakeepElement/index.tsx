@@ -16,8 +16,12 @@ import { IconsUtilsArrDenotationNameType } from 'components/IconsUtils/types';
 
 import { EditingDialogOfPakeepElementProps, onChangeType, UseStylesInteface } from './types';
 import { useLabelListFunc } from 'hooks/useLabelListFunc.hook';
+import { useNewPakeepUtility } from 'hooks/useNewPakeepUtility.hook';
+import CheckBoxContainer from 'components/CheckBoxContainer';
+import { useNewPakeepStatuses } from 'hooks/useNewPakeepStatuses.hook';
+import AttributeGroup from '../PakeepElement/components/AttributeGroup';
 
-const useStyles = makeStyles(({ typography: { h4, h6 }, spacing }) => {
+const useStyles = makeStyles(({ typography: { h4, h6, body1, h5 }, spacing }) => {
   return {
     containerClass: ({ backgroundColor, color }: UseStylesInteface) => ({
       backgroundColor,
@@ -29,11 +33,12 @@ const useStyles = makeStyles(({ typography: { h4, h6 }, spacing }) => {
         paddingBottom: 0,
         paddingRight: spacing(1.8),
         '& input': {
+          ...h5
           // fontSize: spacing(2.8),
-          fontSize: h4.fontSize
+          // fontSize: h4.fontSize
         }
       },
-      '& input,textarea': {
+      '& input, textarea': {
         color,
         caretColor: color,
         '&::selection ': {
@@ -42,14 +47,15 @@ const useStyles = makeStyles(({ typography: { h4, h6 }, spacing }) => {
         }
       },
       '& textarea': {
-        lineHeight: spacing(0.2),
-        fontWeight: 200,
-        fontSize: h6.fontSize,
-        marginTop: spacing(-0.8),
-        marginBottom: spacing(-2)
+        ...body1,
+        // lineHeight: spacing(0.2),
+        // fontWeight: 200,
+        // fontSize: h6.fontSize,
+        marginTop: spacing(0.4),
+        // marginBottom: spacing(-2)
       }
-    }),
-    dialogIconsUtilsClass: { margin: spacing(-2, 0.4, 0), paddingBottom: spacing(0.4) }
+    })
+    // dialogIconsUtilsClass: { margin: spacing(-2, 0.4, 0), padding: spacing(0,4) }
   };
 });
 
@@ -57,16 +63,48 @@ const EditingDialogOfPakeepElement: FC<EditingDialogOfPakeepElementProps> = ({
   id: pakeepId,
   handleClosePakeepDialog
 }) => {
+  if (!pakeepId) return null;
+
   const findedPakeep = useFindPakeepUsingId(pakeepId);
   if (!findedPakeep) return null;
 
   const { backgroundColor, color, title, text, checkBoxes, id, labels, events, ...properties } = findedPakeep;
 
-  const [state, setState] = useState({ title, text, backgroundColor, color });
+  const defaultState = {
+    ...properties,
+    id,
+    labels,
+    events,
+    checkBoxes,
+    color,
+    backgroundColor
+  };
 
-  useEffect(() => {
-    setState({ title, text, backgroundColor, color });
-  }, [findedPakeep]);
+  const {
+    setState,
+    iconUtilsFuncs,
+    state,
+    defaultLabelListProps,
+    handleChangeInputsValue,
+    labelsOfAttributeGroup,
+    eventsListProps: defaultEventsListProps,
+    setCheckBoxes
+  } = useNewPakeepUtility({
+    defaultState,
+    defaultCheckBoxesValue: [],
+    defaultInputState: { title, text }
+  });
+  const {
+    statusState,
+    hanldeChangeTextVisiblittyStatus,
+    handleSetWidth,
+    handleStatusOfHideLabelView,
+    handleAccomplishedCheckBoxesHiddenStatus
+  } = useNewPakeepStatuses();
+
+  // useEffect(() => {
+  //   setState({ title, text, backgroundColor, color });
+  // }, [findedPakeep]);
 
   const [customColor, isBackgroundColorDefault, isColorDefault] = useGetReadableColor(
     state.backgroundColor,
@@ -77,14 +115,10 @@ const EditingDialogOfPakeepElement: FC<EditingDialogOfPakeepElementProps> = ({
 
   const classes = useStyles({ backgroundColor: correctBackgroundColor, color: correctColor });
 
-  const onChange: onChangeType = ({ target: { name, value } }) => {
-    setState(state => ({ ...state, [name]: value }));
-  };
-
   const titleInputProps = {
     placeholder: 'Title',
     autoComplete: 'off',
-    onChange,
+    onChange: handleChangeInputsValue,
     fullWidth: true,
     name: 'title',
     value: state.title,
@@ -94,7 +128,7 @@ const EditingDialogOfPakeepElement: FC<EditingDialogOfPakeepElementProps> = ({
   const textInputProps = {
     placeholder: 'Text',
     autoComplete: 'off',
-    onChange,
+    onChange: handleChangeInputsValue,
     fullWidth: true,
     name: 'text',
     value: state.text,
@@ -105,38 +139,37 @@ const EditingDialogOfPakeepElement: FC<EditingDialogOfPakeepElementProps> = ({
   const JUST_PADDING_VALUE = 160;
   const widthOfContainer = width - JUST_PADDING_VALUE;
 
-  const arrOfButtonNamesWhichSholudBeHidden: IconsUtilsArrDenotationNameType[] = ['width'];
-
-  const iconsUtilsFunc = usePakeepUtilsFunc(id, properties);
-
-  const handleSetBackgroundColorPakeep = (backgroundColor: string) => {
-    setState(state => ({ ...state, backgroundColor }));
-  };
-  const handleSetColorPakeep = (color: string) => {
-    setState(state => ({ ...state, color }));
-  };
-
-  const { handleDeleteNewLabel, handleAddNewLabel } = useLabelListFunc(id);
-
+  const arrOfButtonNamesWhichSholudBeHidden: IconsUtilsArrDenotationNameType[] = [];
+  // const arrOfButtonNamesWhichSholudBeHidden: IconsUtilsArrDenotationNameType[] = ['width'];
   const labelsListProps = {
-    // customColor,
-    handleDeleteNewLabel,
-    handleAddNewLabel
+    ...defaultLabelListProps,
+    customColor,
+    handleStatusOfHideLabelView
+  };
+
+  const eventsListProps = {
+    ...defaultEventsListProps
   };
 
   const iconsUtilsProps = {
+    ...iconUtilsFuncs,
     labelsListProps,
     widthOfContainer,
     id,
-    eventsListProps: { events: findedPakeep.events, handleSaveEvents: (events: any) => console.log(events) },
+    handleSetWidth,
+    eventsListProps,
     customColor,
-    handleSetBackgroundColorPakeep,
-    handleSetColorPakeep,
-    iconsUtilsFunc,
-    arrOfButtonNamesWhichSholudBeHidden
+    arrOfButtonNamesWhichSholudBeHidden,
+    isEditingUtilsHidden: false
   };
 
-  const attributeGroupProps = {};
+  const attributeGroupProps = {
+    labels: labelsOfAttributeGroup,
+    pakeepId,
+    customColor,
+    parentBackgrounColor: state.backgroundColor,
+    events: state.events
+  };
 
   const handleSubmit = () => {
     console.log(state);
@@ -156,7 +189,7 @@ const EditingDialogOfPakeepElement: FC<EditingDialogOfPakeepElementProps> = ({
   };
 
   return (
-    <Dialog open={isOpen} onClose={onClose}>
+    <Dialog open={isOpen} onClose={onClose} maxWidth={'md'} fullWidth={statusState.isNewPakeepContainerHaveFullWidth}>
       <Grid className={classes.containerClass} ref={ref}>
         <DialogTitle>
           <Grid container>
@@ -166,13 +199,35 @@ const EditingDialogOfPakeepElement: FC<EditingDialogOfPakeepElementProps> = ({
           </Grid>
         </DialogTitle>
         <DialogContent>
-          <InputBase {...textInputProps} />
+          {state.isCheckBoxes ? (
+            <CheckBoxContainer
+              checkBoxesArr={state.checkBoxes}
+              setCheckBoxes={setCheckBoxes}
+              customColor={customColor}
+              isAccomplishedCheckBoxesHidden={statusState.isAccomplishedCheckBoxesHidden}
+              handleAccomplishedCheckBoxesHiddenStatus={handleAccomplishedCheckBoxesHiddenStatus}
+            />
+          ) : (
+            <InputBase {...textInputProps} />
+          )}
         </DialogContent>
-        <DialogContent>{/* <AttributeGroup {...allAttributeGroupProps} /> */}</DialogContent>
 
-        <DialogActions className={classes.dialogIconsUtilsClass}>
-          <IconsUtils {...iconsUtilsProps} />
-          <ActionsButtonGroup {...actionsButtonGroupProps} />
+        {!statusState.isTextHidden && !statusState.isLabelViewHidden && (
+          <Grid container>
+            {/* <Grid container className={classes.attributeGroupContainer}> */}
+            <AttributeGroup {...attributeGroupProps} />
+          </Grid>
+        )}
+
+        <DialogActions>
+          <Grid className={classes.dialogIconsUtilsClass} container alignItems={'center'} justify={'space-between'}>
+            <Grid>
+              <IconsUtils {...iconsUtilsProps} />
+            </Grid>
+            <Grid>
+              <ActionsButtonGroup {...actionsButtonGroupProps} />
+            </Grid>
+          </Grid>
         </DialogActions>
       </Grid>
     </Dialog>

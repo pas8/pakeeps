@@ -58,9 +58,14 @@ export type PayloadTypes = {
   [TypeNames.HANDLE_CHANGE_GLOBAL_EVENT_LIST_TEMPROPARY_DATA]: { globalEventList: EventsOfPakeepType };
 
   [TypeNames.HANDLE_ADD_GLOBAL_EVENT]: { newEvent: IGlobalEvent };
+  [TypeNames.HANDLE_DELETE_GLOBAL_LABEL]: { labelId: LabelIdType };
 };
 
 export type ActionsValueTypes = {
+  toDeleteGlobalLabel: {
+    type: typeof TypeNames.HANDLE_DELETE_GLOBAL_LABEL;
+    payload: PayloadTypes[TypeNames.HANDLE_DELETE_GLOBAL_LABEL];
+  };
   toAddGlobalEvent: {
     type: typeof TypeNames.HANDLE_ADD_GLOBAL_EVENT;
     payload: PayloadTypes[TypeNames.HANDLE_ADD_GLOBAL_EVENT];
@@ -243,7 +248,7 @@ export interface IGlobalEvent {
   id: string;
   value: EventyValueType;
   onlyTime?: boolean;
-  variant:LabelVariantType
+  variant: LabelVariantType;
   color: string;
   isFolderIsPlaceholder?: boolean;
 }
@@ -289,15 +294,17 @@ export type TitleAndTextOfPakeepType = {
 export type CheckBoxElementType = { color: ColorType; value: string; isAccomplished: boolean; id: string };
 export type CheckBoxesArrtype = CheckBoxElementType[];
 
+export type DefaultPakeepElementType = {
+  color: ColorType;
+  labels: LabelsOfPakeepType;
+  events: EventsOfPakeepType;
+  readonly id: PakeepIdType;
+  backgroundColor: ColorType;
+};
+
 export type PakeepElementType = DefaultFolderElementPropertyType &
-  TitleAndTextOfPakeepType & {
-    color: ColorType;
-    checkBoxes?: CheckBoxesArrtype;
-    labels: LabelsOfPakeepType;
-    events: EventsOfPakeepType;
-    readonly id: PakeepIdType;
-    backgroundColor: ColorType;
-  };
+  TitleAndTextOfPakeepType &
+  DefaultPakeepElementType & { checkBoxes: CheckBoxesArrtype };
 
 export interface ILabelElement {
   color: ColorType;

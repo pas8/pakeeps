@@ -3,7 +3,7 @@ import { useSnackbar } from 'notistack';
 import PropTypes from 'prop-types';
 import { FC, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { toChangeGlobalLabelItem } from 'store/modules/App/actions';
+import { toChangeGlobalLabelItem, toDeleteGlobalLabel } from 'store/modules/App/actions';
 import { getTemporaryDataOfLabelItem } from 'store/modules/App/selectors';
 import { ILabelElement } from 'store/modules/App/types';
 import MenuOfLabelPart from '../Menu';
@@ -41,12 +41,10 @@ const WrapperOfMenuOfLabelPart: FC<WrapperOfMenuOfLabelPartPropsType> = ({ mouse
     setMenuState(state => ({ ...state, mouseX, mouseY, ...findedLabel }));
   }, [mouseX, mouseY, findedLabel]);
 
-
   const handleClose = () => setMenuState(nullityOfMenuState);
 
   const handleDeleteLabel = () => {
-    // handleDeleteLabelFromPakeepFunc(pakeepId, menuState.id);
-    console.log('should be dleted');
+    dispatch(toDeleteGlobalLabel({ labelId: menuState.id }));
     handleClose();
   };
 

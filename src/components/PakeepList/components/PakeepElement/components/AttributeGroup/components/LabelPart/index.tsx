@@ -10,7 +10,6 @@ import { Grid } from '@material-ui/core';
 
 const LabelPart: FC<LabelPartPropsType> = ({
   labels,
-  handleDeleteLabelFromPakeepFunc,
   pakeepId,
   parentBackgrounColor,
   customColor: notReversedCustomColor

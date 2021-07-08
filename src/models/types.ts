@@ -1,9 +1,12 @@
 import { Optional } from 'utility-types';
 import {
+  CheckBoxesArrtype,
   DefaultFolderArrType,
   DefaultFolderElementPropertyType,
+  DefaultPakeepElementType,
   GlobalLabelsType,
-  LabelVariantType
+  LabelVariantType,
+  TitleAndTextOfPakeepType
 } from './../store/modules/App/types';
 import { PropertyiesOfPakeepElement } from './../components/PakeepList/components/PakeepElement/types';
 import { TimeAndDateFromatType, TimeFormatType } from './../store/modules/Settings/types';
@@ -11,7 +14,7 @@ import { SettingsInitialStateType } from 'store/modules/Settings/types';
 import { ColorInitialStateType } from 'store/modules/Color/types';
 
 import AddCircleOutlineOutlinedIcon from '@material-ui/icons/AddCircleOutlineOutlined';
-import { ReactNode } from 'react';
+import { ChangeEventHandler, Dispatch, ReactNode, SetStateAction } from 'react';
 import {
   AppInitialStateInteface,
   GlobalEventsType,
@@ -26,10 +29,19 @@ import {
   DefaultFolderElementPropertyNamesType
 } from 'store/modules/App/types';
 import { HandleSelectedPakeepsPropertyFuncType, PakeepPropertyiesType } from 'components/HeaderWhenActiveSelecto/types';
-import { IconsUtilsArrType, IconsUtilsFunctionType, NullityOfSlicedArrType } from 'components/IconsUtils/types';
+import {
+  EventsListProps,
+  IconsUtilsArrType,
+  IconsUtilsFunctionType,
+  NullityOfSlicedArrType
+} from 'components/IconsUtils/types';
 import { AuthInitialStateType } from 'store/modules/Auth/types';
 import { ThunkAction } from 'redux-thunk';
 import { Action } from 'redux';
+import {
+  DefaultLabelListPropsType,
+  HandleLabelFuncsOfLabelListType
+} from 'components/IconsUtils/components/LabelsList/types';
 
 export type SelectedPakeepsType = PakeepsType;
 export type SelectedPakeepsIdType = PakeepIdType[];
@@ -112,7 +124,7 @@ export type UsePakeepUtilsFuncType = (
   propetyies: DefaultFolderElementPropertyType
 ) => IconsUtilsFunctionType;
 
-export type UseFindPakeepUsingIdType = (id: PakeepIdType) => PakeepElementType;
+export type UseFindPakeepUsingIdType = (id: PakeepIdType) => PakeepElementType | null;
 
 export type IconType = typeof AddCircleOutlineOutlinedIcon;
 
@@ -155,3 +167,24 @@ export type UsePakeepFoldersType = ({
   defaultFolderArr: DefaultFolderArrType;
 }) => DefaultFolderArrType[];
 export type ThunkType<P> = ThunkAction<any, RootStoreType, null, Action<P>>;
+
+export type HandleChangeInputsValueType = ChangeEventHandler<HTMLInputElement>;
+
+export type UseNewPakeepUtilityType = ({
+  defaultState,
+  defaultInputState,
+  defaultCheckBoxesValue
+}: {
+  defaultInputState: TitleAndTextOfPakeepType;
+  defaultCheckBoxesValue: CheckBoxesArrtype;
+  defaultState: DefaultPakeepElementType & DefaultFolderElementPropertyType;
+}) => {
+  setState: Dispatch<SetStateAction<any>>;
+  state: PakeepElementType;
+  eventsListProps: EventsListProps;
+  labelsOfAttributeGroup: GlobalLabelsType;
+  setCheckBoxes: Dispatch<SetStateAction<CheckBoxesArrtype>>;
+  handleChangeInputsValue: HandleChangeInputsValueType;
+  iconUtilsFuncs: IconsUtilsFunctionType;
+  defaultLabelListProps: DefaultLabelListPropsType;
+};

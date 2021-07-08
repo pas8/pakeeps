@@ -25,7 +25,7 @@ const useStyles = makeStyles(
       '& button,.MuiCheckbox-root': {
         color: customColor.isUseDefault ? '' : customColor.hover,
         '&:hover .MuiTouchRipple-root': {
-          background: customColor.isUseDefault ? '' : useAlpha(customColor.hover,0.2)
+          background: customColor.isUseDefault ? '' : useAlpha(customColor.hover, 0.2)
         }
       },
       '& svg': {
@@ -187,7 +187,7 @@ const CheckBoxContainer: FC<CheckBoxItemPropsType> = ({
               </Grid>
 
               <Grid className={'text'} item container alignItems={'center'}>
-                <Typography color={'textSecondary'}>{value}</Typography>
+                <Typography color={'textSecondary'}>{!!value ? value : 'Empty element'}</Typography>
               </Grid>
             </Grid>
           );
