@@ -84,17 +84,17 @@ const PakeepList: FC = () => {
   const pinnedPakeeps = filter(pakeeps, ({ isPinned }) => !!isPinned);
 
   const onClickOfPakeepElement = (id: PakeepIdType) => {
-    // if (!isSomePakeepsSelected) return setPakeepDialogId(id);
-    // const newItem: HTMLElement = document.getElementById(id)!;
-    // const isSelected = includes(newItem.className, SELECTED);
-    // if (isSelected) {
-    //   const newSelectedPakeepsId = filter(selectedPakeepsId, pakeepId => pakeepId !== id);
-    //   newItem.classList.remove(SELECTED);
-    //   return handleSetSelectedPakeepsId(newSelectedPakeepsId);
-    // }
-    // const newSelectedPakeepsId = [...selectedPakeepsId, id];
-    // newItem.classList.add(SELECTED);
-    // return handleSetSelectedPakeepsId(newSelectedPakeepsId);
+    if (!isSomePakeepsSelected) return setPakeepDialogId(id);
+    const newItem: HTMLElement = document.getElementById(id)!;
+    const isSelected = includes(newItem.className, SELECTED);
+    if (isSelected) {
+      const newSelectedPakeepsId = filter(selectedPakeepsId, pakeepId => pakeepId !== id);
+      newItem.classList.remove(SELECTED);
+      return handleSetSelectedPakeepsId(newSelectedPakeepsId);
+    }
+    const newSelectedPakeepsId = [...selectedPakeepsId, id];
+    newItem.classList.add(SELECTED);
+    return handleSetSelectedPakeepsId(newSelectedPakeepsId);
   };
   const defaultPakeepListContainerProps = {
     folderProperty,
@@ -172,11 +172,11 @@ const PakeepList: FC = () => {
     <>
       {/* <PakeepHoveringContext.Provider value={pakeepHoveringContextPropviderPropsValue}> */}
       <Grid ref={scrollerRef} className={'selectoContainer'}>
-        {isFolderPropertyIsAll && <WrapperOfContainerOfPakeepList {...wrapperOfContainerOfPinnedPakeepListProps} />}
+        {/* {isFolderPropertyIsAll && <WrapperOfContainerOfPakeepList {...wrapperOfContainerOfPinnedPakeepListProps} />} */}
 
-        {/* <WrapperOfContainerOfPakeepList {...wrapperOfContainerOfAllPakeepListProps} /> */}
+        <WrapperOfContainerOfPakeepList {...wrapperOfContainerOfAllPakeepListProps} />
       </Grid>
-      {/* {!isSelectoHidden && <SelectofFPakeepListContainer {...selectoOfPakeepListContainerProps} />} */}
+      {!isSelectoHidden && <SelectofFPakeepListContainer {...selectoOfPakeepListContainerProps} />}
       {/* <SelectofFPakeepListContainer {...selectoOfPakeepListContainerProps} /> */}
 
       {/* </PakeepHoveringContext.Provider> */}

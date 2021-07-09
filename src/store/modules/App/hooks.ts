@@ -35,23 +35,16 @@ export const useFindPakeep = (pakeeps: PakeepsType, pakeepId: PakeepIdType): Pak
 
 export const useChangePakeepProperty = ({
   pakeepId,
-  properyName,
-  propertyValue,
+  property,
   pakeeps
-}: useHooksTypes[TypeNames.HANDLE_ADD_EVENT_TO_PAKEEP]): OnlyPakeepReturnType => {
+}: useHooksTypes[TypeNames.HANDLE_CHANGE_PAKEEP_PROPERTY]): OnlyPakeepReturnType => {
   const findedPakeep = find(pakeeps, ({ id }) => pakeepId === id);
   if (!findedPakeep) return { pakeeps };
 
-  const property: PakeepPropertyValueType =
-    properyName === 'events' || properyName === 'labels'
-      ? [...findedPakeep[properyName], propertyValue]
-      : !findedPakeep[properyName];
-
-  const newPakeep = { ...findedPakeep, [properyName]: property };
+  const newPakeep = { ...findedPakeep, ...property };
 
   const filteredPakeeps = filter(pakeeps, ({ id }) => pakeepId !== id);
   const variedPakeeps = [...filteredPakeeps, newPakeep];
-
   const variedState = { pakeeps: variedPakeeps };
 
   return variedState;
@@ -59,17 +52,16 @@ export const useChangePakeepProperty = ({
 
 export const useChangePakeepCustomProperty = ({
   pakeepId,
-  property,
+  propertyName,
   pakeeps
-}: useHooksTypes[TypeNames.HANDLE_CHANGE_PAKEEP_CUSTOM_PROPERTY]): OnlyPakeepReturnType => {
+}: PayloadTypes[TypeNames.HANDLE_CHANGE_PAKEEP_CUSTOM_PROPERTY] & OnlyPakeepReturnType): OnlyPakeepReturnType => {
   const findedPakeep = find(pakeeps, ({ id }) => pakeepId === id);
   if (!findedPakeep) return { pakeeps };
 
-  const newPakeep = { ...findedPakeep, ...property };
+  const newPakeep = { ...findedPakeep, [propertyName]: !findedPakeep[propertyName] };
 
-  const filteredPakeeps = filter(pakeeps, ({ id }) => pakeepId === id);
+  const filteredPakeeps = filter(pakeeps, ({ id }) => pakeepId !== id);
   const variedPakeeps = [...filteredPakeeps, newPakeep];
-
   const variedState = { pakeeps: variedPakeeps };
 
   return variedState;
@@ -83,9 +75,9 @@ export const useAddNewPakeep = ({
 }: useHooksTypes[TypeNames.HANDLE_ADD_NEW_PAKEEP] & PayloadTypes[TypeNames.HANDLE_ADD_NEW_PAKEEP]): any => {
   const isPinned = newPakeep?.isPinned;
 
-  const newPakeeps = [...pakeeps, newPakeep];
-  const newPakeepsOrderNames = isPinned ? pakeepsOrderNames : [...pakeepsOrderNames, newPakeep.id];
-  const newPinnedPakeepsOrderNames = isPinned ? [...pinnedPakeepsOrderNames, newPakeep.id] : pinnedPakeepsOrderNames;
+  const newPakeeps = [newPakeep, ...pakeeps];
+  const newPakeepsOrderNames = isPinned ? pakeepsOrderNames : [newPakeep.id, ...pakeepsOrderNames];
+  const newPinnedPakeepsOrderNames = isPinned ? [newPakeep.id, ...pinnedPakeepsOrderNames] : pinnedPakeepsOrderNames;
 
   const variedState = {
     pinnedPakeepsOrderNames: newPinnedPakeepsOrderNames,
@@ -126,7 +118,9 @@ export const useDeleteLabelFromPakeep = ({
 
   const labels = filter(findedPakeep.labels, id => labelIdWhichShouldBeDeleted !== id);
   const newPakeep = { ...findedPakeep, labels };
-  const newPakeeps = [...pakeeps, newPakeep];
+
+  const filteredPakeeps = useFilterPakeeps(pakeeps, findedPakeep.id);
+  const newPakeeps = [...filteredPakeeps, newPakeep];
 
   const variedState = { pakeeps: newPakeeps };
   return variedState;
@@ -146,7 +140,8 @@ export const useAddLabelToPakeep = ({
   const labels = isPakeepHaveThisLabel ? findedPakeep.labels : newLabels;
 
   const newPakeep = { ...findedPakeep, labels };
-  const newPakeeps = [...pakeeps, newPakeep];
+  const filteredPakeeps = useFilterPakeeps(pakeeps, findedPakeep.id);
+  const newPakeeps = [...filteredPakeeps, newPakeep];
 
   const variedState = { pakeeps: newPakeeps };
   return variedState;

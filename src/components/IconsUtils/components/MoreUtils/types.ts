@@ -4,6 +4,7 @@ import { CustomColorType, IconType } from 'models/types';
 export type UseStylesOfMoreUtilsType = {
   color: string;
   hoverColor: string;
+  menuColor?:string
 };
 
 export type MoreUtilsPropsType = {

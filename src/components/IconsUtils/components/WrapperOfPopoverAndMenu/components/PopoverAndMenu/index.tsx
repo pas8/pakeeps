@@ -30,6 +30,7 @@ const PopoverAndMenu: FC<PopoverAndMenuType> = ({
   popoverText,
   menuComponentsProps,
   MenuComponents,
+  reversedColor,
   popoverTypographyVariant = 'subtitle2',
   // menuLocation = 'default',
   // popoverLocation = 'default',
@@ -84,7 +85,6 @@ const PopoverAndMenu: FC<PopoverAndMenuType> = ({
   //     : menuLocation === 'center'
   //     ? defaultLocationOfPopoverToWitCentered
   //     : leftSiteLocation;
-
   const popoverProps = {
     // ...locationOfPopover,
     ...defaultLocationOfPopoverToWitCentered,

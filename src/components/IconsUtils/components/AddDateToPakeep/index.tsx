@@ -17,7 +17,7 @@ import { useValidatedCurrentEvents } from 'hooks/useValidatedCurrentEvents.hook'
 import { Chip, Typography, Grid, makeStyles } from '@material-ui/core';
 import { format } from 'date-fns';
 import PreviewEventList from 'components/PakeepList/components/PakeepElement/components/AttributeGroup/components/EventsPart/components/PreviewEventList';
-import DialogOfEditingDate from 'components/PakeepList/components/PakeepElement/components/AttributeGroup/components/EventsPart/components/DialogOfEditingDate';
+import { DialogOfAddingNewGlobalEvent } from 'components/PakeepList/components/PakeepElement/components/AttributeGroup/components/EventsPart/components/DialogOfAddingNewGlobalEvent';
 import {
   AddDateToPakeepPropsType,
   ChosenItemArrType,
@@ -25,18 +25,28 @@ import {
   DateListArrType,
   HandleDateAndTimeInputsStateType
 } from './types';
+import { DEFAULT } from 'models/denotation';
+
+
+const useStyles = makeStyles(({ spacing, shape: { borderRadius } }) => ({
+
+  container: ({ color,  }:any) => ({
+    borderRadius,background:color.unHover
+  })
+}));
 
 const AddDateToPakeep: FC<AddDateToPakeepPropsType> = ({
   onMenuClose,
   id,
   customColor: color,
   currentEventsArr,
-  handlePakeepEvents
+  handleSaveEvents
 }) => {
-  const ampm = false;
 
+  const classes = useStyles({color});
+  
+  const ampm = false;
   if (!currentEventsArr) return null;
-  // console.log(events);
 
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
@@ -47,21 +57,28 @@ const AddDateToPakeep: FC<AddDateToPakeepPropsType> = ({
     TO_PUSH = 'TO_PUSH',
     SAVED = 'saved'
   }
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
 
   const currentEventsObject = mapKeys(currentEventsArr, ({ id }) => id);
   const customColor = useGetReversedCustomColor(color);
+  const handleOpenDialog = () => setIsEditDialogOpen(true);
 
+  const dialogOfAddingNewGlobalEventProps = {
+    open: isEditDialogOpen,
+    handleOpenDialog,
+    customColor: color,
+    onClose: () => setIsEditDialogOpen(false)
+  };
   const [buttonSaveState, setButtonSaveState] = useState<ButtonSaveStateDenotation>(ButtonSaveStateDenotation.NULLITY);
 
   const [focusedEventId, setFocusedEventId] = useState('');
 
   const [dateAndTimeInputsState, setDateAndTimeInputsState] = useState<DateAndTimeInputsStateType>({});
-
+  // console.log(dateAndTimeInputsState)
   const handleDateAndTimeInputsState: HandleDateAndTimeInputsStateType = (id, value, inputValue) => {
     setFocusedEventId(id);
     setDateAndTimeInputsState(state => ({ ...state, [id]: { id, value, inputValue } }));
   };
-
   // const handleAddCustomEvent = newCustomEvent => {
   //   setDateAndTimeInputsState(state => ({ ...state, addMoreEvents: [...state.addMoreEvents, newCustomEvent] }));
   // };
@@ -70,15 +87,12 @@ const AddDateToPakeep: FC<AddDateToPakeepPropsType> = ({
     {
       title: 'Add Custom Events',
       iconName: 'dateRange',
-      id:'2151152352rerwkfsdnj23',
-      dynamicComponent: {
-        component: DynamicAddMoreEvents
-        // props: { handleAddCustomEvent }
-      }
+      id: '2151152352rerwkfsdnj23',
+      onClick: () => setIsEditDialogOpen(true)
     }
   ];
 
-  const dateListArr:DateListArrType = [...currentEventsArr, ...defaultDateListArr];
+  const dateListArr: DateListArrType = [...currentEventsArr, ...defaultDateListArr];
 
   const [chosenItemArr, setChosenItemArr] = useState<ChosenItemArrType>([]);
 
@@ -93,12 +107,12 @@ const AddDateToPakeep: FC<AddDateToPakeepPropsType> = ({
 
     const nullityOfChosenItemArr = map(filter(dateListArr, 'isChosen'), 'id');
     setChosenItemArr(nullityOfChosenItemArr);
-  }, [currentEventsArr]);
+  }, []);
 
   const validatedCurrentEvents = useValidatedCurrentEvents(dateAndTimeInputsState, chosenItemArr);
-
   useEffect(() => {
     if (buttonSaveState !== ButtonSaveStateDenotation.TO_PUSH) return;
+    console.log(validatedCurrentEvents);
 
     if (!validatedCurrentEvents.length) {
       enqueueSnackbar({
@@ -107,8 +121,7 @@ const AddDateToPakeep: FC<AddDateToPakeepPropsType> = ({
       });
       return;
     }
-
-    handlePakeepEvents(id, validatedCurrentEvents);
+    handleSaveEvents(validatedCurrentEvents);
     onMenuClose();
 
     enqueueSnackbar({
@@ -118,10 +131,24 @@ const AddDateToPakeep: FC<AddDateToPakeepPropsType> = ({
     return setButtonSaveState(ButtonSaveStateDenotation.SAVED);
   }, [buttonSaveState]);
 
-  const onClickOfSaveButton = () => setButtonSaveState(ButtonSaveStateDenotation.TO_PUSH);
+  const onClickOfSaveButton = () => {
+    setButtonSaveState(ButtonSaveStateDenotation.TO_PUSH);
+  };
 
-  const previewEventListProps = { validatedCurrentEvents, currentEventsArr, customColor };
-  const customTitle = <PreviewEventList {...previewEventListProps} />;
+  const previewEventListProps = {
+    validatedCurrentEvents,
+    currentEventsArr,
+    customColor,
+    parentBackgroundColor: customColor.isUseDefault ? DEFAULT : customColor.bgHover
+  };
+  const customTitle = !!validatedCurrentEvents.length ? (
+    <Grid style={{ maxWidth: 292 }}>
+      {' '}
+      <PreviewEventList {...previewEventListProps} />
+    </Grid>
+  ) : (
+    <Typography style={{ color: customColor.isUseDefault ? '' : customColor.unHover }}> Events</Typography>
+  );
 
   const headerOfAddDateToPakeepProps = {
     buttonSaveState,
@@ -132,14 +159,8 @@ const AddDateToPakeep: FC<AddDateToPakeepPropsType> = ({
     isHideBorder: includes(chosenItemArr, FIRST_EVENT_ID)
   };
 
-  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
-
-  const dialogOfEditingDateProps = {
-    open: isEditDialogOpen
-  };
-
   return (
-    <>
+    <Grid className={classes.container}>
       <HeaderOfAddDateToPakeep {...headerOfAddDateToPakeepProps} />
       {dateListArr.map(({ title, iconName, onClick: onMenuItemClick, onlyTime, dynamicComponent, id }) => {
         const [icon] = useTakeIcon(iconName);
@@ -203,8 +224,8 @@ const AddDateToPakeep: FC<AddDateToPakeepPropsType> = ({
         return <DynamicMenuItem {...dynamicMenuListProps} key={nanoid()} />;
       })}
 
-      <DialogOfEditingDate {...dialogOfEditingDateProps} />
-    </>
+      <DialogOfAddingNewGlobalEvent {...dialogOfAddingNewGlobalEventProps} />
+    </Grid>
   );
 };
 

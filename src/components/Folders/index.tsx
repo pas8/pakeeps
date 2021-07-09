@@ -6,7 +6,7 @@ import { FC, MouseEventHandler, useEffect, useState } from 'react';
 import _, { flatten, mapValues, startsWith } from 'lodash';
 import { ToggleButton, ToggleButtonGroup } from '@material-ui/lab';
 import { useAlpha } from 'hooks/useAlpha.hook';
-import { getFolders } from 'store/modules/App/selectors';
+import { getFolders, getHeaderHeight } from 'store/modules/App/selectors';
 import { FoldersTypeProps, UseStylesOfFoldersType } from './types';
 import MoreMenuOfFolders from './components/MoreMenu';
 import { getNavigationViewLike } from 'store/modules/Settings/selectors';
@@ -26,15 +26,21 @@ const useStyles = makeStyles(
       isFolderViewWithPakeepViewAlignToCenter,
       folderColor,
       isFoldersHaveDraweView,
+      headerHeight,
       positionOfFolderViewWithPakeepViewIsRight
     }: UseStylesOfFoldersType) => {
       const color = folderColor;
       return {
         // transform:'scale(0.8)',
 
-        margin: spacing(isFoldersHaveDraweView ? 0 : positionOfFolderViewWithPakeepViewIsBottom ? 8 : 8 + 1.8, 0, 0, 0),
+        marginTop: isFoldersHaveDraweView
+          ? 0
+          : positionOfFolderViewWithPakeepViewIsBottom
+          ? headerHeight
+          : headerHeight,
         // margin: spacing(positionOfFolderViewWithPakeepViewIsBottom ? -10 : -10 + 1.4, 0, 0, 0),
         '& .MuiToggleButtonGroup-root': {
+         
           width: positionOfFolderViewWithPakeepViewIsBottom ? 'auto' : '100%',
           margin: spacing(
             isFoldersHaveDraweView ? 0 : marginOfToogleGroups,
@@ -50,6 +56,10 @@ const useStyles = makeStyles(
               ? 1.4
               : 0
           ),
+          '&:first-child':{
+
+            marginTop:0,
+                      },
           background: isFoldersHaveDraweView ? background.paper : background.default
         },
         '& button': {
@@ -156,7 +166,7 @@ const APPEARANCE = 'appearance';
 
 const APPEARANCE_URL = `${SETTING_URL}/${APPEARANCE}`;
 const THEME_URL = `${SETTING_URL}/${THEME}`;
-const ACCOUNT_URL = `${SETTING_URL}/account`;
+export const ACCOUNT_URL = `${SETTING_URL}/account`;
 const SECURITY_URL = `${SETTING_URL}/security`;
 
 export const themeAnchorArr = {
@@ -206,12 +216,14 @@ const Folders: FC<FoldersTypeProps> = ({
       : folderColor === 'secondary'
       ? secondary.main
       : folderColor;
+  const headerHeight = useSelector(getHeaderHeight);
 
   const navigationViewLike = useSelector(getNavigationViewLike);
   const folders = useSelector(getFolders);
   const classes = useStyles({
     folderColor: validatedFolderColor,
     isMenuOpen,
+    headerHeight,
     isFoldersHaveDraweView,
     positionOfFolderViewWithPakeepViewIsBottom,
     positionOfFolderViewWithPakeepViewIsRight,
@@ -375,7 +387,7 @@ const Folders: FC<FoldersTypeProps> = ({
 
   useEffect(() => {
     const findedElementIdx = _.findIndex(flattenAllFolders, ({ id }) => findedElement?.id === id);
-    findedElementIdx && handleChange(null, findedElementIdx);
+    router.pathname !== '/' &&   findedElementIdx && handleChange(null, findedElementIdx);
   }, [router, findedElement]);
 
   const FOLDER_WITHOUT_ROUTE = 'FOLDER_WITHOUT_ROUTE';
@@ -415,7 +427,6 @@ const Folders: FC<FoldersTypeProps> = ({
     handleChange,
     value
   };
-  // console.log(isSizeOfFoldersMoreThanSize)
   useEffect(() => {
     const MARGIN_VALUE = +(
       positionOfFolderViewWithPakeepViewIsBottom &&
@@ -574,7 +585,7 @@ const Folders: FC<FoldersTypeProps> = ({
                               {isButtonIsMore ? moreButtonTitle : isHaveParentRoute ? `# ${title}` : title}
                             </Grid>
                           )}
-                          {isMenuOpen &&  isButtonActive && (
+                          {isMenuOpen && isButtonActive && (
                             <Grid container alignItems={'flex-end'} justify={'flex-end'}>
                               {isAncholElHidden ? <ArrowDropDownOutlinedIcon /> : <ArrowDropUpOutlinedIcon />}
                             </Grid>

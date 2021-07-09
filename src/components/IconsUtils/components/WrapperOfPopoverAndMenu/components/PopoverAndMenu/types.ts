@@ -1,5 +1,5 @@
 import { TypographyClassKey } from '@material-ui/core';
-import { ClosePopoverOrMenuType, CurrentTargetType, UseStylesCustomColorType } from 'models/types';
+import { ClosePopoverOrMenuType, CurrentTargetType, CustomColorType, UseStylesCustomColorType } from 'models/types';
 
 export type PopoverLocationType = 'default' | 'left' | 'center' | 'right';
 export type MenuLocationType = PopoverLocationType;
@@ -15,7 +15,8 @@ export type PopoverAndMenuType = UseStylesType & {
   popoverText?: string;
   menuComponentsProps?: object;
   MenuComponents?: any;
-  popoverTypographyVariant?: TypographyClassKey | any
+  reversedColor?: CustomColorType;
+  popoverTypographyVariant?: TypographyClassKey | any;
   // menuLocation: any;
   // popoverLocation: any;
 };

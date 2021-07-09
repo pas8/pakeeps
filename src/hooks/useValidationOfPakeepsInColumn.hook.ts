@@ -12,23 +12,22 @@ export const useValidationOfPakeepsInColumn: UseValidationOfPakeepsInColumnType 
 
   const validatedPakeepsInColumn: (PakeepElementType | null)[] = notValidatedPakeepsInColumn.map(el => {
     if (!el) return null;
-
+    if (folderProperty === 'ALL') return el;
     if (folderProperty === 'isArchived' && el[folderProperty]) return el;
     if (el?.isArchived) return null;
-    if (folderProperty !== 'label' && folderProperty !== 'ALL' && el[folderProperty]) return el;
+    if (folderProperty !== 'label' && el[folderProperty]) return el;
     if (folderProperty === 'label' && !!find(el?.labels, id => id === folderId)) return el;
 
-    if (folderProperty !== 'label' && folderProperty !== 'ALL' && el[folderProperty]) return el;
+    if (folderProperty !== 'label' && el[folderProperty]) return el;
 
-    if (isPakeepDragContextPinned && el.isPinned) return el;
-    if (isPakeepDragContextPinned && !el.isPinned) return null;
-    if (folderProperty !== 'isPinned' && el?.isPinned) return null;
+    // if (isPakeepDragContextPinned && el.isPinned) return el;
+    // if (isPakeepDragContextPinned && !el.isPinned) return null;
+    // if (folderProperty !== 'isPinned' && el?.isPinned) return null;
 
-    if (folderProperty === 'ALL') return el;
     return null;
   });
   //@ts-ignore
   const filtered: PakeepsType = pull(validatedPakeepsInColumn, null);
-  
+
   return filtered;
 };

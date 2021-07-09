@@ -6,3 +6,5 @@
 // export const changeTwoColorColumnThunk = (startColumn, finishColumn) => dispatch => {
 //   dispatch(toChangeTwoColorColumn(startColumn, finishColumn));
 // };
+
+export const nothing = () => {};

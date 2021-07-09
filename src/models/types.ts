@@ -1,11 +1,21 @@
-import { DefaultFolderArrType, GlobalLabelsType } from './../store/modules/App/types';
+import { Optional } from 'utility-types';
+import {
+  CheckBoxesArrtype,
+  DefaultFolderArrType,
+  DefaultFolderElementPropertyType,
+  DefaultPakeepElementType,
+  GlobalLabelsType,
+  LabelsOfPakeepType,
+  LabelVariantType,
+  TitleAndTextOfPakeepType
+} from './../store/modules/App/types';
 import { PropertyiesOfPakeepElement } from './../components/PakeepList/components/PakeepElement/types';
 import { TimeAndDateFromatType, TimeFormatType } from './../store/modules/Settings/types';
 import { SettingsInitialStateType } from 'store/modules/Settings/types';
 import { ColorInitialStateType } from 'store/modules/Color/types';
 
 import AddCircleOutlineOutlinedIcon from '@material-ui/icons/AddCircleOutlineOutlined';
-import { ReactNode } from 'react';
+import { ChangeEventHandler, Dispatch, ReactNode, SetStateAction } from 'react';
 import {
   AppInitialStateInteface,
   GlobalEventsType,
@@ -20,7 +30,19 @@ import {
   DefaultFolderElementPropertyNamesType
 } from 'store/modules/App/types';
 import { HandleSelectedPakeepsPropertyFuncType, PakeepPropertyiesType } from 'components/HeaderWhenActiveSelecto/types';
-import { IconsUtilsArrType, IconsUtilsFunctionType, NullityOfSlicedArrType } from 'components/IconsUtils/types';
+import {
+  EventsListProps,
+  IconsUtilsArrType,
+  IconsUtilsFunctionType,
+  NullityOfSlicedArrType
+} from 'components/IconsUtils/types';
+import { AuthInitialStateType } from 'store/modules/Auth/types';
+import { ThunkAction } from 'redux-thunk';
+import { Action } from 'redux';
+import {
+  DefaultLabelListPropsType,
+  HandleLabelFuncsOfLabelListType
+} from 'components/IconsUtils/components/LabelsList/types';
 
 export type SelectedPakeepsType = PakeepsType;
 export type SelectedPakeepsIdType = PakeepIdType[];
@@ -38,6 +60,7 @@ export type UsePropertiesToUtilsType = (
 ) => Object;
 
 export type RootStoreType = {
+  auth: AuthInitialStateType;
   app: AppInitialStateInteface;
   color: ColorInitialStateType;
   settings: SettingsInitialStateType;
@@ -82,6 +105,7 @@ export type CurrentEventsElementType = {
   value: number | Date;
   isChosen: boolean;
   title: string;
+  variant: LabelVariantType;
   iconName: string;
   onlyTime?: boolean;
   color: string;
@@ -96,13 +120,15 @@ export type UseFindCurrentEventsType = (
   timeAndDateFromat: TimeAndDateFromatType
 ) => CurrentEventsArrType | null;
 
-export type UsePakeepUtilsFuncType = (pakeepId: PakeepIdType) => IconsUtilsFunctionType;
+export type UsePakeepUtilsFuncType = (
+  pakeepId: PakeepIdType,
+) => IconsUtilsFunctionType;
 
-export type UseFindPakeepUsingIdType = (id: PakeepIdType) => PakeepElementType;
+export type UseFindPakeepUsingIdType = (id: PakeepIdType) => PakeepElementType | null;
 
 export type IconType = typeof AddCircleOutlineOutlinedIcon;
 
-export type HandlePakeepEventsType = (pakeepId: PakeepIdType, events?: EventsOfPakeepType) => void;
+export type HandlePakeepEventsType = (events: EventsOfPakeepType) => void;
 
 export type HandleDeleteNewLabelType = (labelIdWhichShouldBeDeleted: LabelIdType) => void;
 export type HandleAddNewLabelType = (labelIdWhichShouldBeAdded: LabelIdType) => void;
@@ -140,3 +166,28 @@ export type UsePakeepFoldersType = ({
   labels: GlobalLabelsType;
   defaultFolderArr: DefaultFolderArrType;
 }) => DefaultFolderArrType[];
+export type ThunkType<P> = ThunkAction<any, RootStoreType, null, Action<P>>;
+
+export type HandleChangeInputsValueType = ChangeEventHandler<HTMLInputElement>;
+
+export type UseNewPakeepUtilityType = ({
+  defaultState,
+  defaultInputState,
+  defaultCheckBoxesValue
+}: {
+  defaultInputState: TitleAndTextOfPakeepType;
+  defaultCheckBoxesValue: CheckBoxesArrtype;
+  defaultState: DefaultPakeepElementType & DefaultFolderElementPropertyType;
+}) => {
+  setState: Dispatch<SetStateAction<any>>;
+  state: PakeepElementType;
+  eventsListProps: EventsListProps;
+  labelsOfAttributeGroup: GlobalLabelsType;
+  setCheckBoxes: Dispatch<SetStateAction<CheckBoxesArrtype>>;
+  handleChangeInputsValue: HandleChangeInputsValueType;
+  iconUtilsFuncs: IconsUtilsFunctionType;
+  defaultLabelListProps: DefaultLabelListPropsType;
+};
+
+export type UseFindSelectedLabelsType = (selectedPakeeps: PakeepsType) => LabelsOfPakeepType;
+export type UseFindSelectedEventsType = (selectedPakeeps: PakeepsType) => EventsOfPakeepType;

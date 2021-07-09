@@ -10,7 +10,6 @@ import { Grid } from '@material-ui/core';
 
 const LabelPart: FC<LabelPartPropsType> = ({
   labels,
-  handleDeleteLabelFromPakeepFunc,
   pakeepId,
   parentBackgrounColor,
   customColor: notReversedCustomColor
@@ -20,7 +19,7 @@ const LabelPart: FC<LabelPartPropsType> = ({
   const customColor = useGetReversedCustomColor(notReversedCustomColor);
 
   return (
-    <Grid container>
+    <Grid container style={{marginLeft:4,}}>
       {labels.map(({ title, iconName: labelIconName, id, color, variant }) => {
         const icon = useFindIcon(labelIconName);
 

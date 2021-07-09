@@ -1,16 +1,19 @@
+import { EventsListProps } from 'components/IconsUtils/types';
 import { CurrentEventsArrType, CustomColorType } from 'models/types';
 import { ReactNode } from 'react';
-import { EventIdType, IconNameType, PakeepIdType } from 'store/modules/App/types';
+import { EventIdType, IconNameType, PakeepIdType, EventsOfPakeepType } from 'store/modules/App/types';
 
 export type WrapperOfAddDateToPakeepPropsType = {
   onMenuClose: () => void;
   id: PakeepIdType;
+
   customColor: CustomColorType;
 };
 
+export type HandleSaveEventsType = (events: EventsOfPakeepType) => void;
 export type AddDateToPakeepPropsType = {
   currentEventsArr: CurrentEventsArrType | null;
-  handlePakeepEvents: any;
+  handleSaveEvents: HandleSaveEventsType;
 } & WrapperOfAddDateToPakeepPropsType;
 
 export type DateAndTimeInputElementStateType = {

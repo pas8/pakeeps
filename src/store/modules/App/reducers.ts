@@ -1,5 +1,5 @@
 import { CustomColorType } from './../../../models/types';
-import { addDays } from 'date-fns';
+import { addDays, addHours } from 'date-fns';
 import { nanoid } from 'nanoid';
 import { TypeNames } from './enums';
 import {
@@ -11,14 +11,15 @@ import {
   useChangeSelectedPakeepsProperty,
   useDeleteLabelFromPakeep,
   useDeletePakeep,
+  useFindPakeep,
   usePinStatusOfPakeeps
 } from './hooks';
 import { AppActionTypes, AppInitialStateInteface, GlobalLabelsType } from './types';
-import { random, sampleSize, words } from 'lodash';
+import { random, sampleSize, words, filter } from 'lodash';
 //@ts-ignore
 import randomSentence from 'random-sentence';
 import { colord } from 'colord';
-import { NONE,TRANSPARENT } from 'models/denotation';
+import { DEFAULT, NONE, OUTLINED, PRIMARY, SECONDARY, TRANSPARENT } from 'models/denotation';
 
 const labelsOfInitialState: GlobalLabelsType = [
   { color: '', title: 'Day plans', iconName: 'category', id: 'label0', variant: 'outlined' },
@@ -33,8 +34,6 @@ const labelsOfInitialState: GlobalLabelsType = [
 const randomPakeeps = Array(8)
   .fill('pakeepID')
   .map((el, idx) => {
-    const DEFAULT = 'default';
-
     const randomColor = colord({ r: random(256), g: random(256), b: random(256) }).toHex();
     const anotherRandomcolor = colord({ r: random(256), g: random(256), b: random(256) }).toHex();
 
@@ -48,6 +47,17 @@ const randomPakeeps = Array(8)
       .map(() => randomSentence())
       .toString()}-${id}`;
 
+    const isCheckBoxes = !!random(1);
+    const checkBoxes = Array(random(2, 4))
+      .fill('')
+      .map(() => ({ value: randomSentence(), isAccomplished: !!random(1), id: nanoid(), color: 'default' }));
+
+    const events = [
+      { id: '1', value: addHours(new Date(), 2) },
+      { id: '2', value: addHours(new Date(), 32) },
+      { id: '3', value: addHours(new Date(), 100) }
+    ];
+
     return {
       title: randomSentence({ words: random(4, 8) }),
       text,
@@ -58,12 +68,13 @@ const randomPakeeps = Array(8)
         random(labelsOfInitialState.length)
       ),
       isArchived: !!random(1),
-      events: [],
+      events,
       id,
+      checkBoxes: isCheckBoxes ? checkBoxes : [],
       isPinned: !!random(1),
       backgroundColor,
       color,
-      isCheckBoxes: !!random(1)
+      isCheckBoxes
     };
   });
 
@@ -73,15 +84,15 @@ export const defaultAvatarProperties = {
   backgroundColor: TRANSPARENT
 };
 
-const initialState: AppInitialStateInteface = {
+export const initialState: AppInitialStateInteface = {
   defaultFolderArr: [
     { title: 'All pakeeps', iconName: '', id: 'folder-ALL', property: 'ALL', color: 'default' },
     { title: 'Pined', iconName: 'pin', id: 'folder-isPinned', property: 'isPinned', color: 'default' },
     { title: 'Bookmark', iconName: 'bookmark', id: 'folder-isInBookmark', property: 'isInBookmark', color: 'default' },
     { title: 'Favorite', iconName: 'favorite', id: 'folder-isFavorite', property: 'isFavorite', color: 'default' },
     {
-      title: 'With chckebox',
-      iconName: 'checkbox',
+      title: 'With checkBoxes',
+      iconName: 'checkBox',
       id: 'folder-isCheckBoxes',
       property: 'isCheckBoxes',
       color: 'default'
@@ -90,34 +101,74 @@ const initialState: AppInitialStateInteface = {
   ],
 
   labels: labelsOfInitialState,
+
   events: [
-    { title: 'Later today', iconName: 'today', id: '1', value: Date.now(), onlyTime: true, color: '' },
-    { title: 'Tomorrow', iconName: 'tomorrow', id: '2', value: addDays(Date.now(), 1), onlyTime: true, color: '' },
-    { title: 'Next week', iconName: 'week', id: '3', value: addDays(Date.now(), 7), color: '' }
+    {
+      title: 'Later today',
+      iconName: 'today',
+      id: '1',
+      value: Date.now(),
+      onlyTime: true,
+      color: PRIMARY,
+      variant: DEFAULT
+    },
+    {
+      title: 'Tomorrow',
+      iconName: 'tomorrow',
+      id: '2',
+      value: addDays(Date.now(), 1),
+      onlyTime: true,
+      color: SECONDARY,
+      variant: OUTLINED
+    },
+    { title: 'Next week', iconName: 'week', id: '3', value: addDays(Date.now(), 7), color: DEFAULT, variant: OUTLINED },
+    {
+      title: 'Next Mouth',
+      iconName: 'alarm',
+      id: '4',
+      value: addDays(Date.now(), 30),
+      onlyTime: false,
+      color: '#fbbc49',
+      variant: DEFAULT
+    }
   ],
   selectedPakeepsId: [],
   folders: [[]],
 
-  pakeeps: [
-    {
-      title: 'Placeholder 1',
-      text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-      isInBookmark: true,
-      isFavorite: true,
-      color: 'default',
-      labels: ['label3', 'label1', 'label0', 'label2'],
-      isArchived: false,
-      events: [],
-      id: 'pakeep1',
-      isPinned: true,
-      isCheckBoxes: true,
-      backgroundColor: 'default'
-    },
-    ...randomPakeeps
-  ],
+  pakeeps: [],
+  // pakeeps: [
+  //   {
+  //     title: 'Placeholder 1',
+  //     text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+  //     isInBookmark: true,
+  //     isFavorite: true,
+  //     color: 'default',
+  //     labels: ['label3', 'label1', 'label0', 'label2'],
+  //     isArchived: false,
+  //     events: [
+  //       { id: '1', value: addHours(new Date(), 2) },
+  //       { id: '2', value: addHours(new Date(), 32) },
+  //       { id: '3', value: addHours(new Date(), 100) }
+  //     ],
+  //     checkBoxes: Array(random(4, 10))
+  //       .fill('')
+  //       .map(() => ({ value: randomSentence(), isAccomplished: !!random(1), id: nanoid(), color: 'default' })),
+  //     id: 'pakeep1',
+  //     isPinned: true,
+  //     isCheckBoxes: true,
+  //     backgroundColor: 'default'
+  //   },
+  //   ...randomPakeeps
+  // ],
   pakeepsOrderNames: [],
   pinnedPakeepsOrderNames: [],
   notifinationCounter: 8,
+  userData: {
+    email: NONE,
+    userName: NONE,
+    name: NONE
+  },
+  headerHeight: 0,
   // menuOpenStatus: 'HIDDEN',
   avatarProperties: defaultAvatarProperties,
   menuOpenStatus: 'EXTENDED',
@@ -138,7 +189,9 @@ const initialState: AppInitialStateInteface = {
 
     labelItem: {
       id: ''
-    }
+    },
+    globalEventList: [],
+    globalLabelList: []
   }
 };
 
@@ -149,16 +202,6 @@ export const AppReducer = (state = initialState, action: AppActionTypes): AppIni
     case TypeNames.HANDLE_ADD_NEW_PAKEEP: {
       const { pakeeps, pakeepsOrderNames, pinnedPakeepsOrderNames } = state;
       const variedState = useAddNewPakeep({ pakeeps, pakeepsOrderNames, pinnedPakeepsOrderNames, ...action.payload });
-
-      return { ...state, ...variedState };
-    }
-
-    case TypeNames.HANDLE_ADD_EVENT_TO_PAKEEP: {
-      const { pakeeps } = state;
-      const { newEvent: propertyValue, pakeepId } = action.payload;
-      const properyName = 'events';
-
-      const variedState = useChangePakeepProperty({ pakeepId, properyName, propertyValue, pakeeps });
 
       return { ...state, ...variedState };
     }
@@ -176,21 +219,35 @@ export const AppReducer = (state = initialState, action: AppActionTypes): AppIni
 
       return { ...state, ...variedState };
     }
+    case TypeNames.HANDLE_ADD_GLOBAL_EVENT: {
+      const { newEvent } = action.payload;
+      console.log([...state.events, newEvent]);
+      return { ...state, events: [...state.events, newEvent] };
+    }
 
     case TypeNames.HANDLE_ADD_LABEL_TO_PAKEEP: {
       const { pakeeps } = state;
       const variedState = useAddLabelToPakeep({ pakeeps, ...action.payload });
-
+      console.log(action.payload);
       return { ...state, ...variedState };
     }
 
     case TypeNames.HANDLE_PIN_STATUS_OF_PAKEEPS: {
-      const { pinnedPakeepsOrderNames, pakeeps, pakeepsOrderNames } = state;
-      const variedState = usePinStatusOfPakeeps({
-        pinnedPakeepsOrderNames,
+      // const { pinnedPakeepsOrderNames, pakeeps, pakeepsOrderNames } = state;
+      // const variedState = usePinStatusOfPakeeps({
+      //   pinnedPakeepsOrderNames,
+      //   pakeeps,
+      //   pakeepsOrderNames,
+      //   ...action.payload
+      // });
+
+      const { pakeeps } = state;
+      const pakeepId = action.payload.pakeepId;
+      const findedPakeep = useFindPakeep(pakeeps, pakeepId);
+      const variedState = useChangePakeepProperty({
+        pakeepId,
         pakeeps,
-        pakeepsOrderNames,
-        ...action.payload
+        property: { isPinned: !findedPakeep?.isPinned! }
       });
 
       return { ...state, ...variedState };
@@ -216,13 +273,6 @@ export const AppReducer = (state = initialState, action: AppActionTypes): AppIni
       return { ...state, ...variedState };
     }
 
-    case TypeNames.HANDLE_CHANGE_PAKEEP_CUSTOM_PROPERTY: {
-      const { pakeeps } = state;
-      const variedState = useChangePakeepCustomProperty({ pakeeps, ...action.payload });
-
-      return { ...state, ...variedState };
-    }
-
     case TypeNames.HANDLE_ADD_NEW_GLOBAL_LABEL: {
       const { newLabel } = action.payload;
       const labels = [...state.labels, newLabel];
@@ -236,13 +286,45 @@ export const AppReducer = (state = initialState, action: AppActionTypes): AppIni
 
       return { ...state, temporaryData };
     }
+    case TypeNames.HANDLE_CHANGE_PAKEEP_CUSTOM_PROPERTY: {
+      const { pakeeps } = state;
+      const { pakeepId, propertyName } = action.payload;
+      const variedState = useChangePakeepCustomProperty({ pakeeps, pakeepId, propertyName });
+
+      return { ...state, ...variedState };
+    }
+
+    case TypeNames.HANDLE_CHANGE_GLOBAL_LABEL_LIST_TEMPROPARY_DATA: {
+      const { globalLabelList } = action.payload;
+      return { ...state, temporaryData: { ...state.temporaryData, globalLabelList } };
+    }
+
+    case TypeNames.HANDLE_CHANGE_GLOBAL_EVENT_LIST_TEMPROPARY_DATA: {
+      const { globalEventList } = action.payload;
+      return { ...state, temporaryData: { ...state.temporaryData, globalEventList } };
+    }
+
+    case TypeNames.HANDLE_EDIT_PAKEEP: {
+      const { editedPakeep } = action.payload;
+      const pakeeps = [editedPakeep, ...filter(state.pakeeps, ({ id }) => id !== editedPakeep.id)];
+
+      return { ...state, pakeeps };
+    }
+
+    case TypeNames.HANDLE_DELETE_GLOBAL_LABEL: {
+      const { labelId } = action.payload;
+      const labels = filter(state.labels, ({ id }) => id !== labelId);
+      return { ...state, labels };
+    }
 
     case TypeNames.HANDLE_SET_ORDER_NAMES_OF_PINNED_PAKEEPS:
     case TypeNames.HANDLE_SET_ORDER_NAMES:
     case TypeNames.HANDLE_CHANGE_AVATAR_PROPERTIES:
-
+    case TypeNames.HANDLE_CHANGE_HEADER_HEIGTH:
     case TypeNames.HANDLE_SET_NEW_ORDER_NAMES:
+
     case TypeNames.HANDLE_CHANGE_PAKEEPS:
+    case TypeNames.HANDLE_CHANGE_USER_DATA:
     case TypeNames.HANDLE_SET_SELECTED_PAKEEPIDS_ARR:
     case TypeNames.HANDLE_CANCEL_SELECTING_STATUS:
     case TypeNames.HANDLE_CHANGE_GLOBAL_LABELS:

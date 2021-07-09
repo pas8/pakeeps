@@ -1,55 +1,60 @@
 import { Grid, makeStyles, Menu, MenuItem, Typography } from '@material-ui/core';
-import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { nanoid } from 'nanoid';
+import { Optional } from 'utility-types';
+import { FC, MouseEvent, MouseEventHandler, ReactNode, useState } from 'react';
 import { useThemeColors } from 'hooks/useThemeColors.hook';
 import { useAlpha } from 'hooks/useAlpha.hook';
-import { FC, MouseEvent, MouseEventHandler, ReactNode, useState } from 'react';
-import { MoreUtilsPropsType, UseStylesOfMoreUtilsType } from './types';
 import { ClosePopoverOrMenuType } from 'models/types';
-import { Optional } from 'utility-types';
+import { useGetReversedCustomColor } from 'hooks/useGetReversedCustomColor.hook';
+import { MoreUtilsPropsType, UseStylesOfMoreUtilsType } from './types';
 
-const useStyles = makeStyles(({ spacing }) => ({
+const useStyles = makeStyles(({ spacing, shape: { borderRadius } }) => ({
   itemGrid: {
     margin: spacing(0.4, 0.8 * 4, 0, 1.4),
     padding: spacing(0.8, 0)
   },
   menuText: { marginLeft: spacing(1.4) },
 
-  container: ({ color, hoverColor }: UseStylesOfMoreUtilsType) => ({
+  menuItemContainer: ({ color, hoverColor }: UseStylesOfMoreUtilsType) => ({
     '& svg,h6': { color },
     '&:hover svg,h6': { color: hoverColor },
     '&:hover .MuiTouchRipple-root': {
       background: useAlpha(color),
-      // borderBottom:isIconActive && `2px solid ${color}`,
       borderRight: 0,
       borderLeft: 0
     }
   }),
-  menuContainer: ({ color }: UseStylesOfMoreUtilsType) => ({
-    '& > div': {
-      backgroundColor: color
-    }
-  })
+
+  container: { borderRadius }
 }));
 
 const MoreUtils: FC<MoreUtilsPropsType> = ({ slicedArrAfter, customColor }) => {
   const nullityOfAnchorEl = {
     name: '',
     menuComponentsProps: {},
-    currentTarget: null,
+    coordinates: { top: 0, left: 0 },
     MenuComponents: null as ReactNode | any
   };
 
   const [anchorElState, setAnchorElState] = useState<Optional<typeof nullityOfAnchorEl>>(nullityOfAnchorEl);
-
-  const { MenuComponents, menuComponentsProps } = anchorElState;
+  const { MenuComponents } = anchorElState;
 
   const handleMenuClose: ClosePopoverOrMenuType = () => setAnchorElState(nullityOfAnchorEl);
 
   const classes = useStyles({ color: customColor.isUseDefault ? '' : customColor.bgUnHover, hoverColor: '' });
+
+  const anchorPosition =
+    !!anchorElState?.coordinates?.top && !!anchorElState?.coordinates?.left ? anchorElState.coordinates : undefined;
+
+const reversedColor = useGetReversedCustomColor( customColor)
+
+  const menuComponentsProps = {
+    ...anchorElState.menuComponentsProps,
+    customColor:{...reversedColor }
+  };
   return (
-    <>
+    <Grid className={classes.container}>
       {slicedArrAfter.map(
         ({
           name,
@@ -62,7 +67,7 @@ const MoreUtils: FC<MoreUtilsPropsType> = ({ slicedArrAfter, customColor }) => {
           menuComponentsProps
         }) => {
           const [primaryColor, , maxEmphasisColor, highEmphasisColor] = useThemeColors();
-          console.log(isIconActive)
+
           const color = (
             customColor.isUseDefault
               ? isIconActive
@@ -77,11 +82,10 @@ const MoreUtils: FC<MoreUtilsPropsType> = ({ slicedArrAfter, customColor }) => {
           const classes = useStyles({ color, hoverColor });
           //
 
-          const handleMenuOpen: MouseEventHandler<HTMLLIElement> = ({ currentTarget }) => {
-
+          const handleMenuOpen: MouseEventHandler<HTMLLIElement> = ({ clientX: left, clientY: top }) => {
             setAnchorElState(state => ({
               ...state,
-              currentTarget,
+              coordinates: { top, left },
               handleMenuClose,
               menuComponentsProps,
               MenuComponents,
@@ -92,7 +96,7 @@ const MoreUtils: FC<MoreUtilsPropsType> = ({ slicedArrAfter, customColor }) => {
           const onClick = onCustomClick ? onCustomClick : handleMenuOpen;
 
           return (
-            <MenuItem disableGutters key={nanoid()} className={classes.container} onClick={onClick}>
+            <MenuItem disableGutters key={nanoid()} className={classes.menuItemContainer} onClick={onClick}>
               <Grid className={clsx(classes.itemGrid)} container>
                 {isIconActive && !!ActiveIcon ? <ActiveIcon /> : <Icon />}
                 <Grid item className={classes.menuText}>
@@ -105,15 +109,15 @@ const MoreUtils: FC<MoreUtilsPropsType> = ({ slicedArrAfter, customColor }) => {
       )}
 
       <Menu
-        anchorEl={anchorElState.currentTarget}
+        anchorReference={'anchorPosition'}
         keepMounted
         onClose={handleMenuClose}
         open={!!anchorElState.name}
-        // className={classes.menuContainer}
+        anchorPosition={anchorPosition}
       >
         {MenuComponents && <MenuComponents {...menuComponentsProps} onMenuClose={handleMenuClose} />}
       </Menu>
-    </>
+    </Grid>
   );
 };
 

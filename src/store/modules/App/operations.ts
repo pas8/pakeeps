@@ -1,8 +1,25 @@
+import { toAddNewPakeep } from './actions';
+import { PakeepElementType } from 'store/modules/App/types';
+import { ThunkType } from 'models/types';
+import firebase from 'firebase';
 
-export const h = 'h'
-// export const addDateToPakeepThunk = (pakeepId, event) => dispatch => {
-//   dispatch(toAddDateToPakeep(pakeepId, event));
-// };
+export const operateToAddNewPakeep =
+  (newPakeep: PakeepElementType): ThunkType<PakeepElementType> =>
+  dispatch => {
+    firebase
+      .firestore()
+      .collection('users')
+      .doc('pas8')
+      .collection('pakeeps')
+      .add(newPakeep)
+      .then(snapshot => {
+        // if (snapshot.exists) {
+          // let newPakeep = snapshot.data();
+          console.log(snapshot);
+          //  dispatch(toAddNewPakeep({newPakeep}))
+        // }
+      });
+  };
 
 // export const operateToChangeMenuOpenStatus: OperateWOP<
 //   PayloadTypes[TypeNames.HANDLE_CHANGE_MENU_OPEN_STATUS]

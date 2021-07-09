@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 import { LinearProgress, Grid } from '@material-ui/core';
 import { ComposeLayouts } from 'layouts';
 import SnackBarLayout from 'layouts/SnackBarLayout';
@@ -13,6 +13,7 @@ import { useLoading } from 'hooks/useLoading.hook';
 import { useUploadThemeSsr } from 'hooks/useUploadThemeSsr.hook';
 import '../styles/globals.css';
 import { useRouter } from 'next/dist/client/router';
+import { SIGN_IN_URL, NEW_USER_URL } from 'models/denotation';
 // import LogRocket from 'logrocket';
 // LogRocket.init('b6se1p/pakeeps');
 
@@ -20,11 +21,11 @@ const Index: FC<any> = ({ Component, pageProps }) => {
   useUploadThemeSsr();
 
   const router = useRouter();
-
+  // const isLoading = useLoading();
   const isLoading = false;
-  const isFolderLayoutHidden = router.route === '/signin';
+  const isFolderLayoutHidden = router.route === SIGN_IN_URL || router.route === NEW_USER_URL;
 
-  const defaultLayouts = [StoreLayout, ThemeLayout, DateLayout, AuthLayout, SnackBarLayout, MenuesLayout, HeaderLayout];
+  const defaultLayouts = [StoreLayout, ThemeLayout, SnackBarLayout, AuthLayout, DateLayout, MenuesLayout, HeaderLayout];
   const layouts = isFolderLayoutHidden ? defaultLayouts : [...defaultLayouts, FolderLayout];
 
   return (

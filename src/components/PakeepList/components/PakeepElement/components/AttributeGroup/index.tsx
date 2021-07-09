@@ -11,7 +11,6 @@ const useStyles = makeStyles(theme => ({
 
 const AttributeGroup: FC<AttributeGroupPropsType> = ({
   labels,
-  handleDeleteLabelFromPakeepFunc,
   pakeepId,
   customColor,
   parentBackgrounColor,
@@ -21,13 +20,12 @@ const AttributeGroup: FC<AttributeGroupPropsType> = ({
 
   const labelPartProps = {
     labels,
-    handleDeleteLabelFromPakeepFunc,
     pakeepId,
     customColor,
     parentBackgrounColor
   };
 
-  const eventsPartProps = { events, customColor };
+  const eventsPartProps = { events, customColor, parentBackgroundColor: parentBackgrounColor };
 
   const isAttributeGroupOrderIsReverse = false;
 

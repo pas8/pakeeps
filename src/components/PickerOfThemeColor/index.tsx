@@ -1,21 +1,21 @@
-import { Grid, Typography, Button, makeStyles, ButtonGroup } from '@material-ui/core';
-import BackgroundPlaceholderByPas from 'components/BackgroundPlaceholder';
-import { colorColumnArr } from 'components/ColorChanger/components/CustomColor';
-import DoneOutlineOutlinedIcon from '@material-ui/icons/DoneOutlineOutlined';
-import VisibilityOutlinedIcon from '@material-ui/icons/VisibilityOutlined';
-import MoreVertOutlinedIcon from '@material-ui/icons/MoreVertOutlined';
-import ColumnElementOfPreparedColorExamples from 'components/ColorChanger/components/PreparedColorExamples/components/Column/components/ColumnElement';
-import { useAlpha } from 'hooks/useAlpha.hook';
-import { useRandomColor } from 'hooks/useRandomColor.hook';
+import { Grid, Typography,  makeStyles } from '@material-ui/core';
 import { useHover } from 'react-use';
-import { FC, MouseEventHandler, useState } from 'react';
-import { PickerOfThemeColorPropsType } from './types';
-import { shuffle } from 'lodash';
-import { useContrastText } from 'hooks/useContrastText.hook';
-import ArrowDropDownCircleOutlinedIcon from '@material-ui/icons/ArrowDropDownCircleOutlined';
 import clsx from 'clsx';
+import { FC, MouseEventHandler, useState } from 'react';
+import { shuffle } from 'lodash';
+import ArrowDropDownCircleOutlinedIcon from '@material-ui/icons/ArrowDropDownCircleOutlined';
+import DoneOutlineOutlinedIcon from '@material-ui/icons/DoneOutlineOutlined';
 import UnfoldMoreOutlinedIcon from '@material-ui/icons/UnfoldMoreOutlined';
 import PaletteOutlinedIcon from '@material-ui/icons/PaletteOutlined';
+
+import BackgroundPlaceholderByPas from 'components/BackgroundPlaceholder';
+import ColumnElementOfPreparedColorExamples from 'components/ColorChanger/components/PreparedColorExamples/components/Column/components/ColumnElement';
+import { colorColumnArr } from 'components/ColorChanger/components/CustomColor';
+import { useAlpha } from 'hooks/useAlpha.hook';
+import { useContrastText } from 'hooks/useContrastText.hook';
+import { useRandomColor } from 'hooks/useRandomColor.hook';
+import { PickerOfThemeColorPropsType } from './types';
+
 const useStyles = makeStyles(({ spacing, palette, breakpoints, shape: { borderRadius } }) => ({
   colorPaletteContainer: {
     borderRadius,
@@ -36,7 +36,7 @@ const useStyles = makeStyles(({ spacing, palette, breakpoints, shape: { borderRa
       width: '100%'
     },
     padding: spacing(0, 1, 0.8),
-    borderColor: useAlpha(palette.mediumEmphasis?.main, 0.2),
+    borderColor: useAlpha(palette.mediumEmphasis?.main!, 0.2),
     '& legend': {
       padding: spacing(0, 0.8)
     }

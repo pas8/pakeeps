@@ -1,6 +1,19 @@
 import { TypeNames } from './enums';
 import { AppActionTypes, PayloadTypes } from './types';
 
+export const toChangeGlobalLabelListTemproparyData = (
+  payload: PayloadTypes[TypeNames.HANDLE_CHANGE_GLOBAL_LABEL_LIST_TEMPROPARY_DATA]
+): AppActionTypes => ({
+  type: TypeNames.HANDLE_CHANGE_GLOBAL_LABEL_LIST_TEMPROPARY_DATA,
+  payload
+});
+export const toChangeGlobalEventListTemproparyData = (
+  payload: PayloadTypes[TypeNames.HANDLE_CHANGE_GLOBAL_EVENT_LIST_TEMPROPARY_DATA]
+): AppActionTypes => ({
+  type: TypeNames.HANDLE_CHANGE_GLOBAL_EVENT_LIST_TEMPROPARY_DATA,
+  payload
+});
+
 export const toAddNewPakeep = (payload: PayloadTypes[TypeNames.HANDLE_ADD_NEW_PAKEEP]): AppActionTypes => ({
   type: TypeNames.HANDLE_ADD_NEW_PAKEEP,
   payload
@@ -11,13 +24,33 @@ export const toDeletePakeep = (payload: PayloadTypes[TypeNames.HANDLE_DELETE_PAK
   payload
 });
 
+export const toEditPakeep = (payload: PayloadTypes[TypeNames.HANDLE_EDIT_PAKEEP]): AppActionTypes => ({
+  type: TypeNames.HANDLE_EDIT_PAKEEP,
+  payload
+});
+
+export const toDeleteGlobalLabel = (payload: PayloadTypes[TypeNames.HANDLE_DELETE_GLOBAL_LABEL]): AppActionTypes => ({
+  type: TypeNames.HANDLE_DELETE_GLOBAL_LABEL,
+  payload
+});
+
 export const toAddEventToPakeep = (payload: PayloadTypes[TypeNames.HANDLE_ADD_EVENT_TO_PAKEEP]): AppActionTypes => ({
   type: TypeNames.HANDLE_ADD_EVENT_TO_PAKEEP,
   payload
 });
 
+export const toChangeHeaderHeigth = (payload: PayloadTypes[TypeNames.HANDLE_CHANGE_HEADER_HEIGTH]): AppActionTypes => ({
+  type: TypeNames.HANDLE_CHANGE_HEADER_HEIGTH,
+  payload
+});
+
 export const toChangePakeeps = (payload: PayloadTypes[TypeNames.HANDLE_CHANGE_PAKEEPS]): AppActionTypes => ({
   type: TypeNames.HANDLE_CHANGE_PAKEEPS,
+  payload
+});
+
+export const toChangeUserData = (payload: PayloadTypes[TypeNames.HANDLE_CHANGE_USER_DATA]): AppActionTypes => ({
+  type: TypeNames.HANDLE_CHANGE_USER_DATA,
   payload
 });
 
@@ -41,8 +74,6 @@ export const toChangeAvatarProperties = (
   type: TypeNames.HANDLE_CHANGE_AVATAR_PROPERTIES,
   payload
 });
-
-
 
 export const toChangeFolders = (payload: PayloadTypes[TypeNames.HANDLE_CHANGE_FOLDERS]): AppActionTypes => ({
   type: TypeNames.HANDLE_CHANGE_FOLDERS,
@@ -80,6 +111,11 @@ export const toChangeTemporaryData = (
   payload
 });
 
+export const toAddGlobalEvent = (payload: PayloadTypes[TypeNames.HANDLE_ADD_GLOBAL_EVENT]): AppActionTypes => ({
+  type: TypeNames.HANDLE_ADD_GLOBAL_EVENT,
+  payload
+});
+
 export const toAddNewGlobalLabel = (payload: PayloadTypes[TypeNames.HANDLE_ADD_NEW_GLOBAL_LABEL]): AppActionTypes => ({
   type: TypeNames.HANDLE_ADD_NEW_GLOBAL_LABEL,
   payload
@@ -89,13 +125,6 @@ export const toChangePinStatusOfPakeeps = (
   payload: PayloadTypes[TypeNames.HANDLE_PIN_STATUS_OF_PAKEEPS]
 ): AppActionTypes => ({
   type: TypeNames.HANDLE_PIN_STATUS_OF_PAKEEPS,
-  payload
-});
-
-export const toChangePakeepCustomProperty = (
-  payload: PayloadTypes[TypeNames.HANDLE_CHANGE_PAKEEP_CUSTOM_PROPERTY]
-): AppActionTypes => ({
-  type: TypeNames.HANDLE_CHANGE_PAKEEP_CUSTOM_PROPERTY,
   payload
 });
 
@@ -142,8 +171,16 @@ export const toChangePakeepProperty = (
   type: TypeNames.HANDLE_CHANGE_PAKEEP_PROPERTY,
   payload
 });
+export const toChangePakeepCustomProperty = (
+  payload: PayloadTypes[TypeNames.HANDLE_CHANGE_PAKEEP_CUSTOM_PROPERTY]
+): AppActionTypes => ({
+  type: TypeNames.HANDLE_CHANGE_PAKEEP_CUSTOM_PROPERTY,
+  payload
+});
+
 
 export const toChangeThemeColors = (payload: PayloadTypes[TypeNames.HANDLE_CHANGE_THEME_COLORS]): AppActionTypes => ({
   type: TypeNames.HANDLE_CHANGE_THEME_COLORS,
   payload
 });
+

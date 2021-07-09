@@ -1,6 +1,8 @@
 import { useState, FC, useEffect } from 'react';
+import { usePrevious } from 'react-use';
+import RestoreOutlinedIcon from '@material-ui/icons/RestoreOutlined';
 import { useMeasure } from 'react-use';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { Grid, makeStyles, DialogTitle, DialogContent, InputBase, Dialog, DialogActions } from '@material-ui/core';
 import IconsUtils from 'components/IconsUtils';
@@ -16,8 +18,15 @@ import { IconsUtilsArrDenotationNameType } from 'components/IconsUtils/types';
 
 import { EditingDialogOfPakeepElementProps, onChangeType, UseStylesInteface } from './types';
 import { useLabelListFunc } from 'hooks/useLabelListFunc.hook';
+import { useNewPakeepUtility } from 'hooks/useNewPakeepUtility.hook';
+import CheckBoxContainer from 'components/CheckBoxContainer';
+import { useNewPakeepStatuses } from 'hooks/useNewPakeepStatuses.hook';
+import AttributeGroup from '../PakeepElement/components/AttributeGroup';
+import { toEditPakeep } from 'store/modules/App/actions';
+import { useSnackbar } from 'notistack';
+import { isEqual } from 'lodash';
 
-const useStyles = makeStyles(({ typography: { h4, h6 }, spacing }) => {
+const useStyles = makeStyles(({ typography: { h4, h6, body1, h5 }, spacing }) => {
   return {
     containerClass: ({ backgroundColor, color }: UseStylesInteface) => ({
       backgroundColor,
@@ -29,11 +38,12 @@ const useStyles = makeStyles(({ typography: { h4, h6 }, spacing }) => {
         paddingBottom: 0,
         paddingRight: spacing(1.8),
         '& input': {
+          ...h4
           // fontSize: spacing(2.8),
-          fontSize: h4.fontSize
+          // fontSize: h4.fontSize
         }
       },
-      '& input,textarea': {
+      '& input, textarea': {
         color,
         caretColor: color,
         '&::selection ': {
@@ -42,28 +52,69 @@ const useStyles = makeStyles(({ typography: { h4, h6 }, spacing }) => {
         }
       },
       '& textarea': {
-        lineHeight: spacing(0.2),
-        fontWeight: 200,
-        fontSize: h6.fontSize,
-        marginTop: spacing(-0.8),
-        marginBottom: spacing(-2)
+        ...body1
+        // lineHeight: spacing(0.2),
+        // fontWeight: 200,
+        // fontSize: h6.fontSize,
+        // marginTop: spacing(0.4)
+        // marginBottom: spacing(-2)
       }
     }),
-    dialogIconsUtilsClass: { margin: spacing(-2, 0.4, 0), paddingBottom: spacing(0.4) }
+    attributeGroupContainer: {
+      padding: spacing(0, 1.8, 0.8),
+      marginTop: spacing(-2)
+    }
   };
 });
 
-const EditingDialogOfPakeepElement: FC<EditingDialogOfPakeepElementProps> = ({ id, handleClosePakeepDialog }) => {
-  const findedPakeep = useFindPakeepUsingId(id);
-  // if (!findedPakeep) return null;
+const EditingDialogOfPakeepElement: FC<EditingDialogOfPakeepElementProps> = ({
+  id: pakeepId,
+  handleClosePakeepDialog
+}) => {
+  if (!pakeepId) return null;
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
-  const { backgroundColor, color, title, text } = findedPakeep;
+  const findedPakeep = useFindPakeepUsingId(pakeepId);
+  if (!findedPakeep) return null;
 
-  const [state, setState] = useState({ title, text, backgroundColor, color });
+  const dispatch = useDispatch();
 
-  useEffect(() => {
-    setState({ title, text, backgroundColor, color });
-  }, [findedPakeep]);
+  const { backgroundColor, color, title, text, checkBoxes, id, labels, events, ...properties } = findedPakeep;
+
+  const defaultState = {
+    ...properties,
+    id,
+    labels,
+    events,
+
+    color,
+    backgroundColor
+  };
+  const {
+    setState,
+    iconUtilsFuncs,
+    state,
+    defaultLabelListProps,
+    handleChangeInputsValue,
+    labelsOfAttributeGroup,
+    eventsListProps: defaultEventsListProps,
+    setCheckBoxes
+  } = useNewPakeepUtility({
+    defaultState,
+    defaultCheckBoxesValue: checkBoxes,
+    defaultInputState: { title, text }
+  });
+  const {
+    statusState,
+    hanldeChangeTextVisiblittyStatus,
+    handleSetWidth,
+    handleStatusOfHideLabelView,
+    handleAccomplishedCheckBoxesHiddenStatus
+  } = useNewPakeepStatuses();
+
+  // useEffect(() => {
+  //   setState({ title, text, backgroundColor, color });
+  // }, [findedPakeep]);
 
   const [customColor, isBackgroundColorDefault, isColorDefault] = useGetReadableColor(
     state.backgroundColor,
@@ -74,14 +125,12 @@ const EditingDialogOfPakeepElement: FC<EditingDialogOfPakeepElementProps> = ({ i
 
   const classes = useStyles({ backgroundColor: correctBackgroundColor, color: correctColor });
 
-  const onChange: onChangeType = ({ target: { name, value } }) => {
-    setState(state => ({ ...state, [name]: value }));
-  };
+  const TITLE = 'Title';
 
   const titleInputProps = {
     placeholder: 'Title',
     autoComplete: 'off',
-    onChange,
+    onChange: handleChangeInputsValue,
     fullWidth: true,
     name: 'title',
     value: state.title,
@@ -91,7 +140,7 @@ const EditingDialogOfPakeepElement: FC<EditingDialogOfPakeepElementProps> = ({ i
   const textInputProps = {
     placeholder: 'Text',
     autoComplete: 'off',
-    onChange,
+    onChange: handleChangeInputsValue,
     fullWidth: true,
     name: 'text',
     value: state.text,
@@ -102,46 +151,66 @@ const EditingDialogOfPakeepElement: FC<EditingDialogOfPakeepElementProps> = ({ i
   const JUST_PADDING_VALUE = 160;
   const widthOfContainer = width - JUST_PADDING_VALUE;
 
-  const arrOfButtonNamesWhichSholudBeHidden: IconsUtilsArrDenotationNameType[] = ['width'];
-
-  const iconsUtilsFunc = usePakeepUtilsFunc(id);
-
-  const handleSetBackgroundColorPakeep = (backgroundColor: string) => {
-    setState(state => ({ ...state, backgroundColor }));
-  };
-  const handleSetColorPakeep = (color: string) => {
-    setState(state => ({ ...state, color }));
-  };
-
-  const { handleDeleteNewLabel, handleAddNewLabel } = useLabelListFunc(id);
-
+  const arrOfButtonNamesWhichSholudBeHidden: IconsUtilsArrDenotationNameType[] = [];
+  // const arrOfButtonNamesWhichSholudBeHidden: IconsUtilsArrDenotationNameType[] = ['width'];
   const labelsListProps = {
-    // customColor,
-    handleDeleteNewLabel, handleAddNewLabel
+    ...defaultLabelListProps,
+    customColor,
+    handleStatusOfHideLabelView
   };
 
+  const eventsListProps = {
+    ...defaultEventsListProps
+  };
 
   const iconsUtilsProps = {
+    ...iconUtilsFuncs,
     labelsListProps,
     widthOfContainer,
     id,
+    handleSetWidth,
+    eventsListProps,
     customColor,
-    handleSetBackgroundColorPakeep,
-    handleSetColorPakeep,
-    iconsUtilsFunc,
-    arrOfButtonNamesWhichSholudBeHidden
+    arrOfButtonNamesWhichSholudBeHidden,
+    isEditingUtilsHidden: false
   };
 
-  const attributeGroupProps = {};
+  const attributeGroupProps = {
+    labels: labelsOfAttributeGroup,
+    pakeepId,
+    customColor,
+    parentBackgrounColor: state.backgroundColor,
+    events: state.events
+  };
+
+  const previuosState = usePrevious(state);
+
+  const handleRestoreLastGlobalLabel = () => {
+    if (!previuosState) return;
+
+    !isEqual(findedPakeep, previuosState) && setState(previuosState);
+    closeSnackbar();
+  };
 
   const handleSubmit = () => {
-    console.log(state);
+    dispatch(toEditPakeep({ editedPakeep: state }));
+
+    enqueueSnackbar({ message: 'Global label was successfully added' });
+    handleClosePakeepDialog();
   };
 
   const isOpen = !!id;
 
   const onClose = () => {
     handleClosePakeepDialog();
+    !isEqual(findedPakeep, previuosState) &&
+      enqueueSnackbar({
+        message: 'Dialog of creating label was closed',
+        severity: 'warning',
+        buttonText: 'Restore',
+        onClick: handleRestoreLastGlobalLabel,
+        icon: RestoreOutlinedIcon
+      });
   };
 
   const actionsButtonGroupProps = {
@@ -152,7 +221,12 @@ const EditingDialogOfPakeepElement: FC<EditingDialogOfPakeepElementProps> = ({ i
   };
 
   return (
-    <Dialog open={isOpen} onClose={onClose}>
+    <Dialog
+      open={isOpen}
+      onClose={onClose}
+      maxWidth={statusState.isNewPakeepContainerHaveFullWidth ? 'xl' : 'sm'}
+      fullWidth={statusState.isNewPakeepContainerHaveFullWidth}
+    >
       <Grid className={classes.containerClass} ref={ref}>
         <DialogTitle>
           <Grid container>
@@ -162,13 +236,43 @@ const EditingDialogOfPakeepElement: FC<EditingDialogOfPakeepElementProps> = ({ i
           </Grid>
         </DialogTitle>
         <DialogContent>
-          <InputBase {...textInputProps} />
+          {state.isCheckBoxes ? (
+            <CheckBoxContainer
+              checkBoxesArr={state.checkBoxes}
+              setCheckBoxes={setCheckBoxes}
+              customColor={customColor}
+              isAccomplishedCheckBoxesHidden={statusState.isAccomplishedCheckBoxesHidden}
+              handleAccomplishedCheckBoxesHiddenStatus={handleAccomplishedCheckBoxesHiddenStatus}
+            />
+          ) : (
+            <InputBase {...textInputProps} />
+          )}
         </DialogContent>
-        <DialogContent>{/* <AttributeGroup {...allAttributeGroupProps} /> */}</DialogContent>
 
-        <DialogActions className={classes.dialogIconsUtilsClass}>
-          <IconsUtils {...iconsUtilsProps} />
-          <ActionsButtonGroup {...actionsButtonGroupProps} />
+        {/* {!statusState.isTextHidden && !statusState.isLabelViewHidden && ( */}
+
+        {/* )} */}
+
+        <DialogActions>
+          <Grid container>
+            <Grid container className={classes.attributeGroupContainer}>
+              <AttributeGroup {...attributeGroupProps} />
+            </Grid>
+            <Grid
+              // className={classes.dialogIconsUtilsClass}
+              container
+              alignItems={'center'}
+              justify={'space-between'}
+              wrap={'nowrap'}
+            >
+              <Grid>
+                <IconsUtils {...iconsUtilsProps} />
+              </Grid>
+              <Grid>
+                <ActionsButtonGroup {...actionsButtonGroupProps} />
+              </Grid>
+            </Grid>
+          </Grid>
         </DialogActions>
       </Grid>
     </Dialog>

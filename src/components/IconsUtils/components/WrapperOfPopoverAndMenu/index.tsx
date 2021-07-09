@@ -11,7 +11,7 @@ const WrapperOfPopoverAndMenu: FC<WrapperOfPopoverAndMenuType> = ({
   buttonUtilsArr,
   keyName,
   isIconNameExtended = false,
-  iconSize = 'default',
+  iconSize = 'medium',
   handleAverageMainComponentWidth,
   customColor: notReversedCustomColor,
   isCustomColorReversed = false
@@ -36,7 +36,7 @@ const WrapperOfPopoverAndMenu: FC<WrapperOfPopoverAndMenuType> = ({
   const handlePopoverClose: ClosePopoverOrMenuType = () =>
     setAnchorElState(state => ({ ...state, isPopoverOpen: false }));
 
-  const popoverAndMenuProps = { ...anchorElState, handleMenuClose, handlePopoverClose, customColor };
+  const popoverAndMenuProps = { ...anchorElState, handleMenuClose, handlePopoverClose, customColor ,reversedColor};
   const anchorElRef = useRef<HTMLDivElement>(null);
 
   return (

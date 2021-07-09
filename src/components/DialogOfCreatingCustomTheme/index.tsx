@@ -9,15 +9,17 @@ import {
   InputBase,
   FormHelperText
 } from '@material-ui/core';
+import { nanoid } from 'nanoid';
 import useKeyboardJs from 'react-use/lib/useKeyboardJs';
 import { useCopyToClipboard, useHover } from 'react-use';
 import ArrowDropDownCircleOutlinedIcon from '@material-ui/icons/ArrowDropDownCircleOutlined';
 import { useSnackbar } from 'notistack';
 import { colord } from 'colord';
 import { includes, map, mapValues } from 'lodash';
-import ExtensionIcon from '@material-ui/icons/Extension';
-import ActionsButtonGroup from 'components/ActionsButtonGroup';
 import { useDispatch, useSelector } from 'react-redux';
+import ExtensionIcon from '@material-ui/icons/Extension';
+
+import ActionsButtonGroup from 'components/ActionsButtonGroup';
 import { useThemeColors } from 'hooks/useThemeColors.hook';
 import BackgroundPlaceholderByPas from 'components/BackgroundPlaceholder';
 import { useAlpha } from 'hooks/useAlpha.hook';
@@ -31,13 +33,13 @@ import { customColorPlaceholder } from 'components/AccountAvatar';
 import { useGetReadableColor } from 'hooks/useGetReadableColor.hook';
 import { useBreakpointNames } from 'hooks/useBreakpointNames.hook';
 import { getCapionsOfDefaultThemesArr } from 'store/modules/Color/selectors';
+import { getIsHeaderHavePaperColor } from 'store/modules/Settings/selectors';
+import { toChangeDefaultThemesArr } from 'store/modules/Color/actions';
+import { useToHex } from 'hooks/useToHex.hook';
+
 import { ColorStateType } from './components/PickerColorElement/types';
 import PickerColorElement from './components/PickerColorElement';
 import { DialogOfCreatingCustomThemePropsType } from './types';
-import { getIsHeaderHavePaperColor } from 'store/modules/Settings/selectors';
-import { toChangeDefaultThemesArr } from 'store/modules/Color/actions';
-import { nanoid } from 'nanoid';
-import { useToHex } from 'hooks/useToHex.hook';
 
 const useStyles = makeStyles(({ spacing, palette, breakpoints, shape: { borderRadius }, typography }) => ({
   contentContainer: {},
@@ -281,7 +283,7 @@ const DialogOfCreatingCustomTheme: FC<DialogOfCreatingCustomThemePropsType> = ({
   const [colorFormatButton] = useHover(isHovering => (
     <Grid className={classes.containerOfButtonUtilsElement} onClick={handleOpenMenuOfCustomColorFormat}>
       <BackgroundPlaceholderByPas
-        color={useAlpha(secondaryColor, isHovering ? 0.8 : 0.42)}
+        color={useAlpha(secondaryColor!, isHovering ? 0.8 : 0.42)}
         title={'Format '}
         ButtonIcon={ExtensionIcon}
         buttonText={'Format '}
@@ -293,7 +295,7 @@ const DialogOfCreatingCustomTheme: FC<DialogOfCreatingCustomThemePropsType> = ({
   const [advancedColorButton] = useHover(isHovering => (
     <Grid className={classes.containerOfButtonUtilsElement} onClick={handleOpenMenuOfAdvancedColor}>
       <BackgroundPlaceholderByPas
-        color={useAlpha(secondaryColor, isHovering ? 0.8 : 0.42)}
+        color={useAlpha(secondaryColor!, isHovering ? 0.8 : 0.42)}
         title={'Advanced &'}
         ButtonIcon={ArrowDropDownCircleOutlinedIcon}
         buttonText={'Advanced'}
@@ -323,7 +325,7 @@ const DialogOfCreatingCustomTheme: FC<DialogOfCreatingCustomThemePropsType> = ({
         <BackgroundPlaceholderByPas
           isButtonHidden={true}
           title={TITLE}
-          color={useAlpha(mediumEmph, 0.04)}
+          color={useAlpha(mediumEmph!, 0.04)}
           size={1000}
         />
       )}
@@ -388,7 +390,6 @@ const DialogOfCreatingCustomTheme: FC<DialogOfCreatingCustomThemePropsType> = ({
                   />
                 );
               })}
-              {/* </Grid> */}
             </Grid>
           </Grid>
         </Grid>

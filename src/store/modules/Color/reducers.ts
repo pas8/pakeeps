@@ -19,7 +19,7 @@ export const defaultTheme: DefaultThemeType = {
   defaultBackgroundMain: '#303030',
   secondaryMain: '#00b0ff',
   isColorRandom: false,
-  borderRadius:4,
+  borderRadius: 4,
   type: 'dark',
   textColor: '#ffffff'
 };
@@ -78,22 +78,7 @@ export const colorInitialState = {
 };
 
 // const colorReducer = createReducer(colorInitialState)({
-//   [types.CHANGE_ONE_COLOR_COLUMN] : (state, { columnId, newArr }) => ({
-//     ...state,
-//     idColumnArr: {
-//       ...state.idColumnArr,
-//       [columnId]: newArr
-//     }
-//   }),
-//   [types.CHANGE_TWO_COLOR_COLUMN]: (state, { startColumn, finishColumn }) => ({
-//     ...state,
-//     idColumnArr: {
-//       ...state.idColumnArr,
-//       [startColumn.id]: startColumn.newArr,
-//       [finishColumn.id]: finishColumn.newArr
-//     }
-//   })
-// });
+
 export const ColorReducer = (state = colorInitialState, action: ColorActionTypes): any => {
   switch (action.type) {
     case TypeNames.HANDLE_CHANGE_THEME_COLORS: {
@@ -109,6 +94,38 @@ export const ColorReducer = (state = colorInitialState, action: ColorActionTypes
       const defaultThemesToChoseArr = [newThemeElement, ...state.defaultThemesToChoseArr];
       return { ...state, defaultThemesToChoseArr };
     }
+
+    case TypeNames.HANDLE_CHANGE_ONE_COLOR_COLUMN: {
+      const { columnId, newArr } = action.payload;
+
+      return {
+        ...state,
+        idColumnArr: {
+          ...state.idColumnArr,
+          [columnId]: newArr
+        }
+      };
+    }
+    case TypeNames.HANDLE_CHANGE_TWO_COLOR_COLUMN: {
+      const { finishColumn, startColumn } = action.payload;
+
+      return {
+        ...state,
+        idColumnArr: {
+          ...state.idColumnArr,
+          [startColumn.id]: startColumn.newArr,
+          [finishColumn.id]: finishColumn.newArr
+        }
+      };
+    }
+    //   [types.CHANGE_ONE_COLOR_COLUMN] : (state, { columnId, newArr }) => ({
+
+    //   }),
+    //   [types.CHANGE_TWO_COLOR_COLUMN]: (state, { startColumn, finishColumn }) => ({
+
+    //   })
+    // });
+
     // case '': {
     // return { ...state, ...action.payload };
     // }

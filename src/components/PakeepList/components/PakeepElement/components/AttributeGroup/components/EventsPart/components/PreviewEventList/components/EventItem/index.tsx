@@ -4,16 +4,38 @@ import PropTypes from 'prop-types';
 import { FC } from 'react';
 import { EventItemPropsType, UseStylesOfEventItemType } from './types';
 import clsx from 'clsx';
+import { DEFAULT, PRIMARY, SECONDARY } from 'models/denotation';
+import { useIsColorLight } from 'hooks/useIsColorLight.hook';
 const useStyles = makeStyles(({ spacing, transitions, palette, shape: { borderRadius } }) => ({
-  containerOfDateItem: ({ customColor }: UseStylesOfEventItemType) => {
-    const color = !customColor ? palette?.highEmphasis?.main : customColor?.hover;
-    return {
+  containerOfDateItem: ({
+    customColor,
+    color: eventColor,
+    variant,
+    parentBackgroundColor
+  }: UseStylesOfEventItemType) => {
+    const color = customColor.isUseDefault
+      ? eventColor === DEFAULT
+        ? palette?.highEmphasis?.main
+        : eventColor === PRIMARY
+        ? palette.primary.main
+        : eventColor === SECONDARY
+        ? palette.secondary.main
+        : eventColor
+      : customColor?.hover;
+
+      return {
       position: 'relative',
       padding: spacing(0.32, 0.8, 0.16, 0.8),
       margin: spacing(0.4, 0.4),
       border: '1px solid',
       borderColor: color,
-      color,
+      color:
+        variant === DEFAULT
+          ? parentBackgroundColor === DEFAULT
+            ? palette.background.default
+            : parentBackgroundColor
+          : color,
+      background: variant === DEFAULT ? (!!color ? color : palette?.highEmphasis?.main) : '',
       borderRadius
     };
   },
@@ -21,18 +43,16 @@ const useStyles = makeStyles(({ spacing, transitions, palette, shape: { borderRa
   containerOfFirstVariantOfEventItemView: {
     '& svg': {
       fontSize: spacing(2.16),
-      margin: spacing(0, 0.4, 0.4, 0)
+      margin: spacing(0.2, 0.4, 0.4, 0)
     }
   },
   containeOfInputTextViewOfCaptionOfEventItem: {
     margin: spacing(0, 0.4),
     '& legend': {
-      padding: spacing(0,0.32,0,0.08)
+      padding: spacing(0, 0.32, 0, 0.08)
     },
-    '& .mainPart':{
-
-margin:spacing(-0.32,0,0,0)
-
+    '& .mainPart': {
+      margin: spacing(-0.32, 0, 0, 0)
     }
   },
 
@@ -48,12 +68,17 @@ margin:spacing(-0.32,0,0,0)
 const EventItem: FC<EventItemPropsType> = ({
   icon,
   title,
+  color,
+  variant,
   customColor,
   value,
-  isFirstVariantOfEventItemView,
-  isInputTextViewOfCaptionOfEventItem
+  parentBackgroundColor
 }) => {
-  const classes = useStyles({ customColor });
+  const isFirstVariantOfEventItemView = true;
+  const isInlineVariantOfEventItemView = true;
+
+  const isInputTextViewOfCaptionOfEventItem = !true;
+  const classes = useStyles({ customColor, color, variant, parentBackgroundColor });
   return (
     <>
       {isInputTextViewOfCaptionOfEventItem ? (

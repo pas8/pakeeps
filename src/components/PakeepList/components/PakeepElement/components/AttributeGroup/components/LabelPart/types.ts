@@ -3,7 +3,6 @@ import { GlobalLabelsType, ILabelElement, LabelsOfPakeepType, PakeepIdType } fro
 
 export type LabelPartPropsType = {
   labels: GlobalLabelsType;
-  handleDeleteLabelFromPakeepFunc: Function;
   pakeepId: PakeepIdType;
   parentBackgrounColor: string;
   customColor: CustomColorType;

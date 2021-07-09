@@ -8,7 +8,7 @@ import { getTimeAndDateFromat, getTimeFormat } from 'store/modules/Settings/sele
 import { GlobalEventsType } from 'store/modules/App/types';
 import { EventsPartPropsType } from './types';
 
-const EventsPart: FC<EventsPartPropsType> = ({ events = [], customColor }) => {
+const EventsPart: FC<EventsPartPropsType> = ({ events = [], customColor,parentBackgroundColor }) => {
   const timeFormat = useSelector(getTimeFormat);
   const timeAndDateFromat = useSelector(getTimeAndDateFromat);
   const globalEvents: GlobalEventsType = useSelector(getGlobalEventsArr);
@@ -20,6 +20,7 @@ const EventsPart: FC<EventsPartPropsType> = ({ events = [], customColor }) => {
 
   const allPreviewEventListProps = {
     customColor,
+    parentBackgroundColor,
     validatedCurrentEvents: events,
     currentEventsArr
   };

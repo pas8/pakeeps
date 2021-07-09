@@ -8,6 +8,7 @@ import {
   PakeepIdType
 } from 'store/modules/App/types';
 import { $Values } from 'utility-types';
+import { IconUtilsLabelsListPropsType, LabelsListPropsType } from './components/LabelsList/types';
 import { iconsUtilsArrDenotation } from './denotation';
 
 export type IconsUtilsFunctionKeyNameType =
@@ -19,7 +20,9 @@ export type IconsUtilsFunctionKeyNameType =
   | 'handleSetIsPinnedPakeep'
   | 'handleSetWidth'
   | 'handleSetEditTitleIsTrue'
-  | 'handleSetArhivedPakeep';
+  | 'handleSetArhivedPakeep'
+  | 'handleUndo'
+  | 'handleRedo';
 
 export type IconsUtilsFunctionType = {
   [Property in IconsUtilsFunctionKeyNameType]?: (any?: any) => void;
@@ -27,6 +30,7 @@ export type IconsUtilsFunctionType = {
 
 export type IconsUtilsValuesType = {
   isCheckBoxes?: boolean;
+  isEditingUtilsHidden?: boolean;
   isColorDefault?: boolean;
   isFavorite?: boolean;
   isInBookmark?: boolean;
@@ -37,14 +41,20 @@ export type IconsUtilsValuesType = {
   isChangingTitle?: boolean;
 };
 
+export type EventsListProps = {
+  handleSaveEvents: (events: any) => void;
+  events: EventsOfPakeepType;
+};
+
 export type IconsUtilsPropetyiesType = {
   isBackgroundColorDefault?: boolean;
   backgroundColor?: any;
   customColor: CustomColorType;
   isAllIconsIsShown?: boolean;
   labelBargeNumber?: number;
-  labelsListProps?: any;
+  labelsListProps?: IconUtilsLabelsListPropsType;
   open?: boolean;
+  eventsListProps: EventsListProps;
   widthOfContainer?: number;
   isUtilsReversed?: boolean;
   arrOfButtonNamesWhichSholudBeHidden?: IconsUtilsArrDenotationNameType[];
@@ -61,7 +71,7 @@ export type IconUtilElementOptionalPropertyiesType = {
   menuComponentsProps?: object;
   menuComponents?: ReactNode;
   ActiveIcon?: IconType;
-  onClick?: ()=> void;
+  onClick?: () => void;
   popoverText?: string;
   activePopoverText?: string;
   badgeContent?: number | any;

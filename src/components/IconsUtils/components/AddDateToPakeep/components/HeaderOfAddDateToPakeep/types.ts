@@ -8,9 +8,9 @@ export type UseStylesOfHeaderOfAddDateToPakeepType = {
 
 export type HeaderOfAddDateToPakeepPropsType = UseStylesOfHeaderOfAddDateToPakeepType & {
   buttonSaveState?: string;
-  arrowButtonFunc: Function;
+  arrowButtonFunc: ()=> void;
   dynamicTitle?: string;
   isSaveButtonHidden?: boolean;
-  onClickOfSaveButton: Function;
+  onClickOfSaveButton: ()=> void;
   customTitle?: ReactNode;
 };

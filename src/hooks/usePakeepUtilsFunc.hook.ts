@@ -13,23 +13,23 @@ export const usePakeepUtilsFunc: UsePakeepUtilsFuncType = pakeepId => {
   const dispatch = useDispatch();
 
   const handleSetColorPakeep = (color: ColorType): void => {
-    dispatch(toChangePakeepCustomProperty({ pakeepId, property: { color } }));
+    dispatch(toChangePakeepProperty({ pakeepId, property: { color } }));
   };
 
   const handleSetBackgroundColorPakeep = (backgroundColor: ColorType): void => {
-    dispatch(toChangePakeepCustomProperty({ pakeepId, property: { backgroundColor } }));
+    dispatch(toChangePakeepProperty({ pakeepId, property: { backgroundColor } }));
   };
 
   const handleSetBookmarkPakeep = (): void => {
-    dispatch(toChangePakeepProperty({ pakeepId, properyName: pakeepPropertyiesNames.isInBookmark }));
+    dispatch(toChangePakeepCustomProperty({ pakeepId, propertyName: pakeepPropertyiesNames.isInBookmark }));
   };
 
   const handleSetFavoritePakeep = (): void => {
-    dispatch(toChangePakeepProperty({ pakeepId, properyName: pakeepPropertyiesNames.isFavorite }));
+    dispatch(toChangePakeepCustomProperty({ pakeepId, propertyName: pakeepPropertyiesNames.isFavorite }));
   };
 
   const handleSetArhivedPakeep = (): void => {
-    dispatch(toChangePakeepProperty({ pakeepId, properyName: pakeepPropertyiesNames.isArchived }));
+    dispatch(toChangePakeepCustomProperty({ pakeepId, propertyName: pakeepPropertyiesNames.isArchived }));
   };
 
   const handleSetIsPinnedPakeep = (): void => {

@@ -1,13 +1,15 @@
-import { AppBar, Grid, makeStyles, Typography, Toolbar, Zoom, Collapse, Slide } from '@material-ui/core';
+import { AppBar, Grid, makeStyles, Typography, Slide } from '@material-ui/core';
 import { every } from 'lodash';
 import { FC } from 'react';
 import { useMeasure } from 'react-use';
-import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
 import CloseOutlinedIcon from '@material-ui/icons/CloseOutlined';
+
 import { useGetReadableColor } from 'hooks/useGetReadableColor.hook';
 import { usePropertiesToUtils } from 'hooks/usePropertiesToUtils.hook';
 import IconButtonByPas from 'components/IconButton';
+import PakeepPropertyProvider from 'components/PakeepPropertyProviders';
+import { IconsUtilsArrDenotationNameType } from 'components/IconsUtils/types';
 import IconsUtils from 'components/IconsUtils';
 import { useFindSelectedLabels } from 'hooks/useFindSelectedLabels.hook';
 import { useGetIsColorDefault } from 'hooks/useGetIsColorDefault.hook';
@@ -15,19 +17,19 @@ import { useThemeColors } from 'hooks/useThemeColors.hook';
 import {
   toAddLabelToPakeep,
   toCancelSelectingStatus,
+  toChangePakeepProperty,
   toChangePinStatusOfPakeeps,
   toChangeSelectedPakeepsProperty,
   toDeleteLabelFromPakeep
 } from 'store/modules/App/actions';
-import { LabelIdType, PakeepIdType, PakeepsType } from 'store/modules/App/types';
+import { EventsOfPakeepType, LabelIdType, PakeepIdType, PakeepsType } from 'store/modules/App/types';
 import { VariantsOfropertiesToUtils } from 'models/unums';
 import {
   HandleSelectedPakeepsPropertyFuncType,
   HeaderWhenActiveSelectoPropsType,
   PakeepPropertyiesType
 } from './types';
-import PakeepPropertyProvider from 'components/PakeepPropertyProviders';
-import { IconsUtilsArrDenotationNameType } from 'components/IconsUtils/types';
+import { useFindSelectedEvents } from 'hooks/useFindSelectedEvents.hook';
 
 const useStyles = makeStyles(({ spacing }) => ({
   containerClass: {
@@ -94,12 +96,22 @@ const HeaderWhenActiveSelecto: FC<HeaderWhenActiveSelectoPropsType> = ({ selecte
     });
   };
 
+  const id = 'HeaderWhenActiveSelecto';
   const labels = useFindSelectedLabels(selectedPakeeps);
-
+  const events = useFindSelectedEvents(selectedPakeeps);
+  // console.log(selectedPakeepsId)
   const labelsListProps = {
+    labels,
+    pakeepId: id,
     isDefaultMenuListHidden: true,
     handleAddNewLabel,
     handleDeleteNewLabel
+  };
+
+  const handleSaveEvents = (events: EventsOfPakeepType) => {
+    selectedPakeepsId.map((pakeepId: PakeepIdType) => {
+      dispatch(toChangePakeepProperty({ pakeepId, property: { events } }));
+    });
   };
 
   const arrOfButtonNamesWhichSholudBeHidden: IconsUtilsArrDenotationNameType[] = [
@@ -109,39 +121,39 @@ const HeaderWhenActiveSelecto: FC<HeaderWhenActiveSelectoPropsType> = ({ selecte
     'width',
     'share'
   ];
-
+console.log(events)
   const iconsUtilsProps = {
-    id: 'HeaderWhenActiveSelecto',
+    id,
     widthOfContainer,
     isBackgroundColorDefault,
     isColorDefault,
     labels,
+    events,
     iconsCloser: true,
     customColor,
     isUtilsReversed: true,
     labelsListProps,
+    eventsListProps: { events, handleSaveEvents },
     arrOfButtonNamesWhichSholudBeHidden,
     ...propertiesArrToUtils
   };
 
   return (
-    <PakeepPropertyProvider.Provider value={{ labels, events: [] }}>
-      <Slide in={true} direction={'down'}>
-        <AppBar ref={ref} className={classes.containerClass}>
-          <Grid container>
-            <Grid style={{ flex: 1 }}>
-              <Grid container alignItems={'center'}>
-                <IconButtonByPas icon={CloseOutlinedIcon} customColor={customColor} onClick={cancelSelectedPakeepsId} />
-                <Typography variant={'subtitle2'}>{selectedPakeeps.length} selected </Typography>
-              </Grid>
-            </Grid>
-            <Grid style={{marginRight:'8px'}}>
-              <IconsUtils {...iconsUtilsProps} />
+    <Slide in={true} direction={'down'}>
+      <AppBar ref={ref} className={classes.containerClass}>
+        <Grid container>
+          <Grid style={{ flex: 1 }}>
+            <Grid container alignItems={'center'}>
+              <IconButtonByPas icon={CloseOutlinedIcon} customColor={customColor} onClick={cancelSelectedPakeepsId} />
+              <Typography variant={'subtitle2'}>{selectedPakeeps.length} selected </Typography>
             </Grid>
           </Grid>
-        </AppBar>
-      </Slide>
-    </PakeepPropertyProvider.Provider>
+          <Grid style={{ marginRight: 12 }}>
+            <IconsUtils {...iconsUtilsProps} />
+          </Grid>
+        </Grid>
+      </AppBar>
+    </Slide>
   );
 };
 

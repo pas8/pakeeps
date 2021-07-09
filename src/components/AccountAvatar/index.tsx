@@ -1,18 +1,18 @@
-import { FC, MouseEventHandler, useState } from 'react';
-import { makeStyles, Grid, Button, Typography, MenuItem } from '@material-ui/core';
-import { AccountAvatarPropsType } from './types';
-import AccountCircleOutlinedIcon from '@material-ui/icons/AccountCircleOutlined';
-import MenuByPas from 'components/Menu';
-import { CustomColorType } from 'models/types';
 import { useDispatch } from 'react-redux';
+import { colord } from 'colord';
+import { FC } from 'react';
+import { makeStyles, Grid, Button, Typography, MenuItem } from '@material-ui/core';
+import AccountCircleOutlinedIcon from '@material-ui/icons/AccountCircleOutlined';
+import { CustomColorType } from 'models/types';
 import { toChangeAvatarProperties } from 'store/modules/App/actions';
 import { defaultAvatarProperties } from 'store/modules/App/reducers';
 import { useTakeIcon } from 'hooks/useTakeIcon.hook';
 import { useAlpha } from 'hooks/useAlpha.hook';
-import doodle from '@jalba/react-css-doodle';
+import MenuByPas from 'components/Menu';
 import { useThemeColors } from 'hooks/useThemeColors.hook';
-import { colord } from 'colord';
 import { useIsColorLight } from 'hooks/useIsColorLight.hook';
+import { AccountAvatarPropsType } from './types';
+
 export const customColorPlaceholder: CustomColorType = {
   bgHover: '',
   bgUnHover: '',
@@ -30,7 +30,6 @@ const useStyles = makeStyles(
     palette: { secondary, maxEmphasis, background, highEmphasis, mediumEmphasis }
   }) => ({
     elementOfEditMenu: ({ isHaveBgColor, backgroundColor, isBgColorDark }: any) => {
-      
       const color = isBgColorDark ? maxEmphasis?.main : isHaveBgColor ? backgroundColor : secondary.main;
       return {
         padding: spacing(1.2, 2),
@@ -67,8 +66,8 @@ const useStyles = makeStyles(
       bottom: 0,
 
       '& p': {
-        userSelect:'none',
-        color: isDragActive ? secondary.main : useAlpha(mediumEmphasis?.main, 0.42),
+        userSelect: 'none',
+        color: isDragActive ? secondary.main : useAlpha(mediumEmphasis?.main!, 0.42),
         width: '200%',
         height: '300%',
         lineHeight: '32px',
@@ -135,14 +134,18 @@ const AccountAvatar: FC<AccountAvatarPropsType> = ({
       )}
       <MenuByPas
         open={!!anchorEl}
-        customColor={{ ...customColorPlaceholder, bgHover: backgroundColor, isUseDefault: !isBgColorDark || !isHaveBgColor}}
+        customColor={{
+          ...customColorPlaceholder,
+          bgHover: backgroundColor,
+          isUseDefault: !isBgColorDark || !isHaveBgColor
+        }}
         anchorEl={anchorEl}
         onClose={onClose}
       >
         {editMenuArr.map(({ title, onClick, iconName }) => {
           const [icon] = useTakeIcon(iconName);
           return (
-            <MenuItem onClick={onClick} className={classes.elementOfEditMenu}>
+            <MenuItem onClick={onClick} className={classes.elementOfEditMenu} key={`editMenuArr-${title}`}>
               {icon}
               <Typography variant={'body2'}>{title}</Typography>
             </MenuItem>
@@ -155,42 +158,42 @@ const AccountAvatar: FC<AccountAvatarPropsType> = ({
 
 export default AccountAvatar;
 
-  // const FancyDoodle = doodle`
-  // :doodle {
-  //   @grid: 2 / 4vmax;
-  //   // background: ${primaryColor};
-  // }
-  // --hue: calc(180 + 1.5 * @row * @col);
-  // background: hsl(var(--hue), 50%, 70%);
-  // margin: -.2px;
-  // transition: @r(.5s) ease;
-  // clip-path: polygon(@pick(
-  //   '0 0, 100% 0, 100% 100%',
-  //   '0 0, 100% 0, 0 100%',
-  //   '0 0, 100% 100%, 0 100%',
-  //   '100% 0, 100% 100%, 0 100%'
-  // ));
-  // `;
+// const FancyDoodle = doodle`
+// :doodle {
+//   @grid: 2 / 4vmax;
+//   // background: ${primaryColor};
+// }
+// --hue: calc(180 + 1.5 * @row * @col);
+// background: hsl(var(--hue), 50%, 70%);
+// margin: -.2px;
+// transition: @r(.5s) ease;
+// clip-path: polygon(@pick(
+//   '0 0, 100% 0, 100% 100%',
+//   '0 0, 100% 0, 0 100%',
+//   '0 0, 100% 100%, 0 100%',
+//   '100% 0, 100% 100%, 0 100%'
+// ));
+// `;
 
-  // const FancyDoodle = doodle`
-  //   @grid: 8 / 16em;
-  //   background: linear-gradient(
-  //     @rand(360deg),
-  //     @stripe(${primaryColor!}, ${secondaryColor!}, ${color!})
-  //   );
-  // `;
+// const FancyDoodle = doodle`
+//   @grid: 8 / 16em;
+//   background: linear-gradient(
+//     @rand(360deg),
+//     @stripe(${primaryColor!}, ${secondaryColor!}, ${color!})
+//   );
+// `;
 
-  // const FancyDoodle = doodle`
-  // @grid: 1 / 100% 100%;
-  // background-size: 42% 80%;
-  // background-color: ${color!};
-  // background-image: @doodle(
-  //   @grid: 2 / 100%;
-  //   background: @pn(${primaryColor!}, ${secondaryColor!}, );
-  //   transform-origin:
-  //     @pn(100% 100%, 0 100%, 100% 0, 0 0);
-  //   transform:
-  //     rotateX(45deg)
-  //     skewY(@pn(34deg, -34deg, -34deg));
-  // );
-  // `;
+// const FancyDoodle = doodle`
+// @grid: 1 / 100% 100%;
+// background-size: 42% 80%;
+// background-color: ${color!};
+// background-image: @doodle(
+//   @grid: 2 / 100%;
+//   background: @pn(${primaryColor!}, ${secondaryColor!}, );
+//   transform-origin:
+//     @pn(100% 100%, 0 100%, 100% 0, 0 0);
+//   transform:
+//     rotateX(45deg)
+//     skewY(@pn(34deg, -34deg, -34deg));
+// );
+// `;

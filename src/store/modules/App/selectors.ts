@@ -83,3 +83,30 @@ export const getAvatarProperties = createSelector(
   [({ app: { avatarProperties } }: RootStoreType) => avatarProperties],
   avatarProperties => avatarProperties
 );
+export const getHeaderHeight = createSelector(
+  [({ app: { headerHeight } }: RootStoreType) => headerHeight],
+  headerHeight => headerHeight
+);
+export const getUserData = createSelector([({ app: { userData } }: RootStoreType) => userData], userData => userData);
+
+export const getGlobalEventListTemproparyData = createSelector(
+  [
+    ({
+      app: {
+        temporaryData: { globalEventList }
+      }
+    }: RootStoreType) => globalEventList
+  ],
+  globalEventList => globalEventList
+);
+
+export const getGlobalLabelListTemproparyData = createSelector(
+  [
+    ({
+      app: {
+        temporaryData: { globalLabelList }
+      }
+    }: RootStoreType) => globalLabelList
+  ],
+  globalLabelList => globalLabelList
+);

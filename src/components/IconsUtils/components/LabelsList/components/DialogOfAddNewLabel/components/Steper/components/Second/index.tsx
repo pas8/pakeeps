@@ -1,5 +1,4 @@
 import { FormControlLabel, Switch } from '@material-ui/core';
-import PropTypes from 'prop-types';
 import { FC } from 'react';
 
 const SecondStepOfSteperOfDialogOfAddNewLabel: FC<any> = switchProps => (

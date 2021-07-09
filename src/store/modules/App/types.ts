@@ -28,6 +28,12 @@ export type PayloadTypes = {
   [TypeNames.HANDLE_CHANGE_AVATAR_PROPERTIES]: {
     avatarProperties: AvatarPropertiesType;
   };
+  [TypeNames.HANDLE_CHANGE_AVATAR_PROPERTIES]: {
+    avatarProperties: AvatarPropertiesType;
+  };
+  [TypeNames.HANDLE_CHANGE_HEADER_HEIGTH]: {
+    headerHeight: number;
+  };
 
   [TypeNames.HANDLE_SET_DRAWER_WIDTH]: { drawerWidth: DrawerWidthType };
   [TypeNames.HANDLE_ADD_NEW_GLOBAL_LABEL]: { newLabel: ILabelElement };
@@ -40,18 +46,47 @@ export type PayloadTypes = {
   [TypeNames.HANDLE_CHANGE_SELECTED_PAKEEPS_PROPERTY]: { newPakeeps: PakeepsType };
   [TypeNames.HANDLE_CHANGE_PAKEEP_PROPERTY]: {
     pakeepId: PakeepIdType;
-    properyName: PakeepPropertyKeysType;
-  };
-  [TypeNames.HANDLE_CHANGE_PAKEEP_CUSTOM_PROPERTY]: {
-    pakeepId: PakeepIdType;
     property: PakeepPropertyType;
   };
   [TypeNames.HANDLE_CHANGE_THEME_COLORS]: { newThemeColors: DefaultThemeInterface };
 
   [TypeNames.HANDLE_CHANGE_TEMPORARY_DATA]: { newTemporaryData: Optional<TemporaryDatatype> };
+
+  [TypeNames.HANDLE_CHANGE_USER_DATA]: { userData: UserDataType };
+
+  [TypeNames.HANDLE_CHANGE_GLOBAL_LABEL_LIST_TEMPROPARY_DATA]: { globalLabelList: LabelsOfPakeepType };
+  [TypeNames.HANDLE_CHANGE_GLOBAL_EVENT_LIST_TEMPROPARY_DATA]: { globalEventList: EventsOfPakeepType };
+
+  [TypeNames.HANDLE_ADD_GLOBAL_EVENT]: { newEvent: IGlobalEvent };
+  [TypeNames.HANDLE_DELETE_GLOBAL_LABEL]: { labelId: LabelIdType };
+  [TypeNames.HANDLE_EDIT_PAKEEP]: { editedPakeep: PakeepElementType };
+  [TypeNames.HANDLE_CHANGE_PAKEEP_CUSTOM_PROPERTY]: {
+    propertyName: DefaultFolderElementPropertyNamesType;
+    pakeepId: PakeepIdType;
+  };
 };
 
 export type ActionsValueTypes = {
+  toEditPakeep: {
+    type: typeof TypeNames.HANDLE_EDIT_PAKEEP;
+    payload: PayloadTypes[TypeNames.HANDLE_EDIT_PAKEEP];
+  };
+  toDeleteGlobalLabel: {
+    type: typeof TypeNames.HANDLE_DELETE_GLOBAL_LABEL;
+    payload: PayloadTypes[TypeNames.HANDLE_DELETE_GLOBAL_LABEL];
+  };
+  toAddGlobalEvent: {
+    type: typeof TypeNames.HANDLE_ADD_GLOBAL_EVENT;
+    payload: PayloadTypes[TypeNames.HANDLE_ADD_GLOBAL_EVENT];
+  };
+  toChangeUserData: {
+    type: typeof TypeNames.HANDLE_CHANGE_USER_DATA;
+    payload: PayloadTypes[TypeNames.HANDLE_CHANGE_USER_DATA];
+  };
+  toChangeHeaderHeigth: {
+    type: typeof TypeNames.HANDLE_CHANGE_HEADER_HEIGTH;
+    payload: PayloadTypes[TypeNames.HANDLE_CHANGE_HEADER_HEIGTH];
+  };
   toChangeAvatarProperties: {
     type: typeof TypeNames.HANDLE_CHANGE_AVATAR_PROPERTIES;
     payload: PayloadTypes[TypeNames.HANDLE_CHANGE_AVATAR_PROPERTIES];
@@ -59,10 +94,6 @@ export type ActionsValueTypes = {
   toChangeTemporaryData: {
     type: typeof TypeNames.HANDLE_CHANGE_TEMPORARY_DATA;
     payload: PayloadTypes[TypeNames.HANDLE_CHANGE_TEMPORARY_DATA];
-  };
-  toChangePakeepCustomProperty: {
-    type: typeof TypeNames.HANDLE_CHANGE_PAKEEP_CUSTOM_PROPERTY;
-    payload: PayloadTypes[TypeNames.HANDLE_CHANGE_PAKEEP_CUSTOM_PROPERTY];
   };
 
   ToAddNewPakep: {
@@ -164,9 +195,23 @@ export type ActionsValueTypes = {
     payload: PayloadTypes[TypeNames.HANDLE_CHANGE_PAKEEP_PROPERTY];
   };
 
+  ToChangeGlobalLabelListTemproparyData: {
+    type: typeof TypeNames.HANDLE_CHANGE_GLOBAL_LABEL_LIST_TEMPROPARY_DATA;
+    payload: PayloadTypes[TypeNames.HANDLE_CHANGE_GLOBAL_LABEL_LIST_TEMPROPARY_DATA];
+  };
+
+  toChangeGlobalEventListTemproparyData: {
+    type: typeof TypeNames.HANDLE_CHANGE_GLOBAL_EVENT_LIST_TEMPROPARY_DATA;
+    payload: PayloadTypes[TypeNames.HANDLE_CHANGE_GLOBAL_EVENT_LIST_TEMPROPARY_DATA];
+  };
+
   ToChangeThemeColors: {
     type: typeof TypeNames.HANDLE_CHANGE_THEME_COLORS;
     payload: PayloadTypes[TypeNames.HANDLE_CHANGE_THEME_COLORS];
+  };
+  toChangePakeepCustomProperty: {
+    type: typeof TypeNames.HANDLE_CHANGE_PAKEEP_CUSTOM_PROPERTY;
+    payload: PayloadTypes[TypeNames.HANDLE_CHANGE_PAKEEP_CUSTOM_PROPERTY];
   };
 };
 export type AppActionTypes = $Values<ActionsValueTypes>;
@@ -183,20 +228,21 @@ export type useHooksTypes = {
     propertyValue?: any;
     pakeeps: PakeepsType;
   };
+
+  [TypeNames.HANDLE_CHANGE_PAKEEP_PROPERTY]: {
+    pakeepId: PakeepIdType;
+    pakeeps: PakeepsType;
+    property: PakeepPropertyType;
+  };
   [TypeNames.HANDLE_DELETE_PAKEEP]: {
     pakeepId: PakeepIdType;
     pakeeps: PakeepsType;
   };
 
-  [TypeNames.HANDLE_CHANGE_PAKEEP_CUSTOM_PROPERTY]: {
-    pakeepId: PakeepIdType;
-    property: any;
-    pakeeps: PakeepsType;
-  };
 };
 export type OnlyPakeepReturnType = { pakeeps: PakeepsType };
 // export type ActionWithOnlyPayloadType<T> = (payload: T) => AppActionTypes;
-
+export type PakeepPropertyType = Optional<PakeepElementType>;
 export type ColorType = 'default' | string;
 export type LabelVariantType = 'default' | 'outlined';
 export type IconNameType = string;
@@ -210,15 +256,16 @@ export interface IGlobalEvent {
   id: string;
   value: EventyValueType;
   onlyTime?: boolean;
+  variant: LabelVariantType;
   color: string;
-  isFolderIsPlaceholder?:boolean
+  isFolderIsPlaceholder?: boolean;
 }
 
 export interface DefaultFolderElementInterface {
   title: TitleType;
   iconName?: string;
   id: string;
-  route?:string;
+  route?: string;
   color?: ColorType;
   property?: string;
 }
@@ -244,22 +291,28 @@ export type EventOfPakeepType = { id: EventIdType; value: EventyValueType };
 
 export type EventsOfPakeepType = EventOfPakeepType[];
 
-export type TitleOfPakeepType = string;
-export type TextOfPakeepType = string;
+export type TitleOfPakeepType = string | string[];
+export type TextOfPakeepType = string | string[];
 
 export type TitleAndTextOfPakeepType = {
   title: TitleOfPakeepType;
   text: TextOfPakeepType;
 };
 
+export type CheckBoxElementType = { color: ColorType; value: string; isAccomplished: boolean; id: string };
+export type CheckBoxesArrtype = CheckBoxElementType[];
+
+export type DefaultPakeepElementType = {
+  color: ColorType;
+  labels: LabelsOfPakeepType;
+  events: EventsOfPakeepType;
+  readonly id: PakeepIdType;
+  backgroundColor: ColorType;
+};
+
 export type PakeepElementType = DefaultFolderElementPropertyType &
-  TitleAndTextOfPakeepType & {
-    color: ColorType;
-    labels: LabelsOfPakeepType;
-    events: EventsOfPakeepType;
-    readonly id: PakeepIdType;
-    backgroundColor: ColorType;
-  };
+  TitleAndTextOfPakeepType &
+  DefaultPakeepElementType & { checkBoxes: CheckBoxesArrtype };
 
 export interface ILabelElement {
   color: ColorType;
@@ -295,18 +348,25 @@ export type AvatarPropertiesType = {
   backgroundColor: string;
 };
 
+export type UserDataType = {
+  email: string;
+  userName: string;
+  name: string;
+};
+
 export interface AppInitialStateInteface {
   // breakpointsValues: BreakpointsValuesInterface<number>;
   // theme: DefaultThemeInterface;
   defaultFolderArr: DefaultFolderArrType;
 
   avatarProperties: AvatarPropertiesType;
-
+  headerHeight: number;
   labels: GlobalLabelsType;
   events: GlobalEventsType;
   selectedPakeepsId: SelectedPakeepsIdType;
   folders: FoldersType;
   pakeeps: PakeepsType;
+  userData: UserDataType;
   pakeepsOrderNames: OrderNamesType;
   pinnedPakeepsOrderNames: OrderNamesType;
   notifinationCounter: number;
@@ -320,8 +380,6 @@ export interface AppInitialStateInteface {
 export type PakeepPropertyValueType = $Values<PakeepElementType>;
 export type PakeepPropertyKeysType = $Keys<PakeepElementType>;
 
-export type PakeepPropertyType = { [Property in PakeepPropertyKeysType]?: PakeepPropertyValueType };
-
 export type OperateWOP<N> = (payload: N) => void;
 
 export type TemporaryDatatype = {
@@ -333,6 +391,8 @@ export type TemporaryDatatype = {
   labelItem: {
     id: string;
   };
+  globalLabelList: LabelsOfPakeepType;
+  globalEventList: EventsOfPakeepType;
 };
 
 export type DefaultMenuPropsType = {

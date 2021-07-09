@@ -1,4 +1,5 @@
-import { SettingsInitialStateType } from './types';
+import { TypeNames } from './enums';
+import { SettingsActionTypes, SettingsInitialStateType } from './types';
 
 const settingsInitialState: SettingsInitialStateType = {
   viewOfThemeChangerButton: 'iconButton', // 'iconButton' ||  'switch'
@@ -6,20 +7,32 @@ const settingsInitialState: SettingsInitialStateType = {
   isUtilsHaveViewLikeInGoogleKeep: true,
   timeFormat: 'hh:mm',
   timeAndDateFromat: 'yyyy / MM / dd / hh:mm',
-  isHeaderHavePaperColor:!true ,
+  isHeaderHavePaperColor: !true,
   navigationViewLike: 'pakeeps', //'telegram' || 'googleKeep' || 'pakeeps'
   positionOfFolderViewWithPakeepView: 'left', //'left' || 'bottom' || 'right'
   isFolderViewWithPakeepViewAlignToCenter: !true,
-  isMenuHaveGitHubView:!true
+  isMenuHaveGitHubView: !true
 };
 
-// const settingsReducer = createReducer(settingsInitialState)({
-// [types.VIEW_OF_THEME_CHANGER_BUTTON]: (state, { data }) => ({ ...state, viewOfThemeChangerButton: data }),
-// [types.MAX_SNACK_VALUE]: (state, { snackNumber }) => ({ ...state, maxSnack: snackNumber })
-// });
+export const SettingsReducer = (
+  state = settingsInitialState,
+  action: SettingsActionTypes
+): SettingsInitialStateType => {
+  switch (action.type) {
+    // case TypeNames.HANDLE_CHANGE_ANONYMOUS_STATUS: {
+    //   const { newThemeColors } = action.payload;
 
-export const SettingsReducer = (state = settingsInitialState, action: any): any => {
-  return state;
+    //   const theme = { ...state.theme, ...newThemeColors };
+    //   return { ...state, theme };
+    // }
+    case TypeNames.HANDLE_SETTING_PROPERTY:
+      return { ...state, ...action.payload.property };
+    // case TypeNames.HANDLE_SETTING_PROPERTY:
+    //   return { ...state, ...action.payload };
+
+    default:
+      return state;
+    //@ts-ignore
+    // const x: never = action;
+  }
 };
-
-// export default settingsReducer;

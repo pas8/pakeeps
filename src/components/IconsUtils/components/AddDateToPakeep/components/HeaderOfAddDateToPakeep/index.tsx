@@ -17,7 +17,7 @@ const useStyles = makeStyles(({ palette: { mediumEmphasis } }) => ({
   }),
   titleClass: {
     color: ({ customColor }: UseStylesOfHeaderOfAddDateToPakeepType) =>
-      useAlpha(customColor.isUseDefault ? mediumEmphasis?.main : customColor?.hover, 0.8)
+      useAlpha(customColor.isUseDefault ? mediumEmphasis?.main! : customColor?.hover!, 0.8)
   }
 }));
 
@@ -40,7 +40,7 @@ const HeaderOfAddDateToPakeep: FC<HeaderOfAddDateToPakeepPropsType> = ({
           <IconButtonByPas
             icon={ArrowBackOutlinedIcon}
             onClick={arrowButtonFunc}
-            activeProperty={Boolean(!buttonSaveState)}
+            // activeProperty={Boolean(!buttonSaveState)}
             customColor={customColor}
           />
           <Grid>
