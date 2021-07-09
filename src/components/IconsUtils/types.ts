@@ -83,6 +83,9 @@ export type IconUtilElementOptionalPropertyiesType = {
   hidden?: boolean;
 };
 
+
+
+
 export type IconUtilElementType = { icon: IconType } & IconUtilElementOptionalPropertyiesType &
   IconsUtilsArrDenotationType;
 

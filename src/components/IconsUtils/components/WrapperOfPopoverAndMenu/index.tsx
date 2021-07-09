@@ -65,10 +65,9 @@ const WrapperOfPopoverAndMenu: FC<WrapperOfPopoverAndMenuType> = ({
 
           const iconName = isIconNameExtended ? { keyName, buttonUtilsName } : buttonUtilsName;
 
-          const isArctiveIconPresent = customColor && isIconActive && !!ActiveIcon;
+          const isArctiveIconPresent = !customColor.isUseDefault && isIconActive && !!ActiveIcon;
           const icon = isArctiveIconPresent ? ActiveIcon : Icon;
           const popoverText = isIconActive ? activePopoverText : notActivePopoverText;
-
           const iconButtonProps = {
             icon,
             isArctiveIconPresent,

@@ -22,7 +22,66 @@ import { useMeasure } from 'react-use';
 const useStyles = makeStyles(({ spacing, transitions, breakpoints, palette }) => ({
   '@global': {
     body: {
-      background: palette.background.default
+      minHeight: '80vh',
+      overflow: 'visible !important',
+      overflowX: 'hidden !important',
+      background: palette.background.default,
+      padding: '0 !important',
+      scrollBehavior: 'smooth'
+    },
+
+    a: {
+      color: 'inherit',
+      textDecoration: 'none'
+    },
+
+    '*': {
+      boxSizing: 'border-box',
+      padding: 0,
+      margin: 0,
+
+      '&::-webkit-scrollbar': {
+        height: '0.42em',
+        width: '0.42em',
+      },
+      '&::-webkit-scrollbar-track': {
+        border: 'none',
+        background: 'transparent'
+      },
+      '&::-webkit-scrollbar-thumb': {
+        backgroundColor: 'rgba(255, 255, 255, 0.4)',
+        borderRadius: '2em'
+      },
+
+      '&::-webkit-scrollbar-thumb:hover': {
+        backgroundColor: 'rgba(255, 255, 255, 0.8)'
+      }
+    },
+    ul: {
+      padding: ' 0 !important'
+    },
+
+    '.MuiBackdrop-root': {
+      backdropFilter: 'blur(4px)'
+    },
+
+    // .MuiPickersCalendarHeader-switchHeader svg {
+    //   transform: rotate(180deg);
+    // }
+    ' .MuiPickersModal-dialogRoot': {
+      transform: 'scale(1.08)'
+    },
+
+    '.MuiSkeleton-root': {
+      backgroundColor: 'rgba(255, 255, 255, 0.08) !important'
+    },
+
+    // .MuiPickersTimePickerToolbar-hourMinuteLabelReverse {
+    //   flex-direction: row !important;
+    // }
+
+    '.MuiPopover-paper': {
+      overflow: 'visible !important'
     }
   },
   container: {
@@ -33,7 +92,7 @@ const useStyles = makeStyles(({ spacing, transitions, breakpoints, palette }) =>
   content: {
     flexGrow: 1,
     marginTop: ({ headerHeight }: any) => headerHeight,
-    padding: spacing(0,2.8),
+    padding: spacing(0, 2.8),
     transition: transitions.create('margin', {
       easing: transitions.easing.sharp,
       duration: transitions.duration.leavingScreen
@@ -41,10 +100,10 @@ const useStyles = makeStyles(({ spacing, transitions, breakpoints, palette }) =>
 
     // marginLeft: ({ isMenuNavigationHasDialogView, drawerWidth }) => isMenuNavigationHasDialogView && drawerWidth,
     [breakpoints.between('xs', 'sm')]: {
-      padding: spacing(0,1.8)
+      padding: spacing(0, 1.8)
     },
     [breakpoints.down('md')]: {
-      padding: spacing(0,2)
+      padding: spacing(0, 2)
     }
     // [breakpoints.down('sm')]: {
     //   padding: spacing(1.8),
@@ -93,15 +152,13 @@ const HeaderLayout: FC<LayoutChildrenType> = ({ children }) => {
     selectedPakeepsId
   };
 
-
-
   return (
     <Grid className={classes.container}>
-        {isShouldBeHeaderWhenActiveSelecto ? (
-          <HeaderWhenActiveSelecto {...headerWhenActiveSelectoProps} />
-        ) : (
-          <HeaderByPas {...headerByPasProps} />
-        )}
+      {isShouldBeHeaderWhenActiveSelecto ? (
+        <HeaderWhenActiveSelecto {...headerWhenActiveSelectoProps} />
+      ) : (
+        <HeaderByPas {...headerByPasProps} />
+      )}
       <main
         className={clsx(classes.content, {
           [classes.contentShift]: isMenuOpen

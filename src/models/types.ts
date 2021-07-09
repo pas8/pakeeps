@@ -1,3 +1,4 @@
+import { IconsUtilsPropsType } from './../components/IconsUtils/types';
 import { Optional } from 'utility-types';
 import {
   CheckBoxesArrtype,
@@ -49,7 +50,8 @@ export type SelectedPakeepsIdType = PakeepIdType[];
 
 export type UseSlicedType = (
   widthOfContainer?: number,
-  arrWhichShouldBeSliced?: IconsUtilsArrType
+  arrWhichShouldBeSliced?: IconsUtilsArrType,
+  dependency?: IconsUtilsPropsType
 ) => [slicedArr: NullityOfSlicedArrType, isShouldBeSliced: boolean, handleConcatAverageWidth: (value: number) => void];
 
 export type UsePropertiesToUtilsType = (
@@ -120,9 +122,7 @@ export type UseFindCurrentEventsType = (
   timeAndDateFromat: TimeAndDateFromatType
 ) => CurrentEventsArrType | null;
 
-export type UsePakeepUtilsFuncType = (
-  pakeepId: PakeepIdType,
-) => IconsUtilsFunctionType;
+export type UsePakeepUtilsFuncType = (pakeepId: PakeepIdType) => IconsUtilsFunctionType;
 
 export type UseFindPakeepUsingIdType = (id: PakeepIdType) => PakeepElementType | null;
 

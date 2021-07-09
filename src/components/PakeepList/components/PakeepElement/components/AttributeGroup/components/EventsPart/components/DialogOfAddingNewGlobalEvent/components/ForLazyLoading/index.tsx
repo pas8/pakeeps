@@ -130,7 +130,6 @@ const ForLazyLoadingDialogOfAddingNewGlobalEvent: FC<DialogOfAddingNewGlobalEven
   const handleChangeEventColor = (color: ColorType) => {
     setEventState(state => ({ ...state, color }));
   };
-  console.log(eventState.variant);
   const isEventOutlined = eventState.variant === OUTLINED;
   const onChangeOfEventVariantSwitch = () => {
     const variant = isEventOutlined ? DEFAULT : OUTLINED;

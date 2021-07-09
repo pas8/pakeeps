@@ -8,6 +8,7 @@ import { DEFAULT } from 'models/denotation';
 import { useTakeIcon } from 'hooks/useTakeIcon.hook';
 import { useGetReversedCustomColor } from 'hooks/useGetReversedCustomColor.hook';
 import { useValidatedCurrentEvents } from 'hooks/useValidatedCurrentEvents.hook';
+import { CustomColorType } from 'models/types';
 import PreviewEventList from 'components/PakeepList/components/PakeepElement/components/AttributeGroup/components/EventsPart/components/PreviewEventList';
 import { DialogOfAddingNewGlobalEvent } from 'components/PakeepList/components/PakeepElement/components/AttributeGroup/components/EventsPart/components/DialogOfAddingNewGlobalEvent';
 import {
@@ -22,9 +23,9 @@ import DynamicInputDateAndTimePickers from './components/DynamicComponents/compo
 import DynamicMenuItem from './components/DynamicMenuItem';
 
 const useStyles = makeStyles(({ spacing, shape: { borderRadius } }) => ({
-  container: ({ color }: any) => ({
+  container: ({ color }: { color: CustomColorType }) => ({
     borderRadius,
-    background: color.unHover
+    background: !color.isUseDefault ? color.unHover : ''
   })
 }));
 
