@@ -1,4 +1,4 @@
-import { Grid, Typography,  makeStyles } from '@material-ui/core';
+import { Grid, Typography, makeStyles } from '@material-ui/core';
 import { useHover } from 'react-use';
 import clsx from 'clsx';
 import { FC, MouseEventHandler, useState } from 'react';
@@ -15,6 +15,7 @@ import { useAlpha } from 'hooks/useAlpha.hook';
 import { useContrastText } from 'hooks/useContrastText.hook';
 import { useRandomColor } from 'hooks/useRandomColor.hook';
 import { PickerOfThemeColorPropsType } from './types';
+import { customColorPlaceholder } from 'components/AccountAvatar';
 
 const useStyles = makeStyles(({ spacing, palette, breakpoints, shape: { borderRadius } }) => ({
   colorPaletteContainer: {
@@ -22,7 +23,7 @@ const useStyles = makeStyles(({ spacing, palette, breakpoints, shape: { borderRa
 
     '@media  (max-width: 480px)': {
       '& .advancedButton': {
-        marginTop:spacing(0.8),
+        marginTop: spacing(0.8),
         width: '100% !important'
       },
       '& .randomThemeButton,.extendButton': {
@@ -213,7 +214,7 @@ const PickerOfThemeColor: FC<PickerOfThemeColorPropsType> = ({
                 key={`${title}-${id}`}
                 isExtended={isExtended}
                 colorName={colorName}
-                customColor={false}
+                customColor={customColorPlaceholder}
               />
             );
           })}
