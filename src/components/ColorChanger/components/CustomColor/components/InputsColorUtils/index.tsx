@@ -1,38 +1,33 @@
 import clsx from 'clsx';
-import RemoveOutlinedIcon from '@material-ui/icons/RemoveOutlined';
-import AddOutlinedIcon from '@material-ui/icons/AddOutlined';
-import { ToggleButton, ToggleButtonGroup } from '@material-ui/lab';
-import {
-  FilledInput,
-  FormControl,
-  Grid,
-  InputAdornment,
-  InputLabel,
-  makeStyles,
-  OutlinedInput,
-  TextField,
-  Typography
-} from '@material-ui/core';
-import { memo, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import { FormControl, Grid, InputLabel, makeStyles, OutlinedInput } from '@material-ui/core';
+import { ChangeEventHandler, FC, FocusEventHandler, memo, useEffect, useMemo, useRef, useState } from 'react';
 import lchPlugin from 'colord/plugins/lch';
-import { colord, extend } from 'colord';
-import _, { sum } from 'lodash';
-import NumberAdornment from '../NumberAdornment';
-import { useClickAway, useCustomCompareEffect, useDebounce, useUpdateEffect } from 'react-use';
-import { nanoid } from 'nanoid';
+import { AnyColor, colord, extend, RgbaColor } from 'colord';
+import _ from 'lodash';
+import { useClickAway } from 'react-use';
 import { useBreakpointNames } from 'hooks/useBreakpointNames.hook';
+import {
+  ColorOfInputsUtils,
+  FormatType,
+  InputsColorUtilsOfCustomColorPickerPropsType,
+  OnChangeOfCustomFormatStateType,
+  UseStylesOfInputsColorUtilsOfCustomColorPickerType
+} from './types';
+import NumberAdornment from '../NumberAdornment';
 
 const useStyles = makeStyles(({ spacing, breakpoints }) => ({
-  textFieldInHexFormat: ({ isInputsHaveSameGap, colorInHexFormat }) => ({
+  textFieldInHexFormat: ({
+    isInputsHaveSameGap,
+    colorInHexFormat
+  }: UseStylesOfInputsColorUtilsOfCustomColorPickerType) => ({
     width: spacing(isInputsHaveSameGap ? 18 : 8 + 4 + 2),
-
 
     marginRight: spacing(isInputsHaveSameGap ? 1.4 : 4 + 1.4),
 
     [breakpoints.down('xs')]: {
       width: '100%',
 
-      marginRight: spacing(0),
+      marginRight: spacing(0)
     },
 
     '& .MuiFormLabel-root.Mui-focused ': { color: colorInHexFormat },
@@ -47,8 +42,8 @@ const useStyles = makeStyles(({ spacing, breakpoints }) => ({
     [breakpoints.down('xs')]: {
       width: '100%',
 
-      marginRight: spacing(0),
-    },
+      marginRight: spacing(0)
+    }
   },
   textField: {
     width: spacing(12),
@@ -86,36 +81,45 @@ const useStyles = makeStyles(({ spacing, breakpoints }) => ({
       width: '32%'
     }
   },
-  containerOfInputsGroupOfCustomFormatColor: {
+  containerOfInputsGroupOfCustomFormatColor: ({
+    colorInHexFormat
+  }: UseStylesOfInputsColorUtilsOfCustomColorPickerType) => ({
     gap: spacing(1.4),
     [breakpoints.down('xs')]: {
       gap: spacing(0),
-      marginTop: spacing(1.8),
+      marginTop: spacing(1.8)
     },
     width: '100%',
 
-    '& .MuiFormLabel-root.Mui-focused ': { color: ({ colorInHexFormat }) => colorInHexFormat },
+    '& .MuiFormLabel-root.Mui-focused ': { color: colorInHexFormat },
     '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
-      borderColor: ({ colorInHexFormat }) => colorInHexFormat
+      borderColor: colorInHexFormat
     }
-  }
+  })
 }));
 
-const toCorrectFormat = (colorToFormatted, format) => {
+export enum formats {
+  RGB = 'rgb',
+  HSL = 'hsl',
+  HSV = 'hsv',
+  LCH = 'lch'
+}
+
+const toCorrectFormat = (colorToFormatted: ColorOfInputsUtils, format: FormatType) => {
   const color = colord(colorToFormatted);
   extend([lchPlugin]);
 
   switch (format) {
-    case 'rgb':
+    case formats.RGB:
       return color.toRgb();
 
-    case 'hsl':
+    case formats.HSL:
       return color.toHsl();
 
-    case 'hsv':
-      return color.toHsl();
+    case formats.HSV:
+      return color.toHsv();
 
-    case 'lch':
+    case formats.LCH:
       return color.toLch();
 
     default:
@@ -123,7 +127,7 @@ const toCorrectFormat = (colorToFormatted, format) => {
   }
 };
 
-const InputsColorUtilsOfCustomColorPicker = ({
+const InputsColorUtilsOfCustomColorPicker: FC<InputsColorUtilsOfCustomColorPickerPropsType> = ({
   color,
   setColor,
   colorInHexFormat,
@@ -133,10 +137,10 @@ const InputsColorUtilsOfCustomColorPicker = ({
   focusOfPicker,
   isHexInputHidden,
   isCustomFormatInputHidden,
-  inputColor = false,
+  inputColor = '',
   isUseAlpha = true
 }) => {
-  const classes = useStyles({ colorInHexFormat: inputColor || colorInHexFormat, isInputsHaveSameGap });
+  const classes = useStyles({ colorInHexFormat: !!inputColor ? inputColor : colorInHexFormat, isInputsHaveSameGap });
   const colorInCorrectFormat = toCorrectFormat(color, customFormatName);
 
   const { isSiveIsXs } = useBreakpointNames();
@@ -174,22 +178,22 @@ const InputsColorUtilsOfCustomColorPicker = ({
 
   const [hexColor, setHexColor] = useState(colorInHexFormat);
   const [customFormatState, setCustomFormatState] = useState(colorInCorrectFormatArr);
-  const [customFormatElementFocusStatus, setCustomFormatElementFocus] = useState(false);
+  const [customFormatElementFocusStatus, setCustomFormatElementFocus] = useState('');
 
-  const onChangeOfColorInHexFormat = ({ target: { value } }) => {
+  const onChangeOfColorInHexFormat: ChangeEventHandler<HTMLInputElement> = ({ target: { value } }) => {
     setHexColor(value);
     setCustomFormatState(_.valuesIn(toCorrectFormat(value, customFormatName)));
   };
   // console.log(colorInHexFormat)
 
   // console.log(colorInHexFormat)
-  const onChangeOfCustomFormatState = ({ target: { value, name: idx } }) => {
-    const maxLength = currentCustomFormatInputsGroupArr[idx].maxLength;
+  const onChangeOfCustomFormatState: OnChangeOfCustomFormatStateType = ({ target: { value, name: idx } }) => {
+    const maxLength = currentCustomFormatInputsGroupArr[+idx].maxLength;
     const isValid = maxLength >= +value;
 
     const currentValue = isValid ? value : maxLength;
     const clonedCustomFormatState = _.clone(customFormatState);
-    clonedCustomFormatState.splice(idx, 1, currentValue);
+    clonedCustomFormatState.splice(+idx, 1, +currentValue);
     // setHexColor()
     setCustomFormatState(clonedCustomFormatState);
     setHexColor(colord(useFromCustomFormatToCorrectFormat(clonedCustomFormatState)).toHex());
@@ -220,8 +224,9 @@ const InputsColorUtilsOfCustomColorPicker = ({
   //   !focusOfPicker && console.log('focusOfPicker is' + focusOfPicker);
   // }, [colorInHexFormat, gradientStatus, color]);
 
-  const useFromCustomFormatToCorrectFormat = arr => {
+  const useFromCustomFormatToCorrectFormat = (arr: number[]): AnyColor => {
     const colorIsCorrectFormatObj = _.mapKeys(arr, (el, idx) => correctFormatName[idx]);
+    //@ts-ignore
     return colorIsCorrectFormatObj;
   };
 
@@ -231,9 +236,10 @@ const InputsColorUtilsOfCustomColorPicker = ({
     setColor(colordWhichShouldBeSet);
   }, [customFormatName, customFormatState]);
 
-  const onInputFocus = ({ target: { name } }) => setCustomFormatElementFocus(name);
-  const onButtonClick = name => console.log(name);
-  const onInputBlur = () => setCustomFormatElementFocus(false);
+  const onInputFocus: FocusEventHandler<HTMLInputElement> = ({ target: { name } }) => {
+    setCustomFormatElementFocus(name);
+  };
+  const onInputBlur = () => setCustomFormatElementFocus('');
 
   const inputInHexFormatProps = useMemo(
     () => ({
@@ -254,7 +260,7 @@ const InputsColorUtilsOfCustomColorPicker = ({
   );
 
   const refOfCustomFormatElementFocus = useRef(null);
-  useClickAway(refOfCustomFormatElementFocus, () => setCustomFormatElementFocus(false));
+  useClickAway(refOfCustomFormatElementFocus, () => onInputBlur());
 
   return (
     <Grid className={classes.containerOfInputsOfColorPicker} container ref={refOfCustomFormatElementFocus}>
@@ -263,7 +269,8 @@ const InputsColorUtilsOfCustomColorPicker = ({
           <FormControl
             variant={'outlined'}
             className={clsx(
-              (customFormatElementFocusStatus && customFormatElementFocusStatus !== 'hex') || isCustomFormatInputHidden
+              (!!customFormatElementFocusStatus && customFormatElementFocusStatus !== 'hex') ||
+                isCustomFormatInputHidden
                 ? classes.removeMarginFromTextFieldInHexFormat
                 : classes.textFieldInHexFormat
             )}
@@ -280,7 +287,6 @@ const InputsColorUtilsOfCustomColorPicker = ({
             {currentCustomFormatInputsGroupArr.map(({ maxLength, shotName, name }, idx) => {
               const isFocused = customFormatElementFocusStatus === `${idx}`;
               const currentLabelName = isFocused || isSiveIsXs ? name : shotName;
-              const onClick = () => onButtonClick(name);
               const labelWidth = currentLabelName.length * 9.6;
 
               const handleIncrement = () => {
@@ -295,7 +301,7 @@ const InputsColorUtilsOfCustomColorPicker = ({
               const outlinedInputProps = {
                 type: 'number',
                 onChange: onChangeOfCustomFormatState,
-                name: idx,
+                name: `${idx}`,
                 labelWidth,
                 value: customFormatState[idx],
                 endAdornment: isFocused ? (
@@ -315,7 +321,7 @@ const InputsColorUtilsOfCustomColorPicker = ({
                   onFocus={onInputFocus}
                   onBlur={onInputBlur}
                 >
-                  <InputLabel className={classes.toUpperCase}>{currentLabelName}</InputLabel>
+                  <InputLabel>{currentLabelName}</InputLabel>
                   <OutlinedInput {...outlinedInputProps} />
                 </FormControl>
               );

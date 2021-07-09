@@ -1,36 +1,27 @@
-import PropTypes from 'prop-types';
-import { useState } from 'react';
+import { useState, FC } from 'react';
 import { CircularProgress, Dialog, Grid, makeStyles } from '@material-ui/core';
-import _ from 'lodash';
-// import CustomColor from './components/CustomColor';
 import CustomGradient from './components/CustomGradient';
-
 import dynamic from 'next/dynamic';
-import { Skeleton } from '@material-ui/lab';
+import { ColorPickerByPasPropsType } from './types';
 
 const CustomColor = dynamic(() => import('./components/CustomColor'), {
-  loading: () => (
-    <Grid style={{ width: '200px', height: '300px' }}>
-      <CircularProgress color={'secondary'} />
-    </Grid>
-  )
+  loading: () => <CircularProgress />
 });
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles(({ transitions, spacing }) => ({
   container: {
-    transition: theme.transitions.create('all', {
-      easing: theme.transitions.easing.easeIn,
-      duration: theme.transitions.duration.complex
+    transition: transitions.create('all', {
+      easing: transitions.easing.easeIn,
+      duration: transitions.duration.complex
     }),
-    paddingBottom: theme.spacing(0.4),
+    paddingBottom: spacing(0.4),
     '& .MuiDialog-paperWidthSm': {
       maxWidth: '80vw'
     }
-    // overflowX: 'hidden'
   }
 }));
 
-const ColorPickerByPas = ({ handleSave, customColor }) => {
+const ColorPickerByPas: FC<ColorPickerByPasPropsType> = ({ handleSave, customColor }) => {
   const [gradientStatus, setGradientStatus] = useState(false);
   const classes = useStyles();
   const Container = gradientStatus ? Dialog : Grid;
@@ -44,7 +35,8 @@ const ColorPickerByPas = ({ handleSave, customColor }) => {
           customColor={customColor}
         />
       ) : (
-        <CustomGradient gradientStatus={gradientStatus} setGradientStatus={setGradientStatus} />
+        <></>
+        // <CustomGradient gradientStatus={gradientStatus} setGradientStatus={setGradientStatus} />
       )}
     </Container>
   );

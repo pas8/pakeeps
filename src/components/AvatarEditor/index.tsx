@@ -13,6 +13,7 @@ import ColorPickerByPas from 'components/ColorChanger';
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import { useCustomBreakpoint } from 'hooks/useCustomBreakpoint';
 import { useBreakpointNames } from 'hooks/useBreakpointNames.hook';
+import { customColorPlaceholder } from 'components/AccountAvatar';
 
 const useStyles = makeStyles(({ spacing, transitions, breakpoints, palette: { background } }) => ({
   utilsContainer: {
@@ -20,8 +21,7 @@ const useStyles = makeStyles(({ spacing, transitions, breakpoints, palette: { ba
 
     [breakpoints.down('sm')]: {
       margin: spacing(2, 0, 0, 0)
-    },
-
+    }
   },
   containerOfBgColorUtils: {
     margin: spacing(0, 0, 0, 4),
@@ -239,7 +239,10 @@ const AvatarEditorByPas: FC<AvatarEditorByPasPropsType> = ({
           )}
 
           {!!customColor && (
-            <ColorPickerByPas handleSave={handleSaveCustomColor} customColor={{ isUseDefault: true }} />
+            <ColorPickerByPas
+              handleSave={handleSaveCustomColor}
+              customColor={{ ...customColorPlaceholder, isUseDefault: true }}
+            />
           )}
         </Box>
       </Grid>
