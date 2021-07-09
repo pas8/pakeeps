@@ -12,6 +12,7 @@ import PreparedColorExamples from '../PreparedColorExamples';
 import PickerByPas from './components/Picker';
 import { CustomColorPropsType, UseStylesOfCustomColorType } from './types';
 import { FormatType } from './components/InputsColorUtils/types';
+import { HandleSetColorType } from '../PreparedColorExamples/types';
 
 const useStyles = makeStyles(theme => ({
   customColorContainer: {
@@ -93,7 +94,7 @@ const CustomColor: FC<CustomColorPropsType> = ({ gradientStatus, setGradientStat
 
   const onClickCustomizationButton = () => setStatusState(state => ({ ...state, customization: !state.customization }));
 
-  const handleSetColor = (value: string) => setColor(value);
+  const handleSetColor: HandleSetColorType = value => setColor(value);
 
   const onSave = () => {
     handleSave(colorInHexFormat);

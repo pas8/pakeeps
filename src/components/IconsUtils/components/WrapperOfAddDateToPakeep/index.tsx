@@ -1,13 +1,10 @@
-import { EventsListProps } from 'components/IconsUtils/types';
-import PakeepPropertyProvider from 'components/PakeepPropertyProviders';
-import { useCurrentEvents } from 'hooks/useCurrentEvents.hook';
-import { useFindCurrentEvents } from 'hooks/useFindCurrentEvents.hook';
-import { HandlePakeepEventsType } from 'models/types';
+
 import { FC } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import {  toChangePakeepProperty } from 'store/modules/App/actions';
+import {  useSelector } from 'react-redux';
 import { getGlobalEventsArr } from 'store/modules/App/selectors';
 import { getTimeAndDateFromat, getTimeFormat } from 'store/modules/Settings/selectors';
+import { EventsListProps } from 'components/IconsUtils/types';
+import { useFindCurrentEvents } from 'hooks/useFindCurrentEvents.hook';
 import AddDateToPakeep from '../AddDateToPakeep';
 import { WrapperOfAddDateToPakeepPropsType } from '../AddDateToPakeep/types';
 

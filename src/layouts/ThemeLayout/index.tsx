@@ -10,7 +10,9 @@ import mix from 'mix-color';
 import { mapValues } from 'lodash';
 import { useAlpha } from 'hooks/useAlpha.hook';
 
-const ThemeLayout = ({ children }: LayoutChildrenType) => {
+export type LayoutType = typeof ThemeLayout;
+
+const ThemeLayout = ({ children, ...props }: any) => {
   const { breakpointsValues, theme: themeColors, textColorCoefficients } = useSelector(getColor);
 
   const { xs, sm, md, lg, xl } = breakpointsValues;

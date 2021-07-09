@@ -16,7 +16,7 @@ const useStyles = makeStyles(({ spacing, palette: { secondary }, typography: { s
         '& legend': {
           padding: spacing(0, 1.6, 0.6, 1.6),
           color: !customColor.isUseDefault
-            ? useMix({ bgHover: customColor?.bgHover, hover: customColor?.hover }, 0.8)
+            ? useMix({...customColor, bgHover: customColor?.bgHover, hover: customColor?.hover }, 0.8)
             : ''
         },
         '& li,span': {
