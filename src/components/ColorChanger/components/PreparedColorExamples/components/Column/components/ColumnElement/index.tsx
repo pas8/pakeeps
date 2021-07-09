@@ -1,54 +1,68 @@
-import PropTypes from 'prop-types';
-import { colors, Grid, makeStyles, Paper } from '@material-ui/core';
-import DoneOutlineOutlinedIcon from '@material-ui/icons/DoneOutlineOutlined';
+import { FC } from 'react';
 import clsx from 'clsx';
 import _ from 'lodash';
+import { colors, Grid, makeStyles, Paper } from '@material-ui/core';
+import DoneOutlineOutlinedIcon from '@material-ui/icons/DoneOutlineOutlined';
 import CenteredGrid from 'components/CenteredGrid';
 import { useIsColorLight } from 'hooks/useIsColorLight.hook';
+import {
+  ColumnElementOfPreparedColorExamplesPropsType,
+  UseStylesOfColumnElementOfPreparedColorExamplesType
+} from 'components/ColorChanger/components/PreparedColorExamples/types';
+import { colord } from 'colord';
 
-const useStyles = makeStyles(theme => ({
+const DARK_COLOR = 'rgba(8,8,8,1)';
+const WHITE_COLOR = 'rgba(255,255,255,1)';
+
+const useStyles = makeStyles(({ spacing, transitions, shape: { borderRadius } }) => ({
   elementOfGridColorPicker: {
-    width: theme.spacing(16 * 0.42),
-    height: theme.spacing(16 * 0.42),
-    margin: theme.spacing(0.4),
+    width: spacing(16 * 0.42),
+    height: spacing(16 * 0.42),
+    margin: spacing(0.4),
     overflow: 'hidden',
     border: '1px solid',
-    borderColor: ({ isColorLight, isBgColorLight, customColor }) =>
-    isBgColorLight && !!customColor ? customColor?.bgUnHover : isColorLight ? 'rgba(8,8,8,1)' : 'rgba(255,255,255,1)',
+    borderColor: ({ isColorLight, isBgColorLight, customColor }: UseStylesOfColumnElementOfPreparedColorExamplesType) =>
+      isBgColorLight && !!customColor ? customColor?.bgUnHover : isColorLight ? DARK_COLOR : WHITE_COLOR,
 
-
-    transition: theme.transitions.create('border', {
-      easing: theme.transitions.easing.easeIn,
-      duration: theme.transitions.duration.leavingScreen
+    transition: transitions.create('border', {
+      easing: transitions.easing.easeIn,
+      duration: transitions.duration.leavingScreen
     }),
     cursor: 'pointer'
   },
   extendedElementOfGridColorPicker: {
-    width: theme.spacing((8 * 0.8) / 2),
-    height: theme.spacing((8 * 0.8) / 2)
+    width: spacing((8 * 0.8) / 2),
+    height: spacing((8 * 0.8) / 2)
 
-    // margin: theme.spacing(0.2),
+    // margin: spacing(0.2),
     // borderRadius: 0,
   },
   containerOfExtendedElementOfGridColorPicker: {
-    margin: theme.spacing(1.4),
-    borderRadius: '10px'
+    margin: spacing(1.4),
+    borderRadius
   },
   elementOfGridColorPickerWithBorder: {
-
-    transition: theme.transitions.create('border', {
-      easing: theme.transitions.easing.easeIn,
-      duration: theme.transitions.duration.enteringScreen
+    transition: transitions.create('border', {
+      easing: transitions.easing.easeIn,
+      duration: transitions.duration.enteringScreen
     }),
     '& svg': {
-      color: ({ isColorLight }) => (isColorLight ? 'rgba(8,8,8,1)' : 'rgba(255,255,255,1)')
+      color: ({ isColorLight }: UseStylesOfColumnElementOfPreparedColorExamplesType) =>
+        isColorLight ? DARK_COLOR : WHITE_COLOR
     }
   }
   // iconUtilsContainer: {
-  //   '& .MuiSvgIcon-root': { width: theme.spacing(2 / (0.8 - 0.1)) }
+  //   '& .MuiSvgIcon-root': { width: spacing(2 / (0.8 - 0.1)) }
   // },
 }));
-const ColumnElementOfPreparedColorExamples = ({ handleSetColor, isExtended, color, colorName, customColor }, idx) => {
+const ColumnElementOfPreparedColorExamples: FC<ColumnElementOfPreparedColorExamplesPropsType> = ({
+  handleSetColor,
+  isExtended,
+  color:notValidColor,
+  colorName,
+  customColor
+}) => {
+  const color = colord(notValidColor).toHex()
   const isColorLight = useIsColorLight(color);
   const isBgColorLight = useIsColorLight(customColor?.hover);
 
@@ -56,15 +70,18 @@ const ColumnElementOfPreparedColorExamples = ({ handleSetColor, isExtended, colo
   const namesOfPartsOfGridElement = [, ['A100', 'A200'], ['A400', 'A700']];
 
   const correctNamesOfPartsOfGridElementArr = _.flattenDeep(namesOfPartsOfGridElement);
+
   const isExtendedElementColorCorrect = correctNamesOfPartsOfGridElementArr.some(
+    //@ts-ignore
     name => colors[colorName][name] === color
   );
 
   const staticExtendedElement = (
     <Paper className={classes.elementOfGridColorPicker}>
-      {namesOfPartsOfGridElement.map(row => (
-        <Grid container>
-          {row.map(name => {
+      {namesOfPartsOfGridElement.map((row, index) => (
+        <Grid container key={`namesOfPartsOfGridElementContainer-${index}`}>
+          {row?.map((name, idx) => {
+            //@ts-ignore
             const colorOfElementOfPartsOfGridElementProps = colors[colorName][name];
             const onClick = () => handleSetColor(colorOfElementOfPartsOfGridElementProps);
 
@@ -75,7 +92,7 @@ const ColumnElementOfPreparedColorExamples = ({ handleSetColor, isExtended, colo
               },
 
               className: clsx(classes.extendedElementOfGridColorPicker),
-              key: idx
+              key: `namesOfPartsOfGridElement-row-${idx}`
             };
 
             return <Grid {...elementOfPartsOfGridElementProps} />;
@@ -85,14 +102,14 @@ const ColumnElementOfPreparedColorExamples = ({ handleSetColor, isExtended, colo
     </Paper>
   );
 
-  const selectedElement = (correctStatus, color, onClickOfSelectElement) => {
+  const selectedElement = (correctStatus: boolean, color: string, onClickOfSelectElement?: () => void) => {
     const defaultOnClick = () => handleSetColor(color);
     const onClick = onClickOfSelectElement ?? defaultOnClick;
 
     const selectedElementPaperContainerProps = {
       style: {
         backgroundColor: color,
-        border: `1px solid ${isBgColorLight && !!customColor ? customColor?.bgUnHover : color}`,
+        border: `1px solid ${isBgColorLight && !!customColor ? customColor?.bgUnHover : color}`
         // boxShadow: `0 0 2px 1px ${colord(customColor?.bgUnHover).alpha(0.4).toHex()}`
       },
       className: clsx(
@@ -108,26 +125,19 @@ const ColumnElementOfPreparedColorExamples = ({ handleSetColor, isExtended, colo
       </Paper>
     );
   };
-
+  //@ts-ignore
   const nonExtendedElementColor = colors[colorName][500];
   const isNonExtendedElementColorCorrect = color === nonExtendedElementColor;
 
   const nonExtendedElement = selectedElement(isNonExtendedElementColorCorrect, nonExtendedElementColor);
 
   const extendedElement = isExtendedElementColorCorrect
-    ? selectedElement(true, color, () => handleSetColor(false))
+    ? selectedElement(true, color, () => handleSetColor(''))
     : staticExtendedElement;
 
   const elementOfGridColorPicker = isExtended ? extendedElement : nonExtendedElement;
 
   return elementOfGridColorPicker;
-};
-
-ColumnElementOfPreparedColorExamples.propTypes = {
-  color: PropTypes.any,
-  colorName: PropTypes.string,
-  handleSetColor: PropTypes.func,
-  isExtended: PropTypes.bool
 };
 
 export default ColumnElementOfPreparedColorExamples;

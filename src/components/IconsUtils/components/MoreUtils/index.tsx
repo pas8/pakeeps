@@ -26,7 +26,7 @@ const useStyles = makeStyles(({ spacing, shape: { borderRadius } }) => ({
     }
   }),
 
-  container: { borderRadius }
+  container: { borderRadius ,overflow:'hidden'}
 }));
 
 const MoreUtils: FC<MoreUtilsPropsType> = ({ slicedArrAfter, customColor }) => {

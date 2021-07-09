@@ -40,40 +40,42 @@ import WrapperOfAddDateToPakeep from './components/WrapperOfAddDateToPakeep';
 import { IconsUtilsArrDenotationNameType, IconsUtilsArrType, IconsUtilsPropsType } from './types';
 import { iconsUtilsArrDenotation } from './denotation';
 
-const IconsUtils: FC<IconsUtilsPropsType> = ({
-  isAllIconsIsShown = true,
-  handleSetEditTitleIsTrue,
-  handleSetFavoritePakeep,
-  isChangingTitle,
-  isPinned,
-  isFavorite,
-  isInBookmark,
-  id,
-  labels,
-  isCheckBoxes,
-  handleSetBookmarkPakeep,
-  handleSetColorPakeep,
-  handleSetWidth,
-  isNewPakeepContainerHaveFullWidth,
-  widthOfContainer,
-  labelsListProps,
-  handleSetIsPinnedPakeep,
-  labelBargeNumber,
-  customColor,
-  handleSetBackgroundColorPakeep,
-  backgroundColor,
-  handleSetIsCheckBoxesPakeep,
-  isColorDefault,
-  isBackgroundColorDefault,
-  arrOfButtonNamesWhichSholudBeHidden = [],
-  isUtilsReversed,
-  eventsListProps,
-  events = [],
-  isEditingUtilsHidden = true,
-  handleRedo,
-  handleUndo,
-  handleSetArhivedPakeep
-}) => {
+const IconsUtils: FC<IconsUtilsPropsType> = props => {
+
+  const {
+    isAllIconsIsShown = true,
+    handleSetEditTitleIsTrue,
+    handleSetFavoritePakeep,
+    isChangingTitle,
+    isPinned,
+    isFavorite,
+    isInBookmark,
+    id,
+    labels,
+    isCheckBoxes,
+    handleSetBookmarkPakeep,
+    handleSetColorPakeep,
+    handleSetWidth,
+    isNewPakeepContainerHaveFullWidth,
+    widthOfContainer,
+    labelsListProps,
+    handleSetIsPinnedPakeep,
+    labelBargeNumber,
+    customColor,
+    handleSetBackgroundColorPakeep,
+    backgroundColor,
+    handleSetIsCheckBoxesPakeep,
+    isColorDefault,
+    isBackgroundColorDefault,
+    arrOfButtonNamesWhichSholudBeHidden = [],
+    isUtilsReversed,
+    eventsListProps,
+    events = [],
+    isEditingUtilsHidden = true,
+    handleRedo,
+    handleUndo,
+    handleSetArhivedPakeep
+  } = props;
 
   const namesOfEditingUtils = isEditingUtilsHidden
     ? [iconsUtilsArrDenotation.CHECKBOX.name, iconsUtilsArrDenotation.UNDO.name, iconsUtilsArrDenotation.REDO.name]
@@ -133,7 +135,7 @@ const IconsUtils: FC<IconsUtilsPropsType> = ({
       // onClick: handleClick,
       ActiveIcon: EventAvailableIcon,
       isIconActive: !!events?.length,
-      menuComponentsProps: {...eventsListProps, id ,},
+      menuComponentsProps: { ...eventsListProps, id },
       menuComponents: WrapperOfAddDateToPakeep,
       ...iconsUtilsArrDenotation.EVENT
     },
@@ -158,7 +160,6 @@ const IconsUtils: FC<IconsUtilsPropsType> = ({
     //   isIconActive: isChangingTitle,
     //   ActiveIcon: EditIcon
     // },
-
     {
       ...iconsUtilsArrDenotation.FAVORITE,
       icon: FavoriteBorderOutlinedIcon,
@@ -195,6 +196,7 @@ const IconsUtils: FC<IconsUtilsPropsType> = ({
       ...iconsUtilsArrDenotation.SHARE
     }
   ];
+
   const reverseValidatedIconButtonUtilsArr: IconsUtilsArrType = isUtilsReversed
     ? reverse(iconsUtilsArr)
     : iconsUtilsArr;
@@ -205,11 +207,10 @@ const IconsUtils: FC<IconsUtilsPropsType> = ({
       !includes([...arrOfButtonNamesWhichSholudBeHidden, ...namesOfEditingUtils], name)
   );
 
-  // useEffect(() => setPopoverAndMenuState(nullityOfPopoverAndMenuState), [color]);
-
   const [slicedArr, isShouldBeSliced, handleConcatAverageWidth] = useSliced(
     widthOfContainer,
-    correctIconButtonUtilsArr
+    correctIconButtonUtilsArr,
+    props
   );
 
   const defaultWrapperOfPopoverAndMenuProps = { customColor };

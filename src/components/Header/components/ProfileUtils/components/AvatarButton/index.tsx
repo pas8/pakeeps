@@ -97,13 +97,13 @@ const AvatarButton: FC = () => {
         style={{ marginTop: 42 }}
       >
         <Grid className={classes.menuChildContainer}>
-          {menuItemArr.map(({ text, route = false, onClick, iconName = false }) => {
+          {menuItemArr.map(({ text, route = false, onClick, iconName = '' }) => {
             const [icon] = useTakeIcon(iconName);
 
             return (
               <MenuItem onClick={onClick} className={classes.menuItemContainer}>
                 <Grid container alignItems={'center'}>
-                  {iconName ? icon : null}
+                  {!!iconName ? icon : null}
                   {text}
                 </Grid>
               </MenuItem>

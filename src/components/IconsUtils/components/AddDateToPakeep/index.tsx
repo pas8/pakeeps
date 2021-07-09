@@ -1,21 +1,14 @@
-import PropTypes from 'prop-types';
 import React, { useState, useEffect, FC } from 'react';
+import { useSnackbar } from 'notistack';
+import { Typography, Grid, makeStyles } from '@material-ui/core';
 import { nanoid } from 'nanoid';
-import HeaderOfAddDateToPakeep from './components/HeaderOfAddDateToPakeep';
-import DynamicInputDateAndTimePickers from './components/DynamicComponents/components/DynamicInputDateAndTimePickers';
-import { connect } from 'react-redux';
-import DynamicAddMoreEvents from './components/DynamicComponents/components/DynamicAddMoreEvents';
-import DynamicMenuItem from './components/DynamicMenuItem';
-import { getGlobalEventsArr } from 'store/modules/App/selectors';
 import includes from 'lodash.includes';
-import { filter, mapKeys, map, mapValues, find } from 'lodash';
+import { filter, mapKeys, map, mapValues } from 'lodash';
+import { DEFAULT } from 'models/denotation';
 import { useTakeIcon } from 'hooks/useTakeIcon.hook';
 import { useGetReversedCustomColor } from 'hooks/useGetReversedCustomColor.hook';
-import { useSnackbar } from 'notistack';
-import { useCurrentEvents } from 'hooks/useCurrentEvents.hook';
 import { useValidatedCurrentEvents } from 'hooks/useValidatedCurrentEvents.hook';
-import { Chip, Typography, Grid, makeStyles } from '@material-ui/core';
-import { format } from 'date-fns';
+import { CustomColorType } from 'models/types';
 import PreviewEventList from 'components/PakeepList/components/PakeepElement/components/AttributeGroup/components/EventsPart/components/PreviewEventList';
 import { DialogOfAddingNewGlobalEvent } from 'components/PakeepList/components/PakeepElement/components/AttributeGroup/components/EventsPart/components/DialogOfAddingNewGlobalEvent';
 import {
@@ -25,26 +18,26 @@ import {
   DateListArrType,
   HandleDateAndTimeInputsStateType
 } from './types';
-import { DEFAULT } from 'models/denotation';
-
+import HeaderOfAddDateToPakeep from './components/HeaderOfAddDateToPakeep';
+import DynamicInputDateAndTimePickers from './components/DynamicComponents/components/DynamicInputDateAndTimePickers';
+import DynamicMenuItem from './components/DynamicMenuItem';
 
 const useStyles = makeStyles(({ spacing, shape: { borderRadius } }) => ({
-
-  container: ({ color,  }:any) => ({
-    borderRadius,background:color.unHover
+  container: ({ color }: { color: CustomColorType }) => ({
+    borderRadius,
+    background: !color.isUseDefault ? color.unHover : ''
   })
 }));
 
 const AddDateToPakeep: FC<AddDateToPakeepPropsType> = ({
   onMenuClose,
-  id,
+  id: pakeepId,
   customColor: color,
   currentEventsArr,
   handleSaveEvents
 }) => {
+  const classes = useStyles({ color });
 
-  const classes = useStyles({color});
-  
   const ampm = false;
   if (!currentEventsArr) return null;
 
@@ -221,7 +214,7 @@ const AddDateToPakeep: FC<AddDateToPakeepPropsType> = ({
           isPreventClickOfMenuItem: isChosen
         };
 
-        return <DynamicMenuItem {...dynamicMenuListProps} key={nanoid()} />;
+        return <DynamicMenuItem {...dynamicMenuListProps} key={`dateListArrOf${pakeepId}${id}`} />;
       })}
 
       <DialogOfAddingNewGlobalEvent {...dialogOfAddingNewGlobalEventProps} />

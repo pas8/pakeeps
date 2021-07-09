@@ -1,8 +1,9 @@
 import { makeStyles, Grid } from '@material-ui/core';
-import React from 'react';
+import React, { FC } from 'react';
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
 import clsx from 'clsx';
 import ColumnElementOfPreparedColorExamples from './components/ColumnElement';
+import { ColumnOfPreparedColorExamplesPropsType } from '../../types';
 
 const useStyles = makeStyles(theme => ({
   containerOfElement: {
@@ -13,7 +14,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const ColumnOfPreparedColorExamples = ({
+const ColumnOfPreparedColorExamples:FC<ColumnOfPreparedColorExamplesPropsType> = ({
   columnElements,
   columnElementProps,
   droppableId,

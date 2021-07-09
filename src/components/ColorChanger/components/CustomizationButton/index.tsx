@@ -1,22 +1,25 @@
 import { Button, ButtonGroup, Typography, makeStyles, SvgIcon, IconButton, Badge, Grid } from '@material-ui/core';
-import ColorIcon from 'components/Icons/components/ColorIcon';
-import { useState } from 'react';
-import TuneOutlinedIcon from '@material-ui/icons/TuneOutlined';
-import DialogOfAddingCustomColorToColorLayouts from './components/DialogOfAddingCustomColorToColorLayouts';
+import { FC, useState } from 'react';
 import { useIsColorLight } from 'hooks/useIsColorLight.hook';
+import DialogOfAddingCustomColorToColorLayouts from './components/DialogOfAddingCustomColorToColorLayouts';
+import { CustomizationButtonPropsType, UseStylesOfCustomizationButton } from './types';
 
 const useStyles = makeStyles(theme => ({
-  button: ({ customColor, color, nullityColor, colorInHexFormat, }) => {
+  button: ({ customColor, color, nullityColor, colorInHexFormat }: UseStylesOfCustomizationButton) => {
     const isColorDark = !useIsColorLight(colorInHexFormat);
-    console.log();
     const isColorDefault = colorInHexFormat === '#000000';
     // const color
+    console.log(color)
     return {
       border: '1px solid',
-      background: isColorDefault ? '' : isColorDark ? colorInHexFormat : '',
+      background: isColorDefault ? 'transparent' : isColorDark ? colorInHexFormat : 'transparent',
       borderColor: isColorDefault ? 'white' : color === nullityColor ? 'transparent' : colorInHexFormat,
       '& h6': {
-        color: !isColorDark ? colorInHexFormat : theme.palette.maxEmphasis.main ||  customColor.isUseDefault && customColor.bgHover
+        color: !isColorDark
+          ? colorInHexFormat
+          : theme.palette.text.primary || customColor.isUseDefault
+          ? customColor.bgHover
+          : ''
       },
       '& .MuiSvgIcon-root': { width: theme.spacing(2 / (0.8 + 0.1)) }
     };
@@ -57,14 +60,21 @@ const useStyles = makeStyles(theme => ({
   buttonWithBargeContainer: {}
 }));
 
-const CustomizationButton = ({ nullityColor, colorInHexFormat, setCustomizationsStatus, color, customColor }) => {
+const CustomizationButton: FC<CustomizationButtonPropsType> = ({
+  nullityColor,
+  colorInHexFormat,
+  setCustomizationsStatusIsTrue,
+  setCustomizationsStatusIsFalse,
+  color,
+  customColor
+}) => {
   // const [
   //   hoverStatusOfButtonOfAddingCustomColorToColorLayouts,
   //   setHoverStatusOfButtonOfAddingCustomColorToColorLayouts
   // ] = useState(false);
   const [openStatusOfDialog, setOpenStatusOfDialog] = useState(false);
 
-  const classes = useStyles({ colorInHexFormat, customColor, color, nullityColor, colorInHexFormat });
+  const classes = useStyles({ colorInHexFormat, customColor, color, nullityColor });
   // const classes = useStyles({ colorInHexFormat, hoverStatusOfButtonOfAddingCustomColorToColorLayouts });
 
   // const setHoverStatusOfButtonOfAddingCustomColorToColorLayoutsIsTrue = () =>
@@ -109,7 +119,7 @@ const CustomizationButton = ({ nullityColor, colorInHexFormat, setCustomizations
   // );
 
   const unHoveredButtonGroupChildren = (
-    <Button onClick={setCustomizationsStatus} variant={'text'}>
+    <Button onClick={setCustomizationsStatusIsTrue} variant={'text'}>
       <Typography variant={'subtitle2'} style={{ color: nullityColor }}>
         Customization
       </Typography>
@@ -122,8 +132,8 @@ const CustomizationButton = ({ nullityColor, colorInHexFormat, setCustomizations
     <ButtonGroup
       className={classes.button}
       // onMouseLeave={onMouseLeave}
-      outlined
       // onMouseEnter={onMouseEnter}
+      component={'button'}
       // className={classes.buttonGroupContainer}
       size={'small'}
     >

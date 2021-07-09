@@ -3,7 +3,7 @@ import { UseSlicedType } from 'models/types';
 import { useEffect, useState } from 'react';
 import { useFindAverageWidthOfUtils } from './useFindAverageWidthOfUtils';
 
-export const useSliced: UseSlicedType = (widthOfContainer = 0, arrWhichShouldBeSliced) => {
+export const useSliced: UseSlicedType = (widthOfContainer = 0, arrWhichShouldBeSliced,dependency) => {
   const nullityOfSlicedArr = { before: [], after: [] };
 
   const [averageWidth, lengthOfUtilsArr, handleConcatAverageWidth] = useFindAverageWidthOfUtils();
@@ -16,11 +16,12 @@ export const useSliced: UseSlicedType = (widthOfContainer = 0, arrWhichShouldBeS
   useEffect(() => {
     if (!isShouldBeSliced || !arrWhichShouldBeSliced) return;
 
-    const slicedBeforeArr = arrWhichShouldBeSliced.slice(0, sliceArrayTo);
-    const slicedAfterArr = arrWhichShouldBeSliced.slice(sliceArrayTo);
+    const arr = Array.from(arrWhichShouldBeSliced!)
+    const slicedBeforeArr = arr.slice(0, sliceArrayTo);
+    const slicedAfterArr = arr.slice(sliceArrayTo);
 
     return setSlicedArr({ before: slicedBeforeArr, after: slicedAfterArr });
-  }, [slicedCoefficient]);
+  }, [slicedCoefficient,dependency]);
 
   // const [isShouldBeSliced, setIsShouldBeSliced] = useState([]);
   // const [whereShouldBeSliced, setIsShouldBeSliced] = useState([]);

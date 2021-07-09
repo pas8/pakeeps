@@ -11,7 +11,6 @@ import HeaderLayout from 'layouts/HeaderLayout';
 import MenuesLayout from 'layouts/MenuesLayout';
 import { useLoading } from 'hooks/useLoading.hook';
 import { useUploadThemeSsr } from 'hooks/useUploadThemeSsr.hook';
-import '../styles/globals.css';
 import { useRouter } from 'next/dist/client/router';
 import { SIGN_IN_URL, NEW_USER_URL } from 'models/denotation';
 // import LogRocket from 'logrocket';

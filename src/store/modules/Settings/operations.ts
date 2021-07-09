@@ -7,3 +7,5 @@
 // export const changeViewOfThemeChangerButtonThunk = data => dispatch => {
 //   dispatch(toChangeViewOfThemeChangerButton(data));
 // };
+
+export const nothing = () => {};

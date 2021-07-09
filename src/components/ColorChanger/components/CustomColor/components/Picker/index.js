@@ -1,6 +1,5 @@
 import { Grid, makeStyles } from '@material-ui/core';
 import { isString } from 'lodash';
-import PropTypes from 'prop-types';
 import { colord } from 'colord';
 import { RgbaColorPicker } from 'react-colorful';
 
@@ -82,14 +81,5 @@ const PickerByPas = ({
   );
 };
 
-PickerByPas.propTypes = {
-  color: PropTypes.shape({
-    startsWith: PropTypes.func
-  }),
-  gradientColorStateLength: PropTypes.oneOf(['bool', 'number']),
-  gradientStatus: PropTypes.bool,
-  isExtended: PropTypes.bool,
-  setPickerColor: PropTypes.func
-};
 
 export default PickerByPas;

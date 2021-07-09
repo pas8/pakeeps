@@ -92,7 +92,7 @@ const SteperOfDialogOfAddNewLabel: FC<SteperOfDialogOfAddNewLabelPropsType> = ({
   const secondaryCustomColor = {
     ...customColor,
     bgUnHover: customColor?.secondaryColor,
-    bgHover: useMix({ hover: customColor?.secondaryColor, bgHover: customColor?.unHover }, 0.8)
+    bgHover: useMix({ ...customColor, hover: customColor?.secondaryColor, bgHover: customColor?.unHover }, 0.8)
   };
 
   return (
