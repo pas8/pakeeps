@@ -172,7 +172,7 @@ const NewPaKeep: FC = () => {
     [breakpoint]: fullWidthValue || breakpointsValues[breakpoint],
     ref
   };
-
+// console.log(value)
   useEffect(() => {
     console.log(JSON.parse(value!));
     // _.isEqual(state, nulittyState) && setState(JSON.parse(value!));
@@ -183,8 +183,9 @@ const NewPaKeep: FC = () => {
   });
 
   const handleAddNewPakeep = () => {
-    setState({ ...defaultState, ...defaultInputState, checkBoxes: [] });
     dispatch(toAddNewPakeep({ newPakeep: state }));
+    setState({ ...defaultState, ...defaultInputState, checkBoxes: [] });
+
   };
 
   const newPakeepUtils = {

@@ -47,11 +47,12 @@ const MoreUtils: FC<MoreUtilsPropsType> = ({ slicedArrAfter, customColor }) => {
   const anchorPosition =
     !!anchorElState?.coordinates?.top && !!anchorElState?.coordinates?.left ? anchorElState.coordinates : undefined;
 
+const reversedColor = useGetReversedCustomColor( customColor)
+
   const menuComponentsProps = {
     ...anchorElState.menuComponentsProps,
-    customColor: useGetReversedCustomColor(customColor)
+    customColor:{...reversedColor }
   };
-
   return (
     <Grid className={classes.container}>
       {slicedArrAfter.map(

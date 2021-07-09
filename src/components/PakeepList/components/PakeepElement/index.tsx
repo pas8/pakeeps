@@ -122,10 +122,8 @@ const PakeepElement: FC<PakeepElementPropsType> = ({
   const dispatch = useDispatch();
   const isUtilsHaveViewLikeInGoogleKeep = useSelector(getIsUtilsHaveViewLikeInGoogleKeep);
   const globalLabels = useSelector(getLabels);
-
   const filteredLabels = useFilteredLabels(labels, globalLabels);
 
-  const [, , maxEmphasisColor] = useThemeColors();
   const {
     palette: { background, text: textColor }
   } = useTheme();
@@ -168,7 +166,7 @@ const PakeepElement: FC<PakeepElementPropsType> = ({
     dispatch(toDeleteLabelFromPakeep({ currentPakeepId: id, labelIdWhichShouldBeDeleted }));
   };
 
-  const { handleSetIsPinnedPakeep, ...iconsUtilsFunc } = usePakeepUtilsFunc(id, propertyies);
+  const { handleSetIsPinnedPakeep, ...iconsUtilsFunc } = usePakeepUtilsFunc(id);
 
   useEffect(() => {
     !!pakeepElementHeigth && handleResetItemSize();
@@ -183,6 +181,8 @@ const PakeepElement: FC<PakeepElementPropsType> = ({
   const isSomePakeepsSelected = false;
 
   const labelsListProps = {
+    labels,
+    pakeepId: id,
     handleDeleteNewLabel,
     handleAddNewLabel
   };
@@ -197,7 +197,7 @@ const PakeepElement: FC<PakeepElementPropsType> = ({
   };
 
   const onMouseEnter: MouseEventHandler<HTMLDivElement> = e => {
-    dispatch(toChangeTemporaryData({ newTemporaryData: { pakeep: { id, isHovering: true } } }));
+    !isSelecting && dispatch(toChangeTemporaryData({ newTemporaryData: { pakeep: { id, isHovering: true } } }));
     handleSetIsHovering();
   };
 

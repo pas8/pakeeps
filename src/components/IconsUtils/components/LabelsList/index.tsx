@@ -61,12 +61,12 @@ const LabelsList: FC<LabelsListPropsType> = ({
     {
       title: 'Add new labels',
       Icon: AddCircleOutlineOutlinedIcon,
-      onClick: handleOpenAddNewLabelDialog
+      onClick: handleOpenAddNewLabelDialog!
     },
     {
       title: isLabelViewHidden ? 'Show label view' : 'Hide label view',
       Icon: isLabelViewHidden ? VisibilityOutlinedIcon : VisibilityOffOutlinedIcon,
-      onClick: handleStatusOfHideLabelView
+      onClick: handleStatusOfHideLabelView!
     }
   ];
 
@@ -76,7 +76,6 @@ const LabelsList: FC<LabelsListPropsType> = ({
     handleOpenAddNewLabelDialog,
     customColor
   };
-
   const handleChangeNewLabel: HandleChangeNewLabelType = (isChecked, id) => {
     if (isChecked) {
       dispatch(
@@ -131,7 +130,7 @@ const LabelsList: FC<LabelsListPropsType> = ({
       {!isDefaultMenuListHidden && <DefaultMenuListOflabelList {...defaultMenuListOflabelListProps} />}
       <GlobalLabelListOflabelList {...globalLabelListProps} />
 
-      <WrapperOfMenuOfLabelPart {...wrapperOfMenuOfLabelPartProps} mouseX={0} mouseY={0}/>
+      <WrapperOfMenuOfLabelPart {...wrapperOfMenuOfLabelPartProps} mouseX={0} mouseY={0} />
       <DialogOfAddNewLabel {...dialogOfAddNewLabelProps} />
     </Grid>
   );

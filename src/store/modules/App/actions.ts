@@ -171,8 +171,16 @@ export const toChangePakeepProperty = (
   type: TypeNames.HANDLE_CHANGE_PAKEEP_PROPERTY,
   payload
 });
+export const toChangePakeepCustomProperty = (
+  payload: PayloadTypes[TypeNames.HANDLE_CHANGE_PAKEEP_CUSTOM_PROPERTY]
+): AppActionTypes => ({
+  type: TypeNames.HANDLE_CHANGE_PAKEEP_CUSTOM_PROPERTY,
+  payload
+});
+
 
 export const toChangeThemeColors = (payload: PayloadTypes[TypeNames.HANDLE_CHANGE_THEME_COLORS]): AppActionTypes => ({
   type: TypeNames.HANDLE_CHANGE_THEME_COLORS,
   payload
 });
+

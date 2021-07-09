@@ -74,6 +74,7 @@ const IconsUtils: FC<IconsUtilsPropsType> = ({
   handleUndo,
   handleSetArhivedPakeep
 }) => {
+
   const namesOfEditingUtils = isEditingUtilsHidden
     ? [iconsUtilsArrDenotation.CHECKBOX.name, iconsUtilsArrDenotation.UNDO.name, iconsUtilsArrDenotation.REDO.name]
     : [];

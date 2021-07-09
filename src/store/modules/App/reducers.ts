@@ -11,6 +11,7 @@ import {
   useChangeSelectedPakeepsProperty,
   useDeleteLabelFromPakeep,
   useDeletePakeep,
+  useFindPakeep,
   usePinStatusOfPakeeps
 } from './hooks';
 import { AppActionTypes, AppInitialStateInteface, GlobalLabelsType } from './types';
@@ -134,30 +135,31 @@ export const initialState: AppInitialStateInteface = {
   selectedPakeepsId: [],
   folders: [[]],
 
-  pakeeps: [
-    {
-      title: 'Placeholder 1',
-      text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-      isInBookmark: true,
-      isFavorite: true,
-      color: 'default',
-      labels: ['label3', 'label1', 'label0', 'label2'],
-      isArchived: false,
-      events: [
-        { id: '1', value: addHours(new Date(), 2) },
-        { id: '2', value: addHours(new Date(), 32) },
-        { id: '3', value: addHours(new Date(), 100) }
-      ],
-      checkBoxes: Array(random(4, 10))
-        .fill('')
-        .map(() => ({ value: randomSentence(), isAccomplished: !!random(1), id: nanoid(), color: 'default' })),
-      id: 'pakeep1',
-      isPinned: true,
-      isCheckBoxes: true,
-      backgroundColor: 'default'
-    },
-    ...randomPakeeps
-  ],
+  pakeeps: [],
+  // pakeeps: [
+  //   {
+  //     title: 'Placeholder 1',
+  //     text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+  //     isInBookmark: true,
+  //     isFavorite: true,
+  //     color: 'default',
+  //     labels: ['label3', 'label1', 'label0', 'label2'],
+  //     isArchived: false,
+  //     events: [
+  //       { id: '1', value: addHours(new Date(), 2) },
+  //       { id: '2', value: addHours(new Date(), 32) },
+  //       { id: '3', value: addHours(new Date(), 100) }
+  //     ],
+  //     checkBoxes: Array(random(4, 10))
+  //       .fill('')
+  //       .map(() => ({ value: randomSentence(), isAccomplished: !!random(1), id: nanoid(), color: 'default' })),
+  //     id: 'pakeep1',
+  //     isPinned: true,
+  //     isCheckBoxes: true,
+  //     backgroundColor: 'default'
+  //   },
+  //   ...randomPakeeps
+  // ],
   pakeepsOrderNames: [],
   pinnedPakeepsOrderNames: [],
   notifinationCounter: 8,
@@ -226,17 +228,26 @@ export const AppReducer = (state = initialState, action: AppActionTypes): AppIni
     case TypeNames.HANDLE_ADD_LABEL_TO_PAKEEP: {
       const { pakeeps } = state;
       const variedState = useAddLabelToPakeep({ pakeeps, ...action.payload });
-
+      console.log(action.payload);
       return { ...state, ...variedState };
     }
 
     case TypeNames.HANDLE_PIN_STATUS_OF_PAKEEPS: {
-      const { pinnedPakeepsOrderNames, pakeeps, pakeepsOrderNames } = state;
-      const variedState = usePinStatusOfPakeeps({
-        pinnedPakeepsOrderNames,
+      // const { pinnedPakeepsOrderNames, pakeeps, pakeepsOrderNames } = state;
+      // const variedState = usePinStatusOfPakeeps({
+      //   pinnedPakeepsOrderNames,
+      //   pakeeps,
+      //   pakeepsOrderNames,
+      //   ...action.payload
+      // });
+
+      const { pakeeps } = state;
+      const pakeepId = action.payload.pakeepId;
+      const findedPakeep = useFindPakeep(pakeeps, pakeepId);
+      const variedState = useChangePakeepProperty({
+        pakeepId,
         pakeeps,
-        pakeepsOrderNames,
-        ...action.payload
+        property: { isPinned: !findedPakeep?.isPinned! }
       });
 
       return { ...state, ...variedState };
@@ -274,6 +285,13 @@ export const AppReducer = (state = initialState, action: AppActionTypes): AppIni
       const temporaryData = { ...state.temporaryData, ...newTemporaryData };
 
       return { ...state, temporaryData };
+    }
+    case TypeNames.HANDLE_CHANGE_PAKEEP_CUSTOM_PROPERTY: {
+      const { pakeeps } = state;
+      const { pakeepId, propertyName } = action.payload;
+      const variedState = useChangePakeepCustomProperty({ pakeeps, pakeepId, propertyName });
+
+      return { ...state, ...variedState };
     }
 
     case TypeNames.HANDLE_CHANGE_GLOBAL_LABEL_LIST_TEMPROPARY_DATA: {

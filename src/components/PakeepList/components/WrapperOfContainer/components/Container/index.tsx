@@ -16,9 +16,9 @@ const useStyles = makeStyles(({ spacing, breakpoints: { between, down }, palette
     paddingRight:spacing(2.8),
     position: 'fixed',
     right: 4,
-    margin: spacing(4, 0, 0, 0),
-    [between('xs', 'sm')]: { margin: spacing(2, 0, 0, 0) },
-    [down('md')]: { margin: spacing(4, 0, 0, 0) },
+    padding: spacing(4, 0, 0, 0),
+    [between('xs', 'sm')]: { padding: spacing(2, 0, 0, 0) },
+    [down('md')]: { padding: spacing(4, 0, 0, 0) },
     '& .selected > div ': {
       boxShadow: `0px 0px 0px 1px ${palette?.maxEmphasis?.main}`,
       borderColor: palette?.maxEmphasis?.main

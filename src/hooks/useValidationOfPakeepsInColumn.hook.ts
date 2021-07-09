@@ -20,8 +20,8 @@ export const useValidationOfPakeepsInColumn: UseValidationOfPakeepsInColumnType 
 
     if (folderProperty !== 'label' && el[folderProperty]) return el;
 
-    if (isPakeepDragContextPinned && el.isPinned) return el;
-    if (isPakeepDragContextPinned && !el.isPinned) return null;
+    // if (isPakeepDragContextPinned && el.isPinned) return el;
+    // if (isPakeepDragContextPinned && !el.isPinned) return null;
     // if (folderProperty !== 'isPinned' && el?.isPinned) return null;
 
     return null;

@@ -23,3 +23,9 @@ export const getCapionsOfDefaultThemesArr = createSelector(
     return capitons
   }
 );
+
+
+export const getIdColumnArr = createSelector(
+  [({ color: { idColumnArr } }: RootStoreType) => idColumnArr],
+  idColumnArr => idColumnArr
+);

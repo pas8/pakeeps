@@ -27,6 +27,14 @@ import {
 } from './types';
 import { DEFAULT } from 'models/denotation';
 
+
+const useStyles = makeStyles(({ spacing, shape: { borderRadius } }) => ({
+
+  container: ({ color,  }:any) => ({
+    borderRadius,background:color.unHover
+  })
+}));
+
 const AddDateToPakeep: FC<AddDateToPakeepPropsType> = ({
   onMenuClose,
   id,
@@ -34,6 +42,9 @@ const AddDateToPakeep: FC<AddDateToPakeepPropsType> = ({
   currentEventsArr,
   handleSaveEvents
 }) => {
+
+  const classes = useStyles({color});
+  
   const ampm = false;
   if (!currentEventsArr) return null;
 
@@ -149,7 +160,7 @@ const AddDateToPakeep: FC<AddDateToPakeepPropsType> = ({
   };
 
   return (
-    <>
+    <Grid className={classes.container}>
       <HeaderOfAddDateToPakeep {...headerOfAddDateToPakeepProps} />
       {dateListArr.map(({ title, iconName, onClick: onMenuItemClick, onlyTime, dynamicComponent, id }) => {
         const [icon] = useTakeIcon(iconName);
@@ -214,7 +225,7 @@ const AddDateToPakeep: FC<AddDateToPakeepPropsType> = ({
       })}
 
       <DialogOfAddingNewGlobalEvent {...dialogOfAddingNewGlobalEventProps} />
-    </>
+    </Grid>
   );
 };
 

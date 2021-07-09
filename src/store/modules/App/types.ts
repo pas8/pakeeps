@@ -60,17 +60,17 @@ export type PayloadTypes = {
   [TypeNames.HANDLE_ADD_GLOBAL_EVENT]: { newEvent: IGlobalEvent };
   [TypeNames.HANDLE_DELETE_GLOBAL_LABEL]: { labelId: LabelIdType };
   [TypeNames.HANDLE_EDIT_PAKEEP]: { editedPakeep: PakeepElementType };
-
-  
+  [TypeNames.HANDLE_CHANGE_PAKEEP_CUSTOM_PROPERTY]: {
+    propertyName: DefaultFolderElementPropertyNamesType;
+    pakeepId: PakeepIdType;
+  };
 };
 
-
 export type ActionsValueTypes = {
-  toEditPakeep:{
+  toEditPakeep: {
     type: typeof TypeNames.HANDLE_EDIT_PAKEEP;
     payload: PayloadTypes[TypeNames.HANDLE_EDIT_PAKEEP];
-
-  }
+  };
   toDeleteGlobalLabel: {
     type: typeof TypeNames.HANDLE_DELETE_GLOBAL_LABEL;
     payload: PayloadTypes[TypeNames.HANDLE_DELETE_GLOBAL_LABEL];
@@ -209,6 +209,10 @@ export type ActionsValueTypes = {
     type: typeof TypeNames.HANDLE_CHANGE_THEME_COLORS;
     payload: PayloadTypes[TypeNames.HANDLE_CHANGE_THEME_COLORS];
   };
+  toChangePakeepCustomProperty: {
+    type: typeof TypeNames.HANDLE_CHANGE_PAKEEP_CUSTOM_PROPERTY;
+    payload: PayloadTypes[TypeNames.HANDLE_CHANGE_PAKEEP_CUSTOM_PROPERTY];
+  };
 };
 export type AppActionTypes = $Values<ActionsValueTypes>;
 
@@ -235,11 +239,6 @@ export type useHooksTypes = {
     pakeeps: PakeepsType;
   };
 
-  [TypeNames.HANDLE_CHANGE_PAKEEP_CUSTOM_PROPERTY]: {
-    pakeepId: PakeepIdType;
-    property: any;
-    pakeeps: PakeepsType;
-  };
 };
 export type OnlyPakeepReturnType = { pakeeps: PakeepsType };
 // export type ActionWithOnlyPayloadType<T> = (payload: T) => AppActionTypes;

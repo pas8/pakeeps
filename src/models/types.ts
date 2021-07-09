@@ -5,6 +5,7 @@ import {
   DefaultFolderElementPropertyType,
   DefaultPakeepElementType,
   GlobalLabelsType,
+  LabelsOfPakeepType,
   LabelVariantType,
   TitleAndTextOfPakeepType
 } from './../store/modules/App/types';
@@ -121,7 +122,6 @@ export type UseFindCurrentEventsType = (
 
 export type UsePakeepUtilsFuncType = (
   pakeepId: PakeepIdType,
-  propetyies: DefaultFolderElementPropertyType
 ) => IconsUtilsFunctionType;
 
 export type UseFindPakeepUsingIdType = (id: PakeepIdType) => PakeepElementType | null;
@@ -188,3 +188,6 @@ export type UseNewPakeepUtilityType = ({
   iconUtilsFuncs: IconsUtilsFunctionType;
   defaultLabelListProps: DefaultLabelListPropsType;
 };
+
+export type UseFindSelectedLabelsType = (selectedPakeeps: PakeepsType) => LabelsOfPakeepType;
+export type UseFindSelectedEventsType = (selectedPakeeps: PakeepsType) => EventsOfPakeepType;

@@ -2,10 +2,14 @@ import { IconsUtilsFunctionType } from 'components/IconsUtils/types';
 import { pakeepPropertyiesNames } from 'models/denotation';
 import { UsePakeepUtilsFuncType } from 'models/types';
 import { useDispatch } from 'react-redux';
-import { toChangePakeepProperty, toChangePinStatusOfPakeeps } from 'store/modules/App/actions';
+import {
+  toChangePakeepCustomProperty,
+  toChangePakeepProperty,
+  toChangePinStatusOfPakeeps
+} from 'store/modules/App/actions';
 import { ColorType } from 'store/modules/App/types';
 
-export const usePakeepUtilsFunc: UsePakeepUtilsFuncType = (pakeepId, propertyies) => {
+export const usePakeepUtilsFunc: UsePakeepUtilsFuncType = pakeepId => {
   const dispatch = useDispatch();
 
   const handleSetColorPakeep = (color: ColorType): void => {
@@ -17,15 +21,15 @@ export const usePakeepUtilsFunc: UsePakeepUtilsFuncType = (pakeepId, propertyies
   };
 
   const handleSetBookmarkPakeep = (): void => {
-    dispatch(toChangePakeepProperty({ pakeepId, property: { isInBookmark: !propertyies.isInBookmark } }));
+    dispatch(toChangePakeepCustomProperty({ pakeepId, propertyName: pakeepPropertyiesNames.isInBookmark }));
   };
 
   const handleSetFavoritePakeep = (): void => {
-    dispatch(toChangePakeepProperty({ pakeepId, property: { isInBookmark: !propertyies.isFavorite } }));
+    dispatch(toChangePakeepCustomProperty({ pakeepId, propertyName: pakeepPropertyiesNames.isFavorite }));
   };
 
   const handleSetArhivedPakeep = (): void => {
-    dispatch(toChangePakeepProperty({ pakeepId, property: { isInBookmark: !propertyies.isArchived } }));
+    dispatch(toChangePakeepCustomProperty({ pakeepId, propertyName: pakeepPropertyiesNames.isArchived }));
   };
 
   const handleSetIsPinnedPakeep = (): void => {

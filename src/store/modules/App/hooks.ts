@@ -45,7 +45,6 @@ export const useChangePakeepProperty = ({
 
   const filteredPakeeps = filter(pakeeps, ({ id }) => pakeepId !== id);
   const variedPakeeps = [...filteredPakeeps, newPakeep];
-  console.log(newPakeep);
   const variedState = { pakeeps: variedPakeeps };
 
   return variedState;
@@ -53,17 +52,16 @@ export const useChangePakeepProperty = ({
 
 export const useChangePakeepCustomProperty = ({
   pakeepId,
-  property,
+  propertyName,
   pakeeps
-}: useHooksTypes[TypeNames.HANDLE_CHANGE_PAKEEP_CUSTOM_PROPERTY]): OnlyPakeepReturnType => {
+}: PayloadTypes[TypeNames.HANDLE_CHANGE_PAKEEP_CUSTOM_PROPERTY] & OnlyPakeepReturnType): OnlyPakeepReturnType => {
   const findedPakeep = find(pakeeps, ({ id }) => pakeepId === id);
   if (!findedPakeep) return { pakeeps };
 
-  const newPakeep = { ...findedPakeep, ...property };
+  const newPakeep = { ...findedPakeep, [propertyName]: !findedPakeep[propertyName] };
 
-  const filteredPakeeps = filter(pakeeps, ({ id }) => pakeepId === id);
+  const filteredPakeeps = filter(pakeeps, ({ id }) => pakeepId !== id);
   const variedPakeeps = [...filteredPakeeps, newPakeep];
-
   const variedState = { pakeeps: variedPakeeps };
 
   return variedState;
@@ -120,7 +118,9 @@ export const useDeleteLabelFromPakeep = ({
 
   const labels = filter(findedPakeep.labels, id => labelIdWhichShouldBeDeleted !== id);
   const newPakeep = { ...findedPakeep, labels };
-  const newPakeeps = [...pakeeps, newPakeep];
+
+  const filteredPakeeps = useFilterPakeeps(pakeeps, findedPakeep.id);
+  const newPakeeps = [...filteredPakeeps, newPakeep];
 
   const variedState = { pakeeps: newPakeeps };
   return variedState;
@@ -140,7 +140,8 @@ export const useAddLabelToPakeep = ({
   const labels = isPakeepHaveThisLabel ? findedPakeep.labels : newLabels;
 
   const newPakeep = { ...findedPakeep, labels };
-  const newPakeeps = [...pakeeps, newPakeep];
+  const filteredPakeeps = useFilterPakeeps(pakeeps, findedPakeep.id);
+  const newPakeeps = [...filteredPakeeps, newPakeep];
 
   const variedState = { pakeeps: newPakeeps };
   return variedState;
