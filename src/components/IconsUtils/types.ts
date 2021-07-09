@@ -1,3 +1,4 @@
+import { IconsUtilsArrDenotationOfColorPickerType } from 'components/ColorChanger/components/CustomColor/components/IconsUtils/types';
 import { CustomColorType, IconType } from 'models/types';
 import { ReactNode } from 'react';
 import {
@@ -63,7 +64,9 @@ export type IconsUtilsPropetyiesType = {
 
 export type IconsUtilsPropsType = IconsUtilsFunctionType & IconsUtilsValuesType & IconsUtilsPropetyiesType;
 
-export type IconsUtilsArrDenotationType = $Values<typeof iconsUtilsArrDenotation>;
+export type IconsUtilsArrDenotationType =
+  | $Values<typeof iconsUtilsArrDenotation>
+  | IconsUtilsArrDenotationOfColorPickerType;
 export type IconsUtilsArrDenotationNameType = $Values<Pick<IconsUtilsArrDenotationType, 'name'>>;
 
 export type IconUtilElementOptionalPropertyiesType = {
