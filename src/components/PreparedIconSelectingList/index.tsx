@@ -1,11 +1,12 @@
 import { Grid, makeStyles, Typography, Box } from '@material-ui/core';
 import { colord } from 'colord';
-import PropTypes from 'prop-types';
 import { useAlpha } from 'hooks/useAlpha.hook';
 import { useThemeColors } from 'hooks/useThemeColors.hook';
+import { FC } from 'react';
+import { PreparedIconSelectingListPropsType } from './types';
 
 const useStyles = makeStyles(({ spacing, transitions, shadows }) => ({
-  iconContainer: ({ color, hoverColor, isDragging }) => ({
+  iconContainer: ({ color, hoverColor, isDragging }: any) => ({
     padding: spacing(1.4),
     transform: 'scale(1.2)',
     color,
@@ -26,19 +27,19 @@ const useStyles = makeStyles(({ spacing, transitions, shadows }) => ({
   })
 }));
 
-const PreparedIconSelectingList = ({
+const PreparedIconSelectingList: FC<PreparedIconSelectingListPropsType> = ({
   icon,
   iconName,
-  handleChangeLabelIconName,
-  labelIconName,
+  selectedIconName,
   color,
+  onClick,
   customColor,
   isDragging,
   checkedIcon
 }) => {
   const [primaryColor, , , maxEmphasisColor, , mediumEmphasisColor] = useThemeColors();
 
-  const isSelected = iconName === labelIconName;
+  const isSelected = iconName === selectedIconName;
 
   const newColor = customColor
     ? isSelected
@@ -56,7 +57,6 @@ const PreparedIconSelectingList = ({
     : maxEmphasisColor;
 
   const classes = useStyles({ color: newColor, hoverColor, isDragging, customColor });
-  const onClick = () => handleChangeLabelIconName(iconName);
 
   return (
     <Box mx={0.4} onClick={onClick}>
@@ -65,14 +65,6 @@ const PreparedIconSelectingList = ({
       </Grid>
     </Box>
   );
-};
-
-PreparedIconSelectingList.propTypes = {
-  color: PropTypes.string,
-  handleChangeLabelIconName: PropTypes.func,
-  icon: PropTypes.any,
-  iconName: PropTypes.string,
-  labelIconName: PropTypes.string
 };
 
 export default PreparedIconSelectingList;

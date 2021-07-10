@@ -1,9 +1,8 @@
-import PropTypes from 'prop-types';
+import { FC } from 'react';
 import { Grid, makeStyles, Typography, MenuItem } from '@material-ui/core';
 import clsx from 'clsx';
 import { useAlpha } from 'hooks/useAlpha.hook';
 import { useThemeColors } from 'hooks/useThemeColors.hook';
-import { FC } from 'react';
 import { DynamicMenuItemPropsType } from './types';
 
 const useStyles = makeStyles(({ spacing }) => ({

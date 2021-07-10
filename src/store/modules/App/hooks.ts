@@ -1,4 +1,4 @@
-import { GlobalLabelsType } from 'store/modules/App/types';
+import { GlobalEventsType, GlobalLabelsType } from 'store/modules/App/types';
 import { find, filter, includes } from 'lodash';
 
 import {
@@ -106,6 +106,17 @@ export const useChangeGlobalLabelItem = ({
   const labels = [...filteredLabels, changedLabel];
   const variedState = { labels };
   return variedState;
+};
+
+export const useChangeGlobalEventItem = ({
+  globalEvents,
+  changedEvent
+}: PayloadTypes[TypeNames.HANDLE_CHANGE_GLOBAL_EVENT_ITEM] & {
+  globalEvents: GlobalEventsType;
+}): { events: GlobalEventsType } => {
+  const filteredEvents = filter(globalEvents, ({ id }) => id !== changedEvent.id);
+  const events = [...filteredEvents, changedEvent];
+  return { events };
 };
 
 export const useDeleteLabelFromPakeep = ({

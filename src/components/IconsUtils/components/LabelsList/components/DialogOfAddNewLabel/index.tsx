@@ -16,7 +16,7 @@ import { iconsArr } from 'components/Icons';
 import PreparedColorExamples from 'components/ColorChanger/components/PreparedColorExamples';
 import ColorPickerByPas from 'components/ColorChanger';
 import LabelItem from 'components/PakeepList/components/PakeepElement/components/AttributeGroup/components/LabelPart/components/LabelItem';
-import PreparedIconSelectingList from 'components/PakeepList/components/PakeepElement/components/AttributeGroup/components/LabelPart/components/Menu/components/PreparedIconSelectingList';
+import PreparedIconSelectingList from 'components/PreparedIconSelectingList';
 import SteperOfDialogOfAddNewLabel from './components/Steper';
 import FirstStepOfSteperOfDialogOfAddNewLabel from './components/Steper/components/First';
 import SecondStepOfSteperOfDialogOfAddNewLabel from './components/Steper/components/Second';
@@ -172,7 +172,7 @@ const DialogOfAddNewLabel: FC<DialogOfAddNewLabelPropsType> = ({
       AdditionalComponent: PreparedColorExamples,
       additionalComponentProps: {
         isColor: false,
-        customColumnElementProps: { handleChangeLabelIconName, labelIconName: newLabelState.iconName },
+        customColumnElementProps: {onClick: handleChangeLabelIconName, selectedIconName: newLabelState.iconName },
         CustomColumnElement: PreparedIconSelectingList,
         columnArr: iconsArr
       },

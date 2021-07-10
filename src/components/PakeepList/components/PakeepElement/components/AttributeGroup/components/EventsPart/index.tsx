@@ -2,13 +2,18 @@ import { FC, memo } from 'react';
 import PreviewEventList from './components/PreviewEventList';
 import compareFunc from 'compare-func';
 import { useFindCurrentEvents } from 'hooks/useFindCurrentEvents.hook';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+
 import { getGlobalEventsArr } from 'store/modules/App/selectors';
 import { getTimeAndDateFromat, getTimeFormat } from 'store/modules/Settings/selectors';
 import { GlobalEventsType } from 'store/modules/App/types';
 import { EventsPartPropsType } from './types';
+import { toChangeTemporaryData } from 'store/modules/App/actions';
+import { OnClickOfPreviewEventListType } from './components/PreviewEventList/types';
 
-const EventsPart: FC<EventsPartPropsType> = ({ events = [], customColor,parentBackgroundColor }) => {
+const EventsPart: FC<EventsPartPropsType> = ({ events = [], customColor, parentBackgroundColor }) => {
+  const dispatch = useDispatch();
+
   const timeFormat = useSelector(getTimeFormat);
   const timeAndDateFromat = useSelector(getTimeAndDateFromat);
   const globalEvents: GlobalEventsType = useSelector(getGlobalEventsArr);
@@ -18,8 +23,13 @@ const EventsPart: FC<EventsPartPropsType> = ({ events = [], customColor,parentBa
 
   if (!currentEventsArr) return null;
 
+  const onClick: OnClickOfPreviewEventListType = defaultMenuProps => {
+    dispatch(toChangeTemporaryData({ newTemporaryData: { defaultMenuProps } }));
+  };
+
   const allPreviewEventListProps = {
     customColor,
+    onClick,
     parentBackgroundColor,
     validatedCurrentEvents: events,
     currentEventsArr

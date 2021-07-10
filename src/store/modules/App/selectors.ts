@@ -64,10 +64,7 @@ export const getGlobalEventsArr = createSelector(
   globalEvents => globalEvents
 );
 
-export const getTemporaryDataOfLabelItem = createSelector(
-  [({ app: { temporaryData } }: RootStoreType) => temporaryData.labelItem],
-  labelItem => labelItem
-);
+
 
 export const getDefaultMenuPropsOfTemporaryData = createSelector(
   [({ app: { temporaryData } }: RootStoreType) => temporaryData.defaultMenuProps],

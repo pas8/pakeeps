@@ -1,4 +1,4 @@
-import React, { useState, useEffect, FC } from 'react';
+import React, { useState, useEffect, FC, MouseEventHandler } from 'react';
 import { useSnackbar } from 'notistack';
 import { Typography, Grid, makeStyles } from '@material-ui/core';
 import { nanoid } from 'nanoid';
@@ -21,6 +21,9 @@ import {
 import HeaderOfAddDateToPakeep from './components/HeaderOfAddDateToPakeep';
 import DynamicInputDateAndTimePickers from './components/DynamicComponents/components/DynamicInputDateAndTimePickers';
 import DynamicMenuItem from './components/DynamicMenuItem';
+import { useDispatch } from 'react-redux';
+import { toChangeTemporaryData } from 'store/modules/App/actions';
+import { MenusLayoutName } from 'models/unums';
 
 const useStyles = makeStyles(({ spacing, shape: { borderRadius } }) => ({
   container: ({ color }: { color: CustomColorType }) => ({
@@ -36,6 +39,8 @@ const AddDateToPakeep: FC<AddDateToPakeepPropsType> = ({
   currentEventsArr,
   handleSaveEvents
 }) => {
+  const dispatch = useDispatch();
+
   const classes = useStyles({ color });
 
   const ampm = false;
@@ -132,6 +137,7 @@ const AddDateToPakeep: FC<AddDateToPakeepPropsType> = ({
     validatedCurrentEvents,
     currentEventsArr,
     customColor,
+    onClick: (__: any) => {},
     parentBackgroundColor: customColor.isUseDefault ? DEFAULT : customColor.bgHover
   };
   const customTitle = !!validatedCurrentEvents.length ? (
@@ -176,7 +182,15 @@ const AddDateToPakeep: FC<AddDateToPakeepPropsType> = ({
           isChosen ? null : onMenuItemClick ? onMenuItemClick() : onDefaultClick();
         };
         const onClickOfCloseIcon = () => setChosenItemArr(state => filter(state, elId => elId !== name));
-        const onClickOfEditIcon = () => setIsEditDialogOpen(true);
+        const onClickOfEditIcon: MouseEventHandler<HTMLButtonElement> = ({ clientX: mouseX, clientY: mouseY }) => {
+          dispatch(
+            toChangeTemporaryData({
+              newTemporaryData: {
+                defaultMenuProps: { mouseX, mouseY, menuName: MenusLayoutName.EVENTS, customColor, id }
+              }
+            })
+          );
+        };
 
         const dynamicItemProps = { onClick };
 

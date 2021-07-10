@@ -1,11 +1,9 @@
-import { Icon } from '@material-ui/core';
 import { Box, Grid, makeStyles, Typography } from '@material-ui/core';
-import PropTypes from 'prop-types';
 import { FC } from 'react';
-import { EventItemPropsType, UseStylesOfEventItemType } from './types';
 import clsx from 'clsx';
 import { DEFAULT, PRIMARY, SECONDARY } from 'models/denotation';
-import { useIsColorLight } from 'hooks/useIsColorLight.hook';
+import { EventItemPropsType, UseStylesOfEventItemType } from './types';
+
 const useStyles = makeStyles(({ spacing, transitions, palette, shape: { borderRadius } }) => ({
   containerOfDateItem: ({
     customColor,
@@ -23,7 +21,7 @@ const useStyles = makeStyles(({ spacing, transitions, palette, shape: { borderRa
         : eventColor
       : customColor?.hover;
 
-      return {
+    return {
       position: 'relative',
       padding: spacing(0.32, 0.8, 0.16, 0.8),
       margin: spacing(0.4, 0.4),
@@ -36,7 +34,11 @@ const useStyles = makeStyles(({ spacing, transitions, palette, shape: { borderRa
             : parentBackgroundColor
           : color,
       background: variant === DEFAULT ? (!!color ? color : palette?.highEmphasis?.main) : '',
-      borderRadius
+      borderRadius,
+      '&:hover': {
+        cursor:'pointer',
+        boxShadow: `0px 0px 4px 1px ${color}`
+      }
     };
   },
 
@@ -72,6 +74,7 @@ const EventItem: FC<EventItemPropsType> = ({
   variant,
   customColor,
   value,
+  onClick,
   parentBackgroundColor
 }) => {
   const isFirstVariantOfEventItemView = true;
@@ -80,7 +83,7 @@ const EventItem: FC<EventItemPropsType> = ({
   const isInputTextViewOfCaptionOfEventItem = !true;
   const classes = useStyles({ customColor, color, variant, parentBackgroundColor });
   return (
-    <>
+    <Grid onClick={onClick}>
       {isInputTextViewOfCaptionOfEventItem ? (
         <fieldset
           className={clsx(
@@ -126,7 +129,7 @@ const EventItem: FC<EventItemPropsType> = ({
           )}
         </Grid>
       )}
-    </>
+    </Grid>
   );
 };
 

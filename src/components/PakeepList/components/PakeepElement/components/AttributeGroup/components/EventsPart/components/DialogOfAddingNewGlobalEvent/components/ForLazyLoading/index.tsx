@@ -32,7 +32,7 @@ import ActionsButtonGroup from 'components/ActionsButtonGroup';
 import SecondStepOfSteperOfDialogOfAddNewGlobalEvent from '../SecondStepOfSteperOfDialogOfAddNewGlobalEvent';
 import { DialogOfAddingNewGlobalEventPropsType } from '../../types';
 import EventItem from '../../../PreviewEventList/components/EventItem';
-import PreparedIconSelectingList from '../../../../../LabelPart/components/Menu/components/PreparedIconSelectingList';
+import PreparedIconSelectingList from '../../../../../../../../../../../PreparedIconSelectingList';
 import SecondStepOfSteperOfDialogOfAddNewLabel from 'components/IconsUtils/components/LabelsList/components/DialogOfAddNewLabel/components/Steper/components/Second';
 import FirstStepOfSteperOfDialogOfAddNewGlobalEvent from '../FirstStepOfSteperOfDialogOfAddNewGlobalEvent';
 
@@ -94,7 +94,6 @@ const ForLazyLoadingDialogOfAddingNewGlobalEvent: FC<DialogOfAddingNewGlobalEven
 
   const [value, setValue] = useState<any>(toFormat(Date.now(), format));
   const error = !isValid(eventState.value);
-  console.log(eventState.value, value);
 
   const previuosNewEventState = usePrevious(eventState);
 
@@ -185,8 +184,8 @@ const ForLazyLoadingDialogOfAddingNewGlobalEvent: FC<DialogOfAddingNewGlobalEven
       additionalComponentProps: {
         isColor: false,
         customColumnElementProps: {
-          handleChangeLabelIconName: handleChangeEventIconName,
-          labelIconName: eventState.iconName
+          onClick: handleChangeEventIconName,
+          selectedIconName: eventState.iconName
         },
         CustomColumnElement: PreparedIconSelectingList,
         columnArr: iconsArr

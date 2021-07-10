@@ -1,4 +1,4 @@
-import { ClosePopoverOrMenuType, CustomColorType } from 'models/types';
+import { ClosePopoverOrMenuType, CustomColorType, UseStylesCustomColorType } from 'models/types';
 import {
   HandleChangeLabelColorType,
   HandleChangeLabelIconNameType,
@@ -6,9 +6,9 @@ import {
   MenuStateOfChangingLabelMenuType
 } from '../MenuWrapper/types';
 
-export type MenuOfLabelPartPropsType = UseStylesType & {
+export type MenuOfLabelPartPropsType = UseStylesOfMenuOfLabelPartPropsTypeType & {
   menuState: MenuStateOfChangingLabelMenuType;
-  handleDeleteLabel: Function;
+  handleDeleteLabel: ()=> void;
   handleClose: ClosePopoverOrMenuType;
   handleChangeLabelColor: HandleChangeLabelColorType;
   handleChangeLabelVariant: () => void;
@@ -18,7 +18,4 @@ export type MenuOfLabelPartPropsType = UseStylesType & {
   handleChangeLabelTitle: HandleChangeLabelTitleType;
 };
 
-export type UseStylesType = {
-  isThisMenuIsSecond?: boolean;
-  customColor: CustomColorType;
-};
+export type UseStylesOfMenuOfLabelPartPropsTypeType = {} & UseStylesCustomColorType;

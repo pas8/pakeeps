@@ -1,10 +1,9 @@
 import { useFindLabelItem } from 'hooks/useFindLabelItem.hook';
+import { DEFAULT, OUTLINED } from 'models/denotation';
 import { useSnackbar } from 'notistack';
-import PropTypes from 'prop-types';
 import { FC, useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { toChangeGlobalLabelItem, toDeleteGlobalLabel } from 'store/modules/App/actions';
-import { getTemporaryDataOfLabelItem } from 'store/modules/App/selectors';
 import { ILabelElement } from 'store/modules/App/types';
 import MenuOfLabelPart from '../Menu';
 import {
@@ -15,10 +14,15 @@ import {
   WrapperOfMenuOfLabelPartPropsType
 } from './types';
 
-const WrapperOfMenuOfLabelPart: FC<WrapperOfMenuOfLabelPartPropsType> = ({ mouseX, mouseY, customColor }) => {
+const WrapperOfMenuOfLabelPart: FC<WrapperOfMenuOfLabelPartPropsType> = ({
+  mouseX,
+  mouseY,
+  customColor,
+  id,
+  onClose
+}) => {
   const dispatch = useDispatch();
 
-  const { id } = useSelector(getTemporaryDataOfLabelItem);
   const findedLabel = useFindLabelItem(id);
 
   const handleChangeGlobalLabelItem = (changedLabel: ILabelElement) => {
@@ -28,20 +32,25 @@ const WrapperOfMenuOfLabelPart: FC<WrapperOfMenuOfLabelPartPropsType> = ({ mouse
   const nullityOfMenuState = {
     iconName: '',
     color: '',
-    variant: 'default' as 'default',
+    variant: DEFAULT,
     title: '',
     mouseX: 0,
     mouseY: 0,
     id: ''
-  };
+  } as const;
 
   const [menuState, setMenuState] = useState<MenuStateOfChangingLabelMenuType>(nullityOfMenuState);
+
+  const { mouseX: placeholderX, mouseY: placeholderY, ...newLabel } = menuState;
 
   useEffect(() => {
     setMenuState(state => ({ ...state, mouseX, mouseY, ...findedLabel }));
   }, [mouseX, mouseY, findedLabel]);
 
-  const handleClose = () => setMenuState(nullityOfMenuState);
+  const handleClose = () => {
+    onClose();
+    setMenuState(nullityOfMenuState);
+  };
 
   const handleDeleteLabel = () => {
     dispatch(toDeleteGlobalLabel({ labelId: menuState.id }));
@@ -61,18 +70,11 @@ const WrapperOfMenuOfLabelPart: FC<WrapperOfMenuOfLabelPartPropsType> = ({ mouse
   };
 
   const handleChangeLabelVariant = () => {
-    const variant = menuState.variant === 'default' ? 'outlined' : 'default';
+    const variant = menuState.variant === DEFAULT ? OUTLINED : DEFAULT;
     setMenuState(state => ({ ...state, variant }));
   };
 
   const onClickOfSaveButton = () => {
-    const newLabel = {
-      id: menuState.id,
-      iconName: menuState.iconName,
-      title: menuState.title,
-      color: menuState.color,
-      variant: menuState.variant
-    };
     try {
       handleChangeGlobalLabelItem(newLabel);
       enqueueSnackbar({ message: 'Label was successfully chnged' });

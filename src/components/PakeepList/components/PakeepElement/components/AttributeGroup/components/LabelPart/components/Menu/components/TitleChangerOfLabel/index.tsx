@@ -1,5 +1,4 @@
 import { TextField, makeStyles, Grid, withStyles } from '@material-ui/core';
-import PropTypes from 'prop-types';
 import { useAlpha } from 'hooks/useAlpha.hook';
 import { FC } from 'react';
 import { TitleChangerOfLabelPropsType, UseStylesOfTitleChangerOfLabelType } from './type';
@@ -44,13 +43,13 @@ const TitleChangerOfLabel: FC<TitleChangerOfLabelPropsType> = ({ value, onChange
   const allTextFieldProps = {
     autoFocus: true,
     variant: 'outlined' as 'outlined',
-    // color: 'primary',
     fullWidth: true,
+    color: 'secondary' as const,
     value,
+    placeholder: 'Title',
     customColor,
     onChange,
     ...textFieldProps
-    // size:'small'
   };
   const InputTitleChangerOfLabel = !customColor?.isUseDefault ? InputWithCustomColor : TextField;
   return (

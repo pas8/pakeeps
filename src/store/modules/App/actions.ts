@@ -19,8 +19,19 @@ export const toAddNewPakeep = (payload: PayloadTypes[TypeNames.HANDLE_ADD_NEW_PA
   payload
 });
 
+export const toChangeGlobalEventItem = (
+  payload: PayloadTypes[TypeNames.HANDLE_CHANGE_GLOBAL_EVENT_ITEM]
+): AppActionTypes => ({
+  type: TypeNames.HANDLE_CHANGE_GLOBAL_EVENT_ITEM,
+  payload
+});
+
 export const toDeletePakeep = (payload: PayloadTypes[TypeNames.HANDLE_DELETE_PAKEEP]): AppActionTypes => ({
   type: TypeNames.HANDLE_DELETE_PAKEEP,
+  payload
+});
+export const toDeleteGlobalEvent = (payload: PayloadTypes[TypeNames.HANDLE_DELETE_GLOBAL_EVENT]): AppActionTypes => ({
+  type: TypeNames.HANDLE_DELETE_GLOBAL_EVENT,
   payload
 });
 
@@ -178,9 +189,7 @@ export const toChangePakeepCustomProperty = (
   payload
 });
 
-
 export const toChangeThemeColors = (payload: PayloadTypes[TypeNames.HANDLE_CHANGE_THEME_COLORS]): AppActionTypes => ({
   type: TypeNames.HANDLE_CHANGE_THEME_COLORS,
   payload
 });
-

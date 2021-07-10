@@ -38,7 +38,8 @@ export const useNewPakeepUtility: UseNewPakeepUtilityType = ({
         return `${value} \n`;
       })
       .join('');
-    const newCheckBoxes = dropRight(
+    const newCheckBoxes =
+      // dropRight(
       inputState.text
         .toString()
         .split('\n')
@@ -47,9 +48,9 @@ export const useNewPakeepUtility: UseNewPakeepUtilityType = ({
           id: nanoid(),
           color: 'default',
           isAccomplished: false
-        }))
-    );
-// console.log(newCheckBoxes)
+        }));
+    // );
+    // console.log(newCheckBoxes)
     state.isCheckBoxes
       ? setInputState(state => ({
           ...state,
@@ -79,8 +80,6 @@ export const useNewPakeepUtility: UseNewPakeepUtilityType = ({
 
   const globalLabels = useSelector(getLabels);
   const labelsOfAttributeGroup = useFilteredLabels(state.labels, globalLabels);
-
-
 
   const eventsListProps = {
     events: state.events,
