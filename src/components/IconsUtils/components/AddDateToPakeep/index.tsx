@@ -1,10 +1,13 @@
-import React, { useState, useEffect, FC, MouseEventHandler } from 'react';
+import React, { useState, useEffect, FC } from 'react';
+import dynamic from 'next/dynamic';
 import { useSnackbar } from 'notistack';
-import { Typography, Grid, makeStyles } from '@material-ui/core';
+import { toChangeTemporaryData } from 'store/modules/App/actions';
+import { DialogLayoutName } from 'models/unums';
+import { Typography, Grid, makeStyles, CircularProgress } from '@material-ui/core';
+import { useDispatch } from 'react-redux';
 import includes from 'lodash.includes';
 import { filter, mapKeys, map, mapValues } from 'lodash';
 import { DEFAULT } from 'models/denotation';
-import { useTakeIcon } from 'hooks/useTakeIcon.hook';
 import { useGetReversedCustomColor } from 'hooks/useGetReversedCustomColor.hook';
 import { useValidatedCurrentEvents } from 'hooks/useValidatedCurrentEvents.hook';
 import { CustomColorType } from 'models/types';
@@ -13,15 +16,18 @@ import {
   AddDateToPakeepPropsType,
   ChosenItemArrType,
   DateAndTimeInputsStateType,
-  DateListArrType,
   HandleDateAndTimeInputsStateType
 } from './types';
-import HeaderOfAddDateToPakeep from './components/HeaderOfAddDateToPakeep';
-import DynamicInputDateAndTimePickers from './components/DynamicComponents/components/DynamicInputDateAndTimePickers';
-import DynamicMenuItem from './components/DynamicMenuItem';
-import { useDispatch } from 'react-redux';
-import { toChangeTemporaryData } from 'store/modules/App/actions';
-import { DialogLayoutName, MenusLayoutName } from 'models/unums';
+
+const HeaderOfAddDateToPakeep = dynamic(() => import('./components/HeaderOfAddDateToPakeep'));
+
+const EventItemsList = dynamic(() => import('./components/EventItemsList'), {
+  loading: () => (
+    <Grid style={{ width: 200, height: 400 }} container justify={'center'} alignItems={'center'}>
+      <CircularProgress />
+    </Grid>
+  )
+});
 
 const useStyles = makeStyles(({ spacing, shape: { borderRadius } }) => ({
   container: ({ color }: { color: CustomColorType }) => ({
@@ -41,7 +47,6 @@ const AddDateToPakeep: FC<AddDateToPakeepPropsType> = ({
 
   const classes = useStyles({ color });
 
-  const ampm = false;
   if (!currentEventsArr) return null;
 
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
@@ -74,7 +79,9 @@ const AddDateToPakeep: FC<AddDateToPakeepPropsType> = ({
   const handleOpenAddCustomEventsDialog = () => {
     dispatch(
       toChangeTemporaryData({
-        newTemporaryData: { defaultDialogProps: { id: pakeepId, dialogName: DialogLayoutName.EVENTS, customColor:color } }
+        newTemporaryData: {
+          defaultDialogProps: { id: pakeepId, dialogName: DialogLayoutName.EVENTS, customColor: color }
+        }
       })
     );
   };
@@ -88,7 +95,7 @@ const AddDateToPakeep: FC<AddDateToPakeepPropsType> = ({
     }
   ];
 
-  const dateListArr: DateListArrType = [...currentEventsArr, ...defaultDateListArr];
+  const eventListArr = [...currentEventsArr, ...defaultDateListArr];
 
   const [chosenItemArr, setChosenItemArr] = useState<ChosenItemArrType>([]);
 
@@ -101,7 +108,7 @@ const AddDateToPakeep: FC<AddDateToPakeepPropsType> = ({
 
     setDateAndTimeInputsState(nullityOfDateAndTimeInputsState);
 
-    const nullityOfChosenItemArr = map(filter(dateListArr, 'isChosen'), 'id');
+    const nullityOfChosenItemArr = map(filter(eventListArr, 'isChosen'), 'id');
     setChosenItemArr(nullityOfChosenItemArr);
   }, []);
 
@@ -155,78 +162,22 @@ const AddDateToPakeep: FC<AddDateToPakeepPropsType> = ({
     isHideBorder: includes(chosenItemArr, FIRST_EVENT_ID)
   };
 
+  const eventItemsListProps = {
+    eventListArr,
+    setChosenItemArr,
+    dateAndTimeInputsState,
+    chosenItemArr,
+    handleDateAndTimeInputsState,
+    focusedEventId,
+    customColor,
+    pakeepId,
+    currentEventsObject
+  };
+
   return (
     <Grid className={classes.container}>
       <HeaderOfAddDateToPakeep {...headerOfAddDateToPakeepProps} />
-      {dateListArr.map(({ title, iconName, onClick: onMenuItemClick, onlyTime, dynamicComponent, id }) => {
-        const [icon] = useTakeIcon(iconName);
-        const DynamicComponent = onMenuItemClick ?? dynamicComponent?.component ?? DynamicInputDateAndTimePickers;
-        // console.log(onMenuItemClick ?? dynamicComponent.component ?? DynamicInputDateAndTimePickers )
-
-        const name = id;
-
-        const isChosen = includes(chosenItemArr, name);
-        const isActiveIcon = isChosen;
-
-        const isDynamicComponentShouldBeShown = !!(isChosen && DynamicComponent);
-
-        const onClick = () => {
-          const onDefaultClick = () => {
-            setChosenItemArr(state => [...state, name]);
-            // setButtonSaveState(true);
-          };
-
-          isChosen ? null : onMenuItemClick ? onMenuItemClick() : onDefaultClick();
-        };
-        const onClickOfCloseIcon = () => setChosenItemArr(state => filter(state, elId => elId !== name));
-        const onClickOfEditIcon: MouseEventHandler<HTMLButtonElement> = ({ clientX: mouseX, clientY: mouseY }) => {
-          dispatch(
-            toChangeTemporaryData({
-              newTemporaryData: {
-                defaultMenuProps: { mouseX, mouseY, menuName: MenusLayoutName.EVENTS, customColor:color, id }
-              }
-            })
-          );
-        };
-
-        const dynamicItemProps = { onClick };
-
-        const dynamicComponentProps = {
-          ...dynamicComponent?.props,
-          icon,
-          correctName: isChosen,
-          name,
-          value: dateAndTimeInputsState[name]?.value,
-          inputValue: dateAndTimeInputsState[name]?.inputValue,
-          format: currentEventsObject[name]?.format,
-          onlyTime,
-          onClickOfCloseIcon,
-          title,
-          ampm,
-          handleDateAndTimeInputsState,
-          customColor,
-          focusedEventId,
-          onClickOfEditIcon
-        };
-
-        // if (hidden) return;
-
-        const dynamicMenuListProps = {
-          DynamicComponent,
-          dynamicComponentProps,
-          title,
-          isMarginSmaller: true,
-          isActiveIcon,
-          isDynamicComponentShouldBeShown,
-          dynamicItemProps,
-          icon,
-          customColor,
-          // key: name,
-          isPreventClickOfMenuItem: isChosen
-        };
-
-        return <DynamicMenuItem {...dynamicMenuListProps} key={`dateListArrOf${pakeepId}${id}`} />;
-      })}
+      <EventItemsList {...eventItemsListProps} />
     </Grid>
   );
 };

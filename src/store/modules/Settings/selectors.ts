@@ -33,3 +33,8 @@ export const getIsHeaderHavePaperColor = createSelector(
   [({ settings: { isHeaderHavePaperColor } }: RootStoreType) => isHeaderHavePaperColor],
   isHeaderHavePaperColor => isHeaderHavePaperColor
 );
+
+export const getAmpmStatus = createSelector(
+  [({ settings: { ampm } }: RootStoreType) => ampm],
+  ampm => ampm
+);
