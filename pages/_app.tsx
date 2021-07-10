@@ -6,6 +6,7 @@ import FolderLayout from 'layouts/FolderLayout';
 import ThemeLayout from 'layouts/ThemeLayout';
 import DateLayout from 'layouts/DateLayout';
 import StoreLayout from 'layouts/StoreLayout';
+import DialogsLayout from 'layouts/DialogsLayout';
 import AuthLayout from 'layouts/AuthLayout';
 import HeaderLayout from 'layouts/HeaderLayout';
 import MenuesLayout from 'layouts/MenuesLayout';
@@ -25,7 +26,7 @@ const Index: FC<any> = ({ Component, pageProps }) => {
   const isFolderLayoutHidden = router.route === SIGN_IN_URL || router.route === NEW_USER_URL;
 
   const defaultLayouts = [StoreLayout, ThemeLayout, SnackBarLayout, AuthLayout, DateLayout, MenuesLayout, HeaderLayout];
-  const layouts = isFolderLayoutHidden ? defaultLayouts : [...defaultLayouts, FolderLayout];
+  const layouts = isFolderLayoutHidden ? defaultLayouts : [...defaultLayouts, DialogsLayout, FolderLayout];
 
   return (
     <ComposeLayouts layouts={layouts} pageProps={pageProps}>

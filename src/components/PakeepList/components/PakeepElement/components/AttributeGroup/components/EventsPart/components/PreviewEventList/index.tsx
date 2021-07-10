@@ -8,6 +8,7 @@ import EventItem from './components/EventItem';
 import { PreviewEventListPropsType } from './types';
 import { OnClickOfEventItemType } from './components/EventItem/types';
 import { MenusLayoutName } from 'models/unums';
+import compare_func from 'compare-func';
 
 const PreviewEventList: FC<PreviewEventListPropsType> = ({
   validatedCurrentEvents,
@@ -17,7 +18,7 @@ const PreviewEventList: FC<PreviewEventListPropsType> = ({
 }) => (
   <Box my={0.4}>
     <Grid container>
-      {validatedCurrentEvents.map(({ id, value }, idx) => {
+      {validatedCurrentEvents.sort(compare_func('value')).map(({ id, value }, idx) => {
         const findedEl: CurrentEventsElementType = find(currentEventsArr, ['id', id])!;
 
         const [icon] = useTakeIcon(findedEl?.iconName);

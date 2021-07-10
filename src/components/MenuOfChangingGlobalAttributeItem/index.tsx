@@ -5,10 +5,11 @@ import DynamicMenuItem from 'components/IconsUtils/components/AddDateToPakeep/co
 import { useGetReversedCustomColor } from 'hooks/useGetReversedCustomColor.hook';
 import { MenuOfChangingGlobalAttributeItemPropsType, UseStylesOfMenuOfChangingGlobalAttributeItemType } from './types';
 
-const useStyles = makeStyles(({ spacing }) => ({
+const useStyles = makeStyles(({ spacing, shape: { borderRadius } }) => ({
   wrapper: ({ customColor }: UseStylesOfMenuOfChangingGlobalAttributeItemType) => {
     return {
       padding: spacing(0, 0, 0, 0),
+      borderRadius,
       background: !customColor?.isUseDefault ? customColor?.bgHover : ''
     };
   }

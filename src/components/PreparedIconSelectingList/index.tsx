@@ -47,7 +47,7 @@ const PreparedIconSelectingList: FC<PreparedIconSelectingListPropsType> = ({
       : customColor.bgHover
     : isSelected
     ? primaryColor
-    : mediumEmphasisColor;
+    : mediumEmphasisColor;  
   const hoverColor = customColor
     ? isSelected
       ? customColor.bgUnHover
@@ -59,7 +59,7 @@ const PreparedIconSelectingList: FC<PreparedIconSelectingListPropsType> = ({
   const classes = useStyles({ color: newColor, hoverColor, isDragging, customColor });
 
   return (
-    <Box mx={0.4} onClick={onClick}>
+    <Box mx={0.4} onClick={() => onClick(iconName)}>
       <Grid container alignItems={'center'} justify={'center'} className={classes.iconContainer}>
         {isSelected && !!checkedIcon ? checkedIcon : icon}
       </Grid>

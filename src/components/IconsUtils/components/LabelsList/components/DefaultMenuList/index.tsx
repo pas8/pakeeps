@@ -1,6 +1,4 @@
-import { makeStyles, MenuItem, ListItemText, FormControl, FormLabel, Grid } from '@material-ui/core';
-import PropTypes from 'prop-types';
-import { nanoid } from 'nanoid';
+import { makeStyles, MenuItem, ListItemText,  FormLabel, Grid } from '@material-ui/core';
 import ArrowBackOutlinedIcon from '@material-ui/icons/ArrowBackOutlined';
 import IconButtonByPas from 'components/IconButton';
 import { useAlpha } from 'hooks/useAlpha.hook';
@@ -25,7 +23,7 @@ export const useStyles = makeStyles(({ spacing, palette, typography: { subtitle2
     },
     margin: spacing(0, 0, 0.4, 0),
     '& legend': {
-      color: !customColor.isUseDefault ?  useMix(customColor, 0.8) : '',
+      color: !customColor.isUseDefault ? useMix(customColor, 0.8) : '',
       padding: spacing(0.8, 1.6, 0.8, 0)
     }
   }),

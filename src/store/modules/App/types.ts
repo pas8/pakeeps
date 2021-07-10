@@ -1,9 +1,9 @@
 import { menuOpenStatusDenotation, NONE } from './../../../models/denotation';
 import { pakeepPropertyiesNames } from 'models/denotation';
-import { CustomColorType, SelectedPakeepsIdType, SelectedPakeepsType } from 'models/types';
+import { CustomColorType, SelectedPakeepsIdType, SelectedPakeepsType, UseStylesCustomColorType } from 'models/types';
 import { $Keys, $Values, Brand, Optional } from 'utility-types';
 import { TypeNames } from './enums';
-import { MenusLayoutName } from 'models/unums';
+import { DialogLayoutName, MenusLayoutName } from 'models/unums';
 
 export type PayloadTypes = {
   [TypeNames.HANDLE_ADD_NEW_PAKEEP]: {
@@ -74,8 +74,6 @@ export type PayloadTypes = {
 };
 
 export type ActionsValueTypes = {
-
-  
   toChangeGlobalEventItem: {
     type: typeof TypeNames.HANDLE_CHANGE_GLOBAL_EVENT_ITEM;
     payload: PayloadTypes[TypeNames.HANDLE_CHANGE_GLOBAL_EVENT_ITEM];
@@ -400,6 +398,10 @@ export type OperateWOP<N> = (payload: N) => void;
 
 export type TemporaryDatatype = {
   defaultMenuProps: DefaultMenuPropsType;
+  defaultDialogProps: {
+    id: string;
+    dialogName:DialogLayoutName
+  } & UseStylesCustomColorType;
   pakeep: {
     id: string;
     isHovering: boolean;

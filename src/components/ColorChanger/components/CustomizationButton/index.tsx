@@ -9,7 +9,6 @@ const useStyles = makeStyles(theme => ({
     const isColorDark = !useIsColorLight(colorInHexFormat);
     const isColorDefault = colorInHexFormat === '#000000';
     // const color
-    console.log(color)
     return {
       border: '1px solid',
       background: isColorDefault ? 'transparent' : isColorDark ? colorInHexFormat : 'transparent',
