@@ -229,6 +229,7 @@ const ForLazyLoadingDialogOfAddingNewGlobalEvent: FC<DialogOfAddingNewGlobalEven
     !isEqual(nullityEventState, previuosNewEventState) && setEventState(previuosNewEventState);
     setIsDialogOpen(true)
     closeSnackbar();
+  
   };
 
   const handleCloseDialog = () => {
@@ -242,6 +243,10 @@ const ForLazyLoadingDialogOfAddingNewGlobalEvent: FC<DialogOfAddingNewGlobalEven
         onClick: handleRestoreLastGlobalEvent,
         icon: RestoreOutlinedIcon
       });
+      setTimeout(() => {
+        onClose();
+        setIsDialogOpen(true);
+      }, 4000);
   };
 
   const actionsButtonGroupProps = {

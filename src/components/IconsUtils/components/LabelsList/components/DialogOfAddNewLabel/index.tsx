@@ -1,4 +1,4 @@
-import { ChangeEvent, FC, useState } from 'react';
+import { ChangeEvent, FC, useEffect, useState } from 'react';
 import { usePrevious, useToggle } from 'react-use';
 import { useDispatch } from 'react-redux';
 import includes from 'lodash.includes';
@@ -48,10 +48,7 @@ export const useStyles = makeStyles(({ spacing, palette }) => ({
   })
 }));
 
-const DialogOfAddNewLabel: FC<DefaultMenuLayoutElementPropsType> = ({
-  onClose,
-  customColor
-}) => {
+const DialogOfAddNewLabel: FC<DefaultMenuLayoutElementPropsType> = ({ onClose, customColor }) => {
   const dispatch = useDispatch();
   const {
     palette: { primary }
@@ -78,7 +75,8 @@ const DialogOfAddNewLabel: FC<DefaultMenuLayoutElementPropsType> = ({
 
   const [newLabelState, setNewLabelState] = useState<NewLabelStateType>(nullityOfNewLabelState);
 
-  const [isDialogOpen, setIsDialogOpen] = useToggle(true)
+  const [isDialogOpen, setIsDialogOpen] = useToggle(true);
+  const [isAwaited, setAwaitedStatus] = useToggle(false);
 
   const colorVariantsNames = ['', 'primary', 'secondary'];
   const customColorValue = includes(colorVariantsNames, newLabelState.color) ? 'customColor' : newLabelState.color;
@@ -105,7 +103,7 @@ const DialogOfAddNewLabel: FC<DefaultMenuLayoutElementPropsType> = ({
   };
 
   const handleCloseDialog = () => {
-    setIsDialogOpen(false)
+    setIsDialogOpen(false);
     toNullityNewLabelState();
     !isEqual(nullityOfNewLabelState, newLabelState) &&
       enqueueSnackbar({
@@ -115,7 +113,19 @@ const DialogOfAddNewLabel: FC<DefaultMenuLayoutElementPropsType> = ({
         onClick: handleRestoreLastGlobalLabel,
         icon: RestoreOutlinedIcon
       });
+
+    setTimeout(() => {
+      setAwaitedStatus(false)
+      setAwaitedStatus(true);
+    }, 4000);
   };
+
+  useEffect(() => {
+    if (!isDialogOpen && isAwaited) {
+      setIsDialogOpen(true);
+      onClose();
+    }
+  }, [isDialogOpen, isAwaited]);
 
   const handleSave = () => {
     if (!newLabelState.title)
@@ -213,7 +223,7 @@ const DialogOfAddNewLabel: FC<DefaultMenuLayoutElementPropsType> = ({
   };
 
   return (
-    <Dialog open={ isDialogOpen} onClose={handleCloseDialog} className={classes.container}>
+    <Dialog open={isDialogOpen} onClose={handleCloseDialog} className={classes.container}>
       <DialogTitle>Add new global label</DialogTitle>
       <SteperOfDialogOfAddNewLabel {...steperOfDialogOfAddNewLabelProps} />
       <DialogActions>

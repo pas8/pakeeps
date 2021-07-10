@@ -1,17 +1,14 @@
 import { Link, Typography } from '@material-ui/core';
+import MenuOpenOutlinedIcon from '@material-ui/icons/MenuOpenOutlined';
 import { Grid, IconButton, makeStyles, Tooltip } from '@material-ui/core';
-import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import MenuIcon from '@material-ui/icons/Menu';
 import { useRouter } from 'next/dist/client/router';
-import { capitalize, filter, map, split, values } from 'lodash';
-import { FC, useState } from 'react';
+import { capitalize,  map, split } from 'lodash';
+import { FC, Fragment, } from 'react';
 import NextLink from 'next/link';
-import MenuOpenOutlinedIcon from '@material-ui/icons/MenuOpenOutlined';
 import { MainBarPropsType } from '../types';
 import { SIGN_IN_URL, NEW_USER_URL } from 'models/denotation';
-import { useToggle } from 'react-use';
-import MenuByPas from 'components/Menu';
 
 const useStyles = makeStyles(theme => ({
   menuButton: {
@@ -77,14 +74,14 @@ const MainBar: FC<MainBarPropsType> = ({ handleDrawerOpen, isMenuOpen, isSmallSi
 
                 const href = el.routeArr.join('');
                 const isLast = idx + 1 === splitedPathName.length;
-
+                const isFirst = idx === 0;
                 return (
-                  <>
-                    <Link color={'inherit'} onClick={event => event.preventDefault()} style={{ cursor: 'pointer ' }}>
+                  <Fragment key={`headerArr-${idx}`}>
+                    <Link color={'inherit'} onClick={event => event.preventDefault()} style={{ cursor: 'pointer ' }} component={'span'}>
                       <NextLink href={href}>{el.string}</NextLink>
                     </Link>
-                    {isLast ? '' : ' / '}
-                  </>
+                    {isLast && isFirst ? '' : ' / '}
+                  </Fragment>
                 );
               })}
             </Typography>

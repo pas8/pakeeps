@@ -102,7 +102,7 @@ const AvatarButton: FC = () => {
             const [icon] = useTakeIcon(iconName);
 
             return (
-              <MenuItem onClick={onClick} className={classes.menuItemContainer}>
+              <MenuItem onClick={onClick} className={classes.menuItemContainer} key={`menuItemContainer-${text}`}>
                 <Grid container alignItems={'center'}>
                   {!!iconName ? icon : null}
                   {text}

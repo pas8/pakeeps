@@ -152,7 +152,7 @@ export type UseValidationOfPakeepsInColumnType = ({
   folderId: string;
 }) => PakeepsType | null;
 
-export type FolderPropetyType = DefaultFolderElementPropertyNamesType | 'label' | 'ALL';
+export type FolderPropetyType = DefaultFolderElementPropertyNamesType | 'label' | 'ALL' | 'event'
 
 export type UseAttributeGroupColorType = (
   customColor: CustomColorType,
@@ -161,9 +161,11 @@ export type UseAttributeGroupColorType = (
 
 export type UsePakeepFoldersType = ({
   labels,
+  events,
   defaultFolderArr
 }: {
   labels: GlobalLabelsType;
+  events: GlobalEventsType;
   defaultFolderArr: DefaultFolderArrType;
 }) => DefaultFolderArrType[];
 export type ThunkType<P> = ThunkAction<any, RootStoreType, null, Action<P>>;

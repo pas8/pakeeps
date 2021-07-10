@@ -206,12 +206,12 @@ const PickerOfThemeColor: FC<PickerOfThemeColorPropsType> = ({
         </Button> */}
         {/* </ButtonGroup> */}
         <Grid container className={classes.containerOfPreparedExamples} justify={'space-between'}>
-          {colorArr.map(({ id, colorName }) => {
+          {colorArr.map(({ id, colorName },idx) => {
             return (
               <ColumnElementOfPreparedColorExamples
                 handleSetColor={handleChangeColor}
                 color={color}
-                key={`${title}-${id}`}
+                key={`colorArr_${title}_${id}_${idx}`}
                 isExtended={isExtended}
                 colorName={colorName}
                 customColor={customColorPlaceholder}

@@ -22,3 +22,8 @@ export const DEFAULT = 'default';
 export const OUTLINED = 'outlined';
 export const PRIMARY = 'primary';
 export const SECONDARY = 'secondary';
+
+export const attributesName = {
+  EVENT: 'event',
+  LABEL: 'label'
+};

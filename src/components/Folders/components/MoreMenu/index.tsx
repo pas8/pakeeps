@@ -1,26 +1,25 @@
 import { Menu, makeStyles, MenuItem } from '@material-ui/core';
 import { ToggleButton, ToggleButtonGroup } from '@material-ui/lab';
-import { useTakeIcon } from 'hooks/useTakeIcon.hook';
 import { findIndex } from 'lodash';
-import PropTypes from 'prop-types';
-
-const useStyles = makeStyles(theme => ({
+import { FC, MouseEventHandler } from 'react';
+import { MoreMenuOfFoldersPropsType } from 'components/Folders/types';
+import { useTakeIcon } from 'hooks/useTakeIcon.hook';
+const useStyles = makeStyles(({ spacing }) => ({
   container: {
     '& button': {
       justifyContent: 'flex-start'
     },
     '& svg': {
-      margin: theme.spacing(0, 0.8, 0, 0)
+      margin: spacing(0, 0.8, 0, 0)
     }
   }
 }));
 
-const MoreMenuOfFolders = ({
+const MoreMenuOfFolders: FC<MoreMenuOfFoldersPropsType> = ({
   arrToMap,
   isMoreMenuopen,
   handleCloseMenu,
   menuAnchorEl,
-  onClick = null,
   handleChange,
   value,
   flattenAllFolders
@@ -35,20 +34,19 @@ const MoreMenuOfFolders = ({
       className={classes.container}
     >
       <ToggleButtonGroup orientation={'vertical'} value={value} exclusive onChange={handleChange}>
-        {arrToMap.map(({ title, iconName, property, id ,onClick}) => {
+        {arrToMap.map(({ title, iconName, property, id, onClick }) => {
           const findedIdx = findIndex(flattenAllFolders, ({ id: folderId }) => folderId === id);
           const [icon] = useTakeIcon(iconName ? iconName : (property === 'label' && 'label') || 'infinity');
 
-          const onClickOfToggleButton = e => {
+          const onClickOfToggleButton:MouseEventHandler<HTMLButtonElement> = e => {
             onClick && e.preventDefault();
             onClick && onClick(e);
-            handleCloseMenu()
-
+            handleCloseMenu();
           };
 
           const menuItemProps = {
             onClick: onClickOfToggleButton,
-            key: id,
+            key: `MoreMenuOfFolders-${id}`,
             value: findedIdx
           };
           return (
@@ -60,19 +58,6 @@ const MoreMenuOfFolders = ({
       </ToggleButtonGroup>
     </Menu>
   );
-};
-
-MoreMenuOfFolders.propTypes = {
-  arrToMap: PropTypes.shape({
-    map: PropTypes.func
-  }),
-  flattenAllFolders: PropTypes.array,
-  handleChange: PropTypes.func,
-  handleCloseMenu: PropTypes.func,
-  isMoreMenuopen: PropTypes.bool,
-  menuAnchorEl: PropTypes.object,
-  onClick: PropTypes.func,
-  value: PropTypes.number
 };
 
 export default MoreMenuOfFolders;

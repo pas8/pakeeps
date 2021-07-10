@@ -117,7 +117,7 @@ const FolderLayout = ({ children }: LayoutChildrenType) => {
   const positionOfFolderViewWithPakeepViewIsRight = positionOfFolderViewWithPakeepView === 'right';
   const positionOfFolderViewWithPakeepViewIsLeft = positionOfFolderViewWithPakeepView === 'left';
 
-  const foldersArr = usePakeepFolders({ labels, defaultFolderArr });
+  const foldersArr = usePakeepFolders({ events, labels, defaultFolderArr });
 
   const marginValue = 8;
 
@@ -156,7 +156,9 @@ const FolderLayout = ({ children }: LayoutChildrenType) => {
     setIsSizeOfFoldersMoreThanSize
   };
 
-  useEffect(() => handleChangeFolders(foldersArr), [labels, defaultFolderArr]);
+  useEffect(() => {
+    handleChangeFolders(foldersArr);
+  }, [labels, defaultFolderArr, events]);
   // useEffect(() => (!isFolderOpen && drawerWidth !== 0 ? handleDrawerWidth(0) : null), [isFolderOpen, drawerWidth]);
 
   const classes = useStyles({ positionOfFolderViewWithPakeepViewIsBottom, positionOfFolderViewWithPakeepViewIsRight });

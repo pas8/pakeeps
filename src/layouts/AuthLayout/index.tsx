@@ -51,7 +51,8 @@ const AuthLayout: FC<any> = ({ children, pageProps }) => {
   }, [isLogined, router.route]);
   const isChildrenVisible =
     isLoginedAndRouteISAuth || (isRouteIsAuth && !isLogined) || (isLogined && router.route === '/');
-  return <AuthProvider session={pageProps?.session}>{isChildrenVisible ? children : null}</AuthProvider>;
+  // return <AuthProvider session={pageProps?.session}>{isChildrenVisible ? children : null}</AuthProvider>;
+  return <AuthProvider session={pageProps?.session}>{children }</AuthProvider>;
 };
 
 export default AuthLayout;

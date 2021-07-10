@@ -25,7 +25,7 @@ const useStyles = makeStyles(
   }) => ({
     container: {
       minHeight: '80vh',
-      marginTop: spacing(2)
+      marginTop: spacing(0.8)
     },
     containerOftextField: {
       marginBottom: spacing(3.2)
@@ -154,7 +154,6 @@ const SettingAccount: FC<any> = () => {
   const isSiveIsXs = br === 'xs';
 
   const isSmall = isSiveIsSm || isSiveIsXs;
-
   const propsValue = {
     name: 'Pas',
     userName: 'pas8'
@@ -247,6 +246,7 @@ const SettingAccount: FC<any> = () => {
           container
           xl={6}
           md={11}
+          item
           xs={12}
           alignItems={isSiveIsXs ? 'center' : 'flex-start'}
           wrap={!isSmall ? 'wrap' : 'nowrap'}

@@ -40,21 +40,27 @@ const InputWithCustomColor = withStyles({
 const TitleChangerOfLabel: FC<TitleChangerOfLabelPropsType> = ({ value, onChange, customColor, ...textFieldProps }) => {
   const classes = useStyles();
 
-  const allTextFieldProps = {
+  const defaultTextFieldProps = {
     autoFocus: true,
     variant: 'outlined' as 'outlined',
     fullWidth: true,
     color: 'secondary' as const,
     value,
     placeholder: 'Title',
-    customColor,
     onChange,
     ...textFieldProps
   };
+  const inputWithCustomColorProps = { ...defaultTextFieldProps, customColor };
+
   const InputTitleChangerOfLabel = !customColor?.isUseDefault ? InputWithCustomColor : TextField;
+  const allTextFieldProps = !customColor?.isUseDefault ? inputWithCustomColorProps : defaultTextFieldProps;
+
   return (
     <Grid className={classes.container}>
-      <InputTitleChangerOfLabel {...allTextFieldProps} />
+      {
+        //@ts-ignore
+        <InputTitleChangerOfLabel {...allTextFieldProps} />
+      }
     </Grid>
   );
 };

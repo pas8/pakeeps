@@ -14,11 +14,9 @@ const useStyles = makeStyles(theme => ({
       background: isColorDefault ? 'transparent' : isColorDark ? colorInHexFormat : 'transparent',
       borderColor: isColorDefault ? 'white' : color === nullityColor ? 'transparent' : colorInHexFormat,
       '& h6': {
-        color:  isColorDefault ? 'white' : isColorDark 
-          ? 'white'
-          : colorInHexFormat 
-          // ? customColor.bgHover
-          // : ''
+        color: isColorDefault ? 'white' : isColorDark ? 'white' : colorInHexFormat
+        // ? customColor.bgHover
+        // : ''
       },
       '& .MuiSvgIcon-root': { width: theme.spacing(2 / (0.8 + 0.1)) }
     };
@@ -118,7 +116,7 @@ const CustomizationButton: FC<CustomizationButtonPropsType> = ({
   // );
 
   const unHoveredButtonGroupChildren = (
-    <Button onClick={setCustomizationsStatusIsTrue} variant={'text'}>
+    <Button onClick={setCustomizationsStatusIsTrue} variant={'text'} component={'div'}>
       <Typography variant={'subtitle2'} style={{ color: nullityColor }}>
         Customization
       </Typography>

@@ -2,6 +2,7 @@ import { Grid, LinearProgress } from '@material-ui/core';
 import { useLoading } from 'hooks/useLoading.hook';
 import { ComposeLayouts } from 'layouts';
 import DateLayout from 'layouts/DateLayout';
+import DialogsLayout from 'layouts/DialogsLayout';
 import FolderLayout from 'layouts/FolderLayout';
 import MenuesLayout from 'layouts/MenuesLayout';
 import { isEqual, startsWith } from 'lodash';
@@ -35,7 +36,7 @@ const RouterLayout: FC = ({ children }) => {
     ? useCorrectLayoutCases.SETTING_URL
     : '';
 
-  const pakeepLayouts = [DateLayout, MenuesLayout, FolderLayout];
+  const pakeepLayouts = [DateLayout, MenuesLayout, DialogsLayout, FolderLayout];
 
   const useCorrectLayout = (PROPERTY: string): any[] => {
     switch (PROPERTY) {

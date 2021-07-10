@@ -226,7 +226,7 @@ const DefaultThemePreview: FC<DefaultThemePreviewPropsType> = ({
         <Grid className={classes.headerOfThemePrewier} justify={'space-between'} alignItems={'center'} container>
           <Grid className={classes.leftPartPreviewOfHeaderOfThemePrewier}>
           </Grid>
-          <Grid className={classes.rightPartPreviewOfHeaderOfThemePrewier}></Grid>
+          <Grid className={classes.rightPartPreviewOfHeaderOfThemePrewier} item/>
         </Grid>
       </Grid>
       <Grid className={classes.bodyOfThemePrevier} container alignItems={'flex-start'}>

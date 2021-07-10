@@ -163,11 +163,12 @@ const NewPaKeep: FC = () => {
 
   const fullWidthValue = statusState.isNewPakeepContainerHaveFullWidth && 12;
 
-  const breakpoint = useCustomBreakpoint();
+  const [breakpoint] = useCustomBreakpoint();
   const breakpointsValues = { xs: 12, sm: 10 + 1, md: 8 + 1, lg: 6 + 1, xl: 4 + 1 };
 
   const gridContainerProps = {
     className: clsx(classes.container, statusState.isNewPakeepContainerHaveFullWidth ? classes.full : classes.unFull),
+    item:true,
     //@ts-ignore
     [breakpoint]: fullWidthValue || breakpointsValues[breakpoint],
     ref

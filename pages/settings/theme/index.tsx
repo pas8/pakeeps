@@ -208,7 +208,7 @@ const Theme: FC<any> = () => {
   return (
     <Grid container justify={'center'}>
       <Grid container className={classes.colorContainer} justify={'center'} lg={9} xl={8} md={8} xs={12} sm={12}>
-        <Grid xl={10} lg={11} md={12} xs={12} container sm={11} justify={'space-between'} id={themeAnchorArr.COLORS_ID}>
+        <Grid xl={10} lg={11} md={12} xs={12} container sm={11} justify={'space-between'} id={themeAnchorArr.COLORS_ID} item>
           {themePickersArr.map(props => {
             return (
               <PickerOfThemeColor

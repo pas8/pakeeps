@@ -41,7 +41,6 @@ const useStyles = makeStyles(
           : headerHeight,
         // margin: spacing(positionOfFolderViewWithPakeepViewIsBottom ? -10 : -10 + 1.4, 0, 0, 0),
         '& .MuiToggleButtonGroup-root': {
-         
           width: positionOfFolderViewWithPakeepViewIsBottom ? 'auto' : '100%',
           margin: spacing(
             isFoldersHaveDraweView ? 0 : marginOfToogleGroups,
@@ -57,10 +56,9 @@ const useStyles = makeStyles(
               ? 1.4
               : 0
           ),
-          '&:first-child':{
-
-            marginTop:0,
-                      },
+          '&:first-child': {
+            marginTop: 0
+          },
           background: isFoldersHaveDraweView ? background.paper : background.default
         },
         '& button': {
@@ -160,7 +158,6 @@ const useStyles = makeStyles(
   })
 );
 
-
 export const ACCOUNT_URL = `${SETTING_URL}/account`;
 const SECURITY_URL = `${SETTING_URL}/security`;
 
@@ -171,7 +168,6 @@ export const themeAnchorArr = {
 };
 
 export const themeAnchorIdArr = mapValues(themeAnchorArr, el => '#' + el);
-
 
 const Folders: FC<FoldersTypeProps> = ({
   value,
@@ -375,7 +371,7 @@ const Folders: FC<FoldersTypeProps> = ({
 
   useEffect(() => {
     const findedElementIdx = _.findIndex(flattenAllFolders, ({ id }) => findedElement?.id === id);
-    router.pathname !== '/' &&   findedElementIdx && handleChange(null, findedElementIdx);
+    router.pathname !== '/' && findedElementIdx && handleChange(null, findedElementIdx);
   }, [router, findedElement]);
 
   const FOLDER_WITHOUT_ROUTE = 'FOLDER_WITHOUT_ROUTE';
@@ -397,7 +393,7 @@ const Folders: FC<FoldersTypeProps> = ({
 
   const idxOfFolderItemWhichShouldBeInMenu =
     flattenAllFolders.length - ~~((foldersSize - windowSize) / avarageButtonSize);
-
+console.log(idxOfFolderItemWhichShouldBeInMenu)
   const [menuAnchorEl, setMenuAnchorEl] = useState<any>(null);
   const isMoreMenuopen = Boolean(menuAnchorEl);
 
@@ -449,9 +445,11 @@ const Folders: FC<FoldersTypeProps> = ({
       >
         {navigationViewLike === 'pakeeps' &&
           allFolders.map((arr, arrIdx) => {
+            if (!arr.length) return null;
+            
             return (
               <Slide
-                key={`${arrIdx}-arrIdx`}
+                key={`allFolders_${arrIdx}_arrIdx`}
                 in={isFolderOpen}
                 mountOnEnter
                 unmountOnExit
@@ -488,7 +486,7 @@ const Folders: FC<FoldersTypeProps> = ({
                       if ((parentRoute !== router.route || isAncholElHidden || isSizeSmall) && isHaveParentRoute)
                         return null;
                       if (!isMenuOpen && isFolderIsPlaceholder) return null;
-
+                      if (isFolderOpen && iconName === 'none') return null;
                       const findedIdx = _.findIndex(flattenAllFolders, ({ id: folderId }) => folderId === id);
 
                       const isShouldBeHidden =
@@ -496,7 +494,11 @@ const Folders: FC<FoldersTypeProps> = ({
                       const isButtonIsMore =
                         isSizeOfFoldersMoreThanSize && findedIdx === idxOfFolderItemWhichShouldBeInMenu;
                       const [icon] = useTakeIcon(
-                        isButtonIsMore ? 'more' : iconName ? iconName : (property === 'label' && 'label') || 'infinity'
+                        isButtonIsMore
+                          ? 'more'
+                          : !!iconName
+                          ? iconName
+                          : (property === 'label' && 'label') || (property === 'event' && 'week') || 'infinity'
                       );
                       const moreButtonTitle = 'Open more';
 
@@ -557,14 +559,14 @@ const Folders: FC<FoldersTypeProps> = ({
                           value={findedIdx}
                           aria-label={isButtonIsMore ? moreButtonTitle : title}
                           onClick={e => {
-                            handleChange('findedIdx', findedIdx);
-                            setFolderColor(color);
-                            route && router.push(route);
                             onClickOfToggleButton && e.preventDefault();
                             onClickOfToggleButton && onClickOfToggleButton(e);
                             isButtonActive && handleChangeAncholElHiddenStatus();
+                            handleChange('findedIdx', findedIdx);
+                            setFolderColor(color);
+                            route && router.push(route);
                           }}
-                          key={id}
+                          key={`arrItemOfAllFolders${id}`}
                         >
                           {/* {findedElement.id !== id && iconName !== 'none' && icon} */}
                           {iconName !== 'none' && icon}
