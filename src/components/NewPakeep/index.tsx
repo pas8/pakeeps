@@ -174,7 +174,7 @@ const NewPaKeep: FC = () => {
   };
 // console.log(value)
   useEffect(() => {
-    console.log(JSON.parse(value!));
+    // console.log(JSON.parse(value!));
     // _.isEqual(state, nulittyState) && setState(JSON.parse(value!));
   }, []);
 

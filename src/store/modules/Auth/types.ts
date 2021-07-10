@@ -1,3 +1,4 @@
+import { NONE } from 'models/denotation';
 import { $Values, Optional } from 'utility-types';
 import { TypeNames } from './enums';
 
@@ -40,7 +41,7 @@ export type ActionsValueTypes = {
 };
 
 export type AuthInitialStateType = {
-  isLogined: boolean;
+  isLogined: boolean | typeof NONE;
   isError: boolean;
   errorMessage: string;
   isAnonymous: boolean;

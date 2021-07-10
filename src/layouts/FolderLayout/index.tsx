@@ -15,7 +15,8 @@ import {
   getMenuOpenStatus,
   getDrawerWidth,
   getLabels,
-  getDefaultFolderArr
+  getDefaultFolderArr,
+  getGlobalEventsArr
 } from 'store/modules/App/selectors';
 import {
   getIsFolderViewWithPakeepViewAlignToCenter,
@@ -99,6 +100,7 @@ const FolderLayout = ({ children }: LayoutChildrenType) => {
 
   const currentFolderPropertyIdx = useSelector(getCurrentFolderPropertyIdx);
   const labels = useSelector(getLabels);
+  const events = useSelector(getGlobalEventsArr);
   const defaultFolderArr = useSelector(getDefaultFolderArr);
 
   const menuOpenStatus = useSelector(getMenuOpenStatus);
@@ -125,6 +127,7 @@ const FolderLayout = ({ children }: LayoutChildrenType) => {
 
   const handleHideFolder = () => {
     dispatch(toChangeMenuOpenStatus({ menuOpenStatus: menuOpenStatusDenotation.HIDDEN }));
+    handleDrawerWidth(0);
   };
 
   const [margin, setMargin] = useState(0);

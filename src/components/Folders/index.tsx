@@ -15,6 +15,7 @@ import ArrowDropDownOutlinedIcon from '@material-ui/icons/ArrowDropDownOutlined'
 import ArrowDropUpOutlinedIcon from '@material-ui/icons/ArrowDropUpOutlined';
 import { useValidateColor } from 'hooks/useValidateColor.hook';
 import { useBreakpointNames } from 'hooks/useBreakpointNames.hook';
+import { appearanceAnchorArr, APPEARANCE_URL, SETTING_URL, THEME, THEME_URL } from 'layouts/RouterLayout/denotation';
 
 const marginOfToogleGroups = 1;
 
@@ -159,13 +160,7 @@ const useStyles = makeStyles(
   })
 );
 
-const SETTING_URL = '/settings';
 
-const THEME = 'theme';
-const APPEARANCE = 'appearance';
-
-const APPEARANCE_URL = `${SETTING_URL}/${APPEARANCE}`;
-const THEME_URL = `${SETTING_URL}/${THEME}`;
 export const ACCOUNT_URL = `${SETTING_URL}/account`;
 const SECURITY_URL = `${SETTING_URL}/security`;
 
@@ -177,13 +172,6 @@ export const themeAnchorArr = {
 
 export const themeAnchorIdArr = mapValues(themeAnchorArr, el => '#' + el);
 
-const appearanceAnchorArr = {
-  FOLDERS_ID: `#${APPEARANCE}_folders`,
-  PAKEEPS_ID: `#${APPEARANCE}_pakeeps`,
-  HEADER_ID: `#${APPEARANCE}_header`,
-  LABELS_ID: `#${APPEARANCE}_labels`,
-  EVENTS_ID: `#${APPEARANCE}_events`
-};
 
 const Folders: FC<FoldersTypeProps> = ({
   value,

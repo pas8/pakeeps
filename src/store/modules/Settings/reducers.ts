@@ -1,7 +1,7 @@
 import { TypeNames } from './enums';
 import { SettingsActionTypes, SettingsInitialStateType } from './types';
 
-const settingsInitialState: SettingsInitialStateType = {
+export const settingsInitialState: SettingsInitialStateType = {
   viewOfThemeChangerButton: 'iconButton', // 'iconButton' ||  'switch'
   maxSnack: 4,
   isUtilsHaveViewLikeInGoogleKeep: true,

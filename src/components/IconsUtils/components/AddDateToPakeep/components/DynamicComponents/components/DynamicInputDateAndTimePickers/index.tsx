@@ -1,38 +1,26 @@
-import PropTypes from 'prop-types';
 import { KeyboardDateTimePicker, KeyboardTimePicker } from '@material-ui/pickers';
-import { Grid, InputAdornment, makeStyles, Box, SvgIcon } from '@material-ui/core';
-import { FC, memo, useState } from 'react';
+import { Grid, InputAdornment, makeStyles, Box } from '@material-ui/core';
+import { FC, memo } from 'react';
 import { format as toFormat, isValid } from 'date-fns';
 import { useAlpha } from 'hooks/useAlpha.hook';
 import CloseIcon from '@material-ui/icons/Close';
 import IconButtonByPas from 'components/IconButton';
 import { Typography } from '@material-ui/core';
-import { colord, extend } from 'colord';
+import { extend } from 'colord';
 import mixPlugin from 'colord/plugins/mix';
 import { useIsColorLight } from 'hooks/useIsColorLight.hook';
-import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
 import { DynamicInputDateAndTimePickersPropsType, UseStylesOfDynamicInputDateAndTimePickersPropsType } from './types';
 import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date';
 import { defaultTheme } from 'store/modules/Color/reducers';
 import { useDispatch } from 'react-redux';
 import { toChangeThemeColors } from 'store/modules/App/actions';
-
-const EditIcon = () => {
-  return (
-    <SvgIcon viewBox={'0 0 24 24'}>
-      <path d="M19,3H18V1H16V3H8V1H6V3H5A2,2 0 0,0 3,5V19A2,2 0 0,0 5,21H10V19H5V8H19V9H21V5A2,2 0 0,0 19,3M21.7,13.35L20.7,14.35L18.65,12.35L19.65,11.35C19.85,11.14 20.19,11.13 20.42,11.35L21.7,12.63C21.89,12.83 21.89,13.15 21.7,13.35M12,18.94L18.07,12.88L20.12,14.88L14.06,21H12V18.94Z" />
-    </SvgIcon>
-  );
-};
+import EventEditIconByPas from 'components/Icons/components/EventEditIcon';
 
 export const useStyles = makeStyles(({ spacing, typography: { h4 }, palette }) => ({
   '@global': {
     '.MuiPickersToolbarText-toolbarTxt,.MuiPickersToolbarText-toolbarBtnSelected': {
       color: ({ customColor }: UseStylesOfDynamicInputDateAndTimePickersPropsType) =>
         `${customColor.isUseDefault && !useIsColorLight(customColor?.bgHover) && customColor.unHover} !important`
-    },
-    '.MuiPickersModal-dialogRoot': {
-      // borderRadius: ({ customColor }) => customColor && '6px'
     }
   },
   container: ({
@@ -69,15 +57,8 @@ export const useStyles = makeStyles(({ spacing, typography: { h4 }, palette }) =
 
       '& input': {
         color: defaultHoverColor,
-
-        // color: correctName ? 'rgba(255,255,255,0.96)' : 'rgba(255,255,255,0.8)',
         width: onlyTime ? spacing(isSizeSmaller ? 8 : 10) : spacing(isSizeSmaller ? 24 : 42)
       },
-
-      // '& label.Mui-focused': {
-      //   color: customColor
-      // },
-
       '& button:hover': {
         '& svg': {
           color: defaultHoverColor
@@ -96,11 +77,11 @@ export const useStyles = makeStyles(({ spacing, typography: { h4 }, palette }) =
         },
         '&:hover fieldset': {
           borderColor: defaultHoverColor,
-          boxShadow: customColor.isUseDefault ? '' : `0px 0px 4px 1px ${defaultHoverColor}`
+          boxShadow: customColor.isUseDefault ? '' : `0px 0px 4px 1px ${error ? palette.error.main : defaultHoverColor}`
         },
         '&.Mui-focused fieldset': {
           borderColor: focusedColor,
-          boxShadow: customColor ? '' : `0px 0px 4px 1px ${focusedColor}`
+          boxShadow: customColor ? '' : `0px 0px 4px 1px ${error ? palette.error.main : focusedColor}`
         },
         '&.Mui-focused ': {
           color: customColor.bgUnHover
@@ -160,7 +141,6 @@ const DynamicInputDateAndTimePickers: FC<DynamicInputDateAndTimePickersPropsType
 
   const autoFocus = focusedEventId === name;
   const onOpen = () => {
-    console.log(';');
     // !customColor.isUseDefault &&
     //   dispatch(
     //     toChangeThemeColors({
@@ -185,7 +165,7 @@ const DynamicInputDateAndTimePickers: FC<DynamicInputDateAndTimePickersPropsType
       <InputAdornment position={'end'} className={classes.containerOfEndAdornment}>
         <Typography component={'p'}> {title}</Typography>
         <Box ml={1.4} display={'flex'}>
-          <IconButtonByPas icon={EditIcon} size={'small'} onClick={onClickOfEditIcon} />
+          <IconButtonByPas icon={EventEditIconByPas} size={'small'} onClick={onClickOfEditIcon} />
         </Box>
         <Box ml={1.4} display={'flex'} mr={-0.4}>
           <IconButtonByPas icon={CloseIcon} size={'small'} onClick={onClickOfCloseIcon} />

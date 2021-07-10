@@ -1,8 +1,9 @@
+import { NONE } from 'models/denotation';
 import { TypeNames } from './enums';
 import { AuthActionTypes, AuthInitialStateType } from './types';
 
 const authInitialState: AuthInitialStateType = {
-  isLogined: false,
+  isLogined: NONE,
   isAnonymous: false,
   isError: false,
   errorMessage: ''

@@ -23,62 +23,86 @@ import { colord } from 'colord';
 import { DEFAULT, NONE, OUTLINED, PRIMARY, SECONDARY, TRANSPARENT } from 'models/denotation';
 import { DialogLayoutName, MenusLayoutName } from 'models/unums';
 
-const labelsOfInitialState: GlobalLabelsType = [
-  { color: '', title: 'Day plans', iconName: 'category', id: 'label0', variant: 'outlined' },
-  { color: '#dd6b2a', title: 'Week plans', iconName: 'star', id: 'label1', variant: 'outlined' },
-  { color: 'primary', title: 'Mouth plans', iconName: 'keyboard', id: 'label2', variant: 'outlined' },
-  { color: 'secondary', title: 'Year plans', iconName: '', id: 'label3', variant: 'outlined' },
-  { color: '#6e9f47', title: 'Your plans', iconName: 'star', id: 'label6', variant: 'default' },
-  { color: '', title: 'Hobby Placeholders', iconName: 'bookmark', id: 'label4', variant: 'default' },
-  { color: '#afa646', title: 'Eco', iconName: 'eco', id: 'label8', variant: 'default' }
-];
+// pakeeps: [
+//   {
+//     title: 'Placeholder 1',
+//     text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+//     isInBookmark: true,
+//     isFavorite: true,
+//     color: 'default',
+//     labels: ['label3', 'label1', 'label0', 'label2'],
+//     isArchived: false,
+//     events: [
+//       { id: '1', value: addHours(new Date(), 2) },
+//       { id: '2', value: addHours(new Date(), 32) },
+//       { id: '3', value: addHours(new Date(), 100) }
+//     ],
+//     checkBoxes: Array(random(4, 10))
+//       .fill('')
+//       .map(() => ({ value: randomSentence(), isAccomplished: !!random(1), id: nanoid(), color: 'default' })),
+//     id: 'pakeep1',
+//     isPinned: true,
+//     isCheckBoxes: true,
+//     backgroundColor: 'default'
+//   },
+//   ...randomPakeeps
+// ],
+// const randomPakeeps = Array(8)
+//   .fill('pakeepID')
+//   .map((el, idx) => {
+//     const randomColor = colord({ r: random(256), g: random(256), b: random(256) }).toHex();
+//     const anotherRandomcolor = colord({ r: random(256), g: random(256), b: random(256) }).toHex();
 
-const randomPakeeps = Array(8)
-  .fill('pakeepID')
-  .map((el, idx) => {
-    const randomColor = colord({ r: random(256), g: random(256), b: random(256) }).toHex();
-    const anotherRandomcolor = colord({ r: random(256), g: random(256), b: random(256) }).toHex();
+//     const color = colord(randomColor).isDark() && colord(anotherRandomcolor).isLight() ? anotherRandomcolor : DEFAULT;
+//     const backgroundColor = color === DEFAULT ? randomColor : !!random(1) ? randomColor : DEFAULT;
 
-    const color = colord(randomColor).isDark() && colord(anotherRandomcolor).isLight() ? anotherRandomcolor : DEFAULT;
-    const backgroundColor = color === DEFAULT ? randomColor : !!random(1) ? randomColor : DEFAULT;
+//     const id = `${el}-${idx}`;
 
-    const id = `${el}-${idx}`;
+//     const text = `${Array(random(2, 8))
+//       .fill('')
+//       .map(() => randomSentence())
+//       .toString()}-${id}`;
 
-    const text = `${Array(random(2, 8))
-      .fill('')
-      .map(() => randomSentence())
-      .toString()}-${id}`;
+//     const isCheckBoxes = !!random(1);
+//     const checkBoxes = Array(random(2, 4))
+//       .fill('')
+//       .map(() => ({ value: randomSentence(), isAccomplished: !!random(1), id: nanoid(), color: 'default' }));
 
-    const isCheckBoxes = !!random(1);
-    const checkBoxes = Array(random(2, 4))
-      .fill('')
-      .map(() => ({ value: randomSentence(), isAccomplished: !!random(1), id: nanoid(), color: 'default' }));
+//     const events = [
+//       { id: '1', value: addHours(new Date(), 2) },
+//       { id: '2', value: addHours(new Date(), 32) },
+//       { id: '3', value: addHours(new Date(), 100) }
+//     ];
 
-    const events = [
-      { id: '1', value: addHours(new Date(), 2) },
-      { id: '2', value: addHours(new Date(), 32) },
-      { id: '3', value: addHours(new Date(), 100) }
-    ];
+//     return {
+//       title: randomSentence({ words: random(4, 8) }),
+//       text,
+//       isInBookmark: !!random(1),
+//       isFavorite: !!random(1),
+//       labels: sampleSize(
+//         labelsOfInitialState.map(({ id }) => id),
+//         random(labelsOfInitialState.length)
+//       ),
+//       isArchived: !!random(1),
+//       events,
+//       id,
+//       checkBoxes: isCheckBoxes ? checkBoxes : [],
+//       isPinned: !!random(1),
+//       backgroundColor,
+//       color,
+//       isCheckBoxes
+//     };
+//   });
 
-    return {
-      title: randomSentence({ words: random(4, 8) }),
-      text,
-      isInBookmark: !!random(1),
-      isFavorite: !!random(1),
-      labels: sampleSize(
-        labelsOfInitialState.map(({ id }) => id),
-        random(labelsOfInitialState.length)
-      ),
-      isArchived: !!random(1),
-      events,
-      id,
-      checkBoxes: isCheckBoxes ? checkBoxes : [],
-      isPinned: !!random(1),
-      backgroundColor,
-      color,
-      isCheckBoxes
-    };
-  });
+// const labelsOfInitialState: GlobalLabelsType = [
+//   { color: '', title: 'Day plans', iconName: 'category', id: 'label0', variant: 'outlined' },
+//   { color: '#dd6b2a', title: 'Week plans', iconName: 'star', id: 'label1', variant: 'outlined' },
+//   { color: 'primary', title: 'Mouth plans', iconName: 'keyboard', id: 'label2', variant: 'outlined' },
+//   { color: 'secondary', title: 'Year plans', iconName: '', id: 'label3', variant: 'outlined' },
+//   { color: '#6e9f47', title: 'Your plans', iconName: 'star', id: 'label6', variant: 'default' },
+//   { color: '', title: 'Hobby Placeholders', iconName: 'bookmark', id: 'label4', variant: 'default' },
+//   { color: '#afa646', title: 'Eco', iconName: 'eco', id: 'label8', variant: 'default' }
+// ];
 
 export const defaultAvatarProperties = {
   url: NONE,
@@ -100,109 +124,91 @@ export const nullityDefaultDialogProps = {
   customColor: {} as CustomColorType
 };
 
-export const initialState: AppInitialStateInteface = {
-  defaultFolderArr: [
-    { title: 'All pakeeps', iconName: '', id: 'folder-ALL', property: 'ALL', color: 'default' },
-    { title: 'Pined', iconName: 'pin', id: 'folder-isPinned', property: 'isPinned', color: 'default' },
-    { title: 'Bookmark', iconName: 'bookmark', id: 'folder-isInBookmark', property: 'isInBookmark', color: 'default' },
-    { title: 'Favorite', iconName: 'favorite', id: 'folder-isFavorite', property: 'isFavorite', color: 'default' },
-    {
-      title: 'With checkBoxes',
-      iconName: 'checkBox',
-      id: 'folder-isCheckBoxes',
-      property: 'isCheckBoxes',
-      color: 'default'
-    },
-    { title: 'Archiveted', iconName: 'archive', id: 'folder-isArchived', property: 'isArchived', color: 'default' }
-  ],
+// export const defaultEvents = [
+//   {
+//     title: 'Later today',
+//     iconName: 'today',
+//     id: '1',
+//     value: Date.now(),
+//     onlyTime: true,
+//     color: PRIMARY,
+//     variant: DEFAULT
+//   },
+//   {
+//     title: 'Tomorrow',
+//     iconName: 'tomorrow',
+//     id: '2',
+//     value: addDays(Date.now(), 1),
+//     onlyTime: true,
+//     color: SECONDARY,
+//     variant: OUTLINED
+//   },
+//   { title: 'Next week', iconName: 'week', id: '3', value: addDays(Date.now(), 7), color: DEFAULT, variant: OUTLINED },
+//   {
+//     title: 'Next Mouth',
+//     iconName: 'alarm',
+//     id: '4',
+//     value: addDays(Date.now(), 30),
+//     onlyTime: false,
+//     color: '#fbbc49',
+//     variant: DEFAULT
+//   }
+// ];
 
-  labels: labelsOfInitialState,
-
-  events: [
-    {
-      title: 'Later today',
-      iconName: 'today',
-      id: '1',
-      value: Date.now(),
-      onlyTime: true,
-      color: PRIMARY,
-      variant: DEFAULT
-    },
-    {
-      title: 'Tomorrow',
-      iconName: 'tomorrow',
-      id: '2',
-      value: addDays(Date.now(), 1),
-      onlyTime: true,
-      color: SECONDARY,
-      variant: OUTLINED
-    },
-    { title: 'Next week', iconName: 'week', id: '3', value: addDays(Date.now(), 7), color: DEFAULT, variant: OUTLINED },
-    {
-      title: 'Next Mouth',
-      iconName: 'alarm',
-      id: '4',
-      value: addDays(Date.now(), 30),
-      onlyTime: false,
-      color: '#fbbc49',
-      variant: DEFAULT
-    }
-  ],
-  selectedPakeepsId: [],
-  folders: [[]],
-
-  pakeeps: [],
-  // pakeeps: [
-  //   {
-  //     title: 'Placeholder 1',
-  //     text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-  //     isInBookmark: true,
-  //     isFavorite: true,
-  //     color: 'default',
-  //     labels: ['label3', 'label1', 'label0', 'label2'],
-  //     isArchived: false,
-  //     events: [
-  //       { id: '1', value: addHours(new Date(), 2) },
-  //       { id: '2', value: addHours(new Date(), 32) },
-  //       { id: '3', value: addHours(new Date(), 100) }
-  //     ],
-  //     checkBoxes: Array(random(4, 10))
-  //       .fill('')
-  //       .map(() => ({ value: randomSentence(), isAccomplished: !!random(1), id: nanoid(), color: 'default' })),
-  //     id: 'pakeep1',
-  //     isPinned: true,
-  //     isCheckBoxes: true,
-  //     backgroundColor: 'default'
-  //   },
-  //   ...randomPakeeps
-  // ],
-  pakeepsOrderNames: [],
-  pinnedPakeepsOrderNames: [],
-  notifinationCounter: 8,
+export const firebaseAppInitialState = {
+  avatarProperties: defaultAvatarProperties,
+  labels: [],
   userData: {
     email: NONE,
     userName: NONE,
     name: NONE
   },
+  events: [],
+  selectedPakeepsId: [],
+  pakeeps: [],
+  pakeepsOrderNames: []
+};
+
+const defaultFolderArr = [
+  { title: 'All pakeeps', iconName: '', id: 'folder-ALL', property: 'ALL', color: 'default' },
+  { title: 'Pined', iconName: 'pin', id: 'folder-isPinned', property: 'isPinned', color: 'default' },
+  { title: 'Bookmark', iconName: 'bookmark', id: 'folder-isInBookmark', property: 'isInBookmark', color: 'default' },
+  { title: 'Favorite', iconName: 'favorite', id: 'folder-isFavorite', property: 'isFavorite', color: 'default' },
+  {
+    title: 'With checkBoxes',
+    iconName: 'checkBox',
+    id: 'folder-isCheckBoxes',
+    property: 'isCheckBoxes',
+    color: 'default'
+  },
+  { title: 'Archiveted', iconName: 'archive', id: 'folder-isArchived', property: 'isArchived', color: 'default' }
+];
+
+const nullityOfTemporaryData = {
+  defaultMenuProps: nullityDefaultMenuProps,
+  defaultDialogProps: nullityDefaultDialogProps,
+
+  pakeep: {
+    id: '',
+    isHovering: false
+  },
+
+  globalEventList: [],
+  globalLabelList: []
+};
+
+export const initialState: AppInitialStateInteface = {
+  ...firebaseAppInitialState,
+  folders: [],
+  defaultFolderArr,
+  temporaryData: nullityOfTemporaryData,
+  pinnedPakeepsOrderNames: [],
+  notifinationCounter: 8,
   headerHeight: 0,
-  // menuOpenStatus: 'HIDDEN',
-  avatarProperties: defaultAvatarProperties,
-  menuOpenStatus: 'EXTENDED',
+  menuOpenStatus: 'OPEN',
   currentFolderPropertyIdx: 0,
   drawerWidth: 0,
-  isCancelSelectedPakeepsId: false,
-  temporaryData: {
-    defaultMenuProps: nullityDefaultMenuProps,
-    defaultDialogProps: nullityDefaultDialogProps,
-
-    pakeep: {
-      id: '',
-      isHovering: false
-    },
-
-    globalEventList: [],
-    globalLabelList: []
-  }
+  isCancelSelectedPakeepsId: false
 };
 
 // console.log(TypeNames)
@@ -237,7 +243,6 @@ export const AppReducer = (state = initialState, action: AppActionTypes): AppIni
     case TypeNames.HANDLE_ADD_LABEL_TO_PAKEEP: {
       const { pakeeps } = state;
       const variedState = useAddLabelToPakeep({ pakeeps, ...action.payload });
-      console.log(action.payload);
       return { ...state, ...variedState };
     }
 

@@ -1,25 +1,27 @@
 import { toAddNewPakeep } from './actions';
 import { PakeepElementType } from 'store/modules/App/types';
 import { ThunkType } from 'models/types';
-import firebase from 'firebase';
+// import firebase from 'firebase/app';
+// require('firebase/firestore');
 
-export const operateToAddNewPakeep =
-  (newPakeep: PakeepElementType): ThunkType<PakeepElementType> =>
-  dispatch => {
-    firebase
-      .firestore()
-      .collection('users')
-      .doc('pas8')
-      .collection('pakeeps')
-      .add(newPakeep)
-      .then(snapshot => {
-        // if (snapshot.exists) {
-          // let newPakeep = snapshot.data();
-          console.log(snapshot);
-          //  dispatch(toAddNewPakeep({newPakeep}))
-        // }
-      });
-  };
+export const operateToAddNewPakeep = () => {};
+// export const operateToAddNewPakeep =
+//   (newPakeep: PakeepElementType): ThunkType<PakeepElementType> =>
+//   dispatch => {
+//     firebase
+//       .firestore()
+//       .collection('users')
+//       .doc('pas8')
+//       .collection('pakeeps')
+//       .add(newPakeep)
+//       .then(snapshot => {
+//         // if (snapshot.exists) {
+//         // let newPakeep = snapshot.data();
+//         console.log(snapshot);
+//         //  dispatch(toAddNewPakeep({newPakeep}))
+//         // }
+//       });
+//   };
 
 // export const operateToChangeMenuOpenStatus: OperateWOP<
 //   PayloadTypes[TypeNames.HANDLE_CHANGE_MENU_OPEN_STATUS]

@@ -5,10 +5,10 @@ import { useDispatch } from 'react-redux';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import { NEW_USER_URL, SIGN_IN_URL } from 'models/denotation';
-import { ChangeEventHandler, FC, MouseEvent, useState } from 'react';
+import { ChangeEventHandler, FC, FormEventHandler, KeyboardEventHandler, MouseEvent, useState } from 'react';
 import { useRouter } from 'next/dist/client/router';
 
-import { operateToHandleRegister } from 'store/modules/Auth/operations';
+import { operateToHandleRegister, operateToHandleSignIn } from 'store/modules/Auth/operations';
 import { toChangeAnonymousStatus } from 'store/modules/Auth/actions';
 import { AuthFormPropsType } from './types';
 
@@ -80,29 +80,10 @@ const AuthForm: FC<AuthFormPropsType> = ({ isPageIsRegisted = false }) => {
 
   const handleRegistred = () => {
     dispatch(operateToHandleRegister({ email: formState.email.value, password: formState.password.value }));
-    // router.push(SIGN_IN_URL);
-
-    // firebase
-    //   .auth()
-    //   .createUserWithEmailAndPassword(formState.email.value, formState.password.value)
-    //   .then(result => {
-    //     enqueueSnackbar({ message: 'You successfully creataed an acount' });
-
-    //     firebase.firestore().collection('users').doc(firebase.auth().currentUser.uid).set({
-    //       email: formState.email.value,
-    //       avatar: 'none'
-    //     });
-    //   })
-
-    //   .catch(error => {
-    //     enqueueSnackbar({ message: error.message || 'Something went wrong', severity: 'error' });
-    //   });
   };
 
   const handleSignIn = () => {
-    dispatch(operateToHandleRegister({ email: formState.email.value, password: formState.password.value }));
-
-    router.push('/');
+    dispatch(operateToHandleSignIn({ email: formState.email.value, password: formState.password.value }));
   };
 
   const authFormDenotation = {
@@ -140,6 +121,11 @@ const AuthForm: FC<AuthFormPropsType> = ({ isPageIsRegisted = false }) => {
           const label = capitalize(name);
 
           // console.log(formState[name]);
+
+          const onKeyPress: KeyboardEventHandler<HTMLInputElement> = ({ code }) => {
+            isInputIsPassword && code === 'Enter' && onClickOfMainButton();
+          };
+
           const isInputIsPassword = name === authFormaNames.PASSWORD;
           return (
             <Grid className={classes.inputContainer} container>
@@ -147,6 +133,7 @@ const AuthForm: FC<AuthFormPropsType> = ({ isPageIsRegisted = false }) => {
                 label={label}
                 variant={'outlined'}
                 key={name}
+                onKeyPress={onKeyPress}
                 type={isInputIsPassword ? (isPasswordVisible ? 'text' : 'password') : 'email'}
                 InputProps={{
                   endAdornment: isInputIsPassword && (

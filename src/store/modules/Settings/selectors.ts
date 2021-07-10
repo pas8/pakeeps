@@ -34,7 +34,9 @@ export const getIsHeaderHavePaperColor = createSelector(
   isHeaderHavePaperColor => isHeaderHavePaperColor
 );
 
-export const getAmpmStatus = createSelector(
-  [({ settings: { ampm } }: RootStoreType) => ampm],
-  ampm => ampm
+export const getAmpmStatus = createSelector([({ settings: { ampm } }: RootStoreType) => ampm], ampm => ampm);
+
+export const getViewOfThemeChangerButton = createSelector(
+  [({ settings: { viewOfThemeChangerButton } }: RootStoreType) => viewOfThemeChangerButton],
+  viewOfThemeChangerButton => viewOfThemeChangerButton
 );

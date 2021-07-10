@@ -2,7 +2,8 @@ import { IconButton, makeStyles, Button, Tooltip, Grid, Menu, MenuItem, Typograp
 import AccountCircleOutlinedIcon from '@material-ui/icons/AccountCircleOutlined';
 import { ACCOUNT_URL } from 'components/Folders';
 import MenuByPas from 'components/Menu';
-import firebase from 'firebase';
+import firebase from 'firebase/app';
+import 'firebase/auth'
 import { useAlpha } from 'hooks/useAlpha.hook';
 import { useTakeIcon } from 'hooks/useTakeIcon.hook';
 import { NONE } from 'models/denotation';

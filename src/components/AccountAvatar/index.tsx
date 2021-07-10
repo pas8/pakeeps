@@ -12,6 +12,7 @@ import MenuByPas from 'components/Menu';
 import { useThemeColors } from 'hooks/useThemeColors.hook';
 import { useIsColorLight } from 'hooks/useIsColorLight.hook';
 import { AccountAvatarPropsType } from './types';
+import mixColor from 'mix-color';
 
 export const customColorPlaceholder: CustomColorType = {
   bgHover: '',
@@ -95,7 +96,7 @@ const AccountAvatar: FC<AccountAvatarPropsType> = ({
   const dispatch = useDispatch();
 
   const [primaryColor, secondaryColor] = useThemeColors();
-  const color = colord(primaryColor!).mix(secondaryColor!).toHex();
+  const color = mixColor(primaryColor!, secondaryColor!);
 
   const handleDeleteAvatar = () => {
     dispatch(toChangeAvatarProperties({ avatarProperties: defaultAvatarProperties }));
