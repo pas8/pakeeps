@@ -30,6 +30,7 @@ import {
   OnChangeOfLabelColorRadioType,
   UseStylesOfDialogOfAddNewLabelProps
 } from './types';
+import { DefaultMenuLayoutElementPropsType } from 'layouts/DialogsLayout/types';
 
 export const useStyles = makeStyles(({ spacing, palette }) => ({
   container: ({ customColor }: UseStylesOfDialogOfAddNewLabelProps) => ({
@@ -47,10 +48,8 @@ export const useStyles = makeStyles(({ spacing, palette }) => ({
   })
 }));
 
-const DialogOfAddNewLabel: FC<DialogOfAddingNewGlobalEventPropsType> = ({
-  open,
+const DialogOfAddNewLabel: FC<DefaultMenuLayoutElementPropsType> = ({
   onClose,
-  handleOpenDialog,
   customColor
 }) => {
   const dispatch = useDispatch();

@@ -3,7 +3,7 @@ import { IconsUtilsPropsType } from 'components/IconsUtils/types';
 
 export type EditingDialogOfPakeepElementProps = {
   id: string;
-  handleClosePakeepDialog: () => void;
+  onClose: () => void;
 };
 
 export type OnChangeTargetType = {

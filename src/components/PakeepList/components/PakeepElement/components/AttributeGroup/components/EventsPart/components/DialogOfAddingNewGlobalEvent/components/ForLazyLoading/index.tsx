@@ -11,7 +11,7 @@ import { includes, isEqual } from 'lodash';
 import RestoreOutlinedIcon from '@material-ui/icons/RestoreOutlined';
 import { Skeleton } from '@material-ui/lab';
 import { colord } from 'colord';
-import { usePrevious } from 'react-use';
+import { usePrevious, useToggle } from 'react-use';
 import { useSnackbar } from 'notistack';
 
 import { DEFAULT, OUTLINED, PRIMARY, SECONDARY } from 'models/denotation';
@@ -44,10 +44,8 @@ const SteperOfDialogOfAddNewLabel = dynamic(
 );
 
 const ForLazyLoadingDialogOfAddingNewGlobalEvent: FC<DialogOfAddingNewGlobalEventPropsType> = ({
-  open,
   customColor: notValidCustomColor,
   onClose,
-  handleOpenDialog
 }) => {
   const dispatch = useDispatch();
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
@@ -76,6 +74,9 @@ const ForLazyLoadingDialogOfAddingNewGlobalEvent: FC<DialogOfAddingNewGlobalEven
   };
   const timeAndDateFormat = useSelector(getTimeAndDateFromat);
   const timeFormat = useSelector(getTimeFormat);
+
+  const [isDialogOpen, setIsDialogOpen] = useToggle(true)
+
 
   const [eventState, setEventState] = useState(nullityEventState);
 
@@ -226,12 +227,12 @@ const ForLazyLoadingDialogOfAddingNewGlobalEvent: FC<DialogOfAddingNewGlobalEven
     if (!previuosNewEventState) return;
 
     !isEqual(nullityEventState, previuosNewEventState) && setEventState(previuosNewEventState);
-    handleOpenDialog();
+    setIsDialogOpen(true)
     closeSnackbar();
   };
 
   const handleCloseDialog = () => {
-    onClose();
+    setIsDialogOpen(false)
     toNullityEventState();
     !isEqual(nullityEventState, eventState) &&
       enqueueSnackbar({
@@ -251,7 +252,7 @@ const ForLazyLoadingDialogOfAddingNewGlobalEvent: FC<DialogOfAddingNewGlobalEven
   };
 
   return (
-    <Dialog open={open} className={classes.container} onClose={onClose}>
+    <Dialog open={isDialogOpen} className={classes.container} onClose={onClose}>
       <DialogTitle>{'Creating new global event'}</DialogTitle>
       <SteperOfDialogOfAddNewLabel {...steperProps} />
       <DialogActions>

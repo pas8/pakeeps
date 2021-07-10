@@ -1,9 +1,7 @@
 import { Grid, makeStyles } from '@material-ui/core';
-import { colord } from 'colord';
-import { useAlpha } from 'hooks/useAlpha.hook';
-import PropTypes from 'prop-types';
-import { FC, SyntheticEvent, useEffect, useState } from 'react';
+import { FC,  useEffect, useState } from 'react';
 import Selecto, { OnDragStart, OnScroll, OnSelect, OnSelectEnd } from 'react-selecto';
+import { useAlpha } from 'hooks/useAlpha.hook';
 import { SelectofFPakeepListContainerPropsType } from './types';
 
 const useStyles = makeStyles(({ palette: { secondary } }) => ({

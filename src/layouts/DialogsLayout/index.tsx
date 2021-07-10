@@ -9,6 +9,7 @@ import { DialogLayoutName } from 'models/unums';
 import { nullityDefaultDialogProps } from 'store/modules/App/reducers';
 import { getDefaultDialogPropsOfTemporaryData } from 'store/modules/App/selectors';
 import { DialogsLayoutPropsType } from './types';
+import EditingDialogOfPakeepElement from 'components/PakeepList/components/EditingDialogOfPakeepElement';
 
 const DialogsLayout: FC<DialogsLayoutPropsType> = ({ children }) => {
   const dialogProps = useSelector(getDefaultDialogPropsOfTemporaryData);
@@ -16,23 +17,20 @@ const DialogsLayout: FC<DialogsLayoutPropsType> = ({ children }) => {
 
   const dispatch = useDispatch();
 
-  const previuosDefaultMenuProps = usePrevious(dialogProps);
-
-  const handleOpenDialog = () => {
-    dispatch(toChangeTemporaryData({ newTemporaryData: { defaultDialogProps: previuosDefaultMenuProps } }));
-  };
 
   const onClose = () => {
     dispatch(toChangeTemporaryData({ newTemporaryData: { defaultDialogProps: nullityDefaultDialogProps } }));
   };
 
-  const defaultMenuLayoutElementProps = { ...defaultMenuProps, onClose, handleOpenDialog };
+  const defaultMenuLayoutElementProps = { ...defaultMenuProps, onClose };
 
   const menuesComponentsArr = [
     { Component: DialogOfAddingNewGlobalEvent, props: defaultMenuLayoutElementProps, name: DialogLayoutName.EVENTS },
-    { Component: DialogOfAddNewLabel, props: defaultMenuLayoutElementProps, name: DialogLayoutName.LABELS }
+    { Component: DialogOfAddNewLabel, props: defaultMenuLayoutElementProps, name: DialogLayoutName.LABELS },
+    { Component: EditingDialogOfPakeepElement, props: defaultMenuLayoutElementProps, name: DialogLayoutName.PAKEEPS },
   ];
 
+  
   const menuesHidden = dialogName === DialogLayoutName.NONE;
   return (
     <>
@@ -41,7 +39,7 @@ const DialogsLayout: FC<DialogsLayoutPropsType> = ({ children }) => {
         menuesComponentsArr.map(({ Component, props, name }, idx) => {
           if (name !== dialogName) return null;
 
-          return <Component {...props} key={`menuesComponentsArr-${name}-${idx}`} open />;
+          return <Component {...props} key={`menuesComponentsArr-${name}-${idx}`} />;
         })}
     </>
   );

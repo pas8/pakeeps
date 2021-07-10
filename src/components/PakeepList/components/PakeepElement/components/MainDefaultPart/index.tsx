@@ -1,21 +1,13 @@
-import {
-  Grid,
-  makeStyles,
-  Paper,
-  IconButton,
-  Typography,
-  Checkbox,
-  withStyles,
-  CheckboxProps
-} from '@material-ui/core';
-import PropTypes from 'prop-types';
+import { FC } from 'react';
+import { Grid, makeStyles, Paper, IconButton, Typography, Checkbox } from '@material-ui/core';
+import compareFunc from 'compare-func';
 import { colord } from 'colord';
+
 import PinOutlinedIcon from 'components/Icons/components/PinOutlinedIcon';
 import PinIcon from 'components/Icons/components/PinIcon';
-import { FC } from 'react';
-import { MainDefaultPartOfPakeepElementPropsType, UseStylesOfMainDefaultPartOfPakeepElementType } from './types';
 import { useAlpha } from 'hooks/useAlpha.hook';
-import compareFunc from 'compare-func';
+import { MainDefaultPartOfPakeepElementPropsType, UseStylesOfMainDefaultPartOfPakeepElementType } from './types';
+
 const useStyles = makeStyles(({ spacing, palette: { highEmphasis, mediumEmphasis }, typography }) => ({
   titleClass: {
     textOverflow: 'ellipsis',
@@ -56,7 +48,7 @@ const useStyles = makeStyles(({ spacing, palette: { highEmphasis, mediumEmphasis
     marginBottom: spacing(0.8),
     position: 'relative',
     '& p': {
-      padding:spacing(0,0.6,0,3.6)
+      padding: spacing(0, 0.6, 0, 3.6)
       // textIndent: 28
       // '&::first-line': {
       // marginLeft: 100
@@ -100,7 +92,6 @@ const MainDefaultPartOfPakeepElement: FC<MainDefaultPartOfPakeepElementPropsType
                 checkBoxes.sort(compareFunc('isAccomplished')).map(({ id, value, isAccomplished }) => {
                   return (
                     <Grid
-                      // item
                       container
                       key={`mainDefaultPartOfPakeepElement-${id}`}
                       className={classes.checkBoxesItemContainer}
@@ -121,7 +112,7 @@ const MainDefaultPartOfPakeepElement: FC<MainDefaultPartOfPakeepElementPropsType
             <Typography variant={'body2'} component={'p'}>
               {text}
             </Typography>
-          )}{' '}
+          )}
         </Grid>
       </Grid>
       {children}

@@ -1,30 +1,25 @@
-import { useState, FC, useEffect } from 'react';
-import { usePrevious } from 'react-use';
+import { FC } from 'react';
+import { usePrevious, useToggle } from 'react-use';
 import RestoreOutlinedIcon from '@material-ui/icons/RestoreOutlined';
 import { useMeasure } from 'react-use';
-import { useDispatch, useSelector } from 'react-redux';
-
-import { Grid, makeStyles, DialogTitle, DialogContent, InputBase, Dialog, DialogActions } from '@material-ui/core';
-import IconsUtils from 'components/IconsUtils';
-import { useAlpha } from 'hooks/useAlpha.hook';
-import ActionsButtonGroup from 'components/ActionsButtonGroup';
-
-import { getPakeeps } from 'store/modules/App/selectors';
-import { useFindPakeepUsingId } from 'hooks/useFindPakeepUsingId.hook';
-import { useGetReadableColor } from 'hooks/useGetReadableColor.hook';
-import { usePakeepUtilsFunc } from 'hooks/usePakeepUtilsFunc.hook';
-import { IconsUtilsArrDenotationNameType } from 'components/IconsUtils/types';
-// import AttributeGroup from '../PakeepElement/components/AttributeGroup';
-
-import { EditingDialogOfPakeepElementProps, onChangeType, UseStylesInteface } from './types';
-import { useLabelListFunc } from 'hooks/useLabelListFunc.hook';
-import { useNewPakeepUtility } from 'hooks/useNewPakeepUtility.hook';
-import CheckBoxContainer from 'components/CheckBoxContainer';
-import { useNewPakeepStatuses } from 'hooks/useNewPakeepStatuses.hook';
-import AttributeGroup from '../PakeepElement/components/AttributeGroup';
-import { toEditPakeep } from 'store/modules/App/actions';
 import { useSnackbar } from 'notistack';
 import { isEqual } from 'lodash';
+import { useDispatch } from 'react-redux';
+import { Grid, makeStyles, DialogTitle, DialogContent, InputBase, Dialog, DialogActions } from '@material-ui/core';
+
+import IconsUtils from 'components/IconsUtils';
+import { useAlpha } from 'hooks/useAlpha.hook';
+import CheckBoxContainer from 'components/CheckBoxContainer';
+import ActionsButtonGroup from 'components/ActionsButtonGroup';
+import { toEditPakeep } from 'store/modules/App/actions';
+import { useFindPakeepUsingId } from 'hooks/useFindPakeepUsingId.hook';
+import { DefaultMenuLayoutElementPropsType } from 'layouts/DialogsLayout/types';
+import { useNewPakeepUtility } from 'hooks/useNewPakeepUtility.hook';
+import { useGetReadableColor } from 'hooks/useGetReadableColor.hook';
+import { IconsUtilsArrDenotationNameType } from 'components/IconsUtils/types';
+import { useNewPakeepStatuses } from 'hooks/useNewPakeepStatuses.hook';
+import { UseStylesInteface } from './types';
+import AttributeGroup from '../PakeepElement/components/AttributeGroup';
 
 const useStyles = makeStyles(({ typography: { h4, h6, body1, h5 }, spacing }) => {
   return {
@@ -39,8 +34,6 @@ const useStyles = makeStyles(({ typography: { h4, h6, body1, h5 }, spacing }) =>
         paddingRight: spacing(1.8),
         '& input': {
           ...h4
-          // fontSize: spacing(2.8),
-          // fontSize: h4.fontSize
         }
       },
       '& input, textarea': {
@@ -53,11 +46,6 @@ const useStyles = makeStyles(({ typography: { h4, h6, body1, h5 }, spacing }) =>
       },
       '& textarea': {
         ...body1
-        // lineHeight: spacing(0.2),
-        // fontWeight: 200,
-        // fontSize: h6.fontSize,
-        // marginTop: spacing(0.4)
-        // marginBottom: spacing(-2)
       }
     }),
     attributeGroupContainer: {
@@ -67,9 +55,9 @@ const useStyles = makeStyles(({ typography: { h4, h6, body1, h5 }, spacing }) =>
   };
 });
 
-const EditingDialogOfPakeepElement: FC<EditingDialogOfPakeepElementProps> = ({
+const EditingDialogOfPakeepElement: FC<DefaultMenuLayoutElementPropsType> = ({
   id: pakeepId,
-  handleClosePakeepDialog
+  onClose: handleClosePakeepDialog
 }) => {
   if (!pakeepId) return null;
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
@@ -191,8 +179,11 @@ const EditingDialogOfPakeepElement: FC<EditingDialogOfPakeepElementProps> = ({
     if (!previuosState) return;
 
     !isEqual(findedPakeep, previuosState) && setState(previuosState);
+    setIsDialogOpen(true);
     closeSnackbar();
   };
+
+  const [isDialogOpen, setIsDialogOpen] = useToggle(true);
 
   const handleSubmit = () => {
     dispatch(toEditPakeep({ editedPakeep: state }));
@@ -201,10 +192,8 @@ const EditingDialogOfPakeepElement: FC<EditingDialogOfPakeepElementProps> = ({
     handleClosePakeepDialog();
   };
 
-  const isOpen = !!id;
-
   const onClose = () => {
-    handleClosePakeepDialog();
+    setIsDialogOpen(false);
     !isEqual(findedPakeep, previuosState) &&
       enqueueSnackbar({
         message: 'Dialog of creating label was closed',
@@ -224,7 +213,7 @@ const EditingDialogOfPakeepElement: FC<EditingDialogOfPakeepElementProps> = ({
 
   return (
     <Dialog
-      open={isOpen}
+      open={isDialogOpen}
       onClose={onClose}
       maxWidth={statusState.isNewPakeepContainerHaveFullWidth ? 'xl' : 'sm'}
       fullWidth={statusState.isNewPakeepContainerHaveFullWidth}
@@ -250,23 +239,12 @@ const EditingDialogOfPakeepElement: FC<EditingDialogOfPakeepElementProps> = ({
             <InputBase {...textInputProps} />
           )}
         </DialogContent>
-
-        {/* {!statusState.isTextHidden && !statusState.isLabelViewHidden && ( */}
-
-        {/* )} */}
-
         <DialogActions>
           <Grid container>
             <Grid container className={classes.attributeGroupContainer}>
               <AttributeGroup {...attributeGroupProps} />
             </Grid>
-            <Grid
-              // className={classes.dialogIconsUtilsClass}
-              container
-              alignItems={'center'}
-              justify={'space-between'}
-              wrap={'nowrap'}
-            >
+            <Grid container alignItems={'center'} justify={'space-between'} wrap={'nowrap'}>
               <Grid>
                 <IconsUtils {...iconsUtilsProps} />
               </Grid>
