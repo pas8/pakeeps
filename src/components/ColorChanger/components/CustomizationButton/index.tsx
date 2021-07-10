@@ -15,11 +15,11 @@ const useStyles = makeStyles(theme => ({
       background: isColorDefault ? 'transparent' : isColorDark ? colorInHexFormat : 'transparent',
       borderColor: isColorDefault ? 'white' : color === nullityColor ? 'transparent' : colorInHexFormat,
       '& h6': {
-        color: !isColorDark
-          ? colorInHexFormat
-          : theme.palette.text.primary || customColor.isUseDefault
-          ? customColor.bgHover
-          : ''
+        color:  isColorDefault ? 'white' : isColorDark 
+          ? 'white'
+          : colorInHexFormat 
+          // ? customColor.bgHover
+          // : ''
       },
       '& .MuiSvgIcon-root': { width: theme.spacing(2 / (0.8 + 0.1)) }
     };

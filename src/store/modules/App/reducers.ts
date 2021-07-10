@@ -5,6 +5,7 @@ import { TypeNames } from './enums';
 import {
   useAddLabelToPakeep,
   useAddNewPakeep,
+  useChangeGlobalEventItem,
   useChangeGlobalLabelItem,
   useChangePakeepCustomProperty,
   useChangePakeepProperty,
@@ -20,6 +21,7 @@ import { random, sampleSize, words, filter } from 'lodash';
 import randomSentence from 'random-sentence';
 import { colord } from 'colord';
 import { DEFAULT, NONE, OUTLINED, PRIMARY, SECONDARY, TRANSPARENT } from 'models/denotation';
+import { MenusLayoutName } from 'models/unums';
 
 const labelsOfInitialState: GlobalLabelsType = [
   { color: '', title: 'Day plans', iconName: 'category', id: 'label0', variant: 'outlined' },
@@ -82,6 +84,14 @@ export const defaultAvatarProperties = {
   url: NONE,
   borderRadius: 2,
   backgroundColor: TRANSPARENT
+};
+
+export const nullityDefaultMenuProps = {
+  mouseY: 0,
+  menuName: MenusLayoutName.NONE,
+  mouseX: 0,
+  id: NONE,
+  customColor: {} as CustomColorType
 };
 
 export const initialState: AppInitialStateInteface = {
@@ -176,20 +186,12 @@ export const initialState: AppInitialStateInteface = {
   drawerWidth: 0,
   isCancelSelectedPakeepsId: false,
   temporaryData: {
-    defaultMenuProps: {
-      mouseY: 0,
-      mouseX: 0,
-      customColor: {} as CustomColorType
-    },
-
+    defaultMenuProps: nullityDefaultMenuProps,
     pakeep: {
       id: '',
       isHovering: false
     },
 
-    labelItem: {
-      id: ''
-    },
     globalEventList: [],
     globalLabelList: []
   }
@@ -221,7 +223,6 @@ export const AppReducer = (state = initialState, action: AppActionTypes): AppIni
     }
     case TypeNames.HANDLE_ADD_GLOBAL_EVENT: {
       const { newEvent } = action.payload;
-      console.log([...state.events, newEvent]);
       return { ...state, events: [...state.events, newEvent] };
     }
 
@@ -266,6 +267,14 @@ export const AppReducer = (state = initialState, action: AppActionTypes): AppIni
 
       return { ...state, ...variedState };
     }
+
+    case TypeNames.HANDLE_CHANGE_GLOBAL_EVENT_ITEM: {
+      const { events: globalEvents } = state;
+      const variedState = useChangeGlobalEventItem({ globalEvents, ...action.payload });
+
+      return { ...state, ...variedState };
+    }
+
     case TypeNames.HANDLE_CHANGE_PAKEEP_PROPERTY: {
       const { pakeeps } = state;
       const variedState = useChangePakeepProperty({ pakeeps, ...action.payload });
@@ -315,6 +324,12 @@ export const AppReducer = (state = initialState, action: AppActionTypes): AppIni
       const { labelId } = action.payload;
       const labels = filter(state.labels, ({ id }) => id !== labelId);
       return { ...state, labels };
+    }
+
+    case TypeNames.HANDLE_DELETE_GLOBAL_EVENT: {
+      const { eventId } = action.payload;
+      const events = filter(state.events, ({ id }) => id !== eventId);
+      return { ...state, events };
     }
 
     case TypeNames.HANDLE_SET_ORDER_NAMES_OF_PINNED_PAKEEPS:

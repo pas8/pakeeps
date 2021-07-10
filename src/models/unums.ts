@@ -3,4 +3,8 @@ export enum VariantsOfropertiesToUtils {
   VALUE = 'VALUE'
 }
 
-
+export enum MenusLayoutName {
+  EVENTS = 'events',
+  LABELS = 'labels',
+  NONE = 'none'
+}

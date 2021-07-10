@@ -3,6 +3,7 @@ import { pakeepPropertyiesNames } from 'models/denotation';
 import { CustomColorType, SelectedPakeepsIdType, SelectedPakeepsType } from 'models/types';
 import { $Keys, $Values, Brand, Optional } from 'utility-types';
 import { TypeNames } from './enums';
+import { MenusLayoutName } from 'models/unums';
 
 export type PayloadTypes = {
   [TypeNames.HANDLE_ADD_NEW_PAKEEP]: {
@@ -16,6 +17,8 @@ export type PayloadTypes = {
   [TypeNames.HANDLE_CHANGE_FOLDERS]: { folders: FoldersType };
   [TypeNames.HANDLE_CHANGE_GLOBAL_LABELS]: { labels: GlobalLabelsType };
   [TypeNames.HANDLE_CHANGE_GLOBAL_LABEL_ITEM]: { changedLabel: ILabelElement };
+  [TypeNames.HANDLE_CHANGE_GLOBAL_EVENT_ITEM]: { changedEvent: IGlobalEvent };
+
   [TypeNames.HANDLE_DELETE_LABEL_FROM_PAKEEP]: {
     currentPakeepId: PakeepIdType;
     labelIdWhichShouldBeDeleted: LabelIdType;
@@ -64,9 +67,23 @@ export type PayloadTypes = {
     propertyName: DefaultFolderElementPropertyNamesType;
     pakeepId: PakeepIdType;
   };
+
+  [TypeNames.HANDLE_DELETE_GLOBAL_EVENT]: {
+    eventId: EventIdType;
+  };
 };
 
 export type ActionsValueTypes = {
+
+  
+  toChangeGlobalEventItem: {
+    type: typeof TypeNames.HANDLE_CHANGE_GLOBAL_EVENT_ITEM;
+    payload: PayloadTypes[TypeNames.HANDLE_CHANGE_GLOBAL_EVENT_ITEM];
+  };
+  toDeleteGlobalEvent: {
+    type: typeof TypeNames.HANDLE_DELETE_GLOBAL_EVENT;
+    payload: PayloadTypes[TypeNames.HANDLE_DELETE_GLOBAL_EVENT];
+  };
   toEditPakeep: {
     type: typeof TypeNames.HANDLE_EDIT_PAKEEP;
     payload: PayloadTypes[TypeNames.HANDLE_EDIT_PAKEEP];
@@ -238,7 +255,6 @@ export type useHooksTypes = {
     pakeepId: PakeepIdType;
     pakeeps: PakeepsType;
   };
-
 };
 export type OnlyPakeepReturnType = { pakeeps: PakeepsType };
 // export type ActionWithOnlyPayloadType<T> = (payload: T) => AppActionTypes;
@@ -388,15 +404,14 @@ export type TemporaryDatatype = {
     id: string;
     isHovering: boolean;
   };
-  labelItem: {
-    id: string;
-  };
   globalLabelList: LabelsOfPakeepType;
   globalEventList: EventsOfPakeepType;
 };
 
 export type DefaultMenuPropsType = {
+  id: string;
   customColor: CustomColorType;
+  menuName: MenusLayoutName;
 } & CoordinatesType;
 
 export type CoordinatesType = {

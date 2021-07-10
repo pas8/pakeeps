@@ -1,8 +1,6 @@
 import { LabelsOfPakeepType } from './../../../../../../store/modules/App/types';
-import { CustomColorType, UseStylesCustomColorType } from 'models/types';
-import { Dispatch, SetStateAction } from 'react';
-import { ILabelElement, LabelIdType } from 'store/modules/App/types';
-import { HandleChangeNewLabelType, MenuStateOfLabelsListType } from '../../types';
+import { UseStylesCustomColorType } from 'models/types';
+import { HandleChangeNewLabelType } from '../../types';
 
 export type UseStylesOfGlobalLabelListOflabelListType = {
   color: string;
@@ -12,5 +10,4 @@ export type UseStylesOfGlobalLabelListOflabelListType = {
 export type GlobalLabelListOflabelListPropsType = {
   handleChangeNewLabel: HandleChangeNewLabelType;
   selectedLabels: LabelsOfPakeepType;
-  setMenuState: Dispatch<SetStateAction<MenuStateOfLabelsListType>>;
 } & UseStylesCustomColorType;

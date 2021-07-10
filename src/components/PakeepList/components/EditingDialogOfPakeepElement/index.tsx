@@ -167,6 +167,8 @@ const EditingDialogOfPakeepElement: FC<EditingDialogOfPakeepElementProps> = ({
     ...iconUtilsFuncs,
     labelsListProps,
     widthOfContainer,
+    isBackgroundColorDefault,
+    isColorDefault,
     id,
     handleSetWidth,
     eventsListProps,

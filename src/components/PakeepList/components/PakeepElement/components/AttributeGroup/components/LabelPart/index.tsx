@@ -1,5 +1,4 @@
-import React, { useState, FC, MouseEvent, memo } from 'react';
-import { nanoid } from 'nanoid';
+import React, {  FC, MouseEvent, memo } from 'react';
 import { useDispatch } from 'react-redux';
 import { useFindIcon } from 'hooks/useFindIcon.hook';
 import { toChangeTemporaryData } from 'store/modules/App/actions';
@@ -7,6 +6,7 @@ import { useGetReversedCustomColor } from 'hooks/useGetReversedCustomColor.hook'
 import LabelItem from './components/LabelItem';
 import { LabelPartPropsType } from './types';
 import { Grid } from '@material-ui/core';
+import { MenusLayoutName } from 'models/unums';
 
 const LabelPart: FC<LabelPartPropsType> = ({
   labels,
@@ -19,7 +19,7 @@ const LabelPart: FC<LabelPartPropsType> = ({
   const customColor = useGetReversedCustomColor(notReversedCustomColor);
 
   return (
-    <Grid container style={{marginLeft:4,}}>
+    <Grid container style={{ marginLeft: 4 }}>
       {labels.map(({ title, iconName: labelIconName, id, color, variant }) => {
         const icon = useFindIcon(labelIconName);
 
@@ -35,12 +35,20 @@ const LabelPart: FC<LabelPartPropsType> = ({
 
         const handleOpen = (e: MouseEvent<HTMLElement>) => {
           e.preventDefault();
-          const newTemporaryData = {
-            labelItem: { id },
-            defaultMenuProps: { mouseX: e.clientX, mouseY: e.clientY, customColor }
-          };
 
-          dispatch(toChangeTemporaryData({ newTemporaryData }));
+          dispatch(
+            toChangeTemporaryData({
+              newTemporaryData: {
+                defaultMenuProps: {
+                  mouseX: e.clientX,
+                  mouseY: e.clientY,
+                  customColor,
+                  id,
+                  menuName: MenusLayoutName.LABELS
+                }
+              }
+            })
+          );
         };
 
         const labelItemProps = {

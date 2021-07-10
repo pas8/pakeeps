@@ -1,27 +1,38 @@
+import MenuOfChangingGlobalEventItem from 'components/PakeepList/components/PakeepElement/components/AttributeGroup/components/EventsPart/components/MenuOfChangingGlobalEventItem';
 import WrapperOfMenuOfLabelPart from 'components/PakeepList/components/PakeepElement/components/AttributeGroup/components/LabelPart/components/MenuWrapper';
-import { useFindLabelItem } from 'hooks/useFindLabelItem.hook';
-import React, { useState, FC, MouseEvent } from 'react';
+import { MenusLayoutName } from 'models/unums';
+import React, { FC } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getDefaultMenuPropsOfTemporaryData, getTemporaryDataOfLabelItem } from 'store/modules/App/selectors';
+import { toChangeTemporaryData } from 'store/modules/App/actions';
+import { nullityDefaultMenuProps } from 'store/modules/App/reducers';
+import { getDefaultMenuPropsOfTemporaryData } from 'store/modules/App/selectors';
 import { MenuesLayoutPropsType } from './types';
 
 const MenuesLayout: FC<MenuesLayoutPropsType> = ({ children }) => {
-  const defaultMenuProps = useSelector(getDefaultMenuPropsOfTemporaryData);
-  const defaultMenuLayoutElemntProps = {
-    ...defaultMenuProps
+  const { menuName, ...defaultMenuProps } = useSelector(getDefaultMenuPropsOfTemporaryData);
+  const dispatch = useDispatch();
+
+  const onClose = () => {
+    dispatch(toChangeTemporaryData({ newTemporaryData: { defaultMenuProps: nullityDefaultMenuProps } }));
   };
 
+  const defaultMenuLayoutElemntProps = { ...defaultMenuProps, onClose };
 
-  const labelChangindMenuProps = { ...defaultMenuLayoutElemntProps };
+  const menuesComponentsArr = [
+    { Component: WrapperOfMenuOfLabelPart, props: defaultMenuLayoutElemntProps, name: MenusLayoutName.LABELS },
+    { Component: MenuOfChangingGlobalEventItem, props: defaultMenuLayoutElemntProps, name: MenusLayoutName.EVENTS }
+  ];
 
-  const menuesComponentsArr = [{ Component: WrapperOfMenuOfLabelPart, props: labelChangindMenuProps }];
-
+  // console.log(menuName)
+  const menuesHidden = menuName === MenusLayoutName.NONE;
   return (
     <>
       {children}
-      {menuesComponentsArr.map(({ Component, props }, idx) => (
-        <Component {...props} key={idx} />
-      ))}
+      {!menuesHidden &&
+        menuesComponentsArr.map(({ Component, props, name }, idx) => {
+          if (name === menuName) return <Component {...props} key={`menuesComponentsArr-${name}-${idx}`} />;
+          return null;
+        })}
     </>
   );
 };
