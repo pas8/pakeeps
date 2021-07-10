@@ -21,7 +21,7 @@ import { random, sampleSize, words, filter } from 'lodash';
 import randomSentence from 'random-sentence';
 import { colord } from 'colord';
 import { DEFAULT, NONE, OUTLINED, PRIMARY, SECONDARY, TRANSPARENT } from 'models/denotation';
-import { MenusLayoutName } from 'models/unums';
+import { DialogLayoutName, MenusLayoutName } from 'models/unums';
 
 const labelsOfInitialState: GlobalLabelsType = [
   { color: '', title: 'Day plans', iconName: 'category', id: 'label0', variant: 'outlined' },
@@ -90,6 +90,12 @@ export const nullityDefaultMenuProps = {
   mouseY: 0,
   menuName: MenusLayoutName.NONE,
   mouseX: 0,
+  id: NONE,
+  customColor: {} as CustomColorType
+};
+
+export const nullityDefaultDialogProps = {
+  dialogName: DialogLayoutName.NONE,
   id: NONE,
   customColor: {} as CustomColorType
 };
@@ -187,6 +193,8 @@ export const initialState: AppInitialStateInteface = {
   isCancelSelectedPakeepsId: false,
   temporaryData: {
     defaultMenuProps: nullityDefaultMenuProps,
+    defaultDialogProps: nullityDefaultDialogProps,
+
     pakeep: {
       id: '',
       isHovering: false

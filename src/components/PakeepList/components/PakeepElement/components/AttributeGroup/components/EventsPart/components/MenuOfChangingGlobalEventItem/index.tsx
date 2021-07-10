@@ -34,7 +34,13 @@ import SecondStepOfSteperOfDialogOfAddNewGlobalEvent from '../DialogOfAddingNewG
 import TitleChangerOfLabel from '../../../LabelPart/components/Menu/components/TitleChangerOfLabel';
 import { useTakeIcon } from 'hooks/useTakeIcon.hook';
 
-const MenuOfChangingGlobalEventItem: FC<WrapperOfMenuOfLabelPartPropsType> = ({ mouseX, mouseY, customColor, id,onClose }) => {
+const MenuOfChangingGlobalEventItem: FC<WrapperOfMenuOfLabelPartPropsType> = ({
+  mouseX,
+  mouseY,
+  customColor,
+  id,
+  onClose
+}) => {
   const dispatch = useDispatch();
   const timeAndDateFormat = useSelector(getTimeAndDateFromat);
   const timeFormat = useSelector(getTimeFormat);
@@ -58,17 +64,14 @@ const MenuOfChangingGlobalEventItem: FC<WrapperOfMenuOfLabelPartPropsType> = ({ 
   const [menuState, setMenuState] = useState<MenuStateOfMenuOfChangingGlobalEventItemType>(nullityOfMenuState);
 
   const format = menuState.onlyTime ? timeFormat : timeAndDateFormat;
-
   const [value, setValue] = useState<any>(toFormat(Date.now(), format));
   const error = !isValid(menuState.value);
 
-  const { mouseX: top, mouseY: left, ...changedEvent } = menuState;
+  const { mouseX: left, mouseY: top, ...changedEvent } = menuState;
 
   useEffect(() => {
     setMenuState(state => ({ ...state, mouseX, mouseY, ...findedEvent }));
   }, [mouseX, mouseY, findedEvent]);
-
-  
 
   const handleDeleteEvent = () => {
     dispatch(toDeleteGlobalEvent({ eventId: menuState.id }));
@@ -85,8 +88,8 @@ const MenuOfChangingGlobalEventItem: FC<WrapperOfMenuOfLabelPartPropsType> = ({ 
     setMenuState(state => ({ ...state, title }));
   };
 
-  const handleChangeEventIconName: HandleChangeLabelIconNameType = labelIconName => {
-    setMenuState(state => ({ ...state, labelIconName }));
+  const handleChangeEventIconName: HandleChangeLabelIconNameType = iconName => {
+    setMenuState(state => ({ ...state, iconName }));
   };
 
   const handleChangeEventOnlyTimeStatus = () => {
@@ -141,7 +144,7 @@ const MenuOfChangingGlobalEventItem: FC<WrapperOfMenuOfLabelPartPropsType> = ({ 
       name: 'ENTER_A_DEFAULT_EVENT_VALUE',
       dynamicComponent: {
         component: SecondStepOfSteperOfDialogOfAddNewGlobalEvent,
-        componentProps: {
+        props: {
           value,
           onChange: handleChangeEventValue,
           format,
@@ -194,13 +197,13 @@ const MenuOfChangingGlobalEventItem: FC<WrapperOfMenuOfLabelPartPropsType> = ({ 
       onClick: handleDeleteEvent
     }
   ];
-
+  const [icon] = useTakeIcon(menuState.iconName);
   const eventItemProps = {
     ...changedEvent,
     customColor,
-    icon: useTakeIcon(menuState.iconName),
+    icon,
     value,
-    parentBackgroundColor: customColor.bgHover
+    parentBackgroundColor: customColor.isUseDefault ? background.default : customColor.bgHover
   };
 
   const menuOfChangingGlobalAttributeItemProps = {

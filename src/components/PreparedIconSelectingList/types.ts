@@ -5,7 +5,7 @@ export type PreparedIconSelectingListPropsType = {
   iconName: string;
   selectedIconName: string;
   color?: string;
-  onClick: () => void;
+  onClick: (iconName: string) => void;
   customColor: CustomColorType;
   isDragging?: boolean;
   checkedIcon: any;

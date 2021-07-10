@@ -1,7 +1,7 @@
+import { FC } from 'react';
 import { Grid } from '@material-ui/core';
 import { KeyboardDateTimePicker } from '@material-ui/pickers';
 import { useStyles } from 'components/IconsUtils/components/AddDateToPakeep/components/DynamicComponents/components/DynamicInputDateAndTimePickers';
-import { FC } from 'react';
 import { SecondStepOfSteperOfDialogOfAddNewGlobalEventPropsType } from './types';
 
 const SecondStepOfSteperOfDialogOfAddNewGlobalEvent: FC<SecondStepOfSteperOfDialogOfAddNewGlobalEventPropsType> = ({
@@ -20,10 +20,12 @@ const SecondStepOfSteperOfDialogOfAddNewGlobalEvent: FC<SecondStepOfSteperOfDial
     isSizeSmaller: true,
     color
   });
+
+
   return (
     <Grid>
       <Grid className={classes.container}>
-        <KeyboardDateTimePicker {...props} disablePast inputVariant={'outlined'} autoFocus />
+        <KeyboardDateTimePicker {...props} disablePast inputVariant={'outlined'} autoFocus  />
       </Grid>
     </Grid>
   );

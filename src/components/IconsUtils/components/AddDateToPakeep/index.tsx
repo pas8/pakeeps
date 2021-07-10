@@ -1,7 +1,6 @@
 import React, { useState, useEffect, FC, MouseEventHandler } from 'react';
 import { useSnackbar } from 'notistack';
 import { Typography, Grid, makeStyles } from '@material-ui/core';
-import { nanoid } from 'nanoid';
 import includes from 'lodash.includes';
 import { filter, mapKeys, map, mapValues } from 'lodash';
 import { DEFAULT } from 'models/denotation';
@@ -10,7 +9,6 @@ import { useGetReversedCustomColor } from 'hooks/useGetReversedCustomColor.hook'
 import { useValidatedCurrentEvents } from 'hooks/useValidatedCurrentEvents.hook';
 import { CustomColorType } from 'models/types';
 import PreviewEventList from 'components/PakeepList/components/PakeepElement/components/AttributeGroup/components/EventsPart/components/PreviewEventList';
-import { DialogOfAddingNewGlobalEvent } from 'components/PakeepList/components/PakeepElement/components/AttributeGroup/components/EventsPart/components/DialogOfAddingNewGlobalEvent';
 import {
   AddDateToPakeepPropsType,
   ChosenItemArrType,
@@ -23,7 +21,7 @@ import DynamicInputDateAndTimePickers from './components/DynamicComponents/compo
 import DynamicMenuItem from './components/DynamicMenuItem';
 import { useDispatch } from 'react-redux';
 import { toChangeTemporaryData } from 'store/modules/App/actions';
-import { MenusLayoutName } from 'models/unums';
+import { DialogLayoutName, MenusLayoutName } from 'models/unums';
 
 const useStyles = makeStyles(({ spacing, shape: { borderRadius } }) => ({
   container: ({ color }: { color: CustomColorType }) => ({
@@ -55,18 +53,10 @@ const AddDateToPakeep: FC<AddDateToPakeepPropsType> = ({
     TO_PUSH = 'TO_PUSH',
     SAVED = 'saved'
   }
-  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
 
   const currentEventsObject = mapKeys(currentEventsArr, ({ id }) => id);
   const customColor = useGetReversedCustomColor(color);
-  const handleOpenDialog = () => setIsEditDialogOpen(true);
 
-  const dialogOfAddingNewGlobalEventProps = {
-    open: isEditDialogOpen,
-    handleOpenDialog,
-    customColor: color,
-    onClose: () => setIsEditDialogOpen(false)
-  };
   const [buttonSaveState, setButtonSaveState] = useState<ButtonSaveStateDenotation>(ButtonSaveStateDenotation.NULLITY);
 
   const [focusedEventId, setFocusedEventId] = useState('');
@@ -81,12 +71,20 @@ const AddDateToPakeep: FC<AddDateToPakeepPropsType> = ({
   //   setDateAndTimeInputsState(state => ({ ...state, addMoreEvents: [...state.addMoreEvents, newCustomEvent] }));
   // };
 
+  const handleOpenAddCustomEventsDialog = () => {
+    dispatch(
+      toChangeTemporaryData({
+        newTemporaryData: { defaultDialogProps: { id: pakeepId, dialogName: DialogLayoutName.EVENTS, customColor:color } }
+      })
+    );
+  };
+
   const defaultDateListArr = [
     {
       title: 'Add Custom Events',
       iconName: 'dateRange',
-      id: '2151152352rerwkfsdnj23',
-      onClick: () => setIsEditDialogOpen(true)
+      id: 'ADD_CUSTOM_EVENTS',
+      onClick: handleOpenAddCustomEventsDialog
     }
   ];
 
@@ -110,7 +108,6 @@ const AddDateToPakeep: FC<AddDateToPakeepPropsType> = ({
   const validatedCurrentEvents = useValidatedCurrentEvents(dateAndTimeInputsState, chosenItemArr);
   useEffect(() => {
     if (buttonSaveState !== ButtonSaveStateDenotation.TO_PUSH) return;
-    console.log(validatedCurrentEvents);
 
     if (!validatedCurrentEvents.length) {
       enqueueSnackbar({
@@ -186,7 +183,7 @@ const AddDateToPakeep: FC<AddDateToPakeepPropsType> = ({
           dispatch(
             toChangeTemporaryData({
               newTemporaryData: {
-                defaultMenuProps: { mouseX, mouseY, menuName: MenusLayoutName.EVENTS, customColor, id }
+                defaultMenuProps: { mouseX, mouseY, menuName: MenusLayoutName.EVENTS, customColor:color, id }
               }
             })
           );
@@ -230,8 +227,6 @@ const AddDateToPakeep: FC<AddDateToPakeepPropsType> = ({
 
         return <DynamicMenuItem {...dynamicMenuListProps} key={`dateListArrOf${pakeepId}${id}`} />;
       })}
-
-      <DialogOfAddingNewGlobalEvent {...dialogOfAddingNewGlobalEventProps} />
     </Grid>
   );
 };
