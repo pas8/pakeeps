@@ -1,4 +1,4 @@
-import { Grid, Typography, makeStyles, useTheme,  } from '@material-ui/core';
+import { Grid, Typography, makeStyles, useTheme } from '@material-ui/core';
 import { colord } from 'colord';
 import { customColorPlaceholder } from 'components/AccountAvatar';
 import BackgroundPlaceholderByPas from 'components/BackgroundPlaceholder';
@@ -6,7 +6,7 @@ import ColorPickerByPas from 'components/ColorChanger';
 import { useAlpha } from 'hooks/useAlpha.hook';
 import { useGetReadableColor } from 'hooks/useGetReadableColor.hook';
 import { useThemeColors } from 'hooks/useThemeColors.hook';
-import {  FC, useState } from 'react';
+import { FC, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import AddCircleOutlineOutlinedIcon from '@material-ui/icons/AddCircleOutlineOutlined';
 import { useHover } from 'react-use';
@@ -63,7 +63,7 @@ const useStyles = makeStyles(({ spacing, palette, breakpoints, shape: { borderRa
     padding: spacing(1),
     borderRadius,
     border: '2px solid',
-    borderColor: useAlpha(palette.mediumEmphasis?.main!,0.2),
+    borderColor: useAlpha(palette.mediumEmphasis?.main!, 0.2),
     '& legend': {
       padding: spacing(0, 0.8)
     }
@@ -208,7 +208,17 @@ const Theme: FC<any> = () => {
   return (
     <Grid container justify={'center'}>
       <Grid container className={classes.colorContainer} justify={'center'} lg={9} xl={8} md={8} xs={12} sm={12}>
-        <Grid xl={10} lg={11} md={12} xs={12} container sm={11} justify={'space-between'} id={themeAnchorArr.COLORS_ID} item>
+        <Grid
+          xl={10}
+          lg={11}
+          md={12}
+          xs={12}
+          container
+          sm={11}
+          justify={'space-between'}
+          id={themeAnchorArr.COLORS_ID}
+          item
+        >
           {themePickersArr.map(props => {
             return (
               <PickerOfThemeColor
@@ -239,13 +249,18 @@ const Theme: FC<any> = () => {
           <Grid container justify={'space-between'}>
             {randomThemeGenerator}
             {customThemeButton}
-            {defaultThemesToChoseArr?.map(({ caption, background,id }) => {
+            {defaultThemesToChoseArr?.map(({ caption, background, id }) => {
               const isThemeSelected = caption === theme.caption;
 
               const onClick = () => {
                 dispatch(
                   toChangeThemeColors({
-                    newThemeColors: { paperMain: background.paper, caption, defaultBackgroundMain: background.default }
+                    newThemeColors: {
+                      paperMain: background.paper,
+                      caption,
+                      defaultBackgroundMain: background.default,
+                      textColor: background.textColor
+                    }
                   })
                 );
               };
@@ -257,7 +272,7 @@ const Theme: FC<any> = () => {
                 onClick,
                 isHeaderHavePaperColor
               };
-              return <DefaultThemePreview {...defaultThemePreviewProps} key={`defaultThemesToChoseArr-${id}`}/>;
+              return <DefaultThemePreview {...defaultThemePreviewProps} key={`defaultThemesToChoseArr-${id}`} />;
             })}
           </Grid>
         </Grid>

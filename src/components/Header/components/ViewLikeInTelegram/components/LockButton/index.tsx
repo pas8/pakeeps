@@ -1,9 +1,10 @@
 import { Grid, makeStyles, IconButton } from '@material-ui/core';
-import { useState } from 'react';
 import clsx from 'clsx';
+import { useSnackbar } from 'notistack';
 import { useDispatch, useSelector } from 'react-redux';
-import { getIsAuthedWithLocalPassword } from 'store/modules/App/selectors';
+import { gethLocalPasswordPropetyies } from 'store/modules/App/selectors';
 import { toChangeTemporaryData } from 'store/modules/App/actions';
+import { NONE } from 'models/denotation';
 
 const useStyles = makeStyles(theme => ({
   lockContainer: {
@@ -175,10 +176,18 @@ const LockButton = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
 
-  const isAuthedWithLocalPassword = useSelector(getIsAuthedWithLocalPassword);
+  const { enqueueSnackbar } = useSnackbar();
+  const { isAuthedWithLocalPinCode, value } = useSelector(gethLocalPasswordPropetyies);
 
   const onClick = () => {
-    dispatch(toChangeTemporaryData({ newTemporaryData: { isAuthedWithLocalPassword: false } }));
+    if (value === NONE) {
+      return enqueueSnackbar({
+        message: 'You havent added a pin code, but u can do this in setting/account',
+        severity: 'info'
+      });
+    }
+
+    dispatch(toChangeTemporaryData({ newTemporaryData: { isAuthedWithLocalPinCode: false } }));
   };
 
   return (
@@ -187,16 +196,16 @@ const LockButton = () => {
         item
         alignItems={'center'}
         direction={'column'}
-        className={clsx(classes.lockContainer, isAuthedWithLocalPassword && classes.animate)}
+        className={clsx(classes.lockContainer, isAuthedWithLocalPinCode && classes.animate)}
       >
-        <Grid className={clsx(classes.points, isAuthedWithLocalPassword && classes.animatePoints)}>
+        <Grid className={clsx(classes.points, isAuthedWithLocalPinCode && classes.animatePoints)}>
           {Array(4).fill(<Grid />)}
         </Grid>
-        <Grid className={clsx(classes.arch, isAuthedWithLocalPassword && classes.archAnimate)} item></Grid>
+        <Grid className={clsx(classes.arch, isAuthedWithLocalPinCode && classes.archAnimate)} item></Grid>
         <Grid
           alignItems={'center'}
           justify={'center'}
-          className={clsx(classes.box, isAuthedWithLocalPassword && classes.animateBox)}
+          className={clsx(classes.box, isAuthedWithLocalPinCode && classes.animateBox)}
           container
           item
         >

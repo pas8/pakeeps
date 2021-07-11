@@ -79,9 +79,19 @@ export const getHeaderHeight = createSelector(
   headerHeight => headerHeight
 );
 
+export const gethLocalPasswordPropetyies = createSelector(
+  [
+    ({ app: { temporaryData, userData } }: RootStoreType) => ({
+      isAuthedWithLocalPinCode: temporaryData.isAuthedWithLocalPinCode,
+      value: userData.localPinCode
+    })
+  ],
+  localPasswordPropetyies => localPasswordPropetyies
+);
+
 export const getIsAuthedWithLocalPassword = createSelector(
-  [({ app: { temporaryData } }: RootStoreType) => temporaryData.isAuthedWithLocalPassword],
-  isAuthedWithLocalPassword => isAuthedWithLocalPassword
+  [({ app: { temporaryData } }: RootStoreType) => temporaryData.isAuthedWithLocalPinCode],
+  isAuthedWithLocalPinCode => isAuthedWithLocalPinCode
 );
 
 export const getUserData = createSelector([({ app: { userData } }: RootStoreType) => userData], userData => userData);

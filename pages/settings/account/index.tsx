@@ -1,10 +1,6 @@
 import { Button, Grid, makeStyles, TextField, Typography, useTheme } from '@material-ui/core';
-import DialogOfEditingAvatar from 'components/DialogOfEditingAvatar';
-import { useAlpha } from 'hooks/useAlpha.hook';
-import { useCustomBreakpoint } from 'hooks/useCustomBreakpoint';
-import { useFromNameToText } from 'hooks/useFromNameToText.hook';
+import CloudUploadOutlinedIcon from '@material-ui/icons/CloudUploadOutlined';
 import { capitalize, mapValues, snakeCase, values } from 'lodash';
-import { NONE, TRANSPARENT } from 'models/denotation';
 import dynamic from 'next/dynamic';
 import { ChangeEventHandler, FC, MouseEventHandler, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
@@ -14,8 +10,12 @@ import { getAvatarProperties, getUserData } from 'store/modules/App/selectors';
 import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
 import { useIsColorLight } from 'hooks/useIsColorLight.hook';
 import ActionsButtonGroup from 'components/ActionsButtonGroup';
+import { NONE, TRANSPARENT } from 'models/denotation';
 import { useBreakpointNames } from 'hooks/useBreakpointNames.hook';
 import { emailRgEx } from 'components/AuthForm';
+import DialogOfEditingAvatar from 'components/DialogOfEditingAvatar';
+import { useAlpha } from 'hooks/useAlpha.hook';
+import { useFromNameToText } from 'hooks/useFromNameToText.hook';
 
 const AccountAvatar = dynamic(() => import('components/AccountAvatar'), { ssr: false });
 
@@ -27,9 +27,10 @@ const useStyles = makeStyles(
     shape,
     palette: { secondary, maxEmphasis, background, primary, highEmphasis }
   }) => ({
+    wrapper: {
+      position: 'relative'
+    },
     container: {
-      minHeight: 'calc(100vh - 100px)',
-      position: 'relative',
       paddingBottom: 42,
       marginTop: spacing(0.8)
     },
@@ -149,7 +150,7 @@ const useStyles = makeStyles(
       };
     },
     containerOfActionsButtonGroup: ({ isSomethingWasChanged }: any) => ({
-      position: 'fixed',
+      position: 'absolute',
       borderRadius: shape.borderRadius,
       borderColor: useAlpha(isSomethingWasChanged ? primary.main : highEmphasis?.main!, 0.28),
       bottom: 10,
@@ -162,12 +163,6 @@ const SettingAccount: FC = () => {
   const avatarProperties = useSelector(getAvatarProperties);
   const userData = useSelector(getUserData);
   const { isSiveIsXs, isSizeSmall } = useBreakpointNames();
-  const {
-    palette: {
-      text: { hint: colorOfCloseButton },
-      primary: { main: colorOfSaveButton }
-    }
-  } = useTheme();
 
   const validationFunc = (value: any) => console.log(value);
 
@@ -250,7 +245,7 @@ const SettingAccount: FC = () => {
     isHaveBgColor
   };
 
-  const isSomethingWasChanged = inputsState !== nullityOfInputsState 
+  const isSomethingWasChanged = inputsState !== nullityOfInputsState;
 
   const isBgColorDark = !useIsColorLight(avatarProperties.backgroundColor);
 
@@ -263,16 +258,10 @@ const SettingAccount: FC = () => {
     isSomethingWasChanged
   });
 
-  const onClose = () => {
-    setFiles(null);
-    setInputsState(nullityOfInputsState);
-  };
-
-  const onSave = () => {
+  const onUpdateAccountData = () => {
     console.log(inputsState);
   };
 
-  const actionsButtonGroupProps = { colorOfCloseButton, colorOfSaveButton, onClose, onSave };
   return (
     <>
       <Grid container justify={'center'} className={classes.container}>
@@ -282,6 +271,7 @@ const SettingAccount: FC = () => {
           lg={8}
           container
           xl={6}
+          className={classes.wrapper}
           md={11}
           item
           alignItems={isSiveIsXs ? 'center' : 'flex-start'}
@@ -313,11 +303,12 @@ const SettingAccount: FC = () => {
                 variant: 'outlined' as const
               };
               return (
-                <Grid className={classes.containerOftextField} key={name}>
+                <Grid className={classes.containerOftextField} key={name} >
                   <TextField {...textFieldProps} fullWidth />
                 </Grid>
               );
             })}
+            <Button onClick={onUpdateAccountData} color={'primary'} variant={'outlined'} startIcon={<CloudUploadOutlinedIcon/>}>Update account</Button>
           </Grid>
 
           <Grid className={classes.conatinerOfAvatar} lg={6} sm={10} md={5} xl={6} xs={12}>
@@ -349,9 +340,6 @@ const SettingAccount: FC = () => {
               </fieldset>
             </Grid>
           </Grid>
-        </Grid>
-        <Grid className={classes.containerOfActionsButtonGroup} component={'fieldset'}>
-          <ActionsButtonGroup {...actionsButtonGroupProps} />
         </Grid>
       </Grid>
 

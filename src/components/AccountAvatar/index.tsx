@@ -27,6 +27,7 @@ const useStyles = makeStyles(
   ({
     spacing,
     transitions,
+    shape: { borderRadius },
     breakpoints,
     palette: { secondary, maxEmphasis, background, highEmphasis, mediumEmphasis }
   }) => ({
@@ -61,7 +62,7 @@ const useStyles = makeStyles(
       top: 0,
       left: 0,
       overflow: 'hidden',
-      borderRadius: 16,
+      borderRadius,
       right: 0,
       zIndex: 0,
       bottom: 0,

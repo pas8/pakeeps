@@ -161,7 +161,7 @@ export const firebaseAppInitialState = {
   userData: {
     email: NONE,
     userName: NONE,
-    localPassword: NONE as typeof NONE,
+    localPinCode: NONE as typeof NONE,
     name: NONE,
     isEmailVerified: false
   },
@@ -194,7 +194,7 @@ const nullityOfTemporaryData = {
     id: '',
     isHovering: false
   },
-  isAuthedWithLocalPassword: true,
+  isAuthedWithLocalPinCode: true,
   globalEventList: [],
   globalLabelList: []
 };

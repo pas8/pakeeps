@@ -1,14 +1,16 @@
 import { Link, Typography } from '@material-ui/core';
+import { useSelector } from 'react-redux';
 import MenuOpenOutlinedIcon from '@material-ui/icons/MenuOpenOutlined';
 import { Grid, IconButton, makeStyles, Tooltip } from '@material-ui/core';
 import clsx from 'clsx';
 import MenuIcon from '@material-ui/icons/Menu';
 import { useRouter } from 'next/dist/client/router';
-import { capitalize,  map, split } from 'lodash';
-import { FC, Fragment, } from 'react';
+import { capitalize, map, split } from 'lodash';
+import { FC, Fragment } from 'react';
 import NextLink from 'next/link';
-import { MainBarPropsType } from '../types';
 import { SIGN_IN_URL, NEW_USER_URL } from 'models/denotation';
+import { getIsAuthedWithLocalPassword } from 'store/modules/App/selectors';
+import { MainBarPropsType } from '../types';
 
 const useStyles = makeStyles(theme => ({
   menuButton: {
@@ -26,6 +28,7 @@ const MainBar: FC<MainBarPropsType> = ({ handleDrawerOpen, isMenuOpen, isSmallSi
   const isMainPage = pathname === '/';
 
   const splitedPathName = split(pathname, '/');
+  const isAuthedWithLocalPinCode = useSelector(getIsAuthedWithLocalPassword);
 
   const headerArr = isMainPage
     ? [{ string: 'Pakeeps', routeArr: ['/'] }]
@@ -68,22 +71,28 @@ const MainBar: FC<MainBarPropsType> = ({ handleDrawerOpen, isMenuOpen, isSmallSi
           {!isSmallSize && (
             <Typography variant={'h6'} className={classes.typography}>
               {/* {headerTitle} */}
+              {!isAuthedWithLocalPinCode
+                ? 'Enter a pin code'
+                : headerArr.map((el, idx) => {
+                    if (!el) return;
 
-              {headerArr.map((el, idx) => {
-                if (!el) return;
-
-                const href = el.routeArr.join('');
-                const isLast = idx + 1 === splitedPathName.length;
-                const isFirst = idx === 0;
-                return (
-                  <Fragment key={`headerArr-${idx}`}>
-                    <Link color={'inherit'} onClick={event => event.preventDefault()} style={{ cursor: 'pointer ' }} component={'span'}>
-                      <NextLink href={href}>{el.string}</NextLink>
-                    </Link>
-                    {isLast && isFirst ? '' : ' / '}
-                  </Fragment>
-                );
-              })}
+                    const href = el.routeArr.join('');
+                    const isLast = idx + 1 === splitedPathName.length;
+                    const isFirst = idx === 0;
+                    return (
+                      <Fragment key={`headerArr-${idx}`}>
+                        <Link
+                          color={'inherit'}
+                          onClick={event => event.preventDefault()}
+                          style={{ cursor: 'pointer ' }}
+                          component={'span'}
+                        >
+                          <NextLink href={href}>{el.string}</NextLink>
+                        </Link>
+                        {isLast && isFirst ? '' : ' / '}
+                      </Fragment>
+                    );
+                  })}
             </Typography>
           )}
         </>

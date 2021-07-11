@@ -361,13 +361,15 @@ export type AvatarPropertiesType = {
   backgroundColor: string;
 };
 
+export type LocalPasswordType = typeof NONE | string;
+
 export type UserDataType = {
   email: string;
   userName: string;
   isEmailVerified: boolean;
   name: string;
 
-  localPassword: typeof NONE | number;
+  localPinCode: LocalPasswordType;
 };
 
 export interface AppInitialStateInteface {
@@ -404,7 +406,7 @@ export type TemporaryDatatype = {
     id: string;
     dialogName: DialogLayoutName;
   } & UseStylesCustomColorType;
-  isAuthedWithLocalPassword: boolean;
+  isAuthedWithLocalPinCode: boolean;
   pakeep: {
     id: string;
     isHovering: boolean;
