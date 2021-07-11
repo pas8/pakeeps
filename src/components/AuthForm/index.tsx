@@ -39,6 +39,9 @@ const useStyles = makeStyles(({ spacing, shape: { borderRadius }, palette }) => 
   }
 }));
 
+export const emailRgEx =
+  /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
 const AuthForm: FC<AuthFormPropsType> = ({ isPageIsRegisted = false }) => {
   const classes = useStyles();
   const router = useRouter();
@@ -70,9 +73,7 @@ const AuthForm: FC<AuthFormPropsType> = ({ isPageIsRegisted = false }) => {
       value: '',
       isValid: !false,
       validationFunc: (value: string) => {
-        const re =
-          /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-        const isValid = re.test(String(value).toLowerCase());
+        const isValid = emailRgEx.test(String(value).toLowerCase());
         return isValid;
       }
     }
@@ -117,7 +118,7 @@ const AuthForm: FC<AuthFormPropsType> = ({ isPageIsRegisted = false }) => {
   return (
     <Grid className={classes.container} container>
       <Grid container item component={'form'}>
-        {values(authFormaNames).map(name => {
+        {values(authFormaNames).map((name, idx) => {
           const label = capitalize(name);
 
           // console.log(formState[name]);
@@ -132,7 +133,7 @@ const AuthForm: FC<AuthFormPropsType> = ({ isPageIsRegisted = false }) => {
               <TextField
                 label={label}
                 variant={'outlined'}
-                key={name}
+                key={`authFormaNames-idx-${name}`}
                 onKeyPress={onKeyPress}
                 type={isInputIsPassword ? (isPasswordVisible ? 'text' : 'password') : 'email'}
                 InputProps={{

@@ -168,7 +168,6 @@ export type UsePakeepFoldersType = ({
   events: GlobalEventsType;
   defaultFolderArr: DefaultFolderArrType;
 }) => DefaultFolderArrType[];
-export type ThunkType<P> = ThunkAction<any, RootStoreType, null, Action<P>>;
 
 export type HandleChangeInputsValueType = ChangeEventHandler<HTMLInputElement>;
 

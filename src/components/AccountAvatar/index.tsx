@@ -117,7 +117,7 @@ const AccountAvatar: FC<AccountAvatarPropsType> = ({
       {isAccountHaveAvatar ? (
         <>
           {!anchorEl && <input {...getInputProps()} />}
-          <img style={{ width: '100%', height: '100%' }} src={url} />
+          <img style={{ width: '106%', height: '106%', margin: '-6%' }} src={url} />
         </>
       ) : (
         <>

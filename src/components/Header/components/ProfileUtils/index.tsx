@@ -6,6 +6,8 @@ import AvatarButton from './components/AvatarButton';
 import { nanoid } from 'nanoid';
 import { useBreakpointNames } from 'hooks/useBreakpointNames.hook';
 import { FC } from 'react';
+import LockButton from '../ViewLikeInTelegram/components/LockButton';
+import UploadButton from './components/UploadButton';
 
 const useStyles = makeStyles(({ spacing }) => ({
   profileUtils: {
@@ -41,7 +43,9 @@ const HeaderProfileUtils: FC = () => {
           );
         })}
       </Grid>
-        <AvatarButton />
+<UploadButton/>
+      <LockButton />
+      <AvatarButton />
     </>
   );
 };

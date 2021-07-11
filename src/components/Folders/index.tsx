@@ -393,7 +393,6 @@ const Folders: FC<FoldersTypeProps> = ({
 
   const idxOfFolderItemWhichShouldBeInMenu =
     flattenAllFolders.length - ~~((foldersSize - windowSize) / avarageButtonSize);
-console.log(idxOfFolderItemWhichShouldBeInMenu)
   const [menuAnchorEl, setMenuAnchorEl] = useState<any>(null);
   const isMoreMenuopen = Boolean(menuAnchorEl);
 
@@ -559,7 +558,7 @@ console.log(idxOfFolderItemWhichShouldBeInMenu)
                           value={findedIdx}
                           aria-label={isButtonIsMore ? moreButtonTitle : title}
                           onClick={e => {
-                            onClickOfToggleButton && e.preventDefault();
+                            // onClickOfToggleButton  e.preventDefault();
                             onClickOfToggleButton && onClickOfToggleButton(e);
                             isButtonActive && handleChangeAncholElHiddenStatus();
                             handleChange('findedIdx', findedIdx);

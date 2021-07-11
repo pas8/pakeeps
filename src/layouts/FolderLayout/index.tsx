@@ -124,10 +124,12 @@ const FolderLayout = ({ children }: LayoutChildrenType) => {
   const handleChange: HandleChangeOfFolders = (__, idx) => {
     handleCurrentFolderPropertyIdx(idx);
   };
-
   const handleHideFolder = () => {
     dispatch(toChangeMenuOpenStatus({ menuOpenStatus: menuOpenStatusDenotation.HIDDEN }));
-    handleDrawerWidth(0);
+    setTimeout(() => {
+      handleDrawerWidth(0);
+      router.route === '/' && handleCurrentFolderPropertyIdx(0);
+    }, 1000);
   };
 
   const [margin, setMargin] = useState(0);

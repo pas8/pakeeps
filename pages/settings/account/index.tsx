@@ -1,4 +1,4 @@
-import { Button, Grid, makeStyles, TextField, Typography } from '@material-ui/core';
+import { Button, Grid, makeStyles, TextField, Typography, useTheme } from '@material-ui/core';
 import DialogOfEditingAvatar from 'components/DialogOfEditingAvatar';
 import { useAlpha } from 'hooks/useAlpha.hook';
 import { useCustomBreakpoint } from 'hooks/useCustomBreakpoint';
@@ -10,9 +10,12 @@ import { ChangeEventHandler, FC, MouseEventHandler, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { useSelector } from 'react-redux';
 import { useToggle, useTitle } from 'react-use';
-import { getAvatarProperties } from 'store/modules/App/selectors';
+import { getAvatarProperties, getUserData } from 'store/modules/App/selectors';
 import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
 import { useIsColorLight } from 'hooks/useIsColorLight.hook';
+import ActionsButtonGroup from 'components/ActionsButtonGroup';
+import { useBreakpointNames } from 'hooks/useBreakpointNames.hook';
+import { emailRgEx } from 'components/AuthForm';
 
 const AccountAvatar = dynamic(() => import('components/AccountAvatar'), { ssr: false });
 
@@ -21,10 +24,13 @@ const useStyles = makeStyles(
     spacing,
     transitions,
     breakpoints,
-    palette: { secondary, maxEmphasis, background, mediumEmphasis, highEmphasis }
+    shape,
+    palette: { secondary, maxEmphasis, background, primary, highEmphasis }
   }) => ({
     container: {
-      minHeight: '80vh',
+      minHeight: 'calc(100vh - 100px)',
+      position: 'relative',
+      paddingBottom: 42,
       marginTop: spacing(0.8)
     },
     containerOftextField: {
@@ -77,7 +83,7 @@ const useStyles = makeStyles(
         padding: 4,
         position: 'relative',
         width: spacing(36),
-        marginTop: spacing(isAccountHaveAvatar ? 2 : -1.4),
+        marginTop: spacing(isAccountHaveAvatar ? 0 : -1.4),
         height: spacing(36),
 
         [breakpoints.down('md')]: {
@@ -102,7 +108,7 @@ const useStyles = makeStyles(
           padding: spacing(0, 0.8),
           margin: spacing(0, 1),
           background: background.default,
-          borderRadius: 4
+          borderRadius: shape.borderRadius
         },
         '&:hover': {
           boxShadow: isHaveBgColor
@@ -141,57 +147,67 @@ const useStyles = makeStyles(
           }
         }
       };
-    }
+    },
+    containerOfActionsButtonGroup: ({ isSomethingWasChanged }: any) => ({
+      position: 'fixed',
+      borderRadius: shape.borderRadius,
+      borderColor: useAlpha(isSomethingWasChanged ? primary.main : highEmphasis?.main!, 0.28),
+      bottom: 10,
+      right: 10
+    })
   })
 );
 
-const SettingAccount: FC<any> = () => {
-
+const SettingAccount: FC = () => {
   const avatarProperties = useSelector(getAvatarProperties);
-  const [br] = useCustomBreakpoint();
+  const userData = useSelector(getUserData);
+  const { isSiveIsXs, isSizeSmall } = useBreakpointNames();
+  const {
+    palette: {
+      text: { hint: colorOfCloseButton },
+      primary: { main: colorOfSaveButton }
+    }
+  } = useTheme();
 
-  const isSiveIsSm = br === 'sm';
-  const isSiveIsXs = br === 'xs';
-
-  const isSmall = isSiveIsSm || isSiveIsXs;
-  const propsValue = {
-    name: 'Pas',
-    userName: 'pas8'
-  };
+  const validationFunc = (value: any) => console.log(value);
 
   const inputsDetonationOfSettingAccount = {
     name: {
       name: 'name',
+      validationFunc,
       helperText:
         'Your name may appear around Pakeeps where you contribute or are mentioned. You can remove it at any time.'
     },
+
+    email: {
+      name: 'email',
+      validationFunc: (value: string) => {
+        const isValid = emailRgEx.test(String(value).toLowerCase());
+        return isValid;
+      },
+      helperText: 'U can change email, but u will need to verificate that.'
+    },
     userName: {
       name: 'userName',
+      validationFunc,
+
       helperText: 'Anyone can see your userName and you also can remove it at any time.'
     }
   } as const;
 
-  const validationFunc = (value: any) => console.log(value);
-
   const nullityOfInputsState = mapValues(inputsDetonationOfSettingAccount, ({ name }) => {
     const element = {
-      value: propsValue[name],
-      isValid: true,
-      validationFunc
+      value: userData[name],
+      isValid: true
     };
 
     return element;
   });
   const [inputsState, setInputsState] = useState(nullityOfInputsState);
 
-  const onChange: ChangeEventHandler<HTMLInputElement> = ({ target: { name, value } }) => {
-    setInputsState(state => ({ ...state, [name]: { value } }));
-  };
-
   const inputsNameArr = values(inputsDetonationOfSettingAccount);
 
   const isAccountHaveAvatar = avatarProperties?.url !== NONE;
-
   const isHaveBgColor = avatarProperties.backgroundColor !== TRANSPARENT;
 
   const [files, setFiles] = useState<any>([]);
@@ -219,7 +235,7 @@ const SettingAccount: FC<any> = () => {
     setAnchorEl(currentTarget);
   };
 
-  const onClose = () => {
+  const onDialogClose = () => {
     setAnchorEl(false);
   };
 
@@ -228,35 +244,61 @@ const SettingAccount: FC<any> = () => {
     isAccountHaveAvatar,
     handleOpenDialog,
     getInputProps,
-    onClose,
+    onClose: onDialogClose,
     anchorEl,
     isDragActive,
     isHaveBgColor
   };
 
+  const isSomethingWasChanged = inputsState !== nullityOfInputsState 
+
   const isBgColorDark = !useIsColorLight(avatarProperties.backgroundColor);
 
-  const classes = useStyles({ isAccountHaveAvatar, ...avatarProperties, isHaveBgColor, isDragActive, isBgColorDark });
+  const classes = useStyles({
+    isAccountHaveAvatar,
+    ...avatarProperties,
+    isHaveBgColor,
+    isDragActive,
+    isBgColorDark,
+    isSomethingWasChanged
+  });
+
+  const onClose = () => {
+    setFiles(null);
+    setInputsState(nullityOfInputsState);
+  };
+
+  const onSave = () => {
+    console.log(inputsState);
+  };
+
+  const actionsButtonGroupProps = { colorOfCloseButton, colorOfSaveButton, onClose, onSave };
   return (
     <>
       <Grid container justify={'center'} className={classes.container}>
         <Grid
+          xs={12}
           sm={11}
           lg={8}
           container
           xl={6}
           md={11}
           item
-          xs={12}
           alignItems={isSiveIsXs ? 'center' : 'flex-start'}
-          wrap={!isSmall ? 'wrap' : 'nowrap'}
-          direction={isSmall ? 'column-reverse' : 'row'}
+          wrap={!isSizeSmall ? 'wrap' : 'nowrap'}
+          direction={isSizeSmall ? 'column-reverse' : 'row'}
         >
           {/* <Paper variant={'outlined'}> */}
-          <Grid lg={6} sm={12} md={6} xl={6} xs={11} className={classes.containerOfInputs}>
-            {inputsNameArr.map(({ name, helperText = '' }) => {
+          <Grid lg={6} sm={12} md={7} xl={6} xs={12} className={classes.containerOfInputs}>
+            {inputsNameArr.map(({ name, helperText = '', validationFunc: useValidate }) => {
               const label = useFromNameToText(name);
-              const value = inputsState[name].value;
+              const value = inputsState[name].value === NONE ? '' : inputsState[name].value;
+
+              const onChange: ChangeEventHandler<HTMLInputElement> = ({ target: { name, value } }) => {
+                const isValid = useValidate(value);
+                setInputsState(state => ({ ...state, [name]: { value, isValid } }));
+              };
+              const error = !inputsState[name].isValid;
 
               const textFieldProps = {
                 label,
@@ -264,6 +306,7 @@ const SettingAccount: FC<any> = () => {
                 color: 'secondary' as const,
                 type: 'text',
                 value,
+                error,
                 helperText,
                 onChange,
                 name,
@@ -277,7 +320,7 @@ const SettingAccount: FC<any> = () => {
             })}
           </Grid>
 
-          <Grid className={classes.conatinerOfAvatar} lg={6} sm={10} md={6} xl={6} xs={12}>
+          <Grid className={classes.conatinerOfAvatar} lg={6} sm={10} md={5} xl={6} xs={12}>
             <Grid style={{ position: 'relative', padding: 4 }} container>
               {isAccountHaveAvatar && (
                 <Grid className={classes.containerOfEditButton}>
@@ -307,7 +350,11 @@ const SettingAccount: FC<any> = () => {
             </Grid>
           </Grid>
         </Grid>
+        <Grid className={classes.containerOfActionsButtonGroup} component={'fieldset'}>
+          <ActionsButtonGroup {...actionsButtonGroupProps} />
+        </Grid>
       </Grid>
+
       <DialogOfEditingAvatar {...dialogOfEditingAvatarProps} />
     </>
   );

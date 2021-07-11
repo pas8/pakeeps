@@ -1,5 +1,4 @@
-import { menuOpenStatusDenotation, NONE } from './../../../models/denotation';
-import { pakeepPropertyiesNames } from 'models/denotation';
+import { pakeepPropertyiesNames, NONE, menuOpenStatusDenotation } from 'models/denotation';
 import { CustomColorType, SelectedPakeepsIdType, SelectedPakeepsType, UseStylesCustomColorType } from 'models/types';
 import { $Keys, $Values, Brand, Optional } from 'utility-types';
 import { TypeNames } from './enums';
@@ -365,7 +364,10 @@ export type AvatarPropertiesType = {
 export type UserDataType = {
   email: string;
   userName: string;
+  isEmailVerified: boolean;
   name: string;
+
+  localPassword: typeof NONE | number;
 };
 
 export interface AppInitialStateInteface {
@@ -400,8 +402,9 @@ export type TemporaryDatatype = {
   defaultMenuProps: DefaultMenuPropsType;
   defaultDialogProps: {
     id: string;
-    dialogName:DialogLayoutName
+    dialogName: DialogLayoutName;
   } & UseStylesCustomColorType;
+  isAuthedWithLocalPassword: boolean;
   pakeep: {
     id: string;
     isHovering: boolean;

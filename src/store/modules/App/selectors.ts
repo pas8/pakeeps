@@ -64,8 +64,6 @@ export const getGlobalEventsArr = createSelector(
   globalEvents => globalEvents
 );
 
-
-
 export const getDefaultMenuPropsOfTemporaryData = createSelector(
   [({ app: { temporaryData } }: RootStoreType) => temporaryData.defaultMenuProps],
   defaultMenuProps => defaultMenuProps
@@ -76,11 +74,16 @@ export const getIsPakeepHovering = createSelector(
   isHovering => isHovering
 );
 
-
 export const getHeaderHeight = createSelector(
   [({ app: { headerHeight } }: RootStoreType) => headerHeight],
   headerHeight => headerHeight
 );
+
+export const getIsAuthedWithLocalPassword = createSelector(
+  [({ app: { temporaryData } }: RootStoreType) => temporaryData.isAuthedWithLocalPassword],
+  isAuthedWithLocalPassword => isAuthedWithLocalPassword
+);
+
 export const getUserData = createSelector([({ app: { userData } }: RootStoreType) => userData], userData => userData);
 
 export const getGlobalEventListTemproparyData = createSelector(

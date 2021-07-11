@@ -1,12 +1,17 @@
 import { Grid, makeStyles, IconButton } from '@material-ui/core';
 import { useState } from 'react';
 import clsx from 'clsx';
+import { useDispatch, useSelector } from 'react-redux';
+import { getIsAuthedWithLocalPassword } from 'store/modules/App/selectors';
+import { toChangeTemporaryData } from 'store/modules/App/actions';
 
 const useStyles = makeStyles(theme => ({
   lockContainer: {
     margin: theme.spacing(-0.2, 0.6, 0.2, 0.6),
     perspective: '1000px',
     position: 'relative',
+    height: 20,
+    width: 14
   },
   animate: {
     animation: '$mui-ripple-enter 400ms cubic-bezier(0.4, 0, 0.2, 1)'
@@ -18,13 +23,12 @@ const useStyles = makeStyles(theme => ({
     borderRadius: theme.spacing(0.32),
     // borderColor: 'white',
     // borderStyle: 'solid',
-    background: 'white'
+    background: theme.palette.text.secondary
   },
   animateBox: {
     animation: '$box 400ms cubic-bezier(0.4, 0, 0.2, 1)',
     height: 14,
-    width: 18,
-
+    width: 18
   },
 
   '@keyframes box': {
@@ -50,7 +54,7 @@ const useStyles = makeStyles(theme => ({
     width: 12,
     borderWidth: 2.8,
     borderRadius: theme.spacing(0.8),
-    borderColor: 'white',
+    borderColor: theme.palette.text.secondary,
     borderStyle: 'solid',
     borderBottom: 0,
     borderBottomRightRadius: 0,
@@ -97,7 +101,7 @@ const useStyles = makeStyles(theme => ({
       height: theme.spacing(0),
       width: theme.spacing(0),
       borderRadius: '8%',
-      backgroundColor: 'white'
+      backgroundColor: theme.palette.text.secondary
     }
   },
   animatePoints: {
@@ -162,35 +166,37 @@ const useStyles = makeStyles(theme => ({
   circle: {
     height: 6,
     width: 6,
-    backgroundColor: '#424242',
+    backgroundColor: theme.palette.background.paper,
     borderRadius: '50%'
   }
 }));
 
 const LockButton = () => {
   const classes = useStyles();
-  const [state, setState] = useState(false);
-  const handleState = () => setState(e => !e);
+  const dispatch = useDispatch();
+
+  const isAuthedWithLocalPassword = useSelector(getIsAuthedWithLocalPassword);
+
+  const onClick = () => {
+    dispatch(toChangeTemporaryData({ newTemporaryData: { isAuthedWithLocalPassword: false } }));
+  };
 
   return (
-    <IconButton onClick={handleState}>
+    <IconButton onClick={onClick}>
       <Grid
         item
         alignItems={'center'}
         direction={'column'}
-        className={clsx(classes.lockContainer, state && classes.animate)}
+        className={clsx(classes.lockContainer, isAuthedWithLocalPassword && classes.animate)}
       >
-        <Grid className={clsx(classes.points, state && classes.animatePoints)}>
-          <Grid />
-          <Grid />
-          <Grid />
-          <Grid />
+        <Grid className={clsx(classes.points, isAuthedWithLocalPassword && classes.animatePoints)}>
+          {Array(4).fill(<Grid />)}
         </Grid>
-        <Grid className={clsx(classes.arch, state && classes.archAnimate)} item></Grid>
+        <Grid className={clsx(classes.arch, isAuthedWithLocalPassword && classes.archAnimate)} item></Grid>
         <Grid
           alignItems={'center'}
           justify={'center'}
-          className={clsx(classes.box, state && classes.animateBox)}
+          className={clsx(classes.box, isAuthedWithLocalPassword && classes.animateBox)}
           container
           item
         >
@@ -200,7 +206,5 @@ const LockButton = () => {
     </IconButton>
   );
 };
-
-LockButton.propTypes = {};
 
 export default LockButton;

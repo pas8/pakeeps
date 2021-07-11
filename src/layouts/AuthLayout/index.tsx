@@ -33,6 +33,7 @@ const AuthLayout: FC<any> = ({ children, pageProps }) => {
 
   useEffect(() => {
     firebase.auth().onAuthStateChanged(user => {
+      console.log(user)
       if (user) dispatch(toChangeLoginStatus({ isLogined: true }));
       else if (!user) dispatch(toChangeLoginStatus({ isLogined: false }));
     });
@@ -49,8 +50,7 @@ const AuthLayout: FC<any> = ({ children, pageProps }) => {
       router.push('/');
     }
   }, [isLogined, router.route]);
-  const isChildrenVisible =
-    isLoginedAndRouteISAuth || (isRouteIsAuth && !isLogined) || (isLogined && router.route === '/');
+  const isChildrenVisible = isLoginedAndRouteISAuth || (isRouteIsAuth && !isLogined) || (isLogined && !isRouteIsAuth);
   // return <AuthProvider session={pageProps?.session}>{isChildrenVisible ? children : null}</AuthProvider>;
   return <AuthProvider session={pageProps?.session}>{children }</AuthProvider>;
 };

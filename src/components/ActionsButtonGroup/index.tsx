@@ -1,5 +1,4 @@
 import { Grid, makeStyles } from '@material-ui/core';
-import PropTypes from 'prop-types';
 import { FC } from 'react';
 import CloseButtonWithIcon from './components/CloseButtonWithIcon';
 import SaveButtonWithIcon from './components/SaveButtonWithIcon';
