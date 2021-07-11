@@ -5,7 +5,7 @@ import RotateRightOutlinedIcon from '@material-ui/icons/RotateRightOutlined';
 import RotateLeftOutlinedIcon from '@material-ui/icons/RotateLeftOutlined';
 import { useFromNameToText } from 'hooks/useFromNameToText.hook';
 import { useThemeColors } from 'hooks/useThemeColors.hook';
-import { colord } from 'colord';
+import { colord ,extend,} from 'colord';
 import { includes, values } from 'lodash';
 import { AvatarEditorByPasPropsType } from './types';
 import ThirdStepOfSteperOfDialogOfAddNewLabel from 'components/IconsUtils/components/LabelsList/components/DialogOfAddNewLabel/components/Steper/components/Third';
@@ -14,6 +14,7 @@ import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import { useCustomBreakpoint } from 'hooks/useCustomBreakpoint';
 import { useBreakpointNames } from 'hooks/useBreakpointNames.hook';
 import { customColorPlaceholder } from 'components/AccountAvatar';
+import mixPlugin from 'colord/plugins/mix';
 
 const useStyles = makeStyles(({ spacing, transitions, breakpoints, palette: { background } }) => ({
   utilsContainer: {
@@ -38,6 +39,8 @@ const AvatarEditorByPas: FC<AvatarEditorByPasPropsType> = ({
   setAvatarEditorState: setState,
   setEditor
 }) => {
+  extend([mixPlugin]);
+
   const classes = useStyles();
 
   const [customColor, setCustomColor] = useState<boolean | string>(false);

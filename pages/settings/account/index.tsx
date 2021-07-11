@@ -1,4 +1,4 @@
-import { Button, Grid, makeStyles, TextField, Typography, useTheme } from '@material-ui/core';
+import { Button, Grid, makeStyles, Paper, TextField, Typography, useTheme } from '@material-ui/core';
 import CloudUploadOutlinedIcon from '@material-ui/icons/CloudUploadOutlined';
 import { capitalize, mapValues, snakeCase, values } from 'lodash';
 import dynamic from 'next/dynamic';
@@ -28,6 +28,10 @@ const useStyles = makeStyles(
     palette: { secondary, maxEmphasis, background, primary, highEmphasis }
   }) => ({
     wrapper: {
+      // padding: spacing(2  ),
+      // borderRadius: shape.borderRadius,
+      // borderColor: useAlpha( highEmphasis?.main!, 0.28),
+      borderColor: useAlpha( highEmphasis?.main!, 0),
       position: 'relative'
     },
     container: {
@@ -268,8 +272,10 @@ const SettingAccount: FC = () => {
         <Grid
           xs={12}
           sm={11}
+        component={'fieldset'}
           lg={8}
           container
+
           xl={6}
           className={classes.wrapper}
           md={11}
@@ -278,7 +284,7 @@ const SettingAccount: FC = () => {
           wrap={!isSizeSmall ? 'wrap' : 'nowrap'}
           direction={isSizeSmall ? 'column-reverse' : 'row'}
         >
-          {/* <Paper variant={'outlined'}> */}
+          {/* > */}
           <Grid lg={6} sm={12} md={7} xl={6} xs={12} className={classes.containerOfInputs}>
             {inputsNameArr.map(({ name, helperText = '', validationFunc: useValidate }) => {
               const label = useFromNameToText(name);
@@ -303,12 +309,19 @@ const SettingAccount: FC = () => {
                 variant: 'outlined' as const
               };
               return (
-                <Grid className={classes.containerOftextField} key={name} >
+                <Grid className={classes.containerOftextField} key={name}>
                   <TextField {...textFieldProps} fullWidth />
                 </Grid>
               );
             })}
-            <Button onClick={onUpdateAccountData} color={'primary'} variant={'outlined'} startIcon={<CloudUploadOutlinedIcon/>}>Update account</Button>
+            <Button
+              onClick={onUpdateAccountData}
+              color={'primary'}
+              variant={'outlined'}
+              startIcon={<CloudUploadOutlinedIcon />}
+            >
+              Update account
+            </Button>
           </Grid>
 
           <Grid className={classes.conatinerOfAvatar} lg={6} sm={10} md={5} xl={6} xs={12}>

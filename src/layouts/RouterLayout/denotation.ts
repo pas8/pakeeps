@@ -8,6 +8,7 @@ export const THEME_URL = `${SETTING_URL}/${THEME}`;
 
 export const appearanceAnchorArr = {
   FOLDERS_ID: `#${APPEARANCE}_folders`,
+  ATTRIBUTES_ID: `#${APPEARANCE}_attributes`,
   PAKEEPS_ID: `#${APPEARANCE}_pakeeps`,
   HEADER_ID: `#${APPEARANCE}_header`,
   LABELS_ID: `#${APPEARANCE}_labels`,

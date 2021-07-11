@@ -304,7 +304,7 @@ const Folders: FC<FoldersTypeProps> = ({
       },
       {
         title: 'Pakeeps',
-        iconName: '',
+        // iconName: '',
         parentRoute: APPEARANCE_URL,
         id: 'folder-appearance-pakeeps',
         color: 'default',
@@ -320,27 +320,19 @@ const Folders: FC<FoldersTypeProps> = ({
       {
         title: 'Folders',
         parentRoute: APPEARANCE_URL,
-        iconName: 'folder',
+        // iconName: 'folder',
         id: 'folder-appearance-folder',
         color: 'default',
         route: appearanceAnchorArr.FOLDERS_ID
       },
 
       {
-        title: 'Labels',
+        title: 'Attributes',
         parentRoute: APPEARANCE_URL,
-        iconName: 'label',
-        id: 'folder-appearance-labels',
+        // iconName: 'label',
+        id: 'folder-appearance-Attributes',
         color: 'default',
-        route: appearanceAnchorArr.LABELS_ID
-      },
-      {
-        title: 'Events',
-        parentRoute: APPEARANCE_URL,
-        iconName: 'today',
-        id: 'folder-appearance-events',
-        color: 'default',
-        route: appearanceAnchorArr.EVENTS_ID
+        route: appearanceAnchorArr.ATTRIBUTES_ID
       }
     ]
   ];
@@ -445,7 +437,7 @@ const Folders: FC<FoldersTypeProps> = ({
         {navigationViewLike === 'pakeeps' &&
           allFolders.map((arr, arrIdx) => {
             if (!arr.length) return null;
-            
+
             return (
               <Slide
                 key={`allFolders_${arrIdx}_arrIdx`}
@@ -485,9 +477,8 @@ const Folders: FC<FoldersTypeProps> = ({
                       if ((parentRoute !== router.route || isAncholElHidden || isSizeSmall) && isHaveParentRoute)
                         return null;
                       if (!isMenuOpen && isFolderIsPlaceholder) return null;
-                      if (isFolderOpen && iconName === 'none') return null;
+                      if (isFolderOpen && !isMenuOpen && iconName === 'none' && isHaveParentRoute) return null;
                       const findedIdx = _.findIndex(flattenAllFolders, ({ id: folderId }) => folderId === id);
-
                       const isShouldBeHidden =
                         isSizeOfFoldersMoreThanSize && idxOfFolderItemWhichShouldBeInMenu < findedIdx;
                       const isButtonIsMore =
@@ -551,7 +542,9 @@ const Folders: FC<FoldersTypeProps> = ({
                             borderBottomLeftRadius:
                               (isButtonLastOfNotHiddenNotBottomArr || isButtonIsMore) && borderRadiusValue,
                             borderTopLeftRadius:
-                              (isButtonLastOfNotHiddenNotBottomArr || isButtonIsMore) && borderRadiusValue,
+                              !isHaveParentRoute &&
+                              (isButtonLastOfNotHiddenNotBottomArr || isButtonIsMore) &&
+                              borderRadiusValue,
 
                             marginTop: isButtonIsMore && !positionOfFolderViewWithPakeepViewIsBottom && spacing(2)
                           }}
@@ -568,7 +561,7 @@ const Folders: FC<FoldersTypeProps> = ({
                           key={`arrItemOfAllFolders${id}`}
                         >
                           {/* {findedElement.id !== id && iconName !== 'none' && icon} */}
-                          {iconName !== 'none' && icon}
+                          {iconName !== 'none' && !isHaveParentRoute && icon}
                           {isMenuOpen && (
                             <Grid className={classes.textOfFolderWithPakeepsView} container>
                               {isButtonIsMore ? moreButtonTitle : isHaveParentRoute ? `# ${title}` : title}
