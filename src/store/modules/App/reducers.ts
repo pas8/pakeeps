@@ -190,7 +190,7 @@ const defaultFolderArr = [
 const nullityOfTemporaryData = {
   defaultMenuProps: nullityDefaultMenuProps,
   defaultDialogProps: nullityDefaultDialogProps,
-
+  isZenModeActive: false,
   pakeep: {
     id: '',
     isHovering: false
@@ -206,6 +206,7 @@ export const initialState: AppInitialStateInteface = {
   defaultFolderArr,
   temporaryData: nullityOfTemporaryData,
   pinnedPakeepsOrderNames: [],
+  headerPropertyies: { orderIds: [] },
   notifinationCounter: 8,
   headerHeight: 0,
   isAllDataWasUploaded: true,
@@ -355,6 +356,7 @@ export const AppReducer = (state = initialState, action: AppActionTypes): AppIni
     case TypeNames.HANDLE_CHANGE_HEADER_HEIGTH:
     case TypeNames.HANDLE_SET_NEW_ORDER_NAMES:
     case TypeNames.HANDLE_CHANGE_ALL_DATA_WAS_UPLOADED_STATUS:
+
     case TypeNames.HANDLE_CHANGE_PAKEEPS:
     case TypeNames.HANDLE_CHANGE_USER_DATA:
     case TypeNames.HANDLE_SET_SELECTED_PAKEEPIDS_ARR:
