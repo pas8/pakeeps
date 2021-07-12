@@ -11,7 +11,7 @@ const ThemeChangerButton: FC = () => {
 
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
-  const themeOlaceholderFunc = () => {
+  const themePlaceholderFunc = () => {
     // enqueueSnackbar({ message: 'White theme sucks, I am sr, just unluckky 😅', severity: 'info' });
     enqueueSnackbar({
       message: 'U can theme theme in the setting, but remember that, white theme sucks 😅',
@@ -28,7 +28,7 @@ const ThemeChangerButton: FC = () => {
     </Grid>
   );
   const switchProps = {
-    onChange: themeOlaceholderFunc,
+    onChange: themePlaceholderFunc,
     checked: true,
     offHandleColor: circleColor,
     onHandleColor: circleColor,
@@ -44,9 +44,9 @@ const ThemeChangerButton: FC = () => {
       {viewOfThemeChangerButton && (
         <>
           {viewOfThemeChangerButton === 'iconButton' && (
-            <IconButton aria-label={'Notifications'} color={'inherit'} onClick={themeOlaceholderFunc}>
+            <Grid onClick={themePlaceholderFunc} container>
               <Brightness4OutlinedIcon />
-            </IconButton>
+            </Grid>
           )}
           {viewOfThemeChangerButton === 'switch' && (
             <Grid container alignItems={'center'}>

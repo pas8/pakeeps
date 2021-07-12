@@ -1,10 +1,10 @@
 import { Grid, makeStyles, IconButton } from '@material-ui/core';
 import clsx from 'clsx';
+import { NONE } from 'models/denotation';
 import { useSnackbar } from 'notistack';
 import { useDispatch, useSelector } from 'react-redux';
-import { gethLocalPasswordPropetyies } from 'store/modules/App/selectors';
 import { toChangeTemporaryData } from 'store/modules/App/actions';
-import { NONE } from 'models/denotation';
+import { getIsAuthedWithLocalPassword, getUserData } from 'store/modules/App/selectors';
 
 const useStyles = makeStyles(theme => ({
   lockContainer: {
@@ -174,13 +174,16 @@ const useStyles = makeStyles(theme => ({
 
 const LockButton = () => {
   const classes = useStyles();
+  const { enqueueSnackbar } = useSnackbar();
   const dispatch = useDispatch();
 
-  const { enqueueSnackbar } = useSnackbar();
-  const { isAuthedWithLocalPinCode, value } = useSelector(gethLocalPasswordPropetyies);
+  const { localPinCode } = useSelector(getUserData);
 
-  const onClick = () => {
-    if (value === NONE) {
+
+  const isAuthedWithLocalPinCode = useSelector(getIsAuthedWithLocalPassword);
+
+  const onClickOfUploadButton = () => {
+    if (localPinCode === NONE) {
       return enqueueSnackbar({
         message: 'You havent added a pin code, but u can do this in setting/account',
         severity: 'info'
@@ -191,28 +194,27 @@ const LockButton = () => {
   };
 
   return (
-    <IconButton onClick={onClick}>
-      <Grid
-        item
-        alignItems={'center'}
-        direction={'column'}
-        className={clsx(classes.lockContainer, isAuthedWithLocalPinCode && classes.animate)}
-      >
-        <Grid className={clsx(classes.points, isAuthedWithLocalPinCode && classes.animatePoints)}>
-          {Array(4).fill(<Grid />)}
-        </Grid>
-        <Grid className={clsx(classes.arch, isAuthedWithLocalPinCode && classes.archAnimate)} item></Grid>
-        <Grid
-          alignItems={'center'}
-          justify={'center'}
-          className={clsx(classes.box, isAuthedWithLocalPinCode && classes.animateBox)}
-          container
-          item
-        >
-          <Grid className={classes.circle}></Grid>
-        </Grid>
+    <Grid
+      item
+      onClick={onClickOfUploadButton}
+      alignItems={'center'}
+      direction={'column'}
+      className={clsx(classes.lockContainer, !isAuthedWithLocalPinCode && classes.animate)}
+    >
+      <Grid className={clsx(classes.points, !isAuthedWithLocalPinCode && classes.animatePoints)}>
+        {Array(4).fill(<Grid />)}
       </Grid>
-    </IconButton>
+      <Grid className={clsx(classes.arch, !isAuthedWithLocalPinCode && classes.archAnimate)} item></Grid>
+      <Grid
+        alignItems={'center'}
+        justify={'center'}
+        className={clsx(classes.box, !isAuthedWithLocalPinCode && classes.animateBox)}
+        container
+        item
+      >
+        <Grid className={classes.circle}></Grid>
+      </Grid>
+    </Grid>
   );
 };
 

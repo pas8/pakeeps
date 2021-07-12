@@ -3,15 +3,12 @@ export enum VariantsOfropertiesToUtils {
   VALUE = 'VALUE'
 }
 
-
-
-
-
 export enum MenusLayoutName {
   EVENTS = 'events',
   LABELS = 'labels',
+  ACCOUNT = 'ACCOUNT',
   NONE = 'none'
-} 
+}
 
 export enum DialogLayoutName {
   EVENTS = 'events',

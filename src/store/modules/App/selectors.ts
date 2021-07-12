@@ -74,6 +74,11 @@ export const getIsPakeepHovering = createSelector(
   isHovering => isHovering
 );
 
+export const getIsAllDataWasUploaded = createSelector(
+  [({ app: { isAllDataWasUploaded } }: RootStoreType) => isAllDataWasUploaded],
+  isAllDataWasUploaded => isAllDataWasUploaded
+);
+
 export const getHeaderHeight = createSelector(
   [({ app: { headerHeight } }: RootStoreType) => headerHeight],
   headerHeight => headerHeight
@@ -122,6 +127,18 @@ export const getAvatarProperties = createSelector(
   [({ app: { avatarProperties } }: RootStoreType) => avatarProperties],
   avatarProperties => avatarProperties
 );
+
+
+export const getNotifinationCounterValue = createSelector(
+  [({ app: { notifinationCounter } }: RootStoreType) => notifinationCounter],
+  notifinationCounter => notifinationCounter
+);
+
+export const getIsZenModeActive = createSelector(
+  [({ app: { temporaryData } }: RootStoreType) => temporaryData.isZenModeActive],
+  isZenModeActive => isZenModeActive
+);
+
 
 export const getDefaultDialogPropsOfTemporaryData = createSelector(
   [

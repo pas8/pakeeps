@@ -1,3 +1,5 @@
+import { Dispatch, SetStateAction } from 'react';
+
 export type PropetyyyType =
   | 'navigationViewLikeGoogleKeep'
   | 'navigationViewLikeTelegram'
@@ -15,6 +17,11 @@ export type HeaderByPasPropsType = {
 export type MainBarPropsType = {
   handleDrawerOpen: () => void;
   isMenuOpen: boolean;
-  isSmallSize: boolean;
   isMenuExtended: boolean;
+};
+
+export type HeaderSearchPropsType = {
+  isSeaching: boolean;
+  setIsSeaching: Dispatch<SetStateAction<boolean>>;
+  isOnlySearchVisible: boolean;
 };

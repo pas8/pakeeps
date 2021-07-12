@@ -17,6 +17,7 @@ import { useAlpha } from 'hooks/useAlpha.hook';
 import { useFromNameToText } from 'hooks/useFromNameToText.hook';
 import SwitchByPas from 'components/Switch';
 import FieldSetContainer from 'components/FieldSetContainer';
+import SettingContainer from 'components/SettingContainer';
 
 const AccountAvatar = dynamic(() => import('components/AccountAvatar'), { ssr: false });
 
@@ -45,6 +46,7 @@ const useStyles = makeStyles(
       marginBottom: spacing(INPUT_MARGIN_BOTTOMVALUE)
     },
     conatinerOfAvatar: {
+      marginBottom: spacing(INPUT_MARGIN_BOTTOMVALUE),
       padding: spacing(0, 0, 0, 8),
 
       [breakpoints.down('md')]: {
@@ -57,14 +59,25 @@ const useStyles = makeStyles(
       },
 
       [breakpoints.down('xs')]: {
-        padding: spacing(0, 0, 0, 0),
+        padding: spacing(0, 0, 0, 0)
         // height: '60vw',
-        maxHeight: '76vw'
+        // maxHeight: '76vw'
       }
     },
     containerOfInputs: {
       [breakpoints.down('xs')]: {
-        maxWidth: '68vw'
+        marginTop: '100%'
+
+        // maxWidth: '68vw'
+      }
+    },
+
+    wrapperOfAvatar: {
+      position: 'relative',
+      [breakpoints.down('xs')]: {
+        // maxWidth: '68vw'
+        width: '100%',
+        paddingTop: '100%'
       }
     },
     avatar: ({
@@ -104,8 +117,12 @@ const useStyles = makeStyles(
           height: spacing(42)
         },
         [breakpoints.down('xs')]: {
-          minWidth: '68vw',
-          height: '68vw'
+          position: 'absolute',
+          inset: 0,
+          width: '100%',
+          height: '100%'
+          // minWidth: '68vw',
+          // height: '68vw'
         },
 
         boxShadow: isHaveBgColor ? `0px 0px 1px 4px ${backgroundColor}` : '',
@@ -280,104 +297,99 @@ const SettingAccount: FC = () => {
   const onUpdateAccountData = () => {
     console.log(inputsState);
   };
-
+  console.log(isSizeSmall);
   return (
     <>
       <Grid container justify={'center'} className={classes.container}>
-        <Grid
-          xs={12}
-          sm={11}
-          component={'fieldset'}
-          lg={8}
-          container
-          xl={6}
+        <SettingContainer
           className={classes.wrapper}
-          md={11}
-          item
           alignItems={isSiveIsXs ? 'center' : 'flex-start'}
           wrap={!isSizeSmall ? 'wrap' : 'nowrap'}
-          direction={isSizeSmall ? 'column-reverse' : 'row'}
         >
-            <FieldSetContainer title={'Public account'} isOnlyTop>
+          <Grid>
+            <FieldSetContainer
+              title={'Public account'}
+              isOnlyTop
+              direction={isSizeSmall ? 'column-reverse' : 'row'}
+              container
+            >
+              {/* > */}
+              <Grid lg={6} sm={12} md={7} xl={6} xs={12} className={classes.containerOfInputs} item>
+                {inputsArr.map(({ name, helperText = '', validationFunc: useValidate, ...aditional }) => {
+                  const label = useFromNameToText(name);
+                  const value = inputsState[name].value === NONE ? '' : inputsState[name].value;
 
-          {/* > */}
-          <Grid lg={6} sm={12} md={7} xl={6} xs={12} className={classes.containerOfInputs}>
-              {inputsArr.map(({ name, helperText = '', validationFunc: useValidate, ...aditional }) => {
-                const label = useFromNameToText(name);
-                const value = inputsState[name].value === NONE ? '' : inputsState[name].value;
+                  const onChange: ChangeEventHandler<HTMLInputElement> = ({ target: { name, value } }) => {
+                    const isValid = useValidate(value);
+                    setInputsState(state => ({ ...state, [name]: { value, isValid } }));
+                  };
+                  const error = !inputsState[name].isValid;
 
-                const onChange: ChangeEventHandler<HTMLInputElement> = ({ target: { name, value } }) => {
-                  const isValid = useValidate(value);
-                  setInputsState(state => ({ ...state, [name]: { value, isValid } }));
-                };
-                const error = !inputsState[name].isValid;
+                  const textFieldProps = {
+                    label,
+                    placeholder: label,
+                    color: 'secondary' as const,
+                    type: 'text',
+                    value,
+                    error,
+                    helperText,
+                    onChange,
+                    name,
+                    variant: 'outlined' as const
+                  };
+                  return (
+                    <Grid className={classes.containerOftextField} key={name}>
+                      <TextField {...textFieldProps} fullWidth />
 
-                const textFieldProps = {
-                  label,
-                  placeholder: label,
-                  color: 'secondary' as const,
-                  type: 'text',
-                  value,
-                  error,
-                  helperText,
-                  onChange,
-                  name,
-                  variant: 'outlined' as const
-                };
-                return (
-                  <Grid className={classes.containerOftextField} key={name}>
-                    <TextField {...textFieldProps} fullWidth />
+                      {
+                        //@ts-ignore
+                        aditional?.aditionalComponents
+                      }
+                    </Grid>
+                  );
+                })}
+                <Button
+                  onClick={onUpdateAccountData}
+                  color={'primary'}
+                  variant={'outlined'}
+                  startIcon={<CloudUploadOutlinedIcon />}
+                >
+                  Update account
+                </Button>
+              </Grid>
 
-                    {
-                      //@ts-ignore
-                      aditional?.aditionalComponents
-                    }
-                  </Grid>
-                );
-              })}
-              <Button
-                onClick={onUpdateAccountData}
-                color={'primary'}
-                variant={'outlined'}
-                startIcon={<CloudUploadOutlinedIcon />}
-              >
-                Update account
-              </Button>
-          </Grid>
-
-          <Grid className={classes.conatinerOfAvatar} lg={6} sm={10} md={5} xl={6} xs={12} >
-            <Grid style={{ position: 'relative'}} container justify={'flex-end'}>
-              {isAccountHaveAvatar && (
-                <Grid className={classes.containerOfEditButton}>
-                  <Button
-                    startIcon={<EditOutlinedIcon />}
-                    color={'secondary'}
-                    variant={'outlined'}
-                    size={'small'}
-                    onClick={onClickOfEditButton}
-                  >
-                    Edit
-                  </Button>
+              <Grid className={classes.conatinerOfAvatar} lg={6} sm={10} md={5} xl={6} xs={12}>
+                <Grid className={classes.wrapperOfAvatar} container justify={isSizeSmall ? 'flex-start' : 'flex-end'}>
+                  {isAccountHaveAvatar && (
+                    <Grid className={classes.containerOfEditButton}>
+                      <Button
+                        startIcon={<EditOutlinedIcon />}
+                        color={'secondary'}
+                        variant={'outlined'}
+                        size={'small'}
+                        onClick={onClickOfEditButton}
+                      >
+                        Edit
+                      </Button>
+                    </Grid>
+                  )}
+                  <fieldset className={classes.avatar} {...getRootProps()}>
+                    {!isAccountHaveAvatar && (
+                      <legend>
+                        <Typography variant={'body2'} color={'textSecondary'}>
+                          Avatar
+                        </Typography>
+                      </legend>
+                    )}
+                    <Grid container justify={'center'} alignItems={'center'} style={{ width: '100%', height: '100%' }}>
+                      <AccountAvatar {...accountAvatarProps} />
+                    </Grid>
+                  </fieldset>
                 </Grid>
-              )}
-              <fieldset className={classes.avatar} {...getRootProps()}>
-                {!isAccountHaveAvatar && (
-                  <legend>
-                    <Typography variant={'body2'} color={'textSecondary'}>
-                      Avatar
-                    </Typography>
-                  </legend>
-                )}
-                <Grid container justify={'center'} alignItems={'center'} style={{ width: '100%', height: '100%' }}>
-                  <AccountAvatar {...accountAvatarProps} />
-                </Grid>
-              </fieldset>
-            </Grid>
-
+              </Grid>
+            </FieldSetContainer>
           </Grid>
-          </FieldSetContainer>
-
-        </Grid>
+        </SettingContainer>
       </Grid>
 
       <DialogOfEditingAvatar {...dialogOfEditingAvatarProps} />

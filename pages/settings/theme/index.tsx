@@ -24,6 +24,7 @@ import DialogOfCreatingCustomTheme from 'components/DialogOfCreatingCustomTheme'
 import { nanoid } from 'nanoid';
 import { themeAnchorArr } from 'components/Folders';
 import SliderByPas from 'components/Slider';
+import SettingContainer from 'components/SettingContainer';
 
 const useStyles = makeStyles(({ spacing, palette, breakpoints, shape: { borderRadius } }) => ({
   colorContainer: {
@@ -207,18 +208,8 @@ const Theme: FC<any> = () => {
   const [customColorOfElOfThemePicker] = useGetReadableColor(elStateOfThemePicker.color);
   return (
     <Grid container justify={'center'}>
-      <Grid container className={classes.colorContainer} justify={'center'} lg={9} xl={8} md={8} xs={12} sm={12}>
-        <Grid
-          xl={10}
-          lg={11}
-          md={12}
-          xs={12}
-          container
-          sm={11}
-          justify={'space-between'}
-          id={themeAnchorArr.COLORS_ID}
-          item
-        >
+      <SettingContainer container className={classes.colorContainer} justify={'center'}>
+        <Grid container justify={'space-between'} id={themeAnchorArr.COLORS_ID} item>
           {themePickersArr.map(props => {
             return (
               <PickerOfThemeColor
@@ -230,17 +221,7 @@ const Theme: FC<any> = () => {
             );
           })}
         </Grid>
-        <Grid
-          className={classes.defaultThemesContainer}
-          component={'fieldset'}
-          xl={10}
-          lg={11}
-          md={12}
-          sm={11}
-          xs={12}
-          id={themeAnchorArr.DEFAULT_THEMES_ID}
-        >
-
+        <Grid className={classes.defaultThemesContainer} component={'fieldset'} id={themeAnchorArr.DEFAULT_THEMES_ID} container>
           <legend>
             <Typography variant={'subtitle1'} color={'textSecondary'}>
               Default themes
@@ -278,11 +259,6 @@ const Theme: FC<any> = () => {
           </Grid>
         </Grid>
         <Grid
-          xl={10}
-          lg={11}
-          md={12}
-          sm={11}
-          xs={12}
           container
           item
           id={themeAnchorArr.BORDER_RADIUS}
@@ -307,7 +283,7 @@ const Theme: FC<any> = () => {
             // track={'inverted'}
           />
         </Grid>
-      </Grid>
+      </SettingContainer>
       <MenuByPas
         anchorEl={elStateOfThemePicker.anchorEl}
         keepMounted

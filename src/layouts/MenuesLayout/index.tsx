@@ -1,3 +1,4 @@
+import AccountMenu from 'components/AccountMenu';
 import MenuOfChangingGlobalEventItem from 'components/PakeepList/components/PakeepElement/components/AttributeGroup/components/EventsPart/components/MenuOfChangingGlobalEventItem';
 import WrapperOfMenuOfLabelPart from 'components/PakeepList/components/PakeepElement/components/AttributeGroup/components/LabelPart/components/MenuWrapper';
 import { MenusLayoutName } from 'models/unums';
@@ -20,7 +21,8 @@ const MenuesLayout: FC<MenuesLayoutPropsType> = ({ children }) => {
 
   const menuesComponentsArr = [
     { Component: WrapperOfMenuOfLabelPart, props: defaultMenuLayoutElemntProps, name: MenusLayoutName.LABELS },
-    { Component: MenuOfChangingGlobalEventItem, props: defaultMenuLayoutElemntProps, name: MenusLayoutName.EVENTS }
+    { Component: MenuOfChangingGlobalEventItem, props: defaultMenuLayoutElemntProps, name: MenusLayoutName.EVENTS },
+    { Component: AccountMenu, props: defaultMenuLayoutElemntProps, name: MenusLayoutName.ACCOUNT }
   ];
 
   // console.log(menuName)

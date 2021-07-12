@@ -10,7 +10,8 @@ import { FC, Fragment } from 'react';
 import NextLink from 'next/link';
 import { SIGN_IN_URL, NEW_USER_URL } from 'models/denotation';
 import { getIsAuthedWithLocalPassword } from 'store/modules/App/selectors';
-import { MainBarPropsType } from '../types';
+import { MainBarPropsType } from '../../types';
+import { useBreakpointNames } from 'hooks/useBreakpointNames.hook';
 
 const useStyles = makeStyles(theme => ({
   menuButton: {
@@ -21,9 +22,10 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const MainBar: FC<MainBarPropsType> = ({ handleDrawerOpen, isMenuOpen, isSmallSize, isMenuExtended }) => {
+const MainBar: FC<MainBarPropsType> = ({ handleDrawerOpen, isMenuOpen, isMenuExtended }) => {
   const classes = useStyles();
   const { pathname } = useRouter();
+  const { isSiveIsXs } = useBreakpointNames();
 
   const isMainPage = pathname === '/';
 
@@ -68,7 +70,7 @@ const MainBar: FC<MainBarPropsType> = ({ handleDrawerOpen, isMenuOpen, isSmallSi
               {isMenuExtended ? <MenuOpenOutlinedIcon /> : <MenuIcon />}
             </IconButton>
           </Tooltip>
-          {!isSmallSize && (
+          {!isSiveIsXs && (
             <Typography variant={'h6'} className={classes.typography}>
               {/* {headerTitle} */}
               {!isAuthedWithLocalPinCode

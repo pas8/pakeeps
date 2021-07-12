@@ -1,5 +1,8 @@
 import { fade, InputBase, makeStyles, useTheme } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
+import { HeaderSearchPropsType } from 'components/Header/types';
+import { useBreakpointNames } from 'hooks/useBreakpointNames.hook';
+import { FC } from 'react';
 
 const useStyles = makeStyles(theme => ({
   search: {
@@ -12,12 +15,7 @@ const useStyles = makeStyles(theme => ({
     },
     marginRight: theme.spacing(2),
     marginLeft: 0,
-    width: 'auto',
-
-    [theme.breakpoints.down('xs')]: {
-      marginRight: theme.spacing(0.8),
-      width: '100%'
-    }
+    width: 'auto'
   },
   searchIcon: {
     padding: theme.spacing(0, 0.4, 0, 1.4),
@@ -44,8 +42,9 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const HeaderSearch = () => {
+const HeaderSearch: FC<HeaderSearchPropsType> = ({ isOnlySearchVisible, isSeaching, setIsSeaching }) => {
   const classes = useStyles();
+
   return (
     <div className={classes.search}>
       <div className={classes.searchIcon}>

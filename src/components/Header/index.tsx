@@ -1,24 +1,20 @@
-import PropTypes from 'prop-types';
-import React, { FC, useEffect } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import clsx from 'clsx';
-import { connect, useDispatch, useSelector } from 'react-redux';
+import { useMeasure } from 'react-use';
+import { useDispatch } from 'react-redux';
 import { AppBar, makeStyles, Toolbar, Grid } from '@material-ui/core';
-import { getNavigationViewLike } from 'store/modules/Settings/selectors';
-import { useCustomBreakpoint } from 'hooks/useCustomBreakpoint';
+import { menuOpenStatusDenotation, SIGN_IN_URL, NEW_USER_URL } from 'models/denotation';
+import { toChangeHeaderHeigth, toChangeMenuOpenStatus } from 'store/modules/App/actions';
+import { useRouter } from 'next/dist/client/router';
+
 import HeaderSearch from './components/Search';
-import HeaderDrawer from './components/Drawer';
 import HeaderProfileUtils from './components/ProfileUtils';
 import MainBar from './components/MainBar';
-import ViewLikeInTelegram from './components/ViewLikeInTelegram';
-import { toChangeHeaderHeigth, toChangeMenuOpenStatus } from 'store/modules/App/actions';
-import { getMenuOpenStatus } from 'store/modules/App/selectors';
-import { HeaderByPasPropsType, UseStylesOfHeaderByPasType } from './components/types';
-import { menuOpenStatusDenotation, SIGN_IN_URL ,NEW_USER_URL} from 'models/denotation';
-import { useRouter } from 'next/dist/client/router';
-import { useMeasure } from 'react-use';
+import { HeaderByPasPropsType } from './types';
+import { useBreakpointNames } from 'hooks/useBreakpointNames.hook';
 
 const useStyles = makeStyles(theme => ({
-  root: ({ navigationViewLikeTelegram }: HeaderByPasPropsType) => ({
+  root: ({ navigationViewLikeTelegram }: any) => ({
     display: 'flex',
     marginBottom: navigationViewLikeTelegram ? theme.spacing(4) : 0
   }),
@@ -36,7 +32,7 @@ const useStyles = makeStyles(theme => ({
     flexGrow: 1
   },
   appBarShift: {
-    width: ({ isMenuOpen, drawerWidth, navigationViewLikeTelegram }: HeaderByPasPropsType) =>
+    width: ({ isMenuOpen, drawerWidth, navigationViewLikeTelegram }: any) =>
       navigationViewLikeTelegram && isMenuOpen ? `calc(100% - ${drawerWidth}px)` : '',
     // marginLeft: drawerWidth,
     transition: theme.transitions.create(['margin', 'width'], {
@@ -60,59 +56,46 @@ const HeaderByPas: FC<HeaderByPasPropsType> = ({
   navigationViewLikeTelegram,
   navigationViewLikePakeeps
 }) => {
-  const [breakpoint] = useCustomBreakpoint();
   const { pathname } = useRouter();
   const dispatch = useDispatch();
+  const { isSizeSmall } = useBreakpointNames();
 
   const handleDrawerOpen = () => {
     const menuOpenStatus = isMenuExtended ? menuOpenStatusDenotation.OPEN : menuOpenStatusDenotation.EXTENDED;
     dispatch(toChangeMenuOpenStatus({ menuOpenStatus }));
   };
-  // const handleDrawerClose = () => operateToChangeMenuOpenStatus(false);
-
-  const isSmallSize = breakpoint === 'xs';
-
-  //@ts-ignore
   const classes = useStyles({ drawerWidth, navigationViewLikeTelegram, navigationViewLikePakeeps, isMenuOpen });
 
   const isHeaderHavePakeepView = true;
 
-  const isRouteIsSignIn = pathname === SIGN_IN_URL || pathname === NEW_USER_URL
+  const isRouteIsSignIn = pathname === SIGN_IN_URL || pathname === NEW_USER_URL;
   const [ref, { height: headerHeight }] = useMeasure<HTMLDivElement>();
 
   useEffect(() => {
-    dispatch(toChangeHeaderHeigth({ headerHeight:headerHeight + 16 }));
+    dispatch(toChangeHeaderHeigth({ headerHeight: headerHeight + 16 }));
   }, [headerHeight]);
+
+  const [isSeaching, setIsSeaching] = useState(false);
+
+  const isOnlySearchVisible = isSizeSmall && isSeaching;
+
+  const headerSearchProps = {
+    isSeaching,
+    setIsSeaching,
+    isOnlySearchVisible
+  };
+
   return (
     <Grid className={classes.root} container>
-      {/* {isHeaderHavePakeepView ? ( */}
-      <></>
-      {/* ) : ( */}
       <AppBar className={clsx(classes.appBar, { [classes.appBarShift]: isMenuOpen })} ref={ref}>
         <Toolbar className={classes.toolBar}>
-          {(navigationViewLikePakeeps || navigationViewLikeGoogleKeep) && (
-            <>
-              <MainBar
-                isMenuExtended={isMenuExtended}
-                handleDrawerOpen={handleDrawerOpen}
-                isMenuOpen={isMenuOpen}
-                isSmallSize={isSmallSize}
-              />
-              {!isRouteIsSignIn && (
-                <>
-                  <HeaderSearch />
-                  <HeaderProfileUtils />
-                </>
-              )}
-            </>
+          {!isOnlySearchVisible && (
+            <MainBar isMenuExtended={isMenuExtended} handleDrawerOpen={handleDrawerOpen} isMenuOpen={isMenuOpen} />
           )}
-          {/* {navigationViewLikeTelegram && (
-              <ViewLikeInTelegram handleDrawerOpen={handleDrawerOpen} isMenuOpen={isMenuOpen} />
-            )} */}
+          {!isRouteIsSignIn && <HeaderSearch {...headerSearchProps} />}
+          {(!isRouteIsSignIn || !isOnlySearchVisible) && <HeaderProfileUtils />}
         </Toolbar>
       </AppBar>
-      {/* )} */}
-      {/* {navigationViewLikeTelegram && <HeaderDrawer isMenuOpen={isMenuOpen} handleDrawerClose={handleDrawerClose} />} */}
     </Grid>
   );
 };

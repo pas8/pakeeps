@@ -70,6 +70,11 @@ export type PayloadTypes = {
   [TypeNames.HANDLE_DELETE_GLOBAL_EVENT]: {
     eventId: EventIdType;
   };
+  [TypeNames.HANDLE_CHANGE_ALL_DATA_WAS_UPLOADED_STATUS]: {
+    isAllDataWasUploaded: boolean;
+  };
+
+  
 };
 
 export type ActionsValueTypes = {
@@ -227,6 +232,13 @@ export type ActionsValueTypes = {
     type: typeof TypeNames.HANDLE_CHANGE_PAKEEP_CUSTOM_PROPERTY;
     payload: PayloadTypes[TypeNames.HANDLE_CHANGE_PAKEEP_CUSTOM_PROPERTY];
   };
+  toChangeAllDataWasUploadedStatus: {
+    type: typeof TypeNames.HANDLE_CHANGE_ALL_DATA_WAS_UPLOADED_STATUS;
+    payload: PayloadTypes[TypeNames.HANDLE_CHANGE_ALL_DATA_WAS_UPLOADED_STATUS];
+  };
+
+  
+  
 };
 export type AppActionTypes = $Values<ActionsValueTypes>;
 
@@ -373,6 +385,12 @@ export type UserDataType = {
   localPinCode: LocalPasswordType;
 };
 
+export type HeaderPropertyiesType = {
+
+
+  
+}
+
 export interface AppInitialStateInteface {
   // breakpointsValues: BreakpointsValuesInterface<number>;
   // theme: DefaultThemeInterface;
@@ -382,6 +400,10 @@ export interface AppInitialStateInteface {
   headerHeight: number;
   labels: GlobalLabelsType;
   events: GlobalEventsType;
+  headerPropertyies:{
+
+
+  }
   selectedPakeepsId: SelectedPakeepsIdType;
   folders: FoldersType;
   pakeeps: PakeepsType;
@@ -389,6 +411,7 @@ export interface AppInitialStateInteface {
   pakeepsOrderNames: OrderNamesType;
   pinnedPakeepsOrderNames: OrderNamesType;
   notifinationCounter: number;
+  isAllDataWasUploaded: boolean;
   menuOpenStatus: IsMenuOpenType;
   currentFolderPropertyIdx: number;
   drawerWidth: DrawerWidthType;

@@ -26,6 +26,13 @@ export const toChangeGlobalEventItem = (
   payload
 });
 
+export const toChangeAllDataWasUploadedStatus = (
+  payload: PayloadTypes[TypeNames.HANDLE_CHANGE_ALL_DATA_WAS_UPLOADED_STATUS]
+): AppActionTypes => ({
+  type: TypeNames.HANDLE_CHANGE_ALL_DATA_WAS_UPLOADED_STATUS,
+  payload
+});
+
 export const toDeletePakeep = (payload: PayloadTypes[TypeNames.HANDLE_DELETE_PAKEEP]): AppActionTypes => ({
   type: TypeNames.HANDLE_DELETE_PAKEEP,
   payload

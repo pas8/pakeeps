@@ -1,8 +1,10 @@
 import { Grid, IconButton, InputAdornment, makeStyles, Typography, TextField } from '@material-ui/core';
 import FieldSetContainer from 'components/FieldSetContainer';
 import { capitalize, mapValues, values } from 'lodash';
+import VisibilityOutlinedIcon from '@material-ui/icons/VisibilityOutlined';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
+import VisibilityOffOutlinedIcon from '@material-ui/icons/VisibilityOffOutlined';
 import { ChangeEventHandler, FC, KeyboardEventHandler, MouseEvent, useState } from 'react';
 import { INPUT_MARGIN_BOTTOMVALUE } from '../account';
 
@@ -11,8 +13,11 @@ const useStyles = makeStyles(({ spacing, palette, breakpoints, shape: { borderRa
   visibilityButton: {
     color: palette.text.secondary
   },
-  inputContainer: {
+  inputItemContainer: {
     marginBottom: spacing(INPUT_MARGIN_BOTTOMVALUE)
+  },
+  changePasswordContainer:{
+
   }
 }));
 
@@ -24,9 +29,6 @@ const Security: FC = () => {
     NEW_PASSWORD: 'New_Password'
   };
 
-
-
-  
   const nulittyOfinputsStateOfPasswordChanger = mapValues(
     {
       [nameDenotationOfPasswordChanger.OLD_PASSWORD]: {
@@ -52,7 +54,6 @@ const Security: FC = () => {
   const [inputsStateOfPasswordChanger, setInputsStateOfPasswordChanger] = useState(
     nulittyOfinputsStateOfPasswordChanger
   );
-
   const valuesOfInputsStateOfPasswordChanger = values(inputsStateOfPasswordChanger);
 
   const onInputChange: ChangeEventHandler<HTMLInputElement> = ({ target: { value, name } }) => {
@@ -60,12 +61,11 @@ const Security: FC = () => {
 
     setInputsStateOfPasswordChanger(state => ({ ...state, [name]: { ...state[name], value, isValid } }));
   };
-
-  const handleChangePasswordVisiblilittyStatus = () => {};
   return (
     <Grid container justify={'center'}>
-      <Grid container lg={6} xl={5} md={8} xs={12} sm={12} item className={classes.container}>
-        <FieldSetContainer title={'Change password'} isOnlyTop>
+      <Grid container lg={6} xl={5} md={8} xs={12} sm={11} item className={classes.container}>
+        <FieldSetContainer title={'Change password'} isOnlyTop >
+          <Grid className={classes.changePasswordContainer} container item lg={6} sm={12} md={7} xl={6} xs={12}>
           {valuesOfInputsStateOfPasswordChanger.map(({ name }, idx) => {
             const label = capitalize(name);
 
@@ -83,13 +83,21 @@ const Security: FC = () => {
 
             const isPasswordVisible = inputsStateOfPasswordChanger[name].isPasswordVisible;
 
+            const handleChangePasswordVisiblilittyStatus = () => {
+              setInputsStateOfPasswordChanger(state => ({
+                ...state,
+                [name]: { ...state[name], isPasswordVisible: !state[name].isPasswordVisible }
+              }));
+            };
+
             return (
-              <Grid className={classes.inputContainer} container>
+              <Grid className={classes.inputItemContainer} container>
                 <TextField
                   label={label}
                   variant={'outlined'}
                   key={`authFormaNames-${idx}-${name}`}
                   onKeyPress={onKeyPress}
+                  color={'secondary'}
                   type={isPasswordVisible ? 'text' : 'password'}
                   InputProps={{
                     endAdornment: (
@@ -102,7 +110,7 @@ const Security: FC = () => {
                           onMouseDown={handleMouseDownPassword}
                           edge={'end'}
                         >
-                          {isPasswordVisible ? <Visibility /> : <VisibilityOff />}
+                          {isPasswordVisible ? <VisibilityOutlinedIcon /> : <VisibilityOffOutlinedIcon />}
                         </IconButton>
                       </InputAdornment>
                     )
@@ -118,6 +126,8 @@ const Security: FC = () => {
               </Grid>
             );
           })}
+      </Grid>
+
         </FieldSetContainer>
       </Grid>
     </Grid>
