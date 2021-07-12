@@ -127,8 +127,8 @@ export const getAvatarProperties = createSelector(
 );
 
 export const getPakeepFolderOrderNames = createSelector(
-  [({ app: { pakeepFolderOrderNames } }: RootStoreType) => pakeepFolderOrderNames],
-  pakeepFolderOrderNames => pakeepFolderOrderNames
+  [({ app: { folderOrderNames } }: RootStoreType) => folderOrderNames],
+  folderOrderNames => folderOrderNames
 );
 
 export const getNotifinationCounterValue = createSelector(

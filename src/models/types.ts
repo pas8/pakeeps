@@ -48,6 +48,7 @@ import {
   HandleLabelFuncsOfLabelListType
 } from 'components/IconsUtils/components/LabelsList/types';
 import { Theme } from '@material-ui/core';
+import { UseMeasureRef } from 'react-use/lib/useMeasure';
 
 export type SelectedPakeepsType = PakeepsType;
 export type SelectedPakeepsIdType = PakeepIdType[];
@@ -195,10 +196,11 @@ export type UseValidateFolderColorType = (color: ColorType) => { validatedFolder
 
 export type UseTakeFoldersArrType = (props: {
   handleCloseFoldersWithDrawerView: () => void;
-  folderOrderNames: FolderOrderNamesType;
+  handleDrawerWidth: (value: number) => void;
   isFoldersHaveDraweView: boolean;
 }) => {
   folderOrderNames: FolderOrderNamesType;
   fordersBefore: FoldersType;
   foldersAfter: FoldersType;
+  ref: UseMeasureRef<HTMLDivElement>;
 };

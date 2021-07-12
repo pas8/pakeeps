@@ -74,15 +74,15 @@ export type PayloadTypes = {
     isAllDataWasUploaded: boolean;
   };
 
-  [TypeNames.HANDLE_CHANGE_PAKEEP_FOLDER_ORDER_NAMES]: {
-    pakeepFolderOrderNames: FolderOrderNamesValueType;
+  [TypeNames.HANDLE_CHANGE_FOLDER_ORDER_NAMES]: {
+    folderOrderNames: FolderOrderNamesType;
   };
 };
 
 export type ActionsValueTypes = {
-  toChangePakeepFolderOrderNames: {
-    type: typeof TypeNames.HANDLE_CHANGE_PAKEEP_FOLDER_ORDER_NAMES;
-    payload: PayloadTypes[TypeNames.HANDLE_CHANGE_PAKEEP_FOLDER_ORDER_NAMES];
+  toChangeFolderOrderNames: {
+    type: typeof TypeNames.HANDLE_CHANGE_FOLDER_ORDER_NAMES;
+    payload: PayloadTypes[TypeNames.HANDLE_CHANGE_FOLDER_ORDER_NAMES];
   };
   toChangeGlobalEventItem: {
     type: typeof TypeNames.HANDLE_CHANGE_GLOBAL_EVENT_ITEM;
@@ -277,19 +277,19 @@ export type IconNameType = string;
 export type TitleType = string;
 
 export type DefaultPropertyiesOfElementOfFolderArrType = {
-  color: ColorType;
-  title: string;
-  iconName: string;
-  id: string;
-};
-
-export type ElementOfFolderArrType = {
   property: {
     value: AdditionalFolderPropertyNames;
     onClick?: (e: any) => void;
     route?: string;
     additionalArr?: { title: string; route: string };
   };
+  id: string;
+};
+
+export type ElementOfFolderArrType = {
+  iconName: string;
+  title: string;
+  color: ColorType;
 } & DefaultPropertyiesOfElementOfFolderArrType;
 
 export type FolderArrType = ElementOfFolderArrType[];
@@ -417,8 +417,8 @@ export type HeaderPropertyiesType = {
   orderIds: string[];
 };
 
-export type FolderOrderNamesValueType = string[];
-export type FolderOrderNamesType = { [key: string]: FolderOrderNamesValueType };
+export type FolderOrderNamesValueType = string;
+export type FolderOrderNamesType = FolderOrderNamesValueType[];
 
 export interface AppInitialStateInteface {
   // breakpointsValues: BreakpointsValuesInterface<number>;
@@ -428,7 +428,7 @@ export interface AppInitialStateInteface {
   labels: GlobalLabelsType;
   events: GlobalEventsType;
   headerPropertyies: HeaderPropertyiesType;
-  pakeepFolderOrderNames: FolderOrderNamesValueType;
+  folderOrderNames: FolderOrderNamesType;
   pakeeps: PakeepsType;
   userData: UserDataType;
   pakeepsOrderNames: OrderNamesType;

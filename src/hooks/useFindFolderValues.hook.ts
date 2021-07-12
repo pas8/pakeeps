@@ -17,7 +17,6 @@ export const useFindFolderValues = () => {
 
   // const marginsOfToogleGroups = spacing(marginOfToogleGroups) * 2;
 
-  // const [ref, { width: buttonWidth, height: buttonHeight }] = useMeasure<HTMLDivElement>();
 
   // const buttonSize = positionOfFolderViewWithPakeepViewIsBottom ? buttonWidth : buttonHeight;
   // const avarageButtonSize = buttonSize / flattenAllFolders.length;

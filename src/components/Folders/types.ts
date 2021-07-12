@@ -3,13 +3,11 @@ import { Dispatch, SetStateAction } from 'react';
 import { GlobalFolderIdType } from 'store/modules/App/types';
 
 export type DefaultUseStylesOfFoldersType = {
-  positionOfFolderViewWithPakeepViewIsBottom: boolean;
-  positionOfFolderViewWithPakeepViewIsRight: boolean;
-  isFolderViewWithPakeepViewAlignToCenter: boolean;
   isFoldersHaveDraweView: boolean;
+  positionsOfFolder: {
+    [Property in 'isBottom' | 'isRight' | 'isLeft']: boolean;
+  };
 };
-
-export type UseStylesOfFoldersType = { folderColor: string; headerHeight: number } & DefaultUseStylesOfFoldersType;
 
 export type HandleChangeOfFolders = (id: GlobalFolderIdType) => void;
 
@@ -21,14 +19,10 @@ export type DefaultFoldersType = {
 export type FoldersTypeProps = {
   handleDrawerWidth: (drawerWidth: number) => void;
   isFolderOpen: boolean;
+
   isFolderExtended: boolean;
   handleCloseFoldersWithDrawerView: () => void;
-  handleHideFolder: () => void;
-  setMargin: Dispatch<SetStateAction<number>>;
-  isSizeOfFoldersMoreThanSize: boolean;
-  setIsSizeOfFoldersMoreThanSize: Dispatch<SetStateAction<boolean>>;
-} & DefaultUseStylesOfFoldersType &
-  DefaultFoldersType;
+} & DefaultUseStylesOfFoldersType;
 
 export type MoreMenuOfFoldersPropsType = {
   arrToMap: any[];

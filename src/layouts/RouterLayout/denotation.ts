@@ -43,3 +43,9 @@ export const settingUrls = {
     CHANGE_PASSWORD_ID: `#${SECURITY}_changePasswordId`
   }
 };
+
+export const denotationOfCorrectLayoutCases = {
+  BASE_URL: 'BASE_URL',
+  FOLDER_LAYOUT_HIDDEN: 'FOLDER_LAYOUT_HIDDEN',
+  SETTING_URL: 'SETTING_URL'
+};

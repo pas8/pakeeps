@@ -1,13 +1,13 @@
 import { Grid, makeStyles, Slide, useTheme } from '@material-ui/core';
 import { useTakeIcon } from 'hooks/useTakeIcon.hook';
 import { useMeasure, usePrevious, useSize, useWindowSize } from 'react-use';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { FC, MouseEventHandler, useEffect, useState } from 'react';
 import _, { flatten, mapValues, startsWith } from 'lodash';
 import { ToggleButton, ToggleButtonGroup } from '@material-ui/lab';
 import { useAlpha } from 'hooks/useAlpha.hook';
-import { getFolderOrderNames, getFolders, getHeaderHeight } from 'store/modules/App/selectors';
-import { FoldersTypeProps, UseStylesOfFoldersType } from './types';
+import { getHeaderHeight } from 'store/modules/App/selectors';
+import { FoldersTypeProps } from './types';
 import MoreMenuOfFolders from './components/MoreMenu';
 import { getNavigationViewLike } from 'store/modules/Settings/selectors';
 import { useRouter } from 'next/dist/client/router';
@@ -15,27 +15,24 @@ import ArrowDropDownOutlinedIcon from '@material-ui/icons/ArrowDropDownOutlined'
 import ArrowDropUpOutlinedIcon from '@material-ui/icons/ArrowDropUpOutlined';
 import { useValidateColor } from 'hooks/useValidateColor.hook';
 import { useBreakpointNames } from 'hooks/useBreakpointNames.hook';
-;
+
 import { useStylesOfFolders } from './useStyles';
 import { DEFAULT, PRIMARY, SECONDARY } from 'models/denotation';
 import { useValidateFolderColor } from 'hooks/useValidateFolderColor.hook';
 import FolderButtonGroupByPas from './components/ButtonGroup';
 import { useTakeFoldersArr } from 'hooks/useTakeFoldersArr.hook';
+import { toChangeGlobalFolderId } from 'store/modules/App/actions';
+import { GlobalFolderIdType } from 'store/modules/App/types';
 
 const Folders: FC<FoldersTypeProps> = ({
   isFolderOpen,
+  positionsOfFolder,
   isFolderExtended,
-  positionOfFolderViewWithPakeepViewIsBottom,
-  positionOfFolderViewWithPakeepViewIsRight,
-  
-  isFolderViewWithPakeepViewAlignToCenter,
-  setMargin,
-  isSizeOfFoldersMoreThanSize,
-  setIsSizeOfFoldersMoreThanSize,
   ...defaultUseTakeFoldersArrProps
   // ...defaultFolderButtonGroupByPasProps
 }) => {
   const router = useRouter();
+  const dispatch = useDispatch();
 
   const [folderColor, setFolderColor] = useState(DEFAULT);
 
@@ -46,8 +43,12 @@ const Folders: FC<FoldersTypeProps> = ({
 
   const headerHeight = useSelector(getHeaderHeight);
 
+  const handleChangeGlobalFolderId = (globalFolderId: GlobalFolderIdType) => {
+    dispatch(toChangeGlobalFolderId({ globalFolderId }));
+  };
 
-  const all = useTakeFoldersArr({ ...defaultUseTakeFoldersArrProps,  });
+  const { ref, ...all } = useTakeFoldersArr({ ...defaultUseTakeFoldersArrProps });
+  console.log(all)
 
   // const classes = useStylesOfFolders({
   //   folderColor: validatedFolderColor,
@@ -58,17 +59,6 @@ const Folders: FC<FoldersTypeProps> = ({
   //   positionOfFolderViewWithPakeepViewIsRight,
   //   isFolderViewWithPakeepViewAlignToCenter
   // });
-
-  // const findedElement = _.find(flattenAllFolders, el => _.startsWith(router.route, el?.route));
-
-  // useEffect(() => {
-  //   const findedElementIdx = _.findIndex(flattenAllFolders, ({ id }) => findedElement?.id === id);
-  //   router.pathname !== '/' && findedElementIdx && handleChange(null, findedElementIdx);
-  // }, [router, findedElement]);
-
-  // useEffect(() => {
-  //   !isFoldersHaveDraweView && handleDrawerWidth(width);
-  // }, [width, isFolderOpen]);
 
   // const moreMenuOfFoldersProps = {
   //   arrToMap: arrToMapOfMoreMenu,
@@ -90,27 +80,23 @@ const Folders: FC<FoldersTypeProps> = ({
   const folderButtonGroupByPas = {
     // ...defaultFolderButtonGroupByPasProps
   };
+
+  const isFolderViewWithPakeepViewAlignToCenter = false;
   return (
     <Grid container>
       <Grid
         container
-        // ref={ref}
+        ref={ref}
         justify={isFolderViewWithPakeepViewAlignToCenter ? 'center' : 'flex-start'}
         wrap={'nowrap'}
-        direction={positionOfFolderViewWithPakeepViewIsBottom ? 'row' : 'column'}
+        direction={positionsOfFolder.isBottom ? 'row' : 'column'}
         // className={classes.containerOfFolderWithPakeepsView}
       >
         <Slide
           in={isFolderOpen || isFolderExtended}
           mountOnEnter
           unmountOnExit
-          direction={
-            positionOfFolderViewWithPakeepViewIsBottom
-              ? 'down'
-              : positionOfFolderViewWithPakeepViewIsRight
-              ? 'left'
-              : 'right'
-          }
+          direction={positionsOfFolder.isBottom ? 'down' : positionsOfFolder.isRight ? 'left' : 'right'}
         >
           <FolderButtonGroupByPas {...folderButtonGroupByPas} />
         </Slide>
