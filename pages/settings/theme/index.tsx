@@ -240,6 +240,7 @@ const Theme: FC<any> = () => {
           xs={12}
           id={themeAnchorArr.DEFAULT_THEMES_ID}
         >
+
           <legend>
             <Typography variant={'subtitle1'} color={'textSecondary'}>
               Default themes

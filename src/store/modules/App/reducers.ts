@@ -163,7 +163,8 @@ export const firebaseAppInitialState = {
     userName: NONE,
     localPinCode: NONE as typeof NONE,
     name: NONE,
-    isEmailVerified: false
+    isEmailVerified: false,
+    isEmailPubic: false
   },
   events: [],
   selectedPakeepsId: [],

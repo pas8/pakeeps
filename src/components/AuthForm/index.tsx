@@ -117,7 +117,7 @@ const AuthForm: FC<AuthFormPropsType> = ({ isPageIsRegisted = false }) => {
 
   return (
     <Grid className={classes.container} container>
-      <Grid container item component={'form'}>
+      <Grid container item >
         {values(authFormaNames).map((name, idx) => {
           const label = capitalize(name);
 

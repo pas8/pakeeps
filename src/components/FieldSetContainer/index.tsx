@@ -1,25 +1,35 @@
 import { Grid, makeStyles, Typography } from '@material-ui/core';
+import { useAlpha } from 'hooks/useAlpha.hook';
 import { FC } from 'react';
 
-const useStyles = makeStyles(({ spacing, palette, breakpoints, shape: { borderRadius } }) => ({
-  container: {
-    borderRadius,
-    padding: spacing(0.8),
-    '& legend': {
-      padding: spacing(0, 0.8)
-    }
-  }
-}));
+const useStyles = makeStyles(
+  ({ spacing, palette, breakpoints, shape: { borderRadius }, typography: { subtitle1, h6 } }) => ({
+    container: ({ isOnlyTop }: any) => ({
+      borderRadius: isOnlyTop ? 0 : borderRadius,
+      padding: spacing(isOnlyTop ? 1.8 : 0.8,isOnlyTop ? 0 : 0.4, 0.4),
+      borderColor: useAlpha(palette.text.primary, 0.2),
 
-const FieldSetContainer: FC<{ title: string }> = ({ children, title }) => {
-  const classes = useStyles();
+      border: isOnlyTop ? '0px' : '1px',
+      borderTop: '2px solid',
+      '& >  legend': {
+        marginLeft:16,
+        padding: spacing(0, 0.8),
+        '& >p': {
+          ...subtitle1,
+          fontSize: h6.fontSize
+        }
+      }
+    })
+  })
+);
+
+const FieldSetContainer: FC<{ title: string; isOnlyTop?: boolean }> = ({ children, title, isOnlyTop }) => {
+  const classes = useStyles({ isOnlyTop });
 
   return (
-    <Grid className={classes.container} component={'fieldset'}>
+    <Grid className={classes.container} component={'fieldset'} container>
       <legend>
-        <Typography variant={'subtitle1'} color={'textSecondary'}>
-          {title}
-        </Typography>
+        <Typography color={'textSecondary'}>{title}</Typography>
       </legend>
       {children}
     </Grid>

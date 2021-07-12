@@ -368,6 +368,7 @@ export type UserDataType = {
   userName: string;
   isEmailVerified: boolean;
   name: string;
+  isEmailPubic: boolean;
 
   localPinCode: LocalPasswordType;
 };

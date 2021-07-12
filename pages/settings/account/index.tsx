@@ -9,15 +9,18 @@ import { useToggle, useTitle } from 'react-use';
 import { getAvatarProperties, getUserData } from 'store/modules/App/selectors';
 import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
 import { useIsColorLight } from 'hooks/useIsColorLight.hook';
-import ActionsButtonGroup from 'components/ActionsButtonGroup';
 import { NONE, TRANSPARENT } from 'models/denotation';
 import { useBreakpointNames } from 'hooks/useBreakpointNames.hook';
 import { emailRgEx } from 'components/AuthForm';
 import DialogOfEditingAvatar from 'components/DialogOfEditingAvatar';
 import { useAlpha } from 'hooks/useAlpha.hook';
 import { useFromNameToText } from 'hooks/useFromNameToText.hook';
+import SwitchByPas from 'components/Switch';
+import FieldSetContainer from 'components/FieldSetContainer';
 
 const AccountAvatar = dynamic(() => import('components/AccountAvatar'), { ssr: false });
+
+export const INPUT_MARGIN_BOTTOMVALUE = 2.8;
 
 const useStyles = makeStyles(
   ({
@@ -31,7 +34,7 @@ const useStyles = makeStyles(
       // padding: spacing(2  ),
       // borderRadius: shape.borderRadius,
       // borderColor: useAlpha( highEmphasis?.main!, 0.28),
-      borderColor: useAlpha( highEmphasis?.main!, 0),
+      borderColor: useAlpha(highEmphasis?.main!, 0),
       position: 'relative'
     },
     container: {
@@ -39,7 +42,7 @@ const useStyles = makeStyles(
       marginTop: spacing(0.8)
     },
     containerOftextField: {
-      marginBottom: spacing(3.2)
+      marginBottom: spacing(INPUT_MARGIN_BOTTOMVALUE)
     },
     conatinerOfAvatar: {
       padding: spacing(0, 0, 0, 8),
@@ -170,7 +173,26 @@ const SettingAccount: FC = () => {
 
   const validationFunc = (value: any) => console.log(value);
 
+  const [isEmailPublic, setIsEmailPublic] = useState(userData.isEmailPubic);
+
+  const handleChangeEmailPublicStatus: ChangeEventHandler<HTMLInputElement> = ({ target: { checked } }) => {
+    setIsEmailPublic(checked);
+  };
+
   const inputsDetonationOfSettingAccount = {
+    email: {
+      name: 'email',
+      aditionalComponents: (
+        <Grid container>
+          <SwitchByPas title={'Is email  public?'} checked={isEmailPublic} onChange={handleChangeEmailPublicStatus} />
+        </Grid>
+      ),
+      validationFunc: (value: string) => {
+        const isValid = emailRgEx.test(String(value).toLowerCase());
+        return isValid;
+      },
+      helperText: 'U can change email, but u will need to verificate that.'
+    },
     name: {
       name: 'name',
       validationFunc,
@@ -178,14 +200,6 @@ const SettingAccount: FC = () => {
         'Your name may appear around Pakeeps where you contribute or are mentioned. You can remove it at any time.'
     },
 
-    email: {
-      name: 'email',
-      validationFunc: (value: string) => {
-        const isValid = emailRgEx.test(String(value).toLowerCase());
-        return isValid;
-      },
-      helperText: 'U can change email, but u will need to verificate that.'
-    },
     userName: {
       name: 'userName',
       validationFunc,
@@ -202,9 +216,10 @@ const SettingAccount: FC = () => {
 
     return element;
   });
+
   const [inputsState, setInputsState] = useState(nullityOfInputsState);
 
-  const inputsNameArr = values(inputsDetonationOfSettingAccount);
+  const inputsArr = values(inputsDetonationOfSettingAccount);
 
   const isAccountHaveAvatar = avatarProperties?.url !== NONE;
   const isHaveBgColor = avatarProperties.backgroundColor !== TRANSPARENT;
@@ -272,10 +287,9 @@ const SettingAccount: FC = () => {
         <Grid
           xs={12}
           sm={11}
-        component={'fieldset'}
+          component={'fieldset'}
           lg={8}
           container
-
           xl={6}
           className={classes.wrapper}
           md={11}
@@ -284,48 +298,55 @@ const SettingAccount: FC = () => {
           wrap={!isSizeSmall ? 'wrap' : 'nowrap'}
           direction={isSizeSmall ? 'column-reverse' : 'row'}
         >
+            <FieldSetContainer title={'Public account'} isOnlyTop>
+
           {/* > */}
           <Grid lg={6} sm={12} md={7} xl={6} xs={12} className={classes.containerOfInputs}>
-            {inputsNameArr.map(({ name, helperText = '', validationFunc: useValidate }) => {
-              const label = useFromNameToText(name);
-              const value = inputsState[name].value === NONE ? '' : inputsState[name].value;
+              {inputsArr.map(({ name, helperText = '', validationFunc: useValidate, ...aditional }) => {
+                const label = useFromNameToText(name);
+                const value = inputsState[name].value === NONE ? '' : inputsState[name].value;
 
-              const onChange: ChangeEventHandler<HTMLInputElement> = ({ target: { name, value } }) => {
-                const isValid = useValidate(value);
-                setInputsState(state => ({ ...state, [name]: { value, isValid } }));
-              };
-              const error = !inputsState[name].isValid;
+                const onChange: ChangeEventHandler<HTMLInputElement> = ({ target: { name, value } }) => {
+                  const isValid = useValidate(value);
+                  setInputsState(state => ({ ...state, [name]: { value, isValid } }));
+                };
+                const error = !inputsState[name].isValid;
 
-              const textFieldProps = {
-                label,
-                placeholder: label,
-                color: 'secondary' as const,
-                type: 'text',
-                value,
-                error,
-                helperText,
-                onChange,
-                name,
-                variant: 'outlined' as const
-              };
-              return (
-                <Grid className={classes.containerOftextField} key={name}>
-                  <TextField {...textFieldProps} fullWidth />
-                </Grid>
-              );
-            })}
-            <Button
-              onClick={onUpdateAccountData}
-              color={'primary'}
-              variant={'outlined'}
-              startIcon={<CloudUploadOutlinedIcon />}
-            >
-              Update account
-            </Button>
+                const textFieldProps = {
+                  label,
+                  placeholder: label,
+                  color: 'secondary' as const,
+                  type: 'text',
+                  value,
+                  error,
+                  helperText,
+                  onChange,
+                  name,
+                  variant: 'outlined' as const
+                };
+                return (
+                  <Grid className={classes.containerOftextField} key={name}>
+                    <TextField {...textFieldProps} fullWidth />
+
+                    {
+                      //@ts-ignore
+                      aditional?.aditionalComponents
+                    }
+                  </Grid>
+                );
+              })}
+              <Button
+                onClick={onUpdateAccountData}
+                color={'primary'}
+                variant={'outlined'}
+                startIcon={<CloudUploadOutlinedIcon />}
+              >
+                Update account
+              </Button>
           </Grid>
 
-          <Grid className={classes.conatinerOfAvatar} lg={6} sm={10} md={5} xl={6} xs={12}>
-            <Grid style={{ position: 'relative', padding: 4 }} container>
+          <Grid className={classes.conatinerOfAvatar} lg={6} sm={10} md={5} xl={6} xs={12} >
+            <Grid style={{ position: 'relative'}} container justify={'flex-end'}>
               {isAccountHaveAvatar && (
                 <Grid className={classes.containerOfEditButton}>
                   <Button
@@ -352,7 +373,10 @@ const SettingAccount: FC = () => {
                 </Grid>
               </fieldset>
             </Grid>
+
           </Grid>
+          </FieldSetContainer>
+
         </Grid>
       </Grid>
 

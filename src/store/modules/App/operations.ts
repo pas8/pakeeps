@@ -1,6 +1,5 @@
 import { toAddNewPakeep } from './actions';
 import { PakeepElementType } from 'store/modules/App/types';
-import { ThunkType } from 'models/types';
 // import firebase from 'firebase/app';
 // require('firebase/firestore');
 
