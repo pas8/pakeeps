@@ -1,28 +1,45 @@
-import { mapValues } from 'lodash';
+export const BASE_URL = '/';
 
+export const SETTINGS = 'settings';
 export const THEME = 'theme';
 export const APPEARANCE = 'appearance';
+export const ACCOUNT = 'account';
+export const SECURITY = 'security';
 
-export const SETTING_URL = '/settings';
-export const APPEARANCE_URL = `${SETTING_URL}/${APPEARANCE}`;
-export const THEME_URL = `${SETTING_URL}/${THEME}`;
+export const SETTINGS_BASE_URL = `/${SETTINGS}`;
+export const SETTINGS_APPEARANCE_BASE_URL = `${SETTINGS_BASE_URL}/${APPEARANCE}`;
+export const SETTINGS_THEME_BASE_URL = `${SETTINGS_BASE_URL}/${THEME}`;
+export const SETTINGS_ACCOUNT_BASE_URL = `${SETTINGS_BASE_URL}/${ACCOUNT}`;
+export const SETTINGS_SECURITY_BASE_URL = `${SETTINGS_BASE_URL}/${SECURITY}`;
 
-export const appearanceAnchorArr = {
-  FOLDERS_ID: `#${APPEARANCE}_folders`,
-  ATTRIBUTES_ID: `#${APPEARANCE}_attributes`,
-  PAKEEPS_ID: `#${APPEARANCE}_pakeeps`,
-  HEADER_ID: `#${APPEARANCE}_header`,
-  LABELS_ID: `#${APPEARANCE}_labels`,
-  EVENTS_ID: `#${APPEARANCE}_events`
+export const appearanceIds = {
+  FOLDERS: 'Folders',
+  ATTRIBUTES: 'Attributes',
+  PAKEEPS: 'Pakeeps',
+  HEADER: 'Header'
 };
 
-export const ACCOUNT_URL = `${SETTING_URL}/account`;
-export const SECURITY_URL = `${SETTING_URL}/security`;
+export const settingUrls = {
+  BASE: SETTINGS_BASE_URL,
+  APPEARANCE: {
+    BASE: SETTINGS_APPEARANCE_BASE_URL,
+    [appearanceIds.FOLDERS]: `#${APPEARANCE}_${appearanceIds.FOLDERS}`,
+    [appearanceIds.ATTRIBUTES]: `#${APPEARANCE}_${appearanceIds.ATTRIBUTES}`,
+    [appearanceIds.PAKEEPS]: `#${APPEARANCE}_${appearanceIds.PAKEEPS}`,
+    [appearanceIds.HEADER]: `#${APPEARANCE}_${appearanceIds.PAKEEPS}`
+  },
 
-export const themeAnchorArr = {
-  COLORS_ID: `${THEME}_colors`,
-  DEFAULT_THEMES_ID: `${THEME}_defaultThemes`,
-  BORDER_RADIUS: `${THEME}_borderRadius`
+  THEME: {
+    BASE: SETTINGS_THEME_BASE_URL,
+    COLORS_ID: `#${THEME}_colors`,
+    DEFAULT_THEMES_ID: `#${THEME}_defaultThemes`,
+    BORDER_RADIUS: `#${THEME}_borderRadius`
+  },
+  ACCOUNT: {
+    BASE: SETTINGS_ACCOUNT_BASE_URL
+  },
+  SECURITY: {
+    BASE: SETTINGS_SECURITY_BASE_URL,
+    CHANGE_PASSWORD_ID: `#${SECURITY}_changePasswordId`
+  }
 };
-
-export const themeAnchorIdArr = mapValues(themeAnchorArr, el => '#' + el);

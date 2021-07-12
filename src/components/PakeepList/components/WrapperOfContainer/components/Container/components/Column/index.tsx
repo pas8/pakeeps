@@ -23,7 +23,7 @@ const useStyles = makeStyles(({ spacing, breakpoints: { down } }) => ({
   column: () => ({
     // padding: spacing(0, paddingValue),
     '& > div > div': {
-      scrollbarColor:'red',
+      scrollbarColor: 'red',
       '&::-webkit-scrollbar': {
         width: 0
       }
@@ -60,8 +60,6 @@ const ColumnOfPakeepListContainer: FC<ColumnOfPakeepListContainerPropsType & { h
   // pakeepsInColumn,
   isLastColumn,
   isFirstColumn,
-  folderProperty,
-  folderId,
   isPakeepDragContextPinned,
   isSelecting,
   onClickOfPakeepElement,
@@ -71,8 +69,6 @@ const ColumnOfPakeepListContainer: FC<ColumnOfPakeepListContainerPropsType & { h
 }) => {
   const pakeepsInColumn = useValidationOfPakeepsInColumn({
     notValidatedPakeepsInColumn,
-    folderProperty,
-    folderId,
     isPakeepDragContextPinned
   });
   if (!pakeepsInColumn) return null;
@@ -138,7 +134,7 @@ const ColumnOfPakeepListContainer: FC<ColumnOfPakeepListContainerPropsType & { h
     // const pakeepElementHeigth = pakeepsInColumn[el?.id!]!;
 
     if (!el) return <>null</>;
-    const isPinIconShouldBeShownInPakeep = folderProperty === 'ALL' && el.isPinned;
+    // const isPinIconShouldBeShownInPakeep = folderProperty === 'ALL' && el.isPinned;
 
     const handleResetItemSize = () => toggleResetItemSize(idx);
 
@@ -156,7 +152,7 @@ const ColumnOfPakeepListContainer: FC<ColumnOfPakeepListContainerPropsType & { h
       pakeepElementHeigth: pakeepElementHeigthArr[rubric.draggableId],
       handleResetItemSize,
       idx,
-      isPinIconShouldBeShownInPakeep,
+      isPinIconShouldBeShownInPakeep:true,
       isDragging: snapshot.isDragging
     };
     return (
@@ -175,12 +171,10 @@ const ColumnOfPakeepListContainer: FC<ColumnOfPakeepListContainerPropsType & { h
     ref,
     itemData: {
       pakeepsInColumn,
-      folderProperty,
       toggleResetItemSize,
       defaultPakeepElementProps,
       isPakeepDragContextPinned,
       pakeepElementHeigthArr,
-      folderId
     },
     itemCount,
     itemSize: getItemSize

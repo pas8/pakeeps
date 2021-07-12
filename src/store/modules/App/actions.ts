@@ -79,10 +79,17 @@ export const toChangeMenuOpenStatus = (
   payload
 });
 
-export const toSetCurrentFolderPropertyIdx = (
-  payload: PayloadTypes[TypeNames.HANDLE_SET_CURRENT_FOLDER_PROPERTY_IDX]
+export const toChangePakeepFolderOrderNames = (
+  payload: PayloadTypes[TypeNames.HANDLE_CHANGE_PAKEEP_FOLDER_ORDER_NAMES]
 ): AppActionTypes => ({
-  type: TypeNames.HANDLE_SET_CURRENT_FOLDER_PROPERTY_IDX,
+  type: TypeNames.HANDLE_CHANGE_PAKEEP_FOLDER_ORDER_NAMES,
+  payload
+});
+
+export const toChangeGlobalFolderId = (
+  payload: PayloadTypes[TypeNames.HANDLE_CHANGE_GLOBAL_FOLDER_ID]
+): AppActionTypes => ({
+  type: TypeNames.HANDLE_CHANGE_GLOBAL_FOLDER_ID,
   payload
 });
 

@@ -1,54 +1,77 @@
-import { themeAnchorIdArr } from "layouts/RouterLayout/denotation";
+import { useRouter } from 'next/dist/client/router';
+import { BASE_URL, settingUrls, SETTINGS } from 'layouts/RouterLayout/denotation';
 
-import {
-  ACCOUNT_URL,
-  appearanceAnchorArr,
-  APPEARANCE_URL,
-  SETTING_URL,
-  THEME,
-  THEME_URL
-} from 'layouts/RouterLayout/denotation';
+import { startsWith } from 'lodash';
+import { UseTakeFoldersArrType } from 'models/types';
+import { ElementOfFolderArrType, FoldersType } from 'store/modules/App/types';
+import { ALL } from 'models/denotation';
+import { AdditionalFolderPropertyNames } from 'models/unums';
+import { useSelector } from 'react-redux';
+import { getGlobalEventsArr, getLabels, getGlobalFolderId } from 'store/modules/App/selectors';
+import { usePakeepFolders } from './usePakeepFolders.hook';
+import { toChangeMenuOpenStatus } from 'store/modules/App/actions';
 
-export const useTakeFoldersArr = () => {
+export const useTakeFoldersArr: UseTakeFoldersArrType = ({
+  folderOrderNames,
+  folders,
+  isFoldersHaveDraweView,
+  handleCloseFoldersWithDrawerView,
+}) => {
+  const router = useRouter();
+  const dispatch = useDispatch();
 
+  const labels = useSelector(getLabels);
+  const events = useSelector(getGlobalEventsArr);
+  const globalFolderId = useSelector(getGlobalFolderId);
 
-  const handleOpenSetting = () => {
-    handleChange('placeholder', 1);
-    router.push(ACCOUNT_URL);
+  const defaultPakeepDolders = usePakeepFolders({ events, labels });
+
+  const handleHideFolder = () => {
+    dispatch(toChangeMenuOpenStatus({ menuOpenStatus: menuOpenStatusDenotation.HIDDEN }));
+    setTimeout(() => {
+      handleDrawerWidth(0);
+    }, 400);
   };
 
-  // const previuosValue = usePrevious(value)
-  const handleGoBack = () => {
-    router.back();
-    // handleChange('placeholder', previuosValue);
-  };
 
-  const handleGoToPakeep = () => {
-    router.push('/');
-  };
-
-  const allFoldersWithDrawerView = [
-    [
-      {
-        title: 'Close menu',
-        iconName: 'close',
-        id: 'folder-close',
-        onClick: handleCloseFoldersWithDrawerView,
-        color: 'default'
-      }
-    ],
-    ...defaultAllFolders
-  ];
-  const utilsFolders = [
-    [
-      { title: 'Open settings1', iconName: 'settings', id: 'folder-94', onClick: handleOpenSetting, color: 'default' },
-      { title: 'Hide folders2', iconName: 'visibility', onClick: handleHideFolder, id: 'folder-93', color: 'default' }
-    ]
+  const closeMenuFolderArr = [
+    {
+      title: 'Close menu',
+      iconName: 'close',
+      id: 'folder-close',
+      property: { value: AdditionalFolderPropertyNames.ON_CLICK, onClick: handleCloseFoldersWithDrawerView },
+      color: 'default'
+    }
   ];
 
+  const navigationFolderArr = [
+    {
+      title: 'All pakeeps',
+      iconName: '',
+      id: ALL,
+      color: 'default',
+      property: { value: AdditionalFolderPropertyNames.DEFAULT_AND_ROUTE, route: BASE_URL }
+    },
+    {
+      title: 'Open settings',
+      iconName: 'settings',
+      id: SETTINGS,
+      property: { value: AdditionalFolderPropertyNames.DEFAULT_AND_ROUTE, route: settingUrls.BASE },
+      color: 'default'
+    }
+  ];
 
+  const utilsFolderArr = [
+    {
+      title: 'Hide folders',
+      iconName: 'visibility',
+      property: { value: AdditionalFolderPropertyNames.DEFAULT_AND_ROUTE, onClick: handleHideFolder },
+      id: 'hide_folders',
+      color: 'default'
+    }
+  ];
 
-  const settingsFolders = [
+  const defailtSettingsFolders = 
     [
       { title: 'Account', iconName: 'account', id: 'folder-account', color: 'default', route: ACCOUNT_URL },
 
@@ -128,11 +151,9 @@ export const useTakeFoldersArr = () => {
         route: appearanceAnchorArr.ATTRIBUTES_ID
       }
     ]
-  ];
-
+  
 
   const pakeepFolders = [...folders, ...utilsFolders];
-
 
   const goToPakeepsArr = [
     {
@@ -144,14 +165,8 @@ export const useTakeFoldersArr = () => {
     }
   ];
 
-
-  const validatedSettingFolders = isFoldersHaveDraweView ? settingsFolders : [goToPakeepsArr, ...settingsFolders];
-
-  const defaultAllFolders = _.startsWith(router.pathname, SETTING_URL) ? validatedSettingFolders : pakeepFolders;
-
-
+  const defaultAllFolders = startsWith(router.pathname, SETTING_URL) ? validatedSettingFolders : pakeepFolders;
 
   const allFolders = isFoldersHaveDraweView ? allFoldersWithDrawerView : defaultAllFolders;
   const flattenAllFolders = _.flatten(allFolders);
-
-}
+};

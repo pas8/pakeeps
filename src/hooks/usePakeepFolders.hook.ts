@@ -1,14 +1,72 @@
-import { NONE } from 'models/denotation';
+import { mapValues } from 'lodash';
+import { NONE, pakeepPropertyiesNames } from 'models/denotation';
 import { UsePakeepFoldersType } from 'models/types';
+import { AdditionalFolderPropertyNames } from 'models/unums';
+import { ALL } from './../models/denotation';
 
-export const usePakeepFolders: UsePakeepFoldersType = ({ events, labels, defaultFolderArr }) => {
-  const labelsArr = labels.map(({ title, iconName, id, color }) => ({ title, iconName, id, property: 'label', color }));
-  const eventArr = events.map(({ title, iconName, id, color }) => ({ title, iconName, id, property: 'event', color }));
-  const foldersArr = [
-    defaultFolderArr,
-    [{ title: 'labels', iconName: NONE, id: 'labels-pl', isFolderIsPlaceholder: true }, ...labelsArr],
-    eventArr
-  ];
+export const usePakeepFolders: UsePakeepFoldersType = ({ events, labels }) => {
+  const property = { value: AdditionalFolderPropertyNames.DEFAULT };
 
-  return foldersArr;
+  const defaultPropetiesFolderArr = [
+    {
+      title: 'Pined',
+      iconName: 'pin',
+      id: pakeepPropertyiesNames.isPinned,
+      color: 'default'
+    },
+    {
+      title: 'Bookmark',
+      iconName: 'bookmark',
+      id: pakeepPropertyiesNames.isInBookmark,
+      color: 'default'
+    },
+    { title: 'Favorite', iconName: 'favorite', id: pakeepPropertyiesNames.isFavorite, color: 'default' },
+    {
+      title: 'With checkBoxes',
+      iconName: 'checkBox',
+      id: pakeepPropertyiesNames.isCheckBoxes,
+      color: 'default'
+    },
+    { title: 'Archiveted', iconName: 'archive', id: pakeepPropertyiesNames.isArchived, color: 'default' }
+  ].map(value => ({ ...value, property }));
+
+  const labelsArr = labels.map(({ title, iconName, id, color }) => ({
+    title,
+    iconName,
+    id,
+    property,
+    color
+  }));
+  const eventArr = events.map(({ title, iconName, id, color }) => ({
+    title,
+    iconName,
+    id,
+    property,
+    color
+  }));
+
+  const foldersKeyName = {
+    PAKEEP_UTILS: 'PAKEEP_UTILS',
+    LABELS: 'LABELS',
+    EVENTS: 'EVENTS'
+  };
+
+  const folders = mapValues(
+    {
+      [foldersKeyName.PAKEEP_UTILS]: {
+        label: 'Properties',
+        arr: defaultPropetiesFolderArr
+      },
+      [foldersKeyName.LABELS]: {
+        label: 'Labels',
+        arr: labelsArr
+      },
+      [foldersKeyName.EVENTS]: {
+        label: 'Events',
+        arr: eventArr
+      }
+    },
+    (value, id) => ({ ...value, id })
+  );
+  return folders;
 };

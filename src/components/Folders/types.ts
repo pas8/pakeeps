@@ -1,8 +1,8 @@
 import { PopoverProps } from '@material-ui/core';
 import { Dispatch, SetStateAction } from 'react';
+import { GlobalFolderIdType } from 'store/modules/App/types';
 
 export type DefaultUseStylesOfFoldersType = {
-  isMenuOpen: boolean;
   positionOfFolderViewWithPakeepViewIsBottom: boolean;
   positionOfFolderViewWithPakeepViewIsRight: boolean;
   isFolderViewWithPakeepViewAlignToCenter: boolean;
@@ -11,16 +11,17 @@ export type DefaultUseStylesOfFoldersType = {
 
 export type UseStylesOfFoldersType = { folderColor: string; headerHeight: number } & DefaultUseStylesOfFoldersType;
 
-export type HandleChangeOfFolders = (__: any, idx: any) => void;
+export type HandleChangeOfFolders = (id: GlobalFolderIdType) => void;
 
 export type DefaultFoldersType = {
-  handleChange: HandleChangeOfFolders;
-  value: number;
+  handleChangeGlobalFolderId: HandleChangeOfFolders;
+  globalFolderId: GlobalFolderIdType;
 };
 
 export type FoldersTypeProps = {
   handleDrawerWidth: (drawerWidth: number) => void;
   isFolderOpen: boolean;
+  isFolderExtended: boolean;
   handleCloseFoldersWithDrawerView: () => void;
   handleHideFolder: () => void;
   setMargin: Dispatch<SetStateAction<number>>;

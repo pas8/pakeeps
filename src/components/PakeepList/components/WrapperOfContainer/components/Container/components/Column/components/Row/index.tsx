@@ -4,7 +4,7 @@ import { RowOfColumnOfPakeepListContainerType } from './types';
 import DraggableContainerOfPakeepElement from '../DraggableContainer/index';
 
 const RowOfColumnOfPakeepListContainer: FC<RowOfColumnOfPakeepListContainerType> = ({
-  data: { pakeepsInColumn, defaultPakeepElementProps, toggleResetItemSize, folderProperty, pakeepElementHeigthArr },
+  data: { pakeepsInColumn, defaultPakeepElementProps, toggleResetItemSize, pakeepElementHeigthArr },
   index: idx,
   style
 }) => {
@@ -17,7 +17,6 @@ const RowOfColumnOfPakeepListContainer: FC<RowOfColumnOfPakeepListContainerType>
   const pakeepElementHeigth = pakeepElementHeigthArr[el?.id!];
 
   // const draggableContainerClassName = classes.columnElement;
-  const isPinIconShouldBeShownInPakeep = folderProperty === 'ALL' && el.isPinned;
 
   const handleResetItemSize = () => toggleResetItemSize(idx);
 
@@ -26,8 +25,7 @@ const RowOfColumnOfPakeepListContainer: FC<RowOfColumnOfPakeepListContainerType>
     idx,
     handleResetItemSize,
     pakeepElementHeigth,
-    ...defaultPakeepElementProps,
-    isPinIconShouldBeShownInPakeep
+    ...defaultPakeepElementProps
   };
 
   const draggableContainerOfPakeepElementProps = {

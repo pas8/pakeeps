@@ -167,25 +167,12 @@ export const firebaseAppInitialState = {
     isEmailPubic: false
   },
   events: [],
+  headerPropertyies: { orderIds: [] },
   selectedPakeepsId: [],
   pakeeps: [],
-  pakeepsOrderNames: []
+  pakeepsOrderNames: [],
+  pakeepFolderOrderNames: []
 };
-
-const defaultFolderArr = [
-  { title: 'All pakeeps', iconName: '', id: 'folder-ALL', property: 'ALL', color: 'default' },
-  { title: 'Pined', iconName: 'pin', id: 'folder-isPinned', property: 'isPinned', color: 'default' },
-  { title: 'Bookmark', iconName: 'bookmark', id: 'folder-isInBookmark', property: 'isInBookmark', color: 'default' },
-  { title: 'Favorite', iconName: 'favorite', id: 'folder-isFavorite', property: 'isFavorite', color: 'default' },
-  {
-    title: 'With checkBoxes',
-    iconName: 'checkBox',
-    id: 'folder-isCheckBoxes',
-    property: 'isCheckBoxes',
-    color: 'default'
-  },
-  { title: 'Archiveted', iconName: 'archive', id: 'folder-isArchived', property: 'isArchived', color: 'default' }
-];
 
 const nullityOfTemporaryData = {
   defaultMenuProps: nullityDefaultMenuProps,
@@ -195,6 +182,11 @@ const nullityOfTemporaryData = {
     id: '',
     isHovering: false
   },
+  headerHeight: 0,
+  drawerWidth: 0,
+  menuOpenStatus: 'OPEN' as 'OPEN',
+  selectedPakeepsId: [],
+  globalFolderId: '',
   isAuthedWithLocalPinCode: true,
   globalEventList: [],
   globalLabelList: []
@@ -202,17 +194,10 @@ const nullityOfTemporaryData = {
 
 export const initialState: AppInitialStateInteface = {
   ...firebaseAppInitialState,
-  folders: [],
-  defaultFolderArr,
   temporaryData: nullityOfTemporaryData,
   pinnedPakeepsOrderNames: [],
-  headerPropertyies: { orderIds: [] },
   notifinationCounter: 8,
-  headerHeight: 0,
   isAllDataWasUploaded: true,
-  menuOpenStatus: 'OPEN',
-  currentFolderPropertyIdx: 0,
-  drawerWidth: 0,
   isCancelSelectedPakeepsId: false
 };
 
@@ -350,22 +335,28 @@ export const AppReducer = (state = initialState, action: AppActionTypes): AppIni
       return { ...state, events };
     }
 
+    case TypeNames.HANDLE_CHANGE_HEADER_HEIGTH:
+    case TypeNames.HANDLE_SET_SELECTED_PAKEEPIDS_ARR:
+    case TypeNames.HANDLE_SET_DRAWER_WIDTH:
+    case TypeNames.HANDLE_CHANGE_GLOBAL_FOLDER_ID:
+
+    case TypeNames.HANDLE_CHANGE_MENU_OPEN_STATUS: {
+      return { ...state, temporaryData: { ...state.temporaryData, ...action.payload } };
+    }
+
     case TypeNames.HANDLE_SET_ORDER_NAMES_OF_PINNED_PAKEEPS:
     case TypeNames.HANDLE_SET_ORDER_NAMES:
     case TypeNames.HANDLE_CHANGE_AVATAR_PROPERTIES:
-    case TypeNames.HANDLE_CHANGE_HEADER_HEIGTH:
     case TypeNames.HANDLE_SET_NEW_ORDER_NAMES:
     case TypeNames.HANDLE_CHANGE_ALL_DATA_WAS_UPLOADED_STATUS:
+    case TypeNames.HANDLE_CHANGE_PAKEEP_FOLDER_ORDER_NAMES:
 
     case TypeNames.HANDLE_CHANGE_PAKEEPS:
     case TypeNames.HANDLE_CHANGE_USER_DATA:
-    case TypeNames.HANDLE_SET_SELECTED_PAKEEPIDS_ARR:
     case TypeNames.HANDLE_CANCEL_SELECTING_STATUS:
     case TypeNames.HANDLE_CHANGE_GLOBAL_LABELS:
     case TypeNames.HANDLE_CHANGE_FOLDERS:
-    case TypeNames.HANDLE_SET_DRAWER_WIDTH:
-    case TypeNames.HANDLE_SET_CURRENT_FOLDER_PROPERTY_IDX:
-    case TypeNames.HANDLE_CHANGE_MENU_OPEN_STATUS: {
+    case TypeNames.HANDLE_CHANGE_GLOBAL_FOLDER_ID: {
       return { ...state, ...action.payload };
     }
 

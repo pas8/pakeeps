@@ -5,7 +5,6 @@ import { Grid } from '@material-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
 
 import {
-  getCurrentFolderPropertyIdx,
   getFolders,
   getIsCancelSelectedPakeepsId,
   getIsPakeepHovering,
@@ -42,8 +41,6 @@ const PakeepList: FC = () => {
   const selectedPakeepsId = useSelector(getSelectedPakeepsId);
   const pakeepsOrderNames = useSelector(getPakeepsOrderNames);
   const pinnedPakeepsOrderNames = useSelector(getPinnedPakeepsOrderNames);
-  const currentFolderPropertyIdx = useSelector(getCurrentFolderPropertyIdx);
-  const folders: FoldersType = useSelector(getFolders);
   const isCancelSelectedPakeepsId = useSelector(getIsCancelSelectedPakeepsId);
   const isPakeepHovering = useSelector(getIsPakeepHovering);
 
@@ -66,11 +63,6 @@ const PakeepList: FC = () => {
   const [isPakeepDragging, setIsPakeepDragging] = useState(false);
   const [isSelecting, setIsSelecting] = useState(false);
 
-  const flattenFolder = flatten(folders);
-  const folderProperty = flattenFolder[currentFolderPropertyIdx]?.property;
-  const folderId = flattenFolder[currentFolderPropertyIdx]?.id;
-
-  const isFolderPropertyIsAll = folderProperty === 'ALL';
   const pinnedPakeeps = filter(pakeeps, ({ isPinned }) => !!isPinned);
 
   const handleOpenDialog = (id: PakeepIdType) => {
@@ -97,8 +89,6 @@ const PakeepList: FC = () => {
     return handleSetSelectedPakeepsId(newSelectedPakeepsId);
   };
   const defaultPakeepListContainerProps = {
-    folderProperty,
-    folderId,
     isPakeepDragging,
     onClickOfPakeepElement,
     isSelecting
@@ -148,9 +138,9 @@ const PakeepList: FC = () => {
   useKeyPressEvent('Escape', cancelSelectedPakeepsId);
   const isSomePakeepsSelected = selectedPakeepsId.length > 0;
 
-  useEffect(() => {
-    cancelSelectedPakeepsId();
-  }, [currentFolderPropertyIdx]);
+  // useEffect(() => {
+  //   cancelSelectedPakeepsId();
+  // }, [currentFolderPropertyIdx]);
 
   useEffect(() => {
     !isSomePakeepsSelected && cancelSelectedPakeepsId();

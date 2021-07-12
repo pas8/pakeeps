@@ -2,7 +2,7 @@ import { Grid, IconButton, makeStyles, SwipeableDrawer } from '@material-ui/core
 import Folders from 'components/Folders';
 import { usePakeepFolders } from 'hooks/usePakeepFolders.hook';
 import PropTypes from 'prop-types';
-import { useCallback, useState, useEffect, useRef, ReactEventHandler, FC } from 'react';
+import { useCallback, useState, useEffect, useRef, ReactEventHandler, FC, EventHandler } from 'react';
 import { connect, useDispatch, useSelector } from 'react-redux';
 // import {
 //   handleChangeFolders,
@@ -10,13 +10,12 @@ import { connect, useDispatch, useSelector } from 'react-redux';
 //   handleDrawerWidth
 // } from 'store/modules/App/operations';
 import {
-  getCurrentFolderPropertyIdx,
   getFolders,
   getMenuOpenStatus,
   getDrawerWidth,
   getLabels,
-  getDefaultFolderArr,
-  getGlobalEventsArr
+  getGlobalEventsArr,
+  getGlobalFolderId
 } from 'store/modules/App/selectors';
 import {
   getIsFolderViewWithPakeepViewAlignToCenter,
@@ -27,15 +26,16 @@ import ArrowForwardIosOutlinedIcon from '@material-ui/icons/ArrowForwardIosOutli
 import { AllElementsIsBooleanType, LayoutChildrenType } from 'models/types';
 import {
   toChangeFolders,
+  toChangeGlobalFolderId,
   toChangeMenuOpenStatus,
-  toSetCurrentFolderPropertyIdx,
   toSetDrawerWidth
 } from 'store/modules/App/actions';
-import { DrawerWidthType, FoldersType } from 'store/modules/App/types';
+import { DrawerWidthType, FoldersType, GlobalFolderIdType } from 'store/modules/App/types';
 import { HandleChangeOfFolders } from 'components/Folders/types';
 import { menuOpenStatusDenotation } from 'models/denotation';
 import { useRouter } from 'next/dist/client/router';
 import { useCustomBreakpoint } from 'hooks/useCustomBreakpoint';
+import { useBreakpointNames } from 'hooks/useBreakpointNames.hook';
 
 const useStyles = makeStyles(({ palette }) => ({
   container: ({
@@ -82,76 +82,58 @@ const FolderLayout = ({ children }: LayoutChildrenType) => {
   const dispatch = useDispatch();
   const router = useRouter();
 
-  const [br] = useCustomBreakpoint();
-
-  const isVerySmall = br === 'xs' || br === 'sm';
+  const { isSizeSmall } = useBreakpointNames();
 
   const handleDrawerWidth = (drawerWidth: number) => {
     dispatch(toSetDrawerWidth({ drawerWidth }));
-  };
-
-  const handleCurrentFolderPropertyIdx = (currentFolderPropertyIdx: number) => {
-    dispatch(toSetCurrentFolderPropertyIdx({ currentFolderPropertyIdx }));
   };
 
   const handleChangeFolders = (folders: FoldersType) => {
     dispatch(toChangeFolders({ folders }));
   };
 
-  const currentFolderPropertyIdx = useSelector(getCurrentFolderPropertyIdx);
-  const labels = useSelector(getLabels);
-  const events = useSelector(getGlobalEventsArr);
-  const defaultFolderArr = useSelector(getDefaultFolderArr);
+
 
   const menuOpenStatus = useSelector(getMenuOpenStatus);
 
-  const isMenuOpen = menuOpenStatus === menuOpenStatusDenotation.EXTENDED;
-  const isFolderOpen = menuOpenStatus === menuOpenStatusDenotation.OPEN || isMenuOpen;
+  const isFolderExtended = menuOpenStatus === menuOpenStatusDenotation.EXTENDED;
+  const isFolderOpen = menuOpenStatus === menuOpenStatusDenotation.OPEN;
 
   const drawerWidth = useSelector(getDrawerWidth);
 
   const positionOfFolderViewWithPakeepView = useSelector(getPositionOfFolderViewWithPakeepView);
-  const isFolderViewWithPakeepViewAlignToCenter = useSelector(getIsFolderViewWithPakeepViewAlignToCenter);
 
   const positionOfFolderViewWithPakeepViewIsBottom = positionOfFolderViewWithPakeepView === 'bottom';
   const positionOfFolderViewWithPakeepViewIsRight = positionOfFolderViewWithPakeepView === 'right';
   const positionOfFolderViewWithPakeepViewIsLeft = positionOfFolderViewWithPakeepView === 'left';
 
-  const foldersArr = usePakeepFolders({ events, labels, defaultFolderArr });
 
   const marginValue = 8;
 
-  const handleChange: HandleChangeOfFolders = (__, idx) => {
-    handleCurrentFolderPropertyIdx(idx);
+  const handleChangeGlobalFolderId = (globalFolderId: GlobalFolderIdType) => {
+    dispatch(toChangeGlobalFolderId({ globalFolderId }));
   };
-  const handleHideFolder = () => {
-    dispatch(toChangeMenuOpenStatus({ menuOpenStatus: menuOpenStatusDenotation.HIDDEN }));
-    setTimeout(() => {
-      handleDrawerWidth(0);
-      router.route === '/' && handleCurrentFolderPropertyIdx(0);
-    }, 1000);
-  };
+
+
 
   const [margin, setMargin] = useState(0);
   const [isSizeOfFoldersMoreThanSize, setIsSizeOfFoldersMoreThanSize] = useState(false);
 
-  const isFoldersHaveDraweView = isVerySmall && isMenuOpen;
+  const isFoldersHaveDraweView = isSizeSmall && (isFolderOpen || isFolderExtended);
 
   const handleCloseFoldersWithDrawerView = () => {
     dispatch(toChangeMenuOpenStatus({ menuOpenStatus: menuOpenStatusDenotation.OPEN }));
   };
 
   const foldersProps = {
-    handleChange,
+    handleChangeGlobalFolderId,
+    globalFolderId,
     handleCloseFoldersWithDrawerView,
-    value: currentFolderPropertyIdx,
     handleDrawerWidth,
     isFoldersHaveDraweView,
-    isMenuOpen,
+    isFolderExtended,
     isFolderOpen,
     handleHideFolder,
-    positionOfFolderViewWithPakeepViewIsBottom,
-    positionOfFolderViewWithPakeepViewIsRight,
     isFolderViewWithPakeepViewAlignToCenter,
     setMargin,
     isSizeOfFoldersMoreThanSize,
@@ -159,20 +141,18 @@ const FolderLayout = ({ children }: LayoutChildrenType) => {
   };
 
   useEffect(() => {
-    handleChangeFolders(foldersArr);
-  }, [labels, defaultFolderArr, events]);
+    handleChangeFolders(folders);
+  }, [labels, events]);
   // useEffect(() => (!isFolderOpen && drawerWidth !== 0 ? handleDrawerWidth(0) : null), [isFolderOpen, drawerWidth]);
 
   const classes = useStyles({ positionOfFolderViewWithPakeepViewIsBottom, positionOfFolderViewWithPakeepViewIsRight });
 
   const NavContainer = isFoldersHaveDraweView ? SwipeableDrawer : Nav;
-
   const anchor = positionOfFolderViewWithPakeepViewIsRight ? 'right' : 'left';
-
   const onOpen: ReactEventHandler<any> = e => console.log('onOpen');
 
   const navContainerProps = isFoldersHaveDraweView
-    ? { anchor, open: isMenuOpen, onClose: handleCloseFoldersWithDrawerView, onOpen }
+    ? { anchor, open: isFolderExtended, onClose: handleCloseFoldersWithDrawerView, onOpen }
     : {};
 
   return (
@@ -183,13 +163,6 @@ const FolderLayout = ({ children }: LayoutChildrenType) => {
       alignItems={'center'}
       direction={positionOfFolderViewWithPakeepViewIsBottom ? 'column-reverse' : 'row'}
     >
-      {/* {!isFolderOpen && (
-        <Grid className={classes.arrowButton}>
-          <IconButton onClick={() => setIsFolderOpen(true)} size={'small'}>
-            <ArrowForwardIosOutlinedIcon />
-          </IconButton>
-        </Grid>
-      )} */}
       {
         //@ts-ignore
         <NavContainer
@@ -205,6 +178,7 @@ const FolderLayout = ({ children }: LayoutChildrenType) => {
           <Folders {...foldersProps} />
         </NavContainer>
       }
+
       <Grid
         item
         style={{
