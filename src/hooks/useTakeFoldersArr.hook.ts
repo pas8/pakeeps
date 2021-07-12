@@ -1,30 +1,44 @@
 import { useRouter } from 'next/dist/client/router';
-import { BASE_URL, settingUrls, SETTINGS } from 'layouts/RouterLayout/denotation';
+import { BASE_URL, settingUrls, SETTINGS, ACCOUNT, THEME, SECURITY, APPEARANCE } from 'layouts/RouterLayout/denotation';
 
-import { startsWith } from 'lodash';
+import { drop, startsWith } from 'lodash';
 import { UseTakeFoldersArrType } from 'models/types';
-import { ElementOfFolderArrType, FoldersType } from 'store/modules/App/types';
-import { ALL } from 'models/denotation';
+import {
+  DefaultPropertyiesOfElementOfFolderArrType,
+  ElementOfFolderArrType,
+  FolderArrType,
+  FoldersType
+} from 'store/modules/App/types';
+import { ALL, menuOpenStatusDenotation } from 'models/denotation';
 import { AdditionalFolderPropertyNames } from 'models/unums';
-import { useSelector } from 'react-redux';
-import { getGlobalEventsArr, getLabels, getGlobalFolderId } from 'store/modules/App/selectors';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  getGlobalEventsArr,
+  getLabels,
+  getGlobalFolderId,
+  getPakeepFolderOrderNames
+} from 'store/modules/App/selectors';
 import { usePakeepFolders } from './usePakeepFolders.hook';
-import { toChangeMenuOpenStatus } from 'store/modules/App/actions';
+import { toChangeMenuOpenStatus, toChangeFolderOrderNames } from 'store/modules/App/actions';
+import { useMeasure } from 'react-use';
+import { useFindCorrectDefaultPageFoldres } from './useFindCorrectDefaultPageFoldres.hook';
+import { useAddAdditionalArr } from './useAddAdditionalArr.hook';
+import { useAddIdToFolder } from './useAddIdToFolder.hook';
 
 export const useTakeFoldersArr: UseTakeFoldersArrType = ({
-  folderOrderNames,
-  folders,
   isFoldersHaveDraweView,
-  handleCloseFoldersWithDrawerView,
+  handleDrawerWidth,
+  handleCloseFoldersWithDrawerView
 }) => {
+  const [ref, { width: buttonWidth, height: buttonHeight }] = useMeasure<HTMLDivElement>();
+
   const router = useRouter();
   const dispatch = useDispatch();
 
   const labels = useSelector(getLabels);
   const events = useSelector(getGlobalEventsArr);
   const globalFolderId = useSelector(getGlobalFolderId);
-
-  const defaultPakeepDolders = usePakeepFolders({ events, labels });
+  const folderOrderNames = useSelector(getPakeepFolderOrderNames);
 
   const handleHideFolder = () => {
     dispatch(toChangeMenuOpenStatus({ menuOpenStatus: menuOpenStatusDenotation.HIDDEN }));
@@ -33,6 +47,7 @@ export const useTakeFoldersArr: UseTakeFoldersArrType = ({
     }, 400);
   };
 
+  // const
 
   const closeMenuFolderArr = [
     {
@@ -71,102 +86,80 @@ export const useTakeFoldersArr: UseTakeFoldersArrType = ({
     }
   ];
 
-  const defailtSettingsFolders = 
-    [
-      { title: 'Account', iconName: 'account', id: 'folder-account', color: 'default', route: ACCOUNT_URL },
-
-      { title: 'Theme', iconName: 'color', id: 'folder-theme', color: 'default', route: THEME_URL },
-
-      {
-        title: 'Colors',
-        iconName: 'none',
-        parentRoute: THEME_URL,
-        id: themeAnchorIdArr.COLORS_ID,
-        color: 'default',
-        route: themeAnchorIdArr.COLORS_ID
-      },
-      {
-        title: 'Themes',
-        iconName: 'none',
-        parentRoute: THEME_URL,
-        id: themeAnchorIdArr.DEFAULT_THEMES_ID,
-        color: 'default',
-        route: themeAnchorIdArr.DEFAULT_THEMES_ID
-      },
-      {
-        title: 'Border_Radius',
-        iconName: 'none',
-        parentRoute: THEME_URL,
-        id: themeAnchorIdArr.BORDER_RADIUS,
-        color: 'default',
-        route: themeAnchorIdArr.BORDER_RADIUS,
-        isAncholElementLast: true
-      },
-
-      {
-        title: 'Security',
-        iconName: 'security',
-        id: 'folder-security',
-        color: 'default',
-        route: SECURITY_URL
-      },
-      {
-        title: 'Appearance',
-        // isFolderIsPlaceholder: true,
-        iconName: 'view',
-        id: 'folder-appearance',
-        color: 'default',
-        route: APPEARANCE_URL
-      },
-      {
-        title: 'Pakeeps',
-        // iconName: '',
-        parentRoute: APPEARANCE_URL,
-        id: 'folder-appearance-pakeeps',
-        color: 'default',
-        route: appearanceAnchorArr.PAKEEPS_ID
-      },
-      // {
-      //   title: 'Header',
-      //   // iconName: 'header',
-      //   id: 'folder-appearance-header',
-      //   color: 'default',
-      //   route: appearanceAnchorArr.Head
-      // },
-      {
-        title: 'Folders',
-        parentRoute: APPEARANCE_URL,
-        // iconName: 'folder',
-        id: 'folder-appearance-folder',
-        color: 'default',
-        route: appearanceAnchorArr.FOLDERS_ID
-      },
-
-      {
-        title: 'Attributes',
-        parentRoute: APPEARANCE_URL,
-        // iconName: 'label',
-        id: 'folder-appearance-Attributes',
-        color: 'default',
-        route: appearanceAnchorArr.ATTRIBUTES_ID
-      }
-    ]
-  
-
-  const pakeepFolders = [...folders, ...utilsFolders];
-
-  const goToPakeepsArr = [
+  const settingsNavFolderArr = useAddAdditionalArr([
     {
-      title: 'To_pakeeps',
-      iconName: 'arrowBack',
-      id: 'folder-arrowBack',
-      onClick: handleGoToPakeep,
-      color: 'default'
+      title: 'Account',
+      iconName: 'account',
+      id: ACCOUNT,
+      color: 'default',
+      property: { value: AdditionalFolderPropertyNames.DEFAULT_AND_ROUTE, route: settingUrls.ACCOUNT.BASE }
+    },
+
+    {
+      title: 'Theme',
+      iconName: 'color',
+      id: THEME,
+      color: 'default',
+      property: { value: AdditionalFolderPropertyNames.DEFAULT_AND_ROUTE, route: settingUrls.THEME.BASE }
+    },
+
+    {
+      title: 'Security',
+      iconName: 'security',
+      id: SECURITY,
+      color: 'default',
+      property: { value: AdditionalFolderPropertyNames.DEFAULT_AND_ROUTE, route: settingUrls.SECURITY.BASE }
+    },
+    {
+      title: 'Appearance',
+      iconName: 'view',
+      id: APPEARANCE,
+      color: 'default',
+      property: { value: AdditionalFolderPropertyNames.DEFAULT_AND_ROUTE, route: settingUrls.APPEARANCE.BASE }
     }
-  ];
+  ]);
 
-  const defaultAllFolders = startsWith(router.pathname, SETTING_URL) ? validatedSettingFolders : pakeepFolders;
+  const defaultFoldersBefore = {};
+  const defaultForderAfter = useAddIdToFolder({
+    UTILS: {
+      label: 'Utils',
+      arr: utilsFolderArr
+    }
+  });
 
-  const allFolders = isFoldersHaveDraweView ? allFoldersWithDrawerView : defaultAllFolders;
-  const flattenAllFolders = _.flatten(allFolders);
+  const defaultSettingsFolders = useAddIdToFolder({
+    ACCOUNT_SETTINGS: {
+      label: 'Account_Settings',
+      arr: settingsNavFolderArr
+    }
+  });
+
+  const closeMenuFolders = useAddIdToFolder({
+    CLOSE_MENU: {
+      label: 'closeMenu',
+      arr: closeMenuFolderArr
+    }
+  });
+
+  const defaultPakeepFolders = usePakeepFolders({ events, labels });
+
+  const correctDefaultPageFolders = useFindCorrectDefaultPageFoldres({
+    defaultFoldersBefore,
+    defaultForderAfter,
+    defaultSettingsFolders,
+    defaultPakeepFolders
+  });
+
+const newFolderOrderNames
+
+  const allFolders = isFoldersHaveDraweView
+    ? { ...closeMenuFolders, correctDefaultPageFolders }
+    : correctDefaultPageFolders;
+
+  return { ref, folderOrderNames, foldersAfter, fordersBefore };
+
+  // const defaultAllFolders = startsWith(router.pathname, SETTING_URL) ? validatedSettingFolders : pakeepFolders;
+
+  // const allFolders = isFoldersHaveDraweView ? allFoldersWithDrawerView : defaultAllFolders;
+  // const flattenAllFolders = _.flatten(allFolders);
 };

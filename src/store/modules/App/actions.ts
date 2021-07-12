@@ -79,10 +79,10 @@ export const toChangeMenuOpenStatus = (
   payload
 });
 
-export const toChangePakeepFolderOrderNames = (
-  payload: PayloadTypes[TypeNames.HANDLE_CHANGE_PAKEEP_FOLDER_ORDER_NAMES]
+export const toChangeFolderOrderNames = (
+  payload: PayloadTypes[TypeNames.HANDLE_CHANGE_FOLDER_ORDER_NAMES]
 ): AppActionTypes => ({
-  type: TypeNames.HANDLE_CHANGE_PAKEEP_FOLDER_ORDER_NAMES,
+  type: TypeNames.HANDLE_CHANGE_FOLDER_ORDER_NAMES,
   payload
 });
 

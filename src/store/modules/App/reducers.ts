@@ -171,7 +171,7 @@ export const firebaseAppInitialState = {
   selectedPakeepsId: [],
   pakeeps: [],
   pakeepsOrderNames: [],
-  pakeepFolderOrderNames: []
+  folderOrderNames: []
 };
 
 const nullityOfTemporaryData = {
@@ -349,7 +349,7 @@ export const AppReducer = (state = initialState, action: AppActionTypes): AppIni
     case TypeNames.HANDLE_CHANGE_AVATAR_PROPERTIES:
     case TypeNames.HANDLE_SET_NEW_ORDER_NAMES:
     case TypeNames.HANDLE_CHANGE_ALL_DATA_WAS_UPLOADED_STATUS:
-    case TypeNames.HANDLE_CHANGE_PAKEEP_FOLDER_ORDER_NAMES:
+    case TypeNames.HANDLE_CHANGE_FOLDER_ORDER_NAMES:
 
     case TypeNames.HANDLE_CHANGE_PAKEEPS:
     case TypeNames.HANDLE_CHANGE_USER_DATA:

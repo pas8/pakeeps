@@ -3,6 +3,7 @@ import { NONE, pakeepPropertyiesNames } from 'models/denotation';
 import { UsePakeepFoldersType } from 'models/types';
 import { AdditionalFolderPropertyNames } from 'models/unums';
 import { ALL } from './../models/denotation';
+import { useAddIdToFolder } from './useAddIdToFolder.hook';
 
 export const usePakeepFolders: UsePakeepFoldersType = ({ events, labels }) => {
   const property = { value: AdditionalFolderPropertyNames.DEFAULT };
@@ -51,22 +52,19 @@ export const usePakeepFolders: UsePakeepFoldersType = ({ events, labels }) => {
     EVENTS: 'EVENTS'
   };
 
-  const folders = mapValues(
-    {
-      [foldersKeyName.PAKEEP_UTILS]: {
-        label: 'Properties',
-        arr: defaultPropetiesFolderArr
-      },
-      [foldersKeyName.LABELS]: {
-        label: 'Labels',
-        arr: labelsArr
-      },
-      [foldersKeyName.EVENTS]: {
-        label: 'Events',
-        arr: eventArr
-      }
+  const folders = useAddIdToFolder({
+    [foldersKeyName.PAKEEP_UTILS]: {
+      label: 'Properties',
+      arr: defaultPropetiesFolderArr
     },
-    (value, id) => ({ ...value, id })
-  );
+    [foldersKeyName.LABELS]: {
+      label: 'Labels',
+      arr: labelsArr
+    },
+    [foldersKeyName.EVENTS]: {
+      label: 'Events',
+      arr: eventArr
+    }
+  });
   return folders;
 };
