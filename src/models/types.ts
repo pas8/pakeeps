@@ -6,6 +6,8 @@ import {
   DefaultFolderArrType,
   DefaultFolderElementPropertyType,
   DefaultPakeepElementType,
+  FolderOrderNamesType,
+  FoldersType,
   GlobalLabelsType,
   LabelsOfPakeepType,
   LabelVariantType,
@@ -144,14 +146,10 @@ export type UseFindLabelItem = (labelId: LabelIdType) => ILabelElement;
 
 export type UseValidationOfPakeepsInColumnType = ({
   notValidatedPakeepsInColumn,
-  folderProperty,
-  folderId,
   isPakeepDragContextPinned
 }: {
   notValidatedPakeepsInColumn: (PakeepElementType | null)[];
   isPakeepDragContextPinned: boolean;
-  folderProperty: FolderPropetyType;
-  folderId: string;
 }) => PakeepsType | null;
 
 export type FolderPropetyType = DefaultFolderElementPropertyNamesType | 'label' | 'ALL' | 'event';
@@ -163,11 +161,11 @@ export type UseAttributeGroupColorType = (
 
 export type UsePakeepFoldersType = ({
   labels,
-  events,
+  events
 }: {
   labels: GlobalLabelsType;
   events: GlobalEventsType;
-}) => DefaultFolderArrType[];
+}) => FoldersType;
 
 export type HandleChangeInputsValueType = ChangeEventHandler<HTMLInputElement>;
 
@@ -194,3 +192,13 @@ export type UseFindSelectedLabelsType = (selectedPakeeps: PakeepsType) => Labels
 export type UseFindSelectedEventsType = (selectedPakeeps: PakeepsType) => EventsOfPakeepType;
 
 export type UseValidateFolderColorType = (color: ColorType) => { validatedFolderColor: string; theme: Theme };
+
+export type UseTakeFoldersArrType = (props: {
+  handleCloseFoldersWithDrawerView: () => void;
+  folderOrderNames: FolderOrderNamesType;
+  isFoldersHaveDraweView: boolean;
+}) => {
+  folderOrderNames: FolderOrderNamesType;
+  fordersBefore: FoldersType;
+  foldersAfter: FoldersType;
+};

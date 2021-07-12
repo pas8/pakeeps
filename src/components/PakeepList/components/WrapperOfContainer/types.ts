@@ -4,19 +4,17 @@ import { DropResult, ResponderProvided } from 'react-beautiful-dnd';
 import { OrderNamesType, OrderNameType, PakeepsType } from 'store/modules/App/types';
 import { PropsFromPakeepListToPakeepElementType } from '../PakeepElement/types';
 
-export type PropsOfColumnOfPakeepListContainerPropsType =  {
+export type PropsOfColumnOfPakeepListContainerPropsType = {
   isPakeepDragContextPinned: boolean;
-  folderProperty: FolderPropetyType;
-  folderId: string;
   isSelecting: boolean;
-} & PropsFromPakeepListToPakeepElementType
+} & PropsFromPakeepListToPakeepElementType;
 
 export type WrapperOfContainerOfPakeepListType = {
   pakeeps: PakeepsType;
   pakeepsOrderNames: OrderNamesType;
   handleSetPakeepsOrderNames: HandleSetSelectedPakeepsIdType;
   setIsPakeepDragging: Function;
-  columnOfPakeepListContainerProps:PropsOfColumnOfPakeepListContainerPropsType ;
+  columnOfPakeepListContainerProps: PropsOfColumnOfPakeepListContainerPropsType;
 };
 
 export type OnDragEndParamsType = {

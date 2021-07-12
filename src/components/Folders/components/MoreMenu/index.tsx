@@ -20,43 +20,42 @@ const MoreMenuOfFolders: FC<MoreMenuOfFoldersPropsType> = ({
   isMoreMenuopen,
   handleCloseMenu,
   menuAnchorEl,
-  handleChange,
-  value,
   flattenAllFolders
 }) => {
   const classes = useStyles();
   return (
-    <Menu
-      anchorEl={menuAnchorEl}
-      keepMounted
-      open={isMoreMenuopen}
-      onClose={handleCloseMenu}
-      className={classes.container}
-    >
-      <ToggleButtonGroup orientation={'vertical'} value={value} exclusive onChange={handleChange}>
-        {arrToMap.map(({ title, iconName, property, id, onClick }) => {
-          const findedIdx = findIndex(flattenAllFolders, ({ id: folderId }) => folderId === id);
-          const [icon] = useTakeIcon(iconName ? iconName : (property === 'label' && 'label') || 'infinity');
+    <>FUCK</>
+    // <Menu
+    //   anchorEl={menuAnchorEl}
+    //   keepMounted
+    //   open={isMoreMenuopen}
+    //   onClose={handleCloseMenu}
+    //   className={classes.container}
+    // >
+    //   <ToggleButtonGroup orientation={'vertical'} value={value} exclusive onChange={handleChange}>
+    //     {arrToMap.map(({ title, iconName, property, id, onClick }) => {
+    //       const findedIdx = findIndex(flattenAllFolders, ({ id: folderId }) => folderId === id);
+    //       const [icon] = useTakeIcon(iconName ? iconName : (property === 'label' && 'label') || 'infinity');
 
-          const onClickOfToggleButton:MouseEventHandler<HTMLButtonElement> = e => {
-            onClick && e.preventDefault();
-            onClick && onClick(e);
-            handleCloseMenu();
-          };
+    //       const onClickOfToggleButton:MouseEventHandler<HTMLButtonElement> = e => {
+    //         onClick && e.preventDefault();
+    //         onClick && onClick(e);
+    //         handleCloseMenu();
+    //       };
 
-          const menuItemProps = {
-            onClick: onClickOfToggleButton,
-            key: `MoreMenuOfFolders-${id}`,
-            value: findedIdx
-          };
-          return (
-            <ToggleButton {...menuItemProps}>
-              {icon} {title}
-            </ToggleButton>
-          );
-        })}
-      </ToggleButtonGroup>
-    </Menu>
+    //       const menuItemProps = {
+    //         onClick: onClickOfToggleButton,
+    //         key: `MoreMenuOfFolders-${id}`,
+    //         value: findedIdx
+    //       };
+    //       return (
+    //         <ToggleButton {...menuItemProps}>
+    //           {icon} {title}
+    //         </ToggleButton>
+    //       );
+    //     })}
+    //   </ToggleButtonGroup>
+    // </Menu>
   );
 };
 

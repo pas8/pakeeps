@@ -14,24 +14,22 @@ import { createArraySelector } from 'reselect-map';
 
 export const getFilteredLabels = (h: any) => h;
 
-export const getCurrentFolderPropertyIdx = createSelector(
-  [(state: RootStoreType) => state.app.currentFolderPropertyIdx],
-  currentFolderPropertyIdx => currentFolderPropertyIdx
+export const getGlobalFolderId = createSelector(
+  [(state: RootStoreType) => state.app.temporaryData.globalFolderId],
+  globalFolderId => globalFolderId
 );
 
-export const getFolders = createSelector([({ app }: RootStoreType) => app.folders], folders => folders);
+
 
 export const getMenuOpenStatus = createSelector(
-  [({ app }: RootStoreType) => app.menuOpenStatus],
+  [({ app }: RootStoreType) => app.temporaryData.menuOpenStatus],
   menuOpenStatus => menuOpenStatus
 );
-export const getDrawerWidth = createSelector([({ app }: RootStoreType) => app.drawerWidth], drawerWidth => drawerWidth);
-export const getLabels = createSelector([({ app }: RootStoreType) => app.labels], labels => labels);
-
-export const getDefaultFolderArr = createSelector(
-  [({ app }: RootStoreType) => app.defaultFolderArr],
-  defaultFolderArr => defaultFolderArr
+export const getDrawerWidth = createSelector(
+  [({ app }: RootStoreType) => app.temporaryData.drawerWidth],
+  drawerWidth => drawerWidth
 );
+export const getLabels = createSelector([({ app }: RootStoreType) => app.labels], labels => labels);
 
 export const getPakeeps = createSelector([({ app }: RootStoreType) => app.pakeeps], pakeeps => pakeeps);
 export const getPakeepsOrderNames = createSelector(
@@ -45,7 +43,7 @@ export const getPinnedPakeepsOrderNames = createSelector(
 );
 
 export const getSelectedPakeepsId = createSelector(
-  [({ app }: RootStoreType) => app.selectedPakeepsId],
+  [({ app }: RootStoreType) => app.temporaryData.selectedPakeepsId],
   selectedPakeepsId => selectedPakeepsId
 );
 
@@ -55,7 +53,7 @@ export const getIsCancelSelectedPakeepsId = createSelector(
 );
 
 export const getSelectedPakeeps = createArraySelector(
-  [({ app }: RootStoreType) => app.selectedPakeepsId, ({ app: { pakeeps } }: RootStoreType) => pakeeps],
+  [({ app }: RootStoreType) => app.temporaryData.selectedPakeepsId, ({ app: { pakeeps } }: RootStoreType) => pakeeps],
   (selectedPakeepsId, pakeeps) => find(pakeeps, ({ id }) => id === selectedPakeepsId)!
 );
 
@@ -80,7 +78,7 @@ export const getIsAllDataWasUploaded = createSelector(
 );
 
 export const getHeaderHeight = createSelector(
-  [({ app: { headerHeight } }: RootStoreType) => headerHeight],
+  [({ app: { temporaryData } }: RootStoreType) =>temporaryData.headerHeight],
   headerHeight => headerHeight
 );
 
@@ -126,6 +124,11 @@ export const getGlobalLabelListTemproparyData = createSelector(
 export const getAvatarProperties = createSelector(
   [({ app: { avatarProperties } }: RootStoreType) => avatarProperties],
   avatarProperties => avatarProperties
+);
+
+export const getPakeepFolderOrderNames = createSelector(
+  [({ app: { pakeepFolderOrderNames } }: RootStoreType) => pakeepFolderOrderNames],
+  pakeepFolderOrderNames => pakeepFolderOrderNames
 );
 
 export const getNotifinationCounterValue = createSelector(

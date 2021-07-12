@@ -28,3 +28,6 @@ export const attributesName = {
   LABEL: 'label'
 };
 
+
+
+export const ALL = 'ALL'

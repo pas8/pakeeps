@@ -2,7 +2,7 @@ import { pakeepPropertyiesNames, NONE, menuOpenStatusDenotation } from 'models/d
 import { CustomColorType, SelectedPakeepsIdType, SelectedPakeepsType, UseStylesCustomColorType } from 'models/types';
 import { $Keys, $Values, Brand, Optional } from 'utility-types';
 import { TypeNames } from './enums';
-import { DialogLayoutName, MenusLayoutName } from 'models/unums';
+import { AdditionalFolderPropertyNames, DialogLayoutName, MenusLayoutName } from 'models/unums';
 
 export type PayloadTypes = {
   [TypeNames.HANDLE_ADD_NEW_PAKEEP]: {
@@ -11,7 +11,7 @@ export type PayloadTypes = {
   [TypeNames.HANDLE_DELETE_PAKEEP]: { pakeepId: string };
   [TypeNames.HANDLE_ADD_EVENT_TO_PAKEEP]: { newEvent: PakeepEventInteface; pakeepId: PakeepIdType };
   [TypeNames.HANDLE_CHANGE_MENU_OPEN_STATUS]: { menuOpenStatus: IsMenuOpenType };
-  [TypeNames.HANDLE_SET_CURRENT_FOLDER_PROPERTY_IDX]: { currentFolderPropertyIdx: number };
+  [TypeNames.HANDLE_CHANGE_GLOBAL_FOLDER_ID]: { globalFolderId: GlobalFolderIdType };
   [TypeNames.HANDLE_SET_NEW_ORDER_NAMES]: { newOrderNames: OrderNamesType };
   [TypeNames.HANDLE_CHANGE_FOLDERS]: { folders: FoldersType };
   [TypeNames.HANDLE_CHANGE_GLOBAL_LABELS]: { labels: GlobalLabelsType };
@@ -73,9 +73,17 @@ export type PayloadTypes = {
   [TypeNames.HANDLE_CHANGE_ALL_DATA_WAS_UPLOADED_STATUS]: {
     isAllDataWasUploaded: boolean;
   };
+
+  [TypeNames.HANDLE_CHANGE_PAKEEP_FOLDER_ORDER_NAMES]: {
+    pakeepFolderOrderNames: FolderOrderNamesValueType;
+  };
 };
 
 export type ActionsValueTypes = {
+  toChangePakeepFolderOrderNames: {
+    type: typeof TypeNames.HANDLE_CHANGE_PAKEEP_FOLDER_ORDER_NAMES;
+    payload: PayloadTypes[TypeNames.HANDLE_CHANGE_PAKEEP_FOLDER_ORDER_NAMES];
+  };
   toChangeGlobalEventItem: {
     type: typeof TypeNames.HANDLE_CHANGE_GLOBAL_EVENT_ITEM;
     payload: PayloadTypes[TypeNames.HANDLE_CHANGE_GLOBAL_EVENT_ITEM];
@@ -141,8 +149,8 @@ export type ActionsValueTypes = {
     payload: PayloadTypes[TypeNames.HANDLE_SET_NEW_ORDER_NAMES];
   };
   ToSetCurrentFolderPropertyIdxType: {
-    type: typeof TypeNames.HANDLE_SET_CURRENT_FOLDER_PROPERTY_IDX;
-    payload: PayloadTypes[TypeNames.HANDLE_SET_CURRENT_FOLDER_PROPERTY_IDX];
+    type: typeof TypeNames.HANDLE_CHANGE_GLOBAL_FOLDER_ID;
+    payload: PayloadTypes[TypeNames.HANDLE_CHANGE_GLOBAL_FOLDER_ID];
   };
 
   ToChangeFolders: {
@@ -268,7 +276,32 @@ export type LabelVariantType = 'default' | 'outlined';
 export type IconNameType = string;
 export type TitleType = string;
 
-export type FoldersType = any[][];
+export type DefaultPropertyiesOfElementOfFolderArrType = {
+  color: ColorType;
+  title: string;
+  iconName: string;
+  id: string;
+};
+
+export type ElementOfFolderArrType = {
+  property: {
+    value: AdditionalFolderPropertyNames;
+    onClick?: (e: any) => void;
+    route?: string;
+    additionalArr?: { title: string; route: string };
+  };
+} & DefaultPropertyiesOfElementOfFolderArrType;
+
+export type FolderArrType = ElementOfFolderArrType[];
+export type FolderIdType = string;
+
+export type FoldersType = {
+  [key: string]: {
+    id: FolderIdType;
+    label: string;
+    arr: FolderArrType;
+  };
+};
 
 export interface IGlobalEvent {
   title: TitleType;
@@ -384,27 +417,24 @@ export type HeaderPropertyiesType = {
   orderIds: string[];
 };
 
+export type FolderOrderNamesValueType = string[];
+export type FolderOrderNamesType = { [key: string]: FolderOrderNamesValueType };
+
 export interface AppInitialStateInteface {
   // breakpointsValues: BreakpointsValuesInterface<number>;
   // theme: DefaultThemeInterface;
-  defaultFolderArr: DefaultFolderArrType;
 
   avatarProperties: AvatarPropertiesType;
-  headerHeight: number;
   labels: GlobalLabelsType;
   events: GlobalEventsType;
   headerPropertyies: HeaderPropertyiesType;
-  selectedPakeepsId: SelectedPakeepsIdType;
-  folders: FoldersType;
+  pakeepFolderOrderNames: FolderOrderNamesValueType;
   pakeeps: PakeepsType;
   userData: UserDataType;
   pakeepsOrderNames: OrderNamesType;
   pinnedPakeepsOrderNames: OrderNamesType;
   notifinationCounter: number;
   isAllDataWasUploaded: boolean;
-  menuOpenStatus: IsMenuOpenType;
-  currentFolderPropertyIdx: number;
-  drawerWidth: DrawerWidthType;
   isCancelSelectedPakeepsId: boolean;
   temporaryData: TemporaryDatatype;
 }
@@ -414,7 +444,14 @@ export type PakeepPropertyKeysType = $Keys<PakeepElementType>;
 
 export type OperateWOP<N> = (payload: N) => void;
 
+export type GlobalFolderIdType = string;
+
 export type TemporaryDatatype = {
+  selectedPakeepsId: SelectedPakeepsIdType;
+  drawerWidth: DrawerWidthType;
+  menuOpenStatus: IsMenuOpenType;
+  globalFolderId: GlobalFolderIdType;
+  headerHeight: number;
   defaultMenuProps: DefaultMenuPropsType;
   defaultDialogProps: {
     id: string;

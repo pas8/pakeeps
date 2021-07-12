@@ -16,3 +16,11 @@ export enum DialogLayoutName {
   NONE = 'none',
   PAKEEPS = 'PAKEEPS'
 }
+
+export enum AdditionalFolderPropertyNames {
+  DEFAULT = 'DEFAULT',
+  ON_CLICK = 'ON_CLICK',
+  ROUTE = 'ROUTE',
+  DEFAULT_AND_ROUTE = 'DEFAULT_AND_ROUTE',
+
+}
