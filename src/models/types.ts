@@ -2,6 +2,7 @@ import { IconsUtilsPropsType } from './../components/IconsUtils/types';
 import { Optional } from 'utility-types';
 import {
   CheckBoxesArrtype,
+  ColorType,
   DefaultFolderArrType,
   DefaultFolderElementPropertyType,
   DefaultPakeepElementType,
@@ -44,6 +45,7 @@ import {
   DefaultLabelListPropsType,
   HandleLabelFuncsOfLabelListType
 } from 'components/IconsUtils/components/LabelsList/types';
+import { Theme } from '@material-ui/core';
 
 export type SelectedPakeepsType = PakeepsType;
 export type SelectedPakeepsIdType = PakeepIdType[];
@@ -152,7 +154,7 @@ export type UseValidationOfPakeepsInColumnType = ({
   folderId: string;
 }) => PakeepsType | null;
 
-export type FolderPropetyType = DefaultFolderElementPropertyNamesType | 'label' | 'ALL' | 'event'
+export type FolderPropetyType = DefaultFolderElementPropertyNamesType | 'label' | 'ALL' | 'event';
 
 export type UseAttributeGroupColorType = (
   customColor: CustomColorType,
@@ -162,11 +164,9 @@ export type UseAttributeGroupColorType = (
 export type UsePakeepFoldersType = ({
   labels,
   events,
-  defaultFolderArr
 }: {
   labels: GlobalLabelsType;
   events: GlobalEventsType;
-  defaultFolderArr: DefaultFolderArrType;
 }) => DefaultFolderArrType[];
 
 export type HandleChangeInputsValueType = ChangeEventHandler<HTMLInputElement>;
@@ -192,3 +192,5 @@ export type UseNewPakeepUtilityType = ({
 
 export type UseFindSelectedLabelsType = (selectedPakeeps: PakeepsType) => LabelsOfPakeepType;
 export type UseFindSelectedEventsType = (selectedPakeeps: PakeepsType) => EventsOfPakeepType;
+
+export type UseValidateFolderColorType = (color: ColorType) => { validatedFolderColor: string; theme: Theme };

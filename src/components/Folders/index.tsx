@@ -15,159 +15,17 @@ import ArrowDropDownOutlinedIcon from '@material-ui/icons/ArrowDropDownOutlined'
 import ArrowDropUpOutlinedIcon from '@material-ui/icons/ArrowDropUpOutlined';
 import { useValidateColor } from 'hooks/useValidateColor.hook';
 import { useBreakpointNames } from 'hooks/useBreakpointNames.hook';
-import { appearanceAnchorArr, APPEARANCE_URL, SETTING_URL, THEME, THEME_URL } from 'layouts/RouterLayout/denotation';
-
-const marginOfToogleGroups = 1;
-
-const useStyles = makeStyles(
-  ({ spacing, typography, palette: { primary, secondary, background, mediumEmphasis, text } }) => ({
-    containerOfFolderWithPakeepsView: ({
-      isMenuOpen,
-      positionOfFolderViewWithPakeepViewIsBottom,
-      isFolderViewWithPakeepViewAlignToCenter,
-      folderColor,
-      isFoldersHaveDraweView,
-      headerHeight,
-      positionOfFolderViewWithPakeepViewIsRight
-    }: UseStylesOfFoldersType) => {
-      const color = folderColor;
-      return {
-        // transform:'scale(0.8)',
-
-        marginTop: isFoldersHaveDraweView
-          ? 0
-          : positionOfFolderViewWithPakeepViewIsBottom
-          ? headerHeight
-          : headerHeight,
-        // margin: spacing(positionOfFolderViewWithPakeepViewIsBottom ? -10 : -10 + 1.4, 0, 0, 0),
-        '& .MuiToggleButtonGroup-root': {
-          width: positionOfFolderViewWithPakeepViewIsBottom ? 'auto' : '100%',
-          margin: spacing(
-            isFoldersHaveDraweView ? 0 : marginOfToogleGroups,
-            positionOfFolderViewWithPakeepViewIsRight || positionOfFolderViewWithPakeepViewIsBottom
-              ? marginOfToogleGroups
-              : 0,
-            isFoldersHaveDraweView ? 0 : marginOfToogleGroups,
-            isFoldersHaveDraweView
-              ? 0
-              : positionOfFolderViewWithPakeepViewIsBottom
-              ? 1.4
-              : !positionOfFolderViewWithPakeepViewIsBottom && !positionOfFolderViewWithPakeepViewIsRight
-              ? 1.4
-              : 0
-          ),
-          '&:first-child': {
-            marginTop: 0
-          },
-          background: isFoldersHaveDraweView ? background.paper : background.default
-        },
-        '& button': {
-          flexWrap: 'nowrap',
-          height: '100%',
-          borderRadius: isFoldersHaveDraweView ? 0 : '',
-          padding: spacing(1.4, isFoldersHaveDraweView ? 1.42 : positionOfFolderViewWithPakeepViewIsBottom ? 1.4 : 1),
-          // background: isFoldersHaveDraweView ? `${background.paper}` : '',
-          border: isFoldersHaveDraweView ? 'none' : `1px solid ${useAlpha(text.primary)}`,
-          color: isFoldersHaveDraweView ? text.hint : text.hint,
-          display: positionOfFolderViewWithPakeepViewIsBottom && isMenuOpen ? 'block' : 'flex',
-          whiteSpace: 'pre',
-          justifyContent: !isMenuOpen ? 'center' : 'flex-start',
-          flexDirection: 'column',
-          '&:hover': {
-            background: useAlpha(text.primary)
-          },
-
-          '&:last-child': {
-            // background:'red',
-            borderBottom: isFoldersHaveDraweView ? `1px solid ${mediumEmphasis?.main}` : ''
-
-            // background: isFoldersHaveDraweView ? `${useAlpha(color)} !important` : ''
-          },
-          '& svg': {
-            fontSize: '2em'
-          }
-        },
-        '& .Mui-selected': {
-          background: useAlpha(color),
-          color,
-          borderColor: useAlpha(color),
-          '&:hover': { background: useAlpha(color, 0.2) },
-
-          '& svg': { color }
-        },
-        '& .folderIsPlaceholder': {
-          textTransform: 'capitalize',
-          '&:hover': {
-            background: 'transparent !important'
-          }
-        }
-      };
-    },
-    textOfFolderWithPakeepsView: ({ positionOfFolderViewWithPakeepViewIsBottom }: UseStylesOfFoldersType) =>
-      !positionOfFolderViewWithPakeepViewIsBottom
-        ? { padding: spacing(0, 0, 0, 0.8) }
-        : {
-            writingMode: 'vertical-rl',
-            textOrientation: 'upright',
-            flexWrap: positionOfFolderViewWithPakeepViewIsBottom ? 'wrap' : 'nowrap',
-            justifyContent: 'flex-end',
-            // width:'100%',
-            // height:'100%',
-            alignItems: 'center'
-          },
-    container: {
-      margin: spacing(10.32, 0, 0, 0),
-      height: '100vh',
-      // position: 'fixed',
-      '& button:first-of-type': {
-        borderTopRightRadius: 4
-      },
-      '& button:last-of-type': {
-        borderBottomRightRadius: 4
-      },
-      '& .MuiTabs-indicator': {
-        // height:'80%',
-        width: 2,
-        borderRadius: spacing(0.8)
-      },
-
-      '& button': {
-        textTransform: 'none',
-        color: '#fff',
-        minWidth: '40px',
-        fontWeight: typography.fontWeightRegular,
-        fontSize: typography.pxToRem(16),
-        // borderRadius:8,
-        '&:focus': {
-          opacity: 1
-        },
-        minHeight: 0,
-        // marginTop: spacing(1.4),
-        // margin:spacing(2,0),
-        marginBottom: spacing(0.8),
-        padding: spacing(1.48, 2.6),
-        '& span': {
-          flexDirection: 'row',
-          '& svg': {
-            fontSize: '1.8em'
-            // margin: spacing(0.8, 0.4, 0, 0)
-          }
-        }
-      }
-    }
-  })
-);
-
-export const ACCOUNT_URL = `${SETTING_URL}/account`;
-const SECURITY_URL = `${SETTING_URL}/security`;
-
-export const themeAnchorArr = {
-  COLORS_ID: `${THEME}_colors`,
-  DEFAULT_THEMES_ID: `${THEME}_defaultThemes`,
-  BORDER_RADIUS: `${THEME}_borderRadius`
-};
-
-export const themeAnchorIdArr = mapValues(themeAnchorArr, el => '#' + el);
+import {
+  ACCOUNT_URL,
+  appearanceAnchorArr,
+  APPEARANCE_URL,
+  SETTING_URL,
+  THEME,
+  THEME_URL
+} from 'layouts/RouterLayout/denotation';
+import { useStylesOfFolders } from './useStyles';
+import { DEFAULT, PRIMARY, SECONDARY } from 'models/denotation';
+import { useValidateFolderColor } from 'hooks/useValidateFolderColor.hook';
 
 const Folders: FC<FoldersTypeProps> = ({
   value,
@@ -187,24 +45,18 @@ const Folders: FC<FoldersTypeProps> = ({
 }) => {
   const router = useRouter();
 
-  const {
-    spacing,
-    shape,
-    palette: { text, primary, secondary }
-  } = useTheme();
-  const [folderColor, setFolderColor] = useState('default');
+  const [folderColor, setFolderColor] = useState(DEFAULT);
 
-  const validatedFolderColor =
-    folderColor === 'default' || !folderColor || folderColor === 'primary'
-      ? primary.main
-      : folderColor === 'secondary'
-      ? secondary.main
-      : folderColor;
+  const {
+    validatedFolderColor,
+    theme: { shape, spacing ,palette}
+  } = useValidateFolderColor(folderColor);
+
   const headerHeight = useSelector(getHeaderHeight);
 
   const navigationViewLike = useSelector(getNavigationViewLike);
   const folders = useSelector(getFolders);
-  const classes = useStyles({
+  const classes = useStylesOfFolders({
     folderColor: validatedFolderColor,
     isMenuOpen,
     headerHeight,
@@ -214,150 +66,12 @@ const Folders: FC<FoldersTypeProps> = ({
     isFolderViewWithPakeepViewAlignToCenter
   });
 
-  const { width: windowWidth, height: windowHeight } = useWindowSize();
-  // console.log(value)
 
-  const handleOpenSetting = () => {
-    handleChange('placeholder', 1);
-    router.push(ACCOUNT_URL);
-  };
 
-  // const previuosValue = usePrevious(value)
-  const handleGoBack = () => {
-    router.back();
-    // handleChange('placeholder', previuosValue);
-  };
 
-  const handleGoToPakeep = () => {
-    router.push('/');
-  };
 
-  const utilsFolders = [
-    [
-      { title: 'Open settings1', iconName: 'settings', id: 'folder-94', onClick: handleOpenSetting, color: 'default' },
-      { title: 'Hide folders2', iconName: 'visibility', onClick: handleHideFolder, id: 'folder-93', color: 'default' }
-      // { title: 'Hide folders2', iconName: 'visibility', onClick: handleHideFolder, id: 'folder-93', color: 'default' },
-      // { title: 'Hide folders2', iconName: 'visibility', onClick: handleHideFolder, id: 'folder-93', color: 'default' },
-    ]
-  ];
 
-  const marginsOfToogleGroups = spacing(marginOfToogleGroups) * 2;
 
-  const pakeepFolders = [...folders, ...utilsFolders];
-
-  const goToPakeepsArr = [
-    {
-      title: 'To_pakeeps',
-      iconName: 'arrowBack',
-      id: 'folder-arrowBack',
-      onClick: handleGoToPakeep,
-      color: 'default'
-    }
-  ];
-
-  const settingsFolders = [
-    [
-      { title: 'Account', iconName: 'account', id: 'folder-account', color: 'default', route: ACCOUNT_URL },
-
-      { title: 'Theme', iconName: 'color', id: 'folder-theme', color: 'default', route: THEME_URL },
-
-      {
-        title: 'Colors',
-        iconName: 'none',
-        parentRoute: THEME_URL,
-        id: themeAnchorIdArr.COLORS_ID,
-        color: 'default',
-        route: themeAnchorIdArr.COLORS_ID
-      },
-      {
-        title: 'Themes',
-        iconName: 'none',
-        parentRoute: THEME_URL,
-        id: themeAnchorIdArr.DEFAULT_THEMES_ID,
-        color: 'default',
-        route: themeAnchorIdArr.DEFAULT_THEMES_ID
-      },
-      {
-        title: 'Border_Radius',
-        iconName: 'none',
-        parentRoute: THEME_URL,
-        id: themeAnchorIdArr.BORDER_RADIUS,
-        color: 'default',
-        route: themeAnchorIdArr.BORDER_RADIUS,
-        isAncholElementLast: true
-      },
-
-      {
-        title: 'Security',
-        iconName: 'security',
-        id: 'folder-security',
-        color: 'default',
-        route: SECURITY_URL
-      },
-      {
-        title: 'Appearance',
-        // isFolderIsPlaceholder: true,
-        iconName: 'view',
-        id: 'folder-appearance',
-        color: 'default',
-        route: APPEARANCE_URL
-      },
-      {
-        title: 'Pakeeps',
-        // iconName: '',
-        parentRoute: APPEARANCE_URL,
-        id: 'folder-appearance-pakeeps',
-        color: 'default',
-        route: appearanceAnchorArr.PAKEEPS_ID
-      },
-      // {
-      //   title: 'Header',
-      //   // iconName: 'header',
-      //   id: 'folder-appearance-header',
-      //   color: 'default',
-      //   route: appearanceAnchorArr.Head
-      // },
-      {
-        title: 'Folders',
-        parentRoute: APPEARANCE_URL,
-        // iconName: 'folder',
-        id: 'folder-appearance-folder',
-        color: 'default',
-        route: appearanceAnchorArr.FOLDERS_ID
-      },
-
-      {
-        title: 'Attributes',
-        parentRoute: APPEARANCE_URL,
-        // iconName: 'label',
-        id: 'folder-appearance-Attributes',
-        color: 'default',
-        route: appearanceAnchorArr.ATTRIBUTES_ID
-      }
-    ]
-  ];
-
-  // const settingsFoldersRouteArr =  flatten(settingsFolders).map(({route}))
-
-  const validatedSettingFolders = isFoldersHaveDraweView ? settingsFolders : [goToPakeepsArr, ...settingsFolders];
-
-  const defaultAllFolders = _.startsWith(router.pathname, SETTING_URL) ? validatedSettingFolders : pakeepFolders;
-
-  const allFoldersWithDrawerView = [
-    [
-      {
-        title: 'Close menu',
-        iconName: 'close',
-        id: 'folder-close',
-        onClick: handleCloseFoldersWithDrawerView,
-        color: 'default'
-      }
-    ],
-    ...defaultAllFolders
-  ];
-
-  const allFolders = isFoldersHaveDraweView ? allFoldersWithDrawerView : defaultAllFolders;
-  const flattenAllFolders = _.flatten(allFolders);
 
   const findedElement = _.find(flattenAllFolders, el => _.startsWith(router.route, el?.route));
 
@@ -366,32 +80,15 @@ const Folders: FC<FoldersTypeProps> = ({
     router.pathname !== '/' && findedElementIdx && handleChange(null, findedElementIdx);
   }, [router, findedElement]);
 
-  const FOLDER_WITHOUT_ROUTE = 'FOLDER_WITHOUT_ROUTE';
 
-  const allMarginsOfBottomView = marginsOfToogleGroups * (allFolders.length + 1);
-  const allMarginsOfNotBottomView = marginsOfToogleGroups * (allFolders.length + 4) + spacing(8);
+  useEffect(() => {
+    !isFoldersHaveDraweView && handleDrawerWidth(width);
+  }, [width, isFolderOpen]);
 
-  const allMarginsOfToogleGroups = positionOfFolderViewWithPakeepViewIsBottom
-    ? allMarginsOfBottomView
-    : allMarginsOfNotBottomView;
 
-  const [ref, { width: buttonWidth, height: buttonHeight }] = useMeasure<HTMLDivElement>();
 
-  const buttonSize = positionOfFolderViewWithPakeepViewIsBottom ? buttonWidth : buttonHeight;
-  const avarageButtonSize = buttonSize / flattenAllFolders.length;
 
-  const foldersSize = buttonSize + allMarginsOfToogleGroups;
-  const windowSize = positionOfFolderViewWithPakeepViewIsBottom ? windowWidth : windowHeight;
 
-  const idxOfFolderItemWhichShouldBeInMenu =
-    flattenAllFolders.length - ~~((foldersSize - windowSize) / avarageButtonSize);
-  const [menuAnchorEl, setMenuAnchorEl] = useState<any>(null);
-  const isMoreMenuopen = Boolean(menuAnchorEl);
-
-  const handleOpenMenu: MouseEventHandler<HTMLButtonElement> = ({ currentTarget }) => setMenuAnchorEl(currentTarget);
-  const handleCloseMenu = () => setMenuAnchorEl(null);
-
-  const arrToMapOfMoreMenu = _.filter(flattenAllFolders, (el, idx) => idxOfFolderItemWhichShouldBeInMenu <= idx);
 
   const moreMenuOfFoldersProps = {
     arrToMap: arrToMapOfMoreMenu,
@@ -402,19 +99,8 @@ const Folders: FC<FoldersTypeProps> = ({
     handleChange,
     value
   };
-  useEffect(() => {
-    const MARGIN_VALUE = +(
-      positionOfFolderViewWithPakeepViewIsBottom &&
-      buttonSize + (marginsOfToogleGroups * allFolders.length) / 2 - windowSize
-    );
 
-    setMargin(MARGIN_VALUE);
-    //! to improve better margin logic pl
-  }, [buttonSize]);
 
-  useEffect(() => {
-    setIsSizeOfFoldersMoreThanSize(foldersSize > windowSize);
-  }, [foldersSize, avarageButtonSize, windowSize]);
 
   const [isAncholElHidden, setIsAncholElHidden] = useState(false);
 
@@ -424,7 +110,6 @@ const Folders: FC<FoldersTypeProps> = ({
 
   const { isSizeSmall } = useBreakpointNames();
 
-  const [f, { width }] = useSize(() => (
     <Grid container>
       <Grid
         container
@@ -518,11 +203,11 @@ const Folders: FC<FoldersTypeProps> = ({
                             marginLeft: positionOfFolderViewWithPakeepViewIsBottom && isButtonIsMore && spacing(2.8),
                             borderTop: isButtonActive
                               ? `2px solid ${borderColor}`
-                              : isButtonIsMore && `1px solid ${useAlpha(text.primary)}`,
+                              : isButtonIsMore && `1px solid ${useAlpha(palette.text.primary)}`,
                             borderLeft:
                               isHaveParentRoute || isButtonActive
                                 ? `2px solid ${borderColor}`
-                                : isButtonIsMore && `1px solid ${useAlpha(text.primary)}`,
+                                : isButtonIsMore && `1px solid ${useAlpha(palette.text.primary)}`,
                             borderRight: isHaveParentRoute || isButtonActive ? `2px solid ${borderColor}` : '',
                             borderBottom:
                               (isButtonActive && isAncholElHidden) || isAncholElementLast
@@ -583,17 +268,8 @@ const Folders: FC<FoldersTypeProps> = ({
         <MoreMenuOfFolders {...moreMenuOfFoldersProps} />
       </Grid>
     </Grid>
-  ));
-  // useEffect(() =>  setButtonWidth(buttonW), [isFolderOpen])
 
-  useEffect(() => {
-    !isFoldersHaveDraweView && handleDrawerWidth(width);
-  }, [width, isFolderOpen]);
-  useEffect(() => {
-    handleDrawerWidth(0);
-  }, [isMenuOpen]);
 
-  return f;
 };
 
 export default Folders;

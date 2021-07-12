@@ -27,3 +27,4 @@ export const attributesName = {
   EVENT: 'event',
   LABEL: 'label'
 };
+
