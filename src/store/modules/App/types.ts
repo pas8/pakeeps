@@ -73,8 +73,6 @@ export type PayloadTypes = {
   [TypeNames.HANDLE_CHANGE_ALL_DATA_WAS_UPLOADED_STATUS]: {
     isAllDataWasUploaded: boolean;
   };
-
-  
 };
 
 export type ActionsValueTypes = {
@@ -236,9 +234,6 @@ export type ActionsValueTypes = {
     type: typeof TypeNames.HANDLE_CHANGE_ALL_DATA_WAS_UPLOADED_STATUS;
     payload: PayloadTypes[TypeNames.HANDLE_CHANGE_ALL_DATA_WAS_UPLOADED_STATUS];
   };
-
-  
-  
 };
 export type AppActionTypes = $Values<ActionsValueTypes>;
 
@@ -386,10 +381,8 @@ export type UserDataType = {
 };
 
 export type HeaderPropertyiesType = {
-
-
-  
-}
+  orderIds: string[];
+};
 
 export interface AppInitialStateInteface {
   // breakpointsValues: BreakpointsValuesInterface<number>;
@@ -400,10 +393,7 @@ export interface AppInitialStateInteface {
   headerHeight: number;
   labels: GlobalLabelsType;
   events: GlobalEventsType;
-  headerPropertyies:{
-
-
-  }
+  headerPropertyies: HeaderPropertyiesType;
   selectedPakeepsId: SelectedPakeepsIdType;
   folders: FoldersType;
   pakeeps: PakeepsType;
@@ -431,6 +421,7 @@ export type TemporaryDatatype = {
     dialogName: DialogLayoutName;
   } & UseStylesCustomColorType;
   isAuthedWithLocalPinCode: boolean;
+  isZenModeActive: boolean;
   pakeep: {
     id: string;
     isHovering: boolean;

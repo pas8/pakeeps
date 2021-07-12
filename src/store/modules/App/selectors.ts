@@ -128,7 +128,6 @@ export const getAvatarProperties = createSelector(
   avatarProperties => avatarProperties
 );
 
-
 export const getNotifinationCounterValue = createSelector(
   [({ app: { notifinationCounter } }: RootStoreType) => notifinationCounter],
   notifinationCounter => notifinationCounter
@@ -139,6 +138,10 @@ export const getIsZenModeActive = createSelector(
   isZenModeActive => isZenModeActive
 );
 
+export const getHeaderProperties = createSelector(
+  [({ app: { headerPropertyies } }: RootStoreType) => headerPropertyies],
+  headerPropertyies => headerPropertyies
+);
 
 export const getDefaultDialogPropsOfTemporaryData = createSelector(
   [
