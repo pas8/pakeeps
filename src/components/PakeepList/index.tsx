@@ -5,7 +5,6 @@ import { Grid } from '@material-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
 
 import {
-  getFolders,
   getIsCancelSelectedPakeepsId,
   getIsPakeepHovering,
   getPakeeps,

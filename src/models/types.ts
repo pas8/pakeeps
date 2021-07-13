@@ -193,7 +193,7 @@ export type UseNewPakeepUtilityType = ({
 export type UseFindSelectedLabelsType = (selectedPakeeps: PakeepsType) => LabelsOfPakeepType;
 export type UseFindSelectedEventsType = (selectedPakeeps: PakeepsType) => EventsOfPakeepType;
 
-export type UseValidateFolderColorType = (color: ColorType) => { validatedFolderColor: string; theme: Theme };
+export type UseValidateFolderColorType = (color: ColorType) => string;
 
 export type UseTakeFoldersArrType = (props: {
   handleCloseFoldersWithDrawerView: () => void;
@@ -224,7 +224,7 @@ export type ButtonItemDimensionsType = {
   [Property in 'defaultWidth' | 'height']: number;
 };
 
-export type FolderDimensionstype = {
+export type FolderDimensionsType = {
   buttonGroup: ButtonGroupDimensionsType;
   buttonItem: ButtonItemDimensionsType;
 };
@@ -232,7 +232,7 @@ export type FolderDimensionstype = {
 export type ReturnValueOfUseFindFolderOrderNamesType = {
   folderOrderNamesAfter: FolderOrderNamesValueType;
   folderOrderNamesBefore: FolderOrderNamesValueType;
-  folderDimensions: FolderDimensionstype;
+  folderDimensions: FolderDimensionsType;
 };
 
 export type UseFindFolderOrderNamesType = (
