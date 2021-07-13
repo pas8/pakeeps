@@ -197,12 +197,8 @@ export type UseValidateFolderColorType = (color: ColorType) => string;
 
 export type UseTakeFoldersArrType = (props: {
   handleCloseFoldersWithDrawerView: () => void;
-  handleDrawerWidth: (value: number) => void;
   isFoldersHaveDraweView: boolean;
-}) => {
-  ref: UseMeasureRef<HTMLDivElement>;
-  allFolders: FoldersType;
-} & ReturnValueOfUseFindFolderOrderNamesType;
+}) => {} & ReturnValueOfUseFindFolderOrderNamesType;
 
 export type ParamsOfUseFindCorrectFoldersPropertyiesType = {
   [Property in
@@ -230,8 +226,9 @@ export type FolderDimensionsType = {
 };
 
 export type ReturnValueOfUseFindFolderOrderNamesType = {
-  folderOrderNamesAfter: FolderOrderNamesValueType;
-  folderOrderNamesBefore: FolderOrderNamesValueType;
+  foldersAfter: FoldersType;
+  foldersBefore: FoldersType;
+  folderOrderNames: FolderOrderNamesValueType;
   folderDimensions: FolderDimensionsType;
 };
 

@@ -1,16 +1,18 @@
 import { useSelector } from 'react-redux';
+import { findKey,  pickBy, omit,  findIndex, values } from 'lodash';
 import { useWindowSize } from 'react-use';
 import { UseFindFolderOrderNamesType } from 'models/types';
+import { AdditionalFolderPropertyNames } from 'models/unums';
 import { getHeaderHeight } from 'store/modules/App/selectors';
-import { OPEN_MORE } from 'models/denotation';
+import { useAddIdToFolder } from './useAddIdToFolder.hook';
 
 export const useFindFolderOrderNames: UseFindFolderOrderNamesType = (
   notValidatedAllFolders,
   notValidatedFolderOrderNames
 ) => {
   const folderDimensions = {
-    buttonGroup: { marginLeft: 0, marginRight: 0, marginBottom: 20, marginTop: 0, labelHeight: 28 },
-    buttonItem: { defaultWidth: 42, height: 42 }
+    buttonGroup: { marginLeft: 0, marginRight: 0, marginBottom: 20, marginTop: 0, labelHeight: 32 },
+    buttonItem: { defaultWidth: 42 + 12, height: 42 + 12 }
   };
 
   const { height: windowHeight, width } = useWindowSize();
@@ -40,39 +42,87 @@ export const useFindFolderOrderNames: UseFindFolderOrderNamesType = (
     return { folderHeight, folderHeightArr: [...accumulator.folderHeightArr, itemOfFolderHeightArr] };
   }, nulittyValueOfReduceFunc);
 
-  const folderThatHaveHeightMoreThanMaxFolderHeight = folderHeightArr.find(
-    ({ folderGroupHeight }) => folderGroupHeight > maxFolderHeight
+  const useFindIsHeightMoreThatMax = (searchingId: string) => {
+    const findedElement = folderHeightArr?.find(({ id }) => id === searchingId);
+    if (!findedElement) return false;
+    return findedElement?.folderGroupHeight > maxFolderHeight;
+  };
+  const key = findKey(notValidatedAllFolders, value => useFindIsHeightMoreThatMax(value.id));
+
+  const defaultBeforeFoldersObj = pickBy(notValidatedAllFolders, value => !useFindIsHeightMoreThatMax(value.id));
+  const defaultAfterFoldersObj = omit(
+    pickBy(notValidatedAllFolders, value => useFindIsHeightMoreThatMax(value.id)),
+    key!
   );
 
-  if (!folderThatHaveHeightMoreThanMaxFolderHeight) {
+  const folderToChange = notValidatedAllFolders[key!];
+  const heightOffolderToChange = folderHeightArr?.find(({ id }) => id === key)?.folderGroupHeight!;
+
+  if (!folderToChange) {
     return {
       folderDimensions,
-      folderOrderNamesBefore: notValidatedFolderOrderNames,
-      folderOrderNamesAfter: []
+      folderOrderNames: notValidatedFolderOrderNames,
+      foldersBefore: notValidatedAllFolders,
+      foldersAfter: []
     };
   }
+  const difference = heightOffolderToChange - maxFolderHeight;
+  const idxToSliceSlicedFolderArr = ~~(
+    folderToChange.arr.length -
+    (difference - folderDimensions.buttonGroup.marginBottom) / folderDimensions.buttonItem.height
+  );
 
-  // const folderHeightDifferenceOfMaxHeight = folderHeight - maxFolderHeight;
+  const slicedBeforeFolderArr = folderToChange.arr.slice(0, idxToSliceSlicedFolderArr);
+  const slicedAfterFolderArr = folderToChange.arr.slice(idxToSliceSlicedFolderArr);
 
-  const difference = folderThatHaveHeightMoreThanMaxFolderHeight.folderGroupHeight - maxFolderHeight;
+  const sliderFolderNames = {
+    BEFORE: `${folderToChange.id}_before`,
+    OPEN_MORE:'OPEN_MORE',
+    AFTER: `${folderToChange.id}_after`,
+  };
 
-  const endIdx = (difference - folderDimensions.buttonGroup.marginBottom) / folderDimensions.buttonItem.height - 1;
+  const slicedBeforeFolder = useAddIdToFolder({
+    [sliderFolderNames.BEFORE]: {
+      label: folderToChange.label,
+      arr: slicedBeforeFolderArr
+    }
+  });
 
-  const arrayFromNotValidatedFolderOrderNames = Array.from(notValidatedFolderOrderNames);
+  const slicedAfterFolder = useAddIdToFolder({
+    [sliderFolderNames.AFTER]: {
+      label: folderToChange.label,
+      arr: slicedAfterFolderArr
+    }
+  });
 
-  const folderOrderNamesBefore = [...arrayFromNotValidatedFolderOrderNames.slice(0, endIdx - 1), OPEN_MORE];
-  const folderOrderNamesAfter = arrayFromNotValidatedFolderOrderNames.slice(endIdx);
+  const openMoreFolder = useAddIdToFolder({
+    [sliderFolderNames.OPEN_MORE]: {
+      label: '',
+      arr: [
+        {
+          title: 'Open more',
+          iconName: 'more',
+          id: sliderFolderNames.OPEN_MORE,
+          property: { value: AdditionalFolderPropertyNames.ON_CLICK },
+          color: 'default'
+        }
+      ]
+    }
+  });
 
+  const foldersBefore = { ...defaultBeforeFoldersObj, ...slicedBeforeFolder, ...openMoreFolder };
+  const foldersAfter = { ...defaultAfterFoldersObj, ...slicedAfterFolder };
+
+  const validatedDefautlFolderNames = Array.from(notValidatedFolderOrderNames);
+  const startIdxToSliceFolderNames = findIndex(notValidatedFolderOrderNames, key);
+
+  validatedDefautlFolderNames.splice(startIdxToSliceFolderNames - 1, 1, ...values(sliderFolderNames));
+  const folderOrderNames = validatedDefautlFolderNames;
+  console.log(foldersAfter, foldersBefore, validatedDefautlFolderNames);
   return {
     folderDimensions,
-    folderOrderNamesBefore,
-    folderOrderNamesAfter
+    folderOrderNames,
+    foldersBefore,
+    foldersAfter
   };
-  // const foldersSize = buttonSize + allMarginsOfToogleGroups;
-  // const windowSize = positionOfFolderViewWithPakeepViewIsBottom ? windowWidth : windowHeight;
-
-  // const idxOfFolderItemWhichShouldBeInMenu =
-  //   flattenAllFolders.length - ~~((foldersSize - windowSize) / avarageButtonSize);
-
-  // const arrToMapOfMoreMenu = filter(flattenAllFolders, (el, idx) => idxOfFolderItemWhichShouldBeInMenu <= idx);
 };

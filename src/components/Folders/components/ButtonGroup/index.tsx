@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import { Grid, makeStyles, Typography } from '@material-ui/core';
+import { Grid, makeStyles, Typography, Button } from '@material-ui/core';
 import ArrowDropDownOutlinedIcon from '@material-ui/icons/ArrowDropDownOutlined';
 import ArrowDropUpOutlinedIcon from '@material-ui/icons/ArrowDropUpOutlined';
 import { useTakeIcon } from 'hooks/useTakeIcon.hook';
@@ -11,38 +11,66 @@ import { useAlpha } from 'hooks/useAlpha.hook';
 import { FolderAdditionalArrPropertyType } from 'store/modules/App/types';
 
 const useStyles = makeStyles(
-  ({ palette: { secondary, text }, shape: { borderRadius }, typography: { h6, button } }) => ({
+  ({ palette: { secondary, text }, shape: { borderRadius }, typography: { h4, button } }) => ({
     container: ({
       folderDimensions: {
         buttonGroup: { marginBottom },
         buttonItem: { defaultWidth, height }
       },
-      folderColor
+      folderColor,
+      isFolderOpen,
+      isFolderExtended
     }: USeStylesOfFolderButtonGroupByPasType) => ({
       marginBottom,
+      maxWidth: isFolderExtended ? 'auto' : defaultWidth,
+
+      '&  .buttonWrapperOfFolderItem': {
+        width: '100%',
+        height: '100%',
+        padding: 0,
+        minWidth: 0,
+        minHeight: 0
+      },
       '& .folderItem': {
+        '& svg,p': {
+          color: text.hint
+        },
         '& svg': {
-          ...h6
+          ...h4
         },
         '& p': {
           ...button
         },
-        minWidth: defaultWidth,
+        // maxWidth: isFolderExtended ? 'auto' : defaultWidth,
         height,
-        borderRadius,
-        border: '1px solid',
-        borderColor: useAlpha(text.primary, 0.2)
+        borderRadius: 0,
+        border: '2px solid',
+        borderColor: useAlpha(text.primary, 0.2),
+        borderBottomColor: 'transparent',
+
+        '&:hover': {
+          borderColor: text.secondary,
+          '& svg,p': {
+            color: text.primary
+          }
+        }
       },
       '& .selectedFolderItem': {
-        borderColor: `${useAlpha(folderColor, 0.2)} !important`
+        '& svg,p': {
+          color: `${folderColor} !important`
+        },
+        background: useAlpha(folderColor, 0.2),
+        borderColor: `${useAlpha(folderColor,1)} !important`
       },
       '& .lastFolderItem': {
-        borderTopLeftRadius: '0px',
-        borderTopRightRadius: '0px '
+        borderBottomColor:  useAlpha(text.primary, 0.2),
+
+        borderBottomLeftRadius: borderRadius,
+        borderBottomRightRadius: borderRadius
       },
       '& .firstFolderItem': {
-        borderBottomLeftRadius: '0px',
-        borderBottomRightRadius: '0px '
+        borderTopLeftRadius: borderRadius,
+        borderTopRightRadius: borderRadius
       },
       '& .folderArrHaveOnlyOneItem': { borderRadius }
     })
@@ -73,18 +101,17 @@ const FolderButtonGroupByPas: FC<FolderButtonGroupByPasPropsType> = ({
   ) => {
     setAdditionalMenuState({ left, top, arr });
   };
+  if (!folder.arr.length) return null;
 
   return (
     <Grid container className={classes.container}>
       {folder.arr.map(({ color, iconName, id, property, title }, idx) => {
         const [icon] = useTakeIcon(iconName);
-
         const isSelected = id === globalFolderId;
         const isLast = folder.arr.length === idx + 1;
         const isFirst = idx === 0;
         const isFolderArrHaveOnlyOneItem = folder.arr.length === 1;
 
-        console.log(property.value);
         const isPropertyDefault = AdditionalFolderPropertyNames.DEFAULT === property.value;
         const isPropertyIsOnClick = AdditionalFolderPropertyNames.ON_CLICK === property.value;
         const isPropertyHaveAdditionalArr = AdditionalFolderPropertyNames.ADDITIONAL_ARR === property.value;
@@ -105,7 +132,7 @@ const FolderButtonGroupByPas: FC<FolderButtonGroupByPasPropsType> = ({
         };
 
         return (
-          <Grid item key={`folder_${id}`}>
+          <Grid item key={`folder_${id}`} container>
             <Grid
               container
               className={clsx(
@@ -119,8 +146,10 @@ const FolderButtonGroupByPas: FC<FolderButtonGroupByPasPropsType> = ({
               alignItems={'center'}
               onClick={onClick}
             >
-              {icon}
-              {isFolderExtended && <Typography>{title}</Typography>}
+              <Button className={'buttonWrapperOfFolderItem'}>
+                {icon}
+                {isFolderExtended && <Typography>{title}</Typography>}
+              </Button>
             </Grid>
           </Grid>
         );
