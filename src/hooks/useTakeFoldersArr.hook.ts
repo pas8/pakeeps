@@ -1,13 +1,11 @@
-import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useMeasure } from 'react-use';
 import { BASE_URL, settingUrls, SETTINGS, ACCOUNT, THEME, SECURITY, APPEARANCE } from 'layouts/RouterLayout/denotation';
 import { UseTakeFoldersArrType } from 'models/types';
-import { ALL, menuOpenStatusDenotation, OPEN_MORE } from 'models/denotation';
+import { ALL, menuOpenStatusDenotation } from 'models/denotation';
+import { toChangeMenuOpenStatus } from 'store/modules/App/actions';
 import { AdditionalFolderPropertyNames } from 'models/unums';
 import { getGlobalEventsArr, getLabels } from 'store/modules/App/selectors';
 import { usePakeepFolders } from './usePakeepFolders.hook';
-import { toChangeMenuOpenStatus } from 'store/modules/App/actions';
 import { useFindCorrectFoldersPropertyies } from './useFindCorrectFoldersPropertyies.hook';
 import { useAddAdditionalArr } from './useAddAdditionalArr.hook';
 import { useAddIdToFolder } from './useAddIdToFolder.hook';
@@ -15,28 +13,15 @@ import { useFindFolderOrderNames } from './useFindFolderOrderNames.hook';
 
 export const useTakeFoldersArr: UseTakeFoldersArrType = ({
   isFoldersHaveDraweView,
-  handleDrawerWidth,
   handleCloseFoldersWithDrawerView
 }) => {
-  const [ref, { width: drawerWidth, height: folderHeight }] = useMeasure<HTMLDivElement>();
-
-  useEffect(() => {
-    handleDrawerWidth(drawerWidth);
-  }, [drawerWidth]);
-
   const dispatch = useDispatch();
-
   const labels = useSelector(getLabels);
   const events = useSelector(getGlobalEventsArr);
 
   const handleHideFolder = () => {
     dispatch(toChangeMenuOpenStatus({ menuOpenStatus: menuOpenStatusDenotation.HIDDEN }));
-    setTimeout(() => {
-      handleDrawerWidth(0);
-    }, 400);
   };
-
-  // const
 
   const closeMenuFolderArr = [
     {
@@ -51,7 +36,7 @@ export const useTakeFoldersArr: UseTakeFoldersArrType = ({
   const navigationFolderArr = [
     {
       title: 'All pakeeps',
-      iconName: '',
+      iconName: 'infinity',
       id: ALL,
       color: 'default',
       property: { value: AdditionalFolderPropertyNames.DEFAULT_AND_ROUTE, route: BASE_URL }
@@ -69,7 +54,7 @@ export const useTakeFoldersArr: UseTakeFoldersArrType = ({
     {
       title: 'Hide folders',
       iconName: 'visibility',
-      property: { value: AdditionalFolderPropertyNames.DEFAULT_AND_ROUTE, onClick: handleHideFolder },
+      property: { value: AdditionalFolderPropertyNames.ON_CLICK, onClick: handleHideFolder },
       id: 'hide_folders',
       color: 'default'
     }
@@ -138,13 +123,6 @@ export const useTakeFoldersArr: UseTakeFoldersArrType = ({
     }
   });
 
-  const openMoreFolder = useAddIdToFolder({
-    [OPEN_MORE]: {
-      label: '',
-      arr: navigationFolderArr
-    }
-  });
-
   const defaultPakeepFolders = usePakeepFolders({ events, labels });
 
   const { correctFolderValueOrder, correctFolders } = useFindCorrectFoldersPropertyies({
@@ -160,8 +138,10 @@ export const useTakeFoldersArr: UseTakeFoldersArrType = ({
     ? [CLOSE_MENU_ID, ...correctFolderValueOrder]
     : correctFolderValueOrder;
 
-  const defaultFolderPropertyies = useFindFolderOrderNames(notValidatedAllFolders, notValidatedFolderOrderValueNames);
-  const allFolders = { ...notValidatedAllFolders, ...openMoreFolder };
+  const { ...defaultFolderPropertyies } = useFindFolderOrderNames(
+    notValidatedAllFolders,
+    notValidatedFolderOrderValueNames
+  );
 
-  return { ...defaultFolderPropertyies, ref, allFolders };
+  return { ...defaultFolderPropertyies };
 };

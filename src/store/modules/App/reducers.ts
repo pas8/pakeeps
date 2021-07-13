@@ -94,15 +94,23 @@ import { DialogLayoutName, MenusLayoutName } from 'models/unums';
 //     };
 //   });
 
-// const labelsOfInitialState: GlobalLabelsType = [
-//   { color: '', title: 'Day plans', iconName: 'category', id: 'label0', variant: 'outlined' },
-//   { color: '#dd6b2a', title: 'Week plans', iconName: 'star', id: 'label1', variant: 'outlined' },
-//   { color: 'primary', title: 'Mouth plans', iconName: 'keyboard', id: 'label2', variant: 'outlined' },
-//   { color: 'secondary', title: 'Year plans', iconName: '', id: 'label3', variant: 'outlined' },
-//   { color: '#6e9f47', title: 'Your plans', iconName: 'star', id: 'label6', variant: 'default' },
-//   { color: '', title: 'Hobby Placeholders', iconName: 'bookmark', id: 'label4', variant: 'default' },
-//   { color: '#afa646', title: 'Eco', iconName: 'eco', id: 'label8', variant: 'default' }
-// ];
+const labelsOfInitialState: GlobalLabelsType = [
+  { color: '', title: 'Day plans', iconName: 'category', id: 'label0', variant: 'outlined' },
+  { color: '#dd6b2a', title: 'Week plans', iconName: 'star', id: 'label1', variant: 'outlined' },
+  { color: '#dd6b2a', title: 'Week plans', iconName: 'star', id: 'label11', variant: 'outlined' },
+  { color: 'primary', title: 'Mouth plans', iconName: 'keyboard', id: 'label2', variant: 'outlined' },
+  { color: 'primary', title: 'Mouth plans', iconName: 'keyboard', id: 'labe11324l2', variant: 'outlined' },
+  { color: 'secondary', title: 'Year plans', iconName: '', id: 'label3', variant: 'outlined' },
+  { color: '#6e9f47', title: 'Your plans', iconName: 'star', id: 'label6', variant: 'default' },
+  { color: '', title: 'Hobby Placeholders', iconName: 'bookmark', id: 'label4', variant: 'default' },
+  { color: '#afa646', title: 'Eco', iconName: 'eco', id: 'label8', variant: 'default' },
+  { color: '#afa646', title: 'Eco', iconName: 'bookmark', id: 'la1bel8', variant: 'default' },
+  { color: '#afa646', title: 'Eco', iconName: 'bookmark', id: 'la121bel8', variant: 'default' },
+  { color: '#afa646', title: 'Eco', iconName: 'bookmark', id: '21', variant: 'default' },
+  { color: '#afa646', title: 'Eco', iconName: 'bookmark', id: '21', variant: 'default' },
+  { color: '#dd6b2a', title: 'Week plans', iconName: 'star', id: 'labe23l1', variant: 'outlined' },
+  { color: 'primary', title: 'Mouth plans', iconName: 'keyboard', id: 'lweabel2', variant: 'outlined' },
+];
 
 export const defaultAvatarProperties = {
   url: NONE,
@@ -157,7 +165,7 @@ export const nullityDefaultDialogProps = {
 
 export const firebaseAppInitialState = {
   avatarProperties: defaultAvatarProperties,
-  labels: [],
+  labels:labelsOfInitialState ,
   userData: {
     email: NONE,
     userName: NONE,

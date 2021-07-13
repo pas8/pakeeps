@@ -22,7 +22,6 @@ export type FolderOpenStatusType = {
 };
 
 export type FoldersTypeProps = {
-  handleDrawerWidth: (drawerWidth: number) => void;
 
   handleCloseFoldersWithDrawerView: () => void;
 } & DefaultUseStylesOfFoldersType &

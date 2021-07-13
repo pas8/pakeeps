@@ -207,7 +207,7 @@ const NewPaKeep: FC = () => {
   };
 
   return (
-    <Grid {...gridContainerProps}>
+    <Grid {...gridContainerProps} >
       <Grid className={classes.wrapper}>
         <Grid className={classes.inputsContainer}>
           <Grid className={classes.titleContainer}>
