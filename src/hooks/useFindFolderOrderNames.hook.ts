@@ -1,5 +1,5 @@
 import { useSelector } from 'react-redux';
-import { findKey, pickBy, omit, findIndex, values } from 'lodash';
+import { findKey, pickBy, omit, findIndex, values, isNumber } from 'lodash';
 import { useWindowSize } from 'react-use';
 import { UseFindFolderOrderNamesType } from 'models/types';
 import { AdditionalFolderPropertyNames } from 'models/unums';
@@ -9,11 +9,11 @@ import { useAddIdToFolder } from './useAddIdToFolder.hook';
 export const useFindFolderOrderNames: UseFindFolderOrderNamesType = (
   notValidatedAllFolders,
   notValidatedFolderOrderNames,
-  { handleOpenMoreFolders }
+  { handleOpenMoreFolders, aditionalFoldersHeigthObj }
 ) => {
   const folderDimensions = {
     buttonGroup: { marginLeft: 0, marginRight: 0, marginBottom: 20, marginTop: 0, labelHeight: 32 },
-    buttonItem: { defaultWidth: 42 + 12, height: 42 + 12 }
+    buttonItem: { defaultWidth: 42 + 12, height: 42 + 12 ,extendedWidth:200}
   };
 
   const { height: windowHeight, width } = useWindowSize();
@@ -34,9 +34,9 @@ export const useFindFolderOrderNames: UseFindFolderOrderNamesType = (
     const defaultFolderHeight =
       currentFolderHeight + folderDimensions.buttonGroup.marginBottom + accumulator.folderHeight;
 
-    const folderHeight = !!findedElement.label
-      ? defaultFolderHeight + folderDimensions.buttonGroup.labelHeight
-      : defaultFolderHeight;
+    const folderHeight =
+      (!!findedElement.label ? defaultFolderHeight + folderDimensions.buttonGroup.labelHeight : defaultFolderHeight) +
+      (isNumber(aditionalFoldersHeigthObj[id]) ? aditionalFoldersHeigthObj[id] : 0);
 
     const itemOfFolderHeightArr = { id, folderGroupHeight: folderHeight };
 
@@ -119,7 +119,7 @@ export const useFindFolderOrderNames: UseFindFolderOrderNamesType = (
 
   validatedDefautlFolderNames.splice(startIdxToSliceFolderNames - 1, 1, ...values(sliderFolderNames));
   const folderOrderNames = validatedDefautlFolderNames;
-  console.log(foldersAfter, foldersBefore, validatedDefautlFolderNames);
+
   return {
     folderDimensions,
     folderOrderNames,

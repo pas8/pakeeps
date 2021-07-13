@@ -225,7 +225,7 @@ export type ButtonGroupDimensionsType = {
   [Property in 'marginLeft' | 'marginRight' | 'marginBottom' | 'marginTop' | 'labelHeight']: number;
 };
 export type ButtonItemDimensionsType = {
-  [Property in 'defaultWidth' | 'height']: number;
+  [Property in 'defaultWidth' | 'height' | 'extendedWidth']: number;
 };
 
 export type FolderDimensionsType = {
@@ -242,7 +242,13 @@ export type ReturnValueOfUseFindFolderOrderNamesType = {
 
 export type HandleOpenMoreFoldersType = MouseEventHandler<HTMLButtonElement>;
 
-export type AdditionalParamsOfUseFindFolderOrderNamesType = { handleOpenMoreFolders: HandleOpenMoreFoldersType };
+export type AditionalFoldersHeigthObjType = {
+  [key: string]: number;
+};
+export type AdditionalParamsOfUseFindFolderOrderNamesType = {
+  handleOpenMoreFolders: HandleOpenMoreFoldersType;
+  aditionalFoldersHeigthObj: AditionalFoldersHeigthObjType;
+};
 
 export type UseFindFolderOrderNamesType = (
   notValidatedAllFolders: FoldersType,

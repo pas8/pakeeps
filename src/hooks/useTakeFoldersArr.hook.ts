@@ -13,8 +13,8 @@ import { useFindFolderOrderNames } from './useFindFolderOrderNames.hook';
 
 export const useTakeFoldersArr: UseTakeFoldersArrType = ({
   isFoldersHaveDraweView,
-  handleOpenMoreFolders,
-  handleCloseFoldersWithDrawerView
+  handleCloseFoldersWithDrawerView,
+  ...additiontalParamsOfUseFindFolderOrderNames
 }) => {
   const dispatch = useDispatch();
   const labels = useSelector(getLabels);
@@ -142,7 +142,7 @@ export const useTakeFoldersArr: UseTakeFoldersArrType = ({
   const { ...defaultFolderPropertyies } = useFindFolderOrderNames(
     notValidatedAllFolders,
     notValidatedFolderOrderValueNames,
-    { handleOpenMoreFolders }
+    additiontalParamsOfUseFindFolderOrderNames
   );
 
   return { ...defaultFolderPropertyies };

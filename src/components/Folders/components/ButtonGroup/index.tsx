@@ -3,7 +3,7 @@ import { Grid, makeStyles, Typography, Button } from '@material-ui/core';
 import ArrowDropDownOutlinedIcon from '@material-ui/icons/ArrowDropDownOutlined';
 import ArrowDropUpOutlinedIcon from '@material-ui/icons/ArrowDropUpOutlined';
 import { useTakeIcon } from 'hooks/useTakeIcon.hook';
-import { FC,  useState } from 'react';
+import { FC, useState } from 'react';
 import {
   FolderButtonGroupByPasPropsType,
   HandelOpenAdditionalMenuType,
@@ -14,18 +14,17 @@ import { useFindCorrectFolderFunc } from 'hooks/useFindCorrectFolderFunc.hook';
 import { useFindFolderItemPropertyies } from 'hooks/useFindFolderItemPropertyies';
 
 const useStyles = makeStyles(
-  ({ palette: { secondary, text }, shape: { borderRadius }, typography: { h4, button } }) => ({
+  ({ palette: { secondary, text }, shape: { borderRadius }, typography: { button }, spacing }) => ({
     container: ({
       folderDimensions: {
         buttonGroup: { marginBottom },
-        buttonItem: { defaultWidth, height }
+        buttonItem: { defaultWidth, height, extendedWidth }
       },
       folderColor,
       isFolderOpen,
       isFolderExtended
     }: USeStylesOfFolderButtonGroupByPasType) => ({
       marginBottom,
-      maxWidth: isFolderExtended ? 'auto' : defaultWidth,
 
       '&  .buttonWrapperOfFolderItem': {
         width: '100%',
@@ -35,13 +34,18 @@ const useStyles = makeStyles(
         minHeight: 0
       },
       '& .folderItem': {
+        minWidth: defaultWidth,
+        maxWidth: isFolderExtended ? extendedWidth : defaultWidth,
         '& svg,p': {
           color: text.hint
         },
-        '& > svg': {
-          ...h4
+        '&  svg': {
+          margin: isFolderExtended ? spacing(0, 0.8, 0, 1.2) : 0
         },
         '& p': {
+          overflow: 'hidden',
+          whiteSpace: 'nowrap',
+          textOverflow: 'ellipsis',
           ...button
         },
         // maxWidth: isFolderExtended ? 'auto' : defaultWidth,
@@ -82,10 +86,13 @@ const useStyles = makeStyles(
 const FolderButtonGroupByPas: FC<FolderButtonGroupByPasPropsType> = ({
   folder,
   folderDimensions,
+  setAditionalFoldersHeigthObj,
+  aditionalFoldersHeigthObj,
   isFolderOpen,
   isFolderExtended,
   folderColor,
   globalFolderId,
+
   ...defaultUseFindCorrectFolderFuncProps
 }) => {
   const classes = useStyles({ folderDimensions, isFolderOpen, isFolderExtended, folderColor });
@@ -98,7 +105,7 @@ const FolderButtonGroupByPas: FC<FolderButtonGroupByPasPropsType> = ({
   if (!folder.arr.length) return null;
 
   return (
-    <Grid container className={classes.container}>
+    <Grid container className={classes.container} direction={'column'}>
       {folder.arr.map(({ iconName, id, title, ...defaultFolderItemProps }, idx) => {
         const [icon] = useTakeIcon(iconName);
 
@@ -117,7 +124,7 @@ const FolderButtonGroupByPas: FC<FolderButtonGroupByPasPropsType> = ({
         });
 
         return (
-          <Grid item key={`folder_${id}`} container>
+          <Grid item key={`folder_${id}`}>
             <Grid
               container
               className={clsx(
@@ -127,13 +134,13 @@ const FolderButtonGroupByPas: FC<FolderButtonGroupByPasPropsType> = ({
                 isLast ? 'lastFolderItem' : '',
                 isFirst ? 'firstFolderItem' : ''
               )}
-              justify={isFolderExtended ? 'flex-start' : 'center'}
               alignItems={'center'}
-             
             >
-              <Button className={'buttonWrapperOfFolderItem'}  onClick={onClick}>
-                {icon}
-                {isFolderExtended && <Typography>{title}</Typography>}
+              <Button className={'buttonWrapperOfFolderItem'} onClick={onClick}>
+                <Grid container justify={isFolderExtended ? 'flex-start' : 'center'} wrap={'nowrap'}>
+                  {icon}
+                  {isFolderExtended && <Typography>{title}</Typography>}
+                </Grid>
               </Button>
             </Grid>
           </Grid>

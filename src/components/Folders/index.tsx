@@ -45,8 +45,12 @@ const Folders: FC<FoldersTypeProps> = ({
   const onClose = (e: any) => {
     setMoreFoldersMenuCordinates(nullityOfMoreFoldersMenuCordinates);
   };
+
+  const [aditionalFoldersHeigthObj, setAditionalFoldersHeigthObj] = useState({});
+
   const { folderDimensions, folderOrderNames, foldersAfter, foldersBefore } = useTakeFoldersArr({
     ...defaultUseTakeFoldersArrProps,
+    aditionalFoldersHeigthObj,
     handleOpenMoreFolders
   });
 
@@ -63,13 +67,13 @@ const Folders: FC<FoldersTypeProps> = ({
     folderOrderNames,
     globalFolderId,
     foldersAfter,
-    onClose,
+    onClose
   };
 
   return (
     <Grid>
       <Grid
-        container
+        // container
         justify={isFolderViewWithPakeepViewAlignToCenter ? 'center' : 'flex-start'}
         wrap={'nowrap'}
         direction={positionsOfFolder.isBottom ? 'row' : 'column'}
@@ -87,6 +91,8 @@ const Folders: FC<FoldersTypeProps> = ({
               const key = `FOLDER_BUTTON_GROUP_BY_PAS_${id}`;
 
               const folderButtonGroupByPasProps = {
+                setAditionalFoldersHeigthObj,
+                aditionalFoldersHeigthObj,
                 ...defaultFoldersProps,
                 folderDimensions,
                 isFolderExtended,
