@@ -7,10 +7,10 @@ import { Grid, MenuItem, makeStyles, Menu } from '@material-ui/core';
 
 import { useAlpha } from 'hooks/useAlpha.hook';
 import { getUserData } from 'store/modules/App/selectors';
-import { ACCOUNT_URL } from 'components/Folders';
 import { toChangeLoginStatus } from 'store/modules/Auth/actions';
 import { useTakeIcon } from 'hooks/useTakeIcon.hook';
 import { AccountMenuPropsType } from './types';
+import { SETTINGS_ACCOUNT_BASE_URL } from 'layouts/RouterLayout/denotation';
 
 const useStyles = makeStyles(({ spacing, shape: { borderRadius }, palette }) => ({
   containerOfHeaderAvatarButton: {
@@ -49,7 +49,11 @@ const AccountMenu: FC<AccountMenuPropsType> = ({ id, customColor, mouseX: left, 
     dispatch(toChangeLoginStatus({ isLogined: false }));
   };
   const menuItemArr = [
-    { text: `Sign in as ${name || userName || email}`, route: () => router.push(ACCOUNT_URL), iconName: 'account' },
+    {
+      text: `Sign in as ${name || userName || email}`,
+      route: () => router.push(SETTINGS_ACCOUNT_BASE_URL),
+      iconName: 'account'
+    },
     { text: 'Sign Out ', onClick: handleSignOut, iconName: 'signout' }
   ];
 

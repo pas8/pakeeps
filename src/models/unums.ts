@@ -21,6 +21,7 @@ export enum AdditionalFolderPropertyNames {
   DEFAULT = 'DEFAULT',
   ON_CLICK = 'ON_CLICK',
   ROUTE = 'ROUTE',
+  ADDITIONAL_ARR = 'ADDITIONAL_ARR',
   DEFAULT_AND_ROUTE = 'DEFAULT_AND_ROUTE',
 
 }

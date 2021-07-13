@@ -276,12 +276,13 @@ export type LabelVariantType = 'default' | 'outlined';
 export type IconNameType = string;
 export type TitleType = string;
 
+export type FolderAdditionalArrPropertyType = { title: string; route: string }[]
 export type DefaultPropertyiesOfElementOfFolderArrType = {
   property: {
     value: AdditionalFolderPropertyNames;
     onClick?: (e: any) => void;
     route?: string;
-    additionalArr?: { title: string; route: string };
+    additionalArr?: FolderAdditionalArrPropertyType;
   };
   id: string;
 };
@@ -295,12 +296,14 @@ export type ElementOfFolderArrType = {
 export type FolderArrType = ElementOfFolderArrType[];
 export type FolderIdType = string;
 
+export type FolderType = {
+  id: FolderIdType;
+  label: string;
+  arr: FolderArrType;
+};
+
 export type FoldersType = {
-  [key: string]: {
-    id: FolderIdType;
-    label: string;
-    arr: FolderArrType;
-  };
+  [key: string]: FolderType;
 };
 
 export interface IGlobalEvent {

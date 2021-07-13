@@ -1,6 +1,6 @@
 import { PopoverProps } from '@material-ui/core';
 import { Dispatch, SetStateAction } from 'react';
-import { GlobalFolderIdType } from 'store/modules/App/types';
+import { ColorType, GlobalFolderIdType } from 'store/modules/App/types';
 
 export type DefaultUseStylesOfFoldersType = {
   isFoldersHaveDraweView: boolean;
@@ -16,13 +16,17 @@ export type DefaultFoldersType = {
   globalFolderId: GlobalFolderIdType;
 };
 
+export type FolderOpenStatusType = {
+  isFolderOpen: boolean;
+  isFolderExtended: boolean;
+};
+
 export type FoldersTypeProps = {
   handleDrawerWidth: (drawerWidth: number) => void;
-  isFolderOpen: boolean;
 
-  isFolderExtended: boolean;
   handleCloseFoldersWithDrawerView: () => void;
-} & DefaultUseStylesOfFoldersType;
+} & DefaultUseStylesOfFoldersType &
+  FolderOpenStatusType;
 
 export type MoreMenuOfFoldersPropsType = {
   arrToMap: any[];
@@ -31,3 +35,6 @@ export type MoreMenuOfFoldersPropsType = {
   menuAnchorEl: PopoverProps['anchorEl'];
   flattenAllFolders: any[];
 } & DefaultFoldersType;
+
+export type HandleChangeFolderColorType = (color: ColorType) => void;
+export type HandleChangeGlobalFolderIdType = (globalFolderId: GlobalFolderIdType) => void;

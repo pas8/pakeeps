@@ -12,5 +12,5 @@ export const useValidateFolderColor: UseValidateFolderColorType = folderColor =>
       ? theme.palette.secondary.main
       : folderColor;
 
-  return { validatedFolderColor, theme };
+  return validatedFolderColor;
 };

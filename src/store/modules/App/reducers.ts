@@ -15,7 +15,7 @@ import {
   useFindPakeep,
   usePinStatusOfPakeeps
 } from './hooks';
-import { AppActionTypes, AppInitialStateInteface, GlobalLabelsType } from './types';
+import { AppActionTypes, AppInitialStateInteface, FolderOrderNamesType, GlobalLabelsType } from './types';
 import { random, sampleSize, words, filter } from 'lodash';
 //@ts-ignore
 import randomSentence from 'random-sentence';
@@ -171,7 +171,7 @@ export const firebaseAppInitialState = {
   selectedPakeepsId: [],
   pakeeps: [],
   pakeepsOrderNames: [],
-  folderOrderNames: []
+  folderOrderNames: {}
 };
 
 const nullityOfTemporaryData = {

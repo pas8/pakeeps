@@ -22,9 +22,9 @@ import clsx from 'clsx';
 import MenuByPas from 'components/Menu';
 import DialogOfCreatingCustomTheme from 'components/DialogOfCreatingCustomTheme';
 import { nanoid } from 'nanoid';
-import { themeAnchorArr } from 'components/Folders';
 import SliderByPas from 'components/Slider';
 import SettingContainer from 'components/SettingContainer';
+import { settingUrls } from 'layouts/RouterLayout/denotation';
 
 const useStyles = makeStyles(({ spacing, palette, breakpoints, shape: { borderRadius } }) => ({
   colorContainer: {
@@ -209,7 +209,7 @@ const Theme: FC<any> = () => {
   return (
     <Grid container justify={'center'}>
       <SettingContainer container className={classes.colorContainer} justify={'center'}>
-        <Grid container justify={'space-between'} id={themeAnchorArr.COLORS_ID} item>
+        <Grid container justify={'space-between'} id={settingUrls.THEME.COLORS_ID} item>
           {themePickersArr.map(props => {
             return (
               <PickerOfThemeColor
@@ -221,7 +221,12 @@ const Theme: FC<any> = () => {
             );
           })}
         </Grid>
-        <Grid className={classes.defaultThemesContainer} component={'fieldset'} id={themeAnchorArr.DEFAULT_THEMES_ID} container>
+        <Grid
+          className={classes.defaultThemesContainer}
+          component={'fieldset'}
+          id={settingUrls.THEME.DEFAULT_THEMES_ID}
+          container
+        >
           <legend>
             <Typography variant={'subtitle1'} color={'textSecondary'}>
               Default themes
@@ -261,7 +266,7 @@ const Theme: FC<any> = () => {
         <Grid
           container
           item
-          id={themeAnchorArr.BORDER_RADIUS}
+          id={settingUrls.THEME.BORDER_RADIUS}
           component={'fieldset'}
           className={clsx(classes.fieldsetContainer, classes.borderRadiusContainer)}
         >
