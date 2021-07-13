@@ -1,44 +1,33 @@
-import { useRouter } from 'next/dist/client/router';
-import { BASE_URL, settingUrls, SETTINGS, ACCOUNT, THEME, SECURITY, APPEARANCE } from 'layouts/RouterLayout/denotation';
-
-import { drop, startsWith } from 'lodash';
-import { UseTakeFoldersArrType } from 'models/types';
-import {
-  DefaultPropertyiesOfElementOfFolderArrType,
-  ElementOfFolderArrType,
-  FolderArrType,
-  FoldersType
-} from 'store/modules/App/types';
-import { ALL, menuOpenStatusDenotation } from 'models/denotation';
-import { AdditionalFolderPropertyNames } from 'models/unums';
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-  getGlobalEventsArr,
-  getLabels,
-  getGlobalFolderId,
-  getPakeepFolderOrderNames
-} from 'store/modules/App/selectors';
-import { usePakeepFolders } from './usePakeepFolders.hook';
-import { toChangeMenuOpenStatus, toChangeFolderOrderNames } from 'store/modules/App/actions';
 import { useMeasure } from 'react-use';
-import { useFindCorrectDefaultPageFoldres } from './useFindCorrectDefaultPageFoldres.hook';
+import { BASE_URL, settingUrls, SETTINGS, ACCOUNT, THEME, SECURITY, APPEARANCE } from 'layouts/RouterLayout/denotation';
+import { UseTakeFoldersArrType } from 'models/types';
+import { ALL, menuOpenStatusDenotation, OPEN_MORE } from 'models/denotation';
+import { AdditionalFolderPropertyNames } from 'models/unums';
+import { getGlobalEventsArr, getLabels } from 'store/modules/App/selectors';
+import { usePakeepFolders } from './usePakeepFolders.hook';
+import { toChangeMenuOpenStatus } from 'store/modules/App/actions';
+import { useFindCorrectFoldersPropertyies } from './useFindCorrectFoldersPropertyies.hook';
 import { useAddAdditionalArr } from './useAddAdditionalArr.hook';
 import { useAddIdToFolder } from './useAddIdToFolder.hook';
+import { useFindFolderOrderNames } from './useFindFolderOrderNames.hook';
 
 export const useTakeFoldersArr: UseTakeFoldersArrType = ({
   isFoldersHaveDraweView,
   handleDrawerWidth,
   handleCloseFoldersWithDrawerView
 }) => {
-  const [ref, { width: buttonWidth, height: buttonHeight }] = useMeasure<HTMLDivElement>();
+  const [ref, { width: drawerWidth, height: folderHeight }] = useMeasure<HTMLDivElement>();
 
-  const router = useRouter();
+  useEffect(() => {
+    handleDrawerWidth(drawerWidth);
+  }, [drawerWidth]);
+
   const dispatch = useDispatch();
 
   const labels = useSelector(getLabels);
   const events = useSelector(getGlobalEventsArr);
-  const globalFolderId = useSelector(getGlobalFolderId);
-  const folderOrderNames = useSelector(getPakeepFolderOrderNames);
 
   const handleHideFolder = () => {
     dispatch(toChangeMenuOpenStatus({ menuOpenStatus: menuOpenStatusDenotation.HIDDEN }));
@@ -119,7 +108,13 @@ export const useTakeFoldersArr: UseTakeFoldersArrType = ({
     }
   ]);
 
-  const defaultFoldersBefore = {};
+  const defaultFoldersBefore = useAddIdToFolder({
+    NAV: {
+      label: 'Nav',
+      arr: navigationFolderArr
+    }
+  });
+
   const defaultForderAfter = useAddIdToFolder({
     UTILS: {
       label: 'Utils',
@@ -134,32 +129,39 @@ export const useTakeFoldersArr: UseTakeFoldersArrType = ({
     }
   });
 
+  const CLOSE_MENU_ID = 'CLOSE_MENU';
+
   const closeMenuFolders = useAddIdToFolder({
-    CLOSE_MENU: {
-      label: 'closeMenu',
+    [CLOSE_MENU_ID]: {
+      label: 'Close_Menu',
       arr: closeMenuFolderArr
+    }
+  });
+
+  const openMoreFolder = useAddIdToFolder({
+    [OPEN_MORE]: {
+      label: '',
+      arr: navigationFolderArr
     }
   });
 
   const defaultPakeepFolders = usePakeepFolders({ events, labels });
 
-  const correctDefaultPageFolders = useFindCorrectDefaultPageFoldres({
+  const { correctFolderValueOrder, correctFolders } = useFindCorrectFoldersPropertyies({
     defaultFoldersBefore,
     defaultForderAfter,
     defaultSettingsFolders,
     defaultPakeepFolders
   });
 
-const newFolderOrderNames
+  const notValidatedAllFolders = isFoldersHaveDraweView ? { ...closeMenuFolders, ...correctFolders } : correctFolders;
 
-  const allFolders = isFoldersHaveDraweView
-    ? { ...closeMenuFolders, correctDefaultPageFolders }
-    : correctDefaultPageFolders;
+  const notValidatedFolderOrderValueNames = isFoldersHaveDraweView
+    ? [CLOSE_MENU_ID, ...correctFolderValueOrder]
+    : correctFolderValueOrder;
 
-  return { ref, folderOrderNames, foldersAfter, fordersBefore };
+  const defaultFolderPropertyies = useFindFolderOrderNames(notValidatedAllFolders, notValidatedFolderOrderValueNames);
+  const allFolders = { ...notValidatedAllFolders, ...openMoreFolder };
 
-  // const defaultAllFolders = startsWith(router.pathname, SETTING_URL) ? validatedSettingFolders : pakeepFolders;
-
-  // const allFolders = isFoldersHaveDraweView ? allFoldersWithDrawerView : defaultAllFolders;
-  // const flattenAllFolders = _.flatten(allFolders);
+  return { ...defaultFolderPropertyies, ref, allFolders };
 };
