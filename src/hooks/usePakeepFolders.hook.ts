@@ -1,5 +1,5 @@
 import { mapValues } from 'lodash';
-import { NONE, pakeepPropertyiesNames } from 'models/denotation';
+import { DEFAULT, NONE, pakeepPropertyiesNames } from 'models/denotation';
 import { UsePakeepFoldersType } from 'models/types';
 import { AdditionalFolderPropertyNames } from 'models/unums';
 import { ALL } from './../models/denotation';
@@ -33,14 +33,14 @@ export const usePakeepFolders: UsePakeepFoldersType = ({ events, labels }) => {
 
   const labelsArr = labels.map(({ title, iconName, id, color }) => ({
     title,
-    iconName,
+    iconName: !iconName || iconName === DEFAULT ? 'label' : iconName,
     id,
     property,
     color
   }));
   const eventArr = events.map(({ title, iconName, id, color }) => ({
     title,
-    iconName,
+    iconName: !iconName || iconName === DEFAULT ? 'event' : iconName,
     id,
     property,
     color

@@ -25,3 +25,11 @@ export enum AdditionalFolderPropertyNames {
   DEFAULT_AND_ROUTE = 'DEFAULT_AND_ROUTE',
 
 }
+
+
+export enum PropertyOfReturnValueOfUseFindFolderItemPropertyies {
+  IS_SELECTED = 'isSelected',
+  IS_LAST = 'isLast',
+  IS_FIRST = 'isFirst',
+  IS_FOLDER_ARR_HAVE_ONLY_ONE_ITEM = 'isFolderArrHaveOnlyOneItem'
+}

@@ -32,7 +32,6 @@ import {
   PakeepHoveringContextPropviderPropsValueType
 } from './types';
 
-export const PakeepHoveringContext = createContext({} as PakeepHoveringContextPropviderPropsValueType);
 
 const PakeepList: FC = () => {
   const dispatch = useDispatch();

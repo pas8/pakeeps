@@ -1,5 +1,5 @@
 import { useSelector } from 'react-redux';
-import { findKey,  pickBy, omit,  findIndex, values } from 'lodash';
+import { findKey, pickBy, omit, findIndex, values } from 'lodash';
 import { useWindowSize } from 'react-use';
 import { UseFindFolderOrderNamesType } from 'models/types';
 import { AdditionalFolderPropertyNames } from 'models/unums';
@@ -8,7 +8,8 @@ import { useAddIdToFolder } from './useAddIdToFolder.hook';
 
 export const useFindFolderOrderNames: UseFindFolderOrderNamesType = (
   notValidatedAllFolders,
-  notValidatedFolderOrderNames
+  notValidatedFolderOrderNames,
+  { handleOpenMoreFolders }
 ) => {
   const folderDimensions = {
     buttonGroup: { marginLeft: 0, marginRight: 0, marginBottom: 20, marginTop: 0, labelHeight: 32 },
@@ -77,8 +78,8 @@ export const useFindFolderOrderNames: UseFindFolderOrderNamesType = (
 
   const sliderFolderNames = {
     BEFORE: `${folderToChange.id}_before`,
-    OPEN_MORE:'OPEN_MORE',
-    AFTER: `${folderToChange.id}_after`,
+    OPEN_MORE: 'OPEN_MORE',
+    AFTER: `${folderToChange.id}_after`
   };
 
   const slicedBeforeFolder = useAddIdToFolder({
@@ -103,7 +104,7 @@ export const useFindFolderOrderNames: UseFindFolderOrderNamesType = (
           title: 'Open more',
           iconName: 'more',
           id: sliderFolderNames.OPEN_MORE,
-          property: { value: AdditionalFolderPropertyNames.ON_CLICK },
+          property: { value: AdditionalFolderPropertyNames.ON_CLICK, onClick: handleOpenMoreFolders },
           color: 'default'
         }
       ]

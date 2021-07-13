@@ -12,6 +12,7 @@ import {
   GlobalLabelsType,
   LabelsOfPakeepType,
   LabelVariantType,
+  PropertyOfElementOfFolderArrType,
   TitleAndTextOfPakeepType
 } from './../store/modules/App/types';
 import { PropertyiesOfPakeepElement } from './../components/PakeepList/components/PakeepElement/types';
@@ -20,7 +21,7 @@ import { SettingsInitialStateType } from 'store/modules/Settings/types';
 import { ColorInitialStateType } from 'store/modules/Color/types';
 
 import AddCircleOutlineOutlinedIcon from '@material-ui/icons/AddCircleOutlineOutlined';
-import { ChangeEventHandler, Dispatch, ReactNode, SetStateAction } from 'react';
+import { ChangeEventHandler, Dispatch, ReactNode, SetStateAction, MouseEventHandler } from 'react';
 import {
   AppInitialStateInteface,
   GlobalEventsType,
@@ -50,6 +51,11 @@ import {
 } from 'components/IconsUtils/components/LabelsList/types';
 import { Theme } from '@material-ui/core';
 import { UseMeasureRef } from 'react-use/lib/useMeasure';
+import {
+  DefaultUseFindCorrectFolderFuncPropsType,
+  HandelOpenAdditionalMenuType
+} from 'components/Folders/components/ButtonGroup/types';
+import { PropertyOfReturnValueOfUseFindFolderItemPropertyies } from './unums';
 
 export type SelectedPakeepsType = PakeepsType;
 export type SelectedPakeepsIdType = PakeepIdType[];
@@ -195,10 +201,12 @@ export type UseFindSelectedEventsType = (selectedPakeeps: PakeepsType) => Events
 
 export type UseValidateFolderColorType = (color: ColorType) => string;
 
-export type UseTakeFoldersArrType = (props: {
-  handleCloseFoldersWithDrawerView: () => void;
-  isFoldersHaveDraweView: boolean;
-}) => {} & ReturnValueOfUseFindFolderOrderNamesType;
+export type UseTakeFoldersArrType = (
+  props: {
+    handleCloseFoldersWithDrawerView: () => void;
+    isFoldersHaveDraweView: boolean;
+  } & AdditionalParamsOfUseFindFolderOrderNamesType
+) => {} & ReturnValueOfUseFindFolderOrderNamesType;
 
 export type ParamsOfUseFindCorrectFoldersPropertyiesType = {
   [Property in
@@ -232,7 +240,30 @@ export type ReturnValueOfUseFindFolderOrderNamesType = {
   folderDimensions: FolderDimensionsType;
 };
 
+export type HandleOpenMoreFoldersType = MouseEventHandler<HTMLButtonElement>;
+
+export type AdditionalParamsOfUseFindFolderOrderNamesType = { handleOpenMoreFolders: HandleOpenMoreFoldersType };
+
 export type UseFindFolderOrderNamesType = (
   notValidatedAllFolders: FoldersType,
-  notValidatedFolderOrderNames: FolderOrderNamesValueType
+  notValidatedFolderOrderNames: FolderOrderNamesValueType,
+  additionalParams: AdditionalParamsOfUseFindFolderOrderNamesType
 ) => ReturnValueOfUseFindFolderOrderNamesType;
+
+export type UseFindCorrectFolderFuncType = (
+  param: {
+    property: PropertyOfElementOfFolderArrType;
+    color: string;
+    id: string;
+    handelOpenAdditionalMenu?: HandelOpenAdditionalMenuType;
+  } & DefaultUseFindCorrectFolderFuncPropsType
+) => OnClickOfFolderButtonType;
+
+export type OnClickOfFolderButtonType = MouseEventHandler<HTMLElement>;
+
+export type UseFindFolderItemPropertyiesType = (
+  id: string,
+  idx: number,
+  globalFolderId: string,
+  folderArrLength: number
+) => { [Property in PropertyOfReturnValueOfUseFindFolderItemPropertyies]: boolean };

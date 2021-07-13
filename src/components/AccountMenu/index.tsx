@@ -3,7 +3,7 @@ import 'firebase/auth';
 import { FC } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from 'next/dist/client/router';
-import { Grid, MenuItem, makeStyles, Menu } from '@material-ui/core';
+import { Grid, MenuItem, makeStyles, Menu, Typography } from '@material-ui/core';
 
 import { useAlpha } from 'hooks/useAlpha.hook';
 import { getUserData } from 'store/modules/App/selectors';
@@ -12,7 +12,7 @@ import { useTakeIcon } from 'hooks/useTakeIcon.hook';
 import { AccountMenuPropsType } from './types';
 import { SETTINGS_ACCOUNT_BASE_URL } from 'layouts/RouterLayout/denotation';
 
-const useStyles = makeStyles(({ spacing, shape: { borderRadius }, palette }) => ({
+const useStyles = makeStyles(({ spacing, shape: { borderRadius }, palette, typography: { subtitle2, subtitle1 } }) => ({
   containerOfHeaderAvatarButton: {
     maxWidth: spacing(4.2),
     height: spacing(4.2),
@@ -27,6 +27,10 @@ const useStyles = makeStyles(({ spacing, shape: { borderRadius }, palette }) => 
   menuItemContainer: {
     '& div': {
       zIndex: 10000
+    },
+    '& p': {
+      ...subtitle2,
+      fontSize: subtitle1.fontSize
     },
     '&:hover .MuiTouchRipple-root': {
       background: useAlpha(palette.secondary.main, 0.42)
@@ -72,7 +76,7 @@ const AccountMenu: FC<AccountMenuPropsType> = ({ id, customColor, mouseX: left, 
             <MenuItem onClick={onClick} className={classes.menuItemContainer} key={`menuItemContainer-${text}`}>
               <Grid container alignItems={'center'}>
                 {!!iconName ? icon : null}
-                {text}
+                <Typography> {text} </Typography>
               </Grid>
             </MenuItem>
           );

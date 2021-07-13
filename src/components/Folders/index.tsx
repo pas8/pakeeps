@@ -2,13 +2,16 @@ import { Grid, Slide } from '@material-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
 import { FC, useState } from 'react';
 import { getGlobalFolderId } from 'store/modules/App/selectors';
+import { sum, values } from 'lodash';
 import { DEFAULT } from 'models/denotation';
+import { HandleOpenMoreFoldersType } from 'models/types';
 import { useValidateFolderColor } from 'hooks/useValidateFolderColor.hook';
 import { useTakeFoldersArr } from 'hooks/useTakeFoldersArr.hook';
 import { toChangeGlobalFolderId } from 'store/modules/App/actions';
 import { ColorType } from 'store/modules/App/types';
 import { FoldersTypeProps, HandleChangeFolderColorType, HandleChangeGlobalFolderIdType } from './types';
 import FolderButtonGroupByPas from './components/ButtonGroup';
+import MoreMenuOfFolders from './components/MoreMenu';
 
 const Folders: FC<FoldersTypeProps> = ({
   isFolderOpen,
@@ -30,11 +33,39 @@ const Folders: FC<FoldersTypeProps> = ({
     dispatch(toChangeGlobalFolderId({ globalFolderId }));
   };
 
+  const nullityOfMoreFoldersMenuCordinates = { top: 0, left: 0 };
+  const [moreFoldersMenuCordinates, setMoreFoldersMenuCordinates] = useState(nullityOfMoreFoldersMenuCordinates);
+
+  const isMoreFoldersMenuOpen = !!sum(values(moreFoldersMenuCordinates));
+
+  const handleOpenMoreFolders: HandleOpenMoreFoldersType = ({ clientX: left, clientY: top }) => {
+    setMoreFoldersMenuCordinates({ left, top });
+  };
+
+  const onClose = (e: any) => {
+    setMoreFoldersMenuCordinates(nullityOfMoreFoldersMenuCordinates);
+  };
   const { folderDimensions, folderOrderNames, foldersAfter, foldersBefore } = useTakeFoldersArr({
-    ...defaultUseTakeFoldersArrProps
+    ...defaultUseTakeFoldersArrProps,
+    handleOpenMoreFolders
   });
 
   const isFolderViewWithPakeepViewAlignToCenter = false;
+
+  const defaultFoldersProps = {
+    handleChangeGlobalFolderId,
+    handleChangeFolderColor
+  };
+
+  const moreMenuOfFoldersProps = {
+    ...moreFoldersMenuCordinates,
+    ...defaultFoldersProps,
+    folderOrderNames,
+    globalFolderId,
+    foldersAfter,
+    onClose,
+  };
+
   return (
     <Grid>
       <Grid
@@ -44,7 +75,7 @@ const Folders: FC<FoldersTypeProps> = ({
         direction={positionsOfFolder.isBottom ? 'row' : 'column'}
       >
         <Slide
-          in={isFolderOpen || isFolderExtended}
+          in={true}
           mountOnEnter
           unmountOnExit
           direction={positionsOfFolder.isBottom ? 'down' : positionsOfFolder.isRight ? 'left' : 'right'}
@@ -56,8 +87,7 @@ const Folders: FC<FoldersTypeProps> = ({
               const key = `FOLDER_BUTTON_GROUP_BY_PAS_${id}`;
 
               const folderButtonGroupByPasProps = {
-                handleChangeGlobalFolderId,
-                handleChangeFolderColor,
+                ...defaultFoldersProps,
                 folderDimensions,
                 isFolderExtended,
                 globalFolderId,
@@ -72,6 +102,7 @@ const Folders: FC<FoldersTypeProps> = ({
           </Grid>
         </Slide>
       </Grid>
+      {isMoreFoldersMenuOpen && <MoreMenuOfFolders {...moreMenuOfFoldersProps} />}
     </Grid>
   );
 };

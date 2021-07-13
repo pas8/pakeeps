@@ -4,16 +4,18 @@ import dynamic from 'next/dynamic';
 import { useSelector } from 'react-redux';
 import { getAnonymousStatus, getLoginedStatus } from 'store/modules/Auth/selectors';
 import { getIsAuthedWithLocalPassword } from 'store/modules/App/selectors';
+import PakeepList from 'components/PakeepList';
+import NewPakeep from 'components/NewPakeep';
 
-const PakeepList = dynamic(() => import('components/PakeepList'), {
-  loading: () => (
-    <Grid style={{ height: '80vh', width: '90vw' }} container alignItems={'center'} justify={'center'}>
-      <CircularProgress />
-    </Grid>
-  )
-});
+// const PakeepList = dynamic(() => import('components/PakeepList'), {
+//   loading: () => (
+//     <Grid style={{ height: '80vh', width: '90vw' }} container alignItems={'center'} justify={'center'}>
+//       <CircularProgress />
+//     </Grid>
+//   )
+// });
 
-const NewPakeep = dynamic(() => import('components/NewPakeep'), {});
+// const NewPakeep = dynamic(() => import('components/NewPakeep'), {});
 
 const Pakeeps: FC = () => {
   const isLogined = useSelector(getLoginedStatus);

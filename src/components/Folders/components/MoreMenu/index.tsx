@@ -1,9 +1,10 @@
-import { Menu, makeStyles, MenuItem } from '@material-ui/core';
+import { Menu, makeStyles, MenuItem, Grid } from '@material-ui/core';
 import { ToggleButton, ToggleButtonGroup } from '@material-ui/lab';
 import { findIndex } from 'lodash';
 import { FC, MouseEventHandler } from 'react';
 import { MoreMenuOfFoldersPropsType } from 'components/Folders/types';
 import { useTakeIcon } from 'hooks/useTakeIcon.hook';
+import { useFindCorrectFolderFunc } from 'hooks/useFindCorrectFolderFunc.hook';
 const useStyles = makeStyles(({ spacing }) => ({
   container: {
     '& button': {
@@ -16,46 +17,49 @@ const useStyles = makeStyles(({ spacing }) => ({
 }));
 
 const MoreMenuOfFolders: FC<MoreMenuOfFoldersPropsType> = ({
-  arrToMap,
-  isMoreMenuopen,
-  handleCloseMenu,
-  menuAnchorEl,
-  flattenAllFolders
+  globalFolderId,
+  top,
+  foldersAfter,
+  left,
+  folderOrderNames,
+  onClose,
+  ...defaultUseFindCorrectFolderFuncProps
 }) => {
   const classes = useStyles();
   return (
-    <>FUCK</>
-    // <Menu
-    //   anchorEl={menuAnchorEl}
-    //   keepMounted
-    //   open={isMoreMenuopen}
-    //   onClose={handleCloseMenu}
-    //   className={classes.container}
-    // >
-    //   <ToggleButtonGroup orientation={'vertical'} value={value} exclusive onChange={handleChange}>
-    //     {arrToMap.map(({ title, iconName, property, id, onClick }) => {
-    //       const findedIdx = findIndex(flattenAllFolders, ({ id: folderId }) => folderId === id);
-    //       const [icon] = useTakeIcon(iconName ? iconName : (property === 'label' && 'label') || 'infinity');
+    <Menu
+      keepMounted
+      open={true}
+      anchorReference={'anchorPosition'}
+      anchorPosition={{ top, left }}
+      onClose={onClose}
+      className={classes.container}
+    >
+      {folderOrderNames.map((id, idx) => {
+        const folder = foldersAfter[id];
+        if (!folder) return null;
+        const key = `MORE_MENU_OF_FOLDERS${id}_${idx}`;
 
-    //       const onClickOfToggleButton:MouseEventHandler<HTMLButtonElement> = e => {
-    //         onClick && e.preventDefault();
-    //         onClick && onClick(e);
-    //         handleCloseMenu();
-    //       };
+        return (
+          <Grid key={key}>
+            {folder.arr.map(({ iconName, id, title, ...defaultFolderItemProps }, idx) => {
+              const [icon] = useTakeIcon(iconName);
 
-    //       const menuItemProps = {
-    //         onClick: onClickOfToggleButton,
-    //         key: `MoreMenuOfFolders-${id}`,
-    //         value: findedIdx
-    //       };
-    //       return (
-    //         <ToggleButton {...menuItemProps}>
-    //           {icon} {title}
-    //         </ToggleButton>
-    //       );
-    //     })}
-    //   </ToggleButtonGroup>
-    // </Menu>
+              const onClick = useFindCorrectFolderFunc({
+                ...defaultUseFindCorrectFolderFuncProps,
+                ...defaultFolderItemProps,
+                id
+              });
+
+              return <MenuItem key={`${key}_item_${id}_${idx}`} onClick={onClick}>
+
+                {icon}{title}
+              </MenuItem>;
+            })}
+          </Grid>
+        );
+      })}
+    </Menu>
   );
 };
 
