@@ -27,7 +27,6 @@ export const attributesName = {
   EVENT: 'event',
   LABEL: 'label'
 };
+export const OPEN_MORE = 'OPEN_MORE';
 
-
-
-export const ALL = 'ALL'
+export const ALL = 'ALL';

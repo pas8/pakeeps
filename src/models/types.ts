@@ -7,6 +7,7 @@ import {
   DefaultFolderElementPropertyType,
   DefaultPakeepElementType,
   FolderOrderNamesType,
+  FolderOrderNamesValueType,
   FoldersType,
   GlobalLabelsType,
   LabelsOfPakeepType,
@@ -199,8 +200,42 @@ export type UseTakeFoldersArrType = (props: {
   handleDrawerWidth: (value: number) => void;
   isFoldersHaveDraweView: boolean;
 }) => {
-  folderOrderNames: FolderOrderNamesType;
-  fordersBefore: FoldersType;
-  foldersAfter: FoldersType;
   ref: UseMeasureRef<HTMLDivElement>;
+  allFolders: FoldersType;
+} & ReturnValueOfUseFindFolderOrderNamesType;
+
+export type ParamsOfUseFindCorrectFoldersPropertyiesType = {
+  [Property in
+    | 'defaultPakeepFolders'
+    | 'defaultFoldersBefore'
+    | 'defaultForderAfter'
+    | 'defaultSettingsFolders']: FoldersType;
 };
+
+export type UseFindCorrectFoldersPropertyiesType = (params: ParamsOfUseFindCorrectFoldersPropertyiesType) => {
+  correctFolders: FoldersType;
+  correctFolderValueOrder: FolderOrderNamesValueType;
+};
+
+export type ButtonGroupDimensionsType = {
+  [Property in 'marginLeft' | 'marginRight' | 'marginBottom' | 'marginTop' | 'labelHeight']: number;
+};
+export type ButtonItemDimensionsType = {
+  [Property in 'defaultWidth' | 'height']: number;
+};
+
+export type FolderDimensionstype = {
+  buttonGroup: ButtonGroupDimensionsType;
+  buttonItem: ButtonItemDimensionsType;
+};
+
+export type ReturnValueOfUseFindFolderOrderNamesType = {
+  folderOrderNamesAfter: FolderOrderNamesValueType;
+  folderOrderNamesBefore: FolderOrderNamesValueType;
+  folderDimensions: FolderDimensionstype;
+};
+
+export type UseFindFolderOrderNamesType = (
+  notValidatedAllFolders: FoldersType,
+  notValidatedFolderOrderNames: FolderOrderNamesValueType
+) => ReturnValueOfUseFindFolderOrderNamesType;

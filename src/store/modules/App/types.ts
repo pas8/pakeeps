@@ -417,8 +417,8 @@ export type HeaderPropertyiesType = {
   orderIds: string[];
 };
 
-export type FolderOrderNamesValueType = string;
-export type FolderOrderNamesType = FolderOrderNamesValueType[];
+export type FolderOrderNamesValueType = string[];
+export type FolderOrderNamesType = { [key: string]: FolderOrderNamesValueType };
 
 export interface AppInitialStateInteface {
   // breakpointsValues: BreakpointsValuesInterface<number>;
