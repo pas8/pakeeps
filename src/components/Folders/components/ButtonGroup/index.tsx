@@ -12,27 +12,53 @@ import {
 import { useAlpha } from 'hooks/useAlpha.hook';
 import { useFindCorrectFolderFunc } from 'hooks/useFindCorrectFolderFunc.hook';
 import { useFindFolderItemPropertyies } from 'hooks/useFindFolderItemPropertyies';
+import LockButton from 'components/Header/components/ViewLikeInTelegram/components/LockButton';
 
 const useStyles = makeStyles(
   ({ palette: { secondary, text }, shape: { borderRadius }, typography: { button }, spacing }) => ({
     container: ({
       folderDimensions: {
-        buttonGroup: { marginBottom },
+        container,
+        buttonGroup: { marginBottom, labelHeight },
         buttonItem: { defaultWidth, height, extendedWidth }
       },
       folderColor,
       isFolderOpen,
-      isFolderExtended
+      isFolderExtended,
+      isButtonIsOpenMore
     }: USeStylesOfFolderButtonGroupByPasType) => ({
-      marginBottom,
+      ...container,
+      marginBottom: isButtonIsOpenMore ? 0 : marginBottom,
 
+      '& legend': {
+        display: 'flex',
+        alignItems: 'center',
+        ' & p': {
+          overflow: 'hidden',
+          textOverflow: 'ellipsis',
+          whiteSpace: 'nowrap'
+        },
+        height: labelHeight,
+        color: text.hint,
+        borderTopLeftRadius: borderRadius,
+        borderTopRightRadius: borderRadius,
+        minWidth: defaultWidth,
+
+        maxWidth: isFolderExtended ? extendedWidth : defaultWidth,
+        padding: spacing(0, 0.8, 0, 0.8),
+        border: '1px solid',
+        borderColor: useAlpha(text.primary, 0.2),
+        borderBottomWidth: 0
+      },
       '&  .buttonWrapperOfFolderItem': {
+        position: 'relative',
         width: '100%',
         height: '100%',
         padding: 0,
         minWidth: 0,
         minHeight: 0
       },
+
       '& .folderItem': {
         minWidth: defaultWidth,
         maxWidth: isFolderExtended ? extendedWidth : defaultWidth,
@@ -45,9 +71,11 @@ const useStyles = makeStyles(
         '& p': {
           overflow: 'hidden',
           whiteSpace: 'nowrap',
+          paddingRight: spacing(0.8),
           textOverflow: 'ellipsis',
           ...button
         },
+
         // maxWidth: isFolderExtended ? 'auto' : defaultWidth,
         height,
         borderRadius: 0,
@@ -62,14 +90,16 @@ const useStyles = makeStyles(
           }
         }
       },
-      '& .selectedFolderItem': {
-        '& svg,p': {
-          color: `${folderColor} !important`
-        },
-        background: useAlpha(folderColor, 0.2),
-        borderColor: `${useAlpha(folderColor, 1)} !important`
+
+      '& .folderItemWithAdditionalArrowButtonVisible': {
+        '& p': {
+          // margin:10,
+          paddingRight: `${spacing(4)}px !important`
+        }
       },
+
       '& .lastFolderItem': {
+        margin: 0,
         borderBottomColor: useAlpha(text.primary, 0.2),
 
         borderBottomLeftRadius: borderRadius,
@@ -79,7 +109,31 @@ const useStyles = makeStyles(
         borderTopLeftRadius: borderRadius,
         borderTopRightRadius: borderRadius
       },
-      '& .folderArrHaveOnlyOneItem': { borderRadius }
+
+      '& .dashedFolderItem': {
+        borderRadius: 0,
+        borderTopStyle: !isFolderExtended ? 'solid' : 'dashed',
+        '&:hover': {
+          borderTopStyle: 'solid'
+        }
+      },
+      '& .folderArrHaveOnlyOneItem': {
+        borderBottomLeftRadius: borderRadius,
+        borderBottomRightRadius: borderRadius
+      },
+      '& .additionalArrowButton': {
+        position: 'absolute',
+        right: 0
+      },
+      '& .selectedFolderItem': {
+        '& svg,p': {
+          color: `${folderColor} !important`
+        },
+        borderStyle: 'solid',
+
+        background: useAlpha(folderColor, 0.2),
+        borderColor: `${useAlpha(folderColor, 1)} !important`
+      }
     })
   })
 );
@@ -95,10 +149,11 @@ const FolderButtonGroupByPas: FC<FolderButtonGroupByPasPropsType> = ({
 
   ...defaultUseFindCorrectFolderFuncProps
 }) => {
-  const classes = useStyles({ folderDimensions, isFolderOpen, isFolderExtended, folderColor });
+  const isButtonIsOpenMore = folder.id === 'OPEN_MORE';
+
+  const classes = useStyles({ folderDimensions, isFolderOpen, isFolderExtended, folderColor, isButtonIsOpenMore });
 
   const [additionalMenuId, setAdditionalMenuId] = useState('');
-
   const handelOpenAdditionalMenu: HandelOpenAdditionalMenuType = id => {
     setAdditionalMenuId(id);
   };
@@ -106,6 +161,12 @@ const FolderButtonGroupByPas: FC<FolderButtonGroupByPasPropsType> = ({
 
   return (
     <Grid container className={classes.container} direction={'column'}>
+      {!!folder?.label && !!isFolderExtended && (
+        <Typography component={'legend'}>
+          <p> {folder.label}</p>
+        </Typography>
+      )}
+
       {folder.arr.map(({ iconName, id, title, ...defaultFolderItemProps }, idx) => {
         const [icon] = useTakeIcon(iconName);
 
@@ -115,6 +176,7 @@ const FolderButtonGroupByPas: FC<FolderButtonGroupByPasPropsType> = ({
           globalFolderId,
           folder.arr.length
         );
+        // console.log(additionalMenuId,defaultFolderItemProps.property.additionalArr)
 
         const onClick = useFindCorrectFolderFunc({
           ...defaultUseFindCorrectFolderFuncProps,
@@ -122,6 +184,9 @@ const FolderButtonGroupByPas: FC<FolderButtonGroupByPasPropsType> = ({
           handelOpenAdditionalMenu,
           id
         });
+        // console.log(defaultFolderItemProps.property.additionalArr);
+
+        const isAdditionalArrowButtonVisible = isFolderExtended && defaultFolderItemProps.property.additionalArr;
 
         return (
           <Grid item key={`folder_${id}`}>
@@ -132,7 +197,8 @@ const FolderButtonGroupByPas: FC<FolderButtonGroupByPasPropsType> = ({
                 isFolderArrHaveOnlyOneItem ? 'folderArrHaveOnlyOneItem' : '',
                 isSelected ? 'selectedFolderItem' : '',
                 isLast ? 'lastFolderItem' : '',
-                isFirst ? 'firstFolderItem' : ''
+                isAdditionalArrowButtonVisible ? 'folderItemWithAdditionalArrowButtonVisible' : '',
+                isFirst ? (!!folder.label && isFolderExtended ? 'dashedFolderItem' : 'firstFolderItem') : ''
               )}
               alignItems={'center'}
             >
@@ -140,12 +206,26 @@ const FolderButtonGroupByPas: FC<FolderButtonGroupByPasPropsType> = ({
                 <Grid container justify={isFolderExtended ? 'flex-start' : 'center'} wrap={'nowrap'}>
                   {icon}
                   {isFolderExtended && <Typography>{title}</Typography>}
+                  {isAdditionalArrowButtonVisible && (
+                    <Grid className={'additionalArrowButton'}>
+                      {!!additionalMenuId ? <ArrowDropDownOutlinedIcon /> : <ArrowDropUpOutlinedIcon />}
+                    </Grid>
+                  )}
                 </Grid>
               </Button>
             </Grid>
           </Grid>
         );
       })}
+      {/* <Grid item>
+        <Grid container className={clsx('folderItem')} alignItems={'center'}>
+          <Button className={'buttonWrapperOfFolderItem'}>
+            <Grid container justify={isFolderExtended ? 'flex-start' : 'center'} wrap={'nowrap'}>
+              <LockButton />
+            </Grid>
+          </Button>
+        </Grid>
+      </Grid> */}
     </Grid>
   );
 };

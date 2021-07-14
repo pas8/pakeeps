@@ -1,5 +1,11 @@
 import { pakeepPropertyiesNames, NONE, menuOpenStatusDenotation } from 'models/denotation';
-import { CustomColorType, SelectedPakeepsIdType, SelectedPakeepsType, UseStylesCustomColorType } from 'models/types';
+import {
+  CustomColorType,
+  FolderDimensionsType,
+  SelectedPakeepsIdType,
+  SelectedPakeepsType,
+  UseStylesCustomColorType
+} from 'models/types';
 import { $Keys, $Values, Brand, Optional } from 'utility-types';
 import { TypeNames } from './enums';
 import { AdditionalFolderPropertyNames, DialogLayoutName, MenusLayoutName } from 'models/unums';
@@ -432,6 +438,7 @@ export interface AppInitialStateInteface {
 
   avatarProperties: AvatarPropertiesType;
   labels: GlobalLabelsType;
+  dimensions: DimensionsType;
   events: GlobalEventsType;
   headerPropertyies: HeaderPropertyiesType;
   folderOrderNames: FolderOrderNamesType;
@@ -451,6 +458,20 @@ export type PakeepPropertyKeysType = $Keys<PakeepElementType>;
 export type OperateWOP<N> = (payload: N) => void;
 
 export type GlobalFolderIdType = string;
+
+export type PakeepItemDimensionsType = { gapX: number; gapY: number };
+
+export type PakeepDimensionsType = {
+  container: {
+    paddingLeft: number;
+    paddingRight: number;
+  };
+  pakeepItem: PakeepItemDimensionsType;
+};
+export type DimensionsType = {
+  folder: FolderDimensionsType;
+  pakeep: PakeepDimensionsType;
+};
 
 export type TemporaryDatatype = {
   selectedPakeepsId: SelectedPakeepsIdType;

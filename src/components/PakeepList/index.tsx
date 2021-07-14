@@ -146,7 +146,7 @@ const PakeepList: FC = () => {
 
   return (
     <>
-      <Grid ref={scrollerRef} className={'selectoContainer'}>
+      <Grid ref={scrollerRef} className={'selectoContainer'} container >
         {/* {isFolderPropertyIsAll && <WrapperOfContainerOfPakeepList {...wrapperOfContainerOfPinnedPakeepListProps} />} */}
 
         <WrapperOfContainerOfPakeepList {...wrapperOfContainerOfAllPakeepListProps} />

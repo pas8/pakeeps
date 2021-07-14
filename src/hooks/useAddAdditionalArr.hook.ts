@@ -1,11 +1,12 @@
 import { settingUrls } from 'layouts/RouterLayout/denotation';
-import { drop } from 'lodash';
+import { drop, map } from 'lodash';
 import { FolderArrType } from 'store/modules/App/types';
 
 export const useAddAdditionalArr = (arr: FolderArrType): FolderArrType => {
-  return arr.map(el => {
+  const newArr = arr.map(el => {
     //@ts-ignore
-    const additionalArr = drop(settingUrls[el.id]?.map((route, title) => ({ route, title })));
+    const additionalArr = drop(map(settingUrls[el.id], (route, title) => ({ route, title })));
     return { ...el, property: { ...el.property, additionalArr } };
   });
+  return newArr;
 };

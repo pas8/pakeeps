@@ -229,6 +229,9 @@ export type ButtonItemDimensionsType = {
 };
 
 export type FolderDimensionsType = {
+  container: {
+    [Property in 'paddingLeft' | 'paddingRight']: number;
+  };
   buttonGroup: ButtonGroupDimensionsType;
   buttonItem: ButtonItemDimensionsType;
 };

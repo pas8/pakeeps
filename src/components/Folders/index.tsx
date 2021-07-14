@@ -1,17 +1,27 @@
-import { Grid, Slide } from '@material-ui/core';
+import { Grid, makeStyles, Slide } from '@material-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { getGlobalFolderId } from 'store/modules/App/selectors';
 import { sum, values } from 'lodash';
 import { DEFAULT } from 'models/denotation';
 import { HandleOpenMoreFoldersType } from 'models/types';
 import { useValidateFolderColor } from 'hooks/useValidateFolderColor.hook';
 import { useTakeFoldersArr } from 'hooks/useTakeFoldersArr.hook';
-import { toChangeGlobalFolderId } from 'store/modules/App/actions';
+import { toChangeGlobalFolderId, toSetDrawerWidth } from 'store/modules/App/actions';
 import { ColorType } from 'store/modules/App/types';
 import { FoldersTypeProps, HandleChangeFolderColorType, HandleChangeGlobalFolderIdType } from './types';
 import FolderButtonGroupByPas from './components/ButtonGroup';
 import MoreMenuOfFolders from './components/MoreMenu';
+import { useMeasure } from 'react-use';
+
+const useStyles = makeStyles(({ spacing, transitions, breakpoints, palette }) => ({
+
+  container:{
+
+
+  }
+
+}))
 
 const Folders: FC<FoldersTypeProps> = ({
   isFolderOpen,
@@ -19,6 +29,8 @@ const Folders: FC<FoldersTypeProps> = ({
   isFolderExtended,
   ...defaultUseTakeFoldersArrProps
 }) => {
+
+  const classes = useStyles()
   const dispatch = useDispatch();
   const globalFolderId = useSelector(getGlobalFolderId);
 
@@ -61,6 +73,12 @@ const Folders: FC<FoldersTypeProps> = ({
     handleChangeFolderColor
   };
 
+  const [ref, { width: drawerWidth }] = useMeasure<HTMLDivElement>();
+
+  useEffect(() => {
+    dispatch(toSetDrawerWidth({ drawerWidth:drawerWidth  }));
+  }, [drawerWidth]);
+
   const moreMenuOfFoldersProps = {
     ...moreFoldersMenuCordinates,
     ...defaultFoldersProps,
@@ -71,7 +89,7 @@ const Folders: FC<FoldersTypeProps> = ({
   };
 
   return (
-    <Grid>
+    <Grid ref={ref} className={classes.container}>
       <Grid
         // container
         justify={isFolderViewWithPakeepViewAlignToCenter ? 'center' : 'flex-start'}

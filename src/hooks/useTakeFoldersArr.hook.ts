@@ -67,7 +67,7 @@ export const useTakeFoldersArr: UseTakeFoldersArrType = ({
       iconName: 'account',
       id: ACCOUNT,
       color: 'default',
-      property: { value: AdditionalFolderPropertyNames.DEFAULT_AND_ROUTE, route: settingUrls.ACCOUNT.BASE }
+      property: { value: AdditionalFolderPropertyNames.DEFAULT_AND_ROUTE, route: settingUrls[ACCOUNT].BASE }
     },
 
     {
@@ -75,7 +75,7 @@ export const useTakeFoldersArr: UseTakeFoldersArrType = ({
       iconName: 'color',
       id: THEME,
       color: 'default',
-      property: { value: AdditionalFolderPropertyNames.DEFAULT_AND_ROUTE, route: settingUrls.THEME.BASE }
+      property: { value: AdditionalFolderPropertyNames.DEFAULT_AND_ROUTE, route: settingUrls[THEME].BASE }
     },
 
     {
@@ -83,14 +83,14 @@ export const useTakeFoldersArr: UseTakeFoldersArrType = ({
       iconName: 'security',
       id: SECURITY,
       color: 'default',
-      property: { value: AdditionalFolderPropertyNames.DEFAULT_AND_ROUTE, route: settingUrls.SECURITY.BASE }
+      property: { value: AdditionalFolderPropertyNames.DEFAULT_AND_ROUTE, route: settingUrls[SECURITY].BASE }
     },
     {
       title: 'Appearance',
       iconName: 'view',
       id: APPEARANCE,
       color: 'default',
-      property: { value: AdditionalFolderPropertyNames.DEFAULT_AND_ROUTE, route: settingUrls.APPEARANCE.BASE }
+      property: { value: AdditionalFolderPropertyNames.DEFAULT_AND_ROUTE, route: settingUrls[APPEARANCE].BASE }
     }
   ]);
 

@@ -10,6 +10,7 @@ import { FolderAdditionalArrPropertyType, FolderType } from 'store/modules/App/t
 export type USeStylesOfFolderButtonGroupByPasType = {
   folderDimensions: FolderDimensionsType;
   folderColor: string;
+  isButtonIsOpenMore?:boolean
 } & FolderOpenStatusType;
 
 export type DefaultUseFindCorrectFolderFuncPropsType = {

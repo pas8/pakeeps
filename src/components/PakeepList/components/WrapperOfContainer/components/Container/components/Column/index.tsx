@@ -1,63 +1,38 @@
+import { find, sum, values } from 'lodash';
 import { makeStyles, Grid } from '@material-ui/core';
 import { VariableSizeList as List } from 'react-window';
 import React, { FC, memo, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { DraggableChildrenFn, Droppable } from 'react-beautiful-dnd';
 import clsx from 'clsx';
-import { useCustomBreakpoint } from 'hooks/useCustomBreakpoint';
+
+import PakeepElement from 'components/PakeepList/components/PakeepElement';
 import { useValidationOfPakeepsInColumn } from 'hooks/useValidationOfPakeepsInColumn.hook';
 import {
   ColumnOfPakeepListContainerPropsType,
   HandleSetPakeepElementHeigthArrType,
   PakeepElementHeigthArrType
 } from './type';
-import PakeepElement from 'components/PakeepList/components/PakeepElement';
-
 import RowOfColumnOfPakeepListContainer from './components/Row';
-import { find, sum, values } from 'lodash';
-
-const paddingValue = 0.8;
-const paddingValueX = 0.8 * 2;
-const paddingValueOfElement = 0.8 * (2 + 1);
+import { getPakeepDimensions } from 'store/modules/App/selectors';
+import { useSelector } from 'react-redux';
 
 const useStyles = makeStyles(({ spacing, breakpoints: { down } }) => ({
   column: () => ({
-    // padding: spacing(0, paddingValue),
+    // width:'calc(100% - 8px)',
     '& > div > div': {
       scrollbarColor: 'red',
       '&::-webkit-scrollbar': {
         width: 0
       }
-      // overflow: 'hidden !important'
-      // position: isPakeepDragging ? 'relative' : 'fixed'
     }
   })
-  // columnFirst: {
-  //   padding: spacing(0),
-  //   paddingRight: spacing(paddingValue),
-  //   [down('sm')]: {
-  //     paddingRight: spacing(paddingValueX / 1.8)
-  //   }
-  // },
-  // columnLast: {
-  //   padding: spacing(0),
-  //   paddingLeft: spacing(paddingValue),
-  //   [down('sm')]: {
-  //     paddingLeft: spacing(paddingValue / 1.8)
-  //   }
-  // },
-  // columnElement: {
-  //   margin: spacing(0),
-  //   marginBottom: spacing(paddingValueOfElement),
-  //   [down('sm')]: {
-  //     marginBottom: spacing(paddingValueOfElement / 1.2)
-  //   }
-  // }
 }));
 
 const ColumnOfPakeepListContainer: FC<ColumnOfPakeepListContainerPropsType & { handleSetArrOfRefs: any }> = ({
   column,
   pakeepsInColumn: notValidatedPakeepsInColumn,
   // pakeepsInColumn,
+  pakeepItemDisensions,
   isLastColumn,
   isFirstColumn,
   isPakeepDragContextPinned,
@@ -74,18 +49,6 @@ const ColumnOfPakeepListContainer: FC<ColumnOfPakeepListContainerPropsType & { h
   if (!pakeepsInColumn) return null;
 
   const classes = useStyles();
-  const [breakpoint] = useCustomBreakpoint();
-
-  const breakpointValues = { xs: 12, sm: 6, md: 4, lg: 3, xl: 2 };
-  const gridContainerProps: any = {
-    className:
-      breakpoint !== 'xs' &&
-      // clsx(classes.column, isLastColumn ? classes.columnLast : isFirstColumn && classes.columnFirst),
-      clsx(classes.column),
-    //@ts-ignore
-    [breakpoint]: breakpointValues[breakpoint],
-    spacing: 8
-  };
 
   const [pakeepElementHeigthArr, setPakeepElementHeigthArr] = useState<PakeepElementHeigthArrType>(
     {} as PakeepElementHeigthArrType
@@ -101,7 +64,7 @@ const ColumnOfPakeepListContainer: FC<ColumnOfPakeepListContainerPropsType & { h
     handleSetPakeepElementHeigthArr
   };
 
-  const DEFAULT_PAKEEP_VALUE = 200;
+  const DEFAULT_PAKEEP_HEIGHT_VALUE = 200;
 
   const toggleResetItemSize = (idx: number) => {
     if (!!ref?.current) ref.current.resetAfterIndex(idx);
@@ -111,7 +74,7 @@ const ColumnOfPakeepListContainer: FC<ColumnOfPakeepListContainerPropsType & { h
     const id = pakeepsInColumn[index]?.id;
     const size = pakeepElementHeigthArr[id!];
 
-    return (size || DEFAULT_PAKEEP_VALUE) + 16;
+    return (size || DEFAULT_PAKEEP_HEIGHT_VALUE) + pakeepItemDisensions.gapY;
   };
   const ref = useRef<any>(null);
 
@@ -128,13 +91,9 @@ const ColumnOfPakeepListContainer: FC<ColumnOfPakeepListContainerPropsType & { h
 
   const renderClone: DraggableChildrenFn = (provided, snapshot, rubric) => {
     const idx = rubric.source.index;
-
     const el = find(pakeepsInColumn, ['id', rubric.draggableId]);
 
-    // const pakeepElementHeigth = pakeepsInColumn[el?.id!]!;
-
     if (!el) return <>null</>;
-    // const isPinIconShouldBeShownInPakeep = folderProperty === 'ALL' && el.isPinned;
 
     const handleResetItemSize = () => toggleResetItemSize(idx);
 
@@ -143,7 +102,6 @@ const ColumnOfPakeepListContainer: FC<ColumnOfPakeepListContainerPropsType & { h
       ...provided.draggableProps,
       innerRef: provided.innerRef,
       ref: provided.innerRef
-      // className: classes.columnElement
     };
 
     const allPakeepElementProps = {
@@ -152,7 +110,7 @@ const ColumnOfPakeepListContainer: FC<ColumnOfPakeepListContainerPropsType & { h
       pakeepElementHeigth: pakeepElementHeigthArr[rubric.draggableId],
       handleResetItemSize,
       idx,
-      isPinIconShouldBeShownInPakeep:true,
+      isPinIconShouldBeShownInPakeep: true,
       isDragging: snapshot.isDragging
     };
     return (
@@ -168,20 +126,22 @@ const ColumnOfPakeepListContainer: FC<ColumnOfPakeepListContainerPropsType & { h
 
   const listProps = {
     ...pakeepListMeasure,
+
     ref,
     itemData: {
+      pakeepElementGapX: pakeepItemDisensions.gapX,
       pakeepsInColumn,
       toggleResetItemSize,
       defaultPakeepElementProps,
       isPakeepDragContextPinned,
-      pakeepElementHeigthArr,
+      pakeepElementHeigthArr
     },
     itemCount,
     itemSize: getItemSize
   };
 
   return (
-    <Grid {...gridContainerProps}>
+    <Grid className={clsx(classes.column)}>
       <Droppable {...droppableProps}>
         {provided => {
           return (

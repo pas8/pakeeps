@@ -1,27 +1,21 @@
 import { Menu, makeStyles, MenuItem, Grid, Typography } from '@material-ui/core';
-import { ToggleButton, ToggleButtonGroup } from '@material-ui/lab';
-import { findIndex } from 'lodash';
-import { FC, MouseEventHandler } from 'react';
+import { FC } from 'react';
 import { MoreMenuOfFoldersPropsType } from 'components/Folders/types';
 import { useTakeIcon } from 'hooks/useTakeIcon.hook';
 import { useFindCorrectFolderFunc } from 'hooks/useFindCorrectFolderFunc.hook';
 import { useAlpha } from 'hooks/useAlpha.hook';
-const useStyles = makeStyles(({ spacing, palette, shape: { borderRadius } }) => ({
+
+const useStyles = makeStyles(({ spacing, palette, shape: { borderRadius }, typography: { button } }) => ({
   container: {
     border: '1px solid',
     borderColor: useAlpha(palette.text.primary),
     borderRadius,
     borderBottom: 0,
-    '& legend':{
-      padding: spacing(0.6, 1.4,0.2),
-      borderBottom:`1px dashed ${useAlpha(palette.text.primary)}`
-
-
+    '& legend': {
+      padding: spacing(0.8, 1.4, 0.4),
+      borderBottom: `1px dashed ${useAlpha(palette.text.primary)}`
     },
-    '& .groupContainer': {
-
-
-    },
+    '& .groupContainer': {},
     '& .itemContainer': {
       padding: spacing(1.2, 1.8),
       borderBottom: '1px solid',
@@ -33,6 +27,7 @@ const useStyles = makeStyles(({ spacing, palette, shape: { borderRadius } }) => 
       color: palette.text.secondary
     },
     '& p': {
+      ...button,
       textTransform: 'uppercase'
     },
     '& svg': {

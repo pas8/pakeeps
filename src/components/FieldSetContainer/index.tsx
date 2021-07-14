@@ -10,7 +10,9 @@ const useStyles = makeStyles(
       borderColor: useAlpha(palette.text.primary, 0.2),
       display: 'flex',
       border: isOnlyTop ? '0px' : '1px',
-      borderTop: '2px solid',
+      borderTop: '2px',
+      borderStyle:isOnlyTop ? 'solid': 'solid' ,
+
       '& >  legend': {
         marginLeft: 16,
         padding: spacing(0, 0.8),

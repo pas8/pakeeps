@@ -109,7 +109,7 @@ const labelsOfInitialState: GlobalLabelsType = [
   { color: '#afa646', title: 'Eco', iconName: 'bookmark', id: '21', variant: 'default' },
   { color: '#afa646', title: 'Eco', iconName: 'bookmark', id: '21', variant: 'default' },
   { color: '#dd6b2a', title: 'Week plans', iconName: 'star', id: 'labe23l1', variant: 'outlined' },
-  { color: 'primary', title: 'Mouth plans', iconName: 'keyboard', id: 'lweabel2', variant: 'outlined' },
+  { color: 'primary', title: 'Mouth plans', iconName: 'keyboard', id: 'lweabel2', variant: 'outlined' }
 ];
 
 export const defaultAvatarProperties = {
@@ -163,9 +163,28 @@ export const nullityDefaultDialogProps = {
 //   }
 // ];
 
+export const defaultDimensions = {
+  folder: {
+    container: {
+      paddingLeft: 10,
+      paddingRight: 16
+    },
+    buttonGroup: { marginLeft: 0, marginRight: 0, marginBottom: 20, marginTop: 0, labelHeight: 32 },
+    buttonItem: { defaultWidth: 42 + 12, height: 42 + 12, extendedWidth: 200 }
+  },
+  pakeep: {
+    container: {
+      paddingLeft: 0,
+      paddingRight: 4
+    },
+    pakeepItem: { gapX: 16, gapY: 16 }
+  }
+};
+
 export const firebaseAppInitialState = {
   avatarProperties: defaultAvatarProperties,
-  labels:labelsOfInitialState ,
+  labels: labelsOfInitialState,
+  dimensions: defaultDimensions,
   userData: {
     email: NONE,
     userName: NONE,
