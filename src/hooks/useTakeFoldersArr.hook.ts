@@ -10,6 +10,7 @@ import { useFindCorrectFoldersPropertyies } from './useFindCorrectFoldersPropert
 import { useAddAdditionalArr } from './useAddAdditionalArr.hook';
 import { useAddIdToFolder } from './useAddIdToFolder.hook';
 import { useFindFolderOrderNames } from './useFindFolderOrderNames.hook';
+import { useEffect } from 'react';
 
 export const useTakeFoldersArr: UseTakeFoldersArrType = ({
   isFoldersHaveDraweView,
@@ -119,7 +120,7 @@ export const useTakeFoldersArr: UseTakeFoldersArrType = ({
 
   const closeMenuFolders = useAddIdToFolder({
     [CLOSE_MENU_ID]: {
-      label: 'Close_Menu',
+      label: '',
       arr: closeMenuFolderArr
     }
   });
@@ -139,11 +140,14 @@ export const useTakeFoldersArr: UseTakeFoldersArrType = ({
     ? [CLOSE_MENU_ID, ...correctFolderValueOrder]
     : correctFolderValueOrder;
 
-  const { ...defaultFolderPropertyies } = useFindFolderOrderNames(
+  const { foldersBefore, ...defaultFolderPropertyies } = useFindFolderOrderNames(
     notValidatedAllFolders,
     notValidatedFolderOrderValueNames,
     additiontalParamsOfUseFindFolderOrderNames
   );
 
-  return { ...defaultFolderPropertyies };
+  return {
+    ...defaultFolderPropertyies,
+    foldersBefore: isFoldersHaveDraweView ? notValidatedAllFolders : foldersBefore
+  };
 };

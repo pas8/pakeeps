@@ -167,14 +167,14 @@ export const defaultDimensions = {
   folder: {
     container: {
       paddingLeft: 10,
-      paddingRight: 16
+      paddingRight: 0
     },
     buttonGroup: { marginLeft: 0, marginRight: 0, marginBottom: 20, marginTop: 0, labelHeight: 32 },
     buttonItem: { defaultWidth: 42 + 12, height: 42 + 12, extendedWidth: 200 }
   },
   pakeep: {
     container: {
-      paddingLeft: 0,
+      paddingLeft: 16,
       paddingRight: 4
     },
     pakeepItem: { gapX: 16, gapY: 16 }

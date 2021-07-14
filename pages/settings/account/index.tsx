@@ -297,7 +297,6 @@ const SettingAccount: FC = () => {
   const onUpdateAccountData = () => {
     console.log(inputsState);
   };
-  console.log(isSizeSmall);
   return (
     <>
       <Grid container justify={'center'} className={classes.container}>

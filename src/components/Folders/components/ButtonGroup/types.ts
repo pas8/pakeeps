@@ -10,7 +10,7 @@ import { FolderAdditionalArrPropertyType, FolderType } from 'store/modules/App/t
 export type USeStylesOfFolderButtonGroupByPasType = {
   folderDimensions: FolderDimensionsType;
   folderColor: string;
-  isButtonIsOpenMore?:boolean
+  isButtonIsOpenMore?: boolean;
 } & FolderOpenStatusType;
 
 export type DefaultUseFindCorrectFolderFuncPropsType = {
@@ -25,8 +25,9 @@ export type UseStateOfAditionalFoldersHeigthObj = {
 export type FolderButtonGroupByPasPropsType = {
   folder: FolderType;
   globalFolderId: string;
-} & USeStylesOfFolderButtonGroupByPasType & 
+  isFoldersHaveDraweView: boolean;
+} & USeStylesOfFolderButtonGroupByPasType &
   UseStateOfAditionalFoldersHeigthObj &
   DefaultUseFindCorrectFolderFuncPropsType;
 
-export type HandelOpenAdditionalMenuType = (id: string) => void;
+export type HandelOpenAdditionalMenuType = (param: { id: string; arrLength: number }) => void;

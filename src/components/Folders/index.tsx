@@ -13,24 +13,22 @@ import { FoldersTypeProps, HandleChangeFolderColorType, HandleChangeGlobalFolder
 import FolderButtonGroupByPas from './components/ButtonGroup';
 import MoreMenuOfFolders from './components/MoreMenu';
 import { useMeasure } from 'react-use';
+import { useBreakpointNames } from 'hooks/useBreakpointNames.hook';
 
 const useStyles = makeStyles(({ spacing, transitions, breakpoints, palette }) => ({
-
-  container:{
-
-
-  }
-
-}))
+  container: {}
+}));
 
 const Folders: FC<FoldersTypeProps> = ({
   isFolderOpen,
   positionsOfFolder,
   isFolderExtended,
+  isFoldersHaveDraweView,
   ...defaultUseTakeFoldersArrProps
 }) => {
+  const { isSizeSmall } = useBreakpointNames();
 
-  const classes = useStyles()
+  const classes = useStyles();
   const dispatch = useDispatch();
   const globalFolderId = useSelector(getGlobalFolderId);
 
@@ -63,6 +61,7 @@ const Folders: FC<FoldersTypeProps> = ({
   const { folderDimensions, folderOrderNames, foldersAfter, foldersBefore } = useTakeFoldersArr({
     ...defaultUseTakeFoldersArrProps,
     aditionalFoldersHeigthObj,
+    isFoldersHaveDraweView,
     handleOpenMoreFolders
   });
 
@@ -76,8 +75,13 @@ const Folders: FC<FoldersTypeProps> = ({
   const [ref, { width: drawerWidth }] = useMeasure<HTMLDivElement>();
 
   useEffect(() => {
-    dispatch(toSetDrawerWidth({ drawerWidth:drawerWidth  }));
-  }, [drawerWidth]);
+    if (isSizeSmall) {
+      dispatch(toSetDrawerWidth({ drawerWidth: 0 }));
+      return;
+    }
+
+    dispatch(toSetDrawerWidth({ drawerWidth: drawerWidth }));
+  }, [drawerWidth, isSizeSmall]);
 
   const moreMenuOfFoldersProps = {
     ...moreFoldersMenuCordinates,
@@ -111,6 +115,7 @@ const Folders: FC<FoldersTypeProps> = ({
               const folderButtonGroupByPasProps = {
                 setAditionalFoldersHeigthObj,
                 aditionalFoldersHeigthObj,
+                isFoldersHaveDraweView,
                 ...defaultFoldersProps,
                 folderDimensions,
                 isFolderExtended,
