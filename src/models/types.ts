@@ -230,7 +230,7 @@ export type ButtonItemDimensionsType = {
 
 export type FolderDimensionsType = {
   container: {
-    [Property in 'paddingLeft' | 'paddingRight']: number;
+    [Property in 'paddingLeft' | 'paddingRight' | 'paddingBottom']: number;
   };
   buttonGroup: ButtonGroupDimensionsType;
   buttonItem: ButtonItemDimensionsType;
@@ -273,9 +273,14 @@ export type UseFindCorrectFolderFuncType = (
 
 export type OnClickOfFolderButtonType = MouseEventHandler<HTMLElement>;
 
+export type ReturnValueOfUseFindFolderItemPropertyiesType = {
+
+  [Property in PropertyOfReturnValueOfUseFindFolderItemPropertyies]: boolean
+}
+
 export type UseFindFolderItemPropertyiesType = (
   id: string,
   idx: number,
   globalFolderId: string,
   folderArrLength: number
-) => { [Property in PropertyOfReturnValueOfUseFindFolderItemPropertyies]: boolean };
+) => ReturnValueOfUseFindFolderItemPropertyiesType;

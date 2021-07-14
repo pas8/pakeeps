@@ -1,11 +1,12 @@
 import { useSelector } from 'react-redux';
-import { findKey, pickBy, omit, findIndex, values, isNumber } from 'lodash';
+import { findKey, pickBy, omit, findIndex, values, isNumber, sum, some } from 'lodash';
 import { useWindowSize } from 'react-use';
 import { UseFindFolderOrderNamesType } from 'models/types';
-import { menuOpenStatusDenotation } from 'models/denotation';
+import { menuOpenStatusDenotation,OPEN_MORE } from 'models/denotation';
 import { AdditionalFolderPropertyNames } from 'models/unums';
 import { getFolderDimensions, getHeaderHeight, getMenuOpenStatus } from 'store/modules/App/selectors';
 import { useAddIdToFolder } from './useAddIdToFolder.hook';
+
 
 export const useFindFolderOrderNames: UseFindFolderOrderNamesType = (
   notValidatedAllFolders,
@@ -19,46 +20,54 @@ export const useFindFolderOrderNames: UseFindFolderOrderNamesType = (
   const { height: windowHeight, width } = useWindowSize();
 
   const headerHeight = useSelector(getHeaderHeight);
-  const maxFolderHeight = windowHeight - headerHeight;
+  const maxFolderHeight = windowHeight - headerHeight - folderDimensions.container.paddingBottom
 
-  const nulittyValueOfReduceFunc = {
-    folderHeight: 0,
-    folderHeightArr: [] as { id: string; folderGroupHeight: number }[]
+  const nulittyValueOfFoldersReduceFunc = {
+    foldersHeight: 0,
+    folderGroupItemsHeightArr: [] as { id: string; folderGroupHeight: number }[],
+    folderItemsArr: [] as { id: string; height: number }[]
   };
 
-  const { folderHeight, folderHeightArr } = notValidatedFolderOrderNames.reduce((accumulator, id) => {
+  const { folderGroupItemsHeightArr, folderItemsArr } = notValidatedFolderOrderNames.reduce((accumulator, id) => {
     const findedElement = notValidatedAllFolders[id];
-    const itemCounter = findedElement.arr.length;
+    if (!findedElement) return accumulator;
 
-    const currentFolderHeight = itemCounter * folderDimensions.buttonItem.height;
-    const defaultFolderHeight =
-      currentFolderHeight + folderDimensions.buttonGroup.marginBottom + accumulator.folderHeight;
+    const nullityOfFolderGroipDimensionsReduceFunc = {
+      folderItemsArr: accumulator.folderItemsArr,
+      foldersHeight: accumulator.foldersHeight
+    };
 
-    const folderHeight =
-      (!!findedElement.label && isFolderExtended
-        ? defaultFolderHeight + folderDimensions.buttonGroup.labelHeight
-        : defaultFolderHeight) + (isNumber(aditionalFoldersHeigthObj[id]) ? aditionalFoldersHeigthObj[id] : 0);
+    const folderGroipDimensions = findedElement.arr.reduce((sum, { id }) => {
+      const findedFolderHeight = aditionalFoldersHeigthObj[id];
+      const foldersHeight = sum.foldersHeight + findedFolderHeight;
 
-    const itemOfFolderHeightArr = { id, folderGroupHeight: folderHeight };
+      const folderItemsArr = [...sum.folderItemsArr, { id, height: foldersHeight }];
 
-    return { folderHeight, folderHeightArr: [...accumulator.folderHeightArr, itemOfFolderHeightArr] };
-  }, nulittyValueOfReduceFunc);
+      return { foldersHeight, folderItemsArr };
+    }, nullityOfFolderGroipDimensionsReduceFunc);
+
+    const folderGroupItemsHeightArr = [
+      ...accumulator.folderGroupItemsHeightArr,
+      { id, folderGroupHeight: folderGroipDimensions.foldersHeight }
+    ];
+
+    return { ...folderGroipDimensions, folderGroupItemsHeightArr };
+  }, nulittyValueOfFoldersReduceFunc);
 
   const useFindIsHeightMoreThatMax = (searchingId: string) => {
-    const findedElement = folderHeightArr?.find(({ id }) => id === searchingId);
+    const findedElement = folderGroupItemsHeightArr?.find(({ id }) => id === searchingId);
     if (!findedElement) return false;
     return findedElement?.folderGroupHeight > maxFolderHeight;
   };
-  const key = findKey(notValidatedAllFolders, value => useFindIsHeightMoreThatMax(value.id));
+  const key = findKey(notValidatedAllFolders, ({ id }) => useFindIsHeightMoreThatMax(id));
 
   const defaultBeforeFoldersObj = pickBy(notValidatedAllFolders, value => !useFindIsHeightMoreThatMax(value.id));
   const defaultAfterFoldersObj = omit(
     pickBy(notValidatedAllFolders, value => useFindIsHeightMoreThatMax(value.id)),
     key!
   );
-
   const folderToChange = notValidatedAllFolders[key!];
-  const heightOffolderToChange = folderHeightArr?.find(({ id }) => id === key)?.folderGroupHeight!;
+  const folderItemIdWidthHaveMoreHeightThatMax = folderItemsArr.find(({ height }) => height > maxFolderHeight)?.id;
 
   if (!folderToChange) {
     return {
@@ -68,19 +77,15 @@ export const useFindFolderOrderNames: UseFindFolderOrderNamesType = (
       foldersAfter: []
     };
   }
-  const difference = heightOffolderToChange - maxFolderHeight;
-  const idxToSliceSlicedFolderArr = ~~(
-    folderToChange.arr.length -
-    (difference - folderDimensions.buttonGroup.marginBottom) / folderDimensions.buttonItem.height -
-    1
-  );
+  const idxToSliceSlicedFolderArr = findIndex(folderToChange.arr, ({ id }) => id === folderItemIdWidthHaveMoreHeightThatMax) -2
 
-  const slicedBeforeFolderArr = folderToChange.arr.slice(0, idxToSliceSlicedFolderArr);
-  const slicedAfterFolderArr = folderToChange.arr.slice(idxToSliceSlicedFolderArr);
+  const validatedIdxToSliceSlicedFolderArr = idxToSliceSlicedFolderArr >= 0 ? idxToSliceSlicedFolderArr : 0;
+  const slicedBeforeFolderArr = folderToChange.arr.slice(0, validatedIdxToSliceSlicedFolderArr);
+  const slicedAfterFolderArr = folderToChange.arr.slice(validatedIdxToSliceSlicedFolderArr);
 
   const sliderFolderNames = {
     BEFORE: `${folderToChange.id}_before`,
-    OPEN_MORE: 'OPEN_MORE',
+    OPEN_MORE: OPEN_MORE,
     AFTER: `${folderToChange.id}_after`
   };
 
@@ -112,14 +117,13 @@ export const useFindFolderOrderNames: UseFindFolderOrderNamesType = (
       ]
     }
   });
-
   const foldersBefore = { ...defaultBeforeFoldersObj, ...slicedBeforeFolder, ...openMoreFolder };
   const foldersAfter = { ...defaultAfterFoldersObj, ...slicedAfterFolder };
 
   const validatedDefautlFolderNames = Array.from(notValidatedFolderOrderNames);
-  const startIdxToSliceFolderNames = findIndex(notValidatedFolderOrderNames, key);
+  const startIdxToSliceFolderNames = findIndex(notValidatedFolderOrderNames, el => el === key);
 
-  validatedDefautlFolderNames.splice(startIdxToSliceFolderNames - 1, 1, ...values(sliderFolderNames));
+  validatedDefautlFolderNames.splice(startIdxToSliceFolderNames, 1, ...values(sliderFolderNames));
   const folderOrderNames = validatedDefautlFolderNames;
 
   return {
