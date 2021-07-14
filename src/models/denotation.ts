@@ -29,3 +29,4 @@ export const attributesName = {
 };
 
 export const ALL = 'ALL';
+export const OPEN_MORE = 'OPEN_MORE'

@@ -1,7 +1,7 @@
 import { Grid, makeStyles, Slide } from '@material-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
 import { FC, useEffect, useState } from 'react';
-import { getGlobalFolderId } from 'store/modules/App/selectors';
+import { getGlobalFolderId, getHeaderHeight } from 'store/modules/App/selectors';
 import { sum, values } from 'lodash';
 import { DEFAULT } from 'models/denotation';
 import { HandleOpenMoreFoldersType } from 'models/types';
@@ -16,7 +16,12 @@ import { useMeasure } from 'react-use';
 import { useBreakpointNames } from 'hooks/useBreakpointNames.hook';
 
 const useStyles = makeStyles(({ spacing, transitions, breakpoints, palette }) => ({
-  container: {}
+  container: ({ height, isFolderAfterIsEmpty }: any) => ({
+    display: 'flex',
+    justifyContent: isFolderAfterIsEmpty ? 'flex-start' : 'space-between',
+    flexDirection: 'column',
+    height: `calc(100vh - ${height}px)`
+  })
 }));
 
 const Folders: FC<FoldersTypeProps> = ({
@@ -27,8 +32,8 @@ const Folders: FC<FoldersTypeProps> = ({
   ...defaultUseTakeFoldersArrProps
 }) => {
   const { isSizeSmall } = useBreakpointNames();
+  const headerHeight = useSelector(getHeaderHeight);
 
-  const classes = useStyles();
   const dispatch = useDispatch();
   const globalFolderId = useSelector(getGlobalFolderId);
 
@@ -65,6 +70,8 @@ const Folders: FC<FoldersTypeProps> = ({
     handleOpenMoreFolders
   });
 
+  const isFolderAfterIsEmpty = !foldersAfter.length;
+
   const isFolderViewWithPakeepViewAlignToCenter = false;
 
   const defaultFoldersProps = {
@@ -91,9 +98,10 @@ const Folders: FC<FoldersTypeProps> = ({
     foldersAfter,
     onClose
   };
+  const classes = useStyles({ height: headerHeight + folderDimensions.container.paddingBottom, isFolderAfterIsEmpty });
 
   return (
-    <Grid ref={ref} className={classes.container}>
+    <Grid ref={ref}>
       <Grid
         // container
         justify={isFolderViewWithPakeepViewAlignToCenter ? 'center' : 'flex-start'}
@@ -106,7 +114,7 @@ const Folders: FC<FoldersTypeProps> = ({
           unmountOnExit
           direction={positionsOfFolder.isBottom ? 'down' : positionsOfFolder.isRight ? 'left' : 'right'}
         >
-          <Grid>
+          <Grid className={classes.container}>
             {folderOrderNames.map(id => {
               const folder = foldersBefore[id];
               if (!folder) return null;

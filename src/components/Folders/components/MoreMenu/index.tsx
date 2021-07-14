@@ -7,9 +7,12 @@ import { useAlpha } from 'hooks/useAlpha.hook';
 
 const useStyles = makeStyles(({ spacing, palette, shape: { borderRadius }, typography: { button } }) => ({
   container: {
+    padding: 0,
+    overflow: 'scoll',
     border: '1px solid',
     borderColor: useAlpha(palette.text.primary),
     borderRadius,
+    background:palette.background.paper,
     borderBottom: 0,
     '& legend': {
       padding: spacing(0.8, 1.4, 0.4),
@@ -47,11 +50,18 @@ const MoreMenuOfFolders: FC<MoreMenuOfFoldersPropsType> = ({
 }) => {
   const classes = useStyles();
   return (
-    <Menu keepMounted open={true} anchorReference={'anchorPosition'} anchorPosition={{ top, left }} onClose={onClose}>
+    <Menu
+      keepMounted
+      open={true}
+      anchorReference={'anchorPosition'}
+      anchorPosition={{ top, left }}
+      onClose={onClose}
+      style={{ width: '100%', overflowY: 'scroll' }}
+    >
       <Grid className={classes.container}>
         {folderOrderNames.map((id, idx) => {
           const folder = foldersAfter[id];
-          if (!folder) return null;
+          if (!folder?.arr) return null;
           const key = `MORE_MENU_OF_FOLDERS${id}_${idx}`;
 
           return (

@@ -167,13 +167,16 @@ export const defaultDimensions = {
   folder: {
     container: {
       paddingLeft: 10,
-      paddingRight: 0
+      paddingRight: 0,
+      paddingBottom:10,
     },
     buttonGroup: { marginLeft: 0, marginRight: 0, marginBottom: 20, marginTop: 0, labelHeight: 32 },
     buttonItem: { defaultWidth: 42 + 12, height: 42 + 12, extendedWidth: 200 }
   },
+
   pakeep: {
     container: {
+      paddingTop: 16,
       paddingLeft: 16,
       paddingRight: 4
     },
@@ -205,6 +208,7 @@ const nullityOfTemporaryData = {
   defaultMenuProps: nullityDefaultMenuProps,
   defaultDialogProps: nullityDefaultDialogProps,
   isZenModeActive: false,
+  additionalMenuState: { id: '', arrLength: 0 },
   pakeep: {
     id: '',
     isHovering: false

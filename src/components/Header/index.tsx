@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useState } from 'react';
 import clsx from 'clsx';
 import { useMeasure } from 'react-use';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { AppBar, makeStyles, Toolbar, Grid } from '@material-ui/core';
 import { menuOpenStatusDenotation, SIGN_IN_URL, NEW_USER_URL } from 'models/denotation';
 import { toChangeHeaderHeigth, toChangeMenuOpenStatus } from 'store/modules/App/actions';
@@ -12,6 +12,7 @@ import HeaderProfileUtils from './components/ProfileUtils';
 import MainBar from './components/MainBar';
 import { HeaderByPasPropsType } from './types';
 import { useBreakpointNames } from 'hooks/useBreakpointNames.hook';
+import { getPakeepDimensions } from 'store/modules/App/selectors';
 
 const useStyles = makeStyles(theme => ({
   root: ({ navigationViewLikeTelegram }: any) => ({
@@ -59,6 +60,7 @@ const HeaderByPas: FC<HeaderByPasPropsType> = ({
   const { pathname } = useRouter();
   const dispatch = useDispatch();
   const { isSizeSmall } = useBreakpointNames();
+  const pakeepDimensions = useSelector(getPakeepDimensions);
 
   const handleDrawerOpen = () => {
     const menuOpenStatus = isMenuExtended ? menuOpenStatusDenotation.OPEN : menuOpenStatusDenotation.EXTENDED;
@@ -72,7 +74,7 @@ const HeaderByPas: FC<HeaderByPasPropsType> = ({
   const [ref, { height: headerHeight }] = useMeasure<HTMLDivElement>();
 
   useEffect(() => {
-    dispatch(toChangeHeaderHeigth({ headerHeight: headerHeight + 16 }));
+    dispatch(toChangeHeaderHeigth({ headerHeight: headerHeight + pakeepDimensions.container.paddingTop }));
   }, [headerHeight]);
 
   const [isSeaching, setIsSeaching] = useState(false);

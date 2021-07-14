@@ -1,19 +1,20 @@
 import clsx from 'clsx';
 import { Grid, makeStyles, Typography, Button } from '@material-ui/core';
-import ArrowDropDownOutlinedIcon from '@material-ui/icons/ArrowDropDownOutlined';
-import ArrowDropUpOutlinedIcon from '@material-ui/icons/ArrowDropUpOutlined';
+import { useDispatch, useSelector } from 'react-redux';
+import { FC } from 'react';
+
+import { useAlpha } from 'hooks/useAlpha.hook';
+import { useFindCorrectFolderFunc } from 'hooks/useFindCorrectFolderFunc.hook';
 import { useTakeIcon } from 'hooks/useTakeIcon.hook';
-import { FC, Fragment, useEffect, useState } from 'react';
+import { useFindFolderItemPropertyies } from 'hooks/useFindFolderItemPropertyies';
+import { getAdditionalMenuState, getHeaderHeight } from 'store/modules/App/selectors';
+import { toChangeTemporaryData } from 'store/modules/App/actions';
+import FolderItem from './components/FolderItem';
 import {
   FolderButtonGroupByPasPropsType,
   HandelOpenAdditionalMenuType,
   USeStylesOfFolderButtonGroupByPasType
 } from './types';
-import { useAlpha } from 'hooks/useAlpha.hook';
-import { useFindCorrectFolderFunc } from 'hooks/useFindCorrectFolderFunc.hook';
-import { useFindFolderItemPropertyies } from 'hooks/useFindFolderItemPropertyies';
-import LockButton from 'components/Header/components/ViewLikeInTelegram/components/LockButton';
-import Link from 'next/link';
 
 const useStyles = makeStyles(
   ({ palette: { secondary, text }, shape: { borderRadius }, typography: { button, subtitle2 }, spacing }) => ({
@@ -149,10 +150,9 @@ const useStyles = makeStyles(
           color: `${folderColor} !important`
         },
         borderStyle: 'solid',
-'& .MuiTouchRipple-root':{
-background:useAlpha(folderColor, 0.2)
-
-},
+        '& .MuiTouchRipple-root': {
+          background: useAlpha(folderColor, 0.2)
+        },
         borderColor: `${useAlpha(folderColor, 1)} !important`
       },
       '& .additionalFolder': {
@@ -161,9 +161,8 @@ background:useAlpha(folderColor, 0.2)
         borderRightColor: folderColor,
         borderLeftColor: folderColor,
         borderStyle: 'dashed',
-        ' &:hover':{
-borderStyle:'solid',
-
+        ' &:hover': {
+          borderStyle: 'solid'
         },
         '& p': {
           padding: spacing(0, 0, 0, 1.8),
@@ -208,26 +207,24 @@ const FolderButtonGroupByPas: FC<FolderButtonGroupByPasPropsType> = ({
   isFolderExtended,
   folderColor,
   globalFolderId,
-
   ...defaultUseFindCorrectFolderFuncProps
 }) => {
   const isButtonIsOpenMore = folder.id === 'OPEN_MORE';
+  const dispatch = useDispatch();
 
-  const classes = useStyles({ folderDimensions, isFolderOpen, isFolderExtended, folderColor, isButtonIsOpenMore });
+  const classes = useStyles({
+    folderDimensions,
+    isFolderOpen,
+    isFolderExtended,
+    folderColor,
+    isButtonIsOpenMore,
+  });
 
-  const [additionalMenuState, setAdditionalMenuState] = useState({ id: '', arrLength: 0 });
-  const handelOpenAdditionalMenu: HandelOpenAdditionalMenuType = params => {
-    setAdditionalMenuState(params);
+  const additionalMenuState = useSelector(getAdditionalMenuState);
+
+  const handelOpenAdditionalMenu: HandelOpenAdditionalMenuType = additionalMenuState => {
+    dispatch(toChangeTemporaryData({ newTemporaryData: { additionalMenuState } }));
   };
-  useEffect(() => {
-    if (!!additionalMenuState.id) {
-      setAditionalFoldersHeigthObj({});
-      return;
-    }
-    const additionalHeight = additionalMenuState.arrLength * folderDimensions.buttonItem.height;
-
-    setAditionalFoldersHeigthObj(state => ({ ...state, [additionalMenuState.id]: additionalHeight }));
-  }, [additionalMenuState]);
 
   if (!folder.arr.length) return null;
 
@@ -246,89 +243,44 @@ const FolderButtonGroupByPas: FC<FolderButtonGroupByPasPropsType> = ({
         </Typography>
       )}
 
-      {folder.arr.map(({ iconName, id, title, ...defaultFolderItemProps }, idx) => {
+      {folder.arr.map(({ iconName, id, ...defaultFolderItemProps }, idx) => {
         const [icon] = useTakeIcon(iconName);
 
-        const { isFirst, isFolderArrHaveOnlyOneItem, isLast, isSelected } = useFindFolderItemPropertyies(
-          id,
-          idx,
-          globalFolderId,
-          folder.arr.length
-        );
+        const folderItemPropertyies = useFindFolderItemPropertyies(id, idx, globalFolderId, folder.arr.length);
         const isAdditionalButtonsVisible =
           id === additionalMenuState.id && !!defaultFolderItemProps.property.additionalArr;
 
-        const { route, onClick } = useFindCorrectFolderFunc({
+        const correctFolderFuncPropertyies = useFindCorrectFolderFunc({
           ...defaultUseFindCorrectFolderFuncProps,
           isAdditionalButtonsVisible,
           ...defaultFolderItemProps,
           handelOpenAdditionalMenu,
           id
         });
-
-        const isAdditionalArrowButtonVisible =
-          isSelected && isFolderExtended && !!defaultFolderItemProps.property.additionalArr;
-
         const key = `folder_item_${id}-${idx}`;
 
-        return (
-          <Fragment key={key}>
-            <Grid item>
-              <Grid
-                container
-                className={
-                  isFoldersHaveDraweView
-                    ? clsx('folderItem', 'folderWithDrawerViewItem')
-                    : clsx(
-                        'folderItem',
-                        'folderWithOutDrawerViewItem',
-                        isFolderArrHaveOnlyOneItem ? 'folderArrHaveOnlyOneItem' : '',
-                        isSelected ? 'selectedFolderItem' : '',
-                        isLast ? 'lastFolderItem' : '',
-                        isAdditionalButtonsVisible ? 'folderItemWithAdditionalArrowButtonVisible' : '',
-                        isFirst ? (!!folder.label && isFolderExtended ? 'dashedFolderItem' : 'firstFolderItem') : ''
-                      )
-                }
-                alignItems={'center'}
-              >
-                <Button className={'buttonWrapperOfFolderItem'} onClick={onClick}>
-                  {isFolderExtended && route && <Link href={route}>{title}</Link>}
+        const isAdditionalArrowButtonVisible =
+          folderItemPropertyies.isSelected && isFolderExtended && !!defaultFolderItemProps.property.additionalArr;
 
-                  <Grid container justify={isFolderExtended ? 'flex-start' : 'center'} wrap={'nowrap'}>
-                    {icon}
-                    {isFolderExtended && (
-                      <Typography className={isFolderExtended && route ? 'textUnderlinedOnHover' : ''}>
-                        {title}
-                      </Typography>
-                    )}
-                    {isAdditionalArrowButtonVisible && (
-                      <Grid className={'additionalArrowButton'}>
-                        {!!additionalMenuState.id ? <ArrowDropDownOutlinedIcon /> : <ArrowDropUpOutlinedIcon />}
-                      </Grid>
-                    )}
-                  </Grid>
-                </Button>
-              </Grid>
-            </Grid>
+        const folderItemProps = {
+          ...correctFolderFuncPropertyies,
+          isAdditionalArrowButtonVisible,
+          setAditionalFoldersHeigthObj,
+          isAdditionalButtonsVisible,
+          ...defaultFolderItemProps,
+          ...folderItemPropertyies,
+          isFoldersHaveDraweView,
+          additionalMenuState,
+          label: folder.label,
+          isButtonIsOpenMore,
+          isFolderExtended,
+          folderDimensions,
+          icon,
+          key,
+          id
+        };
 
-            {isAdditionalButtonsVisible &&
-              defaultFolderItemProps.property.additionalArr?.map(({ route, title }, idx) => {
-                const isLast = defaultFolderItemProps?.property?.additionalArr?.length === idx + 1;
-                return (
-                  <Grid
-                    key={`${key}_${id}_${idx}`}
-                    className={clsx('folderItem', 'additionalFolder', isLast ? 'lastAdditionalFolder' : '')}
-                    container
-                    alignItems={'center'}
-                  >
-                    <Typography component={'p'}>
-                      # <Link href={route}>{title}</Link>
-                    </Typography>
-                  </Grid>
-                );
-              })}
-          </Fragment>
-        );
+        return <FolderItem {...folderItemProps} />;
       })}
     </Grid>
   );

@@ -23,7 +23,7 @@ const useStyles = makeStyles(({ spacing, transitions, breakpoints, palette }) =>
   '@global': {
     body: {
       minHeight: '80vh',
-      overflow: 'visible !important',
+      // overflow: 'visible !important',
       overflowX: 'hidden !important',
       background: palette.background.default,
       padding: '0 !important',
@@ -58,7 +58,8 @@ const useStyles = makeStyles(({ spacing, transitions, breakpoints, palette }) =>
       }
     },
     ul: {
-      padding: ' 0 !important'
+      paddingTop: '0 !important',
+      paddingBottom: '0 !important'
     },
 
     '.MuiBackdrop-root': {

@@ -465,6 +465,7 @@ export type PakeepDimensionsType = {
   container: {
     paddingLeft: number;
     paddingRight: number;
+    paddingTop: number;
   };
   pakeepItem: PakeepItemDimensionsType;
 };
@@ -476,6 +477,7 @@ export type DimensionsType = {
 export type TemporaryDatatype = {
   selectedPakeepsId: SelectedPakeepsIdType;
   drawerWidth: DrawerWidthType;
+  additionalMenuState: { id: string; arrLength: number };
   menuOpenStatus: IsMenuOpenType;
   globalFolderId: GlobalFolderIdType;
   headerHeight: number;
