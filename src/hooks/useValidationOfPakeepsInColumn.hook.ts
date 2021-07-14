@@ -11,7 +11,7 @@ export const useValidationOfPakeepsInColumn: UseValidationOfPakeepsInColumnType 
   isPakeepDragContextPinned
 }) => {
   const folderId = useSelector(getGlobalFolderId);
-  console.log('folderId', folderId);
+  // console.log('folderId', folderId);
   // if (!notValidatedPakeepsInColumn) return null;
 
   // const validatedPakeepsInColumn: (PakeepElementType | null)[] = notValidatedPakeepsInColumn.map(el => {

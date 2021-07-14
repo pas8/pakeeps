@@ -24,7 +24,7 @@ import DialogOfCreatingCustomTheme from 'components/DialogOfCreatingCustomTheme'
 import { nanoid } from 'nanoid';
 import SliderByPas from 'components/Slider';
 import SettingContainer from 'components/SettingContainer';
-import { settingUrls } from 'layouts/RouterLayout/denotation';
+import { settingUrls, THEME } from 'layouts/RouterLayout/denotation';
 
 const useStyles = makeStyles(({ spacing, palette, breakpoints, shape: { borderRadius } }) => ({
   colorContainer: {
@@ -209,7 +209,7 @@ const Theme: FC<any> = () => {
   return (
     <Grid container justify={'center'}>
       <SettingContainer container className={classes.colorContainer} justify={'center'}>
-        <Grid container justify={'space-between'} id={settingUrls.THEME.COLORS_ID} item>
+        <Grid container justify={'space-between'} id={settingUrls[THEME].COLORS_ID} item>
           {themePickersArr.map(props => {
             return (
               <PickerOfThemeColor
@@ -224,7 +224,7 @@ const Theme: FC<any> = () => {
         <Grid
           className={classes.defaultThemesContainer}
           component={'fieldset'}
-          id={settingUrls.THEME.DEFAULT_THEMES_ID}
+          id={settingUrls[THEME].DEFAULT_THEMES_ID}
           container
         >
           <legend>
@@ -266,7 +266,7 @@ const Theme: FC<any> = () => {
         <Grid
           container
           item
-          id={settingUrls.THEME.BORDER_RADIUS}
+          id={settingUrls[THEME].BORDER_RADIUS}
           component={'fieldset'}
           className={clsx(classes.fieldsetContainer, classes.borderRadiusContainer)}
         >

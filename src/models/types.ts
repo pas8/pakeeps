@@ -259,14 +259,17 @@ export type UseFindFolderOrderNamesType = (
   additionalParams: AdditionalParamsOfUseFindFolderOrderNamesType
 ) => ReturnValueOfUseFindFolderOrderNamesType;
 
+export type ReturnValueOfUseFindCorrectFolderFuncType = { onClick: OnClickOfFolderButtonType; route: false | string };
+
 export type UseFindCorrectFolderFuncType = (
   param: {
     property: PropertyOfElementOfFolderArrType;
     color: string;
     id: string;
     handelOpenAdditionalMenu?: HandelOpenAdditionalMenuType;
+    isAdditionalButtonsVisible?: boolean;
   } & DefaultUseFindCorrectFolderFuncPropsType
-) => OnClickOfFolderButtonType;
+) => ReturnValueOfUseFindCorrectFolderFuncType;
 
 export type OnClickOfFolderButtonType = MouseEventHandler<HTMLElement>;
 
