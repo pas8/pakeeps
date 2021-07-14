@@ -29,4 +29,16 @@ export const attributesName = {
 };
 
 export const ALL = 'ALL';
-export const OPEN_MORE = 'OPEN_MORE'
+export const OPEN_MORE = 'OPEN_MORE';
+
+export const headerProfileUtilsDenotationIds = {
+  UPLOAD_BUTTON: 'UPLOAD_BUTTON',
+  THEME_CHANGER_BUTTON: 'THEME_CHANGER_BUTTON',
+  NOTICATION_BUTTON: 'NOTICATION_BUTTON',
+  LOCK_BUTTON: 'LOCK_BUTTON',
+  ZEN_MODE_BUTTON: 'ZEN_MODE_BUTTON',
+  AVATAR_BUTTON: 'AVATAR_BUTTON'
+};
+
+export const CLOSE_MENU_ID = 'CLOSE_MENU';
+export const HEADER_PROPFILE_UTILS_FOLDER = 'HEADER_PROPFILE_UTILS_FOLDER';

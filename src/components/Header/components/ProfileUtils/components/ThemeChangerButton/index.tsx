@@ -44,7 +44,7 @@ const ThemeChangerButton: FC = () => {
       {viewOfThemeChangerButton && (
         <>
           {viewOfThemeChangerButton === 'iconButton' && (
-            <Grid onClick={themePlaceholderFunc} container>
+            <Grid onClick={themePlaceholderFunc} container alignItems={'center'} justify={'center'}>
               <Brightness4OutlinedIcon />
             </Grid>
           )}

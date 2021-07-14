@@ -2,11 +2,10 @@ import { useSelector } from 'react-redux';
 import { findKey, pickBy, omit, findIndex, values, isNumber, sum, some } from 'lodash';
 import { useWindowSize } from 'react-use';
 import { UseFindFolderOrderNamesType } from 'models/types';
-import { menuOpenStatusDenotation,OPEN_MORE } from 'models/denotation';
+import { menuOpenStatusDenotation, OPEN_MORE } from 'models/denotation';
 import { AdditionalFolderPropertyNames } from 'models/unums';
 import { getFolderDimensions, getHeaderHeight, getMenuOpenStatus } from 'store/modules/App/selectors';
 import { useAddIdToFolder } from './useAddIdToFolder.hook';
-
 
 export const useFindFolderOrderNames: UseFindFolderOrderNamesType = (
   notValidatedAllFolders,
@@ -20,7 +19,8 @@ export const useFindFolderOrderNames: UseFindFolderOrderNamesType = (
   const { height: windowHeight, width } = useWindowSize();
 
   const headerHeight = useSelector(getHeaderHeight);
-  const maxFolderHeight = windowHeight - headerHeight - folderDimensions.container.paddingBottom
+  const maxFolderHeight =
+    windowHeight - headerHeight - folderDimensions.container.paddingBottom - folderDimensions.buttonItem.height -  folderDimensions.container.paddingBottom 
 
   const nulittyValueOfFoldersReduceFunc = {
     foldersHeight: 0,
@@ -74,10 +74,13 @@ export const useFindFolderOrderNames: UseFindFolderOrderNamesType = (
       folderDimensions,
       folderOrderNames: notValidatedFolderOrderNames,
       foldersBefore: notValidatedAllFolders,
-      foldersAfter: []
+      foldersAfter: {}
     };
   }
-  const idxToSliceSlicedFolderArr = findIndex(folderToChange.arr, ({ id }) => id === folderItemIdWidthHaveMoreHeightThatMax) -2
+  const idxToSliceSlicedFolderArr = findIndex(
+    folderToChange.arr,
+    ({ id }) => id === folderItemIdWidthHaveMoreHeightThatMax
+  );
 
   const validatedIdxToSliceSlicedFolderArr = idxToSliceSlicedFolderArr >= 0 ? idxToSliceSlicedFolderArr : 0;
   const slicedBeforeFolderArr = folderToChange.arr.slice(0, validatedIdxToSliceSlicedFolderArr);

@@ -18,10 +18,12 @@ export const useFindCorrectFolderFunc: UseFindCorrectFolderFuncType = ({
   const folderProperties = {
     isPropertyDefault: AdditionalFolderPropertyNames.DEFAULT === property.value,
     isPropertyIsOnClick: AdditionalFolderPropertyNames.ON_CLICK === property.value,
+    isPropertyIsCustomComponent: AdditionalFolderPropertyNames.CUSTOM_COMPONENT === property.value,
     isPropertyIsRoute: AdditionalFolderPropertyNames.ROUTE === property.value,
     isPropertyIsDefaultAndRoute: AdditionalFolderPropertyNames.DEFAULT_AND_ROUTE === property.value
   };
   const defaultOnClick: OnClickOfFolderButtonType = e => {
+    if (folderProperties.isPropertyIsCustomComponent) return;
     // !!arrLength && handelOpenAdditionalMenu && handelOpenAdditionalMenu({ id, arrLength });
 
     handleChangeFolderColor(color);

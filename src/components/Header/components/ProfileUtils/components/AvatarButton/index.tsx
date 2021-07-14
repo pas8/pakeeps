@@ -13,10 +13,12 @@ const useStyles = makeStyles(({ spacing, shape: { borderRadius }, palette }) => 
   containerOfHeaderAvatarButton: {
     // maxWidth: spacing(4.2),
     // height: spacing(4.2),
-    marginLeft: spacing(0.8),
+    // marginLeft: spacing(0.8),
     padding: 0,
     overflow: 'hidden',
     '& img': {
+      // width:'100%',
+// height:'100%',
       width: 42,
       height: 42
     }

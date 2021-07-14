@@ -7,7 +7,7 @@ import { getNotifinationCounterValue } from 'store/modules/App/selectors';
 const NoticationButton: FC = () => {
   const notifinationCounterValue = useSelector(getNotifinationCounterValue);
   return (
-    <Grid container>
+    <Grid container justify={'center'} alignItems={'center'}>
       <Badge badgeContent={notifinationCounterValue} color={'secondary'}>
         <NotificationsNoneOutlinedIcon />
       </Badge>

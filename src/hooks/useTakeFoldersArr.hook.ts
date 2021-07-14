@@ -1,16 +1,18 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { BASE_URL, settingUrls, SETTINGS, ACCOUNT, THEME, SECURITY, APPEARANCE } from 'layouts/RouterLayout/denotation';
 import { UseTakeFoldersArrType } from 'models/types';
-import { ALL, menuOpenStatusDenotation } from 'models/denotation';
+import { ALL, CLOSE_MENU_ID, HEADER_PROPFILE_UTILS_FOLDER, menuOpenStatusDenotation } from 'models/denotation';
 import { toChangeMenuOpenStatus } from 'store/modules/App/actions';
 import { AdditionalFolderPropertyNames } from 'models/unums';
-import { getGlobalEventsArr, getLabels } from 'store/modules/App/selectors';
+import { getGlobalEventsArr, getIsZenModeActive, getLabels } from 'store/modules/App/selectors';
 import { usePakeepFolders } from './usePakeepFolders.hook';
 import { useFindCorrectFoldersPropertyies } from './useFindCorrectFoldersPropertyies.hook';
 import { useAddAdditionalArr } from './useAddAdditionalArr.hook';
 import { useAddIdToFolder } from './useAddIdToFolder.hook';
 import { useFindFolderOrderNames } from './useFindFolderOrderNames.hook';
-import { useEffect } from 'react';
+import { useConvertHeaderProfileUtilsObjToFolderArr } from './useConvertHeaderProfileUtilsObjToFolderArr.hook';
+import { headerProfileUtilsObj } from 'components/Header/components/ProfileUtils';
+import MenuButton from 'components/Header/components/ProfileUtils/components/MenuButton';
 
 export const useTakeFoldersArr: UseTakeFoldersArrType = ({
   isFoldersHaveDraweView,
@@ -24,6 +26,22 @@ export const useTakeFoldersArr: UseTakeFoldersArrType = ({
   const handleHideFolder = () => {
     dispatch(toChangeMenuOpenStatus({ menuOpenStatus: menuOpenStatusDenotation.HIDDEN }));
   };
+  const headerPropfileUtilsArr = useConvertHeaderProfileUtilsObjToFolderArr(headerProfileUtilsObj);
+
+  const zenModeArr = [
+    {
+      title: 'Menu ',
+      iconName: '',
+      id: 'Menu',
+      property: { value: AdditionalFolderPropertyNames.CUSTOM_COMPONENT, customComponent: MenuButton },
+      color: 'default'
+    },
+    ...headerPropfileUtilsArr
+  ];
+
+  const headerPropfileUtilsFolder = useAddIdToFolder({
+    [HEADER_PROPFILE_UTILS_FOLDER]: { label: 'Header_Utils', arr: zenModeArr }
+  });
 
   const closeMenuFolderArr = [
     {
@@ -116,8 +134,6 @@ export const useTakeFoldersArr: UseTakeFoldersArrType = ({
     }
   });
 
-  const CLOSE_MENU_ID = 'CLOSE_MENU';
-
   const closeMenuFolders = useAddIdToFolder({
     [CLOSE_MENU_ID]: {
       label: '',
@@ -126,15 +142,22 @@ export const useTakeFoldersArr: UseTakeFoldersArrType = ({
   });
 
   const defaultPakeepFolders = usePakeepFolders({ events, labels });
+  const isZenModeActive = useSelector(getIsZenModeActive);
 
   const { correctFolderValueOrder, correctFolders } = useFindCorrectFoldersPropertyies({
-    defaultFoldersBefore,
+    defaultFoldersBefore: isZenModeActive
+      ? { ...headerPropfileUtilsFolder, ...defaultFoldersBefore }
+      : defaultFoldersBefore,
     defaultForderAfter,
     defaultSettingsFolders,
     defaultPakeepFolders
   });
 
   const notValidatedAllFolders = isFoldersHaveDraweView ? { ...closeMenuFolders, ...correctFolders } : correctFolders;
+
+  // const folderOrderValueNamesWidthZenModeValidation = isZenModeActive
+  //   ? [HEADER_PROPFILE_UTILS_FOLDER, ...correctFolderValueOrder]
+  //   : correctFolderValueOrder;
 
   const notValidatedFolderOrderValueNames = isFoldersHaveDraweView
     ? [CLOSE_MENU_ID, ...correctFolderValueOrder]

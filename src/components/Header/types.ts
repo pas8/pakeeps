@@ -15,7 +15,6 @@ export type HeaderByPasPropsType = {
 } & UseStylesOfHeaderByPasType;
 
 export type MainBarPropsType = {
-  handleDrawerOpen: () => void;
   isMenuOpen: boolean;
   isMenuExtended: boolean;
 };

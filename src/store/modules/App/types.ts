@@ -288,6 +288,7 @@ export type PropertyOfElementOfFolderArrType = {
   value: AdditionalFolderPropertyNames;
   onClick?: (e: any) => void;
   route?: string;
+  customComponent?: any;
   additionalArr?: FolderAdditionalArrPropertyType;
 };
 

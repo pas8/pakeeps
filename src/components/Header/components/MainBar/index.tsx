@@ -1,28 +1,26 @@
-import { Link, Typography } from '@material-ui/core';
+import { IconButton, Link, Typography } from '@material-ui/core';
 import { useSelector } from 'react-redux';
-import MenuOpenOutlinedIcon from '@material-ui/icons/MenuOpenOutlined';
-import { Grid, IconButton, makeStyles, Tooltip } from '@material-ui/core';
-import clsx from 'clsx';
-import MenuIcon from '@material-ui/icons/Menu';
+import { makeStyles, Tooltip } from '@material-ui/core';
 import { useRouter } from 'next/dist/client/router';
 import { capitalize, map, split } from 'lodash';
 import { FC, Fragment } from 'react';
 import NextLink from 'next/link';
 import { SIGN_IN_URL, NEW_USER_URL } from 'models/denotation';
+import { useBreakpointNames } from 'hooks/useBreakpointNames.hook';
 import { getIsAuthedWithLocalPassword } from 'store/modules/App/selectors';
 import { MainBarPropsType } from '../../types';
-import { useBreakpointNames } from 'hooks/useBreakpointNames.hook';
+import MenuButton from '../ProfileUtils/components/MenuButton';
 
 const useStyles = makeStyles(theme => ({
-  menuButton: {
-    marginRight: theme.spacing(1)
-  },
+  // menuButton: {
+  //   marginRight: theme.spacing(1)
+  // },
   typography: {
     flexGrow: 1
   }
 }));
 
-const MainBar: FC<MainBarPropsType> = ({ handleDrawerOpen, isMenuOpen, isMenuExtended }) => {
+const MainBar: FC<MainBarPropsType> = ({ isMenuOpen, isMenuExtended }) => {
   const classes = useStyles();
   const { pathname } = useRouter();
   const { isSiveIsXs } = useBreakpointNames();
@@ -61,13 +59,8 @@ const MainBar: FC<MainBarPropsType> = ({ handleDrawerOpen, isMenuOpen, isMenuExt
       ) : (
         <>
           <Tooltip title={menuToolTipTitle}>
-            <IconButton
-              aria-label={'open drawer'}
-              onClick={handleDrawerOpen}
-              edge={'start'}
-              className={clsx(classes.menuButton)}
-            >
-              {isMenuExtended ? <MenuOpenOutlinedIcon /> : <MenuIcon />}
+            <IconButton>
+              <MenuButton />
             </IconButton>
           </Tooltip>
           {!isSiveIsXs && (

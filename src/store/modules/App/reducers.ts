@@ -16,12 +16,12 @@ import {
   usePinStatusOfPakeeps
 } from './hooks';
 import { AppActionTypes, AppInitialStateInteface, FolderOrderNamesType, GlobalLabelsType } from './types';
-import { random, sampleSize, words, filter } from 'lodash';
+import { random, sampleSize, words, filter, values } from 'lodash';
 //@ts-ignore
 import randomSentence from 'random-sentence';
 import { colord } from 'colord';
-import { DEFAULT, NONE, OUTLINED, PRIMARY, SECONDARY, TRANSPARENT } from 'models/denotation';
-import { DialogLayoutName, MenusLayoutName } from 'models/unums';
+import { DEFAULT, headerProfileUtilsDenotationIds, NONE, OUTLINED, PRIMARY, SECONDARY, TRANSPARENT } from 'models/denotation';
+import { DialogLayoutName,  MenusLayoutName } from 'models/unums';
 
 // pakeeps: [
 //   {
@@ -197,7 +197,7 @@ export const firebaseAppInitialState = {
     isEmailPubic: false
   },
   events: [],
-  headerPropertyies: { orderIds: [] },
+  headerPropertyies: { orderIds:  values(headerProfileUtilsDenotationIds) },
   selectedPakeepsId: [],
   pakeeps: [],
   pakeepsOrderNames: [],

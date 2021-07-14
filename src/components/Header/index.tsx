@@ -12,7 +12,7 @@ import HeaderProfileUtils from './components/ProfileUtils';
 import MainBar from './components/MainBar';
 import { HeaderByPasPropsType } from './types';
 import { useBreakpointNames } from 'hooks/useBreakpointNames.hook';
-import { getPakeepDimensions } from 'store/modules/App/selectors';
+import { getIsZenModeActive, getPakeepDimensions } from 'store/modules/App/selectors';
 
 const useStyles = makeStyles(theme => ({
   root: ({ navigationViewLikeTelegram }: any) => ({
@@ -62,10 +62,7 @@ const HeaderByPas: FC<HeaderByPasPropsType> = ({
   const { isSizeSmall } = useBreakpointNames();
   const pakeepDimensions = useSelector(getPakeepDimensions);
 
-  const handleDrawerOpen = () => {
-    const menuOpenStatus = isMenuExtended ? menuOpenStatusDenotation.OPEN : menuOpenStatusDenotation.EXTENDED;
-    dispatch(toChangeMenuOpenStatus({ menuOpenStatus }));
-  };
+
   const classes = useStyles({ drawerWidth, navigationViewLikeTelegram, navigationViewLikePakeeps, isMenuOpen });
 
   const isHeaderHavePakeepView = true;
@@ -87,16 +84,20 @@ const HeaderByPas: FC<HeaderByPasPropsType> = ({
     isOnlySearchVisible
   };
 
+  const isZenModeActive = useSelector(getIsZenModeActive);
+
   return (
     <Grid className={classes.root} container>
       <AppBar className={clsx(classes.appBar, { [classes.appBarShift]: isMenuOpen })} ref={ref}>
-        <Toolbar className={classes.toolBar}>
-          {!isOnlySearchVisible && (
-            <MainBar isMenuExtended={isMenuExtended} handleDrawerOpen={handleDrawerOpen} isMenuOpen={isMenuOpen} />
-          )}
-          {!isRouteIsSignIn && <HeaderSearch {...headerSearchProps} />}
-          {(!isRouteIsSignIn || !isOnlySearchVisible) && <HeaderProfileUtils />}
-        </Toolbar>
+        {!isZenModeActive && (
+          <Toolbar className={classes.toolBar}>
+            {!isOnlySearchVisible && (
+              <MainBar isMenuExtended={isMenuExtended}  isMenuOpen={isMenuOpen} />
+            )}
+            {!isRouteIsSignIn && <HeaderSearch {...headerSearchProps} />}
+            {(!isRouteIsSignIn || !isOnlySearchVisible) && <HeaderProfileUtils />}
+          </Toolbar>
+        )}
       </AppBar>
     </Grid>
   );

@@ -2,7 +2,7 @@ import { Grid, makeStyles, Slide } from '@material-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
 import { FC, useEffect, useState } from 'react';
 import { getGlobalFolderId, getHeaderHeight } from 'store/modules/App/selectors';
-import { sum, values } from 'lodash';
+import { size, sum, values } from 'lodash';
 import { DEFAULT } from 'models/denotation';
 import { HandleOpenMoreFoldersType } from 'models/types';
 import { useValidateFolderColor } from 'hooks/useValidateFolderColor.hook';
@@ -70,7 +70,7 @@ const Folders: FC<FoldersTypeProps> = ({
     handleOpenMoreFolders
   });
 
-  const isFolderAfterIsEmpty = !foldersAfter.length;
+  const isFolderAfterIsEmpty = !size(foldersAfter);
 
   const isFolderViewWithPakeepViewAlignToCenter = false;
 

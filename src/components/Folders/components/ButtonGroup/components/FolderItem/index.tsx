@@ -6,6 +6,7 @@ import { Grid, Typography, Button } from '@material-ui/core';
 import ArrowDropDownOutlinedIcon from '@material-ui/icons/ArrowDropDownOutlined';
 import ArrowDropUpOutlinedIcon from '@material-ui/icons/ArrowDropUpOutlined';
 import { FolderItemPropsType } from '../../types';
+import { AdditionalFolderPropertyNames } from 'models/unums';
 
 const FolderItem: FC<FolderItemPropsType> = ({
   isAdditionalArrowButtonVisible,
@@ -38,9 +39,10 @@ const FolderItem: FC<FolderItemPropsType> = ({
         ? notValidatedHeight + folderDimensions.buttonGroup.marginBottom
         : notValidatedHeight;
 
-        height !== 0 && setAditionalFoldersHeigthObj(state => ({ ...state, [id]: height }));
+    height !== 0 && setAditionalFoldersHeigthObj(state => ({ ...state, [id]: height }));
   }, [notValidatedHeight, isFolderExtended, isLast, isFirst, folderDimensions, isButtonIsOpenMore]);
 
+  const CustomComponent = property.customComponent;
   return (
     <Grid ref={ref}>
       <Grid item>
@@ -62,19 +64,31 @@ const FolderItem: FC<FolderItemPropsType> = ({
           alignItems={'center'}
         >
           <Button className={'buttonWrapperOfFolderItem'} onClick={onClick}>
-            {isFolderExtended && route && <Link href={route}>{title}</Link>}
-
-            <Grid container justify={isFolderExtended ? 'flex-start' : 'center'} wrap={'nowrap'}>
-              {icon}
-              {isFolderExtended && (
-                <Typography className={isFolderExtended && route ? 'textUnderlinedOnHover' : ''}>{title}</Typography>
-              )}
-              {isAdditionalArrowButtonVisible && (
-                <Grid className={'additionalArrowButton'}>
-                  {!!additionalMenuState.id ? <ArrowDropDownOutlinedIcon /> : <ArrowDropUpOutlinedIcon />}
+            {property.value === AdditionalFolderPropertyNames.CUSTOM_COMPONENT && !!CustomComponent ? (
+              <Grid container justify={isFolderExtended ? 'flex-start' : 'center'} wrap={'nowrap'}>
+                <Grid>
+                  <CustomComponent />
                 </Grid>
-              )}
-            </Grid>
+                {isFolderExtended && <Typography>{title}</Typography>}
+              </Grid>
+            ) : (
+              <>
+                {isFolderExtended && route && <Link href={route}>{title}</Link>}
+                <Grid container justify={isFolderExtended ? 'flex-start' : 'center'} wrap={'nowrap'}>
+                  {icon}
+                  {isFolderExtended && (
+                    <Typography className={isFolderExtended && route ? 'textUnderlinedOnHover' : ''}>
+                      {title}
+                    </Typography>
+                  )}
+                  {isAdditionalArrowButtonVisible && (
+                    <Grid className={'additionalArrowButton'}>
+                      {!!additionalMenuState.id ? <ArrowDropDownOutlinedIcon /> : <ArrowDropUpOutlinedIcon />}
+                    </Grid>
+                  )}
+                </Grid>
+              </>
+            )}
           </Button>
         </Grid>
       </Grid>
