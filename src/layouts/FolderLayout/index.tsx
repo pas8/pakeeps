@@ -1,8 +1,7 @@
-import { useMeasure } from 'react-use';
 import { Grid, SwipeableDrawer } from '@material-ui/core';
 import { FC } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getMenuOpenStatus } from 'store/modules/App/selectors';
+import { getDrawerWidth, getHeaderHeight, getMenuOpenStatus, getPakeepDimensions } from 'store/modules/App/selectors';
 import { getPositionOfFolderViewWithPakeepView } from 'store/modules/Settings/selectors';
 import { toChangeMenuOpenStatus, toSetDrawerWidth } from 'store/modules/App/actions';
 import { menuOpenStatusDenotation } from 'models/denotation';
@@ -39,18 +38,20 @@ const FolderLayout: FC = ({ children }) => {
     isFolderOpen
   };
 
-  const [ref, { width }] = useMeasure<HTMLDivElement>();
-
   const NavContainer = isFoldersHaveDraweView ? SwipeableDrawer : Nav;
   const anchor = positionsOfFolder.isRight ? 'right' : 'left';
 
   const navContainerProps = isFoldersHaveDraweView
     ? { anchor, open: isFolderExtended, onClose: handleCloseFoldersWithDrawerView }
     : {};
+  const width = useSelector(getDrawerWidth);
+  const {
+    container: { paddingRight, paddingLeft },pakeepItem:{gapX}
+  } = useSelector(getPakeepDimensions);
 
   return (
     <Grid container>
-      <Grid ref={ref}>
+      <Grid>
         {(isFolderExtended || isFolderOpen) && (
           //@ts-ignore
           <NavContainer {...navContainerProps}>
@@ -58,7 +59,7 @@ const FolderLayout: FC = ({ children }) => {
           </NavContainer>
         )}
       </Grid>
-      <Grid style={{ width: `calc(100% - ${width}px - 16px`, marginLeft: 16 }}>{children}</Grid>
+      <Grid style={{ position: 'absolute', left: width + paddingLeft +1 , right:paddingRight - 2 + gapX,  }}> {children}</Grid>
     </Grid>
   );
 };

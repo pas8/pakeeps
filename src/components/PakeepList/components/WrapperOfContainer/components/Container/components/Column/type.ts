@@ -1,10 +1,11 @@
 import { PropsFromPakeepListToPakeepElementType } from 'components/PakeepList/components/PakeepElement/types';
 import { PropsOfColumnOfPakeepListContainerPropsType } from 'components/PakeepList/components/WrapperOfContainer/types';
 import { ColumnElementType, SumOfPakeepsReduceFuncType } from 'models/types';
-import { DefaultFolderElementPropertyNamesType, PakeepElementType, PakeepsType } from 'store/modules/App/types';
+import { DefaultFolderElementPropertyNamesType, PakeepElementType, PakeepItemDimensionsType, PakeepsType } from 'store/modules/App/types';
 
 export type ColumnOfPakeepListContainerPropsType = PropsOfColumnOfPakeepListContainerPropsType & {
   column: ColumnElementType;
+  pakeepItemDisensions:PakeepItemDimensionsType
   pakeepsInColumn: (PakeepElementType | null)[];
   isLastColumn: boolean;
   isFirstColumn: boolean;

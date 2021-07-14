@@ -21,7 +21,7 @@ export const appearanceIds = {
 
 export const settingUrls = {
   BASE: SETTINGS_BASE_URL,
-  APPEARANCE: {
+  [APPEARANCE]: {
     BASE: SETTINGS_APPEARANCE_BASE_URL,
     [appearanceIds.FOLDERS]: `#${APPEARANCE}_${appearanceIds.FOLDERS}`,
     [appearanceIds.ATTRIBUTES]: `#${APPEARANCE}_${appearanceIds.ATTRIBUTES}`,
@@ -29,16 +29,16 @@ export const settingUrls = {
     [appearanceIds.HEADER]: `#${APPEARANCE}_${appearanceIds.PAKEEPS}`
   },
 
-  THEME: {
+  [THEME]: {
     BASE: SETTINGS_THEME_BASE_URL,
     COLORS_ID: `#${THEME}_colors`,
     DEFAULT_THEMES_ID: `#${THEME}_defaultThemes`,
     BORDER_RADIUS: `#${THEME}_borderRadius`
   },
-  ACCOUNT: {
+  [ACCOUNT]: {
     BASE: SETTINGS_ACCOUNT_BASE_URL
   },
-  SECURITY: {
+  [SECURITY]: {
     BASE: SETTINGS_SECURITY_BASE_URL,
     CHANGE_PASSWORD_ID: `#${SECURITY}_changePasswordId`
   }

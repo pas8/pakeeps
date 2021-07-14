@@ -1,20 +1,20 @@
 import { useSelector } from 'react-redux';
-import { findKey, pickBy, omit, findIndex, values } from 'lodash';
+import { findKey, pickBy, omit, findIndex, values, isNumber } from 'lodash';
 import { useWindowSize } from 'react-use';
 import { UseFindFolderOrderNamesType } from 'models/types';
+import { menuOpenStatusDenotation } from 'models/denotation';
 import { AdditionalFolderPropertyNames } from 'models/unums';
-import { getHeaderHeight } from 'store/modules/App/selectors';
+import { getFolderDimensions, getHeaderHeight, getMenuOpenStatus } from 'store/modules/App/selectors';
 import { useAddIdToFolder } from './useAddIdToFolder.hook';
 
 export const useFindFolderOrderNames: UseFindFolderOrderNamesType = (
   notValidatedAllFolders,
   notValidatedFolderOrderNames,
-  { handleOpenMoreFolders }
+  { handleOpenMoreFolders, aditionalFoldersHeigthObj }
 ) => {
-  const folderDimensions = {
-    buttonGroup: { marginLeft: 0, marginRight: 0, marginBottom: 20, marginTop: 0, labelHeight: 32 },
-    buttonItem: { defaultWidth: 42 + 12, height: 42 + 12 }
-  };
+  const folderDimensions = useSelector(getFolderDimensions);
+  const menuOpenStatus = useSelector(getMenuOpenStatus);
+  const isFolderExtended = menuOpenStatus === menuOpenStatusDenotation.EXTENDED;
 
   const { height: windowHeight, width } = useWindowSize();
 
@@ -34,9 +34,10 @@ export const useFindFolderOrderNames: UseFindFolderOrderNamesType = (
     const defaultFolderHeight =
       currentFolderHeight + folderDimensions.buttonGroup.marginBottom + accumulator.folderHeight;
 
-    const folderHeight = !!findedElement.label
-      ? defaultFolderHeight + folderDimensions.buttonGroup.labelHeight
-      : defaultFolderHeight;
+    const folderHeight =
+      (!!findedElement.label && isFolderExtended
+        ? defaultFolderHeight + folderDimensions.buttonGroup.labelHeight
+        : defaultFolderHeight) + (isNumber(aditionalFoldersHeigthObj[id]) ? aditionalFoldersHeigthObj[id] : 0);
 
     const itemOfFolderHeightArr = { id, folderGroupHeight: folderHeight };
 
@@ -70,7 +71,8 @@ export const useFindFolderOrderNames: UseFindFolderOrderNamesType = (
   const difference = heightOffolderToChange - maxFolderHeight;
   const idxToSliceSlicedFolderArr = ~~(
     folderToChange.arr.length -
-    (difference - folderDimensions.buttonGroup.marginBottom) / folderDimensions.buttonItem.height
+    (difference - folderDimensions.buttonGroup.marginBottom) / folderDimensions.buttonItem.height -
+    1
   );
 
   const slicedBeforeFolderArr = folderToChange.arr.slice(0, idxToSliceSlicedFolderArr);
@@ -119,7 +121,7 @@ export const useFindFolderOrderNames: UseFindFolderOrderNamesType = (
 
   validatedDefautlFolderNames.splice(startIdxToSliceFolderNames - 1, 1, ...values(sliderFolderNames));
   const folderOrderNames = validatedDefautlFolderNames;
-  console.log(foldersAfter, foldersBefore, validatedDefautlFolderNames);
+
   return {
     folderDimensions,
     folderOrderNames,

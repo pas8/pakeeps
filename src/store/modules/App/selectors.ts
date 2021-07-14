@@ -19,7 +19,15 @@ export const getGlobalFolderId = createSelector(
   globalFolderId => globalFolderId
 );
 
+export const getFolderDimensions = createSelector(
+  [(state: RootStoreType) => state.app.dimensions.folder],
+  folderDimensions => folderDimensions
+);
 
+export const getPakeepDimensions = createSelector(
+  [(state: RootStoreType) => state.app.dimensions.pakeep],
+  pakeepDimensions => pakeepDimensions
+);
 
 export const getMenuOpenStatus = createSelector(
   [({ app }: RootStoreType) => app.temporaryData.menuOpenStatus],

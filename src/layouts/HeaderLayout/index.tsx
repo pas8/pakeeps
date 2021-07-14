@@ -42,7 +42,7 @@ const useStyles = makeStyles(({ spacing, transitions, breakpoints, palette }) =>
 
       '&::-webkit-scrollbar': {
         height: '0.42em',
-        width: '0.42em',
+        width: '0.42em'
       },
       '&::-webkit-scrollbar-track': {
         border: 'none',
@@ -91,30 +91,7 @@ const useStyles = makeStyles(({ spacing, transitions, breakpoints, palette }) =>
   },
   content: {
     flexGrow: 1,
-    marginTop: ({ headerHeight }: any) => headerHeight,
-    padding: spacing(0, 2.8),
-    transition: transitions.create('margin', {
-      easing: transitions.easing.sharp,
-      duration: transitions.duration.leavingScreen
-    }),
-
-    // marginLeft: ({ isMenuNavigationHasDialogView, drawerWidth }) => isMenuNavigationHasDialogView && drawerWidth,
-    [breakpoints.between('xs', 'sm')]: {
-      padding: spacing(0, 1.8)
-    },
-    [breakpoints.down('md')]: {
-      padding: spacing(0, 2)
-    }
-    // [breakpoints.down('sm')]: {
-    //   padding: spacing(1.8),
-    // }
-  },
-  contentShift: {
-    transition: transitions.create('margin', {
-      easing: transitions.easing.easeOut,
-      duration: transitions.duration.enteringScreen
-    }),
-    marginLeft: ({ drawerWidth, navigationViewLikeTelegram }: any) => (navigationViewLikeTelegram ? drawerWidth : 0)
+    marginTop: ({ headerHeight }: any) => headerHeight
   }
 }));
 
@@ -161,7 +138,7 @@ const HeaderLayout: FC<LayoutChildrenType> = ({ children }) => {
       )}
       <main
         className={clsx(classes.content, {
-          [classes.contentShift]: isMenuOpen
+          // [classes.contentShift]: isMenuOpen
         })}
       >
         {children}

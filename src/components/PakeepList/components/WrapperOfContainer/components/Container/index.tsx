@@ -7,15 +7,12 @@ import { FC, memo, useEffect, useMemo, useRef, useState } from 'react';
 import { PakeepListContainerPropsType } from './types';
 import { PakeepElementType, PakeepsType } from 'store/modules/App/types';
 import { useMeasure, useWindowScroll, useWindowSize } from 'react-use';
-import { getDrawerWidth } from 'store/modules/App/selectors';
+import { getDrawerWidth, getPakeepDimensions } from 'store/modules/App/selectors';
 import { useSelector } from 'react-redux';
 
 const useStyles = makeStyles(({ spacing, breakpoints: { between, down }, palette }) => ({
   containerClass: () => ({
-    // position: !isPakeepDragging ? 'fixed' : 'static',
-    paddingRight:spacing(2.8),
     position: 'fixed',
-    right: 4,
     padding: spacing(4, 0, 0, 0),
     [between('xs', 'sm')]: { padding: spacing(2, 0, 0, 0) },
     [down('md')]: { padding: spacing(4, 0, 0, 0) },
@@ -35,18 +32,16 @@ const PakeepListContainer: FC<PakeepListContainerPropsType> = ({
   onDragStart,
   columnOfPakeepListContainerProps
 }) => {
+  const pakeepDisensions = useSelector(getPakeepDimensions);
   const drawerWidth = useSelector(getDrawerWidth);
-
+  // const ref = useRef()
+// console.log(ref.current)
   const classes = useStyles();
 
-  const { height: windowHeigth ,width} = useWindowSize();
+  const { height: windowHeigth, width } = useWindowSize();
   const columnQuantity = responsiveColumnOrder.length;
 
-  // const [ref, { width }] = useMeasure<HTMLDivElement>();
-
   const [arrOfRefs, setArrOfRefs] = useState<any[]>([]);
-
-  // const [heightOf, setArrOfRefs] = useState<number[]>([]);
 
   const { y: value } = useWindowScroll();
   useEffect(() => {
@@ -55,11 +50,15 @@ const PakeepListContainer: FC<PakeepListContainerPropsType> = ({
 
   const handleSetArrOfRefs = (newRef: any) => setArrOfRefs(state => [...state, newRef]);
 
-  const CONTAINER_WIDTH = width - drawerWidth -16;
-
+  const dimensions = {
+    left: pakeepDisensions.container.paddingLeft + drawerWidth,
+    right: pakeepDisensions.container.paddingRight
+  };
+  const CONTAINER_WIDTH = width - dimensions.left - dimensions.right;
+console.log(dimensions)
   const pakeepListMeasure = {
     height: windowHeigth * 0.96,
-    width: CONTAINER_WIDTH / columnQuantity
+    width: (CONTAINER_WIDTH - pakeepDisensions.pakeepItem.gapX) / (columnQuantity  )
   };
 
   const arr = responsiveColumnOrder?.map((columnId, idx) => {
@@ -80,6 +79,7 @@ const PakeepListContainer: FC<PakeepListContainerPropsType> = ({
 
     const allColumnOfPakeepListContainerProps = {
       ...columnOfPakeepListContainerProps,
+      pakeepItemDisensions: pakeepDisensions.pakeepItem,
       key: column?.id,
       column,
       columnQuantity,
@@ -95,7 +95,7 @@ const PakeepListContainer: FC<PakeepListContainerPropsType> = ({
 
   return (
     <DragDropContext onDragEnd={onDragEnd} onDragStart={onDragStart}>
-      <Grid container className={classes.containerClass}  style={{ width: CONTAINER_WIDTH - 4 }}>
+      <Grid container className={classes.containerClass} style={{ ...dimensions }} >
         {arr}
       </Grid>
     </DragDropContext>
