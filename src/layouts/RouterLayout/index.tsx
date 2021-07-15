@@ -38,8 +38,7 @@ const RouterLayout: FC = ({ children }) => {
         </Grid>
       )}
 
-      {/* {!isAuthedWithLocalPinCode ? <AuthWithLocalPinCode {...authWithLocalPinCodeProps} /> : children} */}
-      {children}
+      {!isAuthedWithLocalPinCode ? <AuthWithLocalPinCode {...authWithLocalPinCodeProps} /> : children}
     </ComposeLayouts>
   );
 };

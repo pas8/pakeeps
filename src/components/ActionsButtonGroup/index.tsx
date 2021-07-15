@@ -1,4 +1,4 @@
-import { Grid, makeStyles } from '@material-ui/core';
+import { Grid, makeStyles, useTheme } from '@material-ui/core';
 import { FC } from 'react';
 import CloseButtonWithIcon from './components/CloseButtonWithIcon';
 import SaveButtonWithIcon from './components/SaveButtonWithIcon';
@@ -13,13 +13,17 @@ const useStyles = makeStyles(({ spacing }) => ({
 }));
 
 const ActionsButtonGroup: FC<ActionsButtonGroupPropsType> = ({
-  colorOfSaveButton,
+  colorOfSaveButton: notValidatedColorOfSaveButton,
   onSave,
-  colorOfCloseButton,
+  colorOfCloseButton: notValidatedColorOfCloseButton,
   onClose
 }) => {
   const classes = useStyles();
-
+  const {
+    palette: { primary, text }
+  } = useTheme();
+  const colorOfSaveButton = notValidatedColorOfSaveButton || primary.main;
+  const colorOfCloseButton = notValidatedColorOfCloseButton || text.hint;
   return (
     <Grid className={classes.container} container wrap={'nowrap'} justify={'flex-end'}>
       <CloseButtonWithIcon colorOfCloseButton={colorOfCloseButton} onClose={onClose} />

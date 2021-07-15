@@ -6,15 +6,18 @@ import BackspaceOutlinedIcon from '@material-ui/icons/BackspaceOutlined';
 import { AuthWithLocalPinCodePropsType } from './types';
 import { useToggle } from 'react-use';
 import clsx from 'clsx';
-import { isEqual, isNaN } from 'lodash';
+import { dropRight, isEqual, isNaN } from 'lodash';
+
+
+const pinCodeDimensionValue = 8
 
 const useStyles = makeStyles(({ spacing, typography: { h6 }, palette }) => ({
   container: {
-    height: '90vw',
-    width: '100vw',
     '& input': {
       ...h6,
-      width: spacing(12),
+      marginTop:spacing(-2),
+      width: '100%',
+      textAlign: 'center',
       caretColor: palette.secondary.main
     }
   },
@@ -23,15 +26,15 @@ const useStyles = makeStyles(({ spacing, typography: { h6 }, palette }) => ({
   },
   pinCodeContainer: {
     padding: spacing(1),
-    maxWidth: spacing(8 * 3.4),
-    gap: 10
+    width: spacing(pinCodeDimensionValue * 3.6),
+    gap: pinCodeDimensionValue
   },
   pinCodeIcon: {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    height: spacing(8),
-    width: spacing(8)
+    height: spacing(pinCodeDimensionValue),
+    width: spacing(pinCodeDimensionValue)
   }
 }));
 
@@ -49,52 +52,59 @@ const AuthWithLocalPinCode: FC<AuthWithLocalPinCodePropsType> = ({
     !isNaN(+value) && setPinCode(value);
   };
 
+  const handleDeleteOnePinCodeLetter = () => {
+    setPinCode(value => (value.length > 0 ? dropRight(value.split('')).join('') : ''));
+  };
+
   return (
     <Grid className={classes.container} container alignItems={'center'} justify={'center'}>
-      <Paper>
-        <Grid container alignItems={'center'} justify={'center'} className={classes.pinCodeContainer}>
-          <InputBase value={pinCode} onChange={onChange} />
-          {/* {Array(8)
-            .fill('AuthWithLocalPinCode')
-            .map((el, idx) => {
-              const onClick = () => {
-                setPinCode(state => state + idx);
-              };
-
-              return (
-                <Button
-                  className={clsx(classes.button, classes.pinCodeIcon)}
-                  variant={'outlined'}
-                  color={'secondary'}
-                  key={`AuthWithLocalPinCode_${el}_${idx}`}
-                  onClick={onClick}
-                >
-                  <Typography variant={'subtitle2'}>{idx + 1}</Typography>
-                </Button>
-              );
-            })} */}
-          <Grid className={classes.pinCodeIcon}>
-            {!isPinCodeVisibleChangerButtonHidden && (
-              <Typography variant={'h4'} onClick={handleChangePinCodeVisibleStatus}>
-                {isPinCodeVisible ? VisibilityOutlinedIcon : VisibilityOffOutlinedIcon}
-              </Typography>
-            )}
-          </Grid>
-          <Button
-            className={classes.button}
-            variant={'outlined'}
-            color={'secondary'}
-            onClick={() => setPinCode(state => state + '0')}
-          >
-            <Typography variant={'subtitle2'}>0</Typography>
-          </Button>
-          <Grid className={classes.pinCodeIcon}>
-            <Typography variant={'h4'} onClick={handleChangePinCodeVisibleStatus}>
-              {BackspaceOutlinedIcon}
-            </Typography>
-          </Grid>
+      <Grid container alignItems={'center'} justify={'center'} className={classes.pinCodeContainer}>
+        <Grid container alignItems={'center'} justify={'center'} className={'inputContainer'}>
+          <InputBase
+            value={pinCode}
+            onChange={onChange}
+            type={isPinCodeVisible ? 'text' : 'password'}
+            autoComplete={'off'}
+          />
         </Grid>
-      </Paper>
+        {Array(9)
+          .fill('AuthWithLocalPinCode')
+          .map((el, idx) => {
+            const onClick = () => {
+              setPinCode(state => state + idx);
+            };
+
+            return (
+              <Button
+                className={clsx(classes.button, classes.pinCodeIcon)}
+                variant={'outlined'}
+                color={'secondary'}
+                key={`AuthWithLocalPinCode_${el}_${idx}`}
+                onClick={onClick}
+              >
+                <Typography variant={'h6'}>{idx + 1}</Typography>
+              </Button>
+            );
+          })}
+        <Button className={classes.pinCodeIcon} onClick={handleChangePinCodeVisibleStatus}>
+          {!isPinCodeVisibleChangerButtonHidden && (
+            <Typography variant={'h4'}>
+              {isPinCodeVisible ? <VisibilityOutlinedIcon /> : <VisibilityOffOutlinedIcon />}
+            </Typography>
+          )}
+        </Button>
+        <Button
+          className={clsx(classes.button, classes.pinCodeIcon)}
+          variant={'outlined'}
+          color={'secondary'}
+          onClick={() => setPinCode(state => state + '0')}
+        >
+          <Typography variant={'h6'}>0</Typography>
+        </Button>
+        <Button className={clsx(classes.button, classes.pinCodeIcon)} onClick={handleDeleteOnePinCodeLetter}>
+          <Typography variant={'h4'}>{<BackspaceOutlinedIcon />}</Typography>
+        </Button>
+      </Grid>
     </Grid>
   );
 };
