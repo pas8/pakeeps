@@ -9,9 +9,15 @@ import { headerProfileUtilsDenotationIds } from 'models/denotation';
 import ZenModeButton from './components/ZenModeButton';
 import { useTakeHeaderProfileUtilsObj } from 'hooks/useTakeHeaderProfileUtilsObj.hook';
 
-const useStyles = makeStyles(({ spacing }) => ({
+const useStyles = makeStyles(({ spacing, palette: { text } }) => ({
   profileUtils: {
     display: 'flex',
+    '& svg': {
+      color: text.hint,
+      '&:hover': {
+        color: text.primary
+      }
+    },
     '& button:not(:last-child)': {
       height: spacing(6)
     }
@@ -42,11 +48,9 @@ const HeaderProfileUtils: FC = () => {
           const { component: Component, toolTipText, onClick } = findedEl;
 
           return (
-            <Tooltip title={toolTipText} key={`HeaderProfileUtils-${id}-${idx}`}>
-              <IconButtonUtilContainer onClick={onClick}>
-                <Component />
-              </IconButtonUtilContainer>
-            </Tooltip>
+            <IconButtonUtilContainer onClick={onClick} title={toolTipText} key={`HeaderProfileUtils-${id}-${idx}`}>
+              <Component />
+            </IconButtonUtilContainer>
           );
         })}
       </Grid>
@@ -56,11 +60,13 @@ const HeaderProfileUtils: FC = () => {
 
 export default HeaderProfileUtils;
 
-const IconButtonUtilContainer: FC<any> = ({ children, onClick }) => {
+const IconButtonUtilContainer: FC<any> = ({ children, onClick, title }) => {
   const classes = useStyles();
   return (
     <Grid className={classes.headerIconButtonContainer} container justify={'center'} alignItems={'center'}>
-      <IconButton onClick={onClick}>{children}</IconButton>
+      <Tooltip title={title}>
+        <IconButton onClick={onClick}>{children}</IconButton>
+      </Tooltip>
     </Grid>
   );
 };

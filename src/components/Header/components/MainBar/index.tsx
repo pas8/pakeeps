@@ -12,9 +12,15 @@ import { MainBarPropsType } from '../../types';
 import MenuButton from '../ProfileUtils/components/MenuButton';
 import { useTakeFuncOfChangngDrawerOpenStatus } from 'hooks/useTakeFuncOfChangngDrawerOpenStatus.hook';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles(({ palette: { text } ,spacing}) => ({
   menuButton: {
-    margin: theme.spacing(0, 0.8, 0, -1.8)
+    margin: spacing(0, 0.8, 0, -1.8),
+    '& svg': {
+      color: text.hint, 
+      '&:hover': {
+        color: text.primary
+      }
+    }
   },
   typography: {
     flexGrow: 1

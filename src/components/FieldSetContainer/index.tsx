@@ -7,11 +7,11 @@ const useStyles = makeStyles(
     container: ({ isOnlyTop }: any) => ({
       borderRadius: isOnlyTop ? 0 : borderRadius,
       padding: spacing(isOnlyTop ? 1.8 : 0.8, isOnlyTop ? 0 : 0.4, 0.4),
-      borderColor: useAlpha(palette.text.primary, 0.2),
       display: 'flex',
-      border: isOnlyTop ? '0px' : '1px',
-      borderTop: '2px',
-      borderStyle:isOnlyTop ? 'solid': 'solid' ,
+      border: isOnlyTop ? '0px' : '1px solid',
+      borderTop: '2px solid',
+      // borderStyle:isOnlyTop ? 'solid': 'solid' ,
+      borderColor: useAlpha(palette.text.primary, 0.2),
 
       '& >  legend': {
         marginLeft: 16,
