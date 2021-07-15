@@ -1,12 +1,8 @@
-import { FC, MouseEventHandler } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { IconButton, makeStyles, Tooltip, Grid } from '@material-ui/core';
+import { FC } from 'react';
+import {  useSelector } from 'react-redux';
+import {  makeStyles, Tooltip, Grid } from '@material-ui/core';
 import AccountCircleOutlinedIcon from '@material-ui/icons/AccountCircleOutlined';
-
-import { customColorPlaceholder } from 'components/AccountAvatar';
 import { NONE } from 'models/denotation';
-import { MenusLayoutName } from 'models/unums';
-import { toChangeTemporaryData } from 'store/modules/App/actions';
 import { getAvatarProperties } from 'store/modules/App/selectors';
 
 const useStyles = makeStyles(({ spacing, shape: { borderRadius }, palette }) => ({
@@ -18,7 +14,7 @@ const useStyles = makeStyles(({ spacing, shape: { borderRadius }, palette }) => 
     overflow: 'hidden',
     '& img': {
       // width:'100%',
-// height:'100%',
+      // height:'100%',
       width: 42,
       height: 42
     }
@@ -27,23 +23,10 @@ const useStyles = makeStyles(({ spacing, shape: { borderRadius }, palette }) => 
 
 const AvatarButton: FC = () => {
   const classes = useStyles();
-  const dispatch = useDispatch();
   const { url, backgroundColor, borderRadius } = useSelector(getAvatarProperties);
 
-  const handleOpenMenu: MouseEventHandler<HTMLDivElement> = ({ currentTarget, clientX: mouseX, clientY: mouseY }) => {
-    const defaultMenuProps = {
-      mouseX,
-      mouseY,
-      id: 'AvatarButton',
-      customColor: customColorPlaceholder,
-      menuName: MenusLayoutName.ACCOUNT
-    };
-
-    dispatch(toChangeTemporaryData({ newTemporaryData: { defaultMenuProps } }));
-  };
-
   return (
-    <Grid onClick={handleOpenMenu} container>
+    <Grid container>
       {url === NONE ? (
         <AccountCircleOutlinedIcon />
       ) : (

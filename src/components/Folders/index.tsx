@@ -6,7 +6,7 @@ import { size, sum, values } from 'lodash';
 import { DEFAULT } from 'models/denotation';
 import { HandleOpenMoreFoldersType } from 'models/types';
 import { useValidateFolderColor } from 'hooks/useValidateFolderColor.hook';
-import { useTakeFoldersArr } from 'hooks/useTakeFoldersArr.hook';
+import { useTakeFoldersPropertyies } from 'hooks/useTakeFoldersPropertyies.hook';
 import { toChangeGlobalFolderId, toSetDrawerWidth } from 'store/modules/App/actions';
 import { ColorType } from 'store/modules/App/types';
 import { FoldersTypeProps, HandleChangeFolderColorType, HandleChangeGlobalFolderIdType } from './types';
@@ -63,7 +63,7 @@ const Folders: FC<FoldersTypeProps> = ({
 
   const [aditionalFoldersHeigthObj, setAditionalFoldersHeigthObj] = useState({});
 
-  const { folderDimensions, folderOrderNames, foldersAfter, foldersBefore } = useTakeFoldersArr({
+  const { folderDimensions, folderOrderNames, foldersAfter, foldersBefore } = useTakeFoldersPropertyies({
     ...defaultUseTakeFoldersArrProps,
     aditionalFoldersHeigthObj,
     isFoldersHaveDraweView,

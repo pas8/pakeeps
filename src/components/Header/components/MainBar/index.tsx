@@ -10,11 +10,12 @@ import { useBreakpointNames } from 'hooks/useBreakpointNames.hook';
 import { getIsAuthedWithLocalPassword } from 'store/modules/App/selectors';
 import { MainBarPropsType } from '../../types';
 import MenuButton from '../ProfileUtils/components/MenuButton';
+import { useTakeFuncOfChangngDrawerOpenStatus } from 'hooks/useTakeFuncOfChangngDrawerOpenStatus.hook';
 
 const useStyles = makeStyles(theme => ({
-  // menuButton: {
-  //   marginRight: theme.spacing(1)
-  // },
+  menuButton: {
+    margin: theme.spacing(0, 0.8, 0, -1.8)
+  },
   typography: {
     flexGrow: 1
   }
@@ -52,6 +53,8 @@ const MainBar: FC<MainBarPropsType> = ({ isMenuOpen, isMenuExtended }) => {
   const isRouteIsSignIn = pathname === SIGN_IN_URL;
   const isRoteIsSignUp = pathname === NEW_USER_URL;
 
+  const handleChangeDrawerOpenStatus = useTakeFuncOfChangngDrawerOpenStatus();
+
   return (
     <>
       {isRouteIsSignIn || isRoteIsSignUp ? (
@@ -59,7 +62,7 @@ const MainBar: FC<MainBarPropsType> = ({ isMenuOpen, isMenuExtended }) => {
       ) : (
         <>
           <Tooltip title={menuToolTipTitle}>
-            <IconButton>
+            <IconButton className={classes.menuButton} onClick={handleChangeDrawerOpenStatus}>
               <MenuButton />
             </IconButton>
           </Tooltip>

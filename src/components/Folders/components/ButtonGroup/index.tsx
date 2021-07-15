@@ -177,7 +177,8 @@ const useStyles = makeStyles(
       },
       '& .lastAdditionalFolder': {
         borderBottomColor: folderColor
-      }
+      },
+      '& .buttonWrapperOfFolderItemWidthCustomComponent': {}
     }),
     containerWithDrawerViewItem: ({ folderDimensions: { container } }: USeStylesOfFolderButtonGroupByPasType) => ({
       // ...container
@@ -217,7 +218,7 @@ const FolderButtonGroupByPas: FC<FolderButtonGroupByPasPropsType> = ({
     isFolderOpen,
     isFolderExtended,
     folderColor,
-    isButtonIsOpenMore,
+    isButtonIsOpenMore
   });
 
   const additionalMenuState = useSelector(getAdditionalMenuState);

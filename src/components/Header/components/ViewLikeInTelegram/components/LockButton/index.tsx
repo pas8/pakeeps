@@ -1,10 +1,7 @@
-import { Grid, makeStyles, IconButton } from '@material-ui/core';
+import { Grid, makeStyles } from '@material-ui/core';
 import clsx from 'clsx';
-import { NONE } from 'models/denotation';
-import { useSnackbar } from 'notistack';
-import { useDispatch, useSelector } from 'react-redux';
-import { toChangeTemporaryData } from 'store/modules/App/actions';
-import { getIsAuthedWithLocalPassword, getUserData } from 'store/modules/App/selectors';
+import { useSelector } from 'react-redux';
+import { getIsAuthedWithLocalPassword, getIsZenModeActive, getUserData } from 'store/modules/App/selectors';
 
 const useStyles = makeStyles(theme => ({
   lockContainer: {
@@ -24,7 +21,7 @@ const useStyles = makeStyles(theme => ({
     borderRadius: theme.spacing(0.32),
     // borderColor: 'white',
     // borderStyle: 'solid',
-    background: theme.palette.text.secondary
+    background: ({ isZenModeActive }: any) => theme.palette.text[isZenModeActive ? 'hint' : 'secondary']
   },
   animateBox: {
     animation: '$box 400ms cubic-bezier(0.4, 0, 0.2, 1)',
@@ -55,7 +52,7 @@ const useStyles = makeStyles(theme => ({
     width: 12,
     borderWidth: 2.8,
     borderRadius: theme.spacing(0.8),
-    borderColor: theme.palette.text.secondary,
+    borderColor: ({ isZenModeActive }: any) => theme.palette.text[isZenModeActive ? 'hint' : 'secondary'],
     borderStyle: 'solid',
     borderBottom: 0,
     borderBottomRightRadius: 0,
@@ -102,7 +99,7 @@ const useStyles = makeStyles(theme => ({
       height: theme.spacing(0),
       width: theme.spacing(0),
       borderRadius: '8%',
-      backgroundColor: theme.palette.text.secondary
+      backgroundColor: ({ isZenModeActive }: any) => theme.palette.text[isZenModeActive ? 'hint' : 'secondary']
     }
   },
   animatePoints: {
@@ -173,30 +170,13 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const LockButton = () => {
-  const classes = useStyles();
-  const { enqueueSnackbar } = useSnackbar();
-  const dispatch = useDispatch();
-
-  const { localPinCode } = useSelector(getUserData);
-
-
+  const isZenModeActive = useSelector(getIsZenModeActive);
   const isAuthedWithLocalPinCode = useSelector(getIsAuthedWithLocalPassword);
 
-  const onClickOfUploadButton = () => {
-    if (localPinCode === NONE) {
-      return enqueueSnackbar({
-        message: 'You havent added a pin code, but u can do this in setting/account',
-        severity: 'info'
-      });
-    }
-
-    dispatch(toChangeTemporaryData({ newTemporaryData: { isAuthedWithLocalPinCode: false } }));
-  };
-
+  const classes = useStyles({ isZenModeActive });
   return (
     <Grid
       item
-      onClick={onClickOfUploadButton}
       alignItems={'center'}
       direction={'column'}
       className={clsx(classes.lockContainer, !isAuthedWithLocalPinCode && classes.animate)}

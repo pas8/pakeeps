@@ -6,6 +6,7 @@ import {
   DefaultFolderArrType,
   DefaultFolderElementPropertyType,
   DefaultPakeepElementType,
+  FolderArrType,
   FolderOrderNamesType,
   FolderOrderNamesValueType,
   FoldersType,
@@ -23,7 +24,7 @@ import { ColorInitialStateType } from 'store/modules/Color/types';
 import AddCircleOutlineOutlinedIcon from '@material-ui/icons/AddCircleOutlineOutlined';
 import { ChangeEventHandler, Dispatch, ReactNode, SetStateAction, MouseEventHandler } from 'react';
 import {
-  AppInitialStateInteface,
+  AppInitialStateType,
   GlobalEventsType,
   PakeepIdType,
   PakeepsType,
@@ -75,7 +76,7 @@ export type UsePropertiesToUtilsType = (
 
 export type RootStoreType = {
   auth: AuthInitialStateType;
-  app: AppInitialStateInteface;
+  app: AppInitialStateType;
   color: ColorInitialStateType;
   settings: SettingsInitialStateType;
 };
@@ -274,9 +275,8 @@ export type UseFindCorrectFolderFuncType = (
 export type OnClickOfFolderButtonType = MouseEventHandler<HTMLElement>;
 
 export type ReturnValueOfUseFindFolderItemPropertyiesType = {
-
-  [Property in PropertyOfReturnValueOfUseFindFolderItemPropertyies]: boolean
-}
+  [Property in PropertyOfReturnValueOfUseFindFolderItemPropertyies]: boolean;
+};
 
 export type UseFindFolderItemPropertyiesType = (
   id: string,
@@ -284,3 +284,14 @@ export type UseFindFolderItemPropertyiesType = (
   globalFolderId: string,
   folderArrLength: number
 ) => ReturnValueOfUseFindFolderItemPropertyiesType;
+
+export type ParamsOfUseConvertHeaderProfileUtilsObjToFolderArrType = {
+  [key: string]: {
+    component: any;
+    onClick: (e: any) => void;
+    toolTipText: string;
+  };
+};
+export type UseConvertHeaderProfileUtilsObjToFolderArrType = (
+  arr: ParamsOfUseConvertHeaderProfileUtilsObjToFolderArrType
+) => FolderArrType;

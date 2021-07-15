@@ -61,7 +61,7 @@ export const getSelectedPakeepsId = createSelector(
 );
 
 export const getIsCancelSelectedPakeepsId = createSelector(
-  [({ app }: RootStoreType) => app.isCancelSelectedPakeepsId],
+  [({ app }: RootStoreType) => app.temporaryData.isCancelSelectedPakeepsId],
   status => status
 );
 
@@ -86,7 +86,7 @@ export const getIsPakeepHovering = createSelector(
 );
 
 export const getIsAllDataWasUploaded = createSelector(
-  [({ app: { isAllDataWasUploaded } }: RootStoreType) => isAllDataWasUploaded],
+  [({ app: {temporaryData  } }: RootStoreType) => temporaryData.isAllDataWasUploaded],
   isAllDataWasUploaded => isAllDataWasUploaded
 );
 

@@ -15,13 +15,21 @@ import {
   useFindPakeep,
   usePinStatusOfPakeeps
 } from './hooks';
-import { AppActionTypes, AppInitialStateInteface, FolderOrderNamesType, GlobalLabelsType } from './types';
+import { AppActionTypes, AppInitialStateType, FolderOrderNamesType, GlobalLabelsType } from './types';
 import { random, sampleSize, words, filter, values } from 'lodash';
 //@ts-ignore
 import randomSentence from 'random-sentence';
 import { colord } from 'colord';
-import { DEFAULT, headerProfileUtilsDenotationIds, NONE, OUTLINED, PRIMARY, SECONDARY, TRANSPARENT } from 'models/denotation';
-import { DialogLayoutName,  MenusLayoutName } from 'models/unums';
+import {
+  DEFAULT,
+  headerProfileUtilsDenotationIds,
+  NONE,
+  OUTLINED,
+  PRIMARY,
+  SECONDARY,
+  TRANSPARENT
+} from 'models/denotation';
+import { DialogLayoutName, MenusLayoutName } from 'models/unums';
 
 // pakeeps: [
 //   {
@@ -168,7 +176,7 @@ export const defaultDimensions = {
     container: {
       paddingLeft: 10,
       paddingRight: 0,
-      paddingBottom:10,
+      paddingBottom: 10
     },
     buttonGroup: { marginLeft: 0, marginRight: 0, marginBottom: 20, marginTop: 0, labelHeight: 32 },
     buttonItem: { defaultWidth: 42 + 12, height: 42 + 12, extendedWidth: 200 }
@@ -197,8 +205,9 @@ export const firebaseAppInitialState = {
     isEmailPubic: false
   },
   events: [],
-  headerPropertyies: { orderIds:  values(headerProfileUtilsDenotationIds) },
+  headerPropertyies: { orderIds: values(headerProfileUtilsDenotationIds) },
   selectedPakeepsId: [],
+  pinnedPakeepsOrderNames: [],
   pakeeps: [],
   pakeepsOrderNames: [],
   folderOrderNames: {}
@@ -214,26 +223,25 @@ const nullityOfTemporaryData = {
     isHovering: false
   },
   headerHeight: 0,
+  isCancelSelectedPakeepsId: false,
   drawerWidth: 0,
   menuOpenStatus: 'OPEN' as 'OPEN',
   selectedPakeepsId: [],
   globalFolderId: '',
+  isAllDataWasUploaded: true,
   isAuthedWithLocalPinCode: true,
   globalEventList: [],
   globalLabelList: []
 };
 
-export const initialState: AppInitialStateInteface = {
+export const initialState: AppInitialStateType = {
   ...firebaseAppInitialState,
   temporaryData: nullityOfTemporaryData,
-  pinnedPakeepsOrderNames: [],
-  notifinationCounter: 8,
-  isAllDataWasUploaded: true,
-  isCancelSelectedPakeepsId: false
+  notifinationCounter: 8
 };
 
 // console.log(TypeNames)
-export const AppReducer = (state = initialState, action: AppActionTypes): AppInitialStateInteface => {
+export const AppReducer = (state = initialState, action: AppActionTypes): AppInitialStateType => {
   // if (!('type' in action) ) return state;
   switch (action.type) {
     case TypeNames.HANDLE_ADD_NEW_PAKEEP: {
@@ -369,8 +377,9 @@ export const AppReducer = (state = initialState, action: AppActionTypes): AppIni
     case TypeNames.HANDLE_CHANGE_HEADER_HEIGTH:
     case TypeNames.HANDLE_SET_SELECTED_PAKEEPIDS_ARR:
     case TypeNames.HANDLE_SET_DRAWER_WIDTH:
+    case TypeNames.HANDLE_CANCEL_SELECTING_STATUS:
     case TypeNames.HANDLE_CHANGE_GLOBAL_FOLDER_ID:
-
+    case TypeNames.HANDLE_CHANGE_ALL_DATA_WAS_UPLOADED_STATUS:
     case TypeNames.HANDLE_CHANGE_MENU_OPEN_STATUS: {
       return { ...state, temporaryData: { ...state.temporaryData, ...action.payload } };
     }
@@ -379,12 +388,10 @@ export const AppReducer = (state = initialState, action: AppActionTypes): AppIni
     case TypeNames.HANDLE_SET_ORDER_NAMES:
     case TypeNames.HANDLE_CHANGE_AVATAR_PROPERTIES:
     case TypeNames.HANDLE_SET_NEW_ORDER_NAMES:
-    case TypeNames.HANDLE_CHANGE_ALL_DATA_WAS_UPLOADED_STATUS:
     case TypeNames.HANDLE_CHANGE_FOLDER_ORDER_NAMES:
 
     case TypeNames.HANDLE_CHANGE_PAKEEPS:
     case TypeNames.HANDLE_CHANGE_USER_DATA:
-    case TypeNames.HANDLE_CANCEL_SELECTING_STATUS:
     case TypeNames.HANDLE_CHANGE_GLOBAL_LABELS:
     case TypeNames.HANDLE_CHANGE_FOLDERS:
     case TypeNames.HANDLE_CHANGE_GLOBAL_FOLDER_ID: {

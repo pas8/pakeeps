@@ -1,21 +1,15 @@
-import { Grid } from '@material-ui/core';
-import ZenModeIcon from 'components/Icons/components/ZenModeIcon';
+import { Grid, SvgIcon } from '@material-ui/core';
 import { FC } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { toChangeTemporaryData } from 'store/modules/App/actions';
-import { getIsZenModeActive } from 'store/modules/App/selectors';
 
 const ZenModeButton: FC = () => {
-  const dispatch = useDispatch();
-  const isZenModeActive = useSelector(getIsZenModeActive);
-
-  const handleChageZenModeStatus = () => {
-    dispatch(toChangeTemporaryData({ newTemporaryData: { isZenModeActive: !isZenModeActive } }));
-  };
-
   return (
-    <Grid onClick={handleChageZenModeStatus}>
-      <ZenModeIcon />
+    <Grid container justify={'center'} alignItems={'center'}>
+      <SvgIcon viewBox={'0 0 480 480'}>
+        <defs />
+        <path d="M414.4 44.4l-15.92 15.92A237.19 237.19 0 00240 0C107.66 0 0 107.66 0 240c0 23.46 3.46 46.78 10.26 69.32a14.97 14.97 0 0018.68 10.04 15 15 0 0010.02-18.7A210.35 210.35 0 0130 240c0-115.8 94.2-210 210-210 51.42 0 99.64 18.6 137.26 51.52L364.4 94.4c-9.44 9.4-2.78 25.6 10.6 25.6h50a15 15 0 0015-15V55c0-13.26-16.1-20.08-25.6-10.6zM469.74 170.68a15 15 0 10-28.72 8.66A209.68 209.68 0 01450 240c0 115.8-94.2 210-210 210-51.42 0-99.64-18.6-137.26-51.52l12.86-12.88c9.44-9.4 2.78-25.6-10.6-25.6H55a15 15 0 00-15 15v50c0 13.38 16.22 19.98 25.6 10.6l15.92-15.92A237.19 237.19 0 00240 480c132.34 0 240-107.66 240-240 0-23.46-3.46-46.78-10.26-69.32z" />
+        <path d="M365.58 192.96a15.3 15.3 0 00-11.5-4.34c-26.96 1.68-49.9 7.96-68.94 18.26-5.76-20.78-16.86-41.44-33.56-61.7-5.7-6.94-17.46-6.94-23.16 0-16.7 20.26-27.8 40.92-33.56 61.7-19.04-10.28-41.98-16.56-68.94-18.24a15.22 15.22 0 00-11.5 4.32 15 15 0 00-4.4 11.48c4.76 83.46 46.62 127.78 129.4 135.54.46 0 2.1-.02 2.56-.06 81.36-7.7 123.24-52.02 127.98-135.48a14.96 14.96 0 00-4.38-11.48z" />
+      </SvgIcon>
+      {/* <ZenModeIcon /> */}
     </Grid>
   );
 };
