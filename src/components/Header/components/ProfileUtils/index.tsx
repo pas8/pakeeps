@@ -8,20 +8,24 @@ import { values } from 'lodash';
 import { headerProfileUtilsDenotationIds } from 'models/denotation';
 import ZenModeButton from './components/ZenModeButton';
 import { useTakeHeaderProfileUtilsObj } from 'hooks/useTakeHeaderProfileUtilsObj.hook';
+import { getIsHeaderHavePaperColor } from 'store/modules/Settings/selectors';
 
-const useStyles = makeStyles(({ spacing, palette: { text } }) => ({
-  profileUtils: {
+const useStyles = makeStyles(({ spacing, palette: { text, background } }) => ({
+  profileUtils: ({ isHeaderHavePaperColor }: { isHeaderHavePaperColor: boolean }) => ({
     display: 'flex',
-    '& svg': {
-      color: text.hint,
-      '&:hover': {
-        color: text.primary
+    '& button': {
+      '&:hover svg': {
+        color: !isHeaderHavePaperColor ? background.default : text.primary
+      },
+      '& svg': {
+        color: !isHeaderHavePaperColor ? background.paper : text.secondary
       }
     },
+
     '& button:not(:last-child)': {
       height: spacing(6)
     }
-  },
+  }),
   headerIconButtonContainer: {
     width: 42,
     height: 42,
@@ -30,7 +34,9 @@ const useStyles = makeStyles(({ spacing, palette: { text } }) => ({
 }));
 
 const HeaderProfileUtils: FC = () => {
-  const classes = useStyles();
+  const isHeaderHavePaperColor = useSelector(getIsHeaderHavePaperColor);
+
+  const classes = useStyles({ isHeaderHavePaperColor });
   const { isSiveIsXs } = useBreakpointNames();
 
   const { orderIds } = useSelector(getHeaderProperties);
@@ -48,9 +54,19 @@ const HeaderProfileUtils: FC = () => {
           const { component: Component, toolTipText, onClick } = findedEl;
 
           return (
-            <IconButtonUtilContainer onClick={onClick} title={toolTipText} key={`HeaderProfileUtils-${id}-${idx}`}>
-              <Component />
-            </IconButtonUtilContainer>
+            <Grid
+              className={classes.headerIconButtonContainer}
+              container
+              justify={'center'}
+              alignItems={'center'}
+              key={`HeaderProfileUtils-${id}-${idx}`}
+            >
+              <Tooltip title={toolTipText}>
+                <IconButton onClick={onClick}>
+                  <Component />
+                </IconButton>
+              </Tooltip>
+            </Grid>
           );
         })}
       </Grid>
@@ -59,14 +75,3 @@ const HeaderProfileUtils: FC = () => {
 };
 
 export default HeaderProfileUtils;
-
-const IconButtonUtilContainer: FC<any> = ({ children, onClick, title }) => {
-  const classes = useStyles();
-  return (
-    <Grid className={classes.headerIconButtonContainer} container justify={'center'} alignItems={'center'}>
-      <Tooltip title={title}>
-        <IconButton onClick={onClick}>{children}</IconButton>
-      </Tooltip>
-    </Grid>
-  );
-};

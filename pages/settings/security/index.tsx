@@ -9,7 +9,9 @@ import {
   Button,
   DialogTitle,
   DialogContent,
-  DialogActions
+  DialogActions,
+  Box,
+  GridSize
 } from '@material-ui/core';
 import FieldSetContainer from 'components/FieldSetContainer';
 import { capitalize, mapValues, values } from 'lodash';
@@ -28,9 +30,16 @@ import AuthWithLocalPinCode from 'components/AuthWithLocalPinCode';
 import ActionsButtonGroup from 'components/ActionsButtonGroup';
 import { toChangeUserData } from 'store/modules/App/actions';
 import { useSnackbar } from 'notistack';
-
+import SettingContainer from 'components/SettingContainer'
 const useStyles = makeStyles(({ spacing, palette, breakpoints, shape: { borderRadius } }) => ({
-  container: {},
+  container: {
+    '& .changePinCodeButtonContainer': {
+      '& button': {
+        marginTop:spacing(1),
+        width: '100%'
+      }
+    }
+  },
   visibilityButton: {
     color: palette.text.secondary
   },
@@ -112,11 +121,20 @@ const Security: FC = () => {
       severity: 'error'
     });
   };
+  const defaultContainerBreakpoint = {
+    lg: 6,
+    sm: 12,
+    md: 7,
+    xl: 6,
+    xs: 12
+  } as { [key: string]: GridSize };
+
   return (
-    <Grid container justify={'center'}>
-      <Grid container lg={6} xl={5} md={8} xs={12} sm={11} item className={classes.container}>
+    <Grid container justify={'center'} >
+    <SettingContainer container justify={'center'} >
+      <Grid container   className={classes.container}  item>
         <FieldSetContainer title={'Change password'} isOnlyTop>
-          <Grid className={classes.changePasswordContainer} container item lg={6} sm={12} md={7} xl={6} xs={12}>
+          <Grid className={classes.changePasswordContainer} container item {...defaultContainerBreakpoint}>
             {valuesOfInputsStateOfPasswordChanger.map(({ name }, idx) => {
               const label = capitalize(name);
 
@@ -181,7 +199,7 @@ const Security: FC = () => {
         </FieldSetContainer>
 
         <FieldSetContainer title={'Change pin code'} isOnlyTop>
-          <Grid container alignItems={'center'}>
+          <Grid container alignItems={'center'} item {...defaultContainerBreakpoint}>
             <Grid item container>
               <SwitchByPas
                 checked={isHaveLocalPinCode}
@@ -189,14 +207,17 @@ const Security: FC = () => {
                 title={'Is have a local pin code '}
               />
             </Grid>
-            <Button
-              variant={'outlined'}
-              color={'secondary'}
-              disabled={!isHaveLocalPinCode}
-              onClick={handleChangeDialogOfChangingPinCodeOpenStatus}
-            >
-              Change pin code
-            </Button>
+            <Grid className={'changePinCodeButtonContainer'} container>
+              <Button
+                variant={'outlined'}
+                // size={'large'}
+                color={'secondary'}
+                disabled={!isHaveLocalPinCode}
+                onClick={handleChangeDialogOfChangingPinCodeOpenStatus}
+              >
+                Change pin code
+              </Button>
+            </Grid>
           </Grid>
         </FieldSetContainer>
 
@@ -205,14 +226,18 @@ const Security: FC = () => {
             <Typography variant={'h6'}>Pin code</Typography>
           </DialogTitle>
           <DialogContent>
-            <AuthWithLocalPinCode {...authWithLocalPinCodeProps} />
+            <Grid container>
+            <AuthWithLocalPinCode {...authWithLocalPinCodeProps}  />
+            </Grid>
           </DialogContent>
           <DialogActions>
             <ActionsButtonGroup onClose={onCloseOfDialogOfChangingPinCode} onSave={onSaveOfDialogOfChangingPinCode} />
           </DialogActions>
         </Dialog>
       </Grid>
+    </SettingContainer>
     </Grid>
+
   );
 };
 

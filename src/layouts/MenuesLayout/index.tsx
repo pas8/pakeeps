@@ -26,6 +26,7 @@ const MenuesLayout: FC<MenuesLayoutPropsType> = ({ children }) => {
   ];
 
   // console.log(menuName)
+  // const p = useProperty
   const menuesHidden = menuName === MenusLayoutName.NONE;
   return (
     <>

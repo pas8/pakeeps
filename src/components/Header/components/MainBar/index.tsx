@@ -1,4 +1,4 @@
-import { IconButton, Link, Typography } from '@material-ui/core';
+import { IconButton, Link, Typography ,Grid} from '@material-ui/core';
 import { useSelector } from 'react-redux';
 import { makeStyles, Tooltip } from '@material-ui/core';
 import { useRouter } from 'next/dist/client/router';
@@ -7,29 +7,36 @@ import { FC, Fragment } from 'react';
 import NextLink from 'next/link';
 import { SIGN_IN_URL, NEW_USER_URL } from 'models/denotation';
 import { useBreakpointNames } from 'hooks/useBreakpointNames.hook';
+import { useTakeFuncOfChangngDrawerOpenStatus } from 'hooks/useTakeFuncOfChangngDrawerOpenStatus.hook';
+import { getIsHeaderHavePaperColor } from 'store/modules/Settings/selectors';
 import { getIsAuthedWithLocalPassword } from 'store/modules/App/selectors';
 import { MainBarPropsType } from '../../types';
 import MenuButton from '../ProfileUtils/components/MenuButton';
-import { useTakeFuncOfChangngDrawerOpenStatus } from 'hooks/useTakeFuncOfChangngDrawerOpenStatus.hook';
 
-const useStyles = makeStyles(({ palette: { text } ,spacing}) => ({
-  menuButton: {
-    margin: spacing(0, 0.8, 0, -1.8),
-    '& svg': {
-      color: text.hint, 
-      '&:hover': {
-        color: text.primary
-      }
+
+const useStyles = makeStyles(({ palette: { text, background }, spacing }) => ({
+  container: ({ isHeaderHavePaperColor }: { isHeaderHavePaperColor: boolean }) => ({
+    '& svg,h6': {
+      color: !isHeaderHavePaperColor ? background.paper : text.secondary
     }
-  },
+  }),
+
+  menuButton: ({ isHeaderHavePaperColor }: { isHeaderHavePaperColor: boolean }) => ({
+    margin: spacing(0, 0.8, 0, -1.8),
+    '&:hover svg': {
+      color: !isHeaderHavePaperColor ? background.default : text.primary
+    }
+  }),
   typography: {
     flexGrow: 1
   }
 }));
 
 const MainBar: FC<MainBarPropsType> = ({ isMenuOpen, isMenuExtended }) => {
-  const classes = useStyles();
+  const isHeaderHavePaperColor = useSelector(getIsHeaderHavePaperColor);
+  const classes = useStyles({ isHeaderHavePaperColor });
   const { pathname } = useRouter();
+
   const { isSiveIsXs } = useBreakpointNames();
 
   const isMainPage = pathname === '/';
@@ -62,7 +69,7 @@ const MainBar: FC<MainBarPropsType> = ({ isMenuOpen, isMenuExtended }) => {
   const handleChangeDrawerOpenStatus = useTakeFuncOfChangngDrawerOpenStatus();
 
   return (
-    <>
+    <Grid className={classes.container} container alignItems={'center'}>
       {isRouteIsSignIn || isRoteIsSignUp ? (
         <Typography variant={'h6'}>{isRoteIsSignUp ? 'Register' : 'Log In '}</Typography>
       ) : (
@@ -101,7 +108,7 @@ const MainBar: FC<MainBarPropsType> = ({ isMenuOpen, isMenuExtended }) => {
           )}
         </>
       )}
-    </>
+    </Grid>
   );
 };
 
