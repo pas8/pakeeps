@@ -39,11 +39,11 @@ const HeaderProfileUtils: FC = () => {
 
           const findedEl = headerProfileUtilsObj[id];
           if (!findedEl) return null;
-          const { component: Component, toolTipText } = findedEl;
+          const { component: Component, toolTipText, onClick } = findedEl;
 
           return (
             <Tooltip title={toolTipText} key={`HeaderProfileUtils-${id}-${idx}`}>
-              <IconButtonUtilContainer>
+              <IconButtonUtilContainer onClick={onClick}>
                 <Component />
               </IconButtonUtilContainer>
             </Tooltip>
@@ -56,11 +56,11 @@ const HeaderProfileUtils: FC = () => {
 
 export default HeaderProfileUtils;
 
-const IconButtonUtilContainer: FC = ({ children }) => {
+const IconButtonUtilContainer: FC<any> = ({ children, onClick }) => {
   const classes = useStyles();
   return (
     <Grid className={classes.headerIconButtonContainer} container justify={'center'} alignItems={'center'}>
-      <IconButton>{children}</IconButton>
+      <IconButton onClick={onClick}>{children}</IconButton>
     </Grid>
   );
 };
