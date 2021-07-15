@@ -433,25 +433,23 @@ export type HeaderPropertyiesType = {
 export type FolderOrderNamesValueType = string[];
 export type FolderOrderNamesType = { [key: string]: FolderOrderNamesValueType };
 
-export interface AppInitialStateInteface {
+export type InitialiAppFirebaseData = {  avatarProperties: AvatarPropertiesType;
+labels: GlobalLabelsType;
+dimensions: DimensionsType;
+events: GlobalEventsType;
+headerPropertyies: HeaderPropertyiesType;
+folderOrderNames: FolderOrderNamesType;
+pakeeps: PakeepsType;
+userData: UserDataType;
+pakeepsOrderNames: OrderNamesType;
+pinnedPakeepsOrderNames: OrderNamesType;
+}
+export type AppInitialStateType =  {
   // breakpointsValues: BreakpointsValuesInterface<number>;
   // theme: DefaultThemeInterface;
-
-  avatarProperties: AvatarPropertiesType;
-  labels: GlobalLabelsType;
-  dimensions: DimensionsType;
-  events: GlobalEventsType;
-  headerPropertyies: HeaderPropertyiesType;
-  folderOrderNames: FolderOrderNamesType;
-  pakeeps: PakeepsType;
-  userData: UserDataType;
-  pakeepsOrderNames: OrderNamesType;
-  pinnedPakeepsOrderNames: OrderNamesType;
   notifinationCounter: number;
-  isAllDataWasUploaded: boolean;
-  isCancelSelectedPakeepsId: boolean;
   temporaryData: TemporaryDatatype;
-}
+} & InitialiAppFirebaseData
 
 export type PakeepPropertyValueType = $Values<PakeepElementType>;
 export type PakeepPropertyKeysType = $Keys<PakeepElementType>;
@@ -476,7 +474,9 @@ export type DimensionsType = {
 };
 
 export type TemporaryDatatype = {
+  isCancelSelectedPakeepsId: boolean;
   selectedPakeepsId: SelectedPakeepsIdType;
+  isAllDataWasUploaded: boolean;
   drawerWidth: DrawerWidthType;
   additionalMenuState: { id: string; arrLength: number };
   menuOpenStatus: IsMenuOpenType;

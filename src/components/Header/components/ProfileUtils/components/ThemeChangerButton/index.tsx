@@ -11,13 +11,6 @@ const ThemeChangerButton: FC = () => {
 
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
-  const themePlaceholderFunc = () => {
-    // enqueueSnackbar({ message: 'White theme sucks, I am sr, just unluckky 😅', severity: 'info' });
-    enqueueSnackbar({
-      message: 'U can theme theme in the setting, but remember that, white theme sucks 😅',
-      severity: 'info'
-    });
-  };
   const handleDiameter = 24;
   const circleColor = '#d8d8d8';
   const backgroundColor = '#5e5e5e';
@@ -27,32 +20,32 @@ const ThemeChangerButton: FC = () => {
       <Typography variant={'subtitle1'}>{icon} </Typography>
     </Grid>
   );
-  const switchProps = {
-    onChange: themePlaceholderFunc,
-    checked: true,
-    offHandleColor: circleColor,
-    onHandleColor: circleColor,
-    offColor: backgroundColor,
-    handleDiameter,
-    onColor: backgroundColor,
-    checkedIcon: switchIcon('🌜'),
-    uncheckedIcon: switchIcon('🌞')
-  };
+  // const switchProps = {
+  //   onChange: themePlaceholderFunc,
+  //   checked: true,
+  //   offHandleColor: circleColor,
+  //   onHandleColor: circleColor,
+  //   offColor: backgroundColor,
+  //   handleDiameter,
+  //   onColor: backgroundColor,
+  //   checkedIcon: switchIcon('🌜'),
+  //   uncheckedIcon: switchIcon('🌞')
+  // };
 
   return (
     <>
       {viewOfThemeChangerButton && (
         <>
           {viewOfThemeChangerButton === 'iconButton' && (
-            <Grid onClick={themePlaceholderFunc} container alignItems={'center'} justify={'center'}>
+            <Grid container alignItems={'center'} justify={'center'}>
               <Brightness4OutlinedIcon />
             </Grid>
           )}
-          {viewOfThemeChangerButton === 'switch' && (
+          {/* {viewOfThemeChangerButton === 'switch' && (
             <Grid container alignItems={'center'}>
               <Switch {...switchProps} />
             </Grid>
-          )}
+          )} */}
         </>
       )}
     </>

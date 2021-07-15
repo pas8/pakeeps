@@ -1,26 +1,43 @@
 import { toAddNewPakeep } from './actions';
 import { PakeepElementType } from 'store/modules/App/types';
+import firebase from 'firebase/app';
+import 'firebase/auth';
+import { RootStoreType } from 'models/types';
+import { ThunkAction } from 'redux-thunk';
+import { DefaultFirebaseStateType } from '../Auth/operations';
 // import firebase from 'firebase/app';
 // require('firebase/firestore');
 
 export const operateToAddNewPakeep = () => {};
-// export const operateToAddNewPakeep =
-//   (newPakeep: PakeepElementType): ThunkType<PakeepElementType> =>
-//   dispatch => {
-//     firebase
-//       .firestore()
-//       .collection('users')
-//       .doc('pas8')
-//       .collection('pakeeps')
-//       .add(newPakeep)
-//       .then(snapshot => {
-//         // if (snapshot.exists) {
-//         // let newPakeep = snapshot.data();
-//         console.log(snapshot);
-//         //  dispatch(toAddNewPakeep({newPakeep}))
-//         // }
-//       });
-//   };
+export const operateToUploadData = (): ThunkAction<any, RootStoreType, unknown, any> => (dispatch, getState) => {
+  const {
+    app: { temporaryData, notifinationCounter, ...appData },
+    color,
+    settings
+  } = getState();
+
+  const data: DefaultFirebaseStateType = {
+    app: {
+      ...appData
+    },
+    color,
+    settings
+  };
+
+  firebase
+    .firestore()
+    .collection('users')
+    .doc(firebase.auth().currentUser?.uid)
+    .set(data)
+    .then(snapshot => {
+      // if (snapshot.exists) {
+      // let newPakeep = snapshot.data();
+      console.log(snapshot);
+      //  dispatch(toAddNewPakeep({newPakeep}))
+      // }
+    })
+    .catch(e => console.log(e));
+};
 
 // export const operateToChangeMenuOpenStatus: OperateWOP<
 //   PayloadTypes[TypeNames.HANDLE_CHANGE_MENU_OPEN_STATUS]

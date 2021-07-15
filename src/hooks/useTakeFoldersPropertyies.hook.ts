@@ -1,3 +1,4 @@
+import { useTakeFuncOfChangngDrawerOpenStatus } from './useTakeFuncOfChangngDrawerOpenStatus.hook';
 import { useDispatch, useSelector } from 'react-redux';
 import { BASE_URL, settingUrls, SETTINGS, ACCOUNT, THEME, SECURITY, APPEARANCE } from 'layouts/RouterLayout/denotation';
 import { UseTakeFoldersArrType } from 'models/types';
@@ -11,10 +12,10 @@ import { useAddAdditionalArr } from './useAddAdditionalArr.hook';
 import { useAddIdToFolder } from './useAddIdToFolder.hook';
 import { useFindFolderOrderNames } from './useFindFolderOrderNames.hook';
 import { useConvertHeaderProfileUtilsObjToFolderArr } from './useConvertHeaderProfileUtilsObjToFolderArr.hook';
-import { headerProfileUtilsObj } from 'components/Header/components/ProfileUtils';
 import MenuButton from 'components/Header/components/ProfileUtils/components/MenuButton';
+import { useTakeHeaderProfileUtilsObj } from './useTakeHeaderProfileUtilsObj.hook';
 
-export const useTakeFoldersArr: UseTakeFoldersArrType = ({
+export const useTakeFoldersPropertyies: UseTakeFoldersArrType = ({
   isFoldersHaveDraweView,
   handleCloseFoldersWithDrawerView,
   ...additiontalParamsOfUseFindFolderOrderNames
@@ -26,14 +27,20 @@ export const useTakeFoldersArr: UseTakeFoldersArrType = ({
   const handleHideFolder = () => {
     dispatch(toChangeMenuOpenStatus({ menuOpenStatus: menuOpenStatusDenotation.HIDDEN }));
   };
+  const headerProfileUtilsObj = useTakeHeaderProfileUtilsObj();
   const headerPropfileUtilsArr = useConvertHeaderProfileUtilsObjToFolderArr(headerProfileUtilsObj);
+  const handleChangeDrawerOpenStatus = useTakeFuncOfChangngDrawerOpenStatus();
 
   const zenModeArr = [
     {
       title: 'Menu ',
       iconName: '',
       id: 'Menu',
-      property: { value: AdditionalFolderPropertyNames.CUSTOM_COMPONENT, customComponent: MenuButton },
+      property: {
+        value: AdditionalFolderPropertyNames.CUSTOM_COMPONENT,
+        customComponent: MenuButton,
+        onClick: handleChangeDrawerOpenStatus
+      },
       color: 'default'
     },
     ...headerPropfileUtilsArr

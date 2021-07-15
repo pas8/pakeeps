@@ -31,7 +31,7 @@ export const ColorReducer = (state = authInitialState, action: AuthActionTypes):
   return state;
 };
 
-// const ColorReducer = (state = colorInitialState, action: AppActionTypes): AppInitialStateInteface => {
+// const ColorReducer = (state = colorInitialState, action: AppActionTypes): AppInitialStateType => {
 //   if (!('type' in action) || !TypeNames) return state;
 //   switch (action.type) {
 //     case TypeNames.CHANGE_ONE_COLOR_COLUMN: {

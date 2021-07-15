@@ -1,3 +1,4 @@
+import { SettingsInitialStateType } from './../Settings/types';
 import { RootStoreType } from 'models/types';
 import { Action } from 'redux';
 import firebase from 'firebase/app';
@@ -8,6 +9,8 @@ import { TRANSPARENT } from 'models/denotation';
 import { settingsInitialState } from '../Settings/reducers';
 import { firebaseAppInitialState } from '../App/reducers';
 import { ThunkAction } from 'redux-thunk';
+import { InitialiAppFirebaseData } from '../App/types';
+import { ColorInitialStateType } from '../Color/types';
 
 export type ParamsOfOperateToHandleRegisterType = { email: string; password: string };
 export type OperateToHandleRegisterType = ThunkAction<any, RootStoreType, unknown, any>;
@@ -17,6 +20,11 @@ export const defaultFirebaseState = {
   app: firebaseAppInitialState
 };
 
+export type DefaultFirebaseStateType = {
+  settings: SettingsInitialStateType;
+  app: InitialiAppFirebaseData;
+  color: ColorInitialStateType;
+};
 
 // const changePassword = (currentPassword, newPassword) => {
 //   this.reauthenticate(currentPassword).then(() => {

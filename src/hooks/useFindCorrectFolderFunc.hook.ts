@@ -23,14 +23,14 @@ export const useFindCorrectFolderFunc: UseFindCorrectFolderFuncType = ({
     isPropertyIsDefaultAndRoute: AdditionalFolderPropertyNames.DEFAULT_AND_ROUTE === property.value
   };
   const defaultOnClick: OnClickOfFolderButtonType = e => {
-    if (folderProperties.isPropertyIsCustomComponent) return;
     // !!arrLength && handelOpenAdditionalMenu && handelOpenAdditionalMenu({ id, arrLength });
 
     handleChangeFolderColor(color);
 
     if (folderProperties.isPropertyDefault || folderProperties.isPropertyIsDefaultAndRoute)
       return handleChangeGlobalFolderId(id);
-    else if (folderProperties.isPropertyIsOnClick) return !!property?.onClick && property?.onClick(e);
+    else if (folderProperties.isPropertyIsOnClick || folderProperties.isPropertyIsCustomComponent)
+      return !!property?.onClick && property?.onClick(e);
   };
   const routeOnClick: OnClickOfFolderButtonType = e => {
     handleChangeFolderColor(color);

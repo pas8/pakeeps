@@ -1,5 +1,5 @@
 import { TypeNames } from './enums';
-import { ColorActionTypes, DefaultThemeType } from './types';
+import { ColorActionTypes, ColorInitialStateType, DefaultThemeType } from './types';
 
 // export const defaultTheme: DefaultThemeType = {
 //   primaryMain: 'rgba(0,255,0,1)',
@@ -79,7 +79,7 @@ export const colorInitialState = {
 
 // const colorReducer = createReducer(colorInitialState)({
 
-export const ColorReducer = (state = colorInitialState, action: ColorActionTypes): any => {
+export const ColorReducer = (state = colorInitialState, action: ColorActionTypes): ColorInitialStateType => {
   switch (action.type) {
     case TypeNames.HANDLE_CHANGE_THEME_COLORS: {
       const { newThemeColors } = action.payload;
@@ -137,7 +137,7 @@ export const ColorReducer = (state = colorInitialState, action: ColorActionTypes
   return state;
 };
 
-// const ColorReducer = (state = colorInitialState, action: AppActionTypes): AppInitialStateInteface => {
+// const ColorReducer = (state = colorInitialState, action: AppActionTypes): AppInitialStateType => {
 //   if (!('type' in action) || !TypeNames) return state;
 //   switch (action.type) {
 //     case TypeNames.CHANGE_ONE_COLOR_COLUMN: {

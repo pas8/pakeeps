@@ -43,6 +43,9 @@ const FolderItem: FC<FolderItemPropsType> = ({
   }, [notValidatedHeight, isFolderExtended, isLast, isFirst, folderDimensions, isButtonIsOpenMore]);
 
   const CustomComponent = property.customComponent;
+
+  const isFolderHaveCustomComponent =
+    property.value === AdditionalFolderPropertyNames.CUSTOM_COMPONENT && !!CustomComponent;
   return (
     <Grid ref={ref}>
       <Grid item>
@@ -63,8 +66,8 @@ const FolderItem: FC<FolderItemPropsType> = ({
           }
           alignItems={'center'}
         >
-          <Button className={'buttonWrapperOfFolderItem'} onClick={onClick}>
-            {property.value === AdditionalFolderPropertyNames.CUSTOM_COMPONENT && !!CustomComponent ? (
+          <Button className={clsx('buttonWrapperOfFolderItem')} onClick={onClick}>
+            {isFolderHaveCustomComponent ? (
               <Grid container justify={isFolderExtended ? 'flex-start' : 'center'} wrap={'nowrap'}>
                 <Grid>
                   <CustomComponent />
