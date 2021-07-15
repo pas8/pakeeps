@@ -7,28 +7,42 @@ import { ComposeLayouts } from 'layouts';
 import { isEqual, startsWith } from 'lodash';
 import { NEW_USER_URL, NONE, SIGN_IN_URL } from 'models/denotation';
 import { useRouter } from 'next/dist/client/router';
-import { FC, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { FC, useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { toChangeTemporaryData } from 'store/modules/App/actions';
 import { getHeaderHeight, getIsAuthedWithLocalPassword, getUserData } from 'store/modules/App/selectors';
 // import LogRocket from 'logrocket';
 // LogRocket.init('b6se1p/pakeeps');
 
 const RouterLayout: FC = ({ children }) => {
   const top = useSelector(getHeaderHeight);
-  // const { isAuthedWithLocalPinCode, value } = useSelector(gethLocalPasswordPropetyies);
-
-  const { localPinCode: value } = useSelector(getUserData);
-  const isAuthedWithLocalPinCode = useSelector(getIsAuthedWithLocalPassword);
-  // const { isAuthedWithLocalPinCode, value } = { isAuthedWithLocalPinCode: '', value: '' };
-  // || (!isAuthedWithLocalPinCode && value !== NONE)
-  console.log(value, isAuthedWithLocalPinCode);
-  // const isLoading = useLoading();
+  const dispatch = useDispatch();
   const isLoading = false;
+
+  const { localPinCode: value, ...all } = useSelector(getUserData);
+  const isAuthedWithLocalPinCode = useSelector(getIsAuthedWithLocalPassword);
 
   const layouts = useCorrectLayout();
   const [pinCode, setPinCode] = useState<string>('');
 
-  const authWithLocalPinCodeProps = { pinCode, setPinCode };
+  useEffect(() => {
+    const isTheSame = value === pinCode;
+    const isValueNone = value === 'none' && !!isAuthedWithLocalPinCode;
+console.log(value,isAuthedWithLocalPinCode)
+    if (isValueNone) {
+      dispatch(toChangeTemporaryData({ newTemporaryData: { isAuthedWithLocalPinCode: isValueNone } }));
+      return;
+    }
+
+    if (isTheSame) {
+      dispatch(toChangeTemporaryData({ newTemporaryData: { isAuthedWithLocalPinCode: isTheSame } }));
+      setPinCode('');
+      return;
+    }
+  }, [value, pinCode,isAuthedWithLocalPinCode]);
+
+
+  const authWithLocalPinCodeProps = { pinCode, setPinCode, isHaveTitle: true };
 
   return (
     <ComposeLayouts layouts={layouts}>
@@ -38,7 +52,10 @@ const RouterLayout: FC = ({ children }) => {
         </Grid>
       )}
 
-      {!isAuthedWithLocalPinCode ? <AuthWithLocalPinCode {...authWithLocalPinCodeProps} /> : children}
+      <Grid style={{ height: `calc(100vh - ${top}px` }}>
+        {' '}
+        {!isAuthedWithLocalPinCode ? <AuthWithLocalPinCode {...authWithLocalPinCodeProps} /> : children}{' '}
+      </Grid>
     </ComposeLayouts>
   );
 };

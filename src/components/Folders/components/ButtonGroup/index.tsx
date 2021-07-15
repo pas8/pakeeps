@@ -61,6 +61,7 @@ const useStyles = makeStyles(
       '&  .buttonWrapperOfFolderItem': {
         position: 'relative',
         width: '100%',
+        borderRadius:0,
         height: '100%',
         padding: 0,
         minWidth: 0,

@@ -229,7 +229,7 @@ const nullityOfTemporaryData = {
   selectedPakeepsId: [],
   globalFolderId: '',
   isAllDataWasUploaded: true,
-  isAuthedWithLocalPinCode: false,
+  isAuthedWithLocalPinCode: !false,
   globalEventList: [],
   globalLabelList: []
 };
@@ -374,7 +374,7 @@ export const AppReducer = (state = initialState, action: AppActionTypes): AppIni
       return { ...state, events };
     }
     case TypeNames.HANDLE_CHANGE_USER_DATA: {
-      return { ...state, userData: { ...state.userData, ...action.payload } };
+      return { ...state, userData: { ...state.userData, ...action.payload.userData } };
     }
 
     case TypeNames.HANDLE_CHANGE_HEADER_HEIGTH:

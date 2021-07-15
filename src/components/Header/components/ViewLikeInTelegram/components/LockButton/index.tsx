@@ -1,5 +1,6 @@
 import { Grid, makeStyles } from '@material-ui/core';
 import clsx from 'clsx';
+import LockOpenOutlinedIcon from '@material-ui/icons/LockOpenOutlined';
 import { useSelector } from 'react-redux';
 import { getIsAuthedWithLocalPassword, getIsZenModeActive, getUserData } from 'store/modules/App/selectors';
 
@@ -173,28 +174,29 @@ const LockButton = () => {
   const isZenModeActive = useSelector(getIsZenModeActive);
   const isAuthedWithLocalPinCode = useSelector(getIsAuthedWithLocalPassword);
 
-  const classes = useStyles({ isZenModeActive });
+  // const classes = useStyles({ isZenModeActive });
   return (
-    <Grid
-      item
-      alignItems={'center'}
-      direction={'column'}
-      className={clsx(classes.lockContainer, !isAuthedWithLocalPinCode && classes.animate)}
-    >
-      <Grid className={clsx(classes.points, !isAuthedWithLocalPinCode && classes.animatePoints)}>
-        {Array(4).fill(<Grid />)}
-      </Grid>
-      <Grid className={clsx(classes.arch, !isAuthedWithLocalPinCode && classes.archAnimate)} item></Grid>
-      <Grid
-        alignItems={'center'}
-        justify={'center'}
-        className={clsx(classes.box, !isAuthedWithLocalPinCode && classes.animateBox)}
-        container
-        item
-      >
-        <Grid className={classes.circle}></Grid>
-      </Grid>
-    </Grid>
+    <LockOpenOutlinedIcon />
+    // <Grid
+    //   item
+    //   alignItems={'center'}
+    //   direction={'column'}
+    //   className={clsx(classes.lockContainer, !isAuthedWithLocalPinCode && classes.animate)}
+    // >
+    //   <Grid className={clsx(classes.points, !isAuthedWithLocalPinCode && classes.animatePoints)}>
+    //     {Array(4).fill(<Grid />)}
+    //   </Grid>
+    //   <Grid className={clsx(classes.arch, !isAuthedWithLocalPinCode && classes.archAnimate)} item></Grid>
+    //   <Grid
+    //     alignItems={'center'}
+    //     justify={'center'}
+    //     className={clsx(classes.box, !isAuthedWithLocalPinCode && classes.animateBox)}
+    //     container
+    //     item
+    //   >
+    //     <Grid className={classes.circle}></Grid>
+    //   </Grid>
+    // </Grid>
   );
 };
 

@@ -12,7 +12,7 @@ import HeaderProfileUtils from './components/ProfileUtils';
 import MainBar from './components/MainBar';
 import { HeaderByPasPropsType } from './types';
 import { useBreakpointNames } from 'hooks/useBreakpointNames.hook';
-import { getIsZenModeActive, getPakeepDimensions } from 'store/modules/App/selectors';
+import { getIsAuthedWithLocalPassword, getIsZenModeActive, getPakeepDimensions } from 'store/modules/App/selectors';
 
 const useStyles = makeStyles(theme => ({
   root: ({ navigationViewLikeTelegram }: any) => ({
@@ -62,12 +62,12 @@ const HeaderByPas: FC<HeaderByPasPropsType> = ({
   const { isSizeSmall } = useBreakpointNames();
   const pakeepDimensions = useSelector(getPakeepDimensions);
 
-
   const classes = useStyles({ drawerWidth, navigationViewLikeTelegram, navigationViewLikePakeeps, isMenuOpen });
 
   const isHeaderHavePakeepView = true;
 
-  const isRouteIsSignIn = pathname === SIGN_IN_URL || pathname === NEW_USER_URL;
+  const isAuthedWithLocalPinCode = useSelector(getIsAuthedWithLocalPassword);
+  const isRouteIsSignIn = pathname === SIGN_IN_URL || pathname === NEW_USER_URL || !isAuthedWithLocalPinCode;
   const [ref, { height: headerHeight }] = useMeasure<HTMLDivElement>();
 
   useEffect(() => {
@@ -75,6 +75,7 @@ const HeaderByPas: FC<HeaderByPasPropsType> = ({
   }, [headerHeight]);
 
   const [isSeaching, setIsSeaching] = useState(false);
+
 
   const isOnlySearchVisible = isSizeSmall && isSeaching;
 
@@ -91,11 +92,9 @@ const HeaderByPas: FC<HeaderByPasPropsType> = ({
       <AppBar className={clsx(classes.appBar, { [classes.appBarShift]: isMenuOpen })} ref={ref}>
         {!isZenModeActive && (
           <Toolbar className={classes.toolBar}>
-            {!isOnlySearchVisible && (
-              <MainBar isMenuExtended={isMenuExtended}  isMenuOpen={isMenuOpen} />
-            )}
+            {!isOnlySearchVisible && <MainBar isMenuExtended={isMenuExtended} isMenuOpen={isMenuOpen} />}
             {!isRouteIsSignIn && <HeaderSearch {...headerSearchProps} />}
-            {(!isRouteIsSignIn || !isOnlySearchVisible) && <HeaderProfileUtils />}
+            {!isRouteIsSignIn && <HeaderProfileUtils />}
           </Toolbar>
         )}
       </AppBar>
