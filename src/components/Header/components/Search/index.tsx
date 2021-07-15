@@ -1,22 +1,28 @@
 import { fade, InputBase, makeStyles, useTheme } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
+import { getIsHeaderHavePaperColor } from 'store/modules/Settings/selectors';
 import { HeaderSearchPropsType } from 'components/Header/types';
 import { useBreakpointNames } from 'hooks/useBreakpointNames.hook';
 import { FC } from 'react';
+import { useSelector } from 'react-redux';
 
 const useStyles = makeStyles(theme => ({
-  search: {
+  search: ({ isHeaderHavePaperColor }: { isHeaderHavePaperColor: boolean }) => ({
     position: 'relative',
     display: 'flex',
     borderRadius: theme.shape.borderRadius,
-    backgroundColor: fade(theme.palette.common.white, 0.15),
+    backgroundColor: theme.palette.background.default,
     '&:hover': {
-      backgroundColor: fade(theme.palette.common.white, 0.25)
+      backgroundColor: theme.palette.background.default,
+      width: 'calc(100% + 100px)'
+
+    },
+    '&:focus': {
     },
     marginRight: theme.spacing(2),
     marginLeft: 0,
     width: 'auto'
-  },
+  }),
   searchIcon: {
     padding: theme.spacing(0, 0.4, 0, 1.4),
     height: '100%',
@@ -43,7 +49,9 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const HeaderSearch: FC<HeaderSearchPropsType> = ({ isOnlySearchVisible, isSeaching, setIsSeaching }) => {
-  const classes = useStyles();
+  const isHeaderHavePaperColor = useSelector(getIsHeaderHavePaperColor);
+
+  const classes = useStyles({ isHeaderHavePaperColor });
 
   return (
     <div className={classes.search}>

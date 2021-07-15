@@ -22,7 +22,7 @@ export type SettingsActionTypes = $Values<ActionsValueTypes>;
 export type SettingsInitialStateType = {
   viewOfThemeChangerButton: 'iconButton' | 'switch';
   isHeaderHavePaperColor: boolean;
-  ampm:boolean
+  ampm: boolean;
   maxSnack: number;
   isUtilsHaveViewLikeInGoogleKeep: boolean;
   timeFormat: TimeFormatType;

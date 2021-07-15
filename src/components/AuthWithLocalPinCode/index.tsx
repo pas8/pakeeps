@@ -71,10 +71,12 @@ const AuthWithLocalPinCode: FC<AuthWithLocalPinCodePropsType> = ({
     setPinCode(value => (value.length > 0 ? dropRight(value.split('')).join('') : ''));
   };
   const Container = isHaveTitle ? FieldSetContainer : Grid;
+const containerProps = isHaveTitle ? {isOnlyTop:false,title:'Pin code '} : {component:'fieldset',style:{border:0}}
+
   return (
     <Grid className={classes.container} container alignItems={'center'} justify={'center'}>
       <Grid className={classes.pinCodeContainer}>
-        <Container container alignItems={'center'} justify={'center'} title={'Pin code '} isOnlyTop={false}>
+        <Container container alignItems={'center'} justify={'center'} {...containerProps} >
           <Grid container alignItems={'center'} justify={'center'} className={'inputContainer'}>
             <InputBase
               value={pinCode}

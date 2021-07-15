@@ -168,12 +168,12 @@ const NewPaKeep: FC = () => {
 
   const gridContainerProps = {
     className: clsx(classes.container, statusState.isNewPakeepContainerHaveFullWidth ? classes.full : classes.unFull),
-    item:true,
+    item: true,
     //@ts-ignore
     [breakpoint]: fullWidthValue || breakpointsValues[breakpoint],
     ref
   };
-// console.log(value)
+  // console.log(value)
   useEffect(() => {
     // console.log(JSON.parse(value!));
     // _.isEqual(state, nulittyState) && setState(JSON.parse(value!));
@@ -182,11 +182,9 @@ const NewPaKeep: FC = () => {
   usePageLeave(() => {
     updateCookie(JSON.stringify(state));
   });
-
   const handleAddNewPakeep = () => {
-    dispatch(toAddNewPakeep({ newPakeep: state }));
     setState({ ...defaultState, ...defaultInputState, checkBoxes: [] });
-
+    dispatch(toAddNewPakeep({ newPakeep: state }));
   };
 
   const newPakeepUtils = {
@@ -207,7 +205,7 @@ const NewPaKeep: FC = () => {
   };
 
   return (
-    <Grid {...gridContainerProps} >
+    <Grid {...gridContainerProps}>
       <Grid className={classes.wrapper}>
         <Grid className={classes.inputsContainer}>
           <Grid className={classes.titleContainer}>

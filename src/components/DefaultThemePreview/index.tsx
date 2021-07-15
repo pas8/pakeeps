@@ -1,6 +1,8 @@
 import { makeStyles, Grid, Typography } from '@material-ui/core';
 import { FC } from 'react';
+import { useSelector } from 'react-redux';
 import { colord } from 'colord';
+import { getIsHeaderHavePaperColor } from 'store/modules/Settings/selectors';
 import { useAlpha } from 'hooks/useAlpha.hook';
 import { DefaultThemePreviewPropsType } from './types';
 
@@ -24,20 +26,20 @@ const useStyles = makeStyles(({ spacing, palette, breakpoints, shape: { borderRa
     position: 'relative',
     borderRadius,
     margin: spacing(0, 0, 1, 0),
+    overflow: 'hidden',
     border: `3px solid `,
     borderColor: isThemeSelected ? palette.primary.main : background.paper,
     '&:hover': {
       cursor: 'pointer',
       borderColor: palette.secondary.main
     }
-
   }),
 
   headerOfThemePrewier: ({ background, isHeaderHavePaperColor }: any) => ({
     height: spacing(4.4),
     width: '100%',
     padding: spacing(0, 2),
-    background: isHeaderHavePaperColor ? palette.primary.main : background.paper,
+    background: !isHeaderHavePaperColor ? palette.primary.main : background.paper,
     '& > div': {
       height: spacing(2.4),
       background: colord(background.default).invert().alpha(0.32).toHex(),
@@ -125,7 +127,10 @@ const useStyles = makeStyles(({ spacing, palette, breakpoints, shape: { borderRa
 
     '& .titleOfPakeepPrevier': {
       height: spacing(2.8),
-
+      overflow: 'hidden',
+      color:palette.text.primary,
+      textOverflow: 'ellipsis',
+      whiteSpace: 'nowrap',
       minWidth: '42%'
     },
     '& .textOfPakeepPrevier': {
@@ -216,17 +221,17 @@ const DefaultThemePreview: FC<DefaultThemePreviewPropsType> = ({
 
   isThemeSelected,
   onClick,
-  isHeaderHavePaperColor
 }) => {
+  const isHeaderHavePaperColor = useSelector(getIsHeaderHavePaperColor);
+
   const classes = useStyles({ background, isHeaderHavePaperColor, isThemeSelected });
 
   return (
     <Grid className={classes.defaultThemeElementContainer} onClick={onClick}>
       <Grid>
         <Grid className={classes.headerOfThemePrewier} justify={'space-between'} alignItems={'center'} container>
-          <Grid className={classes.leftPartPreviewOfHeaderOfThemePrewier}>
-          </Grid>
-          <Grid className={classes.rightPartPreviewOfHeaderOfThemePrewier} item/>
+          <Grid className={classes.leftPartPreviewOfHeaderOfThemePrewier}></Grid>
+          <Grid className={classes.rightPartPreviewOfHeaderOfThemePrewier} item />
         </Grid>
       </Grid>
       <Grid className={classes.bodyOfThemePrevier} container alignItems={'flex-start'}>

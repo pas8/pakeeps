@@ -40,3 +40,5 @@ export const getViewOfThemeChangerButton = createSelector(
   [({ settings: { viewOfThemeChangerButton } }: RootStoreType) => viewOfThemeChangerButton],
   viewOfThemeChangerButton => viewOfThemeChangerButton
 );
+
+

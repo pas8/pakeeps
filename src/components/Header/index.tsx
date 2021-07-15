@@ -13,6 +13,7 @@ import MainBar from './components/MainBar';
 import { HeaderByPasPropsType } from './types';
 import { useBreakpointNames } from 'hooks/useBreakpointNames.hook';
 import { getIsAuthedWithLocalPassword, getIsZenModeActive, getPakeepDimensions } from 'store/modules/App/selectors';
+import { getIsHeaderHavePaperColor } from 'store/modules/Settings/selectors';
 
 const useStyles = makeStyles(theme => ({
   root: ({ navigationViewLikeTelegram }: any) => ({
@@ -20,7 +21,8 @@ const useStyles = makeStyles(theme => ({
     marginBottom: navigationViewLikeTelegram ? theme.spacing(4) : 0
   }),
   appBar: {
-    backgroundColor: theme.palette.background.paper,
+    backgroundColor: ({ isHeaderHavePaperColor }: any) =>
+      isHeaderHavePaperColor ? theme.palette.background.paper : theme.palette.primary.main,
     color: theme.palette.maxEmphasis?.main,
     padding: 0,
     display: 'flex',
@@ -57,12 +59,19 @@ const HeaderByPas: FC<HeaderByPasPropsType> = ({
   navigationViewLikeTelegram,
   navigationViewLikePakeeps
 }) => {
+  const isHeaderHavePaperColor = useSelector(getIsHeaderHavePaperColor);
   const { pathname } = useRouter();
   const dispatch = useDispatch();
   const { isSizeSmall } = useBreakpointNames();
   const pakeepDimensions = useSelector(getPakeepDimensions);
 
-  const classes = useStyles({ drawerWidth, navigationViewLikeTelegram, navigationViewLikePakeeps, isMenuOpen });
+  const classes = useStyles({
+    drawerWidth,
+    navigationViewLikeTelegram,
+    navigationViewLikePakeeps,
+    isMenuOpen,
+    isHeaderHavePaperColor
+  });
 
   const isHeaderHavePakeepView = true;
 
@@ -75,7 +84,6 @@ const HeaderByPas: FC<HeaderByPasPropsType> = ({
   }, [headerHeight]);
 
   const [isSeaching, setIsSeaching] = useState(false);
-
 
   const isOnlySearchVisible = isSizeSmall && isSeaching;
 
