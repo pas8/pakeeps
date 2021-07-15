@@ -60,7 +60,7 @@ export type PayloadTypes = {
 
   [TypeNames.HANDLE_CHANGE_TEMPORARY_DATA]: { newTemporaryData: Optional<TemporaryDatatype> };
 
-  [TypeNames.HANDLE_CHANGE_USER_DATA]: { userData: UserDataType };
+  [TypeNames.HANDLE_CHANGE_USER_DATA]: { userData: Optional<UserDataType> };
 
   [TypeNames.HANDLE_CHANGE_GLOBAL_LABEL_LIST_TEMPROPARY_DATA]: { globalLabelList: LabelsOfPakeepType };
   [TypeNames.HANDLE_CHANGE_GLOBAL_EVENT_LIST_TEMPROPARY_DATA]: { globalEventList: EventsOfPakeepType };
@@ -433,23 +433,24 @@ export type HeaderPropertyiesType = {
 export type FolderOrderNamesValueType = string[];
 export type FolderOrderNamesType = { [key: string]: FolderOrderNamesValueType };
 
-export type InitialiAppFirebaseData = {  avatarProperties: AvatarPropertiesType;
-labels: GlobalLabelsType;
-dimensions: DimensionsType;
-events: GlobalEventsType;
-headerPropertyies: HeaderPropertyiesType;
-folderOrderNames: FolderOrderNamesType;
-pakeeps: PakeepsType;
-userData: UserDataType;
-pakeepsOrderNames: OrderNamesType;
-pinnedPakeepsOrderNames: OrderNamesType;
-}
-export type AppInitialStateType =  {
+export type InitialiAppFirebaseData = {
+  avatarProperties: AvatarPropertiesType;
+  labels: GlobalLabelsType;
+  dimensions: DimensionsType;
+  events: GlobalEventsType;
+  headerPropertyies: HeaderPropertyiesType;
+  folderOrderNames: FolderOrderNamesType;
+  pakeeps: PakeepsType;
+  userData: UserDataType;
+  pakeepsOrderNames: OrderNamesType;
+  pinnedPakeepsOrderNames: OrderNamesType;
+};
+export type AppInitialStateType = {
   // breakpointsValues: BreakpointsValuesInterface<number>;
   // theme: DefaultThemeInterface;
   notifinationCounter: number;
   temporaryData: TemporaryDatatype;
-} & InitialiAppFirebaseData
+} & InitialiAppFirebaseData;
 
 export type PakeepPropertyValueType = $Values<PakeepElementType>;
 export type PakeepPropertyKeysType = $Keys<PakeepElementType>;

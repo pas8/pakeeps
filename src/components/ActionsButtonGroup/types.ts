@@ -1,3 +1,4 @@
+import { Optional } from 'utility-types';
 import { MouseEventHandler } from 'react';
 
 export type UseStylesOfCloseButtonWithIconType = { colorOfCloseButton: string };
@@ -10,4 +11,5 @@ export type SaveButtonWithIconPropsType = UseStylesOfSaveButtonWithIconType & {
   onSave: (e: any) => void;
 };
 
-export type ActionsButtonGroupPropsType = SaveButtonWithIconPropsType & CloseButtonWithIconPropsType;
+export type ActionsButtonGroupPropsType = Optional<SaveButtonWithIconPropsType, 'colorOfSaveButton'> &
+  Optional<CloseButtonWithIconPropsType, 'colorOfCloseButton'>;

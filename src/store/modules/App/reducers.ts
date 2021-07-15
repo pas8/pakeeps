@@ -229,7 +229,7 @@ const nullityOfTemporaryData = {
   selectedPakeepsId: [],
   globalFolderId: '',
   isAllDataWasUploaded: true,
-  isAuthedWithLocalPinCode: true,
+  isAuthedWithLocalPinCode: false,
   globalEventList: [],
   globalLabelList: []
 };
@@ -373,6 +373,9 @@ export const AppReducer = (state = initialState, action: AppActionTypes): AppIni
       const events = filter(state.events, ({ id }) => id !== eventId);
       return { ...state, events };
     }
+    case TypeNames.HANDLE_CHANGE_USER_DATA: {
+      return { ...state, userData: { ...state.userData, ...action.payload } };
+    }
 
     case TypeNames.HANDLE_CHANGE_HEADER_HEIGTH:
     case TypeNames.HANDLE_SET_SELECTED_PAKEEPIDS_ARR:
@@ -391,7 +394,6 @@ export const AppReducer = (state = initialState, action: AppActionTypes): AppIni
     case TypeNames.HANDLE_CHANGE_FOLDER_ORDER_NAMES:
 
     case TypeNames.HANDLE_CHANGE_PAKEEPS:
-    case TypeNames.HANDLE_CHANGE_USER_DATA:
     case TypeNames.HANDLE_CHANGE_GLOBAL_LABELS:
     case TypeNames.HANDLE_CHANGE_FOLDERS:
     case TypeNames.HANDLE_CHANGE_GLOBAL_FOLDER_ID: {
