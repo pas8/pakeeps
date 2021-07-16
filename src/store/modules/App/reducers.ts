@@ -15,7 +15,13 @@ import {
   useFindPakeep,
   usePinStatusOfPakeeps
 } from './hooks';
-import { AppActionTypes, AppInitialStateType, FolderOrderNamesType, GlobalLabelsType } from './types';
+import {
+  AppActionTypes,
+  AppInitialStateType,
+  FolderOrderNamesType,
+  GlobalLabelsType,
+  SearchPropertyiesType
+} from './types';
 import { random, sampleSize, words, filter, values } from 'lodash';
 //@ts-ignore
 import randomSentence from 'random-sentence';
@@ -97,7 +103,7 @@ const randomPakeeps = Array(8)
     const events = [
       { id: '1', value: addHours(new Date(), 2) },
       { id: '2', value: addHours(new Date(), 32) },
-      { id: '3', value: addHours(new Date(), 100 )}
+      { id: '3', value: addHours(new Date(), 100) }
     ];
 
     return {
@@ -119,8 +125,6 @@ const randomPakeeps = Array(8)
       isCheckBoxes
     };
   });
-
-
 
 export const defaultAvatarProperties = {
   url: NONE,
@@ -224,6 +228,7 @@ const nullityOfTemporaryData = {
     id: '',
     isHovering: false
   },
+  searchPropertyies: { value: [], name: NONE } as SearchPropertyiesType,
   headerHeight: 0,
   isCancelSelectedPakeepsId: false,
   drawerWidth: 0,

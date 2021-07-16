@@ -109,6 +109,10 @@ export const getIsAuthedWithLocalPassword = createSelector(
   [({ app: { temporaryData } }: RootStoreType) => temporaryData.isAuthedWithLocalPinCode],
   isAuthedWithLocalPinCode => isAuthedWithLocalPinCode
 );
+export const getSearchPropertyies = createSelector(
+  [({ app: { temporaryData } }: RootStoreType) => temporaryData.searchPropertyies],
+  searchPropertyies => searchPropertyies
+);
 
 export const getUserData = createSelector([({ app: { userData } }: RootStoreType) => userData], userData => userData);
 

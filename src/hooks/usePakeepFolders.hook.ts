@@ -2,6 +2,8 @@ import { mapValues } from 'lodash';
 import { DEFAULT, NONE, pakeepPropertyiesNames } from 'models/denotation';
 import { UsePakeepFoldersType } from 'models/types';
 import { AdditionalFolderPropertyNames } from 'models/unums';
+import { useSelector } from 'react-redux';
+import { getSearchPropertyies } from 'store/modules/App/selectors';
 import { ALL } from './../models/denotation';
 import { useAddIdToFolder } from './useAddIdToFolder.hook';
 
@@ -49,10 +51,11 @@ export const usePakeepFolders: UsePakeepFoldersType = ({ events, labels }) => {
   const foldersKeyName = {
     PAKEEP_UTILS: 'PAKEEP_UTILS',
     LABELS: 'LABELS',
-    EVENTS: 'EVENTS'
+    EVENTS: 'EVENTS',
+    SEARCH: 'SEARCH'
   };
 
-  const folders = useAddIdToFolder({
+  const defaultFolders = useAddIdToFolder({
     [foldersKeyName.PAKEEP_UTILS]: {
       label: 'Properties',
       arr: defaultPropetiesFolderArr
@@ -66,5 +69,25 @@ export const usePakeepFolders: UsePakeepFoldersType = ({ events, labels }) => {
       arr: eventArr
     }
   });
-  return folders;
+
+  const { name } = useSelector(getSearchPropertyies);
+
+  if (name === NONE) return defaultFolders;
+
+  const searchFolder = useAddIdToFolder({
+    [foldersKeyName.SEARCH]: {
+      label: '',
+      arr: [
+        {
+          title:name,
+          iconName: 'search',
+          id: foldersKeyName.SEARCH,
+          property,
+          color: DEFAULT
+        }
+      ]
+    }
+  });
+
+  return { ...searchFolder, ...defaultFolders };
 };

@@ -25,6 +25,12 @@ export type HeaderSearchPropsType = {
   isOnlySearchVisible: boolean;
 };
 
+export type SearchDataType = {
+  [key: string]: {
+    [key: string]: any;
+  };
+};
+
 export type UseStylesOfHeaderSearchType = {
   isSeaching: boolean;
   isHeaderHavePaperColor: boolean;
