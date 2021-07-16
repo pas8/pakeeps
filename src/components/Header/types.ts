@@ -40,3 +40,5 @@ export type SearchGroupContainerWithTitlePropsType = {
   isListHidden: boolean;
   setIsListHidden: Dispatch<SetStateAction<boolean>>;
 };
+
+export type DefaultSearchGroupPropsType = { title: any;  onClose: () => void };

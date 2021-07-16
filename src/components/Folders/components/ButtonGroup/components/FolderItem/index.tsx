@@ -38,7 +38,6 @@ const FolderItem: FC<FolderItemPropsType> = ({
         : isLast  && !isButtonIsOpenMore
         ? notValidatedHeight + folderDimensions.buttonGroup.marginBottom 
         : notValidatedHeight;
-console.log(height)
     height !== 0 && setAditionalFoldersHeigthObj(state => ({ ...state, [id]: height }));
   }, [notValidatedHeight, isFolderExtended, isLast, isFirst, folderDimensions, isButtonIsOpenMore]);
 

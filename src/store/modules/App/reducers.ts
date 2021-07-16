@@ -146,36 +146,36 @@ export const nullityDefaultDialogProps = {
   customColor: {} as CustomColorType
 };
 
-// export const defaultEvents = [
-//   {
-//     title: 'Later today',
-//     iconName: 'today',
-//     id: '1',
-//     value: Date.now(),
-//     onlyTime: true,
-//     color: PRIMARY,
-//     variant: DEFAULT
-//   },
-//   {
-//     title: 'Tomorrow',
-//     iconName: 'tomorrow',
-//     id: '2',
-//     value: addDays(Date.now(), 1),
-//     onlyTime: true,
-//     color: SECONDARY,
-//     variant: OUTLINED
-//   },
-//   { title: 'Next week', iconName: 'week', id: '3', value: addDays(Date.now(), 7), color: DEFAULT, variant: OUTLINED },
-//   {
-//     title: 'Next Mouth',
-//     iconName: 'alarm',
-//     id: '4',
-//     value: addDays(Date.now(), 30),
-//     onlyTime: false,
-//     color: '#fbbc49',
-//     variant: DEFAULT
-//   }
-// ];
+export const defaultEvents = [
+  {
+    title: 'Later today',
+    iconName: 'today',
+    id: '1',
+    value: Date.now(),
+    onlyTime: true,
+    color: PRIMARY,
+    variant: DEFAULT
+  },
+  {
+    title: 'Tomorrow',
+    iconName: 'tomorrow',
+    id: '2',
+    value: addDays(Date.now(), 1),
+    onlyTime: true,
+    color: SECONDARY,
+    variant: OUTLINED
+  },
+  { title: 'Next week', iconName: 'week', id: '3', value: addDays(Date.now(), 7), color: DEFAULT, variant: OUTLINED },
+  {
+    title: 'Next Mouth',
+    iconName: 'alarm',
+    id: '4',
+    value: addDays(Date.now(), 30),
+    onlyTime: false,
+    color: '#fbbc49',
+    variant: DEFAULT
+  }
+];
 
 export const defaultDimensions = {
   folder: {
@@ -210,7 +210,7 @@ export const firebaseAppInitialState = {
     isEmailVerified: false,
     isEmailPubic: false
   },
-  events: [],
+  events: [...defaultEvents],
   headerPropertyies: { orderIds: values(headerProfileUtilsDenotationIds) },
   selectedPakeepsId: [],
   pinnedPakeepsOrderNames: [],

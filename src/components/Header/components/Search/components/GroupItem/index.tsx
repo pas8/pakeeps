@@ -6,7 +6,7 @@ import { FC } from 'react';
 const useStyles = makeStyles(({ shape, spacing, palette, typography: { subtitle2, subtitle1, caption } }) => ({
   container: ({ color }: { color: string }) => ({
     // MuiChip-root
-    borderBottom: `1px solid ${useAlpha(color, 0.42)}`,
+    borderTop: `1px solid ${useAlpha(color, 0.42)}`,
     '&:focus': {
       color,
       ' & .MuiChip-root': {
@@ -28,7 +28,14 @@ const useStyles = makeStyles(({ shape, spacing, palette, typography: { subtitle2
     '& p': {
       textAlign: 'left',
       textTransform: 'capitalize',
-      color: palette.text.secondary
+      display:'flex',
+      color: palette.text.secondary,
+      '& svg': {
+        padding:2,
+        marginRight: 4,
+        
+        // marginTop:-2,
+      },
     },
     '& button': {
       ...caption,
@@ -50,7 +57,11 @@ const useStyles = makeStyles(({ shape, spacing, palette, typography: { subtitle2
       cursor: 'pointer',
       '& p': {
         textDecoration: 'underline',
+        color,
+        '& svg':{
         color
+          
+        }
         // color
       },
       '& .MuiChip-root': {
@@ -64,18 +75,18 @@ const useStyles = makeStyles(({ shape, spacing, palette, typography: { subtitle2
 
 const SearchGroupItem: FC<{
   color: string;
-  arr: string[];
+  label?:string
   title: string;
   onClick: () => void;
   customIcon?: any | false;
-}> = ({ color, arr, title, onClick, customIcon = false }) => {
+}> = ({ color,  title, onClick, customIcon = false,label }) => {
   const classes = useStyles({ color });
 
   return (
     <Button className={classes.container} onClick={onClick}>
       <Grid container alignItems={'center'}>
         <Typography variant={'body2'}>
-          {!!customIcon ? customIcon : <Chip label={arr.length} size={'small'} />} {title}
+          {!!customIcon ? customIcon : <Chip label={label} size={'small'} />}<span> {title}</span>
         </Typography>
       </Grid>
     </Button>
