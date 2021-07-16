@@ -1,4 +1,9 @@
-import { pakeepPropertyiesNames, NONE, menuOpenStatusDenotation } from 'models/denotation';
+import {
+  pakeepPropertyiesNames,
+  NONE,
+  menuOpenStatusDenotation,
+  allPakeeepsSearchPropertyies
+} from 'models/denotation';
 import {
   CustomColorType,
   FolderDimensionsType,
@@ -474,8 +479,8 @@ export type DimensionsType = {
   pakeep: PakeepDimensionsType;
 };
 
-export type NamesOfSearchPropertyiesType = 'title' | 'text' | 'backgroundColor' | 'color' | typeof NONE;
-export type ValueOfSearchPropertyiesType = string[];
+export type NamesOfSearchPropertyiesType = keyof typeof allPakeeepsSearchPropertyies;
+export type ValueOfSearchPropertyiesType = any;
 export type SearchPropertyiesType = {
   value: ValueOfSearchPropertyiesType;
   name: NamesOfSearchPropertyiesType;

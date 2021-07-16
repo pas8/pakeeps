@@ -6,7 +6,7 @@ import { getIsHeaderHavePaperColor } from 'store/modules/Settings/selectors';
 import { HeaderSearchPropsType, SearchDataType, UseStylesOfHeaderSearchType } from 'components/Header/types';
 import { ChangeEventHandler, FC, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { getPakeeps } from 'store/modules/App/selectors';
+import { getGlobalEventsArr, getPakeeps } from 'store/modules/App/selectors';
 import { useClickAway } from 'react-use';
 import { useFocus } from 'hooks/useFocus.hook';
 import _, { chain, groupBy, isEmpty, map, mapValues, pickBy, toPairs } from 'lodash';
@@ -22,7 +22,7 @@ const useStyles = makeStyles(
     breakpoints,
     typography: { subtitle2, subtitle1, caption, body2, h6 }
   }) => ({
-    search: ({ isHeaderHavePaperColor, isSeaching ,isQueryEmpty}: UseStylesOfHeaderSearchType) => {
+    search: ({ isHeaderHavePaperColor, isSeaching, isQueryEmpty }: UseStylesOfHeaderSearchType) => {
       const backgroundColor = isHeaderHavePaperColor
         ? palette.background.default
         : isSeaching
@@ -37,16 +37,16 @@ const useStyles = makeStyles(
         marginLeft: 0,
         transition: transitions.create('width'),
         border: '1px solid',
-        borderBottom: isHeaderHavePaperColor && !isQueryEmpty? 1 : '1px solid',
-        borderColor: isSeaching 
+        borderBottom: isHeaderHavePaperColor && !isQueryEmpty ? 1 : '1px solid',
+        borderColor: isSeaching
           ? palette.secondary.main
-          : !isHeaderHavePaperColor 
+          : !isHeaderHavePaperColor
           ? palette.background.paper
           : palette.background.default,
-        borderBottomColor:!isQueryEmpty && isSeaching ? palette.secondary.main : palette.background.default,
+        borderBottomColor: !isQueryEmpty && isSeaching ? palette.secondary.main : palette.background.default,
 
-        borderBottomRightRadius: isSeaching &&  !isQueryEmpty ? 0 : borderRadius,
-        borderBottomLeftRadius: isSeaching &&  !isQueryEmpty? 0 : borderRadius,
+        borderBottomRightRadius: isSeaching && !isQueryEmpty ? 0 : borderRadius,
+        borderBottomLeftRadius: isSeaching && !isQueryEmpty ? 0 : borderRadius,
         width: isSeaching ? spacing(96) : spacing(42),
         color: isHeaderHavePaperColor
           ? palette.text.secondary
@@ -167,16 +167,16 @@ const useStyles = makeStyles(
 const HeaderSearch: FC<HeaderSearchPropsType> = ({ isOnlySearchVisible, isSeaching, setIsSeaching }) => {
   const isHeaderHavePaperColor = useSelector(getIsHeaderHavePaperColor);
   const pakeeps = useSelector(getPakeeps);
-
+  const events = useSelector(getGlobalEventsArr);
 
   const [query, setQuery] = useState('');
-  const [searchData, setSearchData] = useState<SearchDataType>({});
+  const ref = useRef(null);
 
   const nullityOfFilteredPakeepData = { title: {}, text: {}, backgroundColor: {}, color: {} } as {
     [Property in NamesOfSearchPropertyiesType]: { [key: string]: string[] };
   };
 
-  const filteredData = pakeeps.reduce((sum, { title, text, color, backgroundColor, id }) => {
+  const defaultPakeepSeacrhPropertyiesObj = pakeeps.reduce((sum, { title, text, color, backgroundColor, id }) => {
     const obj = { title, text, color, backgroundColor };
 
     const notFilteredSearhDataObj = mapValues(obj, (value, key: NamesOfSearchPropertyiesType) => {
@@ -193,23 +193,34 @@ const HeaderSearch: FC<HeaderSearchPropsType> = ({ isOnlySearchVisible, isSeachi
   const handleChangeQuery: ChangeEventHandler<HTMLInputElement> = ({ target: { value } }) => {
     setQuery(value);
   };
-  const ref = useRef(null);
-  useClickAway(ref, () => {
+  const handleSetSeachingStatusIsFalse = ()=>  { 
     setIsSeaching(false);
+
+  }
+
+
+  useClickAway(ref, () => {
+    handleSetSeachingStatusIsFalse()
   });
 
   const [inputRef, setInputFocus] = useFocus();
 
+  const isQueryEmpty = !query;
+  const classes = useStyles({ isHeaderHavePaperColor, isSeaching, isOnlySearchVisible, isQueryEmpty });
 
-  const isQueryEmpty = !query
-  const classes = useStyles({ isHeaderHavePaperColor, isSeaching, isOnlySearchVisible ,isQueryEmpty});
+  
+ 
+  const handleCloseSearch = () => {
+    setQuery('');
+    handleSetSeachingStatusIsFalse()
+  };
 
-const handleCloseSearch = () => {
-  setQuery('')
-  setIsSeaching(false)
+  // const queryValue = value.toString().toLowerCase().includes(query.toLowerCase()) ? value.toString() : '';
 
+  // const labelsSearchObj =
+  const searchData = { ...defaultPakeepSeacrhPropertyiesObj };
 
-}
+  // console.log(searchData);
   return (
     <>
       <Grid className={classes.search} container ref={ref} onFocus={() => setIsSeaching(true)}>
@@ -225,7 +236,6 @@ const handleCloseSearch = () => {
           endAdornment={
             !!isSeaching && (
               <IconButton size={'small'} className={'clearButton'} onClick={handleCloseSearch}>
-                
                 <CloseOutlinedIcon />
               </IconButton>
             )
@@ -243,9 +253,9 @@ const handleCloseSearch = () => {
         />
         {isSeaching && !isQueryEmpty && (
           <Grid className={classes.menuContainer}>
-            {map(filteredData, (list, key) => {
+            {map(searchData, (list, key) => {
               if (isEmpty(list)) return null;
-              return <SearchGroup list={list} title={key} key={key} />;
+              return <SearchGroup list={list} title={key} key={key} onClose={handleSetSeachingStatusIsFalse} />;
             })}
           </Grid>
         )}

@@ -20,7 +20,10 @@ export const useFindFolderOrderNames: UseFindFolderOrderNamesType = (
 
   const headerHeight = useSelector(getHeaderHeight);
   const maxFolderHeight =
-    windowHeight - headerHeight - folderDimensions.container.paddingBottom - folderDimensions.buttonItem.height -  folderDimensions.container.paddingBottom 
+    windowHeight -
+    headerHeight -
+    folderDimensions.container.paddingBottom -
+    folderDimensions.buttonItem.height - folderDimensions.buttonGroup.marginBottom  - folderDimensions.buttonGroup.marginBottom 
 
   const nulittyValueOfFoldersReduceFunc = {
     foldersHeight: 0,

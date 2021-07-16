@@ -1,9 +1,11 @@
-import { useThemeColors } from './useThemeColors.hook';
+import { useTheme } from '@material-ui/core';
+import { DEFAULT, PRIMARY, SECONDARY } from 'models/denotation';
 
 export const useValidateColor = (color: string) => {
-  const [primary, secondary] = useThemeColors();
+  const {palette:{primary,secondary}} = useTheme()
+
   const validatedColor =
-    color === 'default' || !color || color === 'primary' ? primary : color === 'secondary' ? secondary : color;
+    color === DEFAULT || !color || color === PRIMARY ? primary.main : color === SECONDARY ? secondary.main : color;
 
   return validatedColor;
 };

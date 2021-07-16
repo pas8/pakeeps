@@ -34,3 +34,9 @@ export type SearchDataType = {
 export type UseStylesOfHeaderSearchType = {
   [Property in 'isSeaching' | 'isQueryEmpty' | 'isHeaderHavePaperColor' | 'isOnlySearchVisible']: boolean;
 };
+
+export type SearchGroupContainerWithTitlePropsType = {
+  title: string;
+  isListHidden: boolean;
+  setIsListHidden: Dispatch<SetStateAction<boolean>>;
+};

@@ -33,12 +33,12 @@ const FolderItem: FC<FolderItemPropsType> = ({
 
   useEffect(() => {
     const height =
-      isFirst && isFolderExtended
+      isFirst && isFolderExtended && !!label
         ? notValidatedHeight + folderDimensions.buttonGroup.labelHeight
-        : isLast && isFolderExtended && !isButtonIsOpenMore
-        ? notValidatedHeight + folderDimensions.buttonGroup.marginBottom
+        : isLast  && !isButtonIsOpenMore
+        ? notValidatedHeight + folderDimensions.buttonGroup.marginBottom 
         : notValidatedHeight;
-
+console.log(height)
     height !== 0 && setAditionalFoldersHeigthObj(state => ({ ...state, [id]: height }));
   }, [notValidatedHeight, isFolderExtended, isLast, isFirst, folderDimensions, isButtonIsOpenMore]);
 

@@ -42,3 +42,23 @@ export const headerProfileUtilsDenotationIds = {
 
 export const CLOSE_MENU_ID = 'CLOSE_MENU';
 export const HEADER_PROPFILE_UTILS_FOLDER = 'HEADER_PROPFILE_UTILS_FOLDER';
+
+export const pakeeepsSearchColorPropertyies = {
+  backgroundColor: 'backgroundColor',
+  color: 'color'
+};
+
+export const allPakeeepsSearchPropertyies = {
+  ...pakeeepsSearchColorPropertyies,
+  title: 'title',
+  text: 'text',
+  [NONE]: NONE
+};
+
+
+export const pakeepFoldersKeyName = {
+  PAKEEP_UTILS: 'PAKEEP_UTILS',
+  LABELS: 'LABELS',
+  EVENTS: 'EVENTS',
+  SEARCH: 'SEARCH'
+};
