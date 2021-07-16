@@ -11,6 +11,7 @@ import { useClickAway } from 'react-use';
 import { useFocus } from 'hooks/useFocus.hook';
 import _, { chain, groupBy, isEmpty, map, mapValues, pickBy, toPairs } from 'lodash';
 import { NamesOfSearchPropertyiesType } from 'store/modules/App/types';
+import SearchGroup from './components/Group';
 
 const useStyles = makeStyles(
   ({
@@ -19,9 +20,9 @@ const useStyles = makeStyles(
     transitions,
     palette,
     breakpoints,
-    typography: { subtitle2, subtitle1, caption ,body2,h6}
+    typography: { subtitle2, subtitle1, caption, body2, h6 }
   }) => ({
-    search: ({ isHeaderHavePaperColor, isSeaching }: UseStylesOfHeaderSearchType) => {
+    search: ({ isHeaderHavePaperColor, isSeaching ,isQueryEmpty}: UseStylesOfHeaderSearchType) => {
       const backgroundColor = isHeaderHavePaperColor
         ? palette.background.default
         : isSeaching
@@ -36,17 +37,17 @@ const useStyles = makeStyles(
         marginLeft: 0,
         transition: transitions.create('width'),
         border: '1px solid',
-        borderBottom: isHeaderHavePaperColor ? 0 : '1px solid',
-        borderColor: isSeaching
+        borderBottom: isHeaderHavePaperColor && !isQueryEmpty? 1 : '1px solid',
+        borderColor: isSeaching 
           ? palette.secondary.main
-          : !isHeaderHavePaperColor
+          : !isHeaderHavePaperColor 
           ? palette.background.paper
           : palette.background.default,
-        borderBottomColor: palette.background.default,
+        borderBottomColor:!isQueryEmpty && isSeaching ? palette.secondary.main : palette.background.default,
 
-        borderBottomRightRadius: isSeaching ? 0 : borderRadius,
-        borderBottomLeftRadius: isSeaching ? 0 : borderRadius,
-        width: isSeaching ? spacing(92) : spacing(42),
+        borderBottomRightRadius: isSeaching &&  !isQueryEmpty ? 0 : borderRadius,
+        borderBottomLeftRadius: isSeaching &&  !isQueryEmpty? 0 : borderRadius,
+        width: isSeaching ? spacing(96) : spacing(42),
         color: isHeaderHavePaperColor
           ? palette.text.secondary
           : isSeaching
@@ -93,33 +94,47 @@ const useStyles = makeStyles(
         left: -1,
         top: '100%',
         '& .containerOfSearchGroup': {
-          padding: spacing(1, 1),
+          padding: spacing(0.4, 0),
 
           '& legend': {
             ...h6,
-         
+            // ...subtitle2,
+            fontSize: subtitle1.fontSize,
+            padding: spacing(0, 0, 0, 0.8),
+
             textTransform: 'capitalize'
           }
         },
         '& .containerOfSearchItem': {
           // MuiChip-root
-          padding: spacing(0.4, 0),
+
+          padding: spacing(1.2, 0.2, 1.2, 1.2),
+          borderRadius: 0,
+          margin: 0,
+          '& .MuiChip-root': {
+            ...caption,
+            height: 24,
+            marginRight: 8
+          },
           width: '100%',
           '& p': {
             overflow: 'hidden',
-            // ...subtitle2,
-            // fontSize: subtitle1.fontSize,
-            maxWidth: spacing(28),
+            textTransform: 'capitalize',
+            maxWidth: spacing(42),
+            color: palette.text.secondary,
             whiteSpace: 'nowrap',
             textOverflow: 'ellipsis'
           },
           '& button': {
             ...caption,
-            padding: spacing(0, 0.4),
-'& svg':{
+            textTransform: 'lowercase',
 
-  marginLeft:-4,
-},
+            padding: spacing(0, 0.8),
+            '& svg': {
+              // fontSize:'1em',
+              marginLeft: -6,
+              color: palette.text.secondary
+            },
             display: 'none',
 
             background: palette.background.default
@@ -127,6 +142,21 @@ const useStyles = makeStyles(
           '&:hover button': {
             display: 'flex',
             wrap: 'no-wrap'
+          },
+          '&:hover': {
+            background: palette.secondary.main,
+            '& p, .MuiChip-root': {
+              fontWeight: 600,
+              maxWidth: spacing(32),
+              color: palette.getContrastText(palette.text.secondary)
+            },
+            '& .MuiChip-root': {
+              borderColor: palette.getContrastText(palette.text.secondary)
+            },
+            '& button,svg': {
+              color: palette.secondary.main,
+              borderColor: 'transparent'
+            }
           }
         }
       };
@@ -138,7 +168,6 @@ const HeaderSearch: FC<HeaderSearchPropsType> = ({ isOnlySearchVisible, isSeachi
   const isHeaderHavePaperColor = useSelector(getIsHeaderHavePaperColor);
   const pakeeps = useSelector(getPakeeps);
 
-  const classes = useStyles({ isHeaderHavePaperColor, isSeaching, isOnlySearchVisible });
 
   const [query, setQuery] = useState('');
   const [searchData, setSearchData] = useState<SearchDataType>({});
@@ -171,6 +200,16 @@ const HeaderSearch: FC<HeaderSearchPropsType> = ({ isOnlySearchVisible, isSeachi
 
   const [inputRef, setInputFocus] = useFocus();
 
+
+  const isQueryEmpty = !query
+  const classes = useStyles({ isHeaderHavePaperColor, isSeaching, isOnlySearchVisible ,isQueryEmpty});
+
+const handleCloseSearch = () => {
+  setQuery('')
+  setIsSeaching(false)
+
+
+}
   return (
     <>
       <Grid className={classes.search} container ref={ref} onFocus={() => setIsSeaching(true)}>
@@ -185,9 +224,9 @@ const HeaderSearch: FC<HeaderSearchPropsType> = ({ isOnlySearchVisible, isSeachi
           }
           endAdornment={
             !!isSeaching && (
-              <IconButton size={'small'} className={'clearButton'}>
-                {' '}
-                <CloseOutlinedIcon />{' '}
+              <IconButton size={'small'} className={'clearButton'} onClick={handleCloseSearch}>
+                
+                <CloseOutlinedIcon />
               </IconButton>
             )
           }
@@ -202,39 +241,11 @@ const HeaderSearch: FC<HeaderSearchPropsType> = ({ isOnlySearchVisible, isSeachi
           }}
           inputProps={{ 'aria-label': 'search' }}
         />
-        {isSeaching && (
+        {isSeaching && !isQueryEmpty && (
           <Grid className={classes.menuContainer}>
             {map(filteredData, (list, key) => {
-              return (
-                <Grid className={'containerOfSearchGroup'} container key={key}>
-                  <Typography component={'legend'}>{key}</Typography>
-                  {map(list, (arr, title) => {
-                    return (
-                      <Button   className={'containerOfSearchItem'}>
-                      <Grid
-                      
-                        key={title}
-                        container
-                        alignItems={'center'}
-                        justify={'space-between'}
-                        wrap={'nowrap'}
-                      >
-                        <Grid>
-                          <Grid container>
-                          <Chip label={arr.length} variant={'outlined'} size={'small'} />
-
-                            <Typography variant={'body2'}>{title} </Typography>
-                          </Grid>
-                        </Grid>
-                        <Button endIcon={<KeyboardReturnOutlinedIcon />} size={'small'} variant={'outlined'}>
-                          Jump to
-                        </Button>
-                      </Grid>
-                      </Button>
-                    );
-                  })}
-                </Grid>
-              );
+              if (isEmpty(list)) return null;
+              return <SearchGroup list={list} title={key} key={key} />;
             })}
           </Grid>
         )}

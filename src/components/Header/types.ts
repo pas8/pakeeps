@@ -32,7 +32,5 @@ export type SearchDataType = {
 };
 
 export type UseStylesOfHeaderSearchType = {
-  isSeaching: boolean;
-  isHeaderHavePaperColor: boolean;
-  isOnlySearchVisible: boolean;
+  [Property in 'isSeaching' | 'isQueryEmpty' | 'isHeaderHavePaperColor' | 'isOnlySearchVisible']: boolean;
 };
