@@ -474,9 +474,17 @@ export type DimensionsType = {
   pakeep: PakeepDimensionsType;
 };
 
+export type NamesOfSearchPropertyiesType = 'title' | 'text' | 'backgroundColor' | 'color' | typeof NONE;
+export type ValueOfSearchPropertyiesType = string[];
+export type SearchPropertyiesType = {
+  value: ValueOfSearchPropertyiesType;
+  name: NamesOfSearchPropertyiesType;
+};
+
 export type TemporaryDatatype = {
   isCancelSelectedPakeepsId: boolean;
   selectedPakeepsId: SelectedPakeepsIdType;
+  searchPropertyies: SearchPropertyiesType;
   isAllDataWasUploaded: boolean;
   drawerWidth: DrawerWidthType;
   additionalMenuState: { id: string; arrLength: number };

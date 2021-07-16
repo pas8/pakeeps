@@ -25,7 +25,11 @@ const useStyles = makeStyles(({ spacing, shape: { borderRadius }, palette, typog
     }
   },
   menuItemContainer: {
+    '&:hover div': {
+      color: palette.getContrastText(palette.secondary.main)
+    },
     '& div': {
+      color: palette.text.secondary,
       zIndex: 10000
     },
     '& p': {
@@ -33,13 +37,18 @@ const useStyles = makeStyles(({ spacing, shape: { borderRadius }, palette, typog
       fontSize: subtitle1.fontSize
     },
     '&:hover .MuiTouchRipple-root': {
-      background: useAlpha(palette.secondary.main, 0.42)
+      background: useAlpha(palette.secondary.main, 1)
     },
     '& svg': {
       margin: spacing(0, 0.8, 0, -0.4)
     }
   },
-  menuChildContainer: { borderRadius, overflow: 'hidden' }
+  menuChildContainer: {
+    borderRadius,
+    overflow: 'hidden',
+    background: palette.background.default,
+    border: `1px solid ${palette.secondary.main}`
+  }
 }));
 
 const AccountMenu: FC<AccountMenuPropsType> = ({ id, customColor, mouseX: left, mouseY: top, onClose }) => {

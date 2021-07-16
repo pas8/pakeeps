@@ -14,6 +14,7 @@ import LanguageOutlinedIcon from '@material-ui/icons/LanguageOutlined';
 import LandscapeOutlinedIcon from '@material-ui/icons/LandscapeOutlined';
 import LocalPostOfficeOutlinedIcon from '@material-ui/icons/LocalPostOfficeOutlined';
 import WidgetsOutlinedIcon from '@material-ui/icons/WidgetsOutlined';
+import SearchIcon from '@material-ui/icons/Search';
 import PinOutlinedIcon from './components/PinOutlinedIcon';
 import SettingsOutlinedIcon from '@material-ui/icons/SettingsOutlined';
 import InfinityIcon from './components/Infinity';
@@ -63,6 +64,8 @@ export const iconsArr = [
   { icon: <ViewWeekOutlinedIcon />, iconName: 'week', id: 'random3', checkedIcon: <ViewWeekIcon /> },
   { icon: <ViewColumnOutlinedIcon />, iconName: 'view', id: 'view' },
   { icon: <ArrowBackOutlinedIcon />, iconName: 'arrowBack', id: 'arrowBack' },
+  { icon: <SearchIcon />, iconName: 'search', id: 'search' },
+  
   { icon: <CloseIcon />, iconName: 'close', id: 'close' },
   { icon: <LockOutlinedIcon />, iconName: 'security', id: 'security' },
   { icon: <DashboardOutlinedIcon />, iconName: 'dashboard', id: 'random4', checkedIcon: <DashboardIcon /> },
