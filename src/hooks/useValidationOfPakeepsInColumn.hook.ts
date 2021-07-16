@@ -1,4 +1,4 @@
-import { find, filter, pull } from 'lodash';
+import { find, filter, pull, values } from 'lodash';
 import { pakeepPropertyiesNames } from 'models/denotation';
 import { UseValidationOfPakeepsInColumnType } from 'models/types';
 import { useSelector } from 'react-redux';
@@ -6,31 +6,24 @@ import { getGlobalFolderId } from 'store/modules/App/selectors';
 import { PakeepElementType, PakeepsType } from 'store/modules/App/types';
 
 export const useValidationOfPakeepsInColumn: UseValidationOfPakeepsInColumnType = ({
-  notValidatedPakeepsInColumn: validatedPakeepsInColumn,
-  // notValidatedPakeepsInColumn,
+  notValidatedPakeepsInColumn,
   isPakeepDragContextPinned
 }) => {
   const folderId = useSelector(getGlobalFolderId);
-  // console.log('folderId', folderId);
-  // if (!notValidatedPakeepsInColumn) return null;
+  const validatedPakeepsInColumn = notValidatedPakeepsInColumn.map(el => {
+    if (!el) return null;
+    if (folderId === pakeepPropertyiesNames.isArchived && !!el.isArchived) return el;
+    if (el?.isArchived) return null;
 
-  // const validatedPakeepsInColumn: (PakeepElementType | null)[] = notValidatedPakeepsInColumn.map(el => {
-  //   if (!el) return null;
-  //   if (folderProperty === 'ALL') return el;
-  //   if (folderProperty === pakeepPropertyiesNames.isArchived && el[folderProperty]) return el;
-  //   if (el?.isArchived) return null;
-  //   if (!(folderProperty === 'label' || folderProperty === 'event') && el[folderProperty]) return el;
-  //   if (!(folderProperty === 'label' || folderProperty === 'event') && !!find(el?.labels, id => id === folderId))
-  //     return el;
+    if (folderId === 'ALL') return el;
 
-  //   // if (folderProperty !== 'label' && el[folderProperty]) return el;
+    if (!!el[values(pakeepPropertyiesNames).find(id => id === folderId)!]) return el;
+    if (!!find(el?.labels, id => id === folderId)) return el;
 
-  //   // if (isPakeepDragContextPinned && el.isPinned) return el;
-  //   // if (isPakeepDragContextPinned && !el.isPinned) return null;
-  //   // if (folderProperty !== 'isPinned' && el?.isPinned) return null;
+    if (!!find(el?.events, ({ id }) => id === folderId)) return el;
+    return null;
+  });
 
-  //   return null;
-  // });
   //@ts-ignore
   const filtered: PakeepsType = pull(validatedPakeepsInColumn, null);
 

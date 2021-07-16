@@ -12,7 +12,7 @@ const useStyles = makeStyles(({ spacing, palette, shape: { borderRadius }, typog
     border: '1px solid',
     borderColor: useAlpha(palette.text.primary),
     borderRadius,
-    background:palette.background.paper,
+    background: palette.background.paper,
     borderBottom: 0,
     '& legend': {
       padding: spacing(0.8, 1.4, 0.4),
@@ -70,7 +70,7 @@ const MoreMenuOfFolders: FC<MoreMenuOfFoldersPropsType> = ({
               {folder.arr.map(({ iconName, id, title, ...defaultFolderItemProps }, idx) => {
                 const [icon] = useTakeIcon(iconName);
 
-                const onClick = useFindCorrectFolderFunc({
+                const { onClick } = useFindCorrectFolderFunc({
                   ...defaultUseFindCorrectFolderFuncProps,
                   ...defaultFolderItemProps,
                   id
