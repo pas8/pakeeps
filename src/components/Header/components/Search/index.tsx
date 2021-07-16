@@ -6,12 +6,14 @@ import { getIsHeaderHavePaperColor } from 'store/modules/Settings/selectors';
 import { HeaderSearchPropsType, SearchDataType, UseStylesOfHeaderSearchType } from 'components/Header/types';
 import { ChangeEventHandler, FC, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { getGlobalEventsArr, getPakeeps } from 'store/modules/App/selectors';
+import { getGlobalEventsArr, getLabels, getPakeeps } from 'store/modules/App/selectors';
 import { useClickAway } from 'react-use';
 import { useFocus } from 'hooks/useFocus.hook';
 import _, { chain, groupBy, isEmpty, map, mapValues, pickBy, toPairs } from 'lodash';
 import { NamesOfSearchPropertyiesType } from 'store/modules/App/types';
-import SearchGroup from './components/Group';
+import PakeepPropertiesSearchGroup from './components/PakeepPropertiesGroup';
+import SearchGroupContainerWithTitle from './components/ContainerWithTitle';
+import AttributesPropertiesGroup from './components/AttributesPropertiesGroup';
 
 const useStyles = makeStyles(
   ({
@@ -93,8 +95,11 @@ const useStyles = makeStyles(
         right: -1,
         left: -1,
         top: '100%',
+
+     
         '& .containerOfSearchGroup': {
           padding: spacing(0.4, 0),
+  
 
           '& legend': {
             ...h6,
@@ -168,6 +173,7 @@ const HeaderSearch: FC<HeaderSearchPropsType> = ({ isOnlySearchVisible, isSeachi
   const isHeaderHavePaperColor = useSelector(getIsHeaderHavePaperColor);
   const pakeeps = useSelector(getPakeeps);
   const events = useSelector(getGlobalEventsArr);
+  const labels = useSelector(getLabels);
 
   const [query, setQuery] = useState('');
   const ref = useRef(null);
@@ -176,11 +182,15 @@ const HeaderSearch: FC<HeaderSearchPropsType> = ({ isOnlySearchVisible, isSeachi
     [Property in NamesOfSearchPropertyiesType]: { [key: string]: string[] };
   };
 
+  const useCheckQuery = (value: string | string[]) => {
+    return value.toString().toLowerCase().includes(query.toLowerCase());
+  };
+
   const defaultPakeepSeacrhPropertyiesObj = pakeeps.reduce((sum, { title, text, color, backgroundColor, id }) => {
     const obj = { title, text, color, backgroundColor };
 
     const notFilteredSearhDataObj = mapValues(obj, (value, key: NamesOfSearchPropertyiesType) => {
-      const queryValue = value.toString().toLowerCase().includes(query.toLowerCase()) ? value.toString() : '';
+      const queryValue = useCheckQuery(value) ? value.toString() : '';
 
       if (!queryValue || !sum[key]) return sum[key];
       if (!sum[key][queryValue]) return { ...sum[key], [queryValue]: [id] };
@@ -193,14 +203,12 @@ const HeaderSearch: FC<HeaderSearchPropsType> = ({ isOnlySearchVisible, isSeachi
   const handleChangeQuery: ChangeEventHandler<HTMLInputElement> = ({ target: { value } }) => {
     setQuery(value);
   };
-  const handleSetSeachingStatusIsFalse = ()=>  { 
+  const handleSetSeachingStatusIsFalse = () => {
     setIsSeaching(false);
-
-  }
-
+  };
 
   useClickAway(ref, () => {
-    handleSetSeachingStatusIsFalse()
+    handleSetSeachingStatusIsFalse();
   });
 
   const [inputRef, setInputFocus] = useFocus();
@@ -208,19 +216,24 @@ const HeaderSearch: FC<HeaderSearchPropsType> = ({ isOnlySearchVisible, isSeachi
   const isQueryEmpty = !query;
   const classes = useStyles({ isHeaderHavePaperColor, isSeaching, isOnlySearchVisible, isQueryEmpty });
 
-  
- 
   const handleCloseSearch = () => {
     setQuery('');
-    handleSetSeachingStatusIsFalse()
+    handleSetSeachingStatusIsFalse();
   };
 
-  // const queryValue = value.toString().toLowerCase().includes(query.toLowerCase()) ? value.toString() : '';
+  // const queryValue = ? value.toString() : '';
 
   // const labelsSearchObj =
-  const searchData = { ...defaultPakeepSeacrhPropertyiesObj };
+  // const searchData = { ...defaultPakeepSeacrhPropertyiesObj };
 
-  // console.log(searchData);
+  const eventsSearchArr = events.filter(({ title, }) => useCheckQuery(title));
+  const labelsSearchArr = labels.filter(({ title }) => useCheckQuery(title));
+
+  const attributesSearchPropertyiesArr = [
+    { title: 'Events', arr: eventsSearchArr,defaultIconName:'week' },
+    { title: 'Labels', arr: labelsSearchArr,defaultIconName:'label' }
+  ];
+
   return (
     <>
       <Grid className={classes.search} container ref={ref} onFocus={() => setIsSeaching(true)}>
@@ -240,7 +253,7 @@ const HeaderSearch: FC<HeaderSearchPropsType> = ({ isOnlySearchVisible, isSeachi
               </IconButton>
             )
           }
-          placeholder="Search…"
+          placeholder={'Search…'}
           type={'text'}
           autoComplete={'off'}
           value={query}
@@ -253,9 +266,23 @@ const HeaderSearch: FC<HeaderSearchPropsType> = ({ isOnlySearchVisible, isSeachi
         />
         {isSeaching && !isQueryEmpty && (
           <Grid className={classes.menuContainer}>
-            {map(searchData, (list, key) => {
+            {map(defaultPakeepSeacrhPropertyiesObj, (list, key) => {
               if (isEmpty(list)) return null;
-              return <SearchGroup list={list} title={key} key={key} onClose={handleSetSeachingStatusIsFalse} />;
+              return (
+                <PakeepPropertiesSearchGroup
+                  list={list}
+                  title={key}
+                  key={key}
+                  onClose={handleSetSeachingStatusIsFalse}
+                />
+              );
+            })}
+
+            {attributesSearchPropertyiesArr.map((el, idx) => {
+              if (!el.arr.length) return null;
+              const key = `attributesSearchPropertyiesArr-${el.title}-${idx}`;
+
+              return <AttributesPropertiesGroup {...el} key={key} onClose={handleSetSeachingStatusIsFalse} />;
             })}
           </Grid>
         )}

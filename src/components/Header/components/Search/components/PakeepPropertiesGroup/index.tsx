@@ -1,16 +1,18 @@
 import { useTheme } from '@material-ui/core';
 import { isArray, map } from 'lodash';
 import { FC, useState } from 'react';
-import SearchGroupItem from '../GroupItem';
 import { useRouter } from 'next/dist/client/router';
-import { allPakeeepsSearchPropertyies, DEFAULT, pakeepFoldersKeyName } from 'models/denotation';
 import { useDispatch } from 'react-redux';
+
+import { allPakeeepsSearchPropertyies, DEFAULT, pakeepFoldersKeyName } from 'models/denotation';
+import { DefaultSearchGroupPropsType } from 'components/Header/types';
+import { useValidateColor } from 'hooks/useValidateColor.hook';
 import { toChangeTemporaryData } from 'store/modules/App/actions';
 import { NamesOfSearchPropertyiesType } from 'store/modules/App/types';
+import SearchGroupItem from '../GroupItem';
 import SearchGroupContainerWithTitle from '../ContainerWithTitle';
-import { useValidateColor } from 'hooks/useValidateColor.hook';
 
-const SearchGroup: FC<{ title: any; list: any; onClose: () => void }> = ({ title, list, onClose }) => {
+const PakeepPropertiesSearchGroup: FC<DefaultSearchGroupPropsType & { list: any }> = ({ title, list, onClose }) => {
   const [isListHidden, setIsListHidden] = useState(true);
 
   const { palette } = useTheme();
@@ -41,10 +43,10 @@ const SearchGroup: FC<{ title: any; list: any; onClose: () => void }> = ({ title
             );
             onClose();
           };
-          return <SearchGroupItem title={key} arr={arr} key={key} color={color} onClick={onClick} />;
+          return <SearchGroupItem title={key} label={`${arr.length}`} key={key} color={color} onClick={onClick} />;
         })}
     </SearchGroupContainerWithTitle>
   );
 };
 
-export default SearchGroup;
+export default PakeepPropertiesSearchGroup;
