@@ -55,53 +55,6 @@ import { DialogLayoutName, MenusLayoutName } from 'models/unums';
 //   },
 //   ...randomPakeeps
 // ],
-// const randomPakeeps = Array(8)
-//   .fill('pakeepID')
-//   .map((el, idx) => {
-//     const randomColor = colord({ r: random(256), g: random(256), b: random(256) }).toHex();
-//     const anotherRandomcolor = colord({ r: random(256), g: random(256), b: random(256) }).toHex();
-
-//     const color = colord(randomColor).isDark() && colord(anotherRandomcolor).isLight() ? anotherRandomcolor : DEFAULT;
-//     const backgroundColor = color === DEFAULT ? randomColor : !!random(1) ? randomColor : DEFAULT;
-
-//     const id = `${el}-${idx}`;
-
-//     const text = `${Array(random(2, 8))
-//       .fill('')
-//       .map(() => randomSentence())
-//       .toString()}-${id}`;
-
-//     const isCheckBoxes = !!random(1);
-//     const checkBoxes = Array(random(2, 4))
-//       .fill('')
-//       .map(() => ({ value: randomSentence(), isAccomplished: !!random(1), id: nanoid(), color: 'default' }));
-
-//     const events = [
-//       { id: '1', value: addHours(new Date(), 2) },
-//       { id: '2', value: addHours(new Date(), 32) },
-//       { id: '3', value: addHours(new Date(), 100) }
-//     ];
-
-//     return {
-//       title: randomSentence({ words: random(4, 8) }),
-//       text,
-//       isInBookmark: !!random(1),
-//       isFavorite: !!random(1),
-//       labels: sampleSize(
-//         labelsOfInitialState.map(({ id }) => id),
-//         random(labelsOfInitialState.length)
-//       ),
-//       isArchived: !!random(1),
-//       events,
-//       id,
-//       checkBoxes: isCheckBoxes ? checkBoxes : [],
-//       isPinned: !!random(1),
-//       backgroundColor,
-//       color,
-//       isCheckBoxes
-//     };
-//   });
-
 const labelsOfInitialState: GlobalLabelsType = [
   { color: '', title: 'Day plans', iconName: 'category', id: 'label0', variant: 'outlined' },
   { color: '#dd6b2a', title: 'Week plans', iconName: 'star', id: 'label1', variant: 'outlined' },
@@ -119,6 +72,55 @@ const labelsOfInitialState: GlobalLabelsType = [
   { color: '#dd6b2a', title: 'Week plans', iconName: 'star', id: 'labe23l1', variant: 'outlined' },
   { color: 'primary', title: 'Mouth plans', iconName: 'keyboard', id: 'lweabel2', variant: 'outlined' }
 ];
+
+const randomPakeeps = Array(8)
+  .fill('pakeepID')
+  .map((el, idx) => {
+    const randomColor = colord({ r: random(256), g: random(256), b: random(256) }).toHex();
+    const anotherRandomcolor = colord({ r: random(256), g: random(256), b: random(256) }).toHex();
+
+    const color = colord(randomColor).isDark() && colord(anotherRandomcolor).isLight() ? anotherRandomcolor : DEFAULT;
+    const backgroundColor = color === DEFAULT ? randomColor : !!random(1) ? randomColor : DEFAULT;
+
+    const id = `${el}-${idx}`;
+
+    const text = `${Array(random(2, 8))
+      .fill('')
+      .map(() => randomSentence())
+      .toString()}-${id}`;
+
+    const isCheckBoxes = !!random(1);
+    const checkBoxes = Array(random(2, 4))
+      .fill('')
+      .map(() => ({ value: randomSentence(), isAccomplished: !!random(1), id: nanoid(), color: 'default' }));
+
+    const events = [
+      { id: '1', value: addHours(new Date(), 2) },
+      { id: '2', value: addHours(new Date(), 32) },
+      { id: '3', value: addHours(new Date(), 100 )}
+    ];
+
+    return {
+      title: randomSentence({ words: random(4, 8) }),
+      text,
+      isInBookmark: !!random(1),
+      isFavorite: !!random(1),
+      labels: sampleSize(
+        labelsOfInitialState.map(({ id }) => id),
+        random(labelsOfInitialState.length)
+      ),
+      isArchived: !!random(1),
+      events,
+      id,
+      checkBoxes: isCheckBoxes ? checkBoxes : [],
+      isPinned: !!random(1),
+      backgroundColor,
+      color,
+      isCheckBoxes
+    };
+  });
+
+
 
 export const defaultAvatarProperties = {
   url: NONE,
@@ -208,7 +210,7 @@ export const firebaseAppInitialState = {
   headerPropertyies: { orderIds: values(headerProfileUtilsDenotationIds) },
   selectedPakeepsId: [],
   pinnedPakeepsOrderNames: [],
-  pakeeps: [],
+  pakeeps: [...randomPakeeps],
   pakeepsOrderNames: [],
   folderOrderNames: {}
 };

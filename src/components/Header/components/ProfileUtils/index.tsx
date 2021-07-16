@@ -9,13 +9,19 @@ import { headerProfileUtilsDenotationIds } from 'models/denotation';
 import ZenModeButton from './components/ZenModeButton';
 import { useTakeHeaderProfileUtilsObj } from 'hooks/useTakeHeaderProfileUtilsObj.hook';
 import { getIsHeaderHavePaperColor } from 'store/modules/Settings/selectors';
+import { useAlpha } from 'hooks/useAlpha.hook';
 
 const useStyles = makeStyles(({ spacing, palette: { text, background } }) => ({
   profileUtils: ({ isHeaderHavePaperColor }: { isHeaderHavePaperColor: boolean }) => ({
     display: 'flex',
     '& button': {
-      '&:hover svg': {
-        color: !isHeaderHavePaperColor ? background.default : text.primary
+      '&:hover': {
+        '& .MuiTouchRipple-root': {
+          background: useAlpha(!isHeaderHavePaperColor ? background.default : text.primary)
+        },
+        '& svg': {
+          color: !isHeaderHavePaperColor ? background.default : text.primary
+        }
       },
       '& svg': {
         color: !isHeaderHavePaperColor ? background.paper : text.secondary

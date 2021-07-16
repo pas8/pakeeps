@@ -24,3 +24,9 @@ export type HeaderSearchPropsType = {
   setIsSeaching: Dispatch<SetStateAction<boolean>>;
   isOnlySearchVisible: boolean;
 };
+
+export type UseStylesOfHeaderSearchType = {
+  isSeaching: boolean;
+  isHeaderHavePaperColor: boolean;
+  isOnlySearchVisible: boolean;
+};
