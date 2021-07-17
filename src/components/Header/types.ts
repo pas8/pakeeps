@@ -47,7 +47,7 @@ export type DefaultSearchGroupPropsType = { title: any; onClose: () => void };
 export type HeaderMenuArrItemType = {
   text: string;
   customIconComponent?: any;
-  onClick: () => void;
+  onClick: (e: any) => void;
   iconName?: string;
   id: string;
 };

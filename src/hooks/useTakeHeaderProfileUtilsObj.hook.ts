@@ -1,7 +1,8 @@
 import { colord } from 'colord';
 import firebase from 'firebase/app';
-import { MouseEventHandler, useEffect } from 'react';
+import { MouseEventHandler, } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useRouter } from 'next/dist/client/router';
 import { useSnackbar } from 'notistack';
 import 'firebase/auth';
 
@@ -13,6 +14,8 @@ import UploadButton from 'components/Header/components/ProfileUtils/components/U
 import ZenModeButton from 'components/Header/components/ProfileUtils/components/ZenModeButton';
 import LockButton from 'components/Header/components/ViewLikeInTelegram/components/LockButton';
 import { headerProfileUtilsDenotationIds, NONE } from 'models/denotation';
+import { SETTINGS_ACCOUNT_BASE_URL } from 'layouts/RouterLayout/denotation';
+import { toChangeLoginStatus } from 'store/modules/Auth/actions';
 import { MenusLayoutName } from 'models/unums';
 import { toChangeTemporaryData } from 'store/modules/App/actions';
 import { operateToUploadData } from 'store/modules/App/operations';
@@ -22,11 +25,7 @@ import { getColorTheme } from 'store/modules/Color/selectors';
 import { toChangeSettingProperty } from 'store/modules/Settings/actions';
 import { ParamsOfUseConvertHeaderProfileUtilsObjToFolderArrType } from './../models/types';
 import { useIsColorLight } from './useIsColorLight.hook';
-import { SETTINGS_ACCOUNT_BASE_URL } from 'layouts/RouterLayout/denotation';
-import { toChangeLoginStatus } from 'store/modules/Auth/actions';
-import SignOutButton from 'components/Icons/components/SignOutButton';
-import { useRouter } from 'next/dist/client/router';
-import { omit, pick } from 'lodash';
+import { useFindCorrectHeaderUtilsObj } from './useFindCorrectHeaderUtilsObj.hook';
 
 export const useTakeHeaderProfileUtilsObj = (): ParamsOfUseConvertHeaderProfileUtilsObjToFolderArrType => {
   const dispatch = useDispatch();
@@ -111,8 +110,6 @@ export const useTakeHeaderProfileUtilsObj = (): ParamsOfUseConvertHeaderProfileU
   };
   const { userName, name, email } = useSelector(getUserData);
 
-  const { order } = useSelector(getHeaderProperties);
-
   const allHeaderButtonUtils = {
     [headerProfileUtilsDenotationIds.ACCOUNT]: {
       toolTipText: `Sign in as ${name || userName || email}`,
@@ -158,14 +155,7 @@ export const useTakeHeaderProfileUtilsObj = (): ParamsOfUseConvertHeaderProfileU
     }
   };
 
-  const headerProfileUtilsObj = omit(allHeaderButtonUtils, order.exclusionNames);
-  const accountProfileUtilsArr = pick(allHeaderButtonUtils, order.exclusionNames);
-
-useEffect(()=> {
-dispatch(toChangeTemporaryData({newTemporaryData:{}}))
-
-
-},[accountProfileUtilsArr])
+  const headerProfileUtilsObj = useFindCorrectHeaderUtilsObj(allHeaderButtonUtils);
 
   return headerProfileUtilsObj;
 };
