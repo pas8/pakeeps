@@ -4,16 +4,19 @@ import { useAlpha } from 'hooks/useAlpha.hook';
 import { getCsrfToken, getProviders, signIn, useSession } from 'next-auth/client';
 import { AppProviders } from 'next-auth/providers';
 import { FC } from 'react';
+import { useSelector } from 'react-redux';
 import Link from 'next/link';
 import { useRouter } from 'next/dist/client/router';
-import { NEW_USER_URL } from 'models/denotation';
+import { NEW_USER_URL } from 'models/denotation';import FieldSetContainer from 'components/FieldSetContainer';
+import { getHeaderHeight } from 'store/modules/App/selectors';
 import { useThemeColors } from 'hooks/useThemeColors.hook';
 import AuthForm from 'components/AuthForm';
 
 const useStyles = makeStyles(({ spacing, shape: { borderRadius }, palette }) => ({
   container: {
+    padding: spacing(0.4, 1, 0.2, 1),
+
     width: '100%',
-    height: '80vh'
   },
 
   buttonProvidersContainer: {
@@ -21,7 +24,6 @@ const useStyles = makeStyles(({ spacing, shape: { borderRadius }, palette }) => 
     borderColor: useAlpha(palette.text.primary, 0.2),
     width: '100%',
     height: spacing(30),
-    padding: spacing(0.4, 1, 0.2, 1),
 
     '& >  legend': {
       padding: spacing(0, 0.8)
@@ -34,7 +36,6 @@ const useStyles = makeStyles(({ spacing, shape: { borderRadius }, palette }) => 
     }
   },
   authContainer: {
-    padding: spacing(0.4, 1, 0.2, 1),
     borderRadius,
     borderColor: useAlpha(palette.text.primary, 0.2),
 
@@ -45,7 +46,7 @@ const useStyles = makeStyles(({ spacing, shape: { borderRadius }, palette }) => 
     }
   },
   border: {
-    margin: spacing(3.4, 1, 2.4),
+    margin: spacing(4.2, 0, 3.2),
 
     borderBottom: `1px solid ${useAlpha(palette.text.primary, 0.2)}`
   }
@@ -71,10 +72,15 @@ const Auth: FC<{ providers: AppProviders }> = ({ providers }) => {
   const goToRegisterPage = () => {
     router.push(NEW_USER_URL);
   };
+  const headerHeight = useSelector(getHeaderHeight);
+
   const isProvidersButtonHaveCustomView = false;
   return (
-    <Grid alignItems={'center'} justify={'center'} container className={classes.container}>
-      <Grid lg={4} xl={3} md={5} sm={8} xs={12} container>
+    <Grid alignItems={'center'} justify={'center'} container className={classes.container}
+    
+    style={{ height: `calc(92vh - ${headerHeight}px)` }}
+    >
+      <FieldSetContainer lg={4} xl={3} md={5} sm={8} xs={12} container title={'Sign In'}>
         <Grid
           xs={12}
           container
@@ -119,7 +125,7 @@ const Auth: FC<{ providers: AppProviders }> = ({ providers }) => {
           ))}
         </Grid>
         <Grid container justify={'center'} xs={12}></Grid>
-      </Grid>
+      </FieldSetContainer>
     </Grid>
   );
 };

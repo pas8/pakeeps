@@ -7,7 +7,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import clsx from 'clsx';
 
 import { getHeaderProperties } from 'store/modules/App/selectors';
-import { OnDragEndType } from 'components/PakeepList/components/WrapperOfContainer/types';
 import { useTakeAllHeaderUtils } from 'hooks/useTakeAllHeaderUtils.hook';
 import { useTakeIcon } from 'hooks/useTakeIcon.hook';
 import { useAlpha } from 'hooks/useAlpha.hook';

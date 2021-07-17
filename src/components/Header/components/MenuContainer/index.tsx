@@ -58,7 +58,7 @@ const HeaderMenuContainer: FC<HeaderMenuContainerPropsType> = ({
           ? componentWhenArrIsEmpty
           : arr.map(({ text, onClick, iconName = '', id, customIconComponent }, idx) => {
               const [icon] = useTakeIcon(iconName);
-
+// console.log(customIconComponent)
               return (
                 <MenuItem onClick={onClick} className={classes.menuItemContainer} key={`${idx}_${id}_${text}`}>
                   <Grid container alignItems={'center'}>
