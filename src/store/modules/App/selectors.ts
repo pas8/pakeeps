@@ -115,6 +115,11 @@ export const getSearchPropertyies = createSelector(
 
 export const getUserData = createSelector([({ app: { userData } }: RootStoreType) => userData], userData => userData);
 
+export const getNotificationArr = createSelector(
+  [({ app: { temporaryData } }: RootStoreType) => temporaryData.notifinationArr],
+  notifinationArr => notifinationArr
+);
+
 export const getGlobalEventListTemproparyData = createSelector(
   [
     ({

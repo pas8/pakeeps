@@ -14,6 +14,7 @@ import {
 import { $Keys, $Values, Brand, Optional } from 'utility-types';
 import { TypeNames } from './enums';
 import { AdditionalFolderPropertyNames, DialogLayoutName, MenusLayoutName } from 'models/unums';
+import { HeaderMenuArrItemType } from 'components/Header/types';
 
 export type PayloadTypes = {
   [TypeNames.HANDLE_ADD_NEW_PAKEEP]: {
@@ -483,7 +484,7 @@ export type SearchPropertyiesType = {
   name: NamesOfSearchPropertyiesType;
 };
 
-export type NotifinationArrType = any[];
+export type NotifinationArrType = HeaderMenuArrItemType[];
 
 export type TemporaryDatatype = {
   isCancelSelectedPakeepsId: boolean;
