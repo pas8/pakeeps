@@ -16,6 +16,9 @@ export const useCorrectLayout = (): any[] => {
     case denotationOfCorrectLayoutCases.FOLDER_LAYOUT_HIDDEN:
       return [];
 
+    case denotationOfCorrectLayoutCases.SETTING_URL:
+      return [MenuesLayout, FolderLayout];
+
     default:
       return [FolderLayout];
   }
