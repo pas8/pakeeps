@@ -8,7 +8,7 @@
 // const ButtonByPas = ({
 //   onClick = null,
 //   rotateDeg = false,
-//   activeIcon = false,
+//   isIconActive = false,
 //   icon: Icon,
 //   iconName = 'icon',
 //   activeIconName = 'icon',
@@ -17,7 +17,7 @@
 
 
 //   const currentHoverStatusIsTrue = _.isEqual(activeIconName, iconName) && activeProperty
-//   const color = activeIcon
+//   const color = isIconActive
 //     ? themeColors.primaryMain
 //     : currentHoverStatusIsTrue
 //     ? 'rgba(255,255,255,0.92)'
@@ -37,7 +37,7 @@
 
 // IconButtonByPas.propTypes = {
 //   Icon: PropTypes.node,
-//   activeIcon: PropTypes.bool,
+//   isIconActive: PropTypes.bool,
 //   activeIconName: PropTypes.string,
 //   activeProperty: PropTypes.any,
 //   iconName: PropTypes.string,

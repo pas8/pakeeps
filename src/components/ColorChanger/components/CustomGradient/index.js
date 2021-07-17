@@ -1,25 +1,10 @@
 import PropTypes from 'prop-types';
 import {
   Box,
-  Button,
-  FilledInput,
-  FormControl,
   Grid,
-  InputAdornment,
-  InputLabel,
-  makeStyles,
-  OutlinedInput,
-  Paper,
-  TextField
-} from '@material-ui/core';
+  makeStyles} from '@material-ui/core';
 import { colord } from 'colord';
-import { RgbaColorPicker } from 'react-colorful';
-import { themeColors } from 'components/theme';
-import PlayArrowOutlinedIcon from '@material-ui/icons/PlayArrowOutlined';
-import KeyboardArrowDownOutlinedIcon from '@material-ui/icons/KeyboardArrowDownOutlined';
-import KeyboardArrowUpOutlinedIcon from '@material-ui/icons/KeyboardArrowUpOutlined';
-import IndeterminateCheckBoxOutlinedIcon from '@material-ui/icons/IndeterminateCheckBoxOutlined';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import _ from 'lodash';
 import { useClickAway } from 'react-use';
 import ButtonUtilsOfCustomGradient from './components/ButtonUtils';
@@ -31,6 +16,7 @@ import ToggleButtonUtilsOfCustomGradient from './components/ToggleButtonUtils';
 import compareFunc from 'compare-func';
 import { useSnackbar } from 'notistack';
 import RestoreOutlinedIcon from '@material-ui/icons/RestoreOutlined';
+
 
 const useStyles = makeStyles(theme => ({
   containerOfGradientUtils: {
@@ -58,6 +44,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const CustomGradient = ({ gradientStatus, setGradientStatus }) => {
+
   // const isExtended = statusState.customColor && statusState.extended;
   // const gradientColorStateLength = gradientColorState.length;
   const classes = useStyles();
@@ -83,7 +70,7 @@ const CustomGradient = ({ gradientStatus, setGradientStatus }) => {
   const currentColorInHexFormat = colord(currentColor).toHex();
 
   const [keyOfGradientFocusedElement, setKeyOfGradientFocusedElement] = useState(gradientColorState[0].key);
-  console.log(keyOfGradientFocusedElement);
+
   const [statusState, setStatusState] = useState({
     saved: false,
     customization: false,

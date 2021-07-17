@@ -19,7 +19,6 @@ import LibraryAddOutlinedIcon from '@material-ui/icons/LibraryAddOutlined';
 import SettingsInputComponentOutlinedIcon from '@material-ui/icons/SettingsInputComponentOutlined';
 import PlaylistAddOutlinedIcon from '@material-ui/icons/PlaylistAddOutlined';
 import AddBoxOutlinedIcon from '@material-ui/icons/AddBoxOutlined';
-import { themeColors } from 'components/theme';
 import { ToggleButton, ToggleButtonGroup } from '@material-ui/lab';
 import { Grid, makeStyles } from '@material-ui/core';
 import _ from 'lodash';
@@ -98,14 +97,14 @@ const ToggleButtonUtilsOfCustomGradient = ({
       icon: AddBoxOutlinedIcon,
       popoverText: 'Add this color to your color pattern',
       value: 'addColorToColorPattern',
-      activeIcon: false,
+      isIconActive: false,
       onClick: onClickOfAddToPatternButton
     },
     {
       icon: ExtensionIcon,
       popoverText: 'Chose color format which u like',
       value: 'choseColorFormatWhichULike',
-      activeIcon: false,
+      isIconActive: false,
       onClick: onClickOfColorFormatButton
     },
     {

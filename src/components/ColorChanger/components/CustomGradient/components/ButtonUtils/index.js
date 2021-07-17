@@ -7,14 +7,15 @@ import { useState } from 'react';
 import CircularSlider from '@fseehawer/react-circular-slider';
 import CenteredGrid from 'components/CenteredGrid';
 import NumberAdornment from 'components/ColorChanger/components/CustomColor/components/NumberAdornment';
-import { themeColors } from 'components/theme';
 import ExposurePlus1OutlinedIcon from '@material-ui/icons/ExposurePlus1Outlined';
-const useStyles = makeStyles(theme => ({
+import { useThemeColors } from 'hooks/useThemeColors.hook';
+
+const useStyles = makeStyles(({ spacing }) => ({
   containerOfGradientDirectionButtons: {
-    marginLeft: theme.spacing(1.6),
-    height: theme.spacing(8 * 0.92 - 0.32),
+    marginLeft: spacing(1.6),
+    height: spacing(8 * 0.92 - 0.32),
     '& button': {
-      width: theme.spacing(8 - 1)
+      width: spacing(8 - 1)
     }
   },
   containerOfCircleSlider: {
@@ -29,11 +30,10 @@ const useStyles = makeStyles(theme => ({
     }
   },
   inputOfGradientAngle: {
-    marginLeft: theme.spacing(-0.4),
-    width: theme.spacing(10),
+    marginLeft: spacing(-0.4),
+    width: spacing(10),
     '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
-      borderColor: ({ color, colorPreview }) =>
-        colorPreview ? color : themeColors.whiteRgbaColorWith0dot96valueOfAlfaCanal
+      borderColor: ({ color, colorPreview, maxEmphasisColor }) => (colorPreview ? color : maxEmphasisColor)
     }
   }
 }));
@@ -46,7 +46,9 @@ const ButtonUtilsOfCustomGradient = ({
   setGradientAngle,
   colorPreview
 }) => {
-  const classes = useStyles({ color, colorPreview });
+  const [primaryColor, , maxEmphasisColor, highEmphasisColor, mediumEmphasisColor] = useThemeColors();
+
+  const classes = useStyles({ color, colorPreview, maxEmphasisColor });
 
   const [hoverStatusOFCircleSlider, setHoverStatusOFCircleSlider] = useState(false);
 
@@ -76,13 +78,13 @@ const ButtonUtilsOfCustomGradient = ({
     direction: 1,
     label: '',
     appendToValue: '°',
-    knobColor: colorPreview ? color : themeColors.whiteRgbaColorWith0dot96valueOfAlfaCanal,
+    knobColor: colorPreview ? color : maxEmphasisColor,
     trackSize: 2,
     knobSize: 24,
     dataIndex: gradientAngle,
     valueFontSize: '0rem',
     width: 42 + 8,
-    trackColor: `rgba(255,255,255,0.${hoverStatusOFCircleSlider ? 8 : 2})`
+    trackColor: hoverStatusOFCircleSlider ? maxEmphasisColor : mediumEmphasisColor
   };
   return (
     <Grid container>
@@ -121,10 +123,7 @@ const ButtonUtilsOfCustomGradient = ({
           </Grid>
         </Box>
       )}
-      <ToggleButtonGroup
-        className={classes.containerOfGradientDirectionButtons}
-        exclusive
-      >
+      <ToggleButtonGroup className={classes.containerOfGradientDirectionButtons} exclusive>
         <ToggleButton value={'linear-gradient'}>
           {/* <ExposurePlus1OutlinedIcon /> */}
           <Box fontWeight={900}>

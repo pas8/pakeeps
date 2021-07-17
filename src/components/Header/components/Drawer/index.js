@@ -1,8 +1,7 @@
 import PropTypes from 'prop-types';
-import { Drawer, IconButton, makeStyles, useTheme } from '@material-ui/core';
+import { Drawer, Grow, IconButton, makeStyles, Modal, useTheme, Zoom } from '@material-ui/core';
 import ArrowForwardIosOutlinedIcon from '@material-ui/icons/ArrowForwardIosOutlined';
 import ArrowBackIosOutlinedIcon from '@material-ui/icons/ArrowBackIosOutlined';
-
 
 const useStyles = makeStyles(theme => ({
   drawer: {
@@ -19,6 +18,14 @@ const useStyles = makeStyles(theme => ({
     // necessary for content to be below app bar
     ...theme.mixins.toolbar,
     justifyContent: 'flex-end'
+  },
+  modal: {
+    backdropFilter: 'blur(4px)',
+    // filter:'blur(4px)'
+    transition: theme.transitions.create('backdropFilter', {
+      easing: theme.transitions.easing.easeIn,
+      duration: theme.transitions.duration.complex
+    })
   }
 }));
 
@@ -28,10 +35,10 @@ const HeaderDrawer = ({ isMenuOpen, handleDrawerClose }) => {
   const classes = useStyles();
   const theme = useTheme();
 
-  return (
+  const drawer = (
     <Drawer
       className={classes.drawer}
-      variant={'persistent'}
+      // variant={'persistent'}
       anchor={'right'}
       open={isMenuOpen}
       classes={{
@@ -43,9 +50,16 @@ const HeaderDrawer = ({ isMenuOpen, handleDrawerClose }) => {
           {theme.direction === 'ltr' ? <ArrowBackIosOutlinedIcon /> : <ArrowForwardIosOutlinedIcon />}
         </IconButton>
       </div>
-      
     </Drawer>
   );
+
+  // if (!isMenuNavigationHasDialogView)
+  //   return (
+  //     <Modal open={isMenuOpen} className={classes.modal}>
+  //       {drawer}
+  //     </Modal>
+  //   );
+  return drawer;
 };
 
 HeaderDrawer.propTypes = {

@@ -1,16 +1,15 @@
 import SearchIcon from '@material-ui/icons/Search';
 import { Button, Grid, makeStyles, Tab, Tabs, withStyles } from '@material-ui/core';
-import PinIcon from 'components/Icons/components/PinIcon';
-import { themeColors } from 'components/theme';
 import PropTypes from 'prop-types';
 import { useState } from 'react';
 import { connect } from 'react-redux';
 import { useTakeIcon } from 'hooks/useTakeIcon.hook';
+import { handleCurrentFolderPropertyIdx } from 'store/modules/App/operations';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles(({spacing,typography}) => ({
   container: {
     '& .MuiTouchRipple-root': {
-      borderRadius: theme.spacing(0.4)
+      borderRadius: spacing(0.4)
     },
     flexGrow: 1,
     width: '100%',
@@ -18,26 +17,28 @@ const useStyles = makeStyles(theme => ({
     '& button': {
       textTransform: 'none',
       color: '#fff',
-      fontWeight: theme.typography.fontWeightRegular,
-      fontSize: theme.typography.pxToRem(16),
+      fontWeight: typography.fontWeightRegular,
+      fontSize: typography.pxToRem(16),
       '&:focus': {
         opacity: 1
       },
       minHeight: 0,
-      marginTop: theme.spacing(1.4),
-      padding: theme.spacing(0.8, 1.8),
+      marginTop: spacing(1.4),
+      padding: spacing(0.8, 1.8),
       '& span': {
         flexDirection: 'row',
         '& svg': {
           fontSize: '1em',
-          margin: theme.spacing(0.8, 0.4, 0, 0)
+          margin: spacing(0.8, 0.4, 0, 0)
         }
       }
     }
   }
 }));
 
-const StyledTabs = withStyles(theme => ({
+
+
+const StyledTabs = withStyles(({palette:{primary}}) => ({
   indicator: {
     height: 2 * 1.6,
     display: 'flex',
@@ -46,23 +47,28 @@ const StyledTabs = withStyles(theme => ({
     '& > span': {
       width: `${80 - 4}%`,
       borderRadius: '4% 4% 0% 0% / 100% 100% 0% 0%  ',
-      backgroundColor: themeColors.primaryMain
+      backgroundColor: primary?.main
     }
   }
 }))(props => <Tabs {...props} TabIndicatorProps={{ children: <span /> }} />);
 
-const LabelTab = ({ folders }) => {
-  const [value, setValue] = useState(0);
+const LabelTab = ({ folders, handleCurrentFolderPropertyIdx, currentFolderPropertyIdx }) => {
 
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
+  const handleTabIdxChange = (placeholder, folderName) => {
+    handleCurrentFolderPropertyIdx(folderName)
   };
+
   const classes = useStyles();
+
+  // const styledTabsProps = {
+  //   value,
+  //   onChange:handleTabIdxChange,
+  // }
   return (
     <Grid className={classes.container}>
       <StyledTabs
-        value={value}
-        onChange={handleChange}
+        value={currentFolderPropertyIdx}
+        onChange={handleTabIdxChange}
         indicatorColor={'primary'}
         textColor={'primary'}
         variant={'scrollable'}
@@ -80,7 +86,9 @@ const LabelTab = ({ folders }) => {
 
 LabelTab.propTypes = {};
 
-const mapStateToProps = ({ app: { folders } }) => ({ folders });
-// const mapDispatchToProps = dispatch => ({ setData: data => dispatch(setData(data)) });
+const mapStateToProps = ({ app: { folders, currentFolderPropertyIdx } }) => ({ folders, currentFolderPropertyIdx });
+const mapDispatchToProps = dispatch => ({
+  handleCurrentFolderPropertyIdx: folderIdx => dispatch(handleCurrentFolderPropertyIdx(folderIdx))
+});
 
-export default connect(mapStateToProps, null)(LabelTab);
+export default connect(mapStateToProps, mapDispatchToProps)(LabelTab);
