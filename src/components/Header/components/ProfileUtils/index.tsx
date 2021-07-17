@@ -7,6 +7,7 @@ import { useBreakpointNames } from 'hooks/useBreakpointNames.hook';
 import { useTakeHeaderProfileUtilsObj } from 'hooks/useTakeHeaderProfileUtilsObj.hook';
 import { getIsHeaderHavePaperColor } from 'store/modules/Settings/selectors';
 import { useAlpha } from 'hooks/useAlpha.hook';
+import { useTakeIcon } from 'hooks/useTakeIcon.hook';
 
 const useStyles = makeStyles(({ spacing, palette: { text, background } }) => ({
   profileUtils: ({ isHeaderHavePaperColor }: { isHeaderHavePaperColor: boolean }) => ({
@@ -54,7 +55,8 @@ const HeaderProfileUtils: FC = () => {
 
           const findedEl = headerProfileUtilsObj[id];
           if (!findedEl) return null;
-          const { component: Component, toolTipText, onClick } = findedEl;
+          const { component: Component, toolTipText, onClick, iconName } = findedEl;
+          const [icon] = useTakeIcon(iconName!);
 
           return (
             <Grid
@@ -65,9 +67,7 @@ const HeaderProfileUtils: FC = () => {
               key={`HeaderProfileUtils-${id}-${idx}`}
             >
               <Tooltip title={toolTipText}>
-                <IconButton onClick={onClick}>
-                  <Component />
-                </IconButton>
+                <IconButton onClick={onClick}>{!!iconName ? icon : <Component />}</IconButton>
               </Tooltip>
             </Grid>
           );

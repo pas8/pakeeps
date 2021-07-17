@@ -10,7 +10,7 @@ const useStyles = makeStyles(
       display: 'flex',
       border: isOnlyTop ? '0px' : '1px solid',
       borderTop: '2px solid',
-      // borderStyle:isOnlyTop ? 'solid': 'solid' ,
+      borderStyle:isOnlyTop ? 'solid': 'solid' ,
       borderColor: useAlpha(palette.text.primary, 0.2),
 
       '& >  legend': {
@@ -28,7 +28,7 @@ const useStyles = makeStyles(
 const FieldSetContainer: FC<{ title: string; isOnlyTop?: boolean } & GridProps> = ({
   children,
   title,
-  isOnlyTop,
+  isOnlyTop = true,
   ...gridProps
 }) => {
   const classes = useStyles({ isOnlyTop });

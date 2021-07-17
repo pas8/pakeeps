@@ -1,5 +1,4 @@
 import { Button, Grid, makeStyles, Paper, TextField, Typography, useTheme } from '@material-ui/core';
-import CloudUploadOutlinedIcon from '@material-ui/icons/CloudUploadOutlined';
 import { capitalize, mapValues, snakeCase, values } from 'lodash';
 import dynamic from 'next/dynamic';
 import { ChangeEventHandler, FC, MouseEventHandler, useState } from 'react';
@@ -18,6 +17,7 @@ import { useFromNameToText } from 'hooks/useFromNameToText.hook';
 import SwitchByPas from 'components/Switch';
 import FieldSetContainer from 'components/FieldSetContainer';
 import SettingContainer from 'components/SettingContainer';
+import ButtonOfUdatingSetting from 'components/ButtonOfUdatingSetting';
 
 const AccountAvatar = dynamic(() => import('components/AccountAvatar'), { ssr: false });
 
@@ -347,14 +347,7 @@ const SettingAccount: FC = () => {
                     </Grid>
                   );
                 })}
-                <Button
-                  onClick={onUpdateAccountData}
-                  color={'primary'}
-                  variant={'outlined'}
-                  startIcon={<CloudUploadOutlinedIcon />}
-                >
-                  Update account
-                </Button>
+                <ButtonOfUdatingSetting onClick={onUpdateAccountData} title={' Update account'} />
               </Grid>
 
               <Grid className={classes.conatinerOfAvatar} lg={6} sm={10} md={5} xl={6} xs={12}>
