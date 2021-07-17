@@ -1,3 +1,4 @@
+import { useIsColorLight } from './useIsColorLight.hook';
 import { ParamsOfUseConvertHeaderProfileUtilsObjToFolderArrType } from './../models/types';
 import { colord } from 'colord';
 import { customColorPlaceholder } from 'components/AccountAvatar';
@@ -17,6 +18,7 @@ import { operateToUploadData } from 'store/modules/App/operations';
 import { getIsZenModeActive, getUserData } from 'store/modules/App/selectors';
 import { toChangeThemeColors } from 'store/modules/Color/actions';
 import { getColorTheme } from 'store/modules/Color/selectors';
+import { toChangeSettingProperty } from 'store/modules/Settings/actions';
 
 export const useTakeHeaderProfileUtilsObj = (): ParamsOfUseConvertHeaderProfileUtilsObjToFolderArrType => {
   const dispatch = useDispatch();
@@ -44,8 +46,10 @@ export const useTakeHeaderProfileUtilsObj = (): ParamsOfUseConvertHeaderProfileU
     const textColor = colord(themeColors.textColor).invert().toHex();
     const defaultBackgroundMain = colord(themeColors.defaultBackgroundMain).invert().toHex();
     const paperMain = colord(themeColors.paperMain).invert().toHex();
-
+    const isDark = !useIsColorLight(paperMain);
     dispatch(toChangeThemeColors({ newThemeColors: { textColor, defaultBackgroundMain, paperMain } }));
+    
+    dispatch(toChangeSettingProperty({ property: { isHeaderHavePaperColor: isDark } }));
     // enqueueSnackbar({ message: 'White theme sucks, I am sr, just unluckky 😅', severity: 'info' });
     // enqueueSnackbar({
     //   message: 'U can theme theme in the setting, but remember that, white theme sucks 😅',

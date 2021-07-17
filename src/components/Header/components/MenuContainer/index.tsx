@@ -53,24 +53,22 @@ const HeaderMenuContainer: FC<HeaderMenuContainerPropsType> = ({
 
   return (
     <Menu open={true} onClose={onClose} anchorReference={'anchorPosition'} anchorPosition={coordinates}>
-      {!!componentWhenArrIsEmpty && !arr.length ? (
-        componentWhenArrIsEmpty
-      ) : (
-        <Grid className={classes.menuChildContainer}>
-          {arr.map(({ text, onClick, iconName = '', id }, idx) => {
-            const [icon] = useTakeIcon(iconName);
+      <Grid className={classes.menuChildContainer}>
+        {!!componentWhenArrIsEmpty && !arr.length
+          ? componentWhenArrIsEmpty
+          : arr.map(({ text, onClick, iconName = '', id }, idx) => {
+              const [icon] = useTakeIcon(iconName);
 
-            return (
-              <MenuItem onClick={onClick} className={classes.menuItemContainer} key={`${idx}_${id}_${text}`}>
-                <Grid container alignItems={'center'}>
-                  {!!iconName ? icon : null}
-                  <Typography> {text} </Typography>
-                </Grid>
-              </MenuItem>
-            );
-          })}
-        </Grid>
-      )}
+              return (
+                <MenuItem onClick={onClick} className={classes.menuItemContainer} key={`${idx}_${id}_${text}`}>
+                  <Grid container alignItems={'center'}>
+                    {!!iconName ? icon : null}
+                    <Typography> {text} </Typography>
+                  </Grid>
+                </MenuItem>
+              );
+            })}
+      </Grid>
     </Menu>
   );
 };
