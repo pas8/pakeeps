@@ -5,6 +5,7 @@ import { useFindCorrectFoldersPropertyies } from './useFindCorrectFoldersPropert
 import { useAddIdToFolder } from './useAddIdToFolder.hook';
 import { useFindFolderOrderNames } from './useFindFolderOrderNames.hook';
 import { useTakeAllFolders } from './useTakeAllFolders.hook';
+import { useSetCorrectFolderId } from './useSetCorrectFolderId.hook';
 
 export const useTakeFoldersPropertyies: UseTakeFoldersArrType = ({
   isFoldersHaveDraweView,
@@ -33,6 +34,8 @@ export const useTakeFoldersPropertyies: UseTakeFoldersArrType = ({
   const { correctFolderValueOrder, correctFolders } = useFindCorrectFoldersPropertyies(allFolders);
 
   const notValidatedAllFolders = isFoldersHaveDraweView ? { ...closeMenuFolders, ...correctFolders } : correctFolders;
+
+  useSetCorrectFolderId(notValidatedAllFolders)
 
   const notValidatedFolderOrderValueNames = isFoldersHaveDraweView
     ? [CLOSE_MENU_ID, ...correctFolderValueOrder]

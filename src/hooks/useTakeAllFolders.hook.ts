@@ -81,7 +81,7 @@ export const useTakeAllFolders = (): ParamsOfUseFindCorrectFoldersPropertyiesTyp
     },
 
     {
-      title: 'Theme',
+      title: 'Theme', 
       iconName: 'color',
       id: THEME,
       color: 'default',
