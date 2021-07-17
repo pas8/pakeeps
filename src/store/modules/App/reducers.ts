@@ -215,7 +215,7 @@ export const firebaseAppInitialState = {
   headerPropertyies: {
     order: {
       names: values(headerProfileUtilsDenotationIds),
-      exclusionNames: [headerProfileUtilsDenotationIds.ACCOUNT, headerProfileUtilsDenotationIds.SIGNOUT]
+      exclusionNames: [headerProfileUtilsDenotationIds.SIGN_IN_AS, headerProfileUtilsDenotationIds.SIGNOUT]
     }
   },
   selectedPakeepsId: [],

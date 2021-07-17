@@ -55,7 +55,7 @@ import DeleteOutlinedIcon from '@material-ui/icons/DeleteOutlined';
 import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
 import GitHubIcon from '@material-ui/icons/GitHub';
 import FacebookIcon from '@material-ui/icons/Facebook';
-import ExitToAppOutlinedIcon from '@material-ui/icons/ExitToAppOutlined';
+import ExitToAppOutlinedIcon from '@material-ui/icons/ExitToAppOutlined';import PersonOutlineIcon from '@material-ui/icons/PersonOutline';
 
 export const iconsArr = [
   { icon: <TodayOutlinedIcon />, iconName: 'tomorrow', id: 'random1', checkedIcon: <TodayIcon /> },
@@ -65,6 +65,7 @@ export const iconsArr = [
   { icon: <ViewColumnOutlinedIcon />, iconName: 'view', id: 'view' },
   { icon: <ArrowBackOutlinedIcon />, iconName: 'arrowBack', id: 'arrowBack' },
   { icon: <SearchIcon />, iconName: 'search', id: 'search' },
+  { icon: <PersonOutlineIcon />, iconName: 'person', id: 'person' },
   
   { icon: <CloseIcon />, iconName: 'close', id: 'close' },
   { icon: <LockOutlinedIcon />, iconName: 'security', id: 'security' },

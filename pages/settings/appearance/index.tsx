@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Grid, makeStyles } from '@material-ui/core';
+import { Box, Grid, makeStyles } from '@material-ui/core';
 
 import FieldSetContainer from 'components/FieldSetContainer';
 import SettingContainer from 'components/SettingContainer';
@@ -11,7 +11,8 @@ import { toChangeSettingProperty } from 'store/modules/Settings/actions';
 import { getIsHeaderHavePaperColor } from 'store/modules/Settings/selectors';
 
 const useStyles = makeStyles(({ spacing, transitions, breakpoints, shape, palette }) => ({
-  container: {}
+  container: {},
+  groupContainer: { padding: spacing(0, 1, 1, 1) }
 }));
 
 const SettingAppearance: FC<any> = () => {
@@ -27,13 +28,20 @@ const SettingAppearance: FC<any> = () => {
   return (
     <Grid container justify={'center'} className={classes.container}>
       <SettingContainer>
-        <FieldSetContainer title={'Header'} id={settingUrls[APPEARANCE][appearanceIds.HEADER]}>
-          <SwitchByPas
-            title={'Is header color is secondary'}
-            checked={!isHeaderHavePaperColor}
-            onChange={handleChangeHeaderHavePaperColorStatus}
-          />
-          <TransferListOfHeaderUtils />
+        <FieldSetContainer title={'Header'} id={settingUrls[APPEARANCE][appearanceIds.HEADER]} isOnlyTop>
+          <Grid container className={classes.groupContainer}>
+            <Box mb={2}>
+              <SwitchByPas
+                title={'Is header color is secondary'}
+                checked={!isHeaderHavePaperColor}
+                onChange={handleChangeHeaderHavePaperColorStatus}
+              />
+            </Box>
+          <Grid container>
+            <TransferListOfHeaderUtils />
+          </Grid>
+          </Grid>
+
         </FieldSetContainer>
       </SettingContainer>
     </Grid>
