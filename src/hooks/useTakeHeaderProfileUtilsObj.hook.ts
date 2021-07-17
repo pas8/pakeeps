@@ -21,7 +21,7 @@ import { getColorTheme } from 'store/modules/Color/selectors';
 export const useTakeHeaderProfileUtilsObj = (): ParamsOfUseConvertHeaderProfileUtilsObjToFolderArrType => {
   const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();
-// const toChangeTemporaryData
+  // const toChangeTemporaryData
   const handleOpenAvatarMenu: MouseEventHandler<HTMLDivElement> = ({
     currentTarget,
     clientX: mouseX,
@@ -57,8 +57,21 @@ export const useTakeHeaderProfileUtilsObj = (): ParamsOfUseConvertHeaderProfileU
     dispatch(operateToUploadData());
   };
 
-  const handleOpenNotificationMenu = () => {
-    console.log('handleOpenNotificationMenu');
+  const handleOpenNotificationMenu: MouseEventHandler<HTMLButtonElement> = ({ clientX: mouseX, clientY: mouseY }) => {
+    console.log('');
+    dispatch(
+      toChangeTemporaryData({
+        newTemporaryData: {
+          defaultMenuProps: {
+            mouseX,
+            mouseY,
+            customColor: customColorPlaceholder,
+            id: 'handleOpenNotificationMenu',
+            menuName: MenusLayoutName.NOTIFICATION
+          }
+        }
+      })
+    );
   };
   const { localPinCode } = useSelector(getUserData);
 

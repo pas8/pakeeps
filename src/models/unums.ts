@@ -5,6 +5,7 @@ export enum VariantsOfropertiesToUtils {
 
 export enum MenusLayoutName {
   EVENTS = 'events',
+  NOTIFICATION = 'NOTIFICATION',
   LABELS = 'labels',
   ACCOUNT = 'ACCOUNT',
   NONE = 'none'
