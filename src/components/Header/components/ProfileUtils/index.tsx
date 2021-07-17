@@ -45,7 +45,6 @@ const HeaderProfileUtils: FC = () => {
   const classes = useStyles({ isHeaderHavePaperColor });
   const { isSiveIsXs } = useBreakpointNames();
 
-  const { orderIds } = useSelector(getHeaderProperties);
 
   const headerProfileUtilsObj = useTakeHeaderProfileUtilsObj();
 

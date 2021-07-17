@@ -4,10 +4,12 @@ import Switch from 'react-switch';
 import Brightness4OutlinedIcon from '@material-ui/icons/Brightness4Outlined';
 import { useSnackbar } from 'notistack';
 import { useSelector } from 'react-redux';
-import { getViewOfThemeChangerButton } from 'store/modules/Settings/selectors';
+import Brightness5OutlinedIcon from '@material-ui/icons/Brightness5Outlined';
+import { getIsHeaderHavePaperColor, getViewOfThemeChangerButton } from 'store/modules/Settings/selectors';
 
 const ThemeChangerButton: FC = () => {
   const viewOfThemeChangerButton = useSelector(getViewOfThemeChangerButton);
+  const isThemeDark = useSelector(getIsHeaderHavePaperColor);
 
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
@@ -38,7 +40,7 @@ const ThemeChangerButton: FC = () => {
         <>
           {viewOfThemeChangerButton === 'iconButton' && (
             <Grid container alignItems={'center'} justify={'center'}>
-              <Brightness4OutlinedIcon />
+              {!isThemeDark ? <Brightness5OutlinedIcon /> : <Brightness4OutlinedIcon />}
             </Grid>
           )}
           {/* {viewOfThemeChangerButton === 'switch' && (

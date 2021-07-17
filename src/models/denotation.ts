@@ -37,7 +37,9 @@ export const headerProfileUtilsDenotationIds = {
   NOTICATION_BUTTON: 'NOTICATION_BUTTON',
   LOCK_BUTTON: 'LOCK_BUTTON',
   ZEN_MODE_BUTTON: 'ZEN_MODE_BUTTON',
-  AVATAR_BUTTON: 'AVATAR_BUTTON'
+  AVATAR_BUTTON: 'AVATAR_BUTTON',
+  SIGNOUT: 'SIGNOUT',
+  ACCOUNT: 'ACCOUNT'
 };
 
 export const CLOSE_MENU_ID = 'CLOSE_MENU';
@@ -54,7 +56,6 @@ export const allPakeeepsSearchPropertyies = {
   text: 'text',
   [NONE]: NONE
 };
-
 
 export const pakeepFoldersKeyName = {
   PAKEEP_UTILS: 'PAKEEP_UTILS',

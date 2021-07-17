@@ -2,7 +2,8 @@ import {
   pakeepPropertyiesNames,
   NONE,
   menuOpenStatusDenotation,
-  allPakeeepsSearchPropertyies
+  allPakeeepsSearchPropertyies,
+  headerProfileUtilsDenotationIds
 } from 'models/denotation';
 import {
   CustomColorType,
@@ -89,9 +90,16 @@ export type PayloadTypes = {
   [TypeNames.HANDLE_CHANGE_FOLDER_ORDER_NAMES]: {
     folderOrderNames: FolderOrderNamesType;
   };
+  [TypeNames.HANDLE_CHANGE_HEADER_ORDER]: {
+    newOrder: Optional<OrderOfHeaderUtilsType>;
+  };
 };
 
 export type ActionsValueTypes = {
+  toChangeHeaderOrder: {
+    type: typeof TypeNames.HANDLE_CHANGE_HEADER_ORDER;
+    payload: PayloadTypes[TypeNames.HANDLE_CHANGE_HEADER_ORDER];
+  };
   toChangeFolderOrderNames: {
     type: typeof TypeNames.HANDLE_CHANGE_FOLDER_ORDER_NAMES;
     payload: PayloadTypes[TypeNames.HANDLE_CHANGE_FOLDER_ORDER_NAMES];
@@ -433,12 +441,18 @@ export type UserDataType = {
 };
 
 export type HeaderPropertyiesType = {
-  orderIds: string[];
+  order: OrderOfHeaderUtilsType;
 };
 
 export type FolderOrderNamesValueType = string[];
 export type FolderOrderNamesType = { [key: string]: FolderOrderNamesValueType };
 
+export type NamesArrOFOrderOfHeaderUtilsType = (keyof typeof headerProfileUtilsDenotationIds)[];
+
+export type OrderOfHeaderUtilsType = {
+  names: NamesArrOFOrderOfHeaderUtilsType;
+  exclusionNames: NamesArrOFOrderOfHeaderUtilsType;
+};
 export type InitialiAppFirebaseData = {
   avatarProperties: AvatarPropertiesType;
   labels: GlobalLabelsType;
@@ -497,7 +511,7 @@ export type TemporaryDatatype = {
   globalFolderId: GlobalFolderIdType;
   headerHeight: number;
   notifinationArr: NotifinationArrType;
-
+  menuAccountUtilsArr: NotifinationArrType;
   defaultMenuProps: DefaultMenuPropsType;
   defaultDialogProps: {
     id: string;

@@ -18,7 +18,7 @@ import { getIsHeaderHavePaperColor } from 'store/modules/Settings/selectors';
 const useStyles = makeStyles(theme => ({
   root: ({ navigationViewLikeTelegram }: any) => ({
     display: 'flex',
-    marginBottom: navigationViewLikeTelegram ? theme.spacing(4) : 0
+    marginBottom: navigationViewLikeTelegram ? theme.spacing(4) : 0,
   }),
   appBar: {
     backgroundColor: ({ isHeaderHavePaperColor }: any) =>
@@ -29,7 +29,7 @@ const useStyles = makeStyles(theme => ({
     transition: theme.transitions.create(['margin', 'width'], {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen
-    })
+    }),
   },
   toolBar: {
     flexGrow: 1

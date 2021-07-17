@@ -58,10 +58,10 @@ const useStyles = makeStyles(
         '&  button': {
           marginRight: 2,
           '& svg': {
-            color: palette.text.hint
+            color: isHeaderHavePaperColor ?  palette.text.hint : palette.background.paper
           },
           '&:hover svg': {
-            color: palette.text.primary
+            color: isHeaderHavePaperColor ?   palette.text.primary : palette.background.default
           }
         }
       };

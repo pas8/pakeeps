@@ -79,6 +79,14 @@ export const toChangeMenuOpenStatus = (
   payload
 });
 
+
+export const toChangeHeaderOrder = (
+  payload: PayloadTypes[TypeNames.HANDLE_CHANGE_HEADER_ORDER]
+): AppActionTypes => ({
+  type: TypeNames.HANDLE_CHANGE_HEADER_ORDER,
+  payload
+});
+
 export const toChangeFolderOrderNames = (
   payload: PayloadTypes[TypeNames.HANDLE_CHANGE_FOLDER_ORDER_NAMES]
 ): AppActionTypes => ({
