@@ -120,6 +120,11 @@ export const getNotificationArr = createSelector(
   notifinationArr => notifinationArr
 );
 
+export const getMenuAccountUtilsArr = createSelector(
+  [({ app: { temporaryData } }: RootStoreType) => temporaryData.menuAccountUtilsArr],
+  menuAccountUtilsArr => menuAccountUtilsArr
+);
+
 export const getGlobalEventListTemproparyData = createSelector(
   [
     ({

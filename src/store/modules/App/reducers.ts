@@ -212,7 +212,12 @@ export const firebaseAppInitialState = {
     isEmailPubic: false
   },
   events: [...defaultEvents],
-  headerPropertyies: { orderIds: values(headerProfileUtilsDenotationIds) },
+  headerPropertyies: {
+    order: {
+      names: values(headerProfileUtilsDenotationIds),
+      exclusionNames: [headerProfileUtilsDenotationIds.ACCOUNT, headerProfileUtilsDenotationIds.SIGNOUT]
+    }
+  },
   selectedPakeepsId: [],
   pinnedPakeepsOrderNames: [],
   pakeeps: [...randomPakeeps],
@@ -234,9 +239,11 @@ const nullityOfTemporaryData = {
   isCancelSelectedPakeepsId: false,
   drawerWidth: 0,
   menuOpenStatus: 'OPEN' as 'OPEN',
-  selectedPakeepsId: [] ,
+  selectedPakeepsId: [],
+  menuAccountUtilsArr: [] as NotifinationArrType,
   notifinationArr: [] as NotifinationArrType,
   globalFolderId: '',
+
   isAllDataWasUploaded: true,
   isAuthedWithLocalPinCode: !false,
   globalEventList: [],
@@ -302,6 +309,15 @@ export const AppReducer = (state = initialState, action: AppActionTypes): AppIni
       });
 
       return { ...state, ...variedState };
+    }
+
+    case TypeNames.HANDLE_CHANGE_HEADER_ORDER: {
+      const { newOrder } = action.payload;
+
+      return {
+        ...state,
+        headerPropertyies: { ...state.headerPropertyies, order: { ...state.headerPropertyies.order, ...newOrder } }
+      };
     }
 
     case TypeNames.HANDLE_CHANGE_SELECTED_PAKEEPS_PROPERTY: {

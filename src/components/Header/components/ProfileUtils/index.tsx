@@ -1,12 +1,9 @@
 import { FC } from 'react';
 import { makeStyles, Tooltip, Grid, IconButton } from '@material-ui/core';
-import { useBreakpointNames } from 'hooks/useBreakpointNames.hook';
-
 import { useSelector } from 'react-redux';
-import { getHeaderProperties, getIsZenModeActive } from 'store/modules/App/selectors';
-import { values } from 'lodash';
-import { headerProfileUtilsDenotationIds } from 'models/denotation';
-import ZenModeButton from './components/ZenModeButton';
+
+import { getHeaderProperties } from 'store/modules/App/selectors';
+import { useBreakpointNames } from 'hooks/useBreakpointNames.hook';
 import { useTakeHeaderProfileUtilsObj } from 'hooks/useTakeHeaderProfileUtilsObj.hook';
 import { getIsHeaderHavePaperColor } from 'store/modules/Settings/selectors';
 import { useAlpha } from 'hooks/useAlpha.hook';
@@ -45,14 +42,14 @@ const HeaderProfileUtils: FC = () => {
   const classes = useStyles({ isHeaderHavePaperColor });
   const { isSiveIsXs } = useBreakpointNames();
 
-  const { orderIds } = useSelector(getHeaderProperties);
+  const { order } = useSelector(getHeaderProperties);
 
   const headerProfileUtilsObj = useTakeHeaderProfileUtilsObj();
 
   return (
     <>
       <Grid className={classes.profileUtils}>
-        {orderIds.map((id, idx) => {
+        {order.names.map((id, idx) => {
           // if (hideInSmallSize && isSiveIsXs) return;
 
           const findedEl = headerProfileUtilsObj[id];

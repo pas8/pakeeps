@@ -290,6 +290,7 @@ export type ParamsOfUseConvertHeaderProfileUtilsObjToFolderArrType = {
     component: any;
     onClick: (e: any) => void;
     toolTipText: string;
+    iconName?: string;
   };
 };
 export type UseConvertHeaderProfileUtilsObjToFolderArrType = (

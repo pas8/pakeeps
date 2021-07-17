@@ -1,12 +1,15 @@
+import { FC } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Grid, makeStyles } from '@material-ui/core';
+
 import FieldSetContainer from 'components/FieldSetContainer';
 import SettingContainer from 'components/SettingContainer';
 import SwitchByPas from 'components/Switch';
+import TransferListOfHeaderUtils from 'components/TransferListOfHeaderUtils';
 import { APPEARANCE, appearanceIds, settingUrls } from 'layouts/RouterLayout/denotation';
-import { FC } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { toChangeSettingProperty } from 'store/modules/Settings/actions';
 import { getIsHeaderHavePaperColor } from 'store/modules/Settings/selectors';
+
 const useStyles = makeStyles(({ spacing, transitions, breakpoints, shape, palette }) => ({
   container: {}
 }));
@@ -30,6 +33,7 @@ const SettingAppearance: FC<any> = () => {
             checked={!isHeaderHavePaperColor}
             onChange={handleChangeHeaderHavePaperColorStatus}
           />
+          <TransferListOfHeaderUtils />
         </FieldSetContainer>
       </SettingContainer>
     </Grid>

@@ -56,13 +56,13 @@ const HeaderMenuContainer: FC<HeaderMenuContainerPropsType> = ({
       <Grid className={classes.menuChildContainer}>
         {!!componentWhenArrIsEmpty && !arr.length
           ? componentWhenArrIsEmpty
-          : arr.map(({ text, onClick, iconName = '', id }, idx) => {
+          : arr.map(({ text, onClick, iconName = '', id, customIconComponent }, idx) => {
               const [icon] = useTakeIcon(iconName);
 
               return (
                 <MenuItem onClick={onClick} className={classes.menuItemContainer} key={`${idx}_${id}_${text}`}>
                   <Grid container alignItems={'center'}>
-                    {!!iconName ? icon : null}
+                    {!!iconName ? icon : !!customIconComponent ? customIconComponent : null}
                     <Typography> {text} </Typography>
                   </Grid>
                 </MenuItem>
