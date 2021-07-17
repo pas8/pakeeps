@@ -10,6 +10,7 @@ import { toChangeTemporaryData } from 'store/modules/App/actions';
 import { nullityDefaultMenuProps } from 'store/modules/App/reducers';
 import { getDefaultMenuPropsOfTemporaryData } from 'store/modules/App/selectors';
 import { MenuesLayoutPropsType } from './types';
+import NotificationMenu from 'components/NotificationMenu';
 
 const MenuesLayout: FC<MenuesLayoutPropsType> = ({ children }) => {
   const { menuName, ...defaultMenuProps } = useSelector(getDefaultMenuPropsOfTemporaryData);
@@ -25,7 +26,8 @@ const MenuesLayout: FC<MenuesLayoutPropsType> = ({ children }) => {
   const menuesComponentsArr = [
     { Component: WrapperOfMenuOfLabelPart, props: defaultMenuLayoutElemntProps, name: MenusLayoutName.LABELS },
     { Component: MenuOfChangingGlobalEventItem, props: defaultMenuLayoutElemntProps, name: MenusLayoutName.EVENTS },
-    { Component: AccountMenu, props: defaultMenuLayoutElemntProps, name: MenusLayoutName.ACCOUNT }
+    { Component: AccountMenu, props: defaultMenuLayoutElemntProps, name: MenusLayoutName.ACCOUNT },
+    { Component: NotificationMenu, props: defaultMenuLayoutElemntProps, name: MenusLayoutName.NOTIFICATION }
   ];
 
   // console.log(menuName)
