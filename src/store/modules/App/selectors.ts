@@ -23,7 +23,6 @@ export const getAdditionalMenuState = createSelector(
   additionalMenuState => additionalMenuState
 );
 
-
 export const getFolderDimensions = createSelector(
   [(state: RootStoreType) => state.app.dimensions.folder],
   folderDimensions => folderDimensions
@@ -86,12 +85,12 @@ export const getIsPakeepHovering = createSelector(
 );
 
 export const getIsAllDataWasUploaded = createSelector(
-  [({ app: {temporaryData  } }: RootStoreType) => temporaryData.isAllDataWasUploaded],
+  [({ app: { temporaryData } }: RootStoreType) => temporaryData.isAllDataWasUploaded],
   isAllDataWasUploaded => isAllDataWasUploaded
 );
 
 export const getHeaderHeight = createSelector(
-  [({ app: { temporaryData } }: RootStoreType) =>temporaryData.headerHeight],
+  [({ app: { temporaryData } }: RootStoreType) => temporaryData.headerHeight],
   headerHeight => headerHeight
 );
 
@@ -149,7 +148,13 @@ export const getPakeepFolderOrderNames = createSelector(
 );
 
 export const getNotifinationCounterValue = createSelector(
-  [({ app: { notifinationCounter } }: RootStoreType) => notifinationCounter],
+  [
+    ({
+      app: {
+        temporaryData: { notifinationArr }
+      }
+    }: RootStoreType) => notifinationArr.length
+  ],
   notifinationCounter => notifinationCounter
 );
 

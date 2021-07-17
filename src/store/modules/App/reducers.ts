@@ -20,6 +20,7 @@ import {
   AppInitialStateType,
   FolderOrderNamesType,
   GlobalLabelsType,
+  NotifinationArrType,
   SearchPropertyiesType
 } from './types';
 import { random, sampleSize, words, filter, values } from 'lodash';
@@ -233,18 +234,18 @@ const nullityOfTemporaryData = {
   isCancelSelectedPakeepsId: false,
   drawerWidth: 0,
   menuOpenStatus: 'OPEN' as 'OPEN',
-  selectedPakeepsId: [],
+  selectedPakeepsId: [] ,
+  notifinationArr: [] as NotifinationArrType,
   globalFolderId: '',
   isAllDataWasUploaded: true,
   isAuthedWithLocalPinCode: !false,
   globalEventList: [],
   globalLabelList: []
 };
-
+//@ts-ignore
 export const initialState: AppInitialStateType = {
   ...firebaseAppInitialState,
-  temporaryData: nullityOfTemporaryData,
-  notifinationCounter: 8
+  temporaryData: nullityOfTemporaryData
 };
 
 // console.log(TypeNames)

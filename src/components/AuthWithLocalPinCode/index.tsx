@@ -1,13 +1,14 @@
-import { Button, Grid, makeStyles, Paper, Typography, InputBase } from '@material-ui/core';
-import { ChangeEventHandler, FC, useState } from 'react';
+import { Button, Grid, makeStyles, Typography, InputBase } from '@material-ui/core';
+import { ChangeEventHandler, FC } from 'react';
+import { useToggle } from 'react-use';
+import clsx from 'clsx';
+import { dropRight, isNaN } from 'lodash';
 import VisibilityOutlinedIcon from '@material-ui/icons/VisibilityOutlined';
 import VisibilityOffOutlinedIcon from '@material-ui/icons/VisibilityOffOutlined';
 import BackspaceOutlinedIcon from '@material-ui/icons/BackspaceOutlined';
-import { AuthWithLocalPinCodePropsType } from './types';
-import { useToggle } from 'react-use';
-import clsx from 'clsx';
-import { dropRight, isEqual, isNaN } from 'lodash';
+
 import FieldSetContainer from 'components/FieldSetContainer';
+import { AuthWithLocalPinCodePropsType } from './types';
 
 const pinCodeDimensionValue = 12;
 
@@ -16,11 +17,11 @@ const useStyles = makeStyles(({ spacing, typography: { h4 }, palette, shape: { b
     height: '100%',
     '& input': {
       ...h4,
-      borderBottom:`1px solid ${palette.text.hint}`,
+      borderBottom: `1px solid ${palette.text.hint}`,
       // marginTop: spacing(-2),
-      margin:spacing(-1,2,1),
+      margin: spacing(-1, 2, 1),
       // width: '80%',
-// minWidth:'20%',
+      // minWidth:'20%',
       textAlign: 'center',
       caretColor: palette.secondary.main
     }
@@ -71,12 +72,14 @@ const AuthWithLocalPinCode: FC<AuthWithLocalPinCodePropsType> = ({
     setPinCode(value => (value.length > 0 ? dropRight(value.split('')).join('') : ''));
   };
   const Container = isHaveTitle ? FieldSetContainer : Grid;
-const containerProps = isHaveTitle ? {isOnlyTop:false,title:'Pin code '} : {component:'fieldset',style:{border:0}}
+  const containerProps = isHaveTitle
+    ? { isOnlyTop: false, title: 'Pin code ' }
+    : { component: 'fieldset', style: { border: 0 }, title: '' };
 
   return (
     <Grid className={classes.container} container alignItems={'center'} justify={'center'}>
       <Grid className={classes.pinCodeContainer}>
-        <Container container alignItems={'center'} justify={'center'} {...containerProps} >
+        <Container container alignItems={'center'} justify={'center'} {...containerProps}>
           <Grid container alignItems={'center'} justify={'center'} className={'inputContainer'}>
             <InputBase
               value={pinCode}
@@ -88,7 +91,7 @@ const containerProps = isHaveTitle ? {isOnlyTop:false,title:'Pin code '} : {comp
           {Array(9)
             .fill('AuthWithLocalPinCode')
             .map((el, idxWithMinusOneValue) => {
-              const idx = idxWithMinusOneValue + 1
+              const idx = idxWithMinusOneValue + 1;
               const onClick = () => {
                 setPinCode(state => state + idx);
               };

@@ -8,10 +8,9 @@ import { DefaultFirebaseStateType } from '../Auth/operations';
 // import firebase from 'firebase/app';
 // require('firebase/firestore');
 
-export const operateToAddNewPakeep = () => {};
 export const operateToUploadData = (): ThunkAction<any, RootStoreType, unknown, any> => (dispatch, getState) => {
   const {
-    app: { temporaryData, notifinationCounter, ...appData },
+    app: { temporaryData, ...appData },
     color,
     settings
   } = getState();

@@ -28,7 +28,7 @@ const RouterLayout: FC = ({ children }) => {
   useEffect(() => {
     const isTheSame = value === pinCode;
     const isValueNone = value === 'none' && !!isAuthedWithLocalPinCode;
-console.log(value,isAuthedWithLocalPinCode)
+// console.log(value,isAuthedWithLocalPinCode)
     if (isValueNone) {
       dispatch(toChangeTemporaryData({ newTemporaryData: { isAuthedWithLocalPinCode: isValueNone } }));
       return;

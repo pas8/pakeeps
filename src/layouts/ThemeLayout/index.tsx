@@ -1,13 +1,9 @@
-import { createMuiTheme, Grid, makeStyles, responsiveFontSizes, ThemeProvider, Button } from '@material-ui/core';
-import { colord } from 'colord';
-import { LayoutChildrenType, RootStoreType } from 'models/types';
-import PropTypes from 'prop-types';
-import { ReactNode, useEffect } from 'react';
-import { connect, useDispatch, useSelector } from 'react-redux';
-import { toDeletePakeep } from 'store/modules/App/actions';
-import { getColor } from 'store/modules/Color/hooks';
-import mix from 'mix-color';
+import { createMuiTheme, responsiveFontSizes, ThemeProvider } from '@material-ui/core';
 import { mapValues } from 'lodash';
+import mix from 'mix-color';
+import { useSelector } from 'react-redux';
+
+import { getColor } from 'store/modules/Color/hooks';
 import { useAlpha } from 'hooks/useAlpha.hook';
 
 export type LayoutType = typeof ThemeLayout;
@@ -17,8 +13,6 @@ const ThemeLayout = ({ children, ...props }: any) => {
 
   const { xs, sm, md, lg, xl } = breakpointsValues;
   const breakpointsArr = [xl, lg, md, sm, xs];
-
-  const dispatch = useDispatch();
 
   const textColors = mapValues(textColorCoefficients, coefficient => useAlpha(themeColors.textColor, coefficient));
   const theme = responsiveFontSizes(

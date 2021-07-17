@@ -451,9 +451,6 @@ export type InitialiAppFirebaseData = {
   pinnedPakeepsOrderNames: OrderNamesType;
 };
 export type AppInitialStateType = {
-  // breakpointsValues: BreakpointsValuesInterface<number>;
-  // theme: DefaultThemeInterface;
-  notifinationCounter: number;
   temporaryData: TemporaryDatatype;
 } & InitialiAppFirebaseData;
 
@@ -486,6 +483,8 @@ export type SearchPropertyiesType = {
   name: NamesOfSearchPropertyiesType;
 };
 
+export type NotifinationArrType = any[];
+
 export type TemporaryDatatype = {
   isCancelSelectedPakeepsId: boolean;
   selectedPakeepsId: SelectedPakeepsIdType;
@@ -496,6 +495,8 @@ export type TemporaryDatatype = {
   menuOpenStatus: IsMenuOpenType;
   globalFolderId: GlobalFolderIdType;
   headerHeight: number;
+  notifinationArr: NotifinationArrType;
+
   defaultMenuProps: DefaultMenuPropsType;
   defaultDialogProps: {
     id: string;
