@@ -1,3 +1,4 @@
+import { CoordinatesType } from 'store/modules/App/types';
 import { Dispatch, SetStateAction } from 'react';
 
 export type PropetyyyType =
@@ -41,4 +42,18 @@ export type SearchGroupContainerWithTitlePropsType = {
   setIsListHidden: Dispatch<SetStateAction<boolean>>;
 };
 
-export type DefaultSearchGroupPropsType = { title: any;  onClose: () => void };
+export type DefaultSearchGroupPropsType = { title: any; onClose: () => void };
+
+export type HeaderMenuArrItemType = {
+  text: string;
+  onClick: () => void;
+  iconName: string;
+  id: string;
+};
+
+export type HeaderMenuContainerPropsType = {
+  onClose: (e: any) => void;
+  componentWhenArrIsEmpty?: any;
+  coordinates: { top: number; left: number };
+  arr: HeaderMenuArrItemType[];
+};
