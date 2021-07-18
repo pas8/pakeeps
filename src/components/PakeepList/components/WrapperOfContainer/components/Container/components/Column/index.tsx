@@ -161,4 +161,4 @@ const ColumnOfPakeepListContainer: FC<ColumnOfPakeepListContainerPropsType & { h
   );
 };
 
-export default memo(ColumnOfPakeepListContainer);
+export default memo(ColumnOfPakeepListContainer)

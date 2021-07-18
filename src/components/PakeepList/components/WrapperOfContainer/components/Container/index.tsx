@@ -61,7 +61,6 @@ const PakeepListContainer: FC<PakeepListContainerPropsType> = ({
     height: windowHeigth * 0.96,
     width: CONTAINER_WIDTH / columnQuantity
   };
-
   const arr = responsiveColumnOrder?.map((columnId, idx) => {
     const column = columns[columnId];
     if (!column?.pakeepsId) return;
@@ -103,4 +102,4 @@ const PakeepListContainer: FC<PakeepListContainerPropsType> = ({
   );
 };
 
-export default memo(PakeepListContainer);
+export default memo(PakeepListContainer)

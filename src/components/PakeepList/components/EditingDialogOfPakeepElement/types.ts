@@ -29,9 +29,9 @@ export interface StateInteface {
   text: string;
 }
 
-export interface UseStylesInteface {
+export type UseStylesOfEditingDialogOfPakeepElementtype =  {
   backgroundColor: string;
-isUseEditingDialogAsNewPakeep: boolean;
+  isSizeSmall:boolean
   color: string;
 }
 

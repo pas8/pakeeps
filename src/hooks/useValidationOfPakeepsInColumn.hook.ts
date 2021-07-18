@@ -14,10 +14,9 @@ export const useValidationOfPakeepsInColumn: UseValidationOfPakeepsInColumnType 
 
   const validatedPakeepsInColumn = notValidatedPakeepsInColumn.map(el => {
     if (!el) return null;
-    if (folderId === pakeepPropertyiesNames.isArchived && !!el.isArchived) return el;
-    
+    // if (folderId === pakeepPropertyiesNames.isArchived && !!el.isArchived) return el;
+
     if (folderId === pakeepFoldersKeyName.SEARCH && name !== 'none' && el[name] === value) return el;
-    if (el?.isArchived) return null;
 
     if (folderId === 'ALL') return el;
 

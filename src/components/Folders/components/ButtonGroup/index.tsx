@@ -227,7 +227,6 @@ const FolderButtonGroupByPas: FC<FolderButtonGroupByPasPropsType> = ({
   const handelOpenAdditionalMenu: HandelOpenAdditionalMenuType = additionalMenuState => {
     dispatch(toChangeTemporaryData({ newTemporaryData: { additionalMenuState } }));
   };
-
   if (!folder.arr.length) return null;
 
   return (

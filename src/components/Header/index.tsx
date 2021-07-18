@@ -22,7 +22,7 @@ import { getIsHeaderHavePaperColor } from 'store/modules/Settings/selectors';
 import { useAlpha } from 'hooks/useAlpha.hook';
 import { PakeepDimensionsType } from 'store/modules/App/types';
 
-const useStyles = makeStyles(({ spacing, palette, transitions, shape: { borderRadius } }) => ({
+const useStyles = makeStyles(({ spacing, palette, transitions, shape: { borderRadius }, breakpoints }) => ({
   root: ({ navigationViewLikeTelegram }: any) => ({
     display: 'flex',
     width: '100%'
@@ -65,8 +65,11 @@ const useStyles = makeStyles(({ spacing, palette, transitions, shape: { borderRa
     position: 'fixed',
     padding: spacing(0.2, 2),
     left: pakeepDimensions.container.paddingLeft,
+    [breakpoints.down('xs')]: {
+      top: pakeepDimensions.container.paddingTop / 1.42
+    },
     top: pakeepDimensions.container.paddingTop,
-    right: pakeepDimensions.container.paddingRight + pakeepDimensions.pakeepItem.gapX -  2, 
+    right: pakeepDimensions.container.paddingRight + pakeepDimensions.pakeepItem.gapX - 2,
     borderColor: useAlpha(palette.text.primary)
   })
 }));
@@ -124,11 +127,11 @@ const HeaderByPas: FC<HeaderByPasPropsType> = ({
   return (
     <Grid className={classes.root}>
       {isSizeSmall ? (
-        <Grid className={classes.smallContainer} ref={ref}  component={'header'}  >
-          <Grid  alignItems={'center'} container justify={'space-between'}>
-    {!isOnlySearchVisible && <MainBar isMenuExtended={isMenuExtended} isMenuOpen={isMenuOpen} />}
-          {!isRouteIsSignIn && <HeaderProfileUtils />}
-        </Grid>
+        <Grid className={classes.smallContainer} ref={ref} component={'header'}>
+          <Grid alignItems={'center'} container justify={'space-between'}>
+            <MainBar isMenuExtended={isMenuExtended} isMenuOpen={isMenuOpen} />
+            {!isRouteIsSignIn && <HeaderProfileUtils />}
+          </Grid>
         </Grid>
       ) : (
         <AppBar className={clsx(classes.appBar, { [classes.appBarShift]: isMenuOpen })} ref={ref}>

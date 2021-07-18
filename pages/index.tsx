@@ -30,7 +30,7 @@ const Pakeeps: FC = () => {
   const isAnonymous = useSelector(getAnonymousStatus);
   const dispatch = useDispatch();
 
-  const { isSizeSmall } = useBreakpointNames();
+  const { isSizeSmall ,isSiveIsXs} = useBreakpointNames();
 
   if (!isLogined) return null;
 
@@ -58,7 +58,7 @@ const Pakeeps: FC = () => {
           <Fab
             color="primary"
             aria-label="add"
-            style={{ position: 'fixed', bottom: 16, right: 16, zIndex: 2, padding: 42 }}
+            style={{ position: 'fixed', bottom: 16, right: 16, zIndex: 2, padding:!isSiveIsXs ? 42 : ''  }}
             onClick={handleOpenDialog}
           >
             <AddIcon />

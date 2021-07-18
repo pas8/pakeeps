@@ -36,6 +36,10 @@ const useStyles = makeStyles(({ typography: { h4, h6, body1, h5 }, spacing }) =>
       '& button': {
         color
       },
+      '& .MuiDialogContent-root':{
+padding:isSizeSmall ?'4px 12px' : ''
+
+      },
       '& .MuiDialogTitle-root': {
         paddingBottom: 0,
         marginLeft: isSizeSmall ? -10 : '',
@@ -52,9 +56,11 @@ const useStyles = makeStyles(({ typography: { h4, h6, body1, h5 }, spacing }) =>
           backgroundColor: color
         }
       },
-      '& textarea': {
-        ...body1,
+      '& > textarea ': {
         marginLeft: isSizeSmall ? -10 : ''
+      },
+      '& textarea ': {
+        ...body1,
       },
       '& .footer': {
         position: isSizeSmall ? 'fixed' : 'static',
