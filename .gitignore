@@ -49,7 +49,7 @@ typings/
 
 # Optional npm cache directory
 .npm
-
+firebaseConfig.ts
 # Optional eslint cache
 .eslintcache
 
@@ -86,3 +86,7 @@ typings/
 
 # DynamoDB Local files
 .dynamodb/
+
+config/
+
+.idea/
