@@ -126,11 +126,16 @@ const HeaderByPas: FC<HeaderByPasPropsType> = ({
 
   return (
     <Grid className={classes.root}>
-      {isSizeSmall ? (
+      {isSizeSmall && !isRouteIsSignIn ? (
         <Grid className={classes.smallContainer} ref={ref} component={'header'}>
           <Grid alignItems={'center'} container justify={'space-between'}>
-            <MainBar isMenuExtended={isMenuExtended} isMenuOpen={isMenuOpen} />
-            {!isRouteIsSignIn && <HeaderProfileUtils />}
+            <Grid >
+            <Grid container>
+              {!isSeaching && <MainBar isMenuExtended={isMenuExtended} isMenuOpen={isMenuOpen} />}
+              <HeaderSearch {...headerSearchProps} />
+            </Grid>
+            </Grid>
+            {!isSeaching && <HeaderProfileUtils />}
           </Grid>
         </Grid>
       ) : (
