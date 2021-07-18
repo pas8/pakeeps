@@ -14,6 +14,7 @@ import { NamesOfSearchPropertyiesType } from 'store/modules/App/types';
 import PakeepPropertiesSearchGroup from './components/PakeepPropertiesGroup';
 import SearchGroupContainerWithTitle from './components/ContainerWithTitle';
 import AttributesPropertiesGroup from './components/AttributesPropertiesGroup';
+import { useBreakpointNames } from 'hooks/useBreakpointNames.hook';
 
 const useStyles = makeStyles(
   ({
@@ -55,13 +56,19 @@ const useStyles = makeStyles(
           : isSeaching
           ? palette.text.primary
           : palette.background.default,
+
+        [breakpoints.down('sm')]: {
+          border: 0,
+          width: isSeaching ? '100%' : 'auto'
+        },
+
         '&  button': {
           marginRight: 2,
           '& svg': {
-            color: isHeaderHavePaperColor ?  palette.text.hint : palette.background.paper
+            color: isHeaderHavePaperColor ? palette.text.hint : palette.background.paper
           },
           '&:hover svg': {
-            color: isHeaderHavePaperColor ?   palette.text.primary : palette.background.default
+            color: isHeaderHavePaperColor ? palette.text.primary : palette.background.default
           }
         }
       };
@@ -92,14 +99,16 @@ const useStyles = makeStyles(
         borderTop: 0,
         borderBottomRightRadius: borderRadius,
         borderBottomLeftRadius: borderRadius,
+
         right: -1,
         left: -1,
         top: '100%',
+        [breakpoints.down('sm')]: {
+          position: 'relative'
+        },
 
-     
         '& .containerOfSearchGroup': {
           padding: spacing(0.4, 0),
-  
 
           '& legend': {
             ...h6,
@@ -223,15 +232,16 @@ const HeaderSearch: FC<HeaderSearchPropsType> = ({ isOnlySearchVisible, isSeachi
 
   // const queryValue = ? value.toString() : '';
 
+  const { isSizeSmall } = useBreakpointNames();
   // const labelsSearchObj =
   // const searchData = { ...defaultPakeepSeacrhPropertyiesObj };
 
-  const eventsSearchArr = events.filter(({ title, }) => useCheckQuery(title));
+  const eventsSearchArr = events.filter(({ title }) => useCheckQuery(title));
   const labelsSearchArr = labels.filter(({ title }) => useCheckQuery(title));
 
   const attributesSearchPropertyiesArr = [
-    { title: 'Events', arr: eventsSearchArr,defaultIconName:'week' },
-    { title: 'Labels', arr: labelsSearchArr,defaultIconName:'label' }
+    { title: 'Events', arr: eventsSearchArr, defaultIconName: 'week' },
+    { title: 'Labels', arr: labelsSearchArr, defaultIconName: 'label' }
   ];
 
   return (
@@ -240,7 +250,9 @@ const HeaderSearch: FC<HeaderSearchPropsType> = ({ isOnlySearchVisible, isSeachi
         <InputBase
           ref={inputRef}
           startAdornment={
-            !isSeaching && (
+            isSizeSmall ?  !isSeaching ?(
+              <></>
+            ) :  <>fuck</>: !isSeaching &&  ( 
               <IconButton size={'small'} onClick={setInputFocus}>
                 <SearchIcon />
               </IconButton>
@@ -265,7 +277,7 @@ const HeaderSearch: FC<HeaderSearchPropsType> = ({ isOnlySearchVisible, isSeachi
           inputProps={{ 'aria-label': 'search' }}
         />
         {isSeaching && !isQueryEmpty && (
-          <Grid className={classes.menuContainer}>
+          <Grid className={classes.menuContainer} container={isSizeSmall}>
             {map(defaultPakeepSeacrhPropertyiesObj, (list, key) => {
               if (isEmpty(list)) return null;
               return (
