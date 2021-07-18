@@ -1,6 +1,5 @@
 import { IconsUtilsPropsType } from 'components/IconsUtils/types';
 
-
 export type EditingDialogOfPakeepElementProps = {
   id: string;
   onClose: () => void;
@@ -25,7 +24,6 @@ export type InputProps = {
 
 type StringOrBoolean = string | boolean;
 
-
 export interface StateInteface {
   title: string;
   text: string;
@@ -33,6 +31,7 @@ export interface StateInteface {
 
 export interface UseStylesInteface {
   backgroundColor: string;
+isUseEditingDialogAsNewPakeep: boolean;
   color: string;
 }
 

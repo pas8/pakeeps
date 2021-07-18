@@ -234,6 +234,8 @@ const nullityOfTemporaryData = {
     id: '',
     isHovering: false
   },
+  isUseEditingDialogAsNewPakeep:false,
+
   searchPropertyies: { value: [], name: NONE } as SearchPropertyiesType,
   headerHeight: 0,
   isCancelSelectedPakeepsId: false,

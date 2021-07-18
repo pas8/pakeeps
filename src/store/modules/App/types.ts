@@ -503,6 +503,7 @@ export type NotifinationArrType = HeaderMenuArrItemType[];
 export type TemporaryDatatype = {
   isCancelSelectedPakeepsId: boolean;
   selectedPakeepsId: SelectedPakeepsIdType;
+  isUseEditingDialogAsNewPakeep:boolean
   searchPropertyies: SearchPropertyiesType;
   isAllDataWasUploaded: boolean;
   drawerWidth: DrawerWidthType;

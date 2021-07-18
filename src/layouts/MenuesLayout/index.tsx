@@ -21,7 +21,12 @@ const MenuesLayout: FC<MenuesLayoutPropsType> = ({ children }) => {
   };
   const namesArr = useFilterMenusNamesOfMenuLayout();
 
-  const defaultMenuLayoutElemntProps = { ...defaultMenuProps, onClose };
+  const defaultMenuLayoutElemntProps = {
+    ...defaultMenuProps,
+    onClose,
+    top: defaultMenuProps.mouseX,
+    left: defaultMenuProps.mouseY
+  };
 
   const menuesComponentsArr = [
     { Component: WrapperOfMenuOfLabelPart, props: defaultMenuLayoutElemntProps, name: MenusLayoutName.LABELS },

@@ -18,6 +18,8 @@ import { FC, useEffect } from 'react';
 import { LayoutChildrenType } from 'models/types';
 import { menuOpenStatusDenotation } from 'models/denotation';
 import { useMeasure } from 'react-use';
+import { useRouter } from 'next/dist/client/router';
+import { BASE_URL } from 'layouts/RouterLayout/denotation';
 
 const useStyles = makeStyles(({ spacing, transitions, breakpoints, palette }) => ({
   '@global': {
@@ -25,6 +27,7 @@ const useStyles = makeStyles(({ spacing, transitions, breakpoints, palette }) =>
       minHeight: '80vh',
       // overflow: 'visible !important',
       overflowX: 'hidden !important',
+      overflow: 'hidden',
       background: palette.background.default,
       padding: '0 !important',
       scrollBehavior: 'smooth'
@@ -110,6 +113,10 @@ const HeaderLayout: FC<LayoutChildrenType> = ({ children }) => {
   const navigationViewLikeGoogleKeep = navigationViewLike === 'googleKeep';
   const navigationViewLikePakeeps = navigationViewLike === 'pakeeps';
 
+  const { route } = useRouter();
+
+  const isRouteIsBase = route === BASE_URL;
+
   const classes = useStyles({ drawerWidth, navigationViewLikeTelegram, headerHeight });
 
   const isMenuExtended = menuOpenStatus === menuOpenStatusDenotation.EXTENDED;
@@ -131,7 +138,7 @@ const HeaderLayout: FC<LayoutChildrenType> = ({ children }) => {
   };
 
   return (
-    <Grid className={classes.container}>
+    <Grid className={classes.container} >
       {isShouldBeHeaderWhenActiveSelecto ? (
         <HeaderWhenActiveSelecto {...headerWhenActiveSelectoProps} />
       ) : (

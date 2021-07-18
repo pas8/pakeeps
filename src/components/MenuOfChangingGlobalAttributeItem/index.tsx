@@ -45,7 +45,7 @@ const MenuOfChangingGlobalAttributeItem: FC<MenuOfChangingGlobalAttributeItemPro
       open={true}
       onClose={onClose}
       anchorReference={'anchorPosition'}
-      anchorPosition={!!top && !!left ? { top, left } : undefined}
+      anchorPosition={!!top && !!left ? { top:left, left:top } : undefined}
     >
       <Grid className={classes.wrapper}>
         <HeaderOfAddDateToPakeep {...headerOfAddDateToPakeepProps} />

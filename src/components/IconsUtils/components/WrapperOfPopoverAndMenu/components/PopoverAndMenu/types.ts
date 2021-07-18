@@ -15,6 +15,7 @@ export type PopoverAndMenuType = UseStylesType & {
   popoverText?: string;
   menuComponentsProps?: object;
   MenuComponents?: any;
+  cordinates?: { top: number; left: number };
   reversedColor?: CustomColorType;
   popoverTypographyVariant?: TypographyClassKey | any;
   // menuLocation: any;

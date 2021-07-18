@@ -1,5 +1,5 @@
 import { Grid, SwipeableDrawer } from '@material-ui/core';
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getDrawerWidth, getHeaderHeight, getMenuOpenStatus, getPakeepDimensions } from 'store/modules/App/selectors';
 import { getPositionOfFolderViewWithPakeepView } from 'store/modules/Settings/selectors';
@@ -46,10 +46,13 @@ const FolderLayout: FC = ({ children }) => {
     : {};
   const width = useSelector(getDrawerWidth);
   const {
-    container: { paddingRight, paddingLeft },pakeepItem:{gapX}
+    container: { paddingRight, paddingLeft },
+    pakeepItem: { gapX }
   } = useSelector(getPakeepDimensions);
 
-
+  useEffect(() => {
+    dispatch(toSetDrawerWidth({ drawerWidth: 0 }));
+  }, [isSizeSmall]);
 
   return (
     <Grid container>
@@ -61,7 +64,9 @@ const FolderLayout: FC = ({ children }) => {
           </NavContainer>
         )}
       </Grid>
-      <Grid style={{ position: 'absolute', left: width + paddingLeft +1 , right:paddingRight - 2 + gapX,  }}> {children}</Grid>
+      <Grid style={{ position: 'absolute', left: width + paddingLeft + 1, right: paddingRight - 2 + gapX }}>
+        {children}
+      </Grid>
     </Grid>
   );
 };
