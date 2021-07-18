@@ -42,6 +42,7 @@ const PakeepList: FC = () => {
   const isCancelSelectedPakeepsId = useSelector(getIsCancelSelectedPakeepsId);
   const isPakeepHovering = useSelector(getIsPakeepHovering);
 
+
   const handleSetSelectedPakeepsId: HandleSetSelectedPakeepsIdType = selectedPakeepsId => {
     dispatch(toSetSelectedPakeepIdsArr({ selectedPakeepsId }));
   };
@@ -50,6 +51,7 @@ const PakeepList: FC = () => {
   };
 
   const handleSetPakeepsOrderNames: HandleSetPakeepsOrderNamesType = pakeepsOrderNames => {
+
     dispatch(toSetOrderNamesOfPakeeps({ pakeepsOrderNames }));
   };
 

@@ -15,13 +15,9 @@ const WrapperOfContainerOfPakeepList: FC<WrapperOfContainerOfPakeepListType> = (
   const placeholderName = 'placeholder';
 
   const { columns, responsiveColumnOrder } = useMakeDraggableArr(
-    pakeeps,
-    pakeepsOrderNames,
     handleSetPakeepsOrderNames
-    // pakeepListContainerProps.isPakeepDragContextPinned
   );
   
-
   const onDragStart = () => setIsPakeepDragging(true);
 
   const onDragEnd: OnDragEndType = ({ destination, source }) => {
@@ -47,6 +43,7 @@ const WrapperOfContainerOfPakeepList: FC<WrapperOfContainerOfPakeepListType> = (
     const sumLengthOfAllPakeeps = pakeepsOrderNames.length;
 
     const toCorrect = +destinationDroppableNumber !== 0;
+    
     if (isSameColumn) {
       // clonedSourceArr.push('placeholder');
       _.fill(clonedSourceArr, sourceArr[source.index], destination.index, destination.index + 1);
@@ -63,7 +60,6 @@ const WrapperOfContainerOfPakeepList: FC<WrapperOfContainerOfPakeepListType> = (
         return [...sum, newOrderNamesPakeepsElementId];
       };
       const newOrderNames = pakeepsOrderNames.reduce(newOrderNamesReduceFunc, []);
-
       return handleSetPakeepsOrderNames(newOrderNames);
     }
 
@@ -135,4 +131,4 @@ const WrapperOfContainerOfPakeepList: FC<WrapperOfContainerOfPakeepListType> = (
   return <PakeepListContainer {...allPakeepListContainerProps} />;
 };
 
-export default memo(WrapperOfContainerOfPakeepList);
+export default memo(WrapperOfContainerOfPakeepList)

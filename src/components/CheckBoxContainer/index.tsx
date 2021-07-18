@@ -1,4 +1,5 @@
 import { makeStyles, Grid, InputBase, Checkbox, Typography, Button, IconButton } from '@material-ui/core';
+import { nanoid } from 'nanoid';
 import { filter, findIndex } from 'lodash';
 import clsx from 'clsx';
 import { ChangeEventHandler, FC } from 'react';
@@ -8,13 +9,13 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 import AddOutlinedIcon from '@material-ui/icons/AddOutlined';
 import CloseOutlinedIcon from '@material-ui/icons/CloseOutlined';
-import { OnDragEndType } from 'components/PakeepList/components/WrapperOfContainer/types';
-import { useAlpha } from 'hooks/useAlpha.hook';
 
-import { CheckBoxItemPropsType } from './types';
-import { nanoid } from 'nanoid';
+import { OnDragEndType } from 'components/PakeepList/components/WrapperOfContainer/types';
 import IconButtonByPas from 'components/IconButton';
 import { CustomColorType, UseStylesCustomColorType } from 'models/types';
+import { useAlpha } from 'hooks/useAlpha.hook';
+import { CheckBoxItemPropsType } from './types';
+
 const useStyles = makeStyles(
   ({ spacing, palette, transitions, typography: { subtitle1, h5 }, shape: { borderRadius } }) => ({
     checkBoxContainer: ({ customColor }: UseStylesCustomColorType) => ({
@@ -44,10 +45,16 @@ const useStyles = makeStyles(
       }
     }),
     accomplishedCheckBoxesContainer: {
-      textDecoration: 'line-through',
+        textDecoration: 'line-through',
+        textDecorationColor:({customColor}:UseStylesCustomColorType)=>`${customColor.isUseDefault ?  palette.text.secondary : customColor.hover} !important`,
 
       marginLeft: spacing(-0.6),
       color: palette.text.secondary,
+      '& p':{
+
+      
+
+      },
       '& .text': {
         width: 'calc(100% - 80px)'
       }

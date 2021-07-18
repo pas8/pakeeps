@@ -119,7 +119,8 @@ const Folders: FC<FoldersTypeProps> = ({
         >
           <Grid className={classes.container}>
             {folderOrderNames.map(id => {
-              const folder = foldersBefore[id];
+              const folder = isSizeSmall ? { ...foldersBefore, ...foldersAfter }[id] : foldersBefore[id];
+
               if (!folder) return null;
               const key = `FOLDER_BUTTON_GROUP_BY_PAS_${id}`;
 

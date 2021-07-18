@@ -101,6 +101,12 @@ const useStyles = makeStyles(({ palette, spacing, shape: { borderRadius }, typog
   }
 }));
 
+export const arrOfProfileUtilsIdOfAlwaysInSameColumn = [
+  [headerProfileUtilsDenotationIds.AVATAR_BUTTON] as NamesArrOFOrderOfHeaderUtilsType,
+  [headerProfileUtilsDenotationIds.SIGN_IN_AS] as NamesArrOFOrderOfHeaderUtilsType
+];
+
+
 const TransferListOfHeaderUtils: FC<TransferListOfHeaderUtilsPropsType> = () => {
   const classes = useStyles();
   const { order } = useSelector(getHeaderProperties);
@@ -110,10 +116,6 @@ const TransferListOfHeaderUtils: FC<TransferListOfHeaderUtilsPropsType> = () => 
   const allHeaderButtonUtils = useTakeAllHeaderUtils();
   const [selected, setSelected] = useState<NamesArrOFOrderOfHeaderUtilsType>([]);
 
-  const arrOfProfileUtilsIdOfAlwaysInSameColumn = [
-    [headerProfileUtilsDenotationIds.AVATAR_BUTTON] as NamesArrOFOrderOfHeaderUtilsType,
-    [headerProfileUtilsDenotationIds.SIGN_IN_AS] as NamesArrOFOrderOfHeaderUtilsType
-  ];
 
   const [state, setState] = useState([
     difference(order.names, order.exclusionNames).filter(
