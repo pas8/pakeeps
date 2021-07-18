@@ -16,9 +16,9 @@ import { useMeasure } from 'react-use';
 import { useBreakpointNames } from 'hooks/useBreakpointNames.hook';
 
 const useStyles = makeStyles(({ spacing, transitions, breakpoints, palette }) => ({
-  container: ({ height, isFolderAfterIsEmpty }: any) => ({
+  container: ({ height, isFolderAfterIsEmpty, isFoldersHaveDraweView }: any) => ({
     display: 'flex',
-    justifyContent: isFolderAfterIsEmpty ? 'flex-start' : 'space-between',
+    justifyContent: isFolderAfterIsEmpty || isFoldersHaveDraweView ? 'flex-start' : 'space-between',
     flexDirection: 'column',
     height: `calc(100vh - ${height}px)`
   })
@@ -31,7 +31,7 @@ const Folders: FC<FoldersTypeProps> = ({
   isFoldersHaveDraweView,
   ...defaultUseTakeFoldersArrProps
 }) => {
-  const { isSizeSmall } = useBreakpointNames();
+  const { isSizeSmall, isSiveIsXs } = useBreakpointNames();
   const headerHeight = useSelector(getHeaderHeight);
 
   const dispatch = useDispatch();
@@ -82,13 +82,12 @@ const Folders: FC<FoldersTypeProps> = ({
   const [ref, { width: drawerWidth }] = useMeasure<HTMLDivElement>();
 
   useEffect(() => {
-    if (isSizeSmall) {
+    if (isFoldersHaveDraweView) {
       dispatch(toSetDrawerWidth({ drawerWidth: 0 }));
       return;
     }
-
     dispatch(toSetDrawerWidth({ drawerWidth: drawerWidth }));
-  }, [drawerWidth, isSizeSmall]);
+  }, [drawerWidth]);
 
   const moreMenuOfFoldersProps = {
     ...moreFoldersMenuCordinates,
@@ -98,7 +97,11 @@ const Folders: FC<FoldersTypeProps> = ({
     foldersAfter,
     onClose
   };
-  const classes = useStyles({ height: headerHeight + folderDimensions.container.paddingBottom, isFolderAfterIsEmpty });
+  const classes = useStyles({
+    height: headerHeight + folderDimensions.container.paddingBottom,
+    isFolderAfterIsEmpty,
+    isFoldersHaveDraweView
+  });
 
   return (
     <Grid ref={ref}>

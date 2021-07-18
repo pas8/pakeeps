@@ -10,7 +10,7 @@ import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 
 import { useGetReadableColor } from 'hooks/useGetReadableColor.hook';
-import { operateToAddNewPakeep } from 'store/modules/App/operations';
+// import { operateToAddNewPakeep } from 'store/modules/App/operations';
 import { useCustomBreakpoint } from 'hooks/useCustomBreakpoint';
 import { useAlpha } from 'hooks/useAlpha.hook';
 import AttributeGroup from 'components/PakeepList/components/PakeepElement/components/AttributeGroup';

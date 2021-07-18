@@ -14,12 +14,13 @@ const useStyles = makeStyles(({ spacing, breakpoints: { between, down }, palette
   containerClass: () => ({
     position: 'fixed',
     padding: spacing(4, 0, 0, 0),
-    [between('xs', 'sm')]: { padding: spacing(2, 0, 0, 0) },
     [down('md')]: { padding: spacing(4, 0, 0, 0) },
     '& .selected > div ': {
       boxShadow: `0px 0px 0px 1px ${palette?.maxEmphasis?.main}`,
       borderColor: palette?.maxEmphasis?.main
-    }
+    },
+    [between('xs', 'sm')]: { padding:0  },
+
   })
 }));
 

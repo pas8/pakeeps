@@ -124,6 +124,10 @@ export const getMenuAccountUtilsArr = createSelector(
   [({ app: { temporaryData } }: RootStoreType) => temporaryData.menuAccountUtilsArr],
   menuAccountUtilsArr => menuAccountUtilsArr
 );
+export const getIsUseEditingDialogAsNewPakeep = createSelector(
+  [({ app: { temporaryData } }: RootStoreType) => temporaryData.isUseEditingDialogAsNewPakeep],
+  isUseEditingDialogAsNewPakeep => isUseEditingDialogAsNewPakeep
+);
 
 export const getGlobalEventListTemproparyData = createSelector(
   [

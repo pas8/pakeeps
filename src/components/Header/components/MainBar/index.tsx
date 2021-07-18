@@ -47,7 +47,7 @@ const MainBar: FC<MainBarPropsType> = ({ isMenuOpen, isMenuExtended }) => {
   const classes = useStyles({ isHeaderHavePaperColor });
   const { pathname } = useRouter();
 
-  const { isSiveIsXs } = useBreakpointNames();
+  const { isSiveIsXs,isSizeSmall } = useBreakpointNames();
 
   const isMainPage = pathname === '/';
 
@@ -79,7 +79,7 @@ const MainBar: FC<MainBarPropsType> = ({ isMenuOpen, isMenuExtended }) => {
   const handleChangeDrawerOpenStatus = useTakeFuncOfChangngDrawerOpenStatus();
 
   return (
-    <Grid className={classes.container} container alignItems={'center'}>
+    <Grid className={classes.container} container={!isSizeSmall } alignItems={'center'}>
       {isRouteIsSignIn || isRoteIsSignUp ? (
         <Typography variant={'h6'}>{isRoteIsSignUp ? 'Register' : 'Log In '}</Typography>
       ) : (
@@ -89,7 +89,7 @@ const MainBar: FC<MainBarPropsType> = ({ isMenuOpen, isMenuExtended }) => {
               <MenuButton />
             </IconButton>
           </Tooltip>
-          {!isSiveIsXs && (
+          {!isSizeSmall && (
             <Typography variant={'h6'} className={classes.typography}>
               {/* {headerTitle} */}
               {!isAuthedWithLocalPinCode

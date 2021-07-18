@@ -26,6 +26,7 @@ const WrapperOfPopoverAndMenu: FC<WrapperOfPopoverAndMenuType> = ({
     onMenuClose: null,
     currentTarget: null,
     popoverText: '',
+    cordinates: { left: 0, top: 0 },
     menuComponentsProps: {},
     MenuComponents: null as ReactNode
   };
@@ -34,9 +35,9 @@ const WrapperOfPopoverAndMenu: FC<WrapperOfPopoverAndMenuType> = ({
 
   const handleMenuClose: ClosePopoverOrMenuType = () => setAnchorElState(nullityOfAnchorEl);
   const handlePopoverClose: ClosePopoverOrMenuType = () =>
-    setAnchorElState(state => ({ ...state, isPopoverOpen: false }));
+    setAnchorElState(state => ({ ...state, isPopoverOpen: false,}));
 
-  const popoverAndMenuProps = { ...anchorElState, handleMenuClose, handlePopoverClose, customColor ,reversedColor};
+  const popoverAndMenuProps = { ...anchorElState, handleMenuClose, handlePopoverClose, customColor, reversedColor };
   const anchorElRef = useRef<HTMLDivElement>(null);
 
   return (
@@ -85,19 +86,20 @@ const WrapperOfPopoverAndMenu: FC<WrapperOfPopoverAndMenuType> = ({
           const mainComponent = <IconButtonByPas {...iconButtonProps} />;
           const allMenuComponentsProps = { onMenuClose: handleMenuClose, customColor, ...menuComponentsProps };
 
-          const handlePopoverOpen = ({ currentTarget }: MouseEvent<HTMLElement, MouseEvent>) =>
+          const handlePopoverOpen = ({ currentTarget, clientX: left, clientY: top  }: MouseEvent<HTMLElement, MouseEvent>) =>
             setAnchorElState(state => ({
               ...state,
+              cordinates: { left, top },
               currentTarget,
               isPopoverOpen: true,
               name: buttonUtilsName,
               popoverText
             }));
 
-          const handleMenuOpen = ({ currentTarget }: MouseEvent<HTMLElement, MouseEvent>) =>
+          const handleMenuOpen = ({ clientX: left, clientY: top }: MouseEvent<HTMLElement, MouseEvent>) =>
             setAnchorElState(state => ({
               ...state,
-              currentTarget,
+              cordinates: { left, top },
               handleMenuClose,
               menuComponentsProps: allMenuComponentsProps,
               MenuComponents,
@@ -108,8 +110,6 @@ const WrapperOfPopoverAndMenu: FC<WrapperOfPopoverAndMenuType> = ({
 
           const wrapperOfMainComponentProps = {
             onMouseEnter: handlePopoverOpen,
-            // onMouseLeave: !anchorEl.menu ? handlePopoverClose : null,
-
             onMouseLeave: handlePopoverClose,
             ref: anchorElRef,
             onClick: handleMenuOpen,
