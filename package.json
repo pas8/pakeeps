@@ -37,7 +37,7 @@
     "mix-color": "^1.1.2",
     "nanoid": "^3.1.22",
     "next": "^10.2.3",
-    "next-auth": "^3.21.0",
+    "next-auth": "^3.27.3",
     "notistack": "^1.0.6",
     "random-sentence": "^1.0.4",
     "re-reselect": "^4.0.0",
