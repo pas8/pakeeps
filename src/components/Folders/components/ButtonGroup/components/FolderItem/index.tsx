@@ -67,8 +67,8 @@ const FolderItem: FC<FolderItemPropsType> = ({
         >
           <Button className={clsx('buttonWrapperOfFolderItem')} onClick={onClick}>
             {isFolderHaveCustomComponent ? (
-              <Grid container justify={isFolderExtended ? 'flex-start' : 'center'} wrap={'nowrap'}>
-                <Grid>
+              <Grid container  wrap={'nowrap'} alignItems={'center'} justify={isFolderExtended ? 'flex-start' : 'center'}>
+                <Grid className={'containerOfCustomComponent'}>
                   <CustomComponent />
                 </Grid>
                 {isFolderExtended && <Typography>{title}</Typography>}
@@ -76,8 +76,16 @@ const FolderItem: FC<FolderItemPropsType> = ({
             ) : (
               <>
                 {isFolderExtended && route && <Link href={route}>{title}</Link>}
-                <Grid container justify={isFolderExtended ? 'flex-start' : 'center'} wrap={'nowrap'}>
-                  {icon}
+                <Grid container justify={isFolderExtended ? 'flex-start' : 'center'} wrap={'nowrap'} alignItems={'center'}>
+                <Grid className={'iconContainer'}>
+                <Grid container justify={'center'}  alignItems={'center'}>
+
+                   {icon}
+
+
+                </Grid>
+                </Grid>
+
                   {isFolderExtended && (
                     <Typography className={isFolderExtended && route ? 'textUnderlinedOnHover' : ''}>
                       {title}

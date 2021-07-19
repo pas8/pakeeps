@@ -14,7 +14,7 @@ import UploadButton from 'components/Header/components/ProfileUtils/components/U
 import ZenModeButton from 'components/Header/components/ProfileUtils/components/ZenModeButton';
 import LockButton from 'components/Header/components/ViewLikeInTelegram/components/LockButton';
 import { headerProfileUtilsDenotationIds, LOCAL_STORAGE_KEY, NONE } from 'models/denotation';
-import { SETTINGS_ACCOUNT_BASE_URL } from 'layouts/RouterLayout/denotation';
+import { SETTINGS_ACCOUNT_BASE_URL,SETTINGS_SECURITY_BASE_URL } from 'layouts/RouterLayout/denotation';
 import { toChangeLoginStatus } from 'store/modules/Auth/actions';
 import { MenusLayoutName } from 'models/unums';
 import { toChangeTemporaryData } from 'store/modules/App/actions';
@@ -92,7 +92,9 @@ export const useTakeAllHeaderUtils = (): ParamsOfUseConvertHeaderProfileUtilsObj
     if (localPinCode === NONE) {
       return enqueueSnackbar({
         message: 'You havent added a pin code, but u can do this in setting/account',
-        severity: 'info'
+        severity: 'info',
+        buttonText: 'To settings',
+        onClick: () => router.push(SETTINGS_SECURITY_BASE_URL)
       });
     }
 
@@ -118,7 +120,9 @@ export const useTakeAllHeaderUtils = (): ParamsOfUseConvertHeaderProfileUtilsObj
 
   const allHeaderButtonUtils = {
     [headerProfileUtilsDenotationIds.SIGN_IN_AS]: {
-      toolTipText: `Sign in as ${name || userName || email}`,
+      toolTipText: `Sign in as ${
+        name !== NONE ? name : userName !== NONE ? userName : email !== NONE ? email : 'anonymys'
+      }`,
       onClick: () => router.push(SETTINGS_ACCOUNT_BASE_URL),
       iconName: 'person',
       component: false

@@ -8,9 +8,9 @@ import { useRouter } from 'next/dist/client/router';
 import { LOCAL_STORAGE_KEY, NEW_USER_URL, NONE, SIGN_IN_URL } from 'models/denotation';
 import { useSnackbar } from 'notistack';
 import { useLocalStorage } from 'react-use';
-import { toChangeUserData } from 'store/modules/App/actions';
+import { toChangeAvatarProperties, toChangeUserData } from 'store/modules/App/actions';
 import { getAllFirebaseData, getUserData } from 'store/modules/App/selectors';
-import { toChangeLoginStatus } from 'store/modules/Auth/actions';
+import { toChangeAnonymousStatus, toChangeLoginStatus } from 'store/modules/Auth/actions';
 import { useCookie, useNetworkState, usePageLeave } from 'react-use';
 import {
   operateToSetStoreOfFirebaseData,
@@ -19,6 +19,9 @@ import {
 } from 'store/modules/App/operations';
 import { defaultFirebaseState } from 'store/modules/Auth/operations';
 import { startsWith } from 'lodash';
+import { defaultAvatarProperties } from 'store/modules/App/reducers';
+import { AUTH_BASE_URL } from 'layouts/RouterLayout/denotation';
+import { useSetNotificationArr } from 'hooks/useSetNotificationArr.hook';
 
 if (firebase.apps.length === 0)
   firebase.initializeApp({
@@ -43,7 +46,6 @@ const AuthLayout: FC<any> = ({ children, pageProps }) => {
   const userData = useSelector(getUserData);
 
   const allFirebaseData = useSelector(getAllFirebaseData);
-
   const [value, setValue] = useLocalStorage(LOCAL_STORAGE_KEY, defaultFirebaseState);
   const { online } = useNetworkState();
   // console.log(value)
@@ -66,21 +68,30 @@ const AuthLayout: FC<any> = ({ children, pageProps }) => {
       enqueueSnackbar({ message: errorMessage || 'Something went wrong', severity: 'error' });
     }
   }, [isError, errorMessage]);
-
+  debugger;
   useEffect(() => {
     firebase.auth().onAuthStateChanged(user => {
       if (!user) return dispatch(toChangeLoginStatus({ isLogined: false }));
+      if (!user.isAnonymous) {
+        dispatch(
+          toChangeAvatarProperties({ avatarProperties: { ...defaultAvatarProperties, url: user.photoURL || NONE } })
+        );
+        dispatch(
+          toChangeUserData({
+            userData: { email: user.email || NONE, name: user.displayName || NONE, isEmailVerified: user.emailVerified }
+          })
+        );
+      } else dispatch(toChangeAnonymousStatus({ isAnonymous: user.isAnonymous }));
 
       dispatch(toChangeLoginStatus({ isLogined: true }));
       if (online) return dispatch(operateToSetStoreOfFirebaseData());
       dispatch(toChangeAllFirebaseStoreState(value!));
     });
   }, []);
-  const isLoginedAndRouteISAuth =
-    (isLogined && router.pathname === NEW_USER_URL) || (isLogined && router.pathname === SIGN_IN_URL);
+  const isLoginedAndRouteISAuth = startsWith(router.pathname, AUTH_BASE_URL);
 
   const isRouteIsAuth = startsWith(router.pathname, SIGN_IN_URL);
-  console.log(isRouteIsAuth, isLogined);
+
   useEffect(() => {
     if (isLogined !== NONE && !isLogined && !isRouteIsAuth) {
       router.push(SIGN_IN_URL);
@@ -88,6 +99,9 @@ const AuthLayout: FC<any> = ({ children, pageProps }) => {
       router.push('/');
     }
   }, [isLogined, router.route]);
+
+  useSetNotificationArr();
+
   const isChildrenVisible = isLoginedAndRouteISAuth || (isRouteIsAuth && !isLogined) || (isLogined && !isRouteIsAuth);
   // return <AuthProvider session={pageProps?.session}>{isChildrenVisible ? children : null}</AuthProvider>;
   return <AuthProvider session={pageProps?.session}>{children}</AuthProvider>;

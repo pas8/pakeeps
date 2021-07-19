@@ -5,7 +5,15 @@ import firebase from 'firebase/app';
 import 'firebase/auth';
 import { useDispatch } from 'react-redux';
 import { errorMessages, NEW_USER_URL, SIGN_IN_URL } from 'models/denotation';
-import { ChangeEventHandler, FC, KeyboardEventHandler, MouseEvent, useState } from 'react';
+import {
+  ChangeEventHandler,
+  FC,
+  KeyboardEventHandler,
+  MouseEvent,
+  useState,
+  MouseEventHandler,
+  useEffect
+} from 'react';
 import { useRouter } from 'next/dist/client/router';
 
 import { operateToHandleRegister, operateToHandleSignIn } from 'store/modules/Auth/operations';
@@ -23,7 +31,7 @@ const useStyles = makeStyles(({ spacing, shape: { borderRadius }, palette }) => 
     // }
   },
   container: {
-    '& button': {
+    '& button,a': {
       width: '32%'
     },
 
@@ -103,10 +111,11 @@ const AuthForm: FC<AuthFormPropsType> = ({ isPageIsRegisted = false }) => {
   };
 
   const onClickOfAnonymousButton = () => {
-    dispatch(toChangeAnonymousStatus({ isAnonymous: true }));
+    firebase.auth().signInAnonymously();
   };
 
-  const onClickOfNavigationButton = () => {
+  const onClickOfNavigationButton: MouseEventHandler = e => {
+    e.preventDefault();
     router.push(isPageIsRegisted ? SIGN_IN_URL : NEW_USER_URL);
   };
 
@@ -224,7 +233,12 @@ const AuthForm: FC<AuthFormPropsType> = ({ isPageIsRegisted = false }) => {
           />
         </Grid> */}
 
-        <Button variant={'outlined'} onClick={onClickOfNavigationButton} color={'secondary'}>
+        <Button
+          variant={'outlined'}
+          onClick={onClickOfNavigationButton}
+          color={'secondary'}
+          href={isPageIsRegisted ? SIGN_IN_URL : NEW_USER_URL}
+        >
           {`to ${!isPageIsRegisted ? authFormDenotation.REGISTER : authFormDenotation.LOGIN}`}
         </Button>
         <Button color={'primary'} variant={'outlined'} onClick={onClickOfMainButton} type={'submit'}>

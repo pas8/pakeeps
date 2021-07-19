@@ -1,6 +1,12 @@
+import { CircularProgress } from '@material-ui/core';
 import AuthFieldSetContainer from 'components/AuthFieldSetContainer';
-import AuthForm from 'components/AuthForm';
 import PageCenteredContainer from 'components/PageCenteredContainer';
+import dynamic from 'next/dynamic';
+
+const AuthForm = dynamic(() => import('components/AuthForm'), {
+  loading: () => <CircularProgress />,
+  ssr:false
+});
 
 const Index = () => (
   <PageCenteredContainer>
@@ -9,5 +15,6 @@ const Index = () => (
     </AuthFieldSetContainer>
   </PageCenteredContainer>
 );
+
 
 export default Index;

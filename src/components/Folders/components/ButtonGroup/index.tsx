@@ -83,7 +83,7 @@ const useStyles = makeStyles(
         '& svg,p': {
           color: text.hint
         },
-        '&  svg': {
+        '&  .containerOfCustomComponent,.iconContainer': {
           margin: isFolderExtended ? spacing(0, 0.8, 0, 1.2) : 0
         },
         '& p': {
@@ -95,7 +95,7 @@ const useStyles = makeStyles(
         },
 
         // maxWidth: isFolderExtended ? 'auto' : defaultWidth,
-        height,
+        height:height -4,
         borderRadius: 0,
 
         '&:hover': {
@@ -179,7 +179,14 @@ const useStyles = makeStyles(
       '& .lastAdditionalFolder': {
         borderBottomColor: folderColor
       },
-      '& .buttonWrapperOfFolderItemWidthCustomComponent': {}
+      '& .buttonWrapperOfFolderItemWidthCustomComponent': {
+'& img':{
+
+
+  margin:10
+}
+
+      }
     }),
     containerWithDrawerViewItem: ({ folderDimensions: { container } }: USeStylesOfFolderButtonGroupByPasType) => ({
       // ...container
