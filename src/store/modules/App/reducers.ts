@@ -62,70 +62,70 @@ import { DialogLayoutName, MenusLayoutName } from 'models/unums';
 //   },
 //   ...randomPakeeps
 // ],
-const labelsOfInitialState: GlobalLabelsType = [
-  { color: '', title: 'Day plans', iconName: 'category', id: 'label0', variant: 'outlined' },
-  { color: '#dd6b2a', title: 'Week plans', iconName: 'star', id: 'label1', variant: 'outlined' },
-  { color: '#dd6b2a', title: 'Week plans', iconName: 'star', id: 'label11', variant: 'outlined' },
-  { color: 'primary', title: 'Mouth plans', iconName: 'keyboard', id: 'label2', variant: 'outlined' },
-  { color: 'primary', title: 'Mouth plans', iconName: 'keyboard', id: 'labe11324l2', variant: 'outlined' },
-  { color: 'secondary', title: 'Year plans', iconName: '', id: 'label3', variant: 'outlined' },
-  { color: '#6e9f47', title: 'Your plans', iconName: 'star', id: 'label6', variant: 'default' },
-  { color: '', title: 'Hobby Placeholders', iconName: 'bookmark', id: 'label4', variant: 'default' },
-  { color: '#afa646', title: 'Eco', iconName: 'eco', id: 'label8', variant: 'default' },
-  { color: '#afa646', title: 'Eco', iconName: 'bookmark', id: 'la1bel8', variant: 'default' },
-  { color: '#afa646', title: 'Eco', iconName: 'bookmark', id: 'la121bel8', variant: 'default' },
-  { color: '#afa646', title: 'Eco', iconName: 'bookmark', id: '21', variant: 'default' },
-  { color: '#afa646', title: 'Eco', iconName: 'bookmark', id: '21', variant: 'default' },
-  { color: '#dd6b2a', title: 'Week plans', iconName: 'star', id: 'labe23l1', variant: 'outlined' },
-  { color: 'primary', title: 'Mouth plans', iconName: 'keyboard', id: 'lweabel2', variant: 'outlined' }
-];
+// const labelsOfInitialState: GlobalLabelsType = [
+//   { color: '', title: 'Day plans', iconName: 'category', id: 'label0', variant: 'outlined' },
+//   { color: '#dd6b2a', title: 'Week plans', iconName: 'star', id: 'label1', variant: 'outlined' },
+//   { color: '#dd6b2a', title: 'Week plans', iconName: 'star', id: 'label11', variant: 'outlined' },
+//   { color: 'primary', title: 'Mouth plans', iconName: 'keyboard', id: 'label2', variant: 'outlined' },
+//   { color: 'primary', title: 'Mouth plans', iconName: 'keyboard', id: 'labe11324l2', variant: 'outlined' },
+//   { color: 'secondary', title: 'Year plans', iconName: '', id: 'label3', variant: 'outlined' },
+//   { color: '#6e9f47', title: 'Your plans', iconName: 'star', id: 'label6', variant: 'default' },
+//   { color: '', title: 'Hobby Placeholders', iconName: 'bookmark', id: 'label4', variant: 'default' },
+//   { color: '#afa646', title: 'Eco', iconName: 'eco', id: 'label8', variant: 'default' },
+//   { color: '#afa646', title: 'Eco', iconName: 'bookmark', id: 'la1bel8', variant: 'default' },
+//   { color: '#afa646', title: 'Eco', iconName: 'bookmark', id: 'la121bel8', variant: 'default' },
+//   { color: '#afa646', title: 'Eco', iconName: 'bookmark', id: '21', variant: 'default' },
+//   { color: '#afa646', title: 'Eco', iconName: 'bookmark', id: '21', variant: 'default' },
+//   { color: '#dd6b2a', title: 'Week plans', iconName: 'star', id: 'labe23l1', variant: 'outlined' },
+//   { color: 'primary', title: 'Mouth plans', iconName: 'keyboard', id: 'lweabel2', variant: 'outlined' }
+// ];
 
-const randomPakeeps = Array(8)
-  .fill('pakeepID')
-  .map((el, idx) => {
-    const randomColor = colord({ r: random(256), g: random(256), b: random(256) }).toHex();
-    const anotherRandomcolor = colord({ r: random(256), g: random(256), b: random(256) }).toHex();
+// const randomPakeeps = Array(8)
+//   .fill('pakeepID')
+//   .map((el, idx) => {
+//     const randomColor = colord({ r: random(256), g: random(256), b: random(256) }).toHex();
+//     const anotherRandomcolor = colord({ r: random(256), g: random(256), b: random(256) }).toHex();
 
-    const color = colord(randomColor).isDark() && colord(anotherRandomcolor).isLight() ? anotherRandomcolor : DEFAULT;
-    const backgroundColor = color === DEFAULT ? randomColor : !!random(1) ? randomColor : DEFAULT;
+//     const color = colord(randomColor).isDark() && colord(anotherRandomcolor).isLight() ? anotherRandomcolor : DEFAULT;
+//     const backgroundColor = color === DEFAULT ? randomColor : !!random(1) ? randomColor : DEFAULT;
 
-    const id = `${el}-${idx}`;
+//     const id = `${el}-${idx}`;
 
-    const text = `${Array(random(2, 8))
-      .fill('')
-      .map(() => randomSentence())
-      .toString()}-${id}`;
+//     const text = `${Array(random(2, 8))
+//       .fill('')
+//       .map(() => randomSentence())
+//       .toString()}-${id}`;
 
-    const isCheckBoxes = !!random(1);
-    const checkBoxes = Array(random(2, 4))
-      .fill('')
-      .map(() => ({ value: randomSentence(), isAccomplished: !!random(1), id: nanoid(), color: 'default' }));
+//     const isCheckBoxes = !!random(1);
+//     const checkBoxes = Array(random(2, 4))
+//       .fill('')
+//       .map(() => ({ value: randomSentence(), isAccomplished: !!random(1), id: nanoid(), color: 'default' }));
 
-    const events = [
-      { id: '1', value: addHours(new Date(), 2) },
-      { id: '2', value: addHours(new Date(), 32) },
-      { id: '3', value: addHours(new Date(), 100) }
-    ];
+//     const events = [
+//       { id: '1', value: addHours(new Date(), 2) },
+//       { id: '2', value: addHours(new Date(), 32) },
+//       { id: '3', value: addHours(new Date(), 100) }
+//     ];
 
-    return {
-      title: randomSentence({ words: random(4, 8) }),
-      text,
-      isInBookmark: !!random(1),
-      isFavorite: !!random(1),
-      labels: sampleSize(
-        labelsOfInitialState.map(({ id }) => id),
-        random(labelsOfInitialState.length)
-      ),
-      isArchived: !!random(1),
-      events,
-      id,
-      checkBoxes: isCheckBoxes ? checkBoxes : [],
-      isPinned: !!random(1),
-      backgroundColor,
-      color,
-      isCheckBoxes
-    };
-  });
+//     return {
+//       title: randomSentence({ words: random(4, 8) }),
+//       text,
+//       isInBookmark: !!random(1),
+//       isFavorite: !!random(1),
+//       labels: sampleSize(
+//         labelsOfInitialState.map(({ id }) => id),
+//         random(labelsOfInitialState.length)
+//       ),
+//       isArchived: !!random(1),
+//       events,
+//       id,
+//       checkBoxes: isCheckBoxes ? checkBoxes : [],
+//       isPinned: !!random(1),
+//       backgroundColor,
+//       color,
+//       isCheckBoxes
+//     };
+//   });
 
 export const defaultAvatarProperties = {
   url: NONE,
@@ -147,36 +147,36 @@ export const nullityDefaultDialogProps = {
   customColor: {} as CustomColorType
 };
 
-export const defaultEvents = [
-  {
-    title: 'Later today',
-    iconName: 'today',
-    id: '1',
-    value: Date.now(),
-    onlyTime: true,
-    color: PRIMARY,
-    variant: DEFAULT
-  },
-  {
-    title: 'Tomorrow',
-    iconName: 'tomorrow',
-    id: '2',
-    value: addDays(Date.now(), 1),
-    onlyTime: true,
-    color: SECONDARY,
-    variant: OUTLINED
-  },
-  { title: 'Next week', iconName: 'week', id: '3', value: addDays(Date.now(), 7), color: DEFAULT, variant: OUTLINED },
-  {
-    title: 'Next Mouth',
-    iconName: 'alarm',
-    id: '4',
-    value: addDays(Date.now(), 30),
-    onlyTime: false,
-    color: '#fbbc49',
-    variant: DEFAULT
-  }
-];
+// export const defaultEvents = [
+//   {
+//     title: 'Later today',
+//     iconName: 'today',
+//     id: '1',
+//     value: Date.now(),
+//     onlyTime: true,
+//     color: PRIMARY,
+//     variant: DEFAULT
+//   },
+//   {
+//     title: 'Tomorrow',
+//     iconName: 'tomorrow',
+//     id: '2',
+//     value: addDays(Date.now(), 1),
+//     onlyTime: true,
+//     color: SECONDARY,
+//     variant: OUTLINED
+//   },
+//   { title: 'Next week', iconName: 'week', id: '3', value: addDays(Date.now(), 7), color: DEFAULT, variant: OUTLINED },
+//   {
+//     title: 'Next Mouth',
+//     iconName: 'alarm',
+//     id: '4',
+//     value: addDays(Date.now(), 30),
+//     onlyTime: false,
+//     color: '#fbbc49',
+//     variant: DEFAULT
+//   }
+// ];
 
 export const defaultDimensions = {
   folder: {
@@ -201,7 +201,8 @@ export const defaultDimensions = {
 
 export const firebaseAppInitialState = {
   avatarProperties: defaultAvatarProperties,
-  labels: labelsOfInitialState,
+  // labels: labelsOfInitialState,
+  labels: [],
   dimensions: defaultDimensions,
   userData: {
     email: NONE,
@@ -211,7 +212,7 @@ export const firebaseAppInitialState = {
     isEmailVerified: false,
     isEmailPubic: false
   },
-  events: [...defaultEvents],
+  events: [],
   headerPropertyies: {
     order: {
       names: values(headerProfileUtilsDenotationIds),
@@ -220,7 +221,7 @@ export const firebaseAppInitialState = {
   },
   selectedPakeepsId: [],
   pinnedPakeepsOrderNames: [],
-  pakeeps: [...randomPakeeps],
+  pakeeps: [],
   pakeepsOrderNames: [],
   folderOrderNames: {}
 };
@@ -234,7 +235,7 @@ const nullityOfTemporaryData = {
     id: '',
     isHovering: false
   },
-  isUseEditingDialogAsNewPakeep:false,
+  isUseEditingDialogAsNewPakeep: false,
 
   searchPropertyies: { value: [], name: NONE } as SearchPropertyiesType,
   headerHeight: 0,

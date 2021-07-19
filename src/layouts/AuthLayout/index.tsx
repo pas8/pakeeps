@@ -2,7 +2,6 @@ import { Provider as AuthProvider } from 'next-auth/client';
 import { FC, useEffect } from 'react';
 import firebase from 'firebase/app';
 import 'firebase/auth';
-import { firebaseConfig } from '../../../firebaseConfig';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAnonymousStatus, getErrorMessage, getErrorStatus, getLoginedStatus } from 'store/modules/Auth/selectors';
 import { useRouter } from 'next/dist/client/router';
@@ -12,7 +11,16 @@ import { toChangeUserData } from 'store/modules/App/actions';
 import { getUserData } from 'store/modules/App/selectors';
 import { toChangeLoginStatus } from 'store/modules/Auth/actions';
 
-if (firebase.apps.length === 0) firebase.initializeApp(firebaseConfig);
+if (firebase.apps.length === 0)
+  firebase.initializeApp({
+    apiKey: process.env.FIREBASE_API_KEY,
+    authDomain: process.env.FIREBASE_AUTH_DOMAIN,
+    projectId: process.env.FIREBASE_PROJECT_ID,
+    storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
+    messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID,
+    appId: process.env.FIREBASE_APP_ID,
+    measurementId: process.env.FIREBASE_MEASUREMENT_ID
+  });
 
 const AuthLayout: FC<any> = ({ children, pageProps }) => {
   const { enqueueSnackbar } = useSnackbar();
@@ -33,7 +41,7 @@ const AuthLayout: FC<any> = ({ children, pageProps }) => {
 
   useEffect(() => {
     firebase.auth().onAuthStateChanged(user => {
-      console.log(user)
+      console.log(user);
       if (user) dispatch(toChangeLoginStatus({ isLogined: true }));
       else if (!user) dispatch(toChangeLoginStatus({ isLogined: false }));
     });
@@ -52,7 +60,7 @@ const AuthLayout: FC<any> = ({ children, pageProps }) => {
   }, [isLogined, router.route]);
   const isChildrenVisible = isLoginedAndRouteISAuth || (isRouteIsAuth && !isLogined) || (isLogined && !isRouteIsAuth);
   // return <AuthProvider session={pageProps?.session}>{isChildrenVisible ? children : null}</AuthProvider>;
-  return <AuthProvider session={pageProps?.session}>{children }</AuthProvider>;
+  return <AuthProvider session={pageProps?.session}>{children}</AuthProvider>;
 };
 
 export default AuthLayout;
