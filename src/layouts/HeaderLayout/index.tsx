@@ -27,7 +27,7 @@ const useStyles = makeStyles(({ spacing, transitions, breakpoints, palette }) =>
       minHeight: '80vh',
       // overflow: 'visible !important',
       overflowX: 'hidden !important',
-      overflow:({isRouteIsBase}:anu)=> isRouteIsBase ?'hidden' : '', 
+      overflow:({isRouteIsBase}:any)=> isRouteIsBase ?'hidden' : '', 
       background: palette.background.default,
       padding: '0 !important',
       scrollBehavior: 'smooth'

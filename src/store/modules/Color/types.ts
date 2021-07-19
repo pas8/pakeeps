@@ -1,3 +1,4 @@
+import { BreakpointValues } from '@material-ui/core/styles/createBreakpoints';
 import { StringNullableChain } from 'lodash';
 import { $Values, Optional } from 'utility-types';
 import { TypeNames } from './enums';
@@ -90,9 +91,7 @@ export type ColorInitialStateType = {
   };
   defaultThemesToChoseArr: ElementOfDefaultThemeToChoseArr[];
 
-  breakpointsValues: {
-    [key: string]: number;
-  };
+  breakpointsValues: BreakpointValues;
   theme: DefaultThemeType;
   idColumnArr: IdColumnArrType;
 };
