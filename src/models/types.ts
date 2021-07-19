@@ -22,7 +22,7 @@ import { SettingsInitialStateType } from 'store/modules/Settings/types';
 import { ColorInitialStateType } from 'store/modules/Color/types';
 
 import AddCircleOutlineOutlinedIcon from '@material-ui/icons/AddCircleOutlineOutlined';
-import { ChangeEventHandler, Dispatch, ReactNode, SetStateAction, MouseEventHandler } from 'react';
+import { ChangeEventHandler, Dispatch, ReactNode, SetStateAction, MouseEventHandler, MouseEvent } from 'react';
 import {
   AppInitialStateType,
   GlobalEventsType,

@@ -14,8 +14,12 @@ import { MainBarPropsType } from '../../types';
 import MenuButton from '../ProfileUtils/components/MenuButton';
 import { useAlpha } from 'hooks/useAlpha.hook';
 
-const useStyles = makeStyles(({ palette: { text, background }, spacing }) => ({
+const useStyles = makeStyles(({ palette: { text, background }, spacing, breakpoints }) => ({
   container: ({ isHeaderHavePaperColor }: { isHeaderHavePaperColor: boolean }) => ({
+    alignItems: 'center',
+    [breakpoints.down('sm')]: {
+      alignItems: ''
+    },
     '& svg,h6': {
       color: !isHeaderHavePaperColor ? background.paper : text.secondary
     },
@@ -47,7 +51,7 @@ const MainBar: FC<MainBarPropsType> = ({ isMenuOpen, isMenuExtended }) => {
   const classes = useStyles({ isHeaderHavePaperColor });
   const { pathname } = useRouter();
 
-  const { isSiveIsXs,isSizeSmall } = useBreakpointNames();
+  const { isSiveIsXs, isSizeSmall } = useBreakpointNames();
 
   const isMainPage = pathname === '/';
 
@@ -79,7 +83,7 @@ const MainBar: FC<MainBarPropsType> = ({ isMenuOpen, isMenuExtended }) => {
   const handleChangeDrawerOpenStatus = useTakeFuncOfChangngDrawerOpenStatus();
 
   return (
-    <Grid className={classes.container} container={!isSizeSmall } alignItems={'center'}>
+    <Grid className={classes.container} container={!isSizeSmall}>
       {isRouteIsSignIn || isRoteIsSignUp ? (
         <Typography variant={'h6'}>{isRoteIsSignUp ? 'Register' : 'Log In '}</Typography>
       ) : (

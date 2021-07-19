@@ -16,7 +16,7 @@ export const useMakeDraggableArr = (
 
   useEffect(() => {
     pakeepsOrderNames.length === 0 && handlePakeepsOrderNames(pakeeps.map(({ id }) => id));
-  }, [pakeeps,pakeepsOrderNames]);
+  }, [pakeeps]);
 
   const orderReduceFunc = (sum: string[], placeholder: any, idx: number) => [...sum, `${idx}`];
 

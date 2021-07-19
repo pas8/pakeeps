@@ -42,7 +42,7 @@ const FolderLayout: FC = ({ children }) => {
   const anchor = positionsOfFolder.isRight ? 'right' : 'left';
 
   const navContainerProps = isFoldersHaveDraweView
-    ? { anchor, open: isFolderExtended, onClose: handleCloseFoldersWithDrawerView }
+    ? { anchor, open: isFolderExtended, onClose: handleCloseFoldersWithDrawerView,onOpen:()=> {} }
     : {};
   const width = useSelector(getDrawerWidth);
   const {

@@ -172,7 +172,10 @@ const PakeepElement: FC<PakeepElementPropsType> = ({
     !!pakeepElementHeigth && handleResetItemSize();
   }, [pakeepElementHeigth]);
 
-  useEffect(() => setStatusState(state => ({ ...state, isLoaded: true })), []);
+  useEffect(() => {
+    setStatusState(state => ({ ...state, isLoaded: true }));
+  }, []);
+
   if (!statusState.isLoaded) return <SkeletonView />;
 
   const AnimationElement = isUtilsHaveViewLikeInGoogleKeep ? Fade : Grow;
@@ -246,7 +249,7 @@ const PakeepElement: FC<PakeepElementPropsType> = ({
     className: clsx(classes.containerClass, className),
     id,
     open: true,
-    maxWidth: 'md'
+    // maxWidth: 'md'
   };
   const handleSaveEvents: HandleSaveEventsType = events => {
     dispatch(toChangePakeepProperty({ pakeepId: id, property: { events } }));
@@ -293,4 +296,4 @@ const PakeepElement: FC<PakeepElementPropsType> = ({
   );
 };
 
-export default memo(PakeepElement);
+export default PakeepElement

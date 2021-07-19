@@ -107,9 +107,9 @@ const Folders: FC<FoldersTypeProps> = ({
     <Grid ref={ref}>
       <Grid
         // container
-        justify={isFolderViewWithPakeepViewAlignToCenter ? 'center' : 'flex-start'}
-        wrap={'nowrap'}
-        direction={positionsOfFolder.isBottom ? 'row' : 'column'}
+        // justify={isFolderViewWithPakeepViewAlignToCenter ? 'center' : 'flex-start'}
+        // wrap={'nowrap'}
+        // direction={positionsOfFolder.isBottom ? 'row' : 'column'}
       >
         <Slide
           in={true}

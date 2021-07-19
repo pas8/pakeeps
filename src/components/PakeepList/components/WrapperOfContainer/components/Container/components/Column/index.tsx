@@ -147,12 +147,10 @@ const ColumnOfPakeepListContainer: FC<ColumnOfPakeepListContainerPropsType & { h
           return (
             <Grid innerRef={provided.innerRef} {...provided.droppableProps}>
               {
-                //@ts-ignore
                 <List {...listProps} outerRef={provided.innerRef}>
                   {RowOfColumnOfPakeepListContainer}
                 </List>
               }
-              {provided.placeholder}
             </Grid>
           );
         }}
@@ -161,4 +159,4 @@ const ColumnOfPakeepListContainer: FC<ColumnOfPakeepListContainerPropsType & { h
   );
 };
 
-export default memo(ColumnOfPakeepListContainer)
+export default memo(ColumnOfPakeepListContainer);

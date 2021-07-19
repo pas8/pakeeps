@@ -1,4 +1,4 @@
-import React, {  FC, MouseEvent, memo } from 'react';
+import React, { FC, MouseEvent, memo } from 'react';
 import { useDispatch } from 'react-redux';
 import { useFindIcon } from 'hooks/useFindIcon.hook';
 import { toChangeTemporaryData } from 'store/modules/App/actions';
@@ -26,10 +26,9 @@ const LabelPart: FC<LabelPartPropsType> = ({
         const labelChipProps = {
           icon,
           label: title,
-          className: null,
           variant,
-          color,
-          size: 'small',
+          color: color as any,
+          size: 'small' as const,
           key: id
         };
 
@@ -54,12 +53,12 @@ const LabelPart: FC<LabelPartPropsType> = ({
         const labelItemProps = {
           currentColor: color,
           handleOpen,
+          aplyMargin: false,
           labelChipProps,
           customColor: notReversedCustomColor,
           parentBackgrounColor
         };
 
-        //@ts-ignore
         return <LabelItem {...labelItemProps} />;
       })}
     </Grid>
