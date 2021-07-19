@@ -46,7 +46,7 @@ const useStyles = makeStyles(({ palette: { text, background }, spacing, breakpoi
   }
 }));
 
-const MainBar: FC<MainBarPropsType> = ({ isMenuOpen, isMenuExtended }) => {
+const MainBar: FC<MainBarPropsType> = ({ isMenuOpen, isMenuExtended, isRouteIsAuth }) => {
   const isHeaderHavePaperColor = useSelector(getIsHeaderHavePaperColor);
   const classes = useStyles({ isHeaderHavePaperColor });
   const { pathname } = useRouter();
@@ -88,11 +88,13 @@ const MainBar: FC<MainBarPropsType> = ({ isMenuOpen, isMenuExtended }) => {
         <Typography variant={'h6'}>{isRoteIsSignUp ? 'Register' : 'Log In '}</Typography>
       ) : (
         <>
-          <Tooltip title={menuToolTipTitle}>
-            <IconButton className={classes.menuButton} onClick={handleChangeDrawerOpenStatus}>
-              <MenuButton />
-            </IconButton>
-          </Tooltip>
+          {!isRouteIsAuth && (
+            <Tooltip title={menuToolTipTitle}>
+              <IconButton className={classes.menuButton} onClick={handleChangeDrawerOpenStatus}>
+                <MenuButton />
+              </IconButton>
+            </Tooltip>
+          )}
           {!isSizeSmall && (
             <Typography variant={'h6'} className={classes.typography}>
               {/* {headerTitle} */}

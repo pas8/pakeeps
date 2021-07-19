@@ -18,6 +18,7 @@ import {
   toChangeAllFirebaseStoreState
 } from 'store/modules/App/operations';
 import { defaultFirebaseState } from 'store/modules/Auth/operations';
+import { startsWith } from 'lodash';
 
 if (firebase.apps.length === 0)
   firebase.initializeApp({
@@ -78,8 +79,8 @@ const AuthLayout: FC<any> = ({ children, pageProps }) => {
   const isLoginedAndRouteISAuth =
     (isLogined && router.pathname === NEW_USER_URL) || (isLogined && router.pathname === SIGN_IN_URL);
 
-  const isRouteIsAuth = router.pathname === SIGN_IN_URL || router.pathname === NEW_USER_URL;
-
+  const isRouteIsAuth = startsWith(router.pathname, SIGN_IN_URL);
+  console.log(isRouteIsAuth, isLogined);
   useEffect(() => {
     if (isLogined !== NONE && !isLogined && !isRouteIsAuth) {
       router.push(SIGN_IN_URL);

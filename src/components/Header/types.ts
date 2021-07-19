@@ -18,6 +18,7 @@ export type HeaderByPasPropsType = {
 export type MainBarPropsType = {
   isMenuOpen: boolean;
   isMenuExtended: boolean;
+  isRouteIsAuth:boolean
 };
 
 export type HeaderSearchPropsType = {

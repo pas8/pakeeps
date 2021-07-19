@@ -34,4 +34,10 @@ export enum PropertyOfReturnValueOfUseFindFolderItemPropertyies {
   IS_FOLDER_ARR_HAVE_ONLY_ONE_ITEM = 'isFolderArrHaveOnlyOneItem'
 }
 
-
+export enum SnackbarSeverityNames {
+  DEFAULT = 'default',
+  ERROR = 'error',
+  SUCCESS = 'success',
+  WARNING = 'warning',
+  INFO = 'info'
+}

@@ -20,7 +20,10 @@ import {
 } from 'store/modules/App/selectors';
 import { getIsHeaderHavePaperColor } from 'store/modules/Settings/selectors';
 import { useAlpha } from 'hooks/useAlpha.hook';
+import { usePropertyDueToRoute } from 'hooks/usePropertyDueToRoute.hook';
+
 import { PakeepDimensionsType } from 'store/modules/App/types';
+import { denotationOfCorrectLayoutCases } from 'layouts/RouterLayout/denotation';
 
 const useStyles = makeStyles(({ spacing, palette, transitions, shape: { borderRadius }, breakpoints }) => ({
   root: ({ navigationViewLikeTelegram }: any) => ({
@@ -100,7 +103,10 @@ const HeaderByPas: FC<HeaderByPasPropsType> = ({
   const isHeaderHavePakeepView = true;
 
   const isAuthedWithLocalPinCode = useSelector(getIsAuthedWithLocalPassword);
-  const isRouteIsSignIn = pathname === SIGN_IN_URL || pathname === NEW_USER_URL || !isAuthedWithLocalPinCode;
+
+  const property = usePropertyDueToRoute();
+  const isRouteIsAuth = denotationOfCorrectLayoutCases.FOLDER_LAYOUT_HIDDEN === property;
+
   const [ref, { height: headerHeight }] = useMeasure<HTMLDivElement>();
   useEffect(() => {
     dispatch(
@@ -126,14 +132,14 @@ const HeaderByPas: FC<HeaderByPasPropsType> = ({
 
   return (
     <Grid className={classes.root}>
-      {isSizeSmall && !isRouteIsSignIn ? (
+      {isSizeSmall && !isRouteIsAuth ? (
         <Grid className={classes.smallContainer} ref={ref} component={'header'}>
           <Grid alignItems={'center'} container justify={'space-between'}>
-            <Grid >
-            <Grid container>
-              {!isSeaching && <MainBar isMenuExtended={isMenuExtended} isMenuOpen={isMenuOpen} />}
-              <HeaderSearch {...headerSearchProps} />
-            </Grid>
+            <Grid>
+              <Grid container>
+                {!isSeaching && <MainBar isMenuExtended={isMenuExtended} isMenuOpen={isMenuOpen} isRouteIsAuth={isRouteIsAuth}/>}
+                <HeaderSearch {...headerSearchProps} />
+              </Grid>
             </Grid>
             {!isSeaching && <HeaderProfileUtils />}
           </Grid>
@@ -142,9 +148,9 @@ const HeaderByPas: FC<HeaderByPasPropsType> = ({
         <AppBar className={clsx(classes.appBar, { [classes.appBarShift]: isMenuOpen })} ref={ref}>
           {!isZenModeActive && (
             <Toolbar className={classes.toolBar}>
-              {!isOnlySearchVisible && <MainBar isMenuExtended={isMenuExtended} isMenuOpen={isMenuOpen} />}
-              {!isRouteIsSignIn && <HeaderSearch {...headerSearchProps} />}
-              {!isRouteIsSignIn && <HeaderProfileUtils />}
+              {!isOnlySearchVisible && <MainBar isMenuExtended={isMenuExtended} isMenuOpen={isMenuOpen} isRouteIsAuth={isRouteIsAuth} />}
+              {!isRouteIsAuth && <HeaderSearch {...headerSearchProps} />}
+              {!isRouteIsAuth && <HeaderProfileUtils />}
             </Toolbar>
           )}
         </AppBar>
