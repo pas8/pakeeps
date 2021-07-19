@@ -12,14 +12,14 @@ export const useStyles = makeStyles(({ spacing, palette, typography: { subtitle2
     border: 0,
     color: customColor?.hover,
     borderBottomWidth: 2,
-    borderColor: !customColor.isUseDefault ? useMix(customColor, 0.8) : palette?.mediumEmphasis?.main,
+    borderColor: !customColor.isUseDefault ? useMix(customColor, 0.8) : palette.text.hint,
     borderStyle: 'solid',
 
     '& li:hover .MuiTouchRipple-root': {
       background: useAlpha(customColor.isUseDefault ? palette.secondary.main : customColor?.hover, 0.42)
     },
     '& svg,p': {
-      color: !customColor.isUseDefault ? customColor?.unHover : palette?.highEmphasis?.main
+      color: !customColor.isUseDefault ? customColor?.unHover : palette.text.secondary
     },
     margin: spacing(0, 0, 0.4, 0),
     '& legend': {

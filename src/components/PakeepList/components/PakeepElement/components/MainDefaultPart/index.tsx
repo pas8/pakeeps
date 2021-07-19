@@ -8,7 +8,7 @@ import PinIcon from 'components/Icons/components/PinIcon';
 import { useAlpha } from 'hooks/useAlpha.hook';
 import { MainDefaultPartOfPakeepElementPropsType, UseStylesOfMainDefaultPartOfPakeepElementType } from './types';
 
-const useStyles = makeStyles(({ spacing, palette: { highEmphasis, mediumEmphasis }, typography }) => ({
+const useStyles = makeStyles(({ spacing, palette, typography }) => ({
   titleClass: {
     textOverflow: 'ellipsis',
     overflow: 'hidden',
@@ -20,13 +20,13 @@ const useStyles = makeStyles(({ spacing, palette: { highEmphasis, mediumEmphasis
     position: 'absolute',
     top: spacing(0.8),
     right: spacing(0.2),
-    color: !customColor.isUseDefault ? customColor.unHover : mediumEmphasis?.main,
+    color: !customColor.isUseDefault ? customColor.unHover : palette.text.hint,
 
     '&:hover': {
-      background: colord(!customColor.isUseDefault ? customColor.hover : highEmphasis ? highEmphasis.main : '')
+      background: colord(!customColor.isUseDefault ? customColor.hover : palette.text.secondary)
         .alpha(0.16)
         .toHex(),
-      color: !customColor.isUseDefault ? customColor.hover : highEmphasis?.main
+      color: !customColor.isUseDefault ? customColor.hover : palette.text.hint
     }
   }),
   mainPartContainer: ({ customColor }: UseStylesOfMainDefaultPartOfPakeepElementType) => ({
@@ -38,9 +38,9 @@ const useStyles = makeStyles(({ spacing, palette: { highEmphasis, mediumEmphasis
       },
       top: -8,
       left: -10,
-      color: !customColor.isUseDefault ? customColor.unHover : mediumEmphasis?.main,
+      color: !customColor.isUseDefault ? customColor.unHover : palette.text.hint,
       '&:hover .MuiTouchRipple-root': {
-        background: useAlpha(!customColor.isUseDefault ? customColor.unHover! : mediumEmphasis?.main!, 0.2)
+        background: useAlpha(!customColor.isUseDefault ? customColor.unHover! : palette.text.hint, 0.2)
       }
     }
   }),

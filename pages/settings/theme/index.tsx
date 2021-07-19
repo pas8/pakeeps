@@ -64,7 +64,7 @@ const useStyles = makeStyles(({ spacing, palette, breakpoints, shape: { borderRa
     padding: spacing(1),
     borderRadius,
     border: '2px solid',
-    borderColor: useAlpha(palette.mediumEmphasis?.main!, 0.2),
+    borderColor: useAlpha(palette.text.primary, 0.2),
     '& legend': {
       padding: spacing(0, 0.8)
     }
@@ -73,16 +73,16 @@ const useStyles = makeStyles(({ spacing, palette, breakpoints, shape: { borderRa
 
   fieldsetContainer: {
     borderRadius,
-    borderColor: useAlpha(palette.mediumEmphasis?.main!, 0.2),
+    borderColor: useAlpha(palette.text.primary, 0.2),
     '& legend': {
       padding: spacing(0, 0.8)
     }
   },
   containerOfRandomThemeGenerator: {
-    background: `${useAlpha(palette.maxEmphasis?.main!, 0.04)} !important`,
+    background: `${useAlpha(palette.text.primary, 0.04)} !important`,
 
     '&:hover': {
-      background: `${useAlpha(palette.secondary.main, 0.2)}!important`
+      background: `${useAlpha(palette.text.primary, 0.2)}!important`
     }
   },
   borderRadiusContainer: {

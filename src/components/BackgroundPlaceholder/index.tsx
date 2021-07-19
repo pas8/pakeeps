@@ -1,15 +1,8 @@
 import { makeStyles, Grid, Typography, Button } from '@material-ui/core';
-import { useAlpha } from 'hooks/useAlpha.hook';
 import { FC, ReactNode } from 'react';
 
 const useStyles = makeStyles(
-  ({
-    spacing,
-    transitions,
-    breakpoints,
-    shape: { borderRadius },
-    palette: { secondary, maxEmphasis, background, highEmphasis, mediumEmphasis }
-  }) => ({
+  ({ spacing, transitions, breakpoints, shape: { borderRadius }, palette: { secondary, background } }) => ({
     bg: ({ color }: { color: string }) => ({
       position: 'absolute',
       top: 0,
@@ -62,7 +55,7 @@ const BackgroundPlaceholderByPas: FC<{
   size?: number;
   isButtonIconIsComponent?: boolean;
   onClick?: (e: any) => void;
-  isButtonBig?:boolean
+  isButtonBig?: boolean;
 }> = ({
   title,
   color,
@@ -89,7 +82,7 @@ const BackgroundPlaceholderByPas: FC<{
           onClick={onClick}
           size={'small'}
         >
-          <Typography variant={ isButtonBig ? 'subtitle1' :'body2'} component={'h6'}>
+          <Typography variant={isButtonBig ? 'subtitle1' : 'body2'} component={'h6'}>
             {buttonText}
           </Typography>
         </Button>

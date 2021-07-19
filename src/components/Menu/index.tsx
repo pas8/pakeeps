@@ -5,7 +5,7 @@ import { FC, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { getIsMenuHaveGitHubView } from 'store/modules/Color/selectors';
 
-const useStyles = makeStyles(({ spacing, breakpoints, palette: { secondary, maxEmphasis, background }, shadows }) => ({
+const useStyles = makeStyles(({ spacing, breakpoints, palette: { secondary, background }, shadows }) => ({
   tringle: ({ customColor, isMenuHaveGitHubView }: UseStylesCustomColorType & any) => {
     const unit = 16;
 
@@ -24,19 +24,18 @@ const useStyles = makeStyles(({ spacing, breakpoints, palette: { secondary, maxE
       width: unit * 2,
       // border:'1px solid white',
       height: unit * 2,
-      background: color,
+      background: color
       // boxShadow:'inset 0px 0px 1px 2px white'
     };
   },
-  '@global': {  
+  '@global': {
     '.MuiMenu-paper': ({ customColor }: UseStylesCustomColorType & any) => ({
-      background: customColor.isUseDefault ? '' : customColor.bgHover,
-
+      background: customColor.isUseDefault ? '' : customColor.bgHover
     })
   }
 }));
 
-const MenuByPas: FC<MenuProps & UseStylesCustomColorType > = ({ children, customColor, ...props }) => {
+const MenuByPas: FC<MenuProps & UseStylesCustomColorType> = ({ children, customColor, ...props }) => {
   const isMenuHaveGitHubView = useSelector(getIsMenuHaveGitHubView);
   const classes = useStyles({ customColor, isMenuHaveGitHubView });
 

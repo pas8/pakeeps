@@ -30,14 +30,14 @@ export const useStyles = makeStyles(({ spacing, typography: { h4 }, palette }) =
     color = '',
     isSizeSmaller = false
   }: UseStylesOfDynamicInputDateAndTimePickersPropsType) => {
-    const defaultColor = customColor.isUseDefault ? palette?.mediumEmphasis?.main : customColor.unHover;
-    const defaultHoverColor = customColor.isUseDefault ? palette?.maxEmphasis?.main : useAlpha(customColor.hover, 0.8);
+    const defaultColor = customColor.isUseDefault ? palette.text.hint : customColor.unHover;
+    const defaultHoverColor = customColor.isUseDefault ? palette.text.primary : useAlpha(customColor.hover, 0.8);
     const focusedColor = error
       ? palette.error.main
       : customColor.isUseDefault
       ? !!color
         ? color
-        : palette?.primary?.main
+        : palette.primary.main
       : customColor.hover;
 
     return {

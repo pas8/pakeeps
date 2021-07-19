@@ -37,7 +37,7 @@ const useStyles = makeStyles(({ spacing, palette, breakpoints, shape: { borderRa
       width: '100%'
     },
     padding: spacing(0, 1, 0.8),
-    borderColor: useAlpha(palette.mediumEmphasis?.main!, 0.2),
+    borderColor: useAlpha(palette.text.hint, 0.2),
     '& legend': {
       padding: spacing(0, 0.8)
     }

@@ -1,5 +1,5 @@
-import { Button, Grid, makeStyles, Paper, TextField, Typography, useTheme } from '@material-ui/core';
-import { capitalize, mapValues, snakeCase, values } from 'lodash';
+import { Button, Grid, makeStyles,  TextField, Typography, useTheme } from '@material-ui/core';
+import {  mapValues,  values } from 'lodash';
 import dynamic from 'next/dynamic';
 import { ChangeEventHandler, FC, MouseEventHandler, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
@@ -24,18 +24,9 @@ const AccountAvatar = dynamic(() => import('components/AccountAvatar'), { ssr: f
 export const INPUT_MARGIN_BOTTOMVALUE = 2.8;
 
 const useStyles = makeStyles(
-  ({
-    spacing,
-    transitions,
-    breakpoints,
-    shape,
-    palette: { secondary, maxEmphasis, background, primary, highEmphasis }
-  }) => ({
+  ({ spacing, transitions, breakpoints, shape, palette: { secondary, background, primary, text } }) => ({
     wrapper: {
-      // padding: spacing(2  ),
-      // borderRadius: shape.borderRadius,
-      // borderColor: useAlpha( highEmphasis?.main!, 0.28),
-      borderColor: useAlpha(highEmphasis?.main!, 0),
+      borderColor: useAlpha(text.primary, 0),
       position: 'relative'
     },
     container: {
@@ -90,12 +81,8 @@ const useStyles = makeStyles(
     }: any) => {
       const borderUnHoverColor = isHaveBgColor
         ? backgroundColor
-        : useAlpha(isAccountHaveAvatar ? secondary.main! : maxEmphasis?.main!, 0.4);
-      const borderHoverColor = isHaveBgColor
-        ? backgroundColor
-        : isAccountHaveAvatar
-        ? secondary.main
-        : maxEmphasis?.main;
+        : useAlpha(isAccountHaveAvatar ? secondary.main! : text.primary, 0.4);
+      const borderHoverColor = isHaveBgColor ? backgroundColor : isAccountHaveAvatar ? secondary.main : text.primary;
 
       return {
         border: `2px solid ${isDragActive ? secondary.main : borderUnHoverColor}`,
@@ -138,7 +125,7 @@ const useStyles = makeStyles(
         '&:hover': {
           boxShadow: isHaveBgColor
             ? isBgColorDark
-              ? `0px 0px 1px 2px ${highEmphasis?.main}`
+              ? `0px 0px 1px 2px ${text.secondary}`
               : `0px 0px 1px 2px ${background.default}, 0px 0px 1px 4px ${backgroundColor}`
             : '',
 
@@ -149,7 +136,7 @@ const useStyles = makeStyles(
     },
 
     containerOfEditButton: ({ backgroundColor, isHaveBgColor, isBgColorDark }: any) => {
-      const color = isHaveBgColor ? (isBgColorDark ? maxEmphasis?.main : backgroundColor) : secondary.main;
+      const color = isHaveBgColor ? (isBgColorDark ? text.primary : backgroundColor) : secondary.main;
       const bg = !isBgColorDark ? background.default : backgroundColor;
       return {
         position: 'absolute',
@@ -176,7 +163,7 @@ const useStyles = makeStyles(
     containerOfActionsButtonGroup: ({ isSomethingWasChanged }: any) => ({
       position: 'absolute',
       borderRadius: shape.borderRadius,
-      borderColor: useAlpha(isSomethingWasChanged ? primary.main : highEmphasis?.main!, 0.28),
+      borderColor: useAlpha(isSomethingWasChanged ? primary.main : text.primary, 0.28),
       bottom: 10,
       right: 10
     })
