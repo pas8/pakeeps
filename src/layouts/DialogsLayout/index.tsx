@@ -10,6 +10,7 @@ import { nullityDefaultDialogProps } from 'store/modules/App/reducers';
 import { getDefaultDialogPropsOfTemporaryData } from 'store/modules/App/selectors';
 import { DialogsLayoutPropsType } from './types';
 import EditingDialogOfPakeepElement from 'components/PakeepList/components/EditingDialogOfPakeepElement';
+import { isArray } from 'lodash';
 
 const DialogsLayout: FC<DialogsLayoutPropsType> = ({ children }) => {
   const dialogProps = useSelector(getDefaultDialogPropsOfTemporaryData);
@@ -37,7 +38,7 @@ const DialogsLayout: FC<DialogsLayoutPropsType> = ({ children }) => {
       {children}
       {!menuesHidden &&
         menuesComponentsArr.map(({ Component, props, name }, idx) => {
-          if (name !== dialogName) return null;
+          if (isArray(dialogName) ? dialogName.includes(name) : name === dialogName)
 
           return <Component {...props} key={`menuesComponentsArr-${name}-${idx}`} />;
         })}

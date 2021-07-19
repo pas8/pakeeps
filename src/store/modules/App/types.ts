@@ -31,8 +31,6 @@ export type PayloadTypes = {
   [TypeNames.HANDLE_CHANGE_GLOBAL_LABEL_ITEM]: { changedLabel: ILabelElement };
   [TypeNames.HANDLE_CHANGE_GLOBAL_EVENT_ITEM]: { changedEvent: IGlobalEvent };
 
-  
-
   [TypeNames.HANDLE_DELETE_LABEL_FROM_PAKEEP]: {
     currentPakeepId: PakeepIdType;
     labelIdWhichShouldBeDeleted: LabelIdType;
@@ -96,15 +94,11 @@ export type PayloadTypes = {
     newOrder: Optional<OrderOfHeaderUtilsType>;
   };
   [TypeNames.HANDLE_CHANGE_ALL_FIREBASE_APP_STATE]: {
-    firebaseState: InitialiAppFirebaseData
+    firebaseState: InitialiAppFirebaseData;
   };
-  
 };
 
-
-
 export type ActionsValueTypes = {
-  
   toChangeAllFirebaseAppState: {
     type: typeof TypeNames.HANDLE_CHANGE_ALL_FIREBASE_APP_STATE;
     payload: PayloadTypes[TypeNames.HANDLE_CHANGE_ALL_FIREBASE_APP_STATE];
@@ -517,7 +511,7 @@ export type NotifinationArrType = HeaderMenuArrItemType[];
 export type TemporaryDatatype = {
   isCancelSelectedPakeepsId: boolean;
   selectedPakeepsId: SelectedPakeepsIdType;
-  isUseEditingDialogAsNewPakeep:boolean
+  isUseEditingDialogAsNewPakeep: boolean;
   searchPropertyies: SearchPropertyiesType;
   isAllDataWasUploaded: boolean;
   drawerWidth: DrawerWidthType;
@@ -528,10 +522,7 @@ export type TemporaryDatatype = {
   notifinationArr: NotifinationArrType;
   menuAccountUtilsArr: NotifinationArrType;
   defaultMenuProps: DefaultMenuPropsType;
-  defaultDialogProps: {
-    id: string;
-    dialogName: DialogLayoutName;
-  } & UseStylesCustomColorType;
+  defaultDialogProps: DefaultDialogPropsType;
   isAuthedWithLocalPinCode: boolean;
   isZenModeActive: boolean;
   pakeep: {
@@ -545,8 +536,13 @@ export type TemporaryDatatype = {
 export type DefaultMenuPropsType = {
   id: string;
   customColor: CustomColorType;
-  menuName: MenusLayoutName;
+  menuName: MenusLayoutName | MenusLayoutName[];
 } & CoordinatesType;
+
+export type DefaultDialogPropsType = {
+  id: string;
+  dialogName: DialogLayoutName | DialogLayoutName[];
+} & UseStylesCustomColorType;
 
 export type CoordinatesType = {
   mouseX: number;

@@ -1,15 +1,17 @@
 import { Grid, InputBase, makeStyles, IconButton, Typography, Button, Chip } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
+import _, { chain, groupBy, isEmpty, map, mapValues, pickBy, toPairs } from 'lodash';
+import { useClickAway } from 'react-use';
 import CloseOutlinedIcon from '@material-ui/icons/CloseOutlined';
 import KeyboardReturnOutlinedIcon from '@material-ui/icons/KeyboardReturnOutlined';
 import { getIsHeaderHavePaperColor } from 'store/modules/Settings/selectors';
-import { HeaderSearchPropsType, SearchDataType, UseStylesOfHeaderSearchType } from 'components/Header/types';
 import { ChangeEventHandler, FC, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
+
 import { getGlobalEventsArr, getLabels, getPakeeps } from 'store/modules/App/selectors';
-import { useClickAway } from 'react-use';
+import { HeaderSearchPropsType, SearchDataType, UseStylesOfHeaderSearchType } from 'components/Header/types';
 import { useFocus } from 'hooks/useFocus.hook';
-import _, { chain, groupBy, isEmpty, map, mapValues, pickBy, toPairs } from 'lodash';
 import { NamesOfSearchPropertyiesType } from 'store/modules/App/types';
 import PakeepPropertiesSearchGroup from './components/PakeepPropertiesGroup';
 import SearchGroupContainerWithTitle from './components/ContainerWithTitle';

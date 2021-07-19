@@ -4,7 +4,7 @@ import { useSnackbar } from 'notistack';
 import { toChangeTemporaryData } from 'store/modules/App/actions';
 import { DialogLayoutName } from 'models/unums';
 import { Typography, Grid, makeStyles, CircularProgress } from '@material-ui/core';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import includes from 'lodash.includes';
 import { filter, mapKeys, map, mapValues } from 'lodash';
 import { DEFAULT } from 'models/denotation';
@@ -18,6 +18,7 @@ import {
   DateAndTimeInputsStateType,
   HandleDateAndTimeInputsStateType
 } from './types';
+import { getDefaultDialogPropsOfTemporaryData } from 'store/modules/App/selectors';
 
 const HeaderOfAddDateToPakeep = dynamic(() => import('./components/HeaderOfAddDateToPakeep'));
 
@@ -50,6 +51,7 @@ const AddDateToPakeep: FC<AddDateToPakeepPropsType> = ({
   if (!currentEventsArr) return null;
 
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+  const { dialogName } = useSelector(getDefaultDialogPropsOfTemporaryData);
 
   const FIRST_EVENT_ID = '1';
 
@@ -67,20 +69,22 @@ const AddDateToPakeep: FC<AddDateToPakeepPropsType> = ({
   const [focusedEventId, setFocusedEventId] = useState('');
 
   const [dateAndTimeInputsState, setDateAndTimeInputsState] = useState<DateAndTimeInputsStateType>({});
-  // console.log(dateAndTimeInputsState)
+
   const handleDateAndTimeInputsState: HandleDateAndTimeInputsStateType = (id, value, inputValue) => {
     setFocusedEventId(id);
     setDateAndTimeInputsState(state => ({ ...state, [id]: { id, value, inputValue } }));
   };
-  // const handleAddCustomEvent = newCustomEvent => {
-  //   setDateAndTimeInputsState(state => ({ ...state, addMoreEvents: [...state.addMoreEvents, newCustomEvent] }));
-  // };
 
   const handleOpenAddCustomEventsDialog = () => {
     dispatch(
       toChangeTemporaryData({
         newTemporaryData: {
-          defaultDialogProps: { id: pakeepId, dialogName: DialogLayoutName.EVENTS, customColor: color }
+          defaultDialogProps: {
+            id: pakeepId,
+            dialogName:
+              dialogName === DialogLayoutName.PAKEEPS ? [DialogLayoutName.EVENTS, dialogName] : DialogLayoutName.EVENTS,
+            customColor: color
+          }
         }
       })
     );
