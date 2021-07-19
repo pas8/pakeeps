@@ -7,7 +7,7 @@ let configureStore = {};
 
 const combinecRedusers = combineReducers({ ...reducers });
 if (process.env.NODE_ENV === 'production') {
-  configureStore = createStore(combinecRedusers, {}, compose(applyMiddleware(thunkMiddleware)));
+  configureStore = createStore(combinecRedusers,  compose(applyMiddleware(thunkMiddleware)));
 } else {
   configureStore = createStore(combinecRedusers, composeWithDevTools(applyMiddleware(thunkMiddleware)));
 }
