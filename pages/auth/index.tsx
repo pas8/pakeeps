@@ -39,7 +39,7 @@ const useStyles = makeStyles(({ spacing, shape: { borderRadius }, palette }) => 
     borderRadius,
     borderColor: useAlpha(palette.text.primary, 0.2),
 
-    height: spacing(22),
+    height: spacing(26),
 
     '& > legend': {
       padding: spacing(0, 0.8)
@@ -59,6 +59,9 @@ const Auth: FC<{ providers: AppProviders }> = ({ providers }) => {
     palette: { secondary, text }
   } = useTheme();
   const [session, loading] = useSession();
+// console.log(session)
+
+
 
   const router = useRouter();
 
@@ -114,8 +117,9 @@ const Auth: FC<{ providers: AppProviders }> = ({ providers }) => {
             </legend>
           )}
 
-          {Object.values(providers).map(({ name, id }) => (
+          {Object.values(providers).map(({ name, id },idx) => (
             <ButtonOfSignInProvider
+            key={`ButtonOfSignInProvider_${name}_${id}_${idx}`}
               onClick={e => signIn(id)}
               name={name}
               //@ts-ignore

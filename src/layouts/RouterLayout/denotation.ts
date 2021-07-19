@@ -6,6 +6,11 @@ export const APPEARANCE = 'appearance';
 export const ACCOUNT = 'account';
 export const SECURITY = 'security';
 
+export const AUTH_BASE_URL = '/auth'
+
+
+export const AUTH_FORGET_PASSWORD_URL =`${AUTH_BASE_URL}/forgetPassword` ;
+
 export const SETTINGS_BASE_URL = `/${SETTINGS}`;
 export const SETTINGS_APPEARANCE_BASE_URL = `${SETTINGS_BASE_URL}/${APPEARANCE}`;
 export const SETTINGS_THEME_BASE_URL = `${SETTINGS_BASE_URL}/${THEME}`;

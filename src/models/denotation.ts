@@ -1,3 +1,5 @@
+import { AUTH_BASE_URL } from "layouts/RouterLayout/denotation";
+
 export const pakeepPropertyiesNames = {
   isInBookmark: 'isInBookmark',
   isFavorite: 'isFavorite',
@@ -12,8 +14,9 @@ export const menuOpenStatusDenotation = {
   EXTENDED: 'EXTENDED'
 } as const;
 
-export const SIGN_IN_URL = '/auth';
-export const NEW_USER_URL = '/auth/register';
+
+export const SIGN_IN_URL = AUTH_BASE_URL;
+export const NEW_USER_URL = `${AUTH_BASE_URL}/register`;
 
 export const TRANSPARENT = 'transparent';
 export const NONE = 'none';

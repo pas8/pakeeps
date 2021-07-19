@@ -11,7 +11,7 @@ export const usePropertyDueToRoute = () => {
 
   const property = isEqual(route, '/')
     ? denotationOfCorrectLayoutCases.BASE_URL
-    : route === SIGN_IN_URL || route === NEW_USER_URL || !isAuthedWithLocalPinCode
+    : startsWith(route, SIGN_IN_URL) || !isAuthedWithLocalPinCode
     ? denotationOfCorrectLayoutCases.FOLDER_LAYOUT_HIDDEN
     : startsWith(route, SETTINGS_BASE_URL)
     ? denotationOfCorrectLayoutCases.SETTING_URL

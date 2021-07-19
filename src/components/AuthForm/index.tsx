@@ -1,16 +1,19 @@
-import { Grid, TextField, makeStyles, Button, InputAdornment, IconButton } from '@material-ui/core';
+import { Grid, TextField, makeStyles, Button, Typography } from '@material-ui/core';
 import { capitalize, mapValues, values } from 'lodash';
 import { useSnackbar } from 'notistack';
+import firebase from 'firebase/app';
+import 'firebase/auth';
 import { useDispatch } from 'react-redux';
-import Visibility from '@material-ui/icons/Visibility';
-import VisibilityOff from '@material-ui/icons/VisibilityOff';
-import { NEW_USER_URL, SIGN_IN_URL } from 'models/denotation';
-import { ChangeEventHandler, FC, FormEventHandler, KeyboardEventHandler, MouseEvent, useState } from 'react';
+import { errorMessages, NEW_USER_URL, SIGN_IN_URL } from 'models/denotation';
+import { ChangeEventHandler, FC, KeyboardEventHandler, MouseEvent, useState } from 'react';
 import { useRouter } from 'next/dist/client/router';
 
 import { operateToHandleRegister, operateToHandleSignIn } from 'store/modules/Auth/operations';
+import { SnackbarSeverityNames } from 'models/unums';
 import { toChangeAnonymousStatus } from 'store/modules/Auth/actions';
 import { AuthFormPropsType } from './types';
+import { AUTH_FORGET_PASSWORD_URL } from '../../layouts/RouterLayout/denotation';
+import InputVisibilityAdornment from 'components/InputVisibilityAdornment';
 
 const useStyles = makeStyles(({ spacing, shape: { borderRadius }, palette }) => ({
   footerButton: {
@@ -22,6 +25,11 @@ const useStyles = makeStyles(({ spacing, shape: { borderRadius }, palette }) => 
   container: {
     '& button': {
       width: '32%'
+    },
+
+    '& .containerOfForgetPassword': {
+      position: 'relative',
+      paddingBottom: spacing(1)
     }
   },
   mainButtonContainer: {
@@ -33,9 +41,6 @@ const useStyles = makeStyles(({ spacing, shape: { borderRadius }, palette }) => 
   },
   inputContainer: {
     marginBottom: spacing(1.4)
-  },
-  visibilityButton: {
-    color: palette.text.secondary
   }
 }));
 
@@ -57,13 +62,13 @@ const AuthForm: FC<AuthFormPropsType> = ({ isPageIsRegisted = false }) => {
 
   const [isPasswordVisible, setIsPasswordVisible] = useState(true);
 
-  const handleClickShowPassword = () => {
+  const handleChangeVisibilityStatus = () => {
     setIsPasswordVisible(prev => !prev);
   };
   const [formState, setFormState] = useState({
     [authFormaNames.PASSWORD]: {
       value: '',
-      isValid: !false,
+      isValid: false,
       validationFunc: (value: string) => {
         return value.length >= 6;
       }
@@ -71,7 +76,7 @@ const AuthForm: FC<AuthFormPropsType> = ({ isPageIsRegisted = false }) => {
 
     [authFormaNames.EMAIL]: {
       value: '',
-      isValid: !false,
+      isValid: false,
       validationFunc: (value: string) => {
         const isValid = emailRgEx.test(String(value).toLowerCase());
         return isValid;
@@ -111,13 +116,38 @@ const AuthForm: FC<AuthFormPropsType> = ({ isPageIsRegisted = false }) => {
     setFormState(state => ({ ...state, [name]: { ...state[name], value, isValid } }));
   };
 
-  const handleMouseDownPassword = (e: MouseEvent<HTMLButtonElement>) => {
+  const handleResetPassword = (e: MouseEvent<HTMLElement>) => {
     e.preventDefault();
+    if (!formState[authFormaNames.EMAIL].isValid)
+      return enqueueSnackbar({
+        message: 'Email is not correct',
+        severity: SnackbarSeverityNames.ERROR
+      });
+
+    // firebase
+    // .auth()
+    // .applyActionCode('code2')
+    // .then(result => {
+    //   console.log(result)
+    // })
+
+    firebase
+      .auth()
+      .sendPasswordResetEmail(formState[authFormaNames.EMAIL].value)
+      .then(result => {
+        router.push(AUTH_FORGET_PASSWORD_URL);
+      })
+      .catch(error => {
+        enqueueSnackbar({
+          message: error.message || errorMessages.SOMETHING_WENT_WRONG,
+          severity: SnackbarSeverityNames.ERROR
+        });
+      });
   };
 
   return (
     <Grid className={classes.container} container>
-      <Grid container item >
+      <Grid container item>
         {values(authFormaNames).map((name, idx) => {
           const label = capitalize(name);
 
@@ -129,7 +159,7 @@ const AuthForm: FC<AuthFormPropsType> = ({ isPageIsRegisted = false }) => {
 
           const isInputIsPassword = name === authFormaNames.PASSWORD;
           return (
-            <Grid className={classes.inputContainer} container>
+            <Grid className={classes.inputContainer} container key={`${name}_${idx}`}>
               <TextField
                 label={label}
                 variant={'outlined'}
@@ -138,18 +168,10 @@ const AuthForm: FC<AuthFormPropsType> = ({ isPageIsRegisted = false }) => {
                 type={isInputIsPassword ? (isPasswordVisible ? 'text' : 'password') : 'email'}
                 InputProps={{
                   endAdornment: isInputIsPassword && (
-                    <InputAdornment position={'end'}>
-                      <IconButton
-                        className={classes.visibilityButton}
-                        aria-label={'toggle password visibility'}
-                        onClick={handleClickShowPassword}
-                        style={{ width: 48, marginRight: -8 }}
-                        onMouseDown={handleMouseDownPassword}
-                        edge={'end'}
-                      >
-                        {isPasswordVisible ? <Visibility /> : <VisibilityOff />}
-                      </IconButton>
-                    </InputAdornment>
+                    <InputVisibilityAdornment
+                      isPasswordVisible={isPasswordVisible}
+                      onClick={handleChangeVisibilityStatus}
+                    />
                   )
                 }}
                 placeholder={label}
@@ -157,12 +179,27 @@ const AuthForm: FC<AuthFormPropsType> = ({ isPageIsRegisted = false }) => {
                 fullWidth
                 value={formState[name].value}
                 name={name}
-                error={!formState[name].isValid}
+                error={!formState[name].isValid && formState[name].value.length > 0}
                 required
               />
             </Grid>
           );
         })}
+      </Grid>
+      <Grid container>
+        {!isPageIsRegisted && (
+          <Grid container className={'containerOfForgetPassword'}>
+            <Typography
+              color={'textSecondary'}
+              variant={'subtitle1'}
+              component={'a'}
+              href={AUTH_FORGET_PASSWORD_URL}
+              onClick={handleResetPassword}
+            >
+              Forget password?
+            </Typography>
+          </Grid>
+        )}
       </Grid>
       <Grid container item justify={'space-between'}>
         {/* <Grid className={classes.mainButtonConendAdornmentiner}> */}

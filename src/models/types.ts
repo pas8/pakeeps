@@ -50,7 +50,7 @@ import {
   DefaultLabelListPropsType,
   HandleLabelFuncsOfLabelListType
 } from 'components/IconsUtils/components/LabelsList/types';
-import { Theme } from '@material-ui/core';
+import { GridProps, Theme } from '@material-ui/core';
 import { UseMeasureRef } from 'react-use/lib/useMeasure';
 import {
   DefaultUseFindCorrectFolderFuncPropsType,
@@ -296,3 +296,6 @@ export type ParamsOfUseConvertHeaderProfileUtilsObjToFolderArrType = {
 export type UseConvertHeaderProfileUtilsObjToFolderArrType = (
   arr: ParamsOfUseConvertHeaderProfileUtilsObjToFolderArrType
 ) => FolderArrType;
+
+
+export type FieldSetContainerPropsType = { title: string; isOnlyTop?: boolean } & GridProps

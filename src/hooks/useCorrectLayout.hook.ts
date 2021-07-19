@@ -8,7 +8,6 @@ import { usePropertyDueToRoute } from './usePropertyDueToRoute.hook';
 export const useCorrectLayout = (): any[] => {
   const pakeepLayouts = [DateLayout, MenuesLayout, DialogsLayout, FolderLayout];
   const PROPERTY = usePropertyDueToRoute();
-
   switch (PROPERTY) {
     case denotationOfCorrectLayoutCases.BASE_URL:
       return pakeepLayouts;
