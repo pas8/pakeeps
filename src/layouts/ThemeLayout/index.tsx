@@ -1,6 +1,5 @@
 import { createMuiTheme, responsiveFontSizes, ThemeProvider } from '@material-ui/core';
 import { mapValues } from 'lodash';
-import mix from 'mix-color';
 import { useSelector } from 'react-redux';
 
 import { getColor } from 'store/modules/Color/hooks';
@@ -39,20 +38,6 @@ const ThemeLayout = ({ children, ...props }: any) => {
         },
         secondary: {
           main: themeColors.secondaryMain
-        },
-        //@ts-ignore
-        mixed: {
-          main: mix(themeColors.primaryMain, themeColors.secondaryMain, 0.42)
-        },
-        //@ts-ignore
-        highEmphasis: {
-          main: textColors.high
-        },
-        mediumEmphasis: {
-          main: textColors.medium
-        },
-        maxEmphasis: {
-          main: textColors.max
         },
         background: {
           paper: themeColors?.paperMain,

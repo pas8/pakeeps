@@ -7,7 +7,7 @@ import { CloseButtonWithIconPropsType, UseStylesOfCloseButtonWithIconType } from
 
 const useStyles = makeStyles(({ palette, spacing }) => ({
   container: ({ colorOfCloseButton }: UseStylesOfCloseButtonWithIconType) => {
-    const color = !colorOfCloseButton ? palette?.mediumEmphasis?.main : colorOfCloseButton;
+    const color = !colorOfCloseButton ? palette.text.hint : colorOfCloseButton;
 
     return {
       '& button': {

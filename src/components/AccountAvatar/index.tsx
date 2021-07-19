@@ -1,5 +1,4 @@
 import { useDispatch } from 'react-redux';
-import { colord } from 'colord';
 import { FC } from 'react';
 import { makeStyles, Grid, Button, Typography, MenuItem } from '@material-ui/core';
 import AccountCircleOutlinedIcon from '@material-ui/icons/AccountCircleOutlined';
@@ -12,7 +11,6 @@ import MenuByPas from 'components/Menu';
 import { useThemeColors } from 'hooks/useThemeColors.hook';
 import { useIsColorLight } from 'hooks/useIsColorLight.hook';
 import { AccountAvatarPropsType } from './types';
-import mixColor from 'mix-color';
 
 export const customColorPlaceholder: CustomColorType = {
   bgHover: '',
@@ -29,13 +27,13 @@ const useStyles = makeStyles(
     transitions,
     shape: { borderRadius },
     breakpoints,
-    palette: { secondary, maxEmphasis, background, highEmphasis, mediumEmphasis }
+    palette: { secondary,  background, text }
   }) => ({
     elementOfEditMenu: ({ isHaveBgColor, backgroundColor, isBgColorDark }: any) => {
-      const color = isBgColorDark ? maxEmphasis?.main : isHaveBgColor ? backgroundColor : secondary.main;
+      const color = isBgColorDark ? text.primary : isHaveBgColor ? backgroundColor : secondary.main;
       return {
         padding: spacing(1.2, 2),
-        color: highEmphasis?.main,
+        color:  text.secondary,
         '& svg': {
           margin: spacing(0, 0.8, 0, -1)
         },
@@ -69,7 +67,7 @@ const useStyles = makeStyles(
 
       '& p': {
         userSelect: 'none',
-        color: isDragActive ? secondary.main : useAlpha(mediumEmphasis?.main!, 0.42),
+        color: isDragActive ? secondary.main : useAlpha(text.secondary, 0.42),
         width: '200%',
         height: '300%',
         lineHeight: '32px',
@@ -97,7 +95,6 @@ const AccountAvatar: FC<AccountAvatarPropsType> = ({
   const dispatch = useDispatch();
 
   const [primaryColor, secondaryColor] = useThemeColors();
-  const color = mixColor(primaryColor!, secondaryColor!);
 
   const handleDeleteAvatar = () => {
     dispatch(toChangeAvatarProperties({ avatarProperties: defaultAvatarProperties }));

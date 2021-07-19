@@ -13,7 +13,7 @@ const useStyles = makeStyles(({ spacing, transitions, palette, shape: { borderRa
   }: UseStylesOfEventItemType) => {
     const color = customColor.isUseDefault
       ? eventColor === DEFAULT
-        ? palette?.highEmphasis?.main
+        ? palette.text.secondary
         : eventColor === PRIMARY
         ? palette.primary.main
         : eventColor === SECONDARY
@@ -33,10 +33,10 @@ const useStyles = makeStyles(({ spacing, transitions, palette, shape: { borderRa
             ? palette.background.default
             : parentBackgroundColor
           : color,
-      background: variant === DEFAULT ? (!!color ? color : palette?.highEmphasis?.main) : '',
+      background: variant === DEFAULT ? (!!color ? color : palette.text.secondary) : '',
       borderRadius,
       '&:hover': {
-        cursor:'pointer',
+        cursor: 'pointer',
         boxShadow: `0px 0px 4px 1px ${color}`
       }
     };
