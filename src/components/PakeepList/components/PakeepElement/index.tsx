@@ -2,6 +2,7 @@ import { Grid, makeStyles, Grow, Fade, Theme, useTheme } from '@material-ui/core
 import { useState, useEffect, FC, memo, MouseEventHandler } from 'react';
 import dynamic from 'next/dynamic';
 import clsx from 'clsx';
+import { isMobile } from 'react-device-detect';
 import { useMeasure } from 'react-use';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -21,12 +22,18 @@ import { useIsColorLight } from 'hooks/useIsColorLight.hook';
 import AttributeGroup from './components/AttributeGroup';
 import SkeletonView from './components/SkeletonView';
 import MainDefaultPartOfPakeepElement from './components/MainDefaultPart';
-import { NullityStatusState, PakeepElementPropsType, UseStylesProps } from './types';
+import { NullityStatusState, PakeepElementPropsType, UseStylesOfPakeepElementType } from './types';
+import { useBreakpointNames } from 'hooks/useBreakpointNames.hook';
 
 const IconsUtils = dynamic(() => import('components/IconsUtils'), { loading: () => <p>loading</p> });
 
 const useStyles = makeStyles(({ spacing, transitions, palette }: Theme) => ({
-  paperClass: ({ customColor, backgroundColor, color, isUtilsHaveViewLikeInGoogleKeep }: UseStylesProps) => {
+  paperClass: ({
+    customColor,
+    backgroundColor,
+    color,
+    isUtilsHaveViewLikeInGoogleKeep
+  }: UseStylesOfPakeepElementType) => {
     const isTypeLight = palette.type === 'light';
 
     const borderColor = isTypeLight ? color : useIsColorLight(backgroundColor) ? backgroundColor : color;
@@ -58,7 +65,7 @@ const useStyles = makeStyles(({ spacing, transitions, palette }: Theme) => ({
     };
   },
 
-  isHoveredClass: ({ customColor, backgroundColor, color }: UseStylesProps) => {
+  isHoveredClass: ({ customColor, backgroundColor, color }: UseStylesOfPakeepElementType) => {
     return {
       // paddingBottom: `${spacing(8 * 0.8)}px !important`,
       // transition: transitions.create('all', {
@@ -86,10 +93,10 @@ const useStyles = makeStyles(({ spacing, transitions, palette }: Theme) => ({
   labelClass: { marginTop: spacing(0) },
   labelsContainerClass: { marginTop: spacing(0.8) },
 
-  // isDraggingClass: ({ customColor }: UseStylesProps) => ({
-  // borderColor: !customColor && palette.primary.main,
-  // boxShadow: !!customColor && `0px 0px 8px 2px ${customColor.hover} !important`
-  // }),
+  isDraggingClass: ({ customColor }: UseStylesOfPakeepElementType) => ({
+    borderColor: customColor.isUseDefault ? palette.primary.main : '',
+    boxShadow: customColor.isUseDefault ? '' : `0px 0px 8px 2px ${customColor.hover} !important`
+  }),
 
   isSelectingClass: {},
   isSomePakeepsSelectedClass: { cursor: 'pointer !important' },
@@ -134,7 +141,7 @@ const PakeepElement: FC<PakeepElementPropsType> = ({
   const correctBackground = isBackgroundColorDefault ? background.default : backgroundColor;
 
   const classes = useStyles({
-    // isDragging,
+    isDragging,
     customColor,
     backgroundColor: correctBackground,
     isUtilsHaveViewLikeInGoogleKeep,
@@ -230,6 +237,7 @@ const PakeepElement: FC<PakeepElementPropsType> = ({
     isPinIconButtonHidden,
     className: clsx(
       classes.paperClass,
+      isDragging && classes.isDraggingClass,
       !isSomePakeepsSelected && statusState.isHovered && !isSelecting && classes.isHoveredClass,
       isSelecting && classes.isSelectingClass,
       isSomePakeepsSelected && classes.isSomePakeepsSelectedClass
@@ -248,7 +256,7 @@ const PakeepElement: FC<PakeepElementPropsType> = ({
 
     className: clsx(classes.containerClass, className),
     id,
-    open: true,
+    open: true
     // maxWidth: 'md'
   };
   const handleSaveEvents: HandleSaveEventsType = events => {
@@ -284,7 +292,7 @@ const PakeepElement: FC<PakeepElementPropsType> = ({
           <AttributeGroup {...attributeGroupProps} />
         </Grid>
 
-        {openIn && !isDragging && (
+        {openIn && !isDragging && !isMobile && (
           <AnimationElement in={openIn}>
             <Grid className={classes.iconsUtilsClass}>
               <IconsUtils {...iconsUtilsProps} />
@@ -296,4 +304,4 @@ const PakeepElement: FC<PakeepElementPropsType> = ({
   );
 };
 
-export default PakeepElement
+export default PakeepElement;

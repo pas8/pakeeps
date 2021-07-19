@@ -3,14 +3,9 @@ import clsx from 'clsx';
 import { useMeasure } from 'react-use';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppBar, makeStyles, Toolbar, Grid } from '@material-ui/core';
-import { menuOpenStatusDenotation, SIGN_IN_URL, NEW_USER_URL } from 'models/denotation';
-import { toChangeHeaderHeigth, toChangeMenuOpenStatus } from 'store/modules/App/actions';
+import { toChangeHeaderHeigth } from 'store/modules/App/actions';
 import { useRouter } from 'next/dist/client/router';
 
-import HeaderSearch from './components/Search';
-import HeaderProfileUtils from './components/ProfileUtils';
-import MainBar from './components/MainBar';
-import { HeaderByPasPropsType } from './types';
 import { useBreakpointNames } from 'hooks/useBreakpointNames.hook';
 import {
   getFolderDimensions,
@@ -21,10 +16,13 @@ import {
 import { getIsHeaderHavePaperColor } from 'store/modules/Settings/selectors';
 import { useAlpha } from 'hooks/useAlpha.hook';
 import { usePropertyDueToRoute } from 'hooks/usePropertyDueToRoute.hook';
-
-import { PakeepDimensionsType } from 'store/modules/App/types';
 import { denotationOfCorrectLayoutCases } from 'layouts/RouterLayout/denotation';
 
+import HeaderSearch from './components/Search';
+import HeaderProfileUtils from './components/ProfileUtils';
+import MainBar from './components/MainBar';
+import { HeaderByPasPropsType } from './types';
+  
 const useStyles = makeStyles(({ spacing, palette, transitions, shape: { borderRadius }, breakpoints }) => ({
   root: ({ navigationViewLikeTelegram }: any) => ({
     display: 'flex',
@@ -56,10 +54,8 @@ const useStyles = makeStyles(({ spacing, palette, transitions, shape: { borderRa
   },
 
   headerGroupFloatedToEnd: {
-    // justifySelf: 'flex-end'
     display: 'flex',
     borderRadius
-    // padding: spacing(3)
   },
 
   smallContainer: ({ pakeepDimensions }: any) => ({
@@ -137,7 +133,9 @@ const HeaderByPas: FC<HeaderByPasPropsType> = ({
           <Grid alignItems={'center'} container justify={'space-between'}>
             <Grid>
               <Grid container>
-                {!isSeaching && <MainBar isMenuExtended={isMenuExtended} isMenuOpen={isMenuOpen} isRouteIsAuth={isRouteIsAuth}/>}
+                {!isSeaching && (
+                  <MainBar isMenuExtended={isMenuExtended} isMenuOpen={isMenuOpen} isRouteIsAuth={isRouteIsAuth} />
+                )}
                 <HeaderSearch {...headerSearchProps} />
               </Grid>
             </Grid>
@@ -148,7 +146,9 @@ const HeaderByPas: FC<HeaderByPasPropsType> = ({
         <AppBar className={clsx(classes.appBar, { [classes.appBarShift]: isMenuOpen })} ref={ref}>
           {!isZenModeActive && (
             <Toolbar className={classes.toolBar}>
-              {!isOnlySearchVisible && <MainBar isMenuExtended={isMenuExtended} isMenuOpen={isMenuOpen} isRouteIsAuth={isRouteIsAuth} />}
+              {!isOnlySearchVisible && (
+                <MainBar isMenuExtended={isMenuExtended} isMenuOpen={isMenuOpen} isRouteIsAuth={isRouteIsAuth} />
+              )}
               {!isRouteIsAuth && <HeaderSearch {...headerSearchProps} />}
               {!isRouteIsAuth && <HeaderProfileUtils />}
             </Toolbar>

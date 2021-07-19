@@ -11,6 +11,7 @@ import { nullityDefaultMenuProps } from 'store/modules/App/reducers';
 import { getDefaultMenuPropsOfTemporaryData } from 'store/modules/App/selectors';
 import { MenuesLayoutPropsType } from './types';
 import NotificationMenu from 'components/NotificationMenu';
+import { isArray } from 'lodash';
 
 const MenuesLayout: FC<MenuesLayoutPropsType> = ({ children }) => {
   const { menuName, ...defaultMenuProps } = useSelector(getDefaultMenuPropsOfTemporaryData);
@@ -35,8 +36,6 @@ const MenuesLayout: FC<MenuesLayoutPropsType> = ({ children }) => {
     { Component: NotificationMenu, props: defaultMenuLayoutElemntProps, name: MenusLayoutName.NOTIFICATION }
   ];
 
-  // console.log(menuName)
-  // const p = useProperty
   const menuesHidden = menuName === MenusLayoutName.NONE;
   return (
     <>
@@ -45,7 +44,8 @@ const MenuesLayout: FC<MenuesLayoutPropsType> = ({ children }) => {
         menuesComponentsArr.map(({ Component, props, name }, idx) => {
           if (namesArr.includes(name)) return null;
 
-          if (name === menuName) return <Component {...props} key={`menuesComponentsArr-${name}-${idx}`} />;
+          if (isArray(menuName) ? menuName.includes(name) : name === menuName)
+            return <Component {...props} key={`menuesComponentsArr-${name}-${idx}`} />;
           return null;
         })}
     </>

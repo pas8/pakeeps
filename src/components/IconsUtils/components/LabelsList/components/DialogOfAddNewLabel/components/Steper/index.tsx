@@ -4,8 +4,9 @@ import { useAlpha } from 'hooks/useAlpha.hook';
 import { useMix } from 'hooks/useMix.hook';
 import { FC } from 'react';
 import { SteperOfDialogOfAddNewLabelPropsType, UseStylesOfSteperOfDialogOfAddNewLabelType } from './types';
+import { useBreakpointNames } from 'hooks/useBreakpointNames.hook';
 
-const useStyles = makeStyles(({ spacing }) => ({
+const useStyles = makeStyles(({ spacing, breakpoints }) => ({
   container: ({ customColor }: UseStylesOfSteperOfDialogOfAddNewLabelType) => {
     if (customColor.isUseDefault) return {};
     const customMixedColor = customColor?.secondaryColor;
@@ -60,6 +61,12 @@ const useStyles = makeStyles(({ spacing }) => ({
   buttonContainer: ({ customColor }: UseStylesOfSteperOfDialogOfAddNewLabelType) => ({
     margin: spacing(0, 0, 0, 1),
     maxWidth: spacing(12),
+    [breakpoints.down('xs')]: {
+      maxWidth: '100%',
+    margin: spacing(1, 0, 0, 1),
+
+      width: '100%'
+    },
     // background: !customColor.isUseDefault ? customColor?.hover : '',
 
     height: '100%',
@@ -95,6 +102,8 @@ const SteperOfDialogOfAddNewLabel: FC<SteperOfDialogOfAddNewLabelPropsType> = ({
     bgHover: useMix({ ...customColor, hover: customColor?.secondaryColor, bgHover: customColor?.unHover }, 0.8)
   };
 
+  const { isSizeSmall } = useBreakpointNames();
+
   return (
     <Grid className={classes.container} container alignItems={'center'}>
       <Stepper activeStep={activeStep} orientation={'vertical'}>
@@ -120,7 +129,7 @@ const SteperOfDialogOfAddNewLabel: FC<SteperOfDialogOfAddNewLabelPropsType> = ({
                 <Grid container alignItems={'center'}>
                   <Grid>
                     <Grid direction={'column'}>
-                      <Grid container className={classes.componentContainer} alignItems={'center'}>
+                      <Grid container className={classes.componentContainer} alignItems={'center'} >
                         <Component {...componentProps} customColor={secondaryCustomColor} />
                       </Grid>
                       <Grid>
@@ -130,8 +139,13 @@ const SteperOfDialogOfAddNewLabel: FC<SteperOfDialogOfAddNewLabelPropsType> = ({
                       </Grid>
                     </Grid>
                   </Grid>
-                  <Grid>
-                    <Grid container direction={'column'} justify={'center'} className={classes.buttonContainer}>
+                  <Grid style={{width:isSizeSmall ? '100%' : 'auto'}}>
+                    <Grid
+                      container
+                      direction={isSizeSmall ? 'row' : 'column'}
+                      justify={isSizeSmall ? 'flex-end' :'center'}
+                      className={classes.buttonContainer}
+                    >
                       <Grid>
                         <Button
                           disabled={activeStep === 0}
@@ -161,7 +175,7 @@ const SteperOfDialogOfAddNewLabel: FC<SteperOfDialogOfAddNewLabelPropsType> = ({
         )}
       </Stepper>
       {isFinished && (
-        <Box m={8} display={'flex'} flexDirection={'column'}>
+        <Box m={8} display={'flex'} flexDirection={'column'} >
           <Button onClick={() => decrimentActiveStep()} size={'small'}>
             Back
           </Button>

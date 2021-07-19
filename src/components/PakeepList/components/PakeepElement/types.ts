@@ -6,8 +6,9 @@ import { HandleSetPakeepElementHeigthArrType } from '../WrapperOfContainer/compo
 
 export type ColorOfPakeepType = { backgroundColor: string; color?: string };
 
-export type UseStylesProps = UseStylesCustomColorType &
+export type UseStylesOfPakeepElementType = UseStylesCustomColorType &
   ColorOfPakeepType & {
+    isDragging: boolean;
     isUtilsHaveViewLikeInGoogleKeep?: boolean;
   };
 

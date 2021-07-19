@@ -31,14 +31,13 @@ const useStyles = makeStyles(({ typography: { h4, h6, body1, h5 }, spacing }) =>
   return {
     containerClass: ({ backgroundColor, color, isSizeSmall }: UseStylesOfEditingDialogOfPakeepElementtype) => ({
       backgroundColor,
-      height:isSizeSmall ?'100vh' : '', 
+      height: isSizeSmall ? '100vh' : '',
       color,
       '& button': {
         color
       },
-      '& .MuiDialogContent-root':{
-padding:isSizeSmall ?'4px 12px' : ''
-
+      '& .MuiDialogContent-root': {
+        padding: isSizeSmall ? '4px 12px' : ''
       },
       '& .MuiDialogTitle-root': {
         paddingBottom: 0,
@@ -60,7 +59,7 @@ padding:isSizeSmall ?'4px 12px' : ''
         marginLeft: isSizeSmall ? -10 : ''
       },
       '& textarea ': {
-        ...body1,
+        ...body1
       },
       '& .footer': {
         position: isSizeSmall ? 'fixed' : 'static',
