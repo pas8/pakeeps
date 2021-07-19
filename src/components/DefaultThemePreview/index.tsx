@@ -1,10 +1,11 @@
 import { makeStyles, Grid, Typography } from '@material-ui/core';
 import { FC } from 'react';
 import { useSelector } from 'react-redux';
-import { colord } from 'colord';
+import { Colord, colord, extend } from 'colord';
 import { getIsHeaderHavePaperColor } from 'store/modules/Settings/selectors';
 import { useAlpha } from 'hooks/useAlpha.hook';
 import { DefaultThemePreviewPropsType } from './types';
+import mixPlugin from 'colord/plugins/mix';
 
 const useStyles = makeStyles(({ spacing, palette, breakpoints, shape: { borderRadius } }) => ({
   defaultThemeElementContainer: ({ background, isThemeSelected }: any) => ({
@@ -154,7 +155,7 @@ const useStyles = makeStyles(({ spacing, palette, breakpoints, shape: { borderRa
     width: '80%',
 
     '& > div:nth-child(2)': {
-      background: `${palette.mixed.main} !important`
+      background: `${colord(palette.primary.main).mix(palette.secondary.main).toHex()} !important`
     },
 
     '& > div': {
@@ -222,6 +223,8 @@ const DefaultThemePreview: FC<DefaultThemePreviewPropsType> = ({
   isThemeSelected,
   onClick
 }) => {
+  extend([mixPlugin]);
+
   const isHeaderHavePaperColor = useSelector(getIsHeaderHavePaperColor);
 
   const classes = useStyles({ background, isHeaderHavePaperColor, isThemeSelected });

@@ -27,7 +27,7 @@ const useStyles = makeStyles(({ spacing, transitions, breakpoints, palette }) =>
       minHeight: '80vh',
       // overflow: 'visible !important',
       overflowX: 'hidden !important',
-      overflow: 'hidden',
+      overflow:({isRouteIsBase}:anu)=> isRouteIsBase ?'hidden' : '', 
       background: palette.background.default,
       padding: '0 !important',
       scrollBehavior: 'smooth'
@@ -117,7 +117,7 @@ const HeaderLayout: FC<LayoutChildrenType> = ({ children }) => {
 
   const isRouteIsBase = route === BASE_URL;
 
-  const classes = useStyles({ drawerWidth, navigationViewLikeTelegram, headerHeight });
+  const classes = useStyles({ drawerWidth, navigationViewLikeTelegram, headerHeight ,isRouteIsBase});
 
   const isMenuExtended = menuOpenStatus === menuOpenStatusDenotation.EXTENDED;
   const isMenuOpen = menuOpenStatus === menuOpenStatusDenotation.OPEN;
