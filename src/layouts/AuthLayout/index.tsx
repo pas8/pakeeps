@@ -1,15 +1,23 @@
 import { Provider as AuthProvider } from 'next-auth/client';
-import { FC, useEffect } from 'react';
+import { FC, useEffect, useState } from 'react';
 import firebase from 'firebase/app';
 import 'firebase/auth';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAnonymousStatus, getErrorMessage, getErrorStatus, getLoginedStatus } from 'store/modules/Auth/selectors';
 import { useRouter } from 'next/dist/client/router';
-import { NEW_USER_URL, NONE, SIGN_IN_URL } from 'models/denotation';
+import { LOCAL_STORAGE_KEY, NEW_USER_URL, NONE, SIGN_IN_URL } from 'models/denotation';
 import { useSnackbar } from 'notistack';
+import { useLocalStorage } from 'react-use';
 import { toChangeUserData } from 'store/modules/App/actions';
-import { getUserData } from 'store/modules/App/selectors';
+import { getAllFirebaseData, getUserData } from 'store/modules/App/selectors';
 import { toChangeLoginStatus } from 'store/modules/Auth/actions';
+import { useCookie, useNetworkState, usePageLeave } from 'react-use';
+import {
+  operateToSetStoreOfFirebaseData,
+  operateToUploadData,
+  toChangeAllFirebaseStoreState
+} from 'store/modules/App/operations';
+import { defaultFirebaseState } from 'store/modules/Auth/operations';
 
 if (firebase.apps.length === 0)
   firebase.initializeApp({
@@ -33,6 +41,25 @@ const AuthLayout: FC<any> = ({ children, pageProps }) => {
   const errorMessage = useSelector(getErrorMessage);
   const userData = useSelector(getUserData);
 
+  const allFirebaseData = useSelector(getAllFirebaseData);
+
+  const [value, setValue] = useLocalStorage(LOCAL_STORAGE_KEY, defaultFirebaseState);
+  const { online } = useNetworkState();
+  // console.log(value)
+  const [isleavead, setIsleavead] = useState(false);
+
+  usePageLeave(() => {
+    setIsleavead(true);
+  });
+
+  useEffect(() => {
+    if (!isleavead) return;
+
+    dispatch(operateToUploadData());
+    setValue(allFirebaseData);
+    setIsleavead(false);
+  }, [isleavead]);
+
   useEffect(() => {
     if (isError) {
       enqueueSnackbar({ message: errorMessage || 'Something went wrong', severity: 'error' });
@@ -41,9 +68,11 @@ const AuthLayout: FC<any> = ({ children, pageProps }) => {
 
   useEffect(() => {
     firebase.auth().onAuthStateChanged(user => {
-      console.log(user);
-      if (user) dispatch(toChangeLoginStatus({ isLogined: true }));
-      else if (!user) dispatch(toChangeLoginStatus({ isLogined: false }));
+      if (!user) return dispatch(toChangeLoginStatus({ isLogined: false }));
+
+      dispatch(toChangeLoginStatus({ isLogined: true }));
+      if (online) return dispatch(operateToSetStoreOfFirebaseData());
+      dispatch(toChangeAllFirebaseStoreState(value!));
     });
   }, []);
   const isLoginedAndRouteISAuth =

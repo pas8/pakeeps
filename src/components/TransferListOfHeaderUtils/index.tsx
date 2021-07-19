@@ -16,96 +16,98 @@ import { headerProfileUtilsDenotationIds } from 'models/denotation';
 import { NamesArrOFOrderOfHeaderUtilsType } from 'store/modules/App/types';
 import { TransferListOfHeaderUtilsPropsType } from './types';
 import ButtonUtils from './components/ButtonUtils';
+import CaptionOfSettingGroup from 'components/CaptionOfSettingGroup';
 
-const useStyles = makeStyles(({ palette, spacing, shape: { borderRadius }, typography: { subtitle1, subtitle2 } }) => ({
-  root: {
-    '& .lastItemContainer': {
-      borderBottom: 0
-    },
-    '& .alwaysInSameColumnItemContainer': {
-      color: palette.text.disabled,
-      '&:hover': {
+const useStyles = makeStyles(
+  ({ palette, spacing, shape: { borderRadius }, typography: { subtitle1, subtitle2, h6 } }) => ({
+    root: {
+      '& .lastItemContainer': {
+        borderBottom: 0
+      },
+      '& .alwaysInSameColumnItemContainer': {
         color: palette.text.disabled,
-        cursor: 'default'
+        '&:hover': {
+          color: palette.text.disabled,
+          cursor: 'default'
+        }
+      },
+      '& .draggingOverColumnContainer': {
+        borderColor: palette.secondary.main
+      },
+
+      '& .draggingItemContainer': {
+        borderRadius,
+        color: palette.background.default,
+        border: `1px solid ${palette.secondary.main}`,
+        background: palette.secondary.main,
+        '& p': {
+          ...subtitle2,
+          fontSize: subtitle1.fontSize
+        }
+      },
+
+      '& .selectedItemContainer': {
+        color: palette.secondary.main,
+        // borderRight:`1px solid ${palette.secondary.main}`,
+        // borderLeft:`1px solid ${palette.secondary.main}`,
+        '& p': {
+          ...subtitle2,
+          fontSize: subtitle1.fontSize
+        }
       }
     },
-    '& .draggingOverColumnContainer': {
-      borderColor: palette.secondary.main
-    },
 
-    '& .draggingItemContainer': {
+    button: {
+      margin: spacing(0.5, 0)
+    },
+    columnContainer: {
+      border: '1px solid',
       borderRadius,
-      color: palette.background.default,
-      border: `1px solid ${palette.secondary.main}`,
-      background: palette.secondary.main,
+      // padding:spacing(0,0.8),
+      borderColor: useAlpha(palette.text.secondary),
+      minWidth: 200
+      // color: palette.secondary.main
+    },
+    itemContainer: {
+      height: 48,
+      padding: spacing(0, 0.4, 0, 1.4),
+
+      // padding: spacing(0.8, 0),
+      borderBottom: '1px solid',
+      borderBottomColor: useAlpha(palette.text.primary),
+
+      color: palette.text.secondary,
+      '& svg': {
+        marginTop: 4
+      },
       '& p': {
-        ...subtitle2,
-        fontSize: subtitle1.fontSize
+        ...subtitle1
+      },
+      '& .iconContainer': {
+        padding: spacing(0, 1.2, 0, 0)
+      },
+
+      '&:hover': {
+        background: palette.background.paper,
+        color: palette.secondary.main,
+
+        '& p': {
+          // ...subtitle2,
+          fontSize: subtitle1.fontSize
+        }
       }
     },
 
-    '& .selectedItemContainer': {
-      color: palette.secondary.main,
-      // borderRight:`1px solid ${palette.secondary.main}`,
-      // borderLeft:`1px solid ${palette.secondary.main}`,
-      '& p': {
-        ...subtitle2,
-        fontSize: subtitle1.fontSize
-      }
+    footer: {
+      margin: spacing(1.8, 0, 0)
     }
-  },
-
-  button: {
-    margin: spacing(0.5, 0)
-  },
-  columnContainer: {
-    border: '1px solid',
-    borderRadius,
-    // padding:spacing(0,0.8),
-    borderColor: useAlpha(palette.text.secondary),
-    minWidth: 200
-    // color: palette.secondary.main
-  },
-  itemContainer: {
-    height: 48,
-    padding: spacing(0, 0.4, 0, 1.4),
-
-    // padding: spacing(0.8, 0),
-    borderBottom: '1px solid',
-    borderBottomColor: useAlpha(palette.text.primary),
-
-    color: palette.text.secondary,
-    '& svg': {
-      marginTop: 4
-    },
-    '& p': {
-      ...subtitle1
-    },
-    '& .iconContainer': {
-      padding: spacing(0, 1.2, 0, 0)
-    },
-
-    '&:hover': {
-      background: palette.background.paper,
-      color: palette.secondary.main,
-
-      '& p': {
-        // ...subtitle2,
-        fontSize: subtitle1.fontSize
-      }
-    }
-  },
-
-  footer: {
-    margin: spacing(1.8, 0, 0)
-  }
-}));
+  })
+);
 
 export const arrOfProfileUtilsIdOfAlwaysInSameColumn = [
   [headerProfileUtilsDenotationIds.AVATAR_BUTTON] as NamesArrOFOrderOfHeaderUtilsType,
   [headerProfileUtilsDenotationIds.SIGN_IN_AS] as NamesArrOFOrderOfHeaderUtilsType
 ];
-
 
 const TransferListOfHeaderUtils: FC<TransferListOfHeaderUtilsPropsType> = () => {
   const classes = useStyles();
@@ -115,7 +117,6 @@ const TransferListOfHeaderUtils: FC<TransferListOfHeaderUtilsPropsType> = () => 
 
   const allHeaderButtonUtils = useTakeAllHeaderUtils();
   const [selected, setSelected] = useState<NamesArrOFOrderOfHeaderUtilsType>([]);
-
 
   const [state, setState] = useState([
     difference(order.names, order.exclusionNames).filter(
@@ -191,6 +192,9 @@ const TransferListOfHeaderUtils: FC<TransferListOfHeaderUtilsPropsType> = () => 
 
   return (
     <Grid className={classes.root} container>
+      <Grid container>
+      <CaptionOfSettingGroup title={'Order'} />
+      </Grid>
       <DragDropContext onDragEnd={onDragEnd}>
         {columnsArr.map((el, idx) => (
           <>

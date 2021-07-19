@@ -1,6 +1,6 @@
 import { colord } from 'colord';
 import firebase from 'firebase/app';
-import { MouseEventHandler, } from 'react';
+import { MouseEventHandler } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from 'next/dist/client/router';
 import { useSnackbar } from 'notistack';
@@ -13,12 +13,12 @@ import ThemeChangerButton from 'components/Header/components/ProfileUtils/compon
 import UploadButton from 'components/Header/components/ProfileUtils/components/UploadButton';
 import ZenModeButton from 'components/Header/components/ProfileUtils/components/ZenModeButton';
 import LockButton from 'components/Header/components/ViewLikeInTelegram/components/LockButton';
-import { headerProfileUtilsDenotationIds, NONE } from 'models/denotation';
+import { headerProfileUtilsDenotationIds, LOCAL_STORAGE_KEY, NONE } from 'models/denotation';
 import { SETTINGS_ACCOUNT_BASE_URL } from 'layouts/RouterLayout/denotation';
 import { toChangeLoginStatus } from 'store/modules/Auth/actions';
 import { MenusLayoutName } from 'models/unums';
 import { toChangeTemporaryData } from 'store/modules/App/actions';
-import { operateToUploadData } from 'store/modules/App/operations';
+import { operateToSetNullityStore, operateToUploadData } from 'store/modules/App/operations';
 import { getHeaderProperties, getIsZenModeActive, getUserData } from 'store/modules/App/selectors';
 import { toChangeThemeColors } from 'store/modules/Color/actions';
 import { getColorTheme } from 'store/modules/Color/selectors';
@@ -26,6 +26,7 @@ import { toChangeSettingProperty } from 'store/modules/Settings/actions';
 import { ParamsOfUseConvertHeaderProfileUtilsObjToFolderArrType } from './../models/types';
 import { useIsColorLight } from './useIsColorLight.hook';
 import { useFindCorrectHeaderUtilsObj } from './useFindCorrectHeaderUtilsObj.hook';
+import { useLocalStorage } from 'react-use';
 
 export const useTakeAllHeaderUtils = (): ParamsOfUseConvertHeaderProfileUtilsObjToFolderArrType => {
   const dispatch = useDispatch();
@@ -104,9 +105,14 @@ export const useTakeAllHeaderUtils = (): ParamsOfUseConvertHeaderProfileUtilsObj
     dispatch(toChangeTemporaryData({ newTemporaryData: { isZenModeActive: !isZenModeActive } }));
   };
 
+  const [, , remove] = useLocalStorage(LOCAL_STORAGE_KEY);
+
   const handleSignOut = () => {
     firebase.auth().signOut();
     dispatch(toChangeLoginStatus({ isLogined: false }));
+    dispatch(toChangeLoginStatus({ isLogined: false }));
+    dispatch(operateToSetNullityStore());
+    remove();
   };
   const { userName, name, email } = useSelector(getUserData);
 

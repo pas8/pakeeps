@@ -20,6 +20,8 @@ import {
   AppInitialStateType,
   FolderOrderNamesType,
   GlobalLabelsType,
+  HeaderPropertyiesType,
+  NamesArrOFOrderOfHeaderUtilsType,
   NotifinationArrType,
   SearchPropertyiesType
 } from './types';
@@ -215,8 +217,11 @@ export const firebaseAppInitialState = {
   events: [],
   headerPropertyies: {
     order: {
-      names: values(headerProfileUtilsDenotationIds),
-      exclusionNames: [headerProfileUtilsDenotationIds.SIGN_IN_AS, headerProfileUtilsDenotationIds.SIGNOUT]
+      names: values(headerProfileUtilsDenotationIds) as NamesArrOFOrderOfHeaderUtilsType,
+      exclusionNames: [
+        headerProfileUtilsDenotationIds.SIGN_IN_AS,
+        headerProfileUtilsDenotationIds.SIGNOUT
+      ] as NamesArrOFOrderOfHeaderUtilsType
     }
   },
   selectedPakeepsId: [],
@@ -262,6 +267,10 @@ export const initialState: AppInitialStateType = {
 export const AppReducer = (state = initialState, action: AppActionTypes): AppInitialStateType => {
   // if (!('type' in action) ) return state;
   switch (action.type) {
+    case TypeNames.HANDLE_CHANGE_ALL_FIREBASE_APP_STATE: {
+      return { ...state, ...action.payload.firebaseState };
+    }
+
     case TypeNames.HANDLE_ADD_NEW_PAKEEP: {
       const { pakeeps, pakeepsOrderNames, pinnedPakeepsOrderNames } = state;
       const variedState = useAddNewPakeep({ pakeeps, pakeepsOrderNames, pinnedPakeepsOrderNames, ...action.payload });

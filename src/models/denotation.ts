@@ -38,8 +38,8 @@ export const headerProfileUtilsDenotationIds = {
   LOCK_BUTTON: 'LOCK_BUTTON',
   ZEN_MODE_BUTTON: 'ZEN_MODE_BUTTON',
   AVATAR_BUTTON: 'AVATAR_BUTTON',
-  SIGNOUT:'SIGNOUT',
-  SIGN_IN_AS:'SIGN_IN_AS'
+  SIGNOUT: 'SIGNOUT',
+  SIGN_IN_AS: 'SIGN_IN_AS'
 };
 
 export const CLOSE_MENU_ID = 'CLOSE_MENU';
@@ -57,10 +57,21 @@ export const allPakeeepsSearchPropertyies = {
   [NONE]: NONE
 };
 
-
 export const pakeepFoldersKeyName = {
   PAKEEP_UTILS: 'PAKEEP_UTILS',
   LABELS: 'LABELS',
   EVENTS: 'EVENTS',
   SEARCH: 'SEARCH'
 };
+
+export const globalClassNames = {
+  CAPTION_OF_SETTING_GROUP: 'captionOfSettingGroup'
+};
+
+export const errorMessages = {
+  SOMETHING_WENT_WRONG: 'Something went wrong',
+  CAN_NOT_UPLOAD_ALL_DATA_TRY_AGAIN: 'can not upload all data,try again'
+};
+
+
+export const LOCAL_STORAGE_KEY = 'pakeep_store'

@@ -120,7 +120,7 @@ const NewPaKeep: FC = () => {
     handleAccomplishedCheckBoxesHiddenStatus
   } = useNewPakeepStatuses();
 
-  const [value, updateCookie, deleteCookie] = useCookie(JSON.stringify(state));
+  // const [value, updateCookie, deleteCookie] = useCookie(JSON.stringify(state));
 
   // const handleDeleteLabelFromPakeepFunc = (placeholder: any, labelId: LabelIdType) => handleDeleteNewLabel(labelId);
   const [ref, { width: widthOfContainer }] = useMeasure<HTMLDivElement>();
@@ -174,14 +174,14 @@ const NewPaKeep: FC = () => {
     ref
   };
   // console.log(value)
-  useEffect(() => {
-    // console.log(JSON.parse(value!));
-    // _.isEqual(state, nulittyState) && setState(JSON.parse(value!));
-  }, []);
+  // useEffect(() => {
+  //   // console.log(JSON.parse(value!));
+  //   // _.isEqual(state, nulittyState) && setState(JSON.parse(value!));
+  // }, []);
 
-  usePageLeave(() => {
-    updateCookie(JSON.stringify(state));
-  });
+  // usePageLeave(() => {
+  //   updateCookie(JSON.stringify(state));
+  // });
   const handleAddNewPakeep = () => {
     setState({ ...defaultState, ...defaultInputState, checkBoxes: [] });
     dispatch(toAddNewPakeep({ newPakeep: state }));

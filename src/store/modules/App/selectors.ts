@@ -3,6 +3,7 @@ import { RootStoreType } from 'models/types';
 import { find } from 'lodash';
 import { createSelector } from 'reselect';
 import { createArraySelector } from 'reselect-map';
+import { DefaultFirebaseStateType } from '../Auth/operations';
 
 // const getPakeeplLabels = ;
 // const getGlobalLabels = ;
@@ -191,4 +192,15 @@ export const getDefaultDialogPropsOfTemporaryData = createSelector(
     }: RootStoreType) => defaultDialogProps
   ],
   defaultDialogProps => defaultDialogProps
+);
+
+export const getAllFirebaseData = createSelector(
+  [
+    ({ app: { temporaryData, ...appData }, color, settings }: RootStoreType) => ({
+      app: { ...appData },
+      color,
+      settings
+    })
+  ],
+  allFirebaseData => allFirebaseData
 );

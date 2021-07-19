@@ -31,6 +31,8 @@ export type PayloadTypes = {
   [TypeNames.HANDLE_CHANGE_GLOBAL_LABEL_ITEM]: { changedLabel: ILabelElement };
   [TypeNames.HANDLE_CHANGE_GLOBAL_EVENT_ITEM]: { changedEvent: IGlobalEvent };
 
+  
+
   [TypeNames.HANDLE_DELETE_LABEL_FROM_PAKEEP]: {
     currentPakeepId: PakeepIdType;
     labelIdWhichShouldBeDeleted: LabelIdType;
@@ -93,9 +95,21 @@ export type PayloadTypes = {
   [TypeNames.HANDLE_CHANGE_HEADER_ORDER]: {
     newOrder: Optional<OrderOfHeaderUtilsType>;
   };
+  [TypeNames.HANDLE_CHANGE_ALL_FIREBASE_APP_STATE]: {
+    firebaseState: InitialiAppFirebaseData
+  };
+  
 };
 
+
+
 export type ActionsValueTypes = {
+  
+  toChangeAllFirebaseAppState: {
+    type: typeof TypeNames.HANDLE_CHANGE_ALL_FIREBASE_APP_STATE;
+    payload: PayloadTypes[TypeNames.HANDLE_CHANGE_ALL_FIREBASE_APP_STATE];
+  };
+
   toChangeHeaderOrder: {
     type: typeof TypeNames.HANDLE_CHANGE_HEADER_ORDER;
     payload: PayloadTypes[TypeNames.HANDLE_CHANGE_HEADER_ORDER];

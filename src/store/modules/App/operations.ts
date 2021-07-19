@@ -2,9 +2,19 @@ import { toAddNewPakeep } from './actions';
 import { PakeepElementType } from 'store/modules/App/types';
 import firebase from 'firebase/app';
 import 'firebase/auth';
+import 'firebase/firestore';
 import { RootStoreType } from 'models/types';
 import { ThunkAction } from 'redux-thunk';
 import { DefaultFirebaseStateType } from '../Auth/operations';
+import { useDispatch } from 'react-redux';
+import { toChangeAllFirebaseAppState } from 'store/modules/App/actions';
+import { colorInitialState } from 'store/modules/Color/reducers';
+import { toChangeSettingProperty } from 'store/modules/Settings/actions';
+import { settingsInitialState } from 'store/modules/Settings/reducers';
+import { firebaseAppInitialState } from './reducers';
+import { toChangeAllFirebaseColorState } from '../Color/actions';
+import { toChangeErrorMessage, toChangeErrorStatus } from '../Auth/actions';
+import { errorMessages } from 'models/denotation';
 // import firebase from 'firebase/app';
 // require('firebase/firestore');
 
@@ -16,9 +26,7 @@ export const operateToUploadData = (): ThunkAction<any, RootStoreType, unknown, 
   } = getState();
 
   const data: DefaultFirebaseStateType = {
-    app: {
-      ...appData
-    },
+    app: { ...appData },
     color,
     settings
   };
@@ -28,117 +36,48 @@ export const operateToUploadData = (): ThunkAction<any, RootStoreType, unknown, 
     .collection('users')
     .doc(firebase.auth().currentUser?.uid)
     .set(data)
-    .then(snapshot => {
-      // if (snapshot.exists) {
-      // let newPakeep = snapshot.data();
-      console.log(snapshot);
-      //  dispatch(toAddNewPakeep({newPakeep}))
-      // }
-    })
-    .catch(e => console.log(e));
+    .catch(e => {
+      dispatch(toChangeErrorMessage({ errorMessage: e.message || errorMessages.CAN_NOT_UPLOAD_ALL_DATA_TRY_AGAIN }));
+      dispatch(toChangeErrorStatus);
+    });
 };
 
-// export const operateToChangeMenuOpenStatus: OperateWOP<
-//   PayloadTypes[TypeNames.HANDLE_CHANGE_MENU_OPEN_STATUS]
-// > = payload => {
-//   useOperateToDispatch<PayloadTypes[TypeNames.HANDLE_CHANGE_MENU_OPEN_STATUS]>(actions.toChangeMenuOpenStatus, payload);
-// };
+export const operateToSetNullityStore = (): ThunkAction<any, RootStoreType, unknown, any> => (dispatch, getState) => {
+  dispatch(
+    toChangeAllFirebaseStoreState({
+      color: colorInitialState,
+      app: firebaseAppInitialState,
+      settings: settingsInitialState
+    })
+  );
+  // DefaultFirebaseStateType
+};
 
-// export const handleScrollDirectionName = scrollDirectionName => dispatch => {
-//   dispatch(toScroll(scrollDirectionName));
-// };
-// export const handlePakeepsOrderNamesThunk = newOrder => dispatch => {
-//   dispatch(toSetNewOrderNames(newOrder));
-// };
+export const operateToSetStoreOfFirebaseData =
+  (): ThunkAction<any, RootStoreType, unknown, any> => async (dispatch, getState) => {
+    const converter = {
+      toFirestore: (data: DefaultFirebaseStateType) => data,
+      fromFirestore: (snap: any) => snap.data() as DefaultFirebaseStateType
+    };
 
-// export const handleCurrentFolderPropertyIdx = folderIdx => dispatch => {
-//   dispatch(toSetCurrentFolderPropertyIdx(folderIdx));
-// };
+    const doc = await firebase
+      .firestore()
+      .collection('users')
+      .withConverter(converter)
+      .doc(firebase?.auth()?.currentUser?.uid)
+      .get();
 
-// export const handleChangeFolders = foldersArr => dispatch => {
-//   dispatch(toChangeFolders(foldersArr));
-// };
+    const allData = doc.data();
 
-// export const changeLabelItemThunk = changedLabel => (dispatch, getState) => {
-//   const {
-//     app: { labels }
-//   } = getState();
+    if (!allData) return;
 
-//   const filteredLabels = filter(labels, ({ id }) => id !== changedLabel.id);
-//   const newLabels = [...filteredLabels, changedLabel];
-//   dispatch(toChangeLabelItem(newLabels));
-// };
+    dispatch(toChangeAllFirebaseStoreState(allData));
+  };
 
-// export const handleDeleteLabelFromPakeepThunk = (pakeepId, labelId) => (dispatch, getState) => {
-//   const currentPakeep = useGetCurrentPakeep(pakeepId, getState);
-//   const labels = filter(currentPakeep.labels, id => labelId !== id);
-//   dispatch(toChangeLabelFromPakeep(currentPakeep, labels));
-// };
-
-// export const handleAddLabelToPakeepThunk = (pakeepId, labelId) => (dispatch, getState) => {
-//   const currentPakeep = useGetCurrentPakeep(pakeepId, getState);
-//   const isPakeepHaveThisLabel = includes(currentPakeep.labels, labelId);
-
-//   const newLabels = [...currentPakeep?.labels, labelId];
-//   const labels = isPakeepHaveThisLabel ? currentPakeep.labels : newLabels;
-
-//   dispatch(toChangeLabelFromPakeep(currentPakeep, labels));
-// };
-
-// export const handleDrawerWidth = drawerWidth => dispatch => {
-//   dispatch(toHandleDrawerWidth(drawerWidth));
-// };
-
-// export const handleSetPreviusOrderNames = orderNames => dispatch => {
-//   dispatch(toSetPreviusOrderNames(orderNames));
-// };
-
-// export const handleSetOrderNamesOfPinnedPakeepsThunk = orderNames => dispatch => {
-//   dispatch(toSetOrderNamesOfPinnedPakeeps(orderNames));
-// };
-
-// export const handleAddNewGlobalLabelThunk = newLabel => dispatch => {
-//   dispatch(toAddNewGlobalLabel(newLabel));
-// };
-
-// export const handkePakeepPropertyThunk = (pakeepId, property) => (dispatch, getState) => {
-//   const {
-//     app: { pakeeps }
-//   } = getState();
-
-//   const currentPakeep = find(pakeeps, ({ id }) => pakeepId === id);
-//   const concatedPakeepWithUpdatedProperty = { ...currentPakeep, ...property };
-//   const filteredPakeeps = filter(pakeeps, ({ id }) => pakeepId !== id);
-
-//   const newPakeeps = [...filteredPakeeps, concatedPakeepWithUpdatedProperty];
-//   // console.log(newPakeeps)
-//   dispatch(toSetNewPakeepsArr(newPakeeps));
-// };
-
-// export const handlePinStatusPakeep = (pakeepId, isPakeepPinned) => dispatch => {
-//   dispatch(toHandlePinStatusPakeep(pakeepId, isPakeepPinned));
-// };
-
-// export const handleSetSelectedPakeepsIdThunk = pakepsId => dispatch => {
-//   dispatch(toSetSelectedPakeepIds(pakepsId));
-// };
-
-// export const handleCancelSelectingStatusThunk = boolValue => dispatch => {
-//   dispatch(toSetIsCancelSelectedPakeepsId(boolValue));
-// };
-
-// export const operateToChangeSelectedPakeepsProperty = newPakeeps => dispatch => {
-//   dispatch(actions.toChangeSelectedPakeepsProperty(newPakeeps));
-// };
-
-// export const handlePakeepPropertyThunk = (pakeepId, property) => dispatch => {
-//   dispatch(toHandlePakeepProperty(pakeepId, property));
-// };
-
-// export const handlePakeepEventsThunk = (pakeepId, events) => dispatch => {
-//   dispatch(toHandlePakeepProperty(pakeepId, { events }));
-// };
-
-// export const handleThemeColorsThunk = newThemeColors => dispatch => {
-//   dispatch(toHandleThemeColors(newThemeColors));
-// };
+export const toChangeAllFirebaseStoreState =
+  ({ app, color, settings }: DefaultFirebaseStateType): ThunkAction<any, RootStoreType, unknown, any> =>
+  (dispatch, getState) => {
+    dispatch(toChangeAllFirebaseAppState({ firebaseState: app }));
+    dispatch(toChangeAllFirebaseColorState({ firebaseState: color }));
+    dispatch(toChangeSettingProperty({ property: settings }));
+  };

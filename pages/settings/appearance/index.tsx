@@ -12,7 +12,7 @@ import { getIsHeaderHavePaperColor } from 'store/modules/Settings/selectors';
 
 const useStyles = makeStyles(({ spacing, transitions, breakpoints, shape, palette }) => ({
   container: {},
-  groupContainer: { padding: spacing(0, 1, 1, 1) }
+  groupContainer: { padding: spacing(0) }
 }));
 
 const SettingAppearance: FC<any> = () => {

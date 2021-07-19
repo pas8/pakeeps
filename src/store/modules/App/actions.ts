@@ -79,10 +79,7 @@ export const toChangeMenuOpenStatus = (
   payload
 });
 
-
-export const toChangeHeaderOrder = (
-  payload: PayloadTypes[TypeNames.HANDLE_CHANGE_HEADER_ORDER]
-): AppActionTypes => ({
+export const toChangeHeaderOrder = (payload: PayloadTypes[TypeNames.HANDLE_CHANGE_HEADER_ORDER]): AppActionTypes => ({
   type: TypeNames.HANDLE_CHANGE_HEADER_ORDER,
   payload
 });
@@ -213,5 +210,12 @@ export const toChangePakeepCustomProperty = (
 
 export const toChangeThemeColors = (payload: PayloadTypes[TypeNames.HANDLE_CHANGE_THEME_COLORS]): AppActionTypes => ({
   type: TypeNames.HANDLE_CHANGE_THEME_COLORS,
+  payload
+});
+
+export const toChangeAllFirebaseAppState = (
+  payload: PayloadTypes[TypeNames.HANDLE_CHANGE_ALL_FIREBASE_APP_STATE]
+): AppActionTypes => ({
+  type: TypeNames.HANDLE_CHANGE_ALL_FIREBASE_APP_STATE,
   payload
 });
