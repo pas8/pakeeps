@@ -31,7 +31,7 @@ const useStyles = makeStyles(({ spacing, palette, transitions, shape: { borderRa
   appBar: {
     backgroundColor: ({ isHeaderHavePaperColor }: any) =>
       isHeaderHavePaperColor ? palette.background.paper : palette.primary.main,
-    color: palette.maxEmphasis?.main,
+    color: palette.text.primary,
     padding: 0,
     display: 'flex',
     transition: transitions.create(['margin', 'width'], {

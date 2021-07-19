@@ -6,18 +6,18 @@ import IconButtonByPas from 'components/IconButton';
 import { useAlpha } from 'hooks/useAlpha.hook';
 import { HeaderOfAddDateToPakeepPropsType, UseStylesOfHeaderOfAddDateToPakeepType } from './types';
 
-const useStyles = makeStyles(({ palette: { mediumEmphasis } }) => ({
+const useStyles = makeStyles(({ palette}  ) => ({
   containerClass: ({ customColor, isHideBorder }: UseStylesOfHeaderOfAddDateToPakeepType) => ({
     borderBottom: '1px solid',
     borderBottomColor: isHideBorder
       ? 'transparent'
       : customColor.isUseDefault
-      ? mediumEmphasis?.main
+      ? palette.text.hint
       : customColor?.hover
   }),
   titleClass: {
     color: ({ customColor }: UseStylesOfHeaderOfAddDateToPakeepType) =>
-      useAlpha(customColor.isUseDefault ? mediumEmphasis?.main! : customColor?.hover!, 0.8)
+      useAlpha(customColor.isUseDefault ? palette.text.hint : customColor?.hover!, 0.8)
   }
 }));
 

@@ -128,7 +128,7 @@ const useStyles = makeStyles(({ spacing, palette, breakpoints, shape: { borderRa
     '& .titleOfPakeepPrevier': {
       height: spacing(2.8),
       overflow: 'hidden',
-      color:palette.text.primary,
+      color: palette.text.primary,
       textOverflow: 'ellipsis',
       whiteSpace: 'nowrap',
       minWidth: '42%'
@@ -206,7 +206,7 @@ const useStyles = makeStyles(({ spacing, palette, breakpoints, shape: { borderRa
 
     '& p': {
       userSelect: 'none',
-      color: useAlpha(palette.mediumEmphasis?.main!, 0.42),
+      color: useAlpha(palette.text.hint, 0.42),
       width: '200%',
       height: '300%',
       lineHeight: '32px',
@@ -220,7 +220,7 @@ const DefaultThemePreview: FC<DefaultThemePreviewPropsType> = ({
   background,
 
   isThemeSelected,
-  onClick,
+  onClick
 }) => {
   const isHeaderHavePaperColor = useSelector(getIsHeaderHavePaperColor);
 
