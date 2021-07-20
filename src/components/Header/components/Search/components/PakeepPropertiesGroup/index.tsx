@@ -12,7 +12,7 @@ import { NamesOfSearchPropertyiesType } from 'store/modules/App/types';
 import SearchGroupItem from '../GroupItem';
 import SearchGroupContainerWithTitle from '../ContainerWithTitle';
 
-const PakeepPropertiesSearchGroup: FC<DefaultSearchGroupPropsType & { list: any }> = ({ title, list, onClose }) => {
+const PakeepPropertiesSearchGroup: FC<DefaultSearchGroupPropsType & { list: any }> = ({ title, list, defaultFunc }) => {
   const [isListHidden, setIsListHidden] = useState(true);
 
   const { palette } = useTheme();
@@ -32,6 +32,7 @@ const PakeepPropertiesSearchGroup: FC<DefaultSearchGroupPropsType & { list: any 
           const color = isPropertyPakeepColor && title !== DEFAULT ? useValidateColor(key) : palette.secondary.main;
 
           const onClick = () => {
+
             router.push('/');
             dispatch(
               toChangeTemporaryData({
@@ -41,7 +42,7 @@ const PakeepPropertiesSearchGroup: FC<DefaultSearchGroupPropsType & { list: any 
                 }
               })
             );
-            onClose();
+            defaultFunc();
           };
           return <SearchGroupItem title={key} label={`${arr.length}`} key={key} color={color} onClick={onClick} />;
         })}

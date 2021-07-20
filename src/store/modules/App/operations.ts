@@ -70,7 +70,6 @@ export const operateToSetStoreOfFirebaseData =
     const allData = doc.data();
 
     if (!allData) return;
-
     dispatch(toChangeAllFirebaseStoreState(allData));
   };
 

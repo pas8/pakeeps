@@ -49,7 +49,7 @@ const DialogOfEditingAvatar: FC<DialogOfEditingAvatarPropsType> = ({
     const url = editor.getImageScaledToCanvas().toDataURL();
     const { borderRadius, backgroundColor } = avatarEditorState;
 
-    dispatch(toChangeAvatarProperties({ avatarProperties: { backgroundColor, borderRadius, url } }));
+    dispatch(toChangeAvatarProperties({ avatarProperties: { backgroundColor, borderRadius ,url} }));
     onClose();
   };
 

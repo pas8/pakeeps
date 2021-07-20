@@ -1,19 +1,20 @@
 import { Grid, Typography, makeStyles, Button } from '@material-ui/core';
+import { FC } from 'react';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
+
 import { SearchGroupContainerWithTitlePropsType } from 'components/Header/types';
 import { useAlpha } from 'hooks/useAlpha.hook';
-import { FC } from 'react';
 
-const useStyles = makeStyles(
-  ({ shape: { borderRadius }, spacing, typography: { subtitle2, subtitle1, caption, body2, h6 }, palette }) => ({
+export const useStylesOfSearchGroupContainerWithTitle = makeStyles(
+  ({ shape: { borderRadius }, spacing, typography: { subtitle2, subtitle1, caption, body2, h6 }, palette,breakpoints }) => ({
     container: () => ({
-      borderTop:`1px solid ${useAlpha( palette.text.secondary)}`,
-
+      borderTop: `1px solid ${useAlpha(palette.text.secondary)}`,
+    
       '& legend': {
         ...subtitle2,
         fontSize: subtitle1.fontSize,
-        padding: spacing(0.4, 0, 0.4, 1.2),
+        padding: spacing(0.8, 0, 0.8, 1.2),
 
         textTransform: 'capitalize'
       },
@@ -26,6 +27,10 @@ const useStyles = makeStyles(
         borderRadius: 0,
         color: palette.text.secondary,
 
+        [breakpoints.down('sm')]:{
+          padding:spacing(1,2,1,1)
+          
+          },
         '&:focus': {
           color: palette.secondary.main,
           '& svg': {
@@ -33,7 +38,7 @@ const useStyles = makeStyles(
           }
         },
         '&:hover': {
-          '& legend,svg': {
+          '& legend,svg,.MuiTouchRipple-root': {
             color: palette.background.default
           },
           background: palette.secondary.main
@@ -51,7 +56,7 @@ const SearchGroupContainerWithTitle: FC<SearchGroupContainerWithTitlePropsType> 
   children,
   title
 }) => {
-  const classes = useStyles();
+  const classes = useStylesOfSearchGroupContainerWithTitle();
 
   const handleChangeListHiddenStatus = () => {
     setIsListHidden(prev => !prev);

@@ -18,7 +18,7 @@ export type HeaderByPasPropsType = {
 export type MainBarPropsType = {
   isMenuOpen: boolean;
   isMenuExtended: boolean;
-  isRouteIsAuth:boolean
+  isRouteIsAuth: boolean;
 };
 
 export type HeaderSearchPropsType = {
@@ -34,7 +34,7 @@ export type SearchDataType = {
 };
 
 export type UseStylesOfHeaderSearchType = {
-  [Property in 'isSeaching' | 'isQueryEmpty' | 'isHeaderHavePaperColor' | 'isOnlySearchVisible']: boolean;
+  [Property in 'isSeaching' | 'isQueryEmpty' | 'isHeaderHavePaperColor' | 'isOnlySearchVisible' | 'isArrSearchArrEmpty']: boolean;
 };
 
 export type SearchGroupContainerWithTitlePropsType = {
@@ -43,7 +43,7 @@ export type SearchGroupContainerWithTitlePropsType = {
   setIsListHidden: Dispatch<SetStateAction<boolean>>;
 };
 
-export type DefaultSearchGroupPropsType = { title: any; onClose: () => void };
+export type DefaultSearchGroupPropsType = { title: any;  defaultFunc: () => void };
 
 export type HeaderMenuArrItemType = {
   text: string;

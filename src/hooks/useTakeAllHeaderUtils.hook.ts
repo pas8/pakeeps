@@ -71,7 +71,6 @@ export const useTakeAllHeaderUtils = (): ParamsOfUseConvertHeaderProfileUtilsObj
   };
 
   const handleOpenNotificationMenu: MouseEventHandler<HTMLButtonElement> = ({ clientX: mouseX, clientY: mouseY }) => {
-    console.log('');
     dispatch(
       toChangeTemporaryData({
         newTemporaryData: {

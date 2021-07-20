@@ -19,7 +19,7 @@ import VisibilityOutlinedIcon from '@material-ui/icons/VisibilityOutlined';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import VisibilityOffOutlinedIcon from '@material-ui/icons/VisibilityOffOutlined';
-import { ChangeEventHandler, FC, KeyboardEventHandler, MouseEvent, useState } from 'react';
+import { ChangeEventHandler, FC, KeyboardEventHandler, MouseEvent, useState,useEffect } from 'react';
 import { INPUT_MARGIN_BOTTOMVALUE } from '../account';
 import { SwitchByPasPropsType } from 'components/Switch/types';
 import SwitchByPas from 'components/Switch';
@@ -94,8 +94,12 @@ const Security: FC = () => {
   const { localPinCode } = useSelector(getUserData);
 
   const [pinCode, setPinCode] = useState<string>('');
-
   const [isHaveLocalPinCode, setIsHaveLocalPinCode] = useState(localPinCode !== NONE);
+
+useEffect(()=> {
+  setIsHaveLocalPinCode(localPinCode !== NONE)
+},[localPinCode])
+
   const [isDialogOfChangingPinCodeOpen, setIsDialogOfChangingPinCodeOpen] = useState(false);
 
   const authWithLocalPinCodeProps = { pinCode, setPinCode };
@@ -227,7 +231,7 @@ const Security: FC = () => {
           </DialogTitle>
           <DialogContent>
             <Grid container>
-            <AuthWithLocalPinCode {...authWithLocalPinCodeProps}  />
+          <AuthWithLocalPinCode {...authWithLocalPinCodeProps}  />
             </Grid>
           </DialogContent>
           <DialogActions>

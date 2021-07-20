@@ -21,7 +21,6 @@ import { defaultFirebaseState } from 'store/modules/Auth/operations';
 import { startsWith } from 'lodash';
 import { defaultAvatarProperties } from 'store/modules/App/reducers';
 import { AUTH_BASE_URL } from 'layouts/RouterLayout/denotation';
-import { useSetNotificationArr } from 'hooks/useSetNotificationArr.hook';
 
 if (firebase.apps.length === 0)
   firebase.initializeApp({
@@ -74,12 +73,13 @@ const AuthLayout: FC<any> = ({ children, pageProps }) => {
       if (!user ) return dispatch(toChangeLoginStatus({ isLogined: false }));
       if (!user.isAnonymous) {
         dispatch(
-          toChangeAvatarProperties({ avatarProperties: { ...defaultAvatarProperties, url: user.photoURL || NONE } })
+          // toChangeAvatarProperties({ avatarProperties: { ...defaultAvatarProperties, url: user.photoURL || NONE } })
+          toChangeAvatarProperties({ avatarProperties: { ...defaultAvatarProperties, } })
         );
         dispatch(
           toChangeUserData({
             userData: { email: user.email || NONE, name: user.displayName || NONE, isEmailVerified: user.emailVerified }
-          })
+          })  
         );
       } else dispatch(toChangeAnonymousStatus({ isAnonymous: user.isAnonymous }));
 
@@ -100,7 +100,6 @@ const AuthLayout: FC<any> = ({ children, pageProps }) => {
     }
   }, [isLogined, router.route]);
 
-  useSetNotificationArr();
 
   const isChildrenVisible = isLoginedAndRouteISAuth || (isRouteIsAuth && !isLogined) || (isLogined && !isRouteIsAuth);
   // return <AuthProvider session={pageProps?.session}>{isChildrenVisible ? children : null}</AuthProvider>;

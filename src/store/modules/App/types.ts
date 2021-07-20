@@ -96,9 +96,16 @@ export type PayloadTypes = {
   [TypeNames.HANDLE_CHANGE_ALL_FIREBASE_APP_STATE]: {
     firebaseState: InitialiAppFirebaseData;
   };
+  [TypeNames.HANDLE_CHANGE_QUERY_SEARCH_ARR]: {
+    querySearchArr: string[];
+  };
 };
 
 export type ActionsValueTypes = {
+  toChangeQuerySearchArr: {
+    type: typeof TypeNames.HANDLE_CHANGE_QUERY_SEARCH_ARR;
+    payload: PayloadTypes[TypeNames.HANDLE_CHANGE_QUERY_SEARCH_ARR];
+  };
   toChangeAllFirebaseAppState: {
     type: typeof TypeNames.HANDLE_CHANGE_ALL_FIREBASE_APP_STATE;
     payload: PayloadTypes[TypeNames.HANDLE_CHANGE_ALL_FIREBASE_APP_STATE];
@@ -466,6 +473,7 @@ export type InitialiAppFirebaseData = {
   labels: GlobalLabelsType;
   dimensions: DimensionsType;
   events: GlobalEventsType;
+  querySearchArr: string[];
   headerPropertyies: HeaderPropertyiesType;
   folderOrderNames: FolderOrderNamesType;
   pakeeps: PakeepsType;

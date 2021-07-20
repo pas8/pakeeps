@@ -5,6 +5,7 @@ import NotificationsNoneOutlinedIcon from '@material-ui/icons/NotificationsNoneO
 import { getNotifinationCounterValue } from 'store/modules/App/selectors';
 import { useFindNotificationArr } from 'hooks/useFindNotificationArr.hook';
 import { toChangeTemporaryData } from 'store/modules/App/actions';
+import { useSetNotificationArr } from 'hooks/useSetNotificationArr.hook';
 
 const useStyles = makeStyles(({ spacing, palette }) => ({
   container: {
@@ -21,11 +22,8 @@ const NoticationButton: FC = () => {
 
   const notifinationCounterValue = useSelector(getNotifinationCounterValue);
 
-  const notifinationArr = useFindNotificationArr();
 
-  useEffect(() => {
-    dispatch(toChangeTemporaryData({ newTemporaryData: { notifinationArr } }));
-  }, [notifinationArr]);
+useSetNotificationArr()
 
   return (
     <Grid container justify={'center'} alignItems={'center'} className={container}>

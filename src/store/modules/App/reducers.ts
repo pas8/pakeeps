@@ -30,6 +30,7 @@ import { random, sampleSize, words, filter, values } from 'lodash';
 import randomSentence from 'random-sentence';
 import { colord } from 'colord';
 import {
+  ALL,
   DEFAULT,
   headerProfileUtilsDenotationIds,
   NONE,
@@ -131,7 +132,7 @@ import { DialogLayoutName, MenusLayoutName } from 'models/unums';
 
 export const defaultAvatarProperties = {
   url: NONE,
-  borderRadius: 16,
+  borderRadius: 4,
   backgroundColor: TRANSPARENT
 };
 
@@ -205,6 +206,7 @@ export const firebaseAppInitialState = {
   avatarProperties: defaultAvatarProperties,
   // labels: labelsOfInitialState,
   labels: [],
+  querySearchArr: [],
   dimensions: defaultDimensions,
   userData: {
     email: NONE,
@@ -250,10 +252,10 @@ const nullityOfTemporaryData = {
   selectedPakeepsId: [],
   menuAccountUtilsArr: [] as NotifinationArrType,
   notifinationArr: [] as NotifinationArrType,
-  globalFolderId: '',
+  globalFolderId: ALL,
 
   isAllDataWasUploaded: true,
-  isAuthedWithLocalPinCode: !false,
+  isAuthedWithLocalPinCode: false,
   globalEventList: [],
   globalLabelList: []
 };
@@ -411,6 +413,13 @@ export const AppReducer = (state = initialState, action: AppActionTypes): AppIni
     }
     case TypeNames.HANDLE_CHANGE_USER_DATA: {
       return { ...state, userData: { ...state.userData, ...action.payload.userData } };
+    }
+
+    case TypeNames.HANDLE_CHANGE_USER_DATA: {
+      return { ...state, userData: { ...state.userData, ...action.payload.userData } };
+    }
+    case TypeNames.HANDLE_CHANGE_QUERY_SEARCH_ARR: {
+      return { ...state, querySearchArr: [...action.payload.querySearchArr] };
     }
 
     case TypeNames.HANDLE_CHANGE_HEADER_HEIGTH:
