@@ -52,7 +52,7 @@ const FolderItem: FC<FolderItemPropsType> = ({
           container
           className={
             isFoldersHaveDraweView
-              ? clsx('folderItem', 'folderWithDrawerViewItem')
+              ? clsx('folderItem', 'folderWithDrawerViewItem', isSelected ? 'selectedFolderWithDrawerViewItem' : '',)
               : clsx(
                   'folderItem',
                   'folderWithOutDrawerViewItem',

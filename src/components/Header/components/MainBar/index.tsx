@@ -48,10 +48,11 @@ const useStyles = makeStyles(({ palette: { text, background }, spacing, breakpoi
 
 const MainBar: FC<MainBarPropsType> = ({ isMenuOpen, isMenuExtended, isRouteIsAuth }) => {
   const isHeaderHavePaperColor = useSelector(getIsHeaderHavePaperColor);
-  const classes = useStyles({ isHeaderHavePaperColor });
+  const { isSiveIsXs, isSizeSmall } = useBreakpointNames();
+
+  const classes = useStyles({ isHeaderHavePaperColor:isHeaderHavePaperColor || isSizeSmall });
   const { pathname } = useRouter();
 
-  const { isSiveIsXs, isSizeSmall } = useBreakpointNames();
 
   const isMainPage = pathname === '/';
 

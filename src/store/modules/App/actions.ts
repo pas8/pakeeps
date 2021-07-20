@@ -151,6 +151,13 @@ export const toAddNewGlobalLabel = (payload: PayloadTypes[TypeNames.HANDLE_ADD_N
   payload
 });
 
+
+export const toChangeQuerySearchArr = (payload: PayloadTypes[TypeNames.HANDLE_CHANGE_QUERY_SEARCH_ARR]): AppActionTypes => ({
+  type: TypeNames.HANDLE_CHANGE_QUERY_SEARCH_ARR,
+  payload
+});
+
+
 export const toChangePinStatusOfPakeeps = (
   payload: PayloadTypes[TypeNames.HANDLE_PIN_STATUS_OF_PAKEEPS]
 ): AppActionTypes => ({

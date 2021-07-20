@@ -1,22 +1,24 @@
-import { Grid, InputBase, makeStyles, IconButton, Typography, Button, Chip, Dialog } from '@material-ui/core';
+import { Grid, InputBase, makeStyles, IconButton, Dialog, Button, Typography, Box } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
-import _, { chain, groupBy, isEmpty, map, mapValues, pickBy, toPairs } from 'lodash';
+import { filter, isEmpty, map, mapValues } from 'lodash';
 import { useClickAway } from 'react-use';
 import CloseOutlinedIcon from '@material-ui/icons/CloseOutlined';
-import KeyboardReturnOutlinedIcon from '@material-ui/icons/KeyboardReturnOutlined';
-import { getIsHeaderHavePaperColor } from 'store/modules/Settings/selectors';
 import { ChangeEventHandler, FC, useRef, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import DeleteOutlineOutlinedIcon from '@material-ui/icons/DeleteOutlineOutlined';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
+import HistoryOutlinedIcon from '@material-ui/icons/HistoryOutlined';
 
-import { getGlobalEventsArr, getLabels, getPakeeps } from 'store/modules/App/selectors';
-import { HeaderSearchPropsType, SearchDataType, UseStylesOfHeaderSearchType } from 'components/Header/types';
+import { getGlobalEventsArr, getLabels, getPakeeps, getQuerySearchArr } from 'store/modules/App/selectors';
+import { HeaderSearchPropsType, UseStylesOfHeaderSearchType } from 'components/Header/types';
 import { useFocus } from 'hooks/useFocus.hook';
+import { useBreakpointNames } from 'hooks/useBreakpointNames.hook';
+import { getIsHeaderHavePaperColor } from 'store/modules/Settings/selectors';
 import { NamesOfSearchPropertyiesType } from 'store/modules/App/types';
 import PakeepPropertiesSearchGroup from './components/PakeepPropertiesGroup';
-import SearchGroupContainerWithTitle from './components/ContainerWithTitle';
 import AttributesPropertiesGroup from './components/AttributesPropertiesGroup';
-import { useBreakpointNames } from 'hooks/useBreakpointNames.hook';
+import { toChangeQuerySearchArr } from 'store/modules/App/actions';
+import { useStylesOfSearchGroupContainerWithTitle } from './components/ContainerWithTitle';
 
 const useStyles = makeStyles(
   ({
@@ -62,16 +64,6 @@ const useStyles = makeStyles(
         [breakpoints.down('sm')]: {
           border: 0,
           width: isSeaching ? '100%' : spacing(16)
-        },
-
-        '&  button': {
-          marginRight: 2,
-          '& svg': {
-            color: isHeaderHavePaperColor ? palette.text.hint : palette.background.paper
-          },
-          '&:hover svg': {
-            color: isHeaderHavePaperColor ? palette.text.primary : palette.background.default
-          }
         }
       };
     },
@@ -79,15 +71,34 @@ const useStyles = makeStyles(
     //   padding: spacing(0, 0.4, 0, 1.4)
     // },
 
-    inputRoot: {
+    inputRoot: ({ isHeaderHavePaperColor }: any) => ({
       color: 'inherit',
-      width: '100%'
-    },
+      width: '100%',
+      '&  button': {
+        marginRight: 2,
+        '& svg': {
+          color: isHeaderHavePaperColor ? palette.text.hint : palette.background.paper
+        },
+        '&:hover svg': {
+          color: isHeaderHavePaperColor ? palette.text.primary : palette.background.default
+        }
+      },
+
+      [breakpoints.down('xs')]: {
+        position: 'relative',
+        padding:spacing(0.2),
+        background: palette.background.paper,
+        border: 0,
+      }
+    }),
     inputInput: {
       ...subtitle2,
       fontSize: subtitle1.fontSize,
       padding: ({ isSeaching }: UseStylesOfHeaderSearchType) => spacing(0.8, 1, 0.8, isSeaching ? 1.4 : 0.4),
-      transition: transitions.create('width')
+      transition: transitions.create('width'),
+      // [breakpoints.down('xs')]: {
+      //   margin:spacing(0,-1)
+      // }
       // [breakpoints.up('md')]: {
       //   width: '20ch'
       // }
@@ -118,8 +129,6 @@ const useStyles = makeStyles(
         '& .containerOfSearchGroup': {
           padding: spacing(0.4, 0),
 
-
-       
           '& legend': {
             ...h6,
             // ...subtitle2,
@@ -137,8 +146,7 @@ const useStyles = makeStyles(
           margin: 0,
 
           [breakpoints.down('xs')]: {
-            background: palette.background.paper,
-
+            background: palette.background.paper
           },
           '& .MuiChip-root': {
             ...caption,
@@ -169,10 +177,8 @@ const useStyles = makeStyles(
             background: palette.background.default,
 
             [breakpoints.down('xs')]: {
-              background: palette.background.paper,
-
-            },
-
+              background: palette.background.paper
+            }
           },
           '&:hover button': {
             display: 'flex',
@@ -204,6 +210,9 @@ const HeaderSearch: FC<HeaderSearchPropsType> = ({ isOnlySearchVisible, isSeachi
   const pakeeps = useSelector(getPakeeps);
   const events = useSelector(getGlobalEventsArr);
   const labels = useSelector(getLabels);
+  const dispatch = useDispatch();
+
+  const { isSizeSmall, isSiveIsXs } = useBreakpointNames();
 
   const [query, setQuery] = useState('');
   const ref = useRef(null);
@@ -244,18 +253,17 @@ const HeaderSearch: FC<HeaderSearchPropsType> = ({ isOnlySearchVisible, isSeachi
   const [inputRef, setInputFocus] = useFocus();
 
   const isQueryEmpty = !query;
-  const classes = useStyles({ isHeaderHavePaperColor, isSeaching, isOnlySearchVisible, isQueryEmpty });
 
   const handleCloseSearch = () => {
     setQuery('');
-    handleSetSeachingStatusIsFalse();
+    !isSizeSmall && handleSetSeachingStatusIsFalse();
   };
-
-  // const queryValue = ? value.toString() : '';
-
-  const { isSizeSmall, isSiveIsXs } = useBreakpointNames();
-  // const labelsSearchObj =
-  // const searchData = { ...defaultPakeepSeacrhPropertyiesObj };
+  const classes = useStyles({
+    isHeaderHavePaperColor: isHeaderHavePaperColor || isSizeSmall,
+    isSeaching,
+    isOnlySearchVisible,
+    isQueryEmpty
+  });
 
   const eventsSearchArr = events.filter(({ title }) => useCheckQuery(title));
   const labelsSearchArr = labels.filter(({ title }) => useCheckQuery(title));
@@ -266,7 +274,7 @@ const HeaderSearch: FC<HeaderSearchPropsType> = ({ isOnlySearchVisible, isSeachi
   ];
   const isContainerIsDialog = isSiveIsXs && isSeaching;
 
-  const Container = !isContainerIsDialog ? Grid : Dialog;
+  const Container: any = !isContainerIsDialog ? Grid : Dialog;
 
   const containerProps = isContainerIsDialog
     ? { open: true, fullScreen: true }
@@ -277,73 +285,89 @@ const HeaderSearch: FC<HeaderSearchPropsType> = ({ isOnlySearchVisible, isSeachi
         onFocus: () => setIsSeaching(true)
       };
 
+  const startAdornment = isSizeSmall ? (
+    !isSeaching ? null : (
+      <IconButton
+        onClick={() => {
+          handleCloseSearch();
+          handleSetSeachingStatusIsFalse();
+        }}
+      >
+        <ArrowBackIcon />
+      </IconButton>
+    )
+  ) : (
+    !isSeaching && (
+      <IconButton size={ 'small'} onClick={setInputFocus}>
+        <SearchIcon />
+      </IconButton>
+    )
+  );
+
+  const querySearchArr = useSelector(getQuerySearchArr);
+
+  const defaultFunc = () => {
+    dispatch(toChangeQuerySearchArr({ querySearchArr: [query, ...filter(querySearchArr, name => name !== query)] }));
+    handleSetSeachingStatusIsFalse();
+  };
+  const { container } = useStylesOfSearchGroupContainerWithTitle();
   return (
-    <>
-      {
-        //@ts-ignore
-        <Container {...containerProps}>
-          <InputBase
-            ref={inputRef}
-            startAdornment={
-              isSizeSmall ? (
-                !isSeaching ? (
-                  <></>
-                ) : (
-                  <IconButton size={'small'} onClick={handleCloseSearch}>
-                    <ArrowBackIcon />
-                  </IconButton>
-                )
-              ) : (
-                !isSeaching && (
-                  <IconButton size={'small'} onClick={setInputFocus}>
-                    <SearchIcon />
-                  </IconButton>
-                )
-              )
-            }
-            endAdornment={
-              !!isSeaching && (
-                <IconButton size={'small'} className={'clearButton'} onClick={handleCloseSearch}>
-                  <CloseOutlinedIcon />
-                </IconButton>
-              )
-            }
-            placeholder={'Search…'}
-            type={'text'}
-            autoComplete={'off'}
-            value={query}
-            onChange={handleChangeQuery}
-            classes={{
-              root: classes.inputRoot,
-              input: classes.inputInput
-            }}
-            inputProps={{ 'aria-label': 'search' }}
-          />
-          {isSeaching && !isQueryEmpty && (
-            <Grid className={classes.menuContainer} container={isSizeSmall}>
-              {map(defaultPakeepSeacrhPropertyiesObj, (list, key) => {
-                if (isEmpty(list)) return null;
+    <Container {...containerProps}>
+      <InputBase
+        ref={inputRef}
+        startAdornment={startAdornment}
+        endAdornment={
+          !!isSeaching && (
+            <IconButton size={isSizeSmall ? 'medium' :'small'} className={'clearButton'} onClick={handleCloseSearch}>
+              <CloseOutlinedIcon />
+            </IconButton>
+          )
+        }
+        placeholder={'Search…'}
+        type={'text'}
+        autoComplete={'off'}
+        value={query}
+        onChange={handleChangeQuery}
+        classes={{
+          root: classes.inputRoot,
+          input: classes.inputInput
+        }}
+        inputProps={{ 'aria-label': 'search' }}
+      />
+      {isSeaching && (
+        <Grid className={classes.menuContainer} container={isSizeSmall}>
+          {isQueryEmpty
+            ? querySearchArr.map((caption, idx) => {
                 return (
-                  <PakeepPropertiesSearchGroup
-                    list={list}
-                    title={key}
-                    key={key}
-                    onClose={handleSetSeachingStatusIsFalse}
-                  />
+                  <Grid className={container} container key={`querySearchArr_${caption}_${idx}`}>
+                    <Button onClick={() => setQuery(caption)} className={'buttonContainer'}>
+                      <HistoryOutlinedIcon />
+                        <Grid container justify={'space-between'} alignItems={'center'}>
+                      <Box py={1}>
+
+                          <Typography component={'legend'}>{caption}</Typography>
+                      </Box>
+                          
+                        </Grid>
+                      <DeleteOutlineOutlinedIcon />
+                    </Button>
+                  </Grid>
                 );
+              })
+            : map(defaultPakeepSeacrhPropertyiesObj, (list, key) => {
+                if (isEmpty(list)) return null;
+                return <PakeepPropertiesSearchGroup list={list} title={key} key={key} defaultFunc={defaultFunc} />;
               })}
 
-              {attributesSearchPropertyiesArr.map((el, idx) => {
-                if (!el.arr.length) return null;
-                const key = `attributesSearchPropertyiesArr-${el.title}-${idx}`;
+          {attributesSearchPropertyiesArr.map((el, idx) => {
+            if (!el.arr.length) return null;
+            const key = `attributesSearchPropertyiesArr-${el.title}-${idx}`;
 
-                return <AttributesPropertiesGroup {...el} key={key} onClose={handleSetSeachingStatusIsFalse} />;
-              })}
-            </Grid>
-          )}
-        </Container>
-      }
-    </>
+            return <AttributesPropertiesGroup {...el} key={key} defaultFunc={defaultFunc} />;
+          })}
+        </Grid>
+      )}
+    </Container>
   );
 };
 

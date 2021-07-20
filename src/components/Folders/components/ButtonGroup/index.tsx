@@ -156,6 +156,18 @@ const useStyles = makeStyles(
         },
         borderColor: `${useAlpha(folderColor, 1)} !important`
       },
+
+
+      '& .selectedFolderWithDrawerViewItem':{
+
+        '& svg,p': {
+          color: `${folderColor} !important`
+        },
+        borderStyle: 'none',
+        '& .MuiTouchRipple-root': {
+          background: useAlpha(folderColor, 0.2)
+        },
+      },
       '& .additionalFolder': {
         border: '2px solid',
         borderColor: useAlpha(text.primary, 0.2),
