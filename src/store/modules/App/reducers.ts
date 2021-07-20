@@ -30,6 +30,7 @@ import { random, sampleSize, words, filter, values } from 'lodash';
 import randomSentence from 'random-sentence';
 import { colord } from 'colord';
 import {
+  ALL,
   DEFAULT,
   headerProfileUtilsDenotationIds,
   NONE,
@@ -251,7 +252,7 @@ const nullityOfTemporaryData = {
   selectedPakeepsId: [],
   menuAccountUtilsArr: [] as NotifinationArrType,
   notifinationArr: [] as NotifinationArrType,
-  globalFolderId: '',
+  globalFolderId: ALL,
 
   isAllDataWasUploaded: true,
   isAuthedWithLocalPinCode: false,

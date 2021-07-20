@@ -22,7 +22,7 @@ import HeaderSearch from './components/Search';
 import HeaderProfileUtils from './components/ProfileUtils';
 import MainBar from './components/MainBar';
 import { HeaderByPasPropsType } from './types';
-  
+
 const useStyles = makeStyles(({ spacing, palette, transitions, shape: { borderRadius }, breakpoints }) => ({
   root: ({ navigationViewLikeTelegram }: any) => ({
     display: 'flex',
@@ -62,9 +62,9 @@ const useStyles = makeStyles(({ spacing, palette, transitions, shape: { borderRa
     border: '1px solid',
     borderRadius,
     position: 'fixed',
-    zIndex:2,
+    zIndex: 2,
     // backdropFilter: 'blur(4px)',
-    background:palette.background.default,
+    background: palette.background.default,
     padding: spacing(0.2, 2),
     left: pakeepDimensions.container.paddingLeft,
     [breakpoints.down('xs')]: {
@@ -84,14 +84,18 @@ const HeaderByPas: FC<HeaderByPasPropsType> = ({
   navigationViewLikeTelegram,
   navigationViewLikePakeeps
 }) => {
-  const isHeaderHavePaperColor = useSelector(getIsHeaderHavePaperColor);
   const { pathname } = useRouter();
   const dispatch = useDispatch();
   const { isSizeSmall } = useBreakpointNames();
+
+  const isHeaderHavePaperColor = useSelector(getIsHeaderHavePaperColor);
   const pakeepDimensions = useSelector(getPakeepDimensions);
+  const isAuthedWithLocalPinCode = useSelector(getIsAuthedWithLocalPassword);
+  const isZenModeActive = useSelector(getIsZenModeActive);
 
   const classes = useStyles({
     drawerWidth,
+    isAuthedWithLocalPinCode,
     pakeepDimensions,
     navigationViewLikeTelegram,
     navigationViewLikePakeeps,
@@ -99,14 +103,20 @@ const HeaderByPas: FC<HeaderByPasPropsType> = ({
     isHeaderHavePaperColor
   });
 
-  const isHeaderHavePakeepView = true;
-
-  const isAuthedWithLocalPinCode = useSelector(getIsAuthedWithLocalPassword);
-
   const property = usePropertyDueToRoute();
-  const isRouteIsAuth = denotationOfCorrectLayoutCases.FOLDER_LAYOUT_HIDDEN === property || !isAuthedWithLocalPinCode
-
   const [ref, { height: headerHeight }] = useMeasure<HTMLDivElement>();
+  const [isSeaching, setIsSeaching] = useState(false);
+
+  const isHeaderHavePakeepView = true;
+  const isRouteIsAuth = denotationOfCorrectLayoutCases.FOLDER_LAYOUT_HIDDEN === property || !isAuthedWithLocalPinCode;
+  const isOnlySearchVisible = isSizeSmall && isSeaching;
+
+  const headerSearchProps = {
+    isSeaching,
+    setIsSeaching,
+    isOnlySearchVisible
+  };
+
   useEffect(() => {
     dispatch(
       toChangeHeaderHeigth({
@@ -117,21 +127,9 @@ const HeaderByPas: FC<HeaderByPasPropsType> = ({
     );
   }, [headerHeight]);
 
-  const [isSeaching, setIsSeaching] = useState(false);
-
-  const isOnlySearchVisible = isSizeSmall && isSeaching;
-
-  const headerSearchProps = {
-    isSeaching,
-    setIsSeaching,
-    isOnlySearchVisible
-  };
-
-  const isZenModeActive = useSelector(getIsZenModeActive);
-
   return (
     <Grid className={classes.root}>
-      {isSizeSmall && !isRouteIsAuth ? (
+      {  !isAuthedWithLocalPinCode ? <Grid ref={ref}/> :isSizeSmall && !isRouteIsAuth ? (
         <Grid className={classes.smallContainer} ref={ref} component={'header'}>
           <Grid alignItems={'center'} container justify={'space-between'}>
             <Grid>

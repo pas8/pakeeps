@@ -12,16 +12,13 @@ import { AuthWithLocalPinCodePropsType } from './types';
 
 const pinCodeDimensionValue = 12;
 
-const useStyles = makeStyles(({ spacing, typography: { h4 }, palette, shape: { borderRadius } }) => ({
+const useStyles = makeStyles(({ spacing, typography: { h4 }, palette, shape: { borderRadius },breakpoints }) => ({
   container: {
     height: '100%',
     '& input': {
       ...h4,
       borderBottom: `1px solid ${palette.text.hint}`,
-      // marginTop: spacing(-2),
       margin: spacing(-1, 2, 1),
-      // width: '80%',
-      // minWidth:'20%',
       textAlign: 'center',
       caretColor: palette.secondary.main
     }
@@ -40,17 +37,30 @@ const useStyles = makeStyles(({ spacing, typography: { h4 }, palette, shape: { b
     '& > fieldset': {
       padding: spacing(1.8, 0.8),
       width: spacing(pinCodeDimensionValue * 3.6),
-      gap: pinCodeDimensionValue
+      gap: pinCodeDimensionValue,
+[breakpoints.down('xs')]:{
+  width: spacing(pinCodeDimensionValue * 3.6 * 0.8),
+  gap: pinCodeDimensionValue * 0.8,
+
+
+}
     }
   },
   pinCodeButton: {
     display: 'flex',
-    // borderStyle:'dashe',
     alignItems: 'center',
     justifyContent: 'center',
     height: spacing(pinCodeDimensionValue),
-    width: spacing(pinCodeDimensionValue)
-  }
+    width: spacing(pinCodeDimensionValue),
+[breakpoints.down('xs')]:{
+  height: spacing(pinCodeDimensionValue * 0.8),
+  width: spacing(pinCodeDimensionValue * 0.8),
+
+
+}
+  },
+
+
 }));
 
 const AuthWithLocalPinCode: FC<AuthWithLocalPinCodePropsType> = ({

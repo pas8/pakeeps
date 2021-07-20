@@ -38,11 +38,11 @@ const FolderLayout: FC = ({ children }) => {
     isFolderOpen
   };
 
-  const NavContainer = isFoldersHaveDraweView ? SwipeableDrawer : Nav;
+  const NavContainer: any = isFoldersHaveDraweView ? SwipeableDrawer : Nav;
   const anchor = positionsOfFolder.isRight ? 'right' : 'left';
 
   const navContainerProps = isFoldersHaveDraweView
-    ? { anchor, open: isFolderExtended, onClose: handleCloseFoldersWithDrawerView,onOpen:()=> {} }
+    ? { anchor, open: isFolderExtended, onClose: handleCloseFoldersWithDrawerView, onOpen: () => {} }
     : {};
   const width = useSelector(getDrawerWidth);
   const {
@@ -58,7 +58,6 @@ const FolderLayout: FC = ({ children }) => {
     <Grid container>
       <Grid>
         {(isFolderExtended || isFolderOpen) && (
-          //@ts-ignore
           <NavContainer {...navContainerProps}>
             <Folders {...foldersProps} />
           </NavContainer>
