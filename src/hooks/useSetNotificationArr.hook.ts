@@ -7,26 +7,25 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { toChangeTemporaryData } from 'store/modules/App/actions';
 import { getUserData } from 'store/modules/App/selectors';
+import { getNotificationArr } from 'store/modules/App/selectors';
 
 export const useSetNotificationArr = () => {
   const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();
-
+  const arr = useSelector(getNotificationArr);
   const { isEmailVerified, email } = useSelector(getUserData);
 
   useEffect(() => {
-    const notifinationArr =
-    //  isEmailVerified
-      // ? []
-      // :
-       [
+    const notifinationArr = isEmailVerified
+      ? []
+      : [
           {
             text: 'Please verificate email',
             customIconComponent: false,
             onClick: (e: any) => {
               firebase
                 .auth()
-                .sendPasswordResetEmail(email)
+                .currentUser?.sendEmailVerification()
                 .then(result => {
                   enqueueSnackbar({
                     message: 'Email verification link was sended again',
@@ -44,7 +43,7 @@ export const useSetNotificationArr = () => {
             id: 'PLEASE_VERIFICATE_EMAIL'
           }
         ];
-console.log(isEmailVerified)
-    dispatch(toChangeTemporaryData({ newTemporaryData: { notifinationArr:[[[]]] } }));
+
+    dispatch(toChangeTemporaryData({ newTemporaryData: { notifinationArr } }));
   }, [isEmailVerified, email]);
 };

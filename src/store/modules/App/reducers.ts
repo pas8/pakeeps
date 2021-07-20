@@ -131,7 +131,7 @@ import { DialogLayoutName, MenusLayoutName } from 'models/unums';
 
 export const defaultAvatarProperties = {
   url: NONE,
-  borderRadius: 16,
+  borderRadius: 4,
   backgroundColor: TRANSPARENT
 };
 

@@ -5,7 +5,7 @@ import RotateRightOutlinedIcon from '@material-ui/icons/RotateRightOutlined';
 import RotateLeftOutlinedIcon from '@material-ui/icons/RotateLeftOutlined';
 import { useFromNameToText } from 'hooks/useFromNameToText.hook';
 import { useThemeColors } from 'hooks/useThemeColors.hook';
-import { colord ,extend,} from 'colord';
+import { colord, extend } from 'colord';
 import { includes, values } from 'lodash';
 import { AvatarEditorByPasPropsType } from './types';
 import ThirdStepOfSteperOfDialogOfAddNewLabel from 'components/IconsUtils/components/LabelsList/components/DialogOfAddNewLabel/components/Steper/components/Third';
@@ -153,6 +153,7 @@ const AvatarEditorByPas: FC<AvatarEditorByPasPropsType> = ({
   const thirdStepOfSteperOfDialogOfAddNewLabelProps = {
     onChange: onChangeOfLabelColorRadio,
     colorVariants,
+    customColor: customColorPlaceholder,
     value: state.backgroundColor
   };
   const handleSaveCustomColor = (backgroundColor: string) => {

@@ -50,7 +50,7 @@ import {
   DefaultLabelListPropsType,
   HandleLabelFuncsOfLabelListType
 } from 'components/IconsUtils/components/LabelsList/types';
-import { GridProps, Theme } from '@material-ui/core';
+import { DialogProps, GridProps, TextFieldProps, Theme } from '@material-ui/core';
 import { UseMeasureRef } from 'react-use/lib/useMeasure';
 import {
   DefaultUseFindCorrectFolderFuncPropsType,
@@ -194,6 +194,12 @@ export type UseNewPakeepUtilityType = ({
   iconUtilsFuncs: IconsUtilsFunctionType;
   defaultLabelListProps: DefaultLabelListPropsType;
 };
+
+export type DialogOfEnteringPasswordPropsType = {
+  onConfirm: (e?: any) => void;
+  onCancel: (e?: any) => void;
+} & DialogProps &
+  TextFieldProps;
 
 export type UseFindSelectedLabelsType = (selectedPakeeps: PakeepsType) => LabelsOfPakeepType;
 export type UseFindSelectedEventsType = (selectedPakeeps: PakeepsType) => EventsOfPakeepType;

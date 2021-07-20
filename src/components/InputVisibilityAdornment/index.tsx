@@ -5,7 +5,13 @@ import VisibilityOff from '@material-ui/icons/VisibilityOff';
 
 const useStyles = makeStyles(({ spacing, shape: { borderRadius }, palette }) => ({
   visibilityButton: {
-    color: palette.text.secondary
+    '& svg': {
+      color: palette.text.hint
+    },
+
+    '&:hover svg': {
+      color: palette.text.primary
+    }
   }
 }));
 
