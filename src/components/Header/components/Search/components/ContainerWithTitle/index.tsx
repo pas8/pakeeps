@@ -7,10 +7,10 @@ import { SearchGroupContainerWithTitlePropsType } from 'components/Header/types'
 import { useAlpha } from 'hooks/useAlpha.hook';
 
 export const useStylesOfSearchGroupContainerWithTitle = makeStyles(
-  ({ shape: { borderRadius }, spacing, typography: { subtitle2, subtitle1, caption, body2, h6 }, palette }) => ({
+  ({ shape: { borderRadius }, spacing, typography: { subtitle2, subtitle1, caption, body2, h6 }, palette,breakpoints }) => ({
     container: () => ({
       borderTop: `1px solid ${useAlpha(palette.text.secondary)}`,
-
+    
       '& legend': {
         ...subtitle2,
         fontSize: subtitle1.fontSize,
@@ -27,6 +27,10 @@ export const useStylesOfSearchGroupContainerWithTitle = makeStyles(
         borderRadius: 0,
         color: palette.text.secondary,
 
+        [breakpoints.down('sm')]:{
+          padding:spacing(1,2,1,1)
+          
+          },
         '&:focus': {
           color: palette.secondary.main,
           '& svg': {
@@ -34,7 +38,7 @@ export const useStylesOfSearchGroupContainerWithTitle = makeStyles(
           }
         },
         '&:hover': {
-          '& legend,svg': {
+          '& legend,svg,.MuiTouchRipple-root': {
             color: palette.background.default
           },
           background: palette.secondary.main

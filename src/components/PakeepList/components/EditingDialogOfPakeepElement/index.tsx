@@ -19,6 +19,7 @@ import { useBreakpointNames } from 'hooks/useBreakpointNames.hook';
 import { toAddNewPakeep, toChangeTemporaryData, toEditPakeep } from 'store/modules/App/actions';
 import { useFindPakeepUsingId } from 'hooks/useFindPakeepUsingId.hook';
 import { DefaultMenuLayoutElementPropsType } from 'layouts/DialogsLayout/types';
+import { UpSildeTransition } from 'components/SildeTransitions';
 import { useNewPakeepUtility } from 'hooks/useNewPakeepUtility.hook';
 import { useGetReadableColor } from 'hooks/useGetReadableColor.hook';
 import { IconsUtilsArrDenotationNameType } from 'components/IconsUtils/types';
@@ -270,6 +271,7 @@ const EditingDialogOfPakeepElement: FC<DefaultMenuLayoutElementPropsType> = ({
     <Dialog
       open={isDialogOpen}
       onClose={onClose}
+      TransitionComponent={isSizeSmall ? UpSildeTransition : undefined}
       fullScreen={isSizeSmall}
       maxWidth={statusState.isNewPakeepContainerHaveFullWidth ? 'xl' : 'sm'}
       fullWidth={statusState.isNewPakeepContainerHaveFullWidth}
