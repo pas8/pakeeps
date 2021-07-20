@@ -44,7 +44,7 @@ const RouterLayout: FC = ({ children }) => {
   const authWithLocalPinCodeProps = { pinCode, setPinCode, isHaveTitle: true };
 
   return (
-    <ComposeLayouts layouts={layouts}>
+    <ComposeLayouts layouts={!isAuthedWithLocalPinCode ? [] :  layouts}>
         <Grow in={isLoading} timeout={100}>
         <Grid style={{ position: 'fixed', top:top -16, left: 0, right: 0, zIndex: 10000 }}>
           <LinearProgress color={'secondary'} variant={'determinate'} value={loadingValue} />

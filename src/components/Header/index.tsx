@@ -104,7 +104,7 @@ const HeaderByPas: FC<HeaderByPasPropsType> = ({
   const isAuthedWithLocalPinCode = useSelector(getIsAuthedWithLocalPassword);
 
   const property = usePropertyDueToRoute();
-  const isRouteIsAuth = denotationOfCorrectLayoutCases.FOLDER_LAYOUT_HIDDEN === property;
+  const isRouteIsAuth = denotationOfCorrectLayoutCases.FOLDER_LAYOUT_HIDDEN === property || !isAuthedWithLocalPinCode
 
   const [ref, { height: headerHeight }] = useMeasure<HTMLDivElement>();
   useEffect(() => {

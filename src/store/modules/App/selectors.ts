@@ -113,6 +113,11 @@ export const getSearchPropertyies = createSelector(
   [({ app: { temporaryData } }: RootStoreType) => temporaryData.searchPropertyies],
   searchPropertyies => searchPropertyies
 );
+export const getQuerySearchArr = createSelector(
+  [({ app: { querySearchArr } }: RootStoreType) => querySearchArr],
+  querySearchArr => querySearchArr
+);
+
 
 export const getUserData = createSelector([({ app: { userData } }: RootStoreType) => userData], userData => userData);
 

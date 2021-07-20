@@ -18,7 +18,7 @@ const AttributesPropertiesGroup: FC<
     arr: { color: string; title: string; iconName: string; id: string }[];
     defaultIconName: string;
   }
-> = ({ title, arr, onClose, defaultIconName }) => {
+> = ({ title, arr, defaultFunc, defaultIconName }) => {
   const [isListHidden, setIsListHidden] = useState(true);
 
   const { palette } = useTheme();
@@ -43,7 +43,7 @@ const AttributesPropertiesGroup: FC<
                 }
               })
             );
-            onClose();
+            defaultFunc();
           };
 
           const [customIcon] = useTakeIcon(iconName || defaultIconName);

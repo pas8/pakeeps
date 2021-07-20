@@ -205,6 +205,7 @@ export const firebaseAppInitialState = {
   avatarProperties: defaultAvatarProperties,
   // labels: labelsOfInitialState,
   labels: [],
+  querySearchArr: [],
   dimensions: defaultDimensions,
   userData: {
     email: NONE,
@@ -253,7 +254,7 @@ const nullityOfTemporaryData = {
   globalFolderId: '',
 
   isAllDataWasUploaded: true,
-  isAuthedWithLocalPinCode: !false,
+  isAuthedWithLocalPinCode: false,
   globalEventList: [],
   globalLabelList: []
 };
@@ -411,6 +412,13 @@ export const AppReducer = (state = initialState, action: AppActionTypes): AppIni
     }
     case TypeNames.HANDLE_CHANGE_USER_DATA: {
       return { ...state, userData: { ...state.userData, ...action.payload.userData } };
+    }
+
+    case TypeNames.HANDLE_CHANGE_USER_DATA: {
+      return { ...state, userData: { ...state.userData, ...action.payload.userData } };
+    }
+    case TypeNames.HANDLE_CHANGE_QUERY_SEARCH_ARR: {
+      return { ...state, querySearchArr: [...action.payload.querySearchArr] };
     }
 
     case TypeNames.HANDLE_CHANGE_HEADER_HEIGTH:

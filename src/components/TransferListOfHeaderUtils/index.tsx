@@ -1,5 +1,5 @@
 import { FC, MouseEventHandler, useState } from 'react';
-import { difference, flatten, uniq } from 'lodash';
+import { difference, flatten, uniq ,reverse} from 'lodash';
 import { DragDropContext, Draggable, Droppable, DropResult, OnDragEndResponder } from 'react-beautiful-dnd';
 import { makeStyles } from '@material-ui/core/styles';
 import { Grid, Typography, Box } from '@material-ui/core';
@@ -188,9 +188,12 @@ const TransferListOfHeaderUtils: FC<TransferListOfHeaderUtilsPropsType> = () => 
   };
 
   const onSave = () => {
+    const exclusionNames = [...arrOfProfileUtilsIdOfAlwaysInSameColumn[1], ...state[1]];
+    const defaultNames =reverse( [...arrOfProfileUtilsIdOfAlwaysInSameColumn[0], ...state[0]])
+    const names = [...defaultNames, ...exclusionNames];
     dispatch(
       toChangeHeaderOrder({
-        newOrder: { exclusionNames: [...arrOfProfileUtilsIdOfAlwaysInSameColumn[1], ...state[1]] }
+        newOrder: { exclusionNames, names }
       })
     );
   };
@@ -282,7 +285,7 @@ const TransferListOfHeaderUtils: FC<TransferListOfHeaderUtilsPropsType> = () => 
             </Droppable>
             {idx === 0 && (
               <Box mx={isSiveIsXs ? 0 : 2} width={!isSiveIsXs ? 'auto' : '100%'}>
-              <ButtonUtils
+                <ButtonUtils
                   selected={selected}
                   setSelected={setSelected}
                   setState={setState}
