@@ -10,9 +10,7 @@ import { WrapperOfAddDateToPakeepPropsType } from '../AddDateToPakeep/types';
 
 const WrapperOfAddDateToPakeep: FC<WrapperOfAddDateToPakeepPropsType & EventsListProps> = ({ events, handleSaveEvents, ...props }) => {
   const globalEvents = useSelector(getGlobalEventsArr);
-  const timeFormat = useSelector(getTimeFormat);
-  const timeAndDateFromat = useSelector(getTimeAndDateFromat);
-  const currentEventsArr = useFindCurrentEvents(globalEvents, events, timeFormat, timeAndDateFromat);
+  const currentEventsArr = useFindCurrentEvents(globalEvents, events, );
 
   const addDateToPakeepProps = {
     handleSaveEvents,

@@ -130,9 +130,7 @@ export type CurrentEventsArrType = CurrentEventsElementType[];
 
 export type UseFindCurrentEventsType = (
   globalEvents: GlobalEventsType,
-  events: EventsOfPakeepType,
-  timeFormat: TimeFormatType,
-  timeAndDateFromat: TimeAndDateFromatType
+  events: EventsOfPakeepType
 ) => CurrentEventsArrType | null;
 
 export type UsePakeepUtilsFuncType = (pakeepId: PakeepIdType) => IconsUtilsFunctionType;
@@ -297,5 +295,4 @@ export type UseConvertHeaderProfileUtilsObjToFolderArrType = (
   arr: ParamsOfUseConvertHeaderProfileUtilsObjToFolderArrType
 ) => FolderArrType;
 
-
-export type FieldSetContainerPropsType = { title: string; isOnlyTop?: boolean } & GridProps
+export type FieldSetContainerPropsType = { title: string; isOnlyTop?: boolean } & GridProps;

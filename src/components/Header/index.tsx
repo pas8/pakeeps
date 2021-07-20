@@ -62,6 +62,9 @@ const useStyles = makeStyles(({ spacing, palette, transitions, shape: { borderRa
     border: '1px solid',
     borderRadius,
     position: 'fixed',
+    zIndex:2,
+    // backdropFilter: 'blur(4px)',
+    background:palette.background.default,
     padding: spacing(0.2, 2),
     left: pakeepDimensions.container.paddingLeft,
     [breakpoints.down('xs')]: {

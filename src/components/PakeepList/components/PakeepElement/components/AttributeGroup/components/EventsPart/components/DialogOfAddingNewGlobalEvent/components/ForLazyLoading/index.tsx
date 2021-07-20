@@ -252,7 +252,7 @@ const ForLazyLoadingDialogOfAddingNewGlobalEvent: FC<DialogOfAddingNewGlobalEven
     onSave: handleSave,
     colorOfSaveButton: customColor?.isUseDefault ? primary.main : reverserCustomColor?.secondaryColor,
     onClose: handleCloseDialog,
-    colorOfCloseButton: customColor?.unHover
+    colorOfCloseButton: customColor?.isUseDefault ? text.hint:   customColor?.unHover
   };
 
   const { isSiveIsXs } = useBreakpointNames();
@@ -260,17 +260,19 @@ const ForLazyLoadingDialogOfAddingNewGlobalEvent: FC<DialogOfAddingNewGlobalEven
   return (
     <Dialog open={isDialogOpen} className={classes.container} onClose={onClose} fullScreen={isSiveIsXs}>
       <DialogTitle>
-        <Typography style={{ color: customColor?.isUseDefault ? text.primary : reverserCustomColor.hover }} variant={'h6'}>
+        <Typography
+          variant={'h6'}
+        >
           {'Creating new global event'}
         </Typography>
       </DialogTitle>
       <SteperOfDialogOfAddNewLabel {...steperProps} />
-      <DialogActions>
-        <Grid container alignItems={'flex-end'} justify={'space-between'}>
-          <Box ml={1.4} display={'flex'} minWidth={216}>
+      <DialogActions style={{position:isSiveIsXs ? 'absolute' : 'relative',bottom:0}}>
+        <Grid container alignItems={'flex-end'} justify={isSiveIsXs ? 'flex-end' : 'space-between'}>
+          <Box ml={1.4} mb={isSiveIsXs ? 1 : 0} display={'flex'} minWidth={216} justifyContent={isSiveIsXs ? 'flex-end' : 'flex-start'}>
             <EventItem {...eventItemProps} />
           </Box>
-          <Grid>
+          <Grid container>
             <ActionsButtonGroup {...actionsButtonGroupProps} />
           </Grid>
         </Grid>

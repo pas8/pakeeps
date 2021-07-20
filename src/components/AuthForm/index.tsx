@@ -23,7 +23,7 @@ import { AuthFormPropsType } from './types';
 import { AUTH_FORGET_PASSWORD_URL } from '../../layouts/RouterLayout/denotation';
 import InputVisibilityAdornment from 'components/InputVisibilityAdornment';
 
-const useStyles = makeStyles(({ spacing, shape: { borderRadius }, palette }) => ({
+const useStyles = makeStyles(({ spacing, shape: { borderRadius }, palette ,breakpoints}) => ({
   footerButton: {
     width: '48%'
     // '& > div': {
@@ -33,11 +33,36 @@ const useStyles = makeStyles(({ spacing, shape: { borderRadius }, palette }) => 
   container: {
     '& button,a': {
       width: '32%'
+,
+      [breakpoints.down('xs')]:{
+        width: '100%',
+        marginBottom:spacing(1.4),
+        height: spacing(6)
+
+      },
     },
+
 
     '& .containerOfForgetPassword': {
       position: 'relative',
-      paddingBottom: spacing(1)
+      paddingBottom: spacing(1),
+
+      '& a':{
+        width: '80%'
+
+
+
+      },
+
+      [breakpoints.down('xs')]:{
+        '& a':{
+          height: spacing(3.6)
+
+
+        },
+      paddingBottom: spacing(0)
+
+      }
     }
   },
   mainButtonContainer: {

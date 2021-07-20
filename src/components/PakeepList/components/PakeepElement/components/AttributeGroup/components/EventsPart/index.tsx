@@ -14,12 +14,11 @@ import { OnClickOfPreviewEventListType } from './components/PreviewEventList/typ
 const EventsPart: FC<EventsPartPropsType> = ({ events = [], customColor, parentBackgroundColor }) => {
   const dispatch = useDispatch();
 
-  const timeFormat = useSelector(getTimeFormat);
-  const timeAndDateFromat = useSelector(getTimeAndDateFromat);
+ 
   const globalEvents: GlobalEventsType = useSelector(getGlobalEventsArr);
 
   const sortedEvents = events.sort(compareFunc('value'));
-  const currentEventsArr = useFindCurrentEvents(globalEvents, sortedEvents, timeFormat, timeAndDateFromat);
+  const currentEventsArr = useFindCurrentEvents(globalEvents, sortedEvents );
 
   if (!currentEventsArr) return null;
 

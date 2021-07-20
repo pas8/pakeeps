@@ -12,7 +12,7 @@ const SecondStepOfSteperOfDialogOfAddNewLabel: FC<SwitchProps & UseStylesCustomC
     {...switchProps}
     isBgIsPaper
     title={'Is variant Outlined?  '}
-    color={customColor.isUseDefault ? DEFAULT : customColor.hover}
+    color={customColor.isUseDefault ? DEFAULT :  customColor.secondaryColor}
   />
 );
 

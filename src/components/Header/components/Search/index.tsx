@@ -1,4 +1,4 @@
-import { Grid, InputBase, makeStyles, IconButton, Typography, Button, Chip } from '@material-ui/core';
+import { Grid, InputBase, makeStyles, IconButton, Typography, Button, Chip, Dialog } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
 import _, { chain, groupBy, isEmpty, map, mapValues, pickBy, toPairs } from 'lodash';
 import { useClickAway } from 'react-use';
@@ -61,7 +61,7 @@ const useStyles = makeStyles(
 
         [breakpoints.down('sm')]: {
           border: 0,
-          width: isSeaching ? '100%' : 'auto'
+          width: isSeaching ? '100%' : spacing(16)
         },
 
         '&  button': {
@@ -105,13 +105,21 @@ const useStyles = makeStyles(
         right: -1,
         left: -1,
         top: '100%',
-        [breakpoints.down('sm')]: {
-          position: 'relative'
+        [breakpoints.down('xs')]: {
+          position: 'relative',
+          top: 0,
+          background: palette.background.paper,
+
+          border: 0,
+          right: 0,
+          left: 0
         },
 
         '& .containerOfSearchGroup': {
           padding: spacing(0.4, 0),
 
+
+       
           '& legend': {
             ...h6,
             // ...subtitle2,
@@ -127,6 +135,11 @@ const useStyles = makeStyles(
           padding: spacing(1.2, 0.2, 1.2, 1.2),
           borderRadius: 0,
           margin: 0,
+
+          [breakpoints.down('xs')]: {
+            background: palette.background.paper,
+
+          },
           '& .MuiChip-root': {
             ...caption,
             height: 24,
@@ -153,7 +166,13 @@ const useStyles = makeStyles(
             },
             display: 'none',
 
-            background: palette.background.default
+            background: palette.background.default,
+
+            [breakpoints.down('xs')]: {
+              background: palette.background.paper,
+
+            },
+
           },
           '&:hover button': {
             display: 'flex',
@@ -234,7 +253,7 @@ const HeaderSearch: FC<HeaderSearchPropsType> = ({ isOnlySearchVisible, isSeachi
 
   // const queryValue = ? value.toString() : '';
 
-  const { isSizeSmall } = useBreakpointNames();
+  const { isSizeSmall, isSiveIsXs } = useBreakpointNames();
   // const labelsSearchObj =
   // const searchData = { ...defaultPakeepSeacrhPropertyiesObj };
 
@@ -245,62 +264,85 @@ const HeaderSearch: FC<HeaderSearchPropsType> = ({ isOnlySearchVisible, isSeachi
     { title: 'Events', arr: eventsSearchArr, defaultIconName: 'week' },
     { title: 'Labels', arr: labelsSearchArr, defaultIconName: 'label' }
   ];
+  const isContainerIsDialog = isSiveIsXs && isSeaching;
+
+  const Container = !isContainerIsDialog ? Grid : Dialog;
+
+  const containerProps = isContainerIsDialog
+    ? { open: true, fullScreen: true }
+    : {
+        className: classes.search,
+        container: true,
+        ref,
+        onFocus: () => setIsSeaching(true)
+      };
 
   return (
     <>
-      <Grid className={classes.search} container ref={ref} onFocus={() => setIsSeaching(true)}>
-        <InputBase
-          ref={inputRef}
-          startAdornment={
-            isSizeSmall ?  !isSeaching ?(
-              <></>
-            ) :  <>fuck</>: !isSeaching &&  ( 
-              <IconButton size={'small'} onClick={setInputFocus}>
-                <SearchIcon />
-              </IconButton>
-            )
-          }
-          endAdornment={
-            !!isSeaching && (
-              <IconButton size={'small'} className={'clearButton'} onClick={handleCloseSearch}>
-                <CloseOutlinedIcon />
-              </IconButton>
-            )
-          }
-          placeholder={'Search…'}
-          type={'text'}
-          autoComplete={'off'}
-          value={query}
-          onChange={handleChangeQuery}
-          classes={{
-            root: classes.inputRoot,
-            input: classes.inputInput
-          }}
-          inputProps={{ 'aria-label': 'search' }}
-        />
-        {isSeaching && !isQueryEmpty && (
-          <Grid className={classes.menuContainer} container={isSizeSmall}>
-            {map(defaultPakeepSeacrhPropertyiesObj, (list, key) => {
-              if (isEmpty(list)) return null;
-              return (
-                <PakeepPropertiesSearchGroup
-                  list={list}
-                  title={key}
-                  key={key}
-                  onClose={handleSetSeachingStatusIsFalse}
-                />
-              );
-            })}
+      {
+        //@ts-ignore
+        <Container {...containerProps}>
+          <InputBase
+            ref={inputRef}
+            startAdornment={
+              isSizeSmall ? (
+                !isSeaching ? (
+                  <></>
+                ) : (
+                  <IconButton size={'small'} onClick={handleCloseSearch}>
+                    <ArrowBackIcon />
+                  </IconButton>
+                )
+              ) : (
+                !isSeaching && (
+                  <IconButton size={'small'} onClick={setInputFocus}>
+                    <SearchIcon />
+                  </IconButton>
+                )
+              )
+            }
+            endAdornment={
+              !!isSeaching && (
+                <IconButton size={'small'} className={'clearButton'} onClick={handleCloseSearch}>
+                  <CloseOutlinedIcon />
+                </IconButton>
+              )
+            }
+            placeholder={'Search…'}
+            type={'text'}
+            autoComplete={'off'}
+            value={query}
+            onChange={handleChangeQuery}
+            classes={{
+              root: classes.inputRoot,
+              input: classes.inputInput
+            }}
+            inputProps={{ 'aria-label': 'search' }}
+          />
+          {isSeaching && !isQueryEmpty && (
+            <Grid className={classes.menuContainer} container={isSizeSmall}>
+              {map(defaultPakeepSeacrhPropertyiesObj, (list, key) => {
+                if (isEmpty(list)) return null;
+                return (
+                  <PakeepPropertiesSearchGroup
+                    list={list}
+                    title={key}
+                    key={key}
+                    onClose={handleSetSeachingStatusIsFalse}
+                  />
+                );
+              })}
 
-            {attributesSearchPropertyiesArr.map((el, idx) => {
-              if (!el.arr.length) return null;
-              const key = `attributesSearchPropertyiesArr-${el.title}-${idx}`;
+              {attributesSearchPropertyiesArr.map((el, idx) => {
+                if (!el.arr.length) return null;
+                const key = `attributesSearchPropertyiesArr-${el.title}-${idx}`;
 
-              return <AttributesPropertiesGroup {...el} key={key} onClose={handleSetSeachingStatusIsFalse} />;
-            })}
-          </Grid>
-        )}
-      </Grid>
+                return <AttributesPropertiesGroup {...el} key={key} onClose={handleSetSeachingStatusIsFalse} />;
+              })}
+            </Grid>
+          )}
+        </Container>
+      }
     </>
   );
 };

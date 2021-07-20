@@ -1,10 +1,18 @@
 import { format as toFormat } from 'date-fns';
 import { find } from 'lodash';
 import { UseFindCurrentEventsType } from 'models/types';
+import { useSelector } from 'react-redux';
+import { getTimeAndDateFromat, getTimeFormat } from 'store/modules/Settings/selectors';
 
-export const useFindCurrentEvents: UseFindCurrentEventsType = (globalEvents, events, timeFormat, timeAndDateFromat) => {
-  if (!globalEvents || !events) return null;
+export const useFindCurrentEvents: UseFindCurrentEventsType = (globalEvents, events, ) => {
 
+  const timeFormat = useSelector(getTimeFormat);
+  const timeAndDateFromat = useSelector(getTimeAndDateFromat);
+
+  if (!globalEvents || !events || !timeFormat || !timeAndDateFromat) return null;
+
+
+  
   const eventsArr = globalEvents.map(({ id: globalId, ...globalEventsProps }) => {
     const findedEvent = find(events, ({ id }) => id === globalId);
     const isEventWasChosen = !!findedEvent;
