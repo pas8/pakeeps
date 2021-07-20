@@ -5,7 +5,7 @@ import includes from 'lodash.includes';
 import { nanoid } from 'nanoid';
 import { isEqual } from 'lodash';
 import { useSnackbar } from 'notistack';
-import { Dialog, DialogActions, DialogTitle, makeStyles, Box, useTheme } from '@material-ui/core';
+import { Dialog, DialogActions, DialogTitle, makeStyles, Box, useTheme, Grid } from '@material-ui/core';
 import RestoreOutlinedIcon from '@material-ui/icons/RestoreOutlined';
 
 import { toAddNewGlobalLabel } from 'store/modules/App/actions';
@@ -31,6 +31,7 @@ import {
   UseStylesOfDialogOfAddNewLabelProps
 } from './types';
 import { DefaultMenuLayoutElementPropsType } from 'layouts/DialogsLayout/types';
+import { useBreakpointNames } from 'hooks/useBreakpointNames.hook';
 
 export const useStyles = makeStyles(({ spacing, palette }) => ({
   container: ({ customColor }: UseStylesOfDialogOfAddNewLabelProps) => ({
@@ -39,7 +40,7 @@ export const useStyles = makeStyles(({ spacing, palette }) => ({
 
       '& .MuiDialogTitle-root, .MuiStepper-root,.MuiDialogActions-root': {
         background: customColor?.isUseDefault ? '' : customColor?.bgUnHover,
-        color: customColor?.hover
+        color: customColor?.isUseDefault ? palette.text.primary : customColor?.hover
       },
       '& .MuiStepper-root': {
         padding: spacing(0.4, 2.8)
@@ -51,7 +52,7 @@ export const useStyles = makeStyles(({ spacing, palette }) => ({
 const DialogOfAddNewLabel: FC<DefaultMenuLayoutElementPropsType> = ({ onClose, customColor }) => {
   const dispatch = useDispatch();
   const {
-    palette: { primary }
+    palette: { primary, text }
   } = useTheme();
   const handleAddNewGlobalLabel: HandleAddNewGlobalLabelType = newLabel => {
     dispatch(toAddNewGlobalLabel({ newLabel }));
@@ -115,7 +116,7 @@ const DialogOfAddNewLabel: FC<DefaultMenuLayoutElementPropsType> = ({ onClose, c
       });
 
     setTimeout(() => {
-      setAwaitedStatus(false)
+      setAwaitedStatus(false);
       setAwaitedStatus(true);
     }, 4000);
   };
@@ -219,21 +220,35 @@ const DialogOfAddNewLabel: FC<DefaultMenuLayoutElementPropsType> = ({ onClose, c
     onSave: handleSave,
     colorOfSaveButton: reverserCustomColor?.isUseDefault ? primary.main : reverserCustomColor?.secondaryColor,
     onClose: handleCloseDialog,
-    colorOfCloseButton: customColor?.unHover
+    colorOfCloseButton: reverserCustomColor?.isUseDefault ? text.hint : customColor?.unHover
   };
 
+  const { isSiveIsXs } = useBreakpointNames();
+
   return (
-    <Dialog open={isDialogOpen} onClose={handleCloseDialog} className={classes.container}>
+    <Dialog open={isDialogOpen} onClose={handleCloseDialog} className={classes.container} fullScreen={isSiveIsXs}>
       <DialogTitle>Add new global label</DialogTitle>
       <SteperOfDialogOfAddNewLabel {...steperOfDialogOfAddNewLabelProps} />
-      <DialogActions>
-        <Box ml={2.4}>
-          {
-            //@ts-ignore
-            <LabelItem {...labelItemProps} />
-          }
-        </Box>
-        <ActionsButtonGroup {...actionsButtonGroupProps} />
+      <DialogActions  style={{position:isSiveIsXs ? 'absolute' : 'relative',bottom:0}}>
+
+        <Grid container alignItems={'flex-end'} justify={isSiveIsXs ? 'flex-end' : 'space-between'}>
+          <Box
+            ml={1.4}
+            mb={isSiveIsXs ? 1 : 0}
+            display={'flex'}
+            minWidth={216}
+            justifyContent={isSiveIsXs ? 'flex-end' : 'flex-start'}
+          >
+            {
+              //@ts-ignore
+              <LabelItem {...labelItemProps} />
+            }
+          </Box>
+
+          <Grid container>
+            <ActionsButtonGroup {...actionsButtonGroupProps} />
+          </Grid>
+        </Grid>
       </DialogActions>
     </Dialog>
   );

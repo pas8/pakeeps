@@ -9,6 +9,7 @@ import { getNotificationArr } from 'store/modules/App/selectors';
 
 const NotificationMenu: FC<NotificationMenuPropsType> = ({ id, onClose, customColor, mouseX: left, mouseY: top }) => {
   const arr = useSelector(getNotificationArr);
+  console.log(arr)
   return (
     <HeaderMenuContainer
       coordinates={{ top, left }}

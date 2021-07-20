@@ -63,7 +63,7 @@ const useStyles = makeStyles(({ spacing, breakpoints }) => ({
     maxWidth: spacing(12),
     [breakpoints.down('xs')]: {
       maxWidth: '100%',
-    margin: spacing(1, 0, 0, 1),
+      margin: spacing(1, 0, 0, 1),
 
       width: '100%'
     },
@@ -129,7 +129,7 @@ const SteperOfDialogOfAddNewLabel: FC<SteperOfDialogOfAddNewLabelPropsType> = ({
                 <Grid container alignItems={'center'}>
                   <Grid>
                     <Grid direction={'column'}>
-                      <Grid container className={classes.componentContainer} alignItems={'center'} >
+                      <Grid container className={classes.componentContainer} alignItems={'center'}>
                         <Component {...componentProps} customColor={secondaryCustomColor} />
                       </Grid>
                       <Grid>
@@ -139,11 +139,11 @@ const SteperOfDialogOfAddNewLabel: FC<SteperOfDialogOfAddNewLabelPropsType> = ({
                       </Grid>
                     </Grid>
                   </Grid>
-                  <Grid style={{width:isSizeSmall ? '100%' : 'auto'}}>
+                  <Grid style={{ width: isSizeSmall ? '100%' : 'auto' }}>
                     <Grid
                       container
                       direction={isSizeSmall ? 'row' : 'column'}
-                      justify={isSizeSmall ? 'flex-end' :'center'}
+                      justify={isSizeSmall ? 'flex-end' : 'center'}
                       className={classes.buttonContainer}
                     >
                       <Grid>
@@ -175,11 +175,15 @@ const SteperOfDialogOfAddNewLabel: FC<SteperOfDialogOfAddNewLabelPropsType> = ({
         )}
       </Stepper>
       {isFinished && (
-        <Box m={8} display={'flex'} flexDirection={'column'} >
-          <Button onClick={() => decrimentActiveStep()} size={'small'}>
+        <Box m={isSizeSmall ? 2 : 8} display={'flex'} flexDirection={isSizeSmall ? 'row' : 'column'} >
+          <Button onClick={() => decrimentActiveStep()} size={'small'}
+          
+          className={classes.buttonOfPriviousStep}
+          
+          >
             Back
           </Button>
-          <Button onClick={toReset} size={'small'} color={'secondary'}>
+          <Button onClick={toReset} size={'small'} color={'secondary'} className={classes.buttonOfNextStep}>
             Reset
           </Button>
         </Box>

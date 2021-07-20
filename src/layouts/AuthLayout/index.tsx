@@ -71,7 +71,7 @@ const AuthLayout: FC<any> = ({ children, pageProps }) => {
   debugger;
   useEffect(() => {
     firebase.auth().onAuthStateChanged(user => {
-      if (!user) return dispatch(toChangeLoginStatus({ isLogined: false }));
+      if (!user ) return dispatch(toChangeLoginStatus({ isLogined: false }));
       if (!user.isAnonymous) {
         dispatch(
           toChangeAvatarProperties({ avatarProperties: { ...defaultAvatarProperties, url: user.photoURL || NONE } })
@@ -84,13 +84,13 @@ const AuthLayout: FC<any> = ({ children, pageProps }) => {
       } else dispatch(toChangeAnonymousStatus({ isAnonymous: user.isAnonymous }));
 
       dispatch(toChangeLoginStatus({ isLogined: true }));
-      if (online) return dispatch(operateToSetStoreOfFirebaseData());
+      if (online && !user.isAnonymous) return dispatch(operateToSetStoreOfFirebaseData());
       dispatch(toChangeAllFirebaseStoreState(value!));
     });
   }, []);
-  const isLoginedAndRouteISAuth = startsWith(router.pathname, AUTH_BASE_URL);
+  const isLoginedAndRouteISAuth = router.pathname ===  AUTH_BASE_URL && isLogined
 
-  const isRouteIsAuth = startsWith(router.pathname, SIGN_IN_URL);
+  const isRouteIsAuth = startsWith(router.pathname, AUTH_BASE_URL);
 
   useEffect(() => {
     if (isLogined !== NONE && !isLogined && !isRouteIsAuth) {

@@ -15,33 +15,36 @@ export const useSetNotificationArr = () => {
   const { isEmailVerified, email } = useSelector(getUserData);
 
   useEffect(() => {
-    console.log(isEmailVerified)
-    const notifinationArr = [
-      {
-        text: 'Please verificate email',
-        customIconComponent: false,
-        onClick: (e: any) => {
-          firebase
-            .auth()
-            .sendPasswordResetEmail(email)
-            .then(result => {
-              enqueueSnackbar({
-                message: 'Email verification link was sended again',
-                severity: SnackbarSeverityNames.INFO
-              });
-            })
-            .catch(error => {
-              enqueueSnackbar({
-                message: error.message || errorMessages.SOMETHING_WENT_WRONG,
-                severity: SnackbarSeverityNames.ERROR
-              });
-            });
-        },
-        iconName: 'email',
-        id: 'PLEASE_VERIFICATE_EMAIL'
-      }
-    ];
-
-    dispatch(toChangeTemporaryData({ newTemporaryData: { notifinationArr } }));
-  }, [isEmailVerified,email]);
+    const notifinationArr =
+    //  isEmailVerified
+      // ? []
+      // :
+       [
+          {
+            text: 'Please verificate email',
+            customIconComponent: false,
+            onClick: (e: any) => {
+              firebase
+                .auth()
+                .sendPasswordResetEmail(email)
+                .then(result => {
+                  enqueueSnackbar({
+                    message: 'Email verification link was sended again',
+                    severity: SnackbarSeverityNames.INFO
+                  });
+                })
+                .catch(error => {
+                  enqueueSnackbar({
+                    message: error.message || errorMessages.SOMETHING_WENT_WRONG,
+                    severity: SnackbarSeverityNames.ERROR
+                  });
+                });
+            },
+            iconName: 'email',
+            id: 'PLEASE_VERIFICATE_EMAIL'
+          }
+        ];
+console.log(isEmailVerified)
+    dispatch(toChangeTemporaryData({ newTemporaryData: { notifinationArr:[[[]]] } }));
+  }, [isEmailVerified, email]);
 };

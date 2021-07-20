@@ -7,16 +7,17 @@ import { FC } from 'react';
 import { useSelector } from 'react-redux';
 import Link from 'next/link';
 import { useRouter } from 'next/dist/client/router';
-import { NEW_USER_URL } from 'models/denotation';import FieldSetContainer from 'components/FieldSetContainer';
+import { NEW_USER_URL } from 'models/denotation';
+import FieldSetContainer from 'components/FieldSetContainer';
 import { getHeaderHeight } from 'store/modules/App/selectors';
 import { useThemeColors } from 'hooks/useThemeColors.hook';
 import AuthForm from 'components/AuthForm';
 
-const useStyles = makeStyles(({ spacing, shape: { borderRadius }, palette }) => ({
+const useStyles = makeStyles(({ spacing, shape: { borderRadius }, palette ,breakpoints}) => ({
   container: {
     padding: spacing(0.4, 1, 0.2, 1),
 
-    width: '100%',
+    width: '100%'
   },
 
   buttonProvidersContainer: {
@@ -38,8 +39,15 @@ const useStyles = makeStyles(({ spacing, shape: { borderRadius }, palette }) => 
   authContainer: {
     borderRadius,
     borderColor: useAlpha(palette.text.primary, 0.2),
-
     height: spacing(26),
+
+
+    [breakpoints.down('xs')]:{
+    height: spacing(42),
+      
+
+    },
+
 
     '& > legend': {
       padding: spacing(0, 0.8)
@@ -59,9 +67,7 @@ const Auth: FC<{ providers: AppProviders }> = ({ providers }) => {
     palette: { secondary, text }
   } = useTheme();
   const [session, loading] = useSession();
-// console.log(session)
-
-
+  // console.log(session)
 
   const router = useRouter();
 
@@ -79,9 +85,12 @@ const Auth: FC<{ providers: AppProviders }> = ({ providers }) => {
 
   const isProvidersButtonHaveCustomView = false;
   return (
-    <Grid alignItems={'center'} justify={'center'} container className={classes.container}
-    
-    style={{ height: `calc(92vh - ${headerHeight}px)` }}
+    <Grid
+      alignItems={'center'}
+      justify={'center'}
+      container
+      className={classes.container}
+      style={{ height: `calc(92vh - ${headerHeight}px)` }}
     >
       <FieldSetContainer lg={4} xl={3} md={5} sm={8} xs={12} container title={'Sign In'}>
         <Grid
@@ -117,9 +126,9 @@ const Auth: FC<{ providers: AppProviders }> = ({ providers }) => {
             </legend>
           )}
 
-          {Object.values(providers).map(({ name, id },idx) => (
+          {Object.values(providers).map(({ name, id }, idx) => (
             <ButtonOfSignInProvider
-            key={`ButtonOfSignInProvider_${name}_${id}_${idx}`}
+              key={`ButtonOfSignInProvider_${name}_${id}_${idx}`}
               onClick={e => signIn(id)}
               name={name}
               //@ts-ignore

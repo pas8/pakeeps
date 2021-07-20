@@ -14,7 +14,7 @@ const FirstStepOfSteperOfDialogOfAddNewGlobalEvent: FC<SwitchProps & UseStylesCu
     {...switchProps}
     isBgIsPaper
     title={'Is event have only time '}
-    color={customColor.isUseDefault ? DEFAULT : customColor.hover}
+    color={customColor.isUseDefault ? DEFAULT : customColor.secondaryColor}
   />
 );
 
