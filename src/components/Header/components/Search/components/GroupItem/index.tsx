@@ -15,7 +15,7 @@ const useStyles = makeStyles(({ shape, spacing, palette, typography: { caption }
         color: palette.getContrastText(color)
       }
     },
-    padding: spacing(0.8, 0, 0.8, 1.2),
+    padding: spacing(1.2, 0, 1.2, 1.2),
     borderRadius: 0,
     margin: `0 !important`,
     width: '100%',
@@ -54,11 +54,11 @@ const useStyles = makeStyles(({ shape, spacing, palette, typography: { caption }
     '&:hover': {
       background: color,
       '& .MuiTouchRipple-root': {
-color: palette.getContrastText(color),
+        color: palette.getContrastText(color)
       },
       cursor: 'pointer',
       '& p': {
-        textDecoration: 'underline',
+        // textDecoration: 'underline',
         color: palette.getContrastText(color),
         '& svg': {
           color: palette.getContrastText(color)
@@ -67,8 +67,8 @@ color: palette.getContrastText(color),
       },
       '& .MuiChip-root': {
         background: 'transparent',
-        borderColor: color,
-        color
+        borderColor: palette.getContrastText(color),
+        color: palette.getContrastText(color)
       }
     },
     [breakpoints.down('sm')]: {

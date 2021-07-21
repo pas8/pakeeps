@@ -29,6 +29,7 @@ const useStyles = makeStyles(({ spacing, shape: { borderRadius }, palette, typog
       fontSize: subtitle1.fontSize
     },
     '&:hover .MuiTouchRipple-root': {
+      color:palette.getContrastText(palette.secondary.main),
       background: useAlpha(palette.secondary.main, 1)
     },
     '& svg': {
