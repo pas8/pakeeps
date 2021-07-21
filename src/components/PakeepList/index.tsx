@@ -29,7 +29,6 @@ import {
 } from 'store/modules/App/actions';
 
 import WrapperOfContainerOfPakeepList from './components/WrapperOfContainer';
-import SelectofFPakeepListContainer from './components/WrapperOfContainer/components/Container/components/Selecto';
 import {
   HandleSetPakeepsOrderNamesType,
   HandleSetPinnedPakeepsOrderNamesType,
@@ -41,6 +40,10 @@ import { useTakePakeepListPlaceholdersOfFolderPropertyies } from 'hooks/useTakeP
 const ListPlaceholdersOfFolderPropertyies = dynamic(() => import('./components/ListPlaceholdersOfFolderPropertyies'), {
   loading: () => <CircularProgress color={'primary'} />
 });
+
+const SelectofFPakeepListContainer = dynamic(
+  () => import('./components/WrapperOfContainer/components/Container/components/Selecto')
+);
 
 const PakeepList: FC = () => {
   const dispatch = useDispatch();

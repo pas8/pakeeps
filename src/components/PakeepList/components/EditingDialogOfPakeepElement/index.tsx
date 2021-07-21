@@ -2,12 +2,13 @@ import { FC } from 'react';
 import { usePrevious, useToggle } from 'react-use';
 import RestoreOutlinedIcon from '@material-ui/icons/RestoreOutlined';
 import { useMeasure } from 'react-use';
+import dynamic from 'next/dynamic';
 import { useSnackbar } from 'notistack';
+import { Skeleton } from '@material-ui/lab';
 import { isEqual } from 'lodash';
 import { useDispatch, useSelector } from 'react-redux';
 import { Grid, makeStyles, DialogTitle, DialogContent, InputBase, Dialog, DialogActions } from '@material-ui/core';
 
-import IconsUtils from 'components/IconsUtils';
 import { useAlpha } from 'hooks/useAlpha.hook';
 import CheckBoxContainer from 'components/CheckBoxContainer';
 import ActionsButtonGroup from 'components/ActionsButtonGroup';
@@ -16,7 +17,12 @@ import { DEFAULT, NONE } from 'models/denotation';
 import { DialogLayoutName } from 'models/unums';
 import { customColorPlaceholder } from 'components/AccountAvatar';
 import { useBreakpointNames } from 'hooks/useBreakpointNames.hook';
-import { toAddNewPakeep, toChangeDefaultLayoutDialogProps, toChangeTemporaryData, toEditPakeep } from 'store/modules/App/actions';
+import {
+  toAddNewPakeep,
+  toChangeDefaultLayoutDialogProps,
+  toChangeTemporaryData,
+  toEditPakeep
+} from 'store/modules/App/actions';
 import { useFindPakeepUsingId } from 'hooks/useFindPakeepUsingId.hook';
 import { DefaultMenuLayoutElementPropsType } from 'layouts/DialogsLayout/types';
 import { UpSildeTransition } from 'components/SildeTransitions';
@@ -27,6 +33,14 @@ import { useNewPakeepStatuses } from 'hooks/useNewPakeepStatuses.hook';
 
 import { UseStylesOfEditingDialogOfPakeepElementtype } from './types';
 import AttributeGroup from '../PakeepElement/components/AttributeGroup';
+
+const IconsUtils = dynamic(() => import('components/IconsUtils'), {
+  loading: () => (
+    <>
+      <Skeleton variant={'rect'} width={200} height={42} />
+    </>
+  )
+});
 
 const useStyles = makeStyles(({ typography: { h4, h6, body1, h5 }, spacing }) => {
   return {
@@ -242,11 +256,10 @@ const EditingDialogOfPakeepElement: FC<DefaultMenuLayoutElementPropsType> = ({
         icon: RestoreOutlinedIcon
       });
 
-      
     dispatch(
       toChangeTemporaryData({
         newTemporaryData: {
-          defaultDialogProps:NONE,
+          defaultDialogProps: NONE,
           isUseEditingDialogAsNewPakeep: false
         }
       })

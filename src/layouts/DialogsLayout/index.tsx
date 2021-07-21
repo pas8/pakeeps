@@ -1,14 +1,44 @@
 import { FC } from 'react';
+import { Backdrop, CircularProgress } from '@material-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
-
+import dynamic from 'next/dynamic';
 import { toChangeDefaultLayoutDialogProps } from 'store/modules/App/actions';
-import { DialogOfAddingNewGlobalEvent } from 'components/PakeepList/components/PakeepElement/components/AttributeGroup/components/EventsPart/components/DialogOfAddingNewGlobalEvent';
-import DialogOfAddNewLabel from 'components/IconsUtils/components/LabelsList/components/DialogOfAddNewLabel';
 import { DialogLayoutName } from 'models/unums';
 import { getDefaultDialogPropsOfTemporaryData } from 'store/modules/App/selectors';
-import { DialogsLayoutPropsType } from './types';
-import EditingDialogOfPakeepElement from 'components/PakeepList/components/EditingDialogOfPakeepElement';
 import { customColorPlaceholder } from 'components/AccountAvatar';
+import { DialogsLayoutPropsType } from './types';
+
+export const DialogLoadingComponent = () => {
+  return (
+    <Backdrop open>
+      <CircularProgress color={'primary'} />
+    </Backdrop>
+  );
+};
+
+const DialogOfAddingNewGlobalEvent = dynamic(
+  () =>
+    import(
+      'components/PakeepList/components/PakeepElement/components/AttributeGroup/components/EventsPart/components/DialogOfAddingNewGlobalEvent/components/ForLazyLoading'
+    ),
+  {
+    loading: () => <DialogLoadingComponent />
+  }
+);
+
+const DialogOfAddNewLabel = dynamic(
+  () => import('components/IconsUtils/components/LabelsList/components/DialogOfAddNewLabel'),
+  {
+    loading: () => <DialogLoadingComponent />
+  }
+);
+
+const EditingDialogOfPakeepElement = dynamic(
+  () => import('components/PakeepList/components/EditingDialogOfPakeepElement'),
+  {
+    loading: () => <DialogLoadingComponent />
+  }
+);
 
 const DialogsLayout: FC<DialogsLayoutPropsType> = ({ children }) => {
   const defaultDialogProps = useSelector(getDefaultDialogPropsOfTemporaryData);

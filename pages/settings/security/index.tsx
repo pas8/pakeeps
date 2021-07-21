@@ -1,41 +1,29 @@
-import {
-  Grid,
-  IconButton,
-  InputAdornment,
-  makeStyles,
-  Typography,
-  TextField,
-  Dialog,
-  Button,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  Box,
-  GridSize
-} from '@material-ui/core';
-import FieldSetContainer from 'components/FieldSetContainer';
+import { Grid, IconButton, InputAdornment, makeStyles, TextField, Button, GridSize } from '@material-ui/core';
+import dynamic from 'next/dynamic';
+import { ChangeEventHandler, FC, KeyboardEventHandler, MouseEvent, useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useSnackbar } from 'notistack';
 import { capitalize, mapValues, values } from 'lodash';
 import VisibilityOutlinedIcon from '@material-ui/icons/VisibilityOutlined';
-import Visibility from '@material-ui/icons/Visibility';
-import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import VisibilityOffOutlinedIcon from '@material-ui/icons/VisibilityOffOutlined';
-import { ChangeEventHandler, FC, KeyboardEventHandler, MouseEvent, useState,useEffect } from 'react';
-import { INPUT_MARGIN_BOTTOMVALUE } from '../account';
-import { SwitchByPasPropsType } from 'components/Switch/types';
+import FieldSetContainer from 'components/FieldSetContainer';
 import SwitchByPas from 'components/Switch';
-import { useDispatch, useSelector } from 'react-redux';
 import { getUserData } from 'store/modules/App/selectors';
 import { NONE } from 'models/denotation';
-import AuthWithLocalPinCode from 'components/AuthWithLocalPinCode';
-import ActionsButtonGroup from 'components/ActionsButtonGroup';
 import { toChangeUserData } from 'store/modules/App/actions';
-import { useSnackbar } from 'notistack';
-import SettingContainer from 'components/SettingContainer'
+import SettingContainer from 'components/SettingContainer';
+import { DialogLoadingComponent } from 'layouts/DialogsLayout';
+import { INPUT_MARGIN_BOTTOMVALUE } from '../account';
+
+const DialogOfAddingNewPinCode = dynamic(() => import('components/DialogOfAddingNewPinCode'), {
+  loading: () => <DialogLoadingComponent />
+});
+
 const useStyles = makeStyles(({ spacing, palette, breakpoints, shape: { borderRadius } }) => ({
   container: {
     '& .changePinCodeButtonContainer': {
       '& button': {
-        marginTop:spacing(1),
+        marginTop: spacing(1),
         width: '100%'
       }
     }
@@ -96,9 +84,9 @@ const Security: FC = () => {
   const [pinCode, setPinCode] = useState<string>('');
   const [isHaveLocalPinCode, setIsHaveLocalPinCode] = useState(localPinCode !== NONE);
 
-useEffect(()=> {
-  setIsHaveLocalPinCode(localPinCode !== NONE)
-},[localPinCode])
+  useEffect(() => {
+    setIsHaveLocalPinCode(localPinCode !== NONE);
+  }, [localPinCode]);
 
   const [isDialogOfChangingPinCodeOpen, setIsDialogOfChangingPinCodeOpen] = useState(false);
 
@@ -134,114 +122,106 @@ useEffect(()=> {
   } as { [key: string]: GridSize };
 
   return (
-    <Grid container justify={'center'} >
-    <SettingContainer container justify={'center'} >
-      <Grid container   className={classes.container}  item>
-        <FieldSetContainer title={'Change password'} isOnlyTop>
-          <Grid className={classes.changePasswordContainer} container item {...defaultContainerBreakpoint}>
-            {valuesOfInputsStateOfPasswordChanger.map(({ name }, idx) => {
-              const label = capitalize(name);
+    <Grid container justify={'center'}>
+      <SettingContainer container justify={'center'}>
+        <Grid container className={classes.container} item>
+          <FieldSetContainer title={'Change password'} isOnlyTop>
+            <Grid className={classes.changePasswordContainer} container item {...defaultContainerBreakpoint}>
+              {valuesOfInputsStateOfPasswordChanger.map(({ name }, idx) => {
+                const label = capitalize(name);
 
-              // console.log(formState[name]);
+                // console.log(formState[name]);
 
-              const onKeyPress: KeyboardEventHandler<HTMLInputElement> = ({ code }) => {
-                idx + 1 === valuesOfInputsStateOfPasswordChanger.length &&
-                  code === 'Enter' &&
-                  console.log('fuck this this ');
-              };
+                const onKeyPress: KeyboardEventHandler<HTMLInputElement> = ({ code }) => {
+                  idx + 1 === valuesOfInputsStateOfPasswordChanger.length &&
+                    code === 'Enter' &&
+                    console.log('fuck this this ');
+                };
 
-              const handleMouseDownPassword = (e: MouseEvent<HTMLButtonElement>) => {
-                e.preventDefault();
-              };
+                const handleMouseDownPassword = (e: MouseEvent<HTMLButtonElement>) => {
+                  e.preventDefault();
+                };
 
-              const isPasswordVisible = inputsStateOfPasswordChanger[name].isPasswordVisible;
+                const isPasswordVisible = inputsStateOfPasswordChanger[name].isPasswordVisible;
 
-              const handleChangePasswordVisiblilittyStatus = () => {
-                setInputsStateOfPasswordChanger(state => ({
-                  ...state,
-                  [name]: { ...state[name], isPasswordVisible: !state[name].isPasswordVisible }
-                }));
-              };
+                const handleChangePasswordVisiblilittyStatus = () => {
+                  setInputsStateOfPasswordChanger(state => ({
+                    ...state,
+                    [name]: { ...state[name], isPasswordVisible: !state[name].isPasswordVisible }
+                  }));
+                };
 
-              return (
-                <Grid className={classes.inputItemContainer} container>
-                  <TextField
-                    label={label}
-                    variant={'outlined'}
-                    key={`authFormaNames-${idx}-${name}`}
-                    onKeyPress={onKeyPress}
-                    color={'secondary'}
-                    type={isPasswordVisible ? 'text' : 'password'}
-                    InputProps={{
-                      endAdornment: (
-                        <InputAdornment position={'end'}>
-                          <IconButton
-                            className={classes.visibilityButton}
-                            aria-label={'toggle password visibility'}
-                            onClick={handleChangePasswordVisiblilittyStatus}
-                            style={{ width: 48, marginRight: -8 }}
-                            onMouseDown={handleMouseDownPassword}
-                            edge={'end'}
-                          >
-                            {isPasswordVisible ? <VisibilityOutlinedIcon /> : <VisibilityOffOutlinedIcon />}
-                          </IconButton>
-                        </InputAdornment>
-                      )
-                    }}
-                    placeholder={label}
-                    onChange={onInputChange}
-                    fullWidth
-                    value={inputsStateOfPasswordChanger[name].value}
-                    name={name}
-                    error={!inputsStateOfPasswordChanger[name].isValid}
-                    required
-                  />
-                </Grid>
-              );
-            })}
-          </Grid>
-        </FieldSetContainer>
-
-        <FieldSetContainer title={'Change pin code'} isOnlyTop>
-          <Grid container alignItems={'center'} item {...defaultContainerBreakpoint}>
-            <Grid item container>
-              <SwitchByPas
-                checked={isHaveLocalPinCode}
-                onChange={handleChangeLocalPinCodeStatus}
-                title={'Is have a local pin code '}
-              />
+                return (
+                  <Grid className={classes.inputItemContainer} container>
+                    <TextField
+                      label={label}
+                      variant={'outlined'}
+                      key={`authFormaNames-${idx}-${name}`}
+                      onKeyPress={onKeyPress}
+                      color={'secondary'}
+                      type={isPasswordVisible ? 'text' : 'password'}
+                      InputProps={{
+                        endAdornment: (
+                          <InputAdornment position={'end'}>
+                            <IconButton
+                              className={classes.visibilityButton}
+                              aria-label={'toggle password visibility'}
+                              onClick={handleChangePasswordVisiblilittyStatus}
+                              style={{ width: 48, marginRight: -8 }}
+                              onMouseDown={handleMouseDownPassword}
+                              edge={'end'}
+                            >
+                              {isPasswordVisible ? <VisibilityOutlinedIcon /> : <VisibilityOffOutlinedIcon />}
+                            </IconButton>
+                          </InputAdornment>
+                        )
+                      }}
+                      placeholder={label}
+                      onChange={onInputChange}
+                      fullWidth
+                      value={inputsStateOfPasswordChanger[name].value}
+                      name={name}
+                      error={!inputsStateOfPasswordChanger[name].isValid}
+                      required
+                    />
+                  </Grid>
+                );
+              })}
             </Grid>
-            <Grid className={'changePinCodeButtonContainer'} container>
-              <Button
-                variant={'outlined'}
-                // size={'large'}
-                color={'secondary'}
-                disabled={!isHaveLocalPinCode}
-                onClick={handleChangeDialogOfChangingPinCodeOpenStatus}
-              >
-                Change pin code
-              </Button>
-            </Grid>
-          </Grid>
-        </FieldSetContainer>
+          </FieldSetContainer>
 
-        <Dialog open={isDialogOfChangingPinCodeOpen}>
-          <DialogTitle>
-            <Typography variant={'h6'}>Pin code</Typography>
-          </DialogTitle>
-          <DialogContent>
-            <Grid container>
-          <AuthWithLocalPinCode {...authWithLocalPinCodeProps}  />
+          <FieldSetContainer title={'Change pin code'} isOnlyTop>
+            <Grid container alignItems={'center'} item {...defaultContainerBreakpoint}>
+              <Grid item container>
+                <SwitchByPas
+                  checked={isHaveLocalPinCode}
+                  onChange={handleChangeLocalPinCodeStatus}
+                  title={'Is have a local pin code '}
+                />
+              </Grid>
+              <Grid className={'changePinCodeButtonContainer'} container>
+                <Button
+                  variant={'outlined'}
+                  // size={'large'}
+                  color={'secondary'}
+                  disabled={!isHaveLocalPinCode}
+                  onClick={handleChangeDialogOfChangingPinCodeOpenStatus}
+                >
+                  Change pin code
+                </Button>
+              </Grid>
             </Grid>
-          </DialogContent>
-          <DialogActions>
-            <ActionsButtonGroup onClose={onCloseOfDialogOfChangingPinCode} onSave={onSaveOfDialogOfChangingPinCode} />
-          </DialogActions>
-        </Dialog>
-      </Grid>
-    </SettingContainer>
+          </FieldSetContainer>
+
+          <DialogOfAddingNewPinCode
+            open={isDialogOfChangingPinCodeOpen}
+            authWithLocalPinCodeProps={authWithLocalPinCodeProps}
+            onClose={onCloseOfDialogOfChangingPinCode}
+            onSave={onSaveOfDialogOfChangingPinCode}
+          />
+        </Grid>
+      </SettingContainer>
     </Grid>
-
   );
 };
 
