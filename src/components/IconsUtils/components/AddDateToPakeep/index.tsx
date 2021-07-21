@@ -1,7 +1,7 @@
 import React, { useState, useEffect, FC } from 'react';
 import dynamic from 'next/dynamic';
 import { useSnackbar } from 'notistack';
-import { toChangeTemporaryData } from 'store/modules/App/actions';
+import { toChangeDefaultLayoutDialogProps, toChangeTemporaryData } from 'store/modules/App/actions';
 import { DialogLayoutName } from 'models/unums';
 import { Typography, Grid, makeStyles, CircularProgress } from '@material-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
@@ -51,7 +51,6 @@ const AddDateToPakeep: FC<AddDateToPakeepPropsType> = ({
   if (!currentEventsArr) return null;
 
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
-  const { dialogName } = useSelector(getDefaultDialogPropsOfTemporaryData);
 
   const FIRST_EVENT_ID = '1';
 
@@ -77,14 +76,11 @@ const AddDateToPakeep: FC<AddDateToPakeepPropsType> = ({
 
   const handleOpenAddCustomEventsDialog = () => {
     dispatch(
-      toChangeTemporaryData({
-        newTemporaryData: {
-          defaultDialogProps: {
-            id: pakeepId,
-            dialogName:
-              dialogName === DialogLayoutName.PAKEEPS ? [DialogLayoutName.EVENTS, dialogName] : DialogLayoutName.EVENTS,
-            customColor: color
-          }
+      toChangeDefaultLayoutDialogProps({
+        props: {
+          id: pakeepId,
+          name: DialogLayoutName.EVENTS,
+          customColor: color
         }
       })
     );

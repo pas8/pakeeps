@@ -5,49 +5,47 @@ import AccountMenu from 'components/AccountMenu';
 import MenuOfChangingGlobalEventItem from 'components/PakeepList/components/PakeepElement/components/AttributeGroup/components/EventsPart/components/MenuOfChangingGlobalEventItem';
 import WrapperOfMenuOfLabelPart from 'components/PakeepList/components/PakeepElement/components/AttributeGroup/components/LabelPart/components/MenuWrapper';
 import { useFilterMenusNamesOfMenuLayout } from 'hooks/useFilterMenusNamesOfMenuLayout.hook';
+import NotificationMenu from 'components/NotificationMenu';
+import { customColorPlaceholder } from 'components/AccountAvatar';
 import { MenusLayoutName } from 'models/unums';
-import { toChangeTemporaryData } from 'store/modules/App/actions';
-import { nullityDefaultMenuProps } from 'store/modules/App/reducers';
+import { toChangeDefaultLayoutMenuProps } from 'store/modules/App/actions';
 import { getDefaultMenuPropsOfTemporaryData } from 'store/modules/App/selectors';
 import { MenuesLayoutPropsType } from './types';
-import NotificationMenu from 'components/NotificationMenu';
-import { isArray } from 'lodash';
 
 const MenuesLayout: FC<MenuesLayoutPropsType> = ({ children }) => {
-  const { menuName, ...defaultMenuProps } = useSelector(getDefaultMenuPropsOfTemporaryData);
+  const defaultMenuProps = useSelector(getDefaultMenuPropsOfTemporaryData);
   const dispatch = useDispatch();
-
-  const onClose = () => {
-    dispatch(toChangeTemporaryData({ newTemporaryData: { defaultMenuProps: nullityDefaultMenuProps } }));
-  };
   const namesArr = useFilterMenusNamesOfMenuLayout();
+  if (defaultMenuProps === MenusLayoutName.NONE) return <> {children} </>
 
-  const defaultMenuLayoutElemntProps = {
-    ...defaultMenuProps,
-    onClose,
-    top: defaultMenuProps.mouseX,
-    left: defaultMenuProps.mouseY
-  };
 
   const menuesComponentsArr = [
-    { Component: WrapperOfMenuOfLabelPart, props: defaultMenuLayoutElemntProps, name: MenusLayoutName.LABELS },
-    { Component: MenuOfChangingGlobalEventItem, props: defaultMenuLayoutElemntProps, name: MenusLayoutName.EVENTS },
-    { Component: AccountMenu, props: defaultMenuLayoutElemntProps, name: MenusLayoutName.ACCOUNT },
-    { Component: NotificationMenu, props: defaultMenuLayoutElemntProps, name: MenusLayoutName.NOTIFICATION }
+    { Component: WrapperOfMenuOfLabelPart, name: MenusLayoutName.LABELS },
+    { Component: MenuOfChangingGlobalEventItem, name: MenusLayoutName.EVENTS },
+    { Component: AccountMenu, name: MenusLayoutName.ACCOUNT },
+    { Component: NotificationMenu, name: MenusLayoutName.NOTIFICATION }
   ];
 
-  const menuesHidden = menuName === MenusLayoutName.NONE;
   return (
     <>
       {children}
-      {!menuesHidden &&
-        menuesComponentsArr.map(({ Component, props, name }, idx) => {
-          if (namesArr.includes(name)) return null;
+      {menuesComponentsArr.map(({ Component, name }, idx) => {
+        if (namesArr.includes(name)) return null;
+        const findedItem = defaultMenuProps.find(({ name: globalName }) => globalName === name);
+        if (!findedItem) return null;
 
-          if (isArray(menuName) ? menuName.includes(name) : name === menuName)
-            return <Component {...props} key={`menuesComponentsArr-${name}-${idx}`} />;
-          return null;
-        })}
+        const onClose = () => {
+          dispatch(toChangeDefaultLayoutMenuProps({ props: { name, isShouldBeClosed: true } }));
+        };
+
+        const defaultMenuLayoutElementProps = {
+          ...findedItem,
+          onClose,
+          customColor: findedItem.customColor || customColorPlaceholder
+        };
+
+        return <Component {...defaultMenuLayoutElementProps} key={`menuesComponentsArr-${name}-${idx}`} />;
+      })}
     </>
   );
 };

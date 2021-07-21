@@ -108,8 +108,8 @@ const MenuOfLabelPart: FC<MenuOfLabelPartPropsType> = ({
     onClose: handleClose,
     onSave: onClickOfSaveButton,
     customColor,
-    top: menuState.mouseX,
-    left: menuState.mouseY,
+    top: menuState.mouseY,
+    left: menuState.mouseX,
     menuItemsArr,
     //@ts-ignore
     customTitle: <LabelItem {...labelItemProps} />

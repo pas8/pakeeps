@@ -10,7 +10,11 @@ import { getIsAuthedWithLocalPassword } from 'store/modules/App/selectors';
 import PakeepList from 'components/PakeepList';
 import NewPakeep from 'components/NewPakeep';
 import { useBreakpointNames } from 'hooks/useBreakpointNames.hook';
-import { toChangeTemporaryData } from 'store/modules/App/actions';
+import {
+  toChangeDefaultLayoutDialogProps,
+  toChangeDefaultLayoutMenuProps,
+  toChangeTemporaryData
+} from 'store/modules/App/actions';
 import { DialogLayoutName } from 'models/unums';
 import { customColorPlaceholder } from 'components/AccountAvatar';
 import { nanoid } from 'nanoid';
@@ -30,20 +34,17 @@ const Pakeeps: FC = () => {
   const isAnonymous = useSelector(getAnonymousStatus);
   const dispatch = useDispatch();
 
-  const { isSizeSmall ,isSiveIsXs} = useBreakpointNames();
+  const { isSizeSmall, isSiveIsXs } = useBreakpointNames();
 
   if (!isLogined) return null;
 
   const handleOpenDialog = () => {
+    dispatch(toChangeTemporaryData({ newTemporaryData: { isUseEditingDialogAsNewPakeep: true } }));
     dispatch(
-      toChangeTemporaryData({
-        newTemporaryData: {
-          defaultDialogProps: {
-            dialogName: DialogLayoutName.PAKEEPS,
-            customColor: customColorPlaceholder,
-            id: nanoid()
-          },
-          isUseEditingDialogAsNewPakeep: true
+      toChangeDefaultLayoutDialogProps({
+        props: {
+          name: DialogLayoutName.PAKEEPS,
+          id: nanoid()
         }
       })
     );
@@ -58,7 +59,7 @@ const Pakeeps: FC = () => {
           <Fab
             color="primary"
             aria-label="add"
-            style={{ position: 'fixed', bottom: 16, right: 16, zIndex: 2, padding:!isSiveIsXs ? 42 : ''  }}
+            style={{ position: 'fixed', bottom: 16, right: 16, zIndex: 2, padding: !isSiveIsXs ? 42 : '' }}
             onClick={handleOpenDialog}
           >
             <AddIcon />

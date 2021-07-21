@@ -67,7 +67,7 @@ const MenuOfChangingGlobalEventItem: FC<WrapperOfMenuOfLabelPartPropsType> = ({
   const [value, setValue] = useState<any>(toFormat(Date.now(), format));
   const error = !isValid(menuState.value);
 
-  const { mouseX:top , mouseY: left, ...changedEvent } = menuState;
+  const { mouseX:left , mouseY: top, ...changedEvent } = menuState;
 
   useEffect(() => {
     setMenuState(state => ({ ...state, mouseX, mouseY, ...findedEvent }));

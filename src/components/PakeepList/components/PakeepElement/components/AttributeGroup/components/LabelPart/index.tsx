@@ -1,11 +1,13 @@
 import React, { FC, MouseEvent, memo } from 'react';
 import { useDispatch } from 'react-redux';
+import { Grid } from '@material-ui/core';
+
+
 import { useFindIcon } from 'hooks/useFindIcon.hook';
-import { toChangeTemporaryData } from 'store/modules/App/actions';
+import { toChangeDefaultLayoutMenuProps,  } from 'store/modules/App/actions';
 import { useGetReversedCustomColor } from 'hooks/useGetReversedCustomColor.hook';
 import LabelItem from './components/LabelItem';
 import { LabelPartPropsType } from './types';
-import { Grid } from '@material-ui/core';
 import { MenusLayoutName } from 'models/unums';
 
 const LabelPart: FC<LabelPartPropsType> = ({
@@ -36,15 +38,13 @@ const LabelPart: FC<LabelPartPropsType> = ({
           e.preventDefault();
 
           dispatch(
-            toChangeTemporaryData({
-              newTemporaryData: {
-                defaultMenuProps: {
-                  mouseX: e.clientX,
-                  mouseY: e.clientY,
-                  customColor,
-                  id,
-                  menuName: MenusLayoutName.LABELS
-                }
+            toChangeDefaultLayoutMenuProps({
+              props: {
+                mouseX: e.clientX,
+                mouseY: e.clientY,
+                name: MenusLayoutName.LABELS,
+                customColor,
+                id
               }
             })
           );

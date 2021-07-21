@@ -10,12 +10,12 @@ import { useAlpha } from 'hooks/useAlpha.hook';
 import { useMix } from 'hooks/useMix.hook';
 import { useTakeIcon } from 'hooks/useTakeIcon.hook';
 import { getLabels } from 'store/modules/App/selectors';
-import { toChangeTemporaryData } from 'store/modules/App/actions';
+import { toChangeDefaultLayoutMenuProps, toChangeTemporaryData } from 'store/modules/App/actions';
 import { MenusLayoutName } from 'models/unums';
 import { GlobalLabelListOflabelListPropsType, UseStylesOfGlobalLabelListOflabelListType } from './types';
 import LabelElementOfGlobalLabelListOflabelList from './components/LabelElement';
 
-const useStyles = makeStyles(({ spacing, palette: { secondary }, typography: { subtitle2 ,body2,caption} }) => {
+const useStyles = makeStyles(({ spacing, palette: { secondary }, typography: { subtitle2, body2, caption } }) => {
   return {
     container: ({ color, customColor }: UseStylesOfGlobalLabelListOflabelListType) => {
       return {
@@ -34,8 +34,7 @@ const useStyles = makeStyles(({ spacing, palette: { secondary }, typography: { s
         }
       };
     },
-    placeholder:{...caption}
-
+    placeholder: { ...caption }
   };
 });
 
@@ -55,8 +54,8 @@ const GlobalLabelListOflabelList: FC<GlobalLabelListOflabelListPropsType> = ({
       <FormLabel component={'legend'}>All labels</FormLabel>
 
       {!globalLabels.length ? (
-        <Box maxWidth={208} mt={0.8} >
-          <Typography component={'legend'}  className={containerClasses.placeholder}>
+        <Box maxWidth={208} mt={0.8}>
+          <Typography component={'legend'} className={containerClasses.placeholder}>
             {'U didnt not added labels yet, but u can simple do this by click to the "Add new global label" button'}
           </Typography>
         </Box>
@@ -72,15 +71,13 @@ const GlobalLabelListOflabelList: FC<GlobalLabelListOflabelListPropsType> = ({
           const onClickOfEditButton: MouseEventHandler<HTMLButtonElement> = e => {
             e.preventDefault();
             dispatch(
-              toChangeTemporaryData({
-                newTemporaryData: {
-                  defaultMenuProps: {
-                    customColor,
-                    id,
-                    menuName: MenusLayoutName.LABELS,
-                    mouseX: e.clientX,
-                    mouseY: e.clientY
-                  }
+              toChangeDefaultLayoutMenuProps({
+                props: {
+                  mouseX:e.clientX,
+                  mouseY:e.clientY,
+                  name: MenusLayoutName.LABELS,
+                  customColor,
+                  id
                 }
               })
             );

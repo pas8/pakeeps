@@ -12,11 +12,11 @@ import { useAlpha } from 'hooks/useAlpha.hook';
 import CheckBoxContainer from 'components/CheckBoxContainer';
 import ActionsButtonGroup from 'components/ActionsButtonGroup';
 import { getIsUseEditingDialogAsNewPakeep } from 'store/modules/App/selectors';
-import { DEFAULT } from 'models/denotation';
+import { DEFAULT, NONE } from 'models/denotation';
 import { DialogLayoutName } from 'models/unums';
 import { customColorPlaceholder } from 'components/AccountAvatar';
 import { useBreakpointNames } from 'hooks/useBreakpointNames.hook';
-import { toAddNewPakeep, toChangeTemporaryData, toEditPakeep } from 'store/modules/App/actions';
+import { toAddNewPakeep, toChangeDefaultLayoutDialogProps, toChangeTemporaryData, toEditPakeep } from 'store/modules/App/actions';
 import { useFindPakeepUsingId } from 'hooks/useFindPakeepUsingId.hook';
 import { DefaultMenuLayoutElementPropsType } from 'layouts/DialogsLayout/types';
 import { UpSildeTransition } from 'components/SildeTransitions';
@@ -242,10 +242,11 @@ const EditingDialogOfPakeepElement: FC<DefaultMenuLayoutElementPropsType> = ({
         icon: RestoreOutlinedIcon
       });
 
+      
     dispatch(
       toChangeTemporaryData({
         newTemporaryData: {
-          defaultDialogProps: { dialogName: DialogLayoutName.NONE, id: '', customColor: customColorPlaceholder },
+          defaultDialogProps:NONE,
           isUseEditingDialogAsNewPakeep: false
         }
       })

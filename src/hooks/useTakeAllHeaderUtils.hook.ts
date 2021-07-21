@@ -17,7 +17,7 @@ import { headerProfileUtilsDenotationIds, LOCAL_STORAGE_KEY, NONE } from 'models
 import { SETTINGS_ACCOUNT_BASE_URL, SETTINGS_SECURITY_BASE_URL } from 'layouts/RouterLayout/denotation';
 import { toChangeLoginStatus } from 'store/modules/Auth/actions';
 import { MenusLayoutName } from 'models/unums';
-import { toChangeTemporaryData } from 'store/modules/App/actions';
+import { toChangeDefaultLayoutMenuProps, toChangeTemporaryData } from 'store/modules/App/actions';
 import { operateToSetNullityStore, operateToUploadData } from 'store/modules/App/operations';
 import {
   getHeaderProperties,
@@ -44,15 +44,14 @@ export const useTakeAllHeaderUtils = (): ParamsOfUseConvertHeaderProfileUtilsObj
     clientX: mouseX,
     clientY: mouseY
   }) => {
-    const defaultMenuProps = {
+    const props = {
       mouseX,
       mouseY,
       id: 'AvatarButton',
-      customColor: customColorPlaceholder,
-      menuName: MenusLayoutName.ACCOUNT
+      name: MenusLayoutName.ACCOUNT
     };
 
-    dispatch(toChangeTemporaryData({ newTemporaryData: { defaultMenuProps } }));
+    dispatch(toChangeDefaultLayoutMenuProps({ props }));
   };
 
   const router = useRouter();
@@ -80,15 +79,12 @@ export const useTakeAllHeaderUtils = (): ParamsOfUseConvertHeaderProfileUtilsObj
 
   const handleOpenNotificationMenu: MouseEventHandler<HTMLButtonElement> = ({ clientX: mouseX, clientY: mouseY }) => {
     dispatch(
-      toChangeTemporaryData({
-        newTemporaryData: {
-          defaultMenuProps: {
-            mouseX,
-            mouseY,
-            customColor: customColorPlaceholder,
-            id: 'handleOpenNotificationMenu',
-            menuName: MenusLayoutName.NOTIFICATION
-          }
+      toChangeDefaultLayoutMenuProps({
+        props: {
+          mouseX,
+          mouseY,
+          id: 'handleOpenNotificationMenu',
+          name: MenusLayoutName.NOTIFICATION
         }
       })
     );
@@ -139,7 +135,7 @@ export const useTakeAllHeaderUtils = (): ParamsOfUseConvertHeaderProfileUtilsObj
   const allHeaderButtonUtils = {
     [headerProfileUtilsDenotationIds.SIGN_IN_AS]: {
       toolTipText: `Sign in as ${
-        accountCaption.length > MAX_STRING_LENGTH ? accountCaption.slice(0,MAX_STRING_LENGTH) + '....' : accountCaption
+        accountCaption.length > MAX_STRING_LENGTH ? accountCaption.slice(0, MAX_STRING_LENGTH) + '....' : accountCaption
       }`,
       onClick: () => router.push(SETTINGS_ACCOUNT_BASE_URL),
       iconName: 'person',

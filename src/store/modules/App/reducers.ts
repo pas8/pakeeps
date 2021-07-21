@@ -18,6 +18,8 @@ import {
 import {
   AppActionTypes,
   AppInitialStateType,
+  DefaultDialogPropsType,
+  DefaultMenuPropsType,
   FolderOrderNamesType,
   GlobalLabelsType,
   HeaderPropertyiesType,
@@ -136,20 +138,6 @@ export const defaultAvatarProperties = {
   backgroundColor: TRANSPARENT
 };
 
-export const nullityDefaultMenuProps = {
-  mouseY: 0,
-  menuName: MenusLayoutName.NONE,
-  mouseX: 0,
-  id: NONE,
-  customColor: {} as CustomColorType
-};
-
-export const nullityDefaultDialogProps = {
-  dialogName: DialogLayoutName.NONE,
-  id: NONE,
-  customColor: {} as CustomColorType
-};
-
 // export const defaultEvents = [
 //   {
 //     title: 'Later today',
@@ -235,8 +223,8 @@ export const firebaseAppInitialState = {
 };
 
 const nullityOfTemporaryData = {
-  defaultMenuProps: nullityDefaultMenuProps,
-  defaultDialogProps: nullityDefaultDialogProps,
+  defaultMenuProps: NONE as typeof NONE,
+  defaultDialogProps: NONE as typeof NONE,
   isZenModeActive: false,
   additionalMenuState: { id: '', arrLength: 0 },
   pakeep: {
@@ -426,6 +414,55 @@ export const AppReducer = (state = initialState, action: AppActionTypes): AppIni
     }
     case TypeNames.HANDLE_CHANGE_QUERY_SEARCH_ARR: {
       return { ...state, querySearchArr: [...action.payload.querySearchArr] };
+    }
+
+    case TypeNames.HANDLE_CHANGE_DEFAULT_LAYOUT_MENU_PROPS: {
+      const { props } = action.payload;
+      const { defaultMenuProps } = state.temporaryData;
+      if (props.isShouldBeClosed && defaultMenuProps !== NONE)
+        return {
+          ...state,
+          temporaryData: {
+            ...state.temporaryData,
+            defaultMenuProps: defaultMenuProps.filter(({ name }) => name !== props.name)
+          }
+        };
+
+      return {
+        ...state,
+        temporaryData: {
+          ...state.temporaryData,
+          defaultMenuProps:
+            defaultMenuProps === NONE
+              ? [props as DefaultMenuPropsType]
+              : [...defaultMenuProps, props as DefaultMenuPropsType]
+        }
+      };
+    }
+
+    case TypeNames.HANDLE_CHANGE_DEFAULT_LAYOUT_DIALOG_PROPS: {
+      const { props } = action.payload;
+      const { defaultDialogProps } = state.temporaryData;
+
+      if (props.isShouldBeClosed && defaultDialogProps !== NONE)
+        return {
+          ...state,
+          temporaryData: {
+            ...state.temporaryData,
+            defaultDialogProps: defaultDialogProps.filter(({ name }) => name !== props.name)
+          }
+        };
+
+      return {
+        ...state,
+        temporaryData: {
+          ...state.temporaryData,
+          defaultDialogProps:
+            defaultDialogProps === NONE
+              ? [props as DefaultDialogPropsType]
+              : [...defaultDialogProps, props as DefaultDialogPropsType]
+        }
+      };
     }
 
     case TypeNames.HANDLE_CHANGE_HEADER_HEIGTH:

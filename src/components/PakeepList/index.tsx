@@ -20,6 +20,7 @@ import { DialogLayoutName } from 'models/unums';
 import { customColorPlaceholder } from 'components/AccountAvatar';
 import {
   toCancelSelectingStatus,
+  toChangeDefaultLayoutDialogProps,
   toChangeOrderOfOnlyOnePakeepColumn,
   toChangeTemporaryData,
   toSetOrderNamesOfPakeeps,
@@ -38,9 +39,7 @@ import {
 import { useTakePakeepListPlaceholdersOfFolderPropertyies } from 'hooks/useTakePakeepListPlaceholdersOfFolderPropertyies.hook';
 
 const ListPlaceholdersOfFolderPropertyies = dynamic(() => import('./components/ListPlaceholdersOfFolderPropertyies'), {
-  loading: () => (
-      <CircularProgress color={'primary'} />
-  )
+  loading: () => <CircularProgress color={'primary'} />
 });
 
 const PakeepList: FC = () => {
@@ -82,9 +81,10 @@ const PakeepList: FC = () => {
 
   const handleOpenDialog = (id: PakeepIdType) => {
     dispatch(
-      toChangeTemporaryData({
-        newTemporaryData: {
-          defaultDialogProps: { id, dialogName: DialogLayoutName.PAKEEPS, customColor: customColorPlaceholder }
+      toChangeDefaultLayoutDialogProps({
+        props: {
+          id,
+          name: DialogLayoutName.PAKEEPS
         }
       })
     );
