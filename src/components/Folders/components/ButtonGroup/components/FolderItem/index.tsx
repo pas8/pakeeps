@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import { useMeasure } from 'react-use';
+import { useMeasure, usePrevious } from 'react-use';
 import Link from 'next/link';
 import { FC, useEffect } from 'react';
 import { Grid, Typography, Button } from '@material-ui/core';
@@ -13,6 +13,7 @@ const FolderItem: FC<FolderItemPropsType> = ({
   setAditionalFoldersHeigthObj,
   isAdditionalButtonsVisible,
   isFolderArrHaveOnlyOneItem,
+  aditionalFoldersHeigthObj,
   isFoldersHaveDraweView,
   additionalMenuState,
   isButtonIsOpenMore,
@@ -31,15 +32,24 @@ const FolderItem: FC<FolderItemPropsType> = ({
 }) => {
   const [ref, { height: notValidatedHeight }] = useMeasure<HTMLDivElement>();
 
-  useEffect(() => {
-    const height =
-      isFirst && isFolderExtended && !!label
-        ? notValidatedHeight + folderDimensions.buttonGroup.labelHeight
-        : isLast  && !isButtonIsOpenMore
-        ? notValidatedHeight + folderDimensions.buttonGroup.marginBottom 
-        : notValidatedHeight;
-    height !== 0 && setAditionalFoldersHeigthObj(state => ({ ...state, [id]: height }));
-  }, [notValidatedHeight, isFolderExtended, isLast, isFirst, folderDimensions, isButtonIsOpenMore]);
+  // const height =
+  // isFirst && isFolderExtended && !!label
+  //   ? notValidatedHeight + folderDimensions.buttonGroup.labelHeight
+  //   : isLast && !isButtonIsOpenMore
+  //   ? notValidatedHeight + folderDimensions.buttonGroup.marginBottom
+  //   : notValidatedHeight;
+
+  // const previousHeight = usePrevious(height);
+
+//   useEffect(() => {
+   
+
+// console.log(';')
+//     height !== 0 &&
+//       height !== aditionalFoldersHeigthObj[id] &&
+//       previousHeight !== height &&
+//       setAditionalFoldersHeigthObj(state => ({ ...state, [id]: height }));
+//   }, [notValidatedHeight, previousHeight, isFolderExtended, isLast, isFirst, folderDimensions, isButtonIsOpenMore]);
 
   const CustomComponent = property.customComponent;
 
@@ -52,7 +62,7 @@ const FolderItem: FC<FolderItemPropsType> = ({
           container
           className={
             isFoldersHaveDraweView
-              ? clsx('folderItem', 'folderWithDrawerViewItem', isSelected ? 'selectedFolderWithDrawerViewItem' : '',)
+              ? clsx('folderItem', 'folderWithDrawerViewItem', isSelected ? 'selectedFolderWithDrawerViewItem' : '')
               : clsx(
                   'folderItem',
                   'folderWithOutDrawerViewItem',
@@ -67,7 +77,12 @@ const FolderItem: FC<FolderItemPropsType> = ({
         >
           <Button className={clsx('buttonWrapperOfFolderItem')} onClick={onClick}>
             {isFolderHaveCustomComponent ? (
-              <Grid container  wrap={'nowrap'} alignItems={'center'} justify={isFolderExtended ? 'flex-start' : 'center'}>
+              <Grid
+                container
+                wrap={'nowrap'}
+                alignItems={'center'}
+                justify={isFolderExtended ? 'flex-start' : 'center'}
+              >
                 <Grid className={'containerOfCustomComponent'}>
                   <CustomComponent />
                 </Grid>
@@ -76,15 +91,17 @@ const FolderItem: FC<FolderItemPropsType> = ({
             ) : (
               <>
                 {isFolderExtended && route && <Link href={route}>{title}</Link>}
-                <Grid container justify={isFolderExtended ? 'flex-start' : 'center'} wrap={'nowrap'} alignItems={'center'}>
-                <Grid className={'iconContainer'}>
-                <Grid container justify={'center'}  alignItems={'center'}>
-
-                   {icon}
-
-
-                </Grid>
-                </Grid>
+                <Grid
+                  container
+                  justify={isFolderExtended ? 'flex-start' : 'center'}
+                  wrap={'nowrap'}
+                  alignItems={'center'}
+                >
+                  <Grid className={'iconContainer'}>
+                    <Grid container justify={'center'} alignItems={'center'}>
+                      {icon}
+                    </Grid>
+                  </Grid>
 
                   {isFolderExtended && (
                     <Typography className={isFolderExtended && route ? 'textUnderlinedOnHover' : ''}>

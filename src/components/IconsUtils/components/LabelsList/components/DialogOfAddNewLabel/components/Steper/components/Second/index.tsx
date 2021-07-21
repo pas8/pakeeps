@@ -1,8 +1,8 @@
 import { FormControlLabel, Switch, SwitchProps } from '@material-ui/core';
+import { FC } from 'react';
 import SwitchByPas from 'components/Switch';
 import { DEFAULT } from 'models/denotation';
 import { UseStylesCustomColorType } from 'models/types';
-import { FC } from 'react';
 
 const SecondStepOfSteperOfDialogOfAddNewLabel: FC<SwitchProps & UseStylesCustomColorType> = ({
   customColor,
@@ -12,7 +12,7 @@ const SecondStepOfSteperOfDialogOfAddNewLabel: FC<SwitchProps & UseStylesCustomC
     {...switchProps}
     isBgIsPaper
     title={'Is variant Outlined?  '}
-    color={customColor.isUseDefault ? DEFAULT :  customColor.secondaryColor}
+    color={customColor.isUseDefault ? DEFAULT : customColor.secondaryColor}
   />
 );
 
