@@ -44,7 +44,7 @@ export const useTakePakeepListPlaceholdersOfFolderPropertyies: UseTakePakeepList
         !!arr.length && !findedItem
           ? false
           : {
-              iconName: findedItem?.iconName || AttributeGroupNames.EVENT ? 'view' : 'label',
+              iconName: findedItem?.iconName || property === AttributeGroupNames.EVENT ? 'view' : 'label',
               color: findedItem?.color,
               title: `Your pakeeps with ${property}_${findedItem?.title}  appear here`
             };
