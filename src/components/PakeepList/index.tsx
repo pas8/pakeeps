@@ -1,7 +1,8 @@
 import { filter, flatten, includes } from 'lodash';
 import { createContext, FC, useEffect, useRef, useState } from 'react';
+import dynamic from 'next/dynamic';
 import { useIsomorphicLayoutEffect, useKeyPressEvent } from 'react-use';
-import { Grid } from '@material-ui/core';
+import { Backdrop, CircularProgress, Grid } from '@material-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
 
 import {
@@ -34,6 +35,13 @@ import {
   HandleSetSelectedPakeepsIdType,
   PakeepHoveringContextPropviderPropsValueType
 } from './types';
+import { useTakePakeepListPlaceholdersOfFolderPropertyies } from 'hooks/useTakePakeepListPlaceholdersOfFolderPropertyies.hook';
+
+const ListPlaceholdersOfFolderPropertyies = dynamic(() => import('./components/ListPlaceholdersOfFolderPropertyies'), {
+  loading: () => (
+      <CircularProgress color={'primary'} />
+  )
+});
 
 const PakeepList: FC = () => {
   const dispatch = useDispatch();
@@ -153,14 +161,21 @@ const PakeepList: FC = () => {
     !isSomePakeepsSelected && cancelSelectedPakeepsId();
   }, [isSomePakeepsSelected]);
 
+  const listPlaceholdersOfFolderPropertyiesProps = useTakePakeepListPlaceholdersOfFolderPropertyies();
+
   return (
     <>
       <Grid ref={scrollerRef} className={'selectoContainer'} container>
         {/* {isFolderPropertyIsAll && <WrapperOfContainerOfPakeepList {...wrapperOfContainerOfPinnedPakeepListProps} />} */}
-
-        <WrapperOfContainerOfPakeepList {...wrapperOfContainerOfAllPakeepListProps} />
+        {!!listPlaceholdersOfFolderPropertyiesProps ? (
+          <ListPlaceholdersOfFolderPropertyies {...listPlaceholdersOfFolderPropertyiesProps} />
+        ) : (
+          <WrapperOfContainerOfPakeepList {...wrapperOfContainerOfAllPakeepListProps} />
+        )}
       </Grid>
-      {!isSelectoHidden && <SelectofFPakeepListContainer {...selectoOfPakeepListContainerProps} />}
+      {!isSelectoHidden && !listPlaceholdersOfFolderPropertyiesProps && (
+        <SelectofFPakeepListContainer {...selectoOfPakeepListContainerProps} />
+      )}
     </>
   );
 };

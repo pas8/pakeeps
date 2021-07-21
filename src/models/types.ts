@@ -57,6 +57,7 @@ import {
   HandelOpenAdditionalMenuType
 } from 'components/Folders/components/ButtonGroup/types';
 import { PropertyOfReturnValueOfUseFindFolderItemPropertyies } from './unums';
+import { ListPlaceholdersOfFolderPropertyiesPropsType } from 'components/PakeepList/components/ListPlaceholdersOfFolderPropertyies/types';
 
 export type SelectedPakeepsType = PakeepsType;
 export type SelectedPakeepsIdType = PakeepIdType[];
@@ -166,13 +167,7 @@ export type UseAttributeGroupColorType = (
   currentColor: string
 ) => [string, boolean, boolean];
 
-export type UsePakeepFoldersType = ({
-  labels,
-  events
-}: {
-  labels: GlobalLabelsType;
-  events: GlobalEventsType;
-}) => FoldersType;
+export type UsePakeepFoldersType = () => FoldersType;
 
 export type HandleChangeInputsValueType = ChangeEventHandler<HTMLInputElement>;
 
@@ -302,3 +297,7 @@ export type UseConvertHeaderProfileUtilsObjToFolderArrType = (
 ) => FolderArrType;
 
 export type FieldSetContainerPropsType = { title: string; isOnlyTop?: boolean } & GridProps;
+
+export type UseTakePakeepListPlaceholdersOfFolderPropertyiesType = () =>
+  | false
+  | ListPlaceholdersOfFolderPropertyiesPropsType;

@@ -41,3 +41,8 @@ export enum SnackbarSeverityNames {
   WARNING = 'warning',
   INFO = 'info'
 }
+
+export enum AttributeGroupNames {
+  EVENT = 'events',
+  LABEL = 'labels'
+}

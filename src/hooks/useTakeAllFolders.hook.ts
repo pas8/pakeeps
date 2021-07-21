@@ -5,7 +5,7 @@ import { ALL, HEADER_PROPFILE_UTILS_FOLDER, menuOpenStatusDenotation } from 'mod
 import { toChangeMenuOpenStatus } from 'store/modules/App/actions';
 import MenuButton from 'components/Header/components/ProfileUtils/components/MenuButton';
 import { AdditionalFolderPropertyNames } from 'models/unums';
-import { getGlobalEventsArr, getIsZenModeActive, getLabels } from 'store/modules/App/selectors';
+import { getIsZenModeActive } from 'store/modules/App/selectors';
 import { usePakeepFolders } from './usePakeepFolders.hook';
 import { useAddAdditionalArr } from './useAddAdditionalArr.hook';
 import { useAddIdToFolder } from './useAddIdToFolder.hook';
@@ -15,8 +15,6 @@ import { useTakeHeaderProfileUtilsObj } from './useTakeHeaderProfileUtilsObj.hoo
 
 export const useTakeAllFolders = (): ParamsOfUseFindCorrectFoldersPropertyiesType => {
   const dispatch = useDispatch();
-  const labels = useSelector(getLabels);
-  const events = useSelector(getGlobalEventsArr);
 
   const handleHideFolder = () => {
     dispatch(toChangeMenuOpenStatus({ menuOpenStatus: menuOpenStatusDenotation.HIDDEN }));
@@ -81,7 +79,7 @@ export const useTakeAllFolders = (): ParamsOfUseFindCorrectFoldersPropertyiesTyp
     },
 
     {
-      title: 'Theme', 
+      title: 'Theme',
       iconName: 'color',
       id: THEME,
       color: 'default',
@@ -125,7 +123,7 @@ export const useTakeAllFolders = (): ParamsOfUseFindCorrectFoldersPropertyiesTyp
     }
   });
 
-  const defaultPakeepFolders = usePakeepFolders({ events, labels });
+  const defaultPakeepFolders = usePakeepFolders();
   const isZenModeActive = useSelector(getIsZenModeActive);
 
   const defaultFoldersBefore = isZenModeActive ? { ...headerPropfileUtilsFolder, ...navFolder } : navFolder;

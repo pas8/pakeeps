@@ -1,4 +1,4 @@
-import { AUTH_BASE_URL } from "layouts/RouterLayout/denotation";
+import { AUTH_BASE_URL } from 'layouts/RouterLayout/denotation';
 
 export const pakeepPropertyiesNames = {
   isInBookmark: 'isInBookmark',
@@ -14,7 +14,6 @@ export const menuOpenStatusDenotation = {
   EXTENDED: 'EXTENDED'
 } as const;
 
-
 export const SIGN_IN_URL = AUTH_BASE_URL;
 export const NEW_USER_URL = `${AUTH_BASE_URL}/register`;
 
@@ -29,7 +28,7 @@ export const SECONDARY = 'secondary';
 export const attributesName = {
   EVENT: 'event',
   LABEL: 'label'
-};
+} 
 
 export const ALL = 'ALL';
 export const OPEN_MORE = 'OPEN_MORE';
@@ -40,8 +39,8 @@ export const headerProfileUtilsDenotationIds = {
   NOTICATION_BUTTON: 'NOTICATION_BUTTON',
   LOCK_BUTTON: 'LOCK_BUTTON',
   ZEN_MODE_BUTTON: 'ZEN_MODE_BUTTON',
-  AVATAR_BUTTON: 'AVATAR_BUTTON',
   CHANGE_PAKEEPS_LIST_VIEW: 'CHANGE_PAKEEPS_LIST_VIEW',
+  AVATAR_BUTTON: 'AVATAR_BUTTON',
   SIGNOUT: 'SIGNOUT',
   SIGN_IN_AS: 'SIGN_IN_AS'
 };
@@ -77,5 +76,21 @@ export const errorMessages = {
   CAN_NOT_UPLOAD_ALL_DATA_TRY_AGAIN: 'can not upload all data,try again'
 };
 
+export const LOCAL_STORAGE_KEY = 'pakeep_store';
 
-export const LOCAL_STORAGE_KEY = 'pakeep_store'
+export const denotationOfDefaultPakeepPropetiesOfFolders = {
+  [pakeepPropertyiesNames.isPinned]: {
+    title: 'Pined',
+    iconName: 'pin'
+  },
+  [pakeepPropertyiesNames.isInBookmark]: {
+    title: 'Bookmark',
+    iconName: 'bookmark'
+  },
+  [pakeepPropertyiesNames.isFavorite]: { title: 'Favorite', iconName: 'favorite' },
+  [pakeepPropertyiesNames.isCheckBoxes]: {
+    title: 'With checkBoxes',
+    iconName: 'checkBox'
+  },
+  [pakeepPropertyiesNames.isArchived]: { title: 'Archiveted', iconName: 'archive' }
+};
