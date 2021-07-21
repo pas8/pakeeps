@@ -1,18 +1,27 @@
 import { Grid, LinearProgress, Grow } from '@material-ui/core';
-import AuthWithLocalPinCode from 'components/AuthWithLocalPinCode';
-import { useCorrectLayout } from 'hooks/useCorrectLayout.hook';
-import { useLoading } from 'hooks/useLoading.hook';
-import { ComposeLayouts } from 'layouts';
 
+import { ComposeLayouts } from 'layouts';
+import { useDispatch, useSelector } from 'react-redux';
+import { Skeleton } from '@material-ui/lab';
 import { isEqual, startsWith } from 'lodash';
 import { NEW_USER_URL, NONE, SIGN_IN_URL } from 'models/denotation';
 import { useRouter } from 'next/dist/client/router';
 import { FC, useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { toChangeTemporaryData } from 'store/modules/App/actions';
+import { toChangeTemporaryData } from 'store/modules/App/actions';import { useCorrectLayout } from 'hooks/useCorrectLayout.hook';
+import { useLoading } from 'hooks/useLoading.hook';
 import { getHeaderHeight, getIsAuthedWithLocalPassword, getUserData } from 'store/modules/App/selectors';
+import dynamic from 'next/dynamic';
 // import LogRocket from 'logrocket';
 // LogRocket.init('b6se1p/pakeeps');
+
+const AuthWithLocalPinCode = dynamic(() => import('components/AuthWithLocalPinCode'), {
+  loading: () => (
+    <>
+      <Skeleton variant={'rect'} width={320} height={420} />
+    </>
+  )
+});
+
 
 const RouterLayout: FC = ({ children }) => {
   const top = useSelector(getHeaderHeight);

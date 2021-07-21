@@ -8,7 +8,6 @@ import AddIcon from '@material-ui/icons/Add';
 import { getAnonymousStatus, getLoginedStatus } from 'store/modules/Auth/selectors';
 import { getIsAuthedWithLocalPassword } from 'store/modules/App/selectors';
 import PakeepList from 'components/PakeepList';
-import NewPakeep from 'components/NewPakeep';
 import { useBreakpointNames } from 'hooks/useBreakpointNames.hook';
 import {
   toChangeDefaultLayoutDialogProps,
@@ -18,6 +17,7 @@ import {
 import { DialogLayoutName } from 'models/unums';
 import { customColorPlaceholder } from 'components/AccountAvatar';
 import { nanoid } from 'nanoid';
+import { Skeleton } from '@material-ui/lab';
 
 // const PakeepList = dynamic(() => import('components/PakeepList'), {
 //   loading: () => (
@@ -27,7 +27,13 @@ import { nanoid } from 'nanoid';
 //   )
 // });
 
-// const NewPakeep = dynamic(() => import('components/NewPakeep'), {});
+const NewPakeep = dynamic(() => import('components/NewPakeep'), {
+  loading: () => (
+    <>
+      <Skeleton variant={'rect'} width={'100%'} height={320} />
+    </>
+  )
+});
 
 const Pakeeps: FC = () => {
   const isLogined = useSelector(getLoginedStatus);
@@ -57,8 +63,8 @@ const Pakeeps: FC = () => {
           <NewPakeep />
         ) : (
           <Fab
-            color="primary"
-            aria-label="add"
+            color={"primary"}
+            aria-label={"add"}
             style={{ position: 'fixed', bottom: 16, right: 16, zIndex: 2, padding: !isSiveIsXs ? 42 : '' }}
             onClick={handleOpenDialog}
           >

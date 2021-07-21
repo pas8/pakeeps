@@ -1,12 +1,16 @@
 import { Grid, SwipeableDrawer } from '@material-ui/core';
+import dynamic from 'next/dynamic';
 import { FC, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getDrawerWidth, getHeaderHeight, getMenuOpenStatus, getPakeepDimensions } from 'store/modules/App/selectors';
+import { getDrawerWidth,  getMenuOpenStatus, getPakeepDimensions } from 'store/modules/App/selectors';
 import { getPositionOfFolderViewWithPakeepView } from 'store/modules/Settings/selectors';
 import { toChangeMenuOpenStatus, toSetDrawerWidth } from 'store/modules/App/actions';
 import { menuOpenStatusDenotation } from 'models/denotation';
-import Folders from 'components/Folders';
 import { useBreakpointNames } from 'hooks/useBreakpointNames.hook';
+
+const Folders = dynamic(() => import('components/Folders'), {
+  // loading: () => <CircularProgress color={'primary'} />
+});
 
 const FolderLayout: FC = ({ children }) => {
   const dispatch = useDispatch();

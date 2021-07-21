@@ -24,7 +24,6 @@ import { errorMessages, NONE, TRANSPARENT } from 'models/denotation';
 import { getAvatarProperties, getUserData } from 'store/modules/App/selectors';
 import { useBreakpointNames } from 'hooks/useBreakpointNames.hook';
 import { emailRgEx } from 'components/AuthForm';
-import DialogOfEditingAvatar from 'components/DialogOfEditingAvatar';
 import { useAlpha } from 'hooks/useAlpha.hook';
 import { useFromNameToText } from 'hooks/useFromNameToText.hook';
 import SwitchByPas from 'components/Switch';
@@ -33,14 +32,14 @@ import SettingContainer from 'components/SettingContainer';
 import ButtonOfUdatingSetting from 'components/ButtonOfUdatingSetting';
 import { toChangeUserData } from 'store/modules/App/actions';
 import { SnackbarSeverityNames } from 'models/unums';
+import { DialogLoadingComponent } from 'layouts/DialogsLayout';
+
+const DialogOfEditingAvatar = dynamic(() => import('components/DialogOfEditingAvatar'), {
+  loading: () => <DialogLoadingComponent />
+});
 
 const DialogOfEnteringPassword = dynamic(() => import('components/DialogOfEnteringPassword'), {
-  ssr: false,
-  loading: () => (
-    <Backdrop open>
-      <CircularProgress color={'primary'} />
-    </Backdrop>
-  )
+  loading: () => <DialogLoadingComponent />
 });
 
 const AccountAvatar = dynamic(() => import('components/AccountAvatar'), { ssr: false });
@@ -316,7 +315,7 @@ const SettingAccount: FC = () => {
 
   const [stateOfDialogOfEnteringPassword, setStateOfDialogOfEnteringPassword] = useState({ open: false, value: '' });
 
-// console.log(userData)
+  // console.log(userData)
 
   const handleUpdateDefaultAccountData = () => {
     const user = firebase.auth().currentUser;
@@ -324,9 +323,10 @@ const SettingAccount: FC = () => {
     user
       .updateProfile({ displayName: inputsState.name.value })
       .then(() => {
-        inputsState.userName.value !== userData.userName &&   enqueueSnackbar({
-          message: `User_Name  was changed `
-        });
+        inputsState.userName.value !== userData.userName &&
+          enqueueSnackbar({
+            message: `User_Name  was changed `
+          });
         dispatch(toChangeUserData({ userData: { userName: inputsState.userName.value } }));
       })
       .catch(error => {

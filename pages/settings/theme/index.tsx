@@ -1,4 +1,12 @@
-import { Grid, Typography, makeStyles, useTheme } from '@material-ui/core';
+import { Grid, Typography, makeStyles, useTheme, CircularProgress, Backdrop } from '@material-ui/core';
+import { useHover } from 'react-use';
+import dynamic from 'next/dynamic';
+import { FC, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { nanoid } from 'nanoid';
+import { Skeleton } from '@material-ui/lab';
+import clsx from 'clsx';
+import AddCircleOutlineOutlinedIcon from '@material-ui/icons/AddCircleOutlineOutlined';
 import { colord } from 'colord';
 import { customColorPlaceholder } from 'components/AccountAvatar';
 import BackgroundPlaceholderByPas from 'components/BackgroundPlaceholder';
@@ -6,25 +14,36 @@ import ColorPickerByPas from 'components/ColorChanger';
 import { useAlpha } from 'hooks/useAlpha.hook';
 import { useGetReadableColor } from 'hooks/useGetReadableColor.hook';
 import { useThemeColors } from 'hooks/useThemeColors.hook';
-import { FC, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import AddCircleOutlineOutlinedIcon from '@material-ui/icons/AddCircleOutlineOutlined';
-import { useHover } from 'react-use';
 import { toChangeDefaultThemesArr, toChangeThemeColors } from 'store/modules/Color/actions';
 import { getColorTheme, getDefaultThemesArr } from 'store/modules/Color/selectors';
 import { getIsHeaderHavePaperColor } from 'store/modules/Settings/selectors';
 import OfflineBoltOutlinedIcon from '@material-ui/icons/OfflineBoltOutlined';
 import { useIsColorLight } from 'hooks/useIsColorLight.hook';
-import DefaultThemePreview from 'components/DefaultThemePreview';
 import { useRandomColor } from 'hooks/useRandomColor.hook';
-import PickerOfThemeColor from 'components/PickerOfThemeColor';
-import clsx from 'clsx';
 import MenuByPas from 'components/Menu';
-import DialogOfCreatingCustomTheme from 'components/DialogOfCreatingCustomTheme';
-import { nanoid } from 'nanoid';
 import SliderByPas from 'components/Slider';
 import SettingContainer from 'components/SettingContainer';
 import { settingUrls, THEME } from 'layouts/RouterLayout/denotation';
+
+const PickerOfThemeColor = dynamic(() => import('components/PickerOfThemeColor'), {
+  loading: () => (
+    <>
+      <Skeleton variant={'rect'} width={'48%'} height={200} />
+    </>
+  )
+});
+
+const DialogOfCreatingCustomTheme = dynamic(() => import('components/DialogOfCreatingCustomTheme'), {
+  loading: () => (
+    <Backdrop open>
+      <CircularProgress color={'primary'} />
+    </Backdrop>
+  )
+});
+
+const DefaultThemePreview = dynamic(() => import('components/DefaultThemePreview'), {
+  loading: () => <Skeleton variant={'rect'} width={'33%'} height={'33%'} />
+});
 
 const useStyles = makeStyles(({ spacing, palette, breakpoints, shape: { borderRadius } }) => ({
   colorContainer: {

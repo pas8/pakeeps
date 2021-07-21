@@ -1,6 +1,7 @@
 import { AppBar, Grid, makeStyles, Typography, Slide } from '@material-ui/core';
 import { every } from 'lodash';
 import { FC } from 'react';
+import dynamic from 'next/dynamic';
 import { useMeasure } from 'react-use';
 import { useDispatch } from 'react-redux';
 import CloseOutlinedIcon from '@material-ui/icons/CloseOutlined';
@@ -10,7 +11,6 @@ import { usePropertiesToUtils } from 'hooks/usePropertiesToUtils.hook';
 import IconButtonByPas from 'components/IconButton';
 import PakeepPropertyProvider from 'components/PakeepPropertyProviders';
 import { IconsUtilsArrDenotationNameType } from 'components/IconsUtils/types';
-import IconsUtils from 'components/IconsUtils';
 import { useFindSelectedLabels } from 'hooks/useFindSelectedLabels.hook';
 import { useGetIsColorDefault } from 'hooks/useGetIsColorDefault.hook';
 import { useThemeColors } from 'hooks/useThemeColors.hook';
@@ -30,12 +30,21 @@ import {
   PakeepPropertyiesType
 } from './types';
 import { useFindSelectedEvents } from 'hooks/useFindSelectedEvents.hook';
+import { Skeleton } from '@material-ui/lab';
 
 const useStyles = makeStyles(({ spacing }) => ({
   containerClass: {
     padding: spacing(1, 0.4)
   }
 }));
+
+const IconsUtils = dynamic(() => import('components/IconsUtils'), {
+  loading: () => (
+    <>
+      <Skeleton variant={'rect'} width={300} height={'80%'} />
+    </>
+  )
+});
 
 const { TOOGLE, VALUE } = VariantsOfropertiesToUtils;
 
