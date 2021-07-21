@@ -55,7 +55,8 @@ import DeleteOutlinedIcon from '@material-ui/icons/DeleteOutlined';
 import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
 import GitHubIcon from '@material-ui/icons/GitHub';
 import FacebookIcon from '@material-ui/icons/Facebook';
-import ExitToAppOutlinedIcon from '@material-ui/icons/ExitToAppOutlined';import PersonOutlineIcon from '@material-ui/icons/PersonOutline';
+import ExitToAppOutlinedIcon from '@material-ui/icons/ExitToAppOutlined';
+import PersonOutlineIcon from '@material-ui/icons/PersonOutline';
 
 export const iconsArr = [
   { icon: <TodayOutlinedIcon />, iconName: 'tomorrow', id: 'random1', checkedIcon: <TodayIcon /> },
@@ -66,7 +67,7 @@ export const iconsArr = [
   { icon: <ArrowBackOutlinedIcon />, iconName: 'arrowBack', id: 'arrowBack' },
   { icon: <SearchIcon />, iconName: 'search', id: 'search' },
   { icon: <PersonOutlineIcon />, iconName: 'person', id: 'person' },
-  
+
   { icon: <CloseIcon />, iconName: 'close', id: 'close' },
   { icon: <LockOutlinedIcon />, iconName: 'security', id: 'security' },
   { icon: <DashboardOutlinedIcon />, iconName: 'dashboard', id: 'random4', checkedIcon: <DashboardIcon /> },
@@ -78,7 +79,7 @@ export const iconsArr = [
   { icon: <ColorLensOutlinedIcon />, iconName: 'color', id: 'color' },
   { icon: <FingerprintOutlinedIcon />, iconName: 'fingerprint', id: '2' },
   { icon: <CheckBoxOutlinedIcon />, iconName: 'checkBox', id: 'checkBox' },
-  
+
   { icon: <DoneOutlineOutlinedIcon />, iconName: 'done', id: '4' },
   { icon: <GitHubIcon />, iconName: 'GitHub', id: 'GitHub' },
   { icon: <FacebookIcon />, iconName: 'Facebook', id: 'Facebook' },
@@ -117,6 +118,27 @@ export const iconsArr = [
   { icon: <HttpsOutlinedIcon />, iconName: 'lock', id: '14' },
   { icon: <LanguageOutlinedIcon />, iconName: 'world', id: '15' },
   { icon: <LandscapeOutlinedIcon />, iconName: 'mountains', id: '16' },
+  {
+    icon: (
+      <SvgIcon viewBox={'0 0 20.24592 16.204397'}>
+        <path d="M2.3942665 15.9783826c-1.2262091-.016536-1.7345854-.036277-1.8111229-.070328-.1713042-.076213-.4795976-.38853-.5334636-.540426C.009652 15.2547536 0 13.8283636 0 8.0255816 0 4.064507.014.7574347.031112.6765324.070697.4893805.3201284.2150268.5622353.092342L.744464 0H19.2600156l.1386.082566c.18566.1105999.417633.331723.49611.4729034.05805.1044294.06499.4292188.07602 3.5564542l.01214 3.44153-.356914-.312917c-.388195-.340342-1.070049-.811809-1.419967-.981835l-.220273-.107031V1.9920297h-3.98406v3.8278586l-.201118.059497c-.412884.1221453-1.109815.4232473-1.800489.7778853-.0158.0081-.02873-1.0382463-.02873-2.3252448V1.9920297h-3.984061v11.9904879h1.646665l.234648.469276c.231758.463496.531792.955033.786839 1.289058.102148.133779.119467.17816.07848.201099-.06963.03897-6.1740392.06564-8.3396351.03643zm3.562669-7.991109V1.9920297H1.9728756v11.9904879h3.9840599z" />
+        <path d="M14.5762956 14.4422166v-1.76218H11.0136266v-1.915414H14.5762956v-3.792518h1.915414v3.792518h3.75421v1.915414h-3.75421v3.52436h-1.915414z" />
+      </SvgIcon>
+    ),
+    iconName: 'addEvent',
+    id: 'addEvent'
+  },
+
+  {
+    icon: (
+      <SvgIcon viewBox={'0 0 19.01 16.18'}>
+        <path d="M11.42 16.13a5.14 5.14 0 01-3.2-1.72l-.31-.38L4.68 14l-3.22-.02-.34-.17c-.42-.2-.75-.53-.96-.96L0 12.52V1.49l.15-.32C.34.77.7.4 1.12.19l.34-.16L7.4.01 13.37 0l.4.2c.24.1.5.28.61.41.17.18 2.4 3.29 4.18 5.82l.4.57-1.07 1.51-1.07 1.51.07.46a5.2 5.2 0 01-.43 2.87 5.56 5.56 0 01-1.72 2c-.88.6-2.28.93-3.32.78zm1.37-2.87l.01-1.38H15.77v-1.46H12.8V7.4h-1.46v3.02H8.5v1.46H11.34v2.8l.72-.02.71-.01zm-5.7-1.94c0-1.15.23-1.97.81-2.84a4.95 4.95 0 017.43-.91c.25.21.47.37.5.35.07-.04.6-.84.6-.9 0-.07-.27-.48-1.9-2.8L13.01 2.1l-.3-.04c-.16-.01-2.64-.03-5.5-.03H1.98v9.97h5.1z" />
+      </SvgIcon>
+    ),
+    iconName: 'addLabel',
+    id: 'addLabel'
+  },
+
   { icon: <PinOutlinedIcon />, iconName: 'pin', id: '96', checkedIcon: <PinIcon /> },
   { icon: <InfinityIcon />, iconName: 'infinity', id: '92' },
   { icon: <SettingsOutlinedIcon />, iconName: 'settings', id: '80' },

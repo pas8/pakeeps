@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { BASE_URL, settingUrls, SETTINGS, ACCOUNT, THEME, SECURITY, APPEARANCE } from 'layouts/RouterLayout/denotation';
 import { ParamsOfUseFindCorrectFoldersPropertyiesType } from 'models/types';
 import { ALL, HEADER_PROPFILE_UTILS_FOLDER, menuOpenStatusDenotation } from 'models/denotation';
-import { toChangeMenuOpenStatus } from 'store/modules/App/actions';
+import { toChangeMenuOpenStatus, toSetDrawerWidth } from 'store/modules/App/actions';
 import MenuButton from 'components/Header/components/ProfileUtils/components/MenuButton';
 import { AdditionalFolderPropertyNames } from 'models/unums';
 import { getIsZenModeActive } from 'store/modules/App/selectors';
@@ -18,6 +18,7 @@ export const useTakeAllFolders = (): ParamsOfUseFindCorrectFoldersPropertyiesTyp
 
   const handleHideFolder = () => {
     dispatch(toChangeMenuOpenStatus({ menuOpenStatus: menuOpenStatusDenotation.HIDDEN }));
+    dispatch(toSetDrawerWidth({ drawerWidth: 0 }));
   };
   const headerProfileUtilsObj = useTakeHeaderProfileUtilsObj();
   const headerPropfileUtilsArr = useConvertHeaderProfileUtilsObjToFolderArr(headerProfileUtilsObj);
