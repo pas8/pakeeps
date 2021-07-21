@@ -6,7 +6,9 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import {
   getIsCancelSelectedPakeepsId,
+  getIsCurrentNumberOfPakeepColumnsIsOne,
   getIsPakeepHovering,
+  getOrderOfOnlyOnePakeepColumn,
   getPakeeps,
   getPakeepsOrderNames,
   getPinnedPakeepsOrderNames,
@@ -17,6 +19,7 @@ import { DialogLayoutName } from 'models/unums';
 import { customColorPlaceholder } from 'components/AccountAvatar';
 import {
   toCancelSelectingStatus,
+  toChangeOrderOfOnlyOnePakeepColumn,
   toChangeTemporaryData,
   toSetOrderNamesOfPakeeps,
   toSetOrderNamesOfPinnedPakeeps,
@@ -32,16 +35,17 @@ import {
   PakeepHoveringContextPropviderPropsValueType
 } from './types';
 
-
 const PakeepList: FC = () => {
   const dispatch = useDispatch();
   const pakeeps = useSelector(getPakeeps);
   const selectedPakeepsId = useSelector(getSelectedPakeepsId);
   const pakeepsOrderNames = useSelector(getPakeepsOrderNames);
+  const orderOfOnlyOnePakeepColumn = useSelector(getOrderOfOnlyOnePakeepColumn);
+
   const pinnedPakeepsOrderNames = useSelector(getPinnedPakeepsOrderNames);
   const isCancelSelectedPakeepsId = useSelector(getIsCancelSelectedPakeepsId);
   const isPakeepHovering = useSelector(getIsPakeepHovering);
-
+  const isCurrentNumberOfPakeepColumnsIsOne = useSelector(getIsCurrentNumberOfPakeepColumnsIsOne);
 
   const handleSetSelectedPakeepsId: HandleSetSelectedPakeepsIdType = selectedPakeepsId => {
     dispatch(toSetSelectedPakeepIdsArr({ selectedPakeepsId }));
@@ -51,8 +55,11 @@ const PakeepList: FC = () => {
   };
 
   const handleSetPakeepsOrderNames: HandleSetPakeepsOrderNamesType = pakeepsOrderNames => {
-
-    dispatch(toSetOrderNamesOfPakeeps({ pakeepsOrderNames }));
+    dispatch(
+      isCurrentNumberOfPakeepColumnsIsOne
+        ? toChangeOrderOfOnlyOnePakeepColumn({ orderOfOnlyOnePakeepColumn: pakeepsOrderNames })
+        : toSetOrderNamesOfPakeeps({ pakeepsOrderNames })
+    );
   };
 
   const handleSetPinnedPakeepsOrderNames: HandleSetPinnedPakeepsOrderNamesType = pinnedPakeepsOrderNames => {
@@ -109,7 +116,7 @@ const PakeepList: FC = () => {
     columnOfPakeepListContainerProps: { ...defaultPakeepListContainerProps, isPakeepDragContextPinned: false },
     setIsPakeepDragging,
     pakeeps,
-    pakeepsOrderNames,
+    pakeepsOrderNames: isCurrentNumberOfPakeepColumnsIsOne ? orderOfOnlyOnePakeepColumn : pakeepsOrderNames,
     handleSetPakeepsOrderNames
   };
   const scrollerRef = useRef(null);
@@ -148,7 +155,7 @@ const PakeepList: FC = () => {
 
   return (
     <>
-      <Grid ref={scrollerRef} className={'selectoContainer'} container >
+      <Grid ref={scrollerRef} className={'selectoContainer'} container>
         {/* {isFolderPropertyIsAll && <WrapperOfContainerOfPakeepList {...wrapperOfContainerOfPinnedPakeepListProps} />} */}
 
         <WrapperOfContainerOfPakeepList {...wrapperOfContainerOfAllPakeepListProps} />

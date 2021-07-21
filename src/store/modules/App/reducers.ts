@@ -208,6 +208,7 @@ export const firebaseAppInitialState = {
   labels: [],
   querySearchArr: [],
   dimensions: defaultDimensions,
+  orderOfOnlyOnePakeepColumn: [],
   userData: {
     email: NONE,
     userName: NONE,
@@ -242,6 +243,7 @@ const nullityOfTemporaryData = {
     id: '',
     isHovering: false
   },
+  isCurrentNumberOfPakeepColumnsIsOne: false,
   isUseEditingDialogAsNewPakeep: false,
 
   searchPropertyies: { value: [], name: NONE } as SearchPropertyiesType,
@@ -277,7 +279,11 @@ export const AppReducer = (state = initialState, action: AppActionTypes): AppIni
       const { pakeeps, pakeepsOrderNames, pinnedPakeepsOrderNames } = state;
       const variedState = useAddNewPakeep({ pakeeps, pakeepsOrderNames, pinnedPakeepsOrderNames, ...action.payload });
 
-      return { ...state, ...variedState };
+      return {
+        ...state,
+        ...variedState,
+        orderOfOnlyOnePakeepColumn: [action.payload.newPakeep.id, ...state.orderOfOnlyOnePakeepColumn]
+      };
     }
 
     case TypeNames.HANDLE_DELETE_PAKEEP: {
@@ -437,7 +443,7 @@ export const AppReducer = (state = initialState, action: AppActionTypes): AppIni
     case TypeNames.HANDLE_CHANGE_AVATAR_PROPERTIES:
     case TypeNames.HANDLE_SET_NEW_ORDER_NAMES:
     case TypeNames.HANDLE_CHANGE_FOLDER_ORDER_NAMES:
-
+    case TypeNames.HANDLE_CHANGE_ORDER_OF_ONLY_ONE_PAKEEP_COLUMN:
     case TypeNames.HANDLE_CHANGE_PAKEEPS:
     case TypeNames.HANDLE_CHANGE_GLOBAL_LABELS:
     case TypeNames.HANDLE_CHANGE_FOLDERS:

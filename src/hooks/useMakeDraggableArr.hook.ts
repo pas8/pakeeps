@@ -1,21 +1,41 @@
 import { useEffect } from 'react';
-import { OrderNamesType, PakeepsType } from 'store/modules/App/types';
+import { useDispatch, useSelector } from 'react-redux';
+
 import { PakeepsReduceFuncType } from 'models/types';
+import {
+  getIsCurrentNumberOfPakeepColumnsIsOne,
+  getOrderOfOnlyOnePakeepColumn,
+  getPakeeps,
+  getPakeepsOrderNames
+} from 'store/modules/App/selectors';
+import { toChangeOrderOfOnlyOnePakeepColumn, toChangeTemporaryData } from 'store/modules/App/actions';
 import { HandleSetPakeepsOrderNamesType } from 'components/PakeepList/types';
+import { useBreakpointNames } from './useBreakpointNames.hook';
 import { useTakeValueFromBreakpoints } from './useTakeValueFromBreakpoints.hook';
-import { useSelector } from 'react-redux';
-import { getPakeeps, getPakeepsOrderNames } from 'store/modules/App/selectors';
 
 export const useMakeDraggableArr = (
   handlePakeepsOrderNames: HandleSetPakeepsOrderNamesType,
   maxColumnNumber = 6,
   defaultBreakpointValue = [6, 4, 3, 2, 1]
 ) => {
+  const dispatch = useDispatch();
+
   const pakeepsOrderNames = useSelector(getPakeepsOrderNames);
+  const orderOfOnlyOnePakeepColumn = useSelector(getOrderOfOnlyOnePakeepColumn);
+  const isCurrentNumberOfPakeepColumnsIsOne = useSelector(getIsCurrentNumberOfPakeepColumnsIsOne);
   const pakeeps = useSelector(getPakeeps);
+  const { isSiveIsXs } = useBreakpointNames();
 
   useEffect(() => {
-    pakeepsOrderNames.length === 0 && handlePakeepsOrderNames(pakeeps.map(({ id }) => id));
+    dispatch(toChangeTemporaryData({ newTemporaryData: { isCurrentNumberOfPakeepColumnsIsOne: isSiveIsXs } }));
+  }, [isSiveIsXs]);
+
+  useEffect(() => {
+    const newPakeepOrder = pakeeps.map(({ id }) => id);
+    !pakeepsOrderNames.length && handlePakeepsOrderNames(newPakeepOrder);
+
+    !orderOfOnlyOnePakeepColumn.length &&
+      dispatch(toChangeOrderOfOnlyOnePakeepColumn({ orderOfOnlyOnePakeepColumn: newPakeepOrder }));
   }, [pakeeps]);
 
   const orderReduceFunc = (sum: string[], placeholder: any, idx: number) => [...sum, `${idx}`];
@@ -42,7 +62,14 @@ export const useMakeDraggableArr = (
     };
   };
 
-  const columns = pakeepsOrderNames.reduce(pakeepsReduceFunc, {});
+  const oneColumnId = '1';
 
-  return { columns, responsiveColumnOrder };
+  const oneColumn = { [oneColumnId]: { pakeepsId: orderOfOnlyOnePakeepColumn, id: oneColumnId } };
+  const pakeepsColumns = pakeepsOrderNames.reduce(pakeepsReduceFunc, {});
+  const columns = isCurrentNumberOfPakeepColumnsIsOne ? oneColumn : pakeepsColumns;
+
+  return {
+    columns,
+    responsiveColumnOrder: isCurrentNumberOfPakeepColumnsIsOne ? [oneColumnId] : responsiveColumnOrder
+  };
 };

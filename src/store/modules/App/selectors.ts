@@ -119,6 +119,16 @@ export const getQuerySearchArr = createSelector(
 );
 
 
+export const getIsCurrentNumberOfPakeepColumnsIsOne = createSelector(
+  [({ app: { temporaryData } }: RootStoreType) => temporaryData.isCurrentNumberOfPakeepColumnsIsOne],
+  isCurrentNumberOfPakeepColumnsIsOne => isCurrentNumberOfPakeepColumnsIsOne
+);
+
+export const getOrderOfOnlyOnePakeepColumn = createSelector(
+  [({ app: { orderOfOnlyOnePakeepColumn } }: RootStoreType) => orderOfOnlyOnePakeepColumn],
+  orderOfOnlyOnePakeepColumn => orderOfOnlyOnePakeepColumn
+);
+
 export const getUserData = createSelector([({ app: { userData } }: RootStoreType) => userData], userData => userData);
 
 export const getNotificationArr = createSelector(

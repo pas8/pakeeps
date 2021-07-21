@@ -1,4 +1,4 @@
-import { Grid, LinearProgress,Grow } from '@material-ui/core';
+import { Grid, LinearProgress, Grow } from '@material-ui/core';
 import AuthWithLocalPinCode from 'components/AuthWithLocalPinCode';
 import { useCorrectLayout } from 'hooks/useCorrectLayout.hook';
 import { useLoading } from 'hooks/useLoading.hook';
@@ -27,15 +27,15 @@ const RouterLayout: FC = ({ children }) => {
 
   useEffect(() => {
     const isTheSame = value === pinCode;
-    const isValueNone = value === 'none' && !!isAuthedWithLocalPinCode;
-    // console.log(value,isAuthedWithLocalPinCode)
+    const isValueNone = value === 'none'
+
     if (isValueNone) {
-      dispatch(toChangeTemporaryData({ newTemporaryData: { isAuthedWithLocalPinCode: isValueNone } }));
+      dispatch(toChangeTemporaryData({ newTemporaryData: { isAuthedWithLocalPinCode: true } }));
       return;
     }
 
     if (isTheSame) {
-      dispatch(toChangeTemporaryData({ newTemporaryData: { isAuthedWithLocalPinCode: isTheSame } }));
+      dispatch(toChangeTemporaryData({ newTemporaryData: { isAuthedWithLocalPinCode: true } }));
       setPinCode('');
       return;
     }
@@ -44,15 +44,19 @@ const RouterLayout: FC = ({ children }) => {
   const authWithLocalPinCodeProps = { pinCode, setPinCode, isHaveTitle: true };
 
   return (
-    <ComposeLayouts layouts={!isAuthedWithLocalPinCode ? [] :  layouts}>
-        <Grow in={isLoading} timeout={100}>
-        <Grid style={{ position: 'fixed', top:top -16, left: 0, right: 0, zIndex: 10000 }}>
+    <ComposeLayouts layouts={!isAuthedWithLocalPinCode ? [] : layouts}>
+      <Grow in={isLoading} timeout={100}>
+        <Grid style={{ position: 'fixed', top: top - 16, left: 0, right: 0, zIndex: 10000 }}>
           <LinearProgress color={'secondary'} variant={'determinate'} value={loadingValue} />
         </Grid>
-        </Grow>
+      </Grow>
 
       <Grid style={{ height: `calc(100vh - ${top}px` }}>
-        {!isAuthedWithLocalPinCode ? <AuthWithLocalPinCode {...authWithLocalPinCodeProps} /> : children}{' '}
+        {!isAuthedWithLocalPinCode && value !== NONE ? (
+          <AuthWithLocalPinCode {...authWithLocalPinCodeProps} />
+        ) : (
+          children
+        )}
       </Grid>
     </ComposeLayouts>
   );

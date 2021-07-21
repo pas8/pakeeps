@@ -99,6 +99,10 @@ export type PayloadTypes = {
   [TypeNames.HANDLE_CHANGE_QUERY_SEARCH_ARR]: {
     querySearchArr: string[];
   };
+
+  [TypeNames.HANDLE_CHANGE_ORDER_OF_ONLY_ONE_PAKEEP_COLUMN]: {
+    orderOfOnlyOnePakeepColumn: OrderOfOnlyOnePakeepColumnType;
+  };
 };
 
 export type ActionsValueTypes = {
@@ -276,6 +280,11 @@ export type ActionsValueTypes = {
   toChangeAllDataWasUploadedStatus: {
     type: typeof TypeNames.HANDLE_CHANGE_ALL_DATA_WAS_UPLOADED_STATUS;
     payload: PayloadTypes[TypeNames.HANDLE_CHANGE_ALL_DATA_WAS_UPLOADED_STATUS];
+  };
+
+  toChangeOrderOfOnlyOnePakeepColumn: {
+    type: typeof TypeNames.HANDLE_CHANGE_ORDER_OF_ONLY_ONE_PAKEEP_COLUMN;
+    payload: PayloadTypes[TypeNames.HANDLE_CHANGE_ORDER_OF_ONLY_ONE_PAKEEP_COLUMN];
   };
 };
 export type AppActionTypes = $Values<ActionsValueTypes>;
@@ -468,11 +477,14 @@ export type OrderOfHeaderUtilsType = {
   names: NamesArrOFOrderOfHeaderUtilsType;
   exclusionNames: NamesArrOFOrderOfHeaderUtilsType;
 };
+
+export type OrderOfOnlyOnePakeepColumnType = string[];
 export type InitialiAppFirebaseData = {
   avatarProperties: AvatarPropertiesType;
   labels: GlobalLabelsType;
   dimensions: DimensionsType;
   events: GlobalEventsType;
+  orderOfOnlyOnePakeepColumn: OrderOfOnlyOnePakeepColumnType;
   querySearchArr: string[];
   headerPropertyies: HeaderPropertyiesType;
   folderOrderNames: FolderOrderNamesType;
@@ -526,6 +538,7 @@ export type TemporaryDatatype = {
   additionalMenuState: { id: string; arrLength: number };
   menuOpenStatus: IsMenuOpenType;
   globalFolderId: GlobalFolderIdType;
+  isCurrentNumberOfPakeepColumnsIsOne: boolean;
   headerHeight: number;
   notifinationArr: NotifinationArrType;
   menuAccountUtilsArr: NotifinationArrType;

@@ -43,8 +43,8 @@ const AuthLayout: FC<any> = ({ children, pageProps }) => {
   const isError = useSelector(getErrorStatus);
   const errorMessage = useSelector(getErrorMessage);
   const userData = useSelector(getUserData);
-
   const allFirebaseData = useSelector(getAllFirebaseData);
+
   const [value, setValue] = useLocalStorage(LOCAL_STORAGE_KEY, defaultFirebaseState);
   const { online } = useNetworkState();
   // console.log(value)
@@ -95,7 +95,7 @@ const AuthLayout: FC<any> = ({ children, pageProps }) => {
   useEffect(() => {
     if (isLogined !== NONE && !isLogined && !isRouteIsAuth) {
       router.push(SIGN_IN_URL);
-    } else if (isLoginedAndRouteISAuth) {
+    } else if (isRouteIsAuth && isLogined) {
       router.push('/');
     }
   }, [isLogined, router.route]);

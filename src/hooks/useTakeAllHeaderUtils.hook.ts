@@ -14,12 +14,18 @@ import UploadButton from 'components/Header/components/ProfileUtils/components/U
 import ZenModeButton from 'components/Header/components/ProfileUtils/components/ZenModeButton';
 import LockButton from 'components/Header/components/ViewLikeInTelegram/components/LockButton';
 import { headerProfileUtilsDenotationIds, LOCAL_STORAGE_KEY, NONE } from 'models/denotation';
-import { SETTINGS_ACCOUNT_BASE_URL,SETTINGS_SECURITY_BASE_URL } from 'layouts/RouterLayout/denotation';
+import { SETTINGS_ACCOUNT_BASE_URL, SETTINGS_SECURITY_BASE_URL } from 'layouts/RouterLayout/denotation';
 import { toChangeLoginStatus } from 'store/modules/Auth/actions';
 import { MenusLayoutName } from 'models/unums';
 import { toChangeTemporaryData } from 'store/modules/App/actions';
 import { operateToSetNullityStore, operateToUploadData } from 'store/modules/App/operations';
-import { getHeaderProperties, getIsZenModeActive, getUserData } from 'store/modules/App/selectors';
+import {
+  getHeaderProperties,
+  getIsCurrentNumberOfPakeepColumnsIsOne,
+  getIsZenModeActive,
+  getOrderOfOnlyOnePakeepColumn,
+  getUserData
+} from 'store/modules/App/selectors';
 import { toChangeThemeColors } from 'store/modules/Color/actions';
 import { getColorTheme } from 'store/modules/Color/selectors';
 import { toChangeSettingProperty } from 'store/modules/Settings/actions';
@@ -27,6 +33,7 @@ import { ParamsOfUseConvertHeaderProfileUtilsObjToFolderArrType } from './../mod
 import { useIsColorLight } from './useIsColorLight.hook';
 import { useFindCorrectHeaderUtilsObj } from './useFindCorrectHeaderUtilsObj.hook';
 import { useLocalStorage } from 'react-use';
+import PakeepListViewChangerButton from 'components/Header/components/PakeepListViewChangerButton';
 
 export const useTakeAllHeaderUtils = (): ParamsOfUseConvertHeaderProfileUtilsObjToFolderArrType => {
   const dispatch = useDispatch();
@@ -50,6 +57,7 @@ export const useTakeAllHeaderUtils = (): ParamsOfUseConvertHeaderProfileUtilsObj
 
   const router = useRouter();
   const themeColors = useSelector(getColorTheme);
+  const isCurrentNumberOfPakeepColumnsIsOne = useSelector(getIsCurrentNumberOfPakeepColumnsIsOne);
 
   const handleInvertTheme = () => {
     const textColor = colord(themeColors.textColor).invert().toHex();
@@ -115,12 +123,23 @@ export const useTakeAllHeaderUtils = (): ParamsOfUseConvertHeaderProfileUtilsObj
     dispatch(operateToSetNullityStore());
     remove();
   };
+
+  const handleChangePakeepsListView = () => {
+    dispatch(
+      toChangeTemporaryData({
+        newTemporaryData: { isCurrentNumberOfPakeepColumnsIsOne: !isCurrentNumberOfPakeepColumnsIsOne }
+      })
+    );
+  };
+
   const { userName, name, email } = useSelector(getUserData);
+  const accountCaption = name !== NONE ? name : userName !== NONE ? userName : email !== NONE ? email : 'anonymys';
+  const MAX_STRING_LENGTH = 10;
 
   const allHeaderButtonUtils = {
     [headerProfileUtilsDenotationIds.SIGN_IN_AS]: {
       toolTipText: `Sign in as ${
-        name !== NONE ? name : userName !== NONE ? userName : email !== NONE ? email : 'anonymys'
+        accountCaption.length > MAX_STRING_LENGTH ? accountCaption.slice(0,MAX_STRING_LENGTH) + '....' : accountCaption
       }`,
       onClick: () => router.push(SETTINGS_ACCOUNT_BASE_URL),
       iconName: 'person',
@@ -137,6 +156,12 @@ export const useTakeAllHeaderUtils = (): ParamsOfUseConvertHeaderProfileUtilsObj
       onClick: handleUplodaData,
       toolTipText: 'Upload all data'
     },
+    [headerProfileUtilsDenotationIds.CHANGE_PAKEEPS_LIST_VIEW]: {
+      component: PakeepListViewChangerButton,
+      onClick: handleChangePakeepsListView,
+      toolTipText: isCurrentNumberOfPakeepColumnsIsOne ? 'List view' : 'Grid view'
+    },
+
     [headerProfileUtilsDenotationIds.THEME_CHANGER_BUTTON]: {
       onClick: handleInvertTheme,
       component: ThemeChangerButton,
