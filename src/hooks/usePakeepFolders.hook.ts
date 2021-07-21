@@ -1,37 +1,21 @@
-import { mapValues } from 'lodash';
 import { DEFAULT, NONE, pakeepFoldersKeyName, pakeepPropertyiesNames } from 'models/denotation';
 import { UsePakeepFoldersType } from 'models/types';
 import { AdditionalFolderPropertyNames } from 'models/unums';
 import { useSelector } from 'react-redux';
-import { getSearchPropertyies } from 'store/modules/App/selectors';
-import { ALL } from './../models/denotation';
+import { getGlobalEventsArr, getLabels, getSearchPropertyies } from 'store/modules/App/selectors';
 import { useAddIdToFolder } from './useAddIdToFolder.hook';
+import { useTakeDefaultPakeepPropetiesFolderArr } from './useTakeDefaultPakeepPropetiesFolderArr.hook';
 
-export const usePakeepFolders: UsePakeepFoldersType = ({ events, labels }) => {
+export const usePakeepFolders: UsePakeepFoldersType = () => {
+
+
+  const labels = useSelector(getLabels);
+  const events = useSelector(getGlobalEventsArr);
+
   const property = { value: AdditionalFolderPropertyNames.DEFAULT };
 
-  const defaultPropetiesFolderArr = [
-    {
-      title: 'Pined',
-      iconName: 'pin',
-      id: pakeepPropertyiesNames.isPinned,
-      color: 'default'
-    },
-    {
-      title: 'Bookmark',
-      iconName: 'bookmark',
-      id: pakeepPropertyiesNames.isInBookmark,
-      color: 'default'
-    },
-    { title: 'Favorite', iconName: 'favorite', id: pakeepPropertyiesNames.isFavorite, color: 'default' },
-    {
-      title: 'With checkBoxes',
-      iconName: 'checkBox',
-      id: pakeepPropertyiesNames.isCheckBoxes,
-      color: 'default'
-    },
-    { title: 'Archiveted', iconName: 'archive', id: pakeepPropertyiesNames.isArchived, color: 'default' }
-  ].map(value => ({ ...value, property }));
+  const defaultPropetiesFolderArr =  useTakeDefaultPakeepPropetiesFolderArr()
+
 
   const labelsArr = labels.map(({ title, iconName, id, color }) => ({
     title,
@@ -47,7 +31,6 @@ export const usePakeepFolders: UsePakeepFoldersType = ({ events, labels }) => {
     property,
     color
   }));
-
 
 
   const defaultFolders = useAddIdToFolder({

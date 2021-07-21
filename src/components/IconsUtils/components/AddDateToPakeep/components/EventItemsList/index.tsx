@@ -10,6 +10,7 @@ import { getAmpmStatus } from 'store/modules/Settings/selectors';
 import DynamicInputDateAndTimePickers from '../DynamicComponents/components/DynamicInputDateAndTimePickers';
 import DynamicMenuItem from '../DynamicMenuItem';
 import { EventItemsListPropsType } from './types';
+import { Box, Typography } from '@material-ui/core';
 
 const EventItemsList: FC<EventItemsListPropsType> = ({
   eventListArr,
@@ -25,7 +26,7 @@ const EventItemsList: FC<EventItemsListPropsType> = ({
   const dispatch = useDispatch();
   const ampm = useSelector(getAmpmStatus);
   const reversedCustomColor = useGetReversedCustomColor(customColor);
-  
+
   return (
     <>
       {eventListArr.map(({ title, iconName, onClick: onMenuItemClick, onlyTime, dynamicComponent, id }) => {
@@ -104,6 +105,13 @@ const EventItemsList: FC<EventItemsListPropsType> = ({
 
         return <DynamicMenuItem {...dynamicMenuListProps} key={`dateListArrOf${pakeepId}${id}`} />;
       })}
+      {eventListArr.length === 1 && (
+        <Box maxWidth={296} p={0.8} borderTop={1} borderColor={'text.disabled'}>
+          <Typography component={'legend'} variant={'caption'}>
+            {'U didnt not added events yet, but u can simple do this by click to the "Add custom event" button'}
+          </Typography>
+        </Box>
+      )}
     </>
   );
 };
