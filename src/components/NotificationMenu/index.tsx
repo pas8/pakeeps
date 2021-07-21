@@ -1,11 +1,9 @@
 import { FC } from 'react';
-import { NotificationMenuPropsType } from './types';
-import { useDispatch, useSelector } from 'react-redux';
-import { useRouter } from 'next/dist/client/router';
-import { Grid, MenuItem, makeStyles, Menu, Typography, Box } from '@material-ui/core';
-import { useAlpha } from 'hooks/useAlpha.hook';
+import { useSelector } from 'react-redux';
+import {  Typography, Box } from '@material-ui/core';
 import HeaderMenuContainer from 'components/Header/components/MenuContainer';
 import { getNotificationArr } from 'store/modules/App/selectors';
+import { NotificationMenuPropsType } from './types';
 
 const NotificationMenu: FC<NotificationMenuPropsType> = ({ id, onClose, customColor, mouseX: left, mouseY: top }) => {
   const arr = useSelector(getNotificationArr);
@@ -16,7 +14,7 @@ const NotificationMenu: FC<NotificationMenuPropsType> = ({ id, onClose, customCo
       arr={arr}
       componentWhenArrIsEmpty={
         <Box padding={1} maxWidth={200}>
-          <Typography color={'textSecondary'}>{'You dont have any notification, but u will have nice day)'} </Typography>{' '}
+          <Typography color={'textSecondary'}>{'You dont have any notification, but u will have nice day)'} </Typography>
         </Box>
       }
     />
