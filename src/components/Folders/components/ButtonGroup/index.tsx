@@ -286,6 +286,7 @@ const FolderButtonGroupByPas: FC<FolderButtonGroupByPasPropsType> = ({
           isAdditionalArrowButtonVisible,
           setAditionalFoldersHeigthObj,
           isAdditionalButtonsVisible,
+          aditionalFoldersHeigthObj,
           ...defaultFolderItemProps,
           ...folderItemPropertyies,
           isFoldersHaveDraweView,

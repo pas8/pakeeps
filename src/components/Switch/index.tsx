@@ -35,7 +35,7 @@ const useStyles = makeStyles(({ spacing, palette }) => ({
 const SwitchByPas: FC<SwitchByPasPropsType> = ({ color = DEFAULT, title, isBgIsPaper = false, ...swithProps }) => {
   const classes = useStyles({ color, isChecked: swithProps.checked, isBgIsPaper });
   return (
-    <FormControlLabel className={classes.container} control={<Switch {...swithProps} color={color} />} label={title} />
+    <FormControlLabel className={classes.container} control={<Switch {...swithProps}  />} label={title} />
   );
 };
 

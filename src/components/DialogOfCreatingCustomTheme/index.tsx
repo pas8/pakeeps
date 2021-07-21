@@ -221,7 +221,6 @@ const DialogOfCreatingCustomTheme: FC<DialogOfCreatingCustomThemePropsType> = ({
       navigator.clipboard
         .readText()
         .then(json => {
-          console.log(JSON.parse(json));
           setColorState(JSON.parse(json));
           enqueueSnackbar({
             message: 'Theme was pasted'

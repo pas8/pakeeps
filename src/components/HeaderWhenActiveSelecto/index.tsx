@@ -121,7 +121,6 @@ const HeaderWhenActiveSelecto: FC<HeaderWhenActiveSelectoPropsType> = ({ selecte
     'width',
     'share'
   ];
-console.log(events)
   const iconsUtilsProps = {
     id,
     widthOfContainer,

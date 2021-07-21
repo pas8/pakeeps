@@ -102,7 +102,7 @@ const SteperOfDialogOfAddNewLabel: FC<SteperOfDialogOfAddNewLabelPropsType> = ({
     bgHover: useMix({ ...customColor, hover: customColor?.secondaryColor, bgHover: customColor?.unHover }, 0.8)
   };
 
-  const { isSizeSmall } = useBreakpointNames();
+  const { isSizeSmall,isSiveIsXs } = useBreakpointNames();
 
   return (
     <Grid className={classes.container} container alignItems={'center'}>
@@ -126,7 +126,7 @@ const SteperOfDialogOfAddNewLabel: FC<SteperOfDialogOfAddNewLabelPropsType> = ({
                 </Grid>
               </StepLabel>
               <StepContent>
-                <Grid container alignItems={'center'}>
+                <Grid container alignItems={'center'} >
                   <Grid>
                     <Grid direction={'column'}>
                       <Grid container className={classes.componentContainer} alignItems={'center'}>
@@ -139,7 +139,7 @@ const SteperOfDialogOfAddNewLabel: FC<SteperOfDialogOfAddNewLabelPropsType> = ({
                       </Grid>
                     </Grid>
                   </Grid>
-                  <Grid style={{ width: isSizeSmall ? '100%' : 'auto' }}>
+                  <Grid style={{ width: isSiveIsXs ? '100%' : 'auto' }}>
                     <Grid
                       container
                       direction={isSizeSmall ? 'row' : 'column'}

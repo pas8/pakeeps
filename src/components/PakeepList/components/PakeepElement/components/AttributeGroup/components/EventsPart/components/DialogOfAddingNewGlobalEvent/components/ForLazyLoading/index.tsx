@@ -255,10 +255,10 @@ const ForLazyLoadingDialogOfAddingNewGlobalEvent: FC<DialogOfAddingNewGlobalEven
     colorOfCloseButton: customColor?.isUseDefault ? text.hint:   customColor?.unHover
   };
 
-  const { isSiveIsXs } = useBreakpointNames();
+  const { isSiveIsXs,isSiveIsSm } = useBreakpointNames();
 
   return (
-    <Dialog open={isDialogOpen} className={classes.container} onClose={onClose} fullScreen={isSiveIsXs}>
+    <Dialog open={isDialogOpen} className={classes.container} onClose={onClose} fullScreen={isSiveIsXs} fullWidth={isSiveIsSm}>
       <DialogTitle>
         <Typography
           variant={'h6'}

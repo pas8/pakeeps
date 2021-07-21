@@ -1,6 +1,6 @@
 import { useSelector } from 'react-redux';
 import { findKey, pickBy, omit, findIndex, values, isNumber, sum, some } from 'lodash';
-import { useWindowSize } from 'react-use';
+import { useWindowSize, usePrevious } from 'react-use';
 import { UseFindFolderOrderNamesType } from 'models/types';
 import { menuOpenStatusDenotation, OPEN_MORE } from 'models/denotation';
 import { AdditionalFolderPropertyNames } from 'models/unums';
@@ -23,7 +23,8 @@ export const useFindFolderOrderNames: UseFindFolderOrderNamesType = (
     windowHeight -
     headerHeight -
     folderDimensions.container.paddingBottom -
-    folderDimensions.buttonItem.height - folderDimensions.buttonGroup.marginBottom  - folderDimensions.buttonGroup.marginBottom 
+    folderDimensions.buttonItem.height -
+    folderDimensions.buttonGroup.marginBottom 
 
   const nulittyValueOfFoldersReduceFunc = {
     foldersHeight: 0,
@@ -33,6 +34,7 @@ export const useFindFolderOrderNames: UseFindFolderOrderNamesType = (
 
   const { folderGroupItemsHeightArr, folderItemsArr } = notValidatedFolderOrderNames.reduce((accumulator, id) => {
     const findedElement = notValidatedAllFolders[id];
+
     if (!findedElement) return accumulator;
 
     const nullityOfFolderGroipDimensionsReduceFunc = {
@@ -40,9 +42,15 @@ export const useFindFolderOrderNames: UseFindFolderOrderNamesType = (
       foldersHeight: accumulator.foldersHeight
     };
 
-    const folderGroipDimensions = findedElement.arr.reduce((sum, { id }) => {
-      const findedFolderHeight = aditionalFoldersHeigthObj[id];
-      const foldersHeight = sum.foldersHeight + findedFolderHeight;
+    const folderGroipDimensions = findedElement.arr.reduce((sum, { id }, idx) => {
+      const height =
+        idx === 0 && isFolderExtended && !!findedElement.label
+          ? folderDimensions.buttonItem.height + folderDimensions.buttonGroup.labelHeight
+          : idx + 1 === findedElement.arr.length
+          ? folderDimensions.buttonItem.height + folderDimensions.buttonGroup.marginBottom
+          : folderDimensions.buttonItem.height;
+
+          const foldersHeight = sum.foldersHeight + height;
 
       const folderItemsArr = [...sum.folderItemsArr, { id, height: foldersHeight }];
 
@@ -60,10 +68,11 @@ export const useFindFolderOrderNames: UseFindFolderOrderNamesType = (
   const useFindIsHeightMoreThatMax = (searchingId: string) => {
     const findedElement = folderGroupItemsHeightArr?.find(({ id }) => id === searchingId);
     if (!findedElement) return false;
+    // console.log(findedElement?.folderGroupHeight,maxFolderHeight)
     return findedElement?.folderGroupHeight > maxFolderHeight;
   };
   const key = findKey(notValidatedAllFolders, ({ id }) => useFindIsHeightMoreThatMax(id));
-
+// console.log(key,notValidatedAllFolders) 
   const defaultBeforeFoldersObj = pickBy(notValidatedAllFolders, value => !useFindIsHeightMoreThatMax(value.id));
   const defaultAfterFoldersObj = omit(
     pickBy(notValidatedAllFolders, value => useFindIsHeightMoreThatMax(value.id)),
@@ -71,6 +80,8 @@ export const useFindFolderOrderNames: UseFindFolderOrderNamesType = (
   );
   const folderToChange = notValidatedAllFolders[key!];
   const folderItemIdWidthHaveMoreHeightThatMax = folderItemsArr.find(({ height }) => height > maxFolderHeight)?.id;
+
+  // const priviousFoldersBefore = usePrevious(notValidatedAllFolders)
 
   if (!folderToChange) {
     return {

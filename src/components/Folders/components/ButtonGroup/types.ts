@@ -43,7 +43,6 @@ export type HandelOpenAdditionalMenuType = (param: { id: string; arrLength: numb
 export type FolderItemPropsType = {
   folderDimensions: FolderDimensionsType;
   isFoldersHaveDraweView: boolean;
-  setAditionalFoldersHeigthObj: SetAditionalFoldersHeigthObjType;
   isFolderExtended: boolean;
   isAdditionalButtonsVisible: boolean;
   icon: any;
@@ -56,4 +55,4 @@ export type FolderItemPropsType = {
 
   isAdditionalArrowButtonVisible: boolean;
 } & ReturnValueOfUseFindCorrectFolderFuncType &
-  ReturnValueOfUseFindFolderItemPropertyiesType;
+  ReturnValueOfUseFindFolderItemPropertyiesType & UseStateOfAditionalFoldersHeigthObj
