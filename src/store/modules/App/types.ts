@@ -103,9 +103,24 @@ export type PayloadTypes = {
   [TypeNames.HANDLE_CHANGE_ORDER_OF_ONLY_ONE_PAKEEP_COLUMN]: {
     orderOfOnlyOnePakeepColumn: OrderOfOnlyOnePakeepColumnType;
   };
+  [TypeNames.HANDLE_CHANGE_DEFAULT_LAYOUT_MENU_PROPS]: {
+    props: (DefaultMenuPropsType & { isShouldBeClosed?: false }) | { name: MenusLayoutName; isShouldBeClosed: true };
+  };
+  [TypeNames.HANDLE_CHANGE_DEFAULT_LAYOUT_DIALOG_PROPS]: {
+    props: (DefaultDialogPropsType & { isShouldBeClosed?: false }) | { name: DialogLayoutName; isShouldBeClosed: true };
+  };
 };
 
 export type ActionsValueTypes = {
+  toChangeDefaultLayoutMenuProps: {
+    type: typeof TypeNames.HANDLE_CHANGE_DEFAULT_LAYOUT_MENU_PROPS;
+    payload: PayloadTypes[TypeNames.HANDLE_CHANGE_DEFAULT_LAYOUT_MENU_PROPS];
+  };
+  toChangeDefaultLayoutDialogProps: {
+    type: typeof TypeNames.HANDLE_CHANGE_DEFAULT_LAYOUT_DIALOG_PROPS;
+    payload: PayloadTypes[TypeNames.HANDLE_CHANGE_DEFAULT_LAYOUT_DIALOG_PROPS];
+  };
+
   toChangeQuerySearchArr: {
     type: typeof TypeNames.HANDLE_CHANGE_QUERY_SEARCH_ARR;
     payload: PayloadTypes[TypeNames.HANDLE_CHANGE_QUERY_SEARCH_ARR];
@@ -542,8 +557,8 @@ export type TemporaryDatatype = {
   headerHeight: number;
   notifinationArr: NotifinationArrType;
   menuAccountUtilsArr: NotifinationArrType;
-  defaultMenuProps: DefaultMenuPropsType;
-  defaultDialogProps: DefaultDialogPropsType;
+  defaultMenuProps: DefaultMenuPropsType[] | typeof NONE;
+  defaultDialogProps: DefaultDialogPropsType[] | typeof NONE;
   isAuthedWithLocalPinCode: boolean;
   isZenModeActive: boolean;
   pakeep: {
@@ -556,14 +571,16 @@ export type TemporaryDatatype = {
 
 export type DefaultMenuPropsType = {
   id: string;
-  customColor: CustomColorType;
-  menuName: MenusLayoutName | MenusLayoutName[];
+  customColor?: CustomColorType;
+  name: MenusLayoutName;
 } & CoordinatesType;
 
 export type DefaultDialogPropsType = {
   id: string;
-  dialogName: DialogLayoutName | DialogLayoutName[];
-} & UseStylesCustomColorType;
+  customColor?: CustomColorType;
+
+  name: DialogLayoutName;
+};
 
 export type CoordinatesType = {
   mouseX: number;

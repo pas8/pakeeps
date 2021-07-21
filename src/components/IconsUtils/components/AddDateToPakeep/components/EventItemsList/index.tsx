@@ -1,7 +1,7 @@
 import { filter, includes } from 'lodash';
 import { FC, MouseEventHandler } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { toChangeTemporaryData } from 'store/modules/App/actions';
+import { toChangeDefaultLayoutMenuProps } from 'store/modules/App/actions';
 import { MenusLayoutName } from 'models/unums';
 import { useGetReversedCustomColor } from 'hooks/useGetReversedCustomColor.hook';
 import { useTakeIcon } from 'hooks/useTakeIcon.hook';
@@ -53,15 +53,13 @@ const EventItemsList: FC<EventItemsListPropsType> = ({
         };
         const onClickOfEditIcon: MouseEventHandler<HTMLButtonElement> = ({ clientX: mouseX, clientY: mouseY }) => {
           dispatch(
-            toChangeTemporaryData({
-              newTemporaryData: {
-                defaultMenuProps: {
-                  mouseX,
-                  mouseY,
-                  menuName: MenusLayoutName.EVENTS,
-                  customColor: reversedCustomColor,
-                  id
-                }
+            toChangeDefaultLayoutMenuProps({
+              props: {
+                mouseX,
+                mouseY,
+                name: MenusLayoutName.EVENTS,
+                customColor: reversedCustomColor,
+                id
               }
             })
           );

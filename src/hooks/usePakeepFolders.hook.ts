@@ -4,7 +4,7 @@ import { UsePakeepFoldersType } from 'models/types';
 import { AdditionalFolderPropertyNames } from 'models/unums';
 import { MouseEventHandler } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { toChangeTemporaryData } from 'store/modules/App/actions';
+import { toChangeDefaultLayoutDialogProps, toChangeTemporaryData } from 'store/modules/App/actions';
 import { getGlobalEventsArr, getLabels, getSearchPropertyies } from 'store/modules/App/selectors';
 import { useAddIdToFolder } from './useAddIdToFolder.hook';
 import { useTakeDefaultPakeepPropetiesFolderArr } from './useTakeDefaultPakeepPropetiesFolderArr.hook';
@@ -38,29 +38,25 @@ export const usePakeepFolders: UsePakeepFoldersType = () => {
 
   const handleOpenDialogAddingNewEvent = () => {
     dispatch(
-      toChangeTemporaryData({
-        newTemporaryData: {
-          defaultDialogProps: {
-            dialogName: DialogLayoutName.EVENTS,
+      toChangeDefaultLayoutDialogProps({
+          props: {
+            name: DialogLayoutName.EVENTS,
             customColor: customColorPlaceholder,
             id: ADD_NEW_EVENT
           }
-        }
       })
     );
   };
 
   const handleOpenDialogAddingNewLabel = () => {
     dispatch(
-      toChangeTemporaryData({
-        newTemporaryData: {
-          defaultDialogProps: {
-            dialogName: DialogLayoutName.LABELS,
-            customColor: customColorPlaceholder,
-            id: ADD_NEW_LABEL
-          }
+      toChangeDefaultLayoutDialogProps({
+        props: {
+          name: DialogLayoutName.LABELS,
+          customColor: customColorPlaceholder,
+          id: ADD_NEW_LABEL
         }
-      })
+    })
     );
   };
 

@@ -66,6 +66,19 @@ export const toChangePakeeps = (payload: PayloadTypes[TypeNames.HANDLE_CHANGE_PA
   type: TypeNames.HANDLE_CHANGE_PAKEEPS,
   payload
 });
+export const toChangeDefaultLayoutMenuProps = (
+  payload: PayloadTypes[TypeNames.HANDLE_CHANGE_DEFAULT_LAYOUT_MENU_PROPS]
+): AppActionTypes => ({
+  type: TypeNames.HANDLE_CHANGE_DEFAULT_LAYOUT_MENU_PROPS,
+  payload
+});
+
+export const toChangeDefaultLayoutDialogProps = (
+  payload: PayloadTypes[TypeNames.HANDLE_CHANGE_DEFAULT_LAYOUT_DIALOG_PROPS]
+): AppActionTypes => ({
+  type: TypeNames.HANDLE_CHANGE_DEFAULT_LAYOUT_DIALOG_PROPS,
+  payload
+});
 
 export const toChangeUserData = (payload: PayloadTypes[TypeNames.HANDLE_CHANGE_USER_DATA]): AppActionTypes => ({
   type: TypeNames.HANDLE_CHANGE_USER_DATA,

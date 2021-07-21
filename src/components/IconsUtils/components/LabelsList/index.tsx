@@ -6,7 +6,11 @@ import { CircularProgress, Grid, makeStyles } from '@material-ui/core';
 import VisibilityOutlinedIcon from '@material-ui/icons/VisibilityOutlined';
 import VisibilityOffOutlinedIcon from '@material-ui/icons/VisibilityOffOutlined';
 import AddCircleOutlineOutlinedIcon from '@material-ui/icons/AddCircleOutlineOutlined';
-import { toChangeGlobalLabelListTemproparyData, toChangeTemporaryData } from 'store/modules/App/actions';
+import {
+  toChangeDefaultLayoutDialogProps,
+  toChangeGlobalLabelListTemproparyData,
+  toChangeTemporaryData
+} from 'store/modules/App/actions';
 import { getGlobalLabelListTemproparyData } from 'store/modules/App/selectors';
 import { useGetReversedCustomColor } from 'hooks/useGetReversedCustomColor.hook';
 import { HandleChangeNewLabelType, LabelsListPropsType } from './types';
@@ -52,8 +56,12 @@ const LabelsList: FC<LabelsListPropsType> = ({
 
   const handleOpenAddNewLabelDialog = () => {
     dispatch(
-      toChangeTemporaryData({
-        newTemporaryData: { defaultDialogProps: { id, dialogName: DialogLayoutName.LABELS, customColor } }
+      toChangeDefaultLayoutDialogProps({
+        props: {
+          id,
+          name: DialogLayoutName.LABELS,
+          customColor
+        }
       })
     );
   };
