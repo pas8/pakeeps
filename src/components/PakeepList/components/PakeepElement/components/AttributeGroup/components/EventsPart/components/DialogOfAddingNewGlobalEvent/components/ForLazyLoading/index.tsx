@@ -1,5 +1,4 @@
-import { Dialog, DialogActions, DialogTitle, Box, useTheme, Typography } from '@material-ui/core';
-import { Grid } from '@material-ui/core';
+import { Grid, useTheme } from '@material-ui/core';
 import { ChangeEventHandler, FC, useState } from 'react';
 import { nanoid } from 'nanoid';
 import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date';
@@ -7,8 +6,7 @@ import { toAddGlobalEvent } from 'store/modules/App/actions';
 import { format as toFormat, isValid, differenceInMinutes, addMinutes } from 'date-fns';
 import { useDispatch, useSelector } from 'react-redux';
 import dynamic from 'next/dynamic';
-import { includes, isEqual } from 'lodash';
-import RestoreOutlinedIcon from '@material-ui/icons/RestoreOutlined';
+import { includes } from 'lodash';
 import { Skeleton } from '@material-ui/lab';
 import { colord } from 'colord';
 import { usePrevious, useToggle } from 'react-use';
@@ -21,35 +19,33 @@ import { useGetReversedCustomColor } from 'hooks/useGetReversedCustomColor.hook'
 import FirstStepOfSteperOfDialogOfAddNewLabel from 'components/IconsUtils/components/LabelsList/components/DialogOfAddNewLabel/components/Steper/components/First';
 import ThirdStepOfSteperOfDialogOfAddNewLabel from 'components/IconsUtils/components/LabelsList/components/DialogOfAddNewLabel/components/Steper/components/Third';
 import FourthStepOfSteperOfDialogOfAddNewLabel from 'components/IconsUtils/components/LabelsList/components/DialogOfAddNewLabel/components/Steper/components/Fourth';
-import { useStyles } from 'components/IconsUtils/components/LabelsList/components/DialogOfAddNewLabel';
 import SecondStepOfSteperOfDialogOfAddNewLabel from 'components/IconsUtils/components/LabelsList/components/DialogOfAddNewLabel/components/Steper/components/Second';
 import ColorPickerByPas from 'components/ColorChanger';
 import { getTimeAndDateFromat, getTimeFormat } from 'store/modules/Settings/selectors';
+import AttributeDialogContainer from 'components/AttributeDialogContainer';
 import { ColorType, IconNameType, LabelVariantType } from 'store/modules/App/types';
 import { iconsArr } from 'components/Icons';
 import PreparedColorExamples from 'components/ColorChanger/components/PreparedColorExamples';
-import ActionsButtonGroup from 'components/ActionsButtonGroup';
 
 import SecondStepOfSteperOfDialogOfAddNewGlobalEvent from '../SecondStepOfSteperOfDialogOfAddNewGlobalEvent';
 import { DialogOfAddingNewGlobalEventPropsType } from '../../types';
 import EventItem from '../../../PreviewEventList/components/EventItem';
 import PreparedIconSelectingList from '../../../../../../../../../../../PreparedIconSelectingList';
 import FirstStepOfSteperOfDialogOfAddNewGlobalEvent from '../FirstStepOfSteperOfDialogOfAddNewGlobalEvent';
-import { useBreakpointNames } from 'hooks/useBreakpointNames.hook';
 
-const SteperOfDialogOfAddNewLabel = dynamic(
-  () => import('components/IconsUtils/components/LabelsList/components/DialogOfAddNewLabel/components/Steper'),
-  {
-    loading: () => <Skeleton variant={'rect'} width={400} height={400} />
-  }
-);
+// const SteperOfDialogOfAddNewLabel = dynamic(
+//   () => import('components/IconsUtils/components/LabelsList/components/DialogOfAddNewLabel/components/Steper'),
+//   {
+//     loading: () => <Skeleton variant={'rect'} width={400} height={400} />
+//   }
+// );
 
 const ForLazyLoadingDialogOfAddingNewGlobalEvent: FC<DialogOfAddingNewGlobalEventPropsType> = ({
   customColor: notValidCustomColor,
   onClose
 }) => {
   const dispatch = useDispatch();
-  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+  const { enqueueSnackbar } = useSnackbar();
   const {
     palette: { primary, background, secondary, text }
   } = useTheme();
@@ -61,7 +57,6 @@ const ForLazyLoadingDialogOfAddingNewGlobalEvent: FC<DialogOfAddingNewGlobalEven
           ? colord(notValidCustomColor.bgUnHover).darken(0.08).toHex()
           : colord(notValidCustomColor.bgUnHover).lighten(0.08).toHex()
       };
-  const classes = useStyles({ customColor });
   const reverserCustomColor = useGetReversedCustomColor(customColor);
 
   const nullityEventState = {
@@ -75,9 +70,6 @@ const ForLazyLoadingDialogOfAddingNewGlobalEvent: FC<DialogOfAddingNewGlobalEven
   };
   const timeAndDateFormat = useSelector(getTimeAndDateFromat);
   const timeFormat = useSelector(getTimeFormat);
-
-  const [isDialogOpen, setIsDialogOpen] = useToggle(true);
-
   const [eventState, setEventState] = useState(nullityEventState);
 
   const format = eventState.onlyTime ? timeFormat : timeAndDateFormat;
@@ -223,61 +215,25 @@ const ForLazyLoadingDialogOfAddingNewGlobalEvent: FC<DialogOfAddingNewGlobalEven
     toNullityEventState();
   };
 
-  const handleRestoreLastGlobalEvent = () => {
-    if (!previuosNewEventState) return;
-
-    !isEqual(nullityEventState, previuosNewEventState) && setEventState(previuosNewEventState);
-    setIsDialogOpen(true);
-    closeSnackbar();
-  };
-
-  const handleCloseDialog = () => {
-    setIsDialogOpen(false);
-    toNullityEventState();
-    !isEqual(nullityEventState, eventState) &&
-      enqueueSnackbar({
-        message: 'Dialog of creating label was closed',
-        severity: 'warning',
-        buttonText: 'Restore',
-        onClick: handleRestoreLastGlobalEvent,
-        icon: RestoreOutlinedIcon
-      });
-    setTimeout(() => {
-      onClose();
-      setIsDialogOpen(true);
-    }, 4000);
-  };
-
   const actionsButtonGroupProps = {
     onSave: handleSave,
     colorOfSaveButton: customColor?.isUseDefault ? primary.main : reverserCustomColor?.secondaryColor,
-    onClose: handleCloseDialog,
-    colorOfCloseButton: customColor?.isUseDefault ? text.hint:   customColor?.unHover
+    onClose,
+    colorOfCloseButton: customColor?.isUseDefault ? text.hint : customColor?.unHover
   };
 
-  const { isSiveIsXs,isSiveIsSm } = useBreakpointNames();
-
   return (
-    <Dialog open={isDialogOpen} className={classes.container} onClose={onClose} fullScreen={isSiveIsXs} fullWidth={isSiveIsSm}>
-      <DialogTitle>
-        <Typography
-          variant={'h6'}
-        >
-          {'Creating new global event'}
-        </Typography>
-      </DialogTitle>
-      <SteperOfDialogOfAddNewLabel {...steperProps} />
-      <DialogActions style={{position:isSiveIsXs ? 'absolute' : 'relative',bottom:0}}>
-        <Grid container alignItems={'flex-end'} justify={isSiveIsXs ? 'flex-end' : 'space-between'}>
-          <Box ml={1.4} mb={isSiveIsXs ? 1 : 0} display={'flex'} minWidth={216} justifyContent={isSiveIsXs ? 'flex-end' : 'flex-start'}>
-            <EventItem {...eventItemProps} />
-          </Box>
-          <Grid container>
-            <ActionsButtonGroup {...actionsButtonGroupProps} />
-          </Grid>
-        </Grid>
-      </DialogActions>
-    </Dialog>
+    <AttributeDialogContainer
+      {...actionsButtonGroupProps}
+      nullityState={nullityEventState}
+      snackBarMessage={'Dialog of creating event was closed '}
+      state={eventState}
+      setState={setEventState}
+      customColor={customColor}
+      previewComponent={<EventItem {...eventItemProps} />}
+      steperProps={steperProps}
+      title={'Add new global event'}
+    />
   );
 };
 

@@ -30,7 +30,7 @@ import { Skeleton } from '@material-ui/lab';
 const NewPakeep = dynamic(() => import('components/NewPakeep'), {
   loading: () => (
     <>
-      <Skeleton variant={'rect'} width={'100%'} height={320} />
+      <Skeleton variant={'rect'} width={'100%'} height={42} />
     </>
   )
 });

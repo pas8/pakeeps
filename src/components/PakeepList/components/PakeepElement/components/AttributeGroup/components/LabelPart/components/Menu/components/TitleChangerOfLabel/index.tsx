@@ -14,6 +14,7 @@ const InputWithCustomColor = withStyles({
     // '& label.Mui-focused': {
     //   color: customColor
     // },
+    width: '100%',
 
     '& .MuiOutlinedInput-root': {
       color: customColor?.bgHover,
@@ -28,7 +29,7 @@ const InputWithCustomColor = withStyles({
       },
       '&.Mui-focused fieldset': {
         borderColor: customColor?.bgUnHover,
-        boxShadow: `0px 0px 4px 1px ${customColor?.bgUnHover}`
+        boxShadow: `0px 0px 2px 1px ${useAlpha(customColor?.bgUnHover, 0.42)}`
       },
       '&.Mui-focused ': {
         color: customColor?.bgUnHover
@@ -56,7 +57,7 @@ const TitleChangerOfLabel: FC<TitleChangerOfLabelPropsType> = ({ value, onChange
   const allTextFieldProps = !customColor?.isUseDefault ? inputWithCustomColorProps : defaultTextFieldProps;
 
   return (
-    <Grid className={classes.container}>
+    <Grid className={classes.container} container>
       {
         //@ts-ignore
         <InputTitleChangerOfLabel {...allTextFieldProps} />

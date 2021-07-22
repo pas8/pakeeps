@@ -6,10 +6,12 @@ import { FC } from 'react';
 import { PreparedIconSelectingListPropsType } from './types';
 
 const useStyles = makeStyles(({ spacing, transitions, shadows }) => ({
-  iconContainer: ({ color, hoverColor, isDragging }: any) => ({
+  iconContainer: ({ color, hoverColor, isDragging, isSelected }: any) => ({
     padding: spacing(1.4),
     transform: 'scale(1.2)',
     color,
+    border: '1px solid',
+    borderColor: isSelected ? color : 'transparent',
     borderRadius: spacing(0.6),
     transition: transitions.create('all', {
       easing: transitions.easing.easeIn,
@@ -47,7 +49,7 @@ const PreparedIconSelectingList: FC<PreparedIconSelectingListPropsType> = ({
       : customColor.bgHover
     : isSelected
     ? primaryColor
-    : mediumEmphasisColor;  
+    : mediumEmphasisColor;
   const hoverColor = customColor
     ? isSelected
       ? customColor.bgUnHover
@@ -56,7 +58,7 @@ const PreparedIconSelectingList: FC<PreparedIconSelectingListPropsType> = ({
     ? primaryColor
     : maxEmphasisColor;
 
-  const classes = useStyles({ color: newColor, hoverColor, isDragging, customColor });
+  const classes = useStyles({ color: newColor, hoverColor, isDragging, customColor, isSelected });
 
   return (
     <Box mx={0.4} onClick={() => onClick(iconName)}>

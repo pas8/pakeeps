@@ -20,8 +20,16 @@ import { denotationOfCorrectLayoutCases } from 'layouts/RouterLayout/denotation'
 
 import HeaderSearch from './components/Search';
 import HeaderProfileUtils from './components/ProfileUtils';
-import MainBar from './components/MainBar';
 import { HeaderByPasPropsType } from './types';
+import dynamic from 'next/dynamic';
+import { Skeleton } from '@material-ui/lab';
+
+
+const MainBar = dynamic(() => import('./components/MainBar'), {
+  loading: () => <Skeleton variant={'rect'} width={100} height={42} />
+});
+
+
 
 const useStyles = makeStyles(({ spacing, palette, transitions, shape: { borderRadius }, breakpoints }) => ({
   root: ({ navigationViewLikeTelegram }: any) => ({

@@ -11,7 +11,6 @@ import { WrapperOfAddDateToPakeepPropsType } from '../AddDateToPakeep/types';
 const WrapperOfAddDateToPakeep: FC<WrapperOfAddDateToPakeepPropsType & EventsListProps> = ({ events, handleSaveEvents, ...props }) => {
   const globalEvents = useSelector(getGlobalEventsArr);
   const currentEventsArr = useFindCurrentEvents(globalEvents, events, );
-
   const addDateToPakeepProps = {
     handleSaveEvents,
     currentEventsArr,
