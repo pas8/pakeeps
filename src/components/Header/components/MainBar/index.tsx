@@ -2,7 +2,7 @@ import { IconButton, Link, Typography, Grid } from '@material-ui/core';
 import { useSelector } from 'react-redux';
 import { makeStyles, Tooltip } from '@material-ui/core';
 import { useRouter } from 'next/dist/client/router';
-import { capitalize, map, split } from 'lodash';
+import { capitalize, map, split, startsWith } from 'lodash';
 import { FC, Fragment } from 'react';
 import NextLink from 'next/link';
 import { SIGN_IN_URL, NEW_USER_URL } from 'models/denotation';
@@ -13,6 +13,7 @@ import { getIsAuthedWithLocalPassword } from 'store/modules/App/selectors';
 import { MainBarPropsType } from '../../types';
 import MenuButton from '../ProfileUtils/components/MenuButton';
 import { useAlpha } from 'hooks/useAlpha.hook';
+import { AUTH_BASE_URL } from 'layouts/RouterLayout/denotation';
 
 const useStyles = makeStyles(({ palette: { text, background }, spacing, breakpoints }) => ({
   container: ({ isHeaderHavePaperColor }: { isHeaderHavePaperColor: boolean }) => ({
@@ -78,15 +79,14 @@ const MainBar: FC<MainBarPropsType> = ({ isMenuOpen, isMenuExtended, isRouteIsAu
       });
 
   const menuToolTipTitle = isMenuExtended ? 'Narrow down menu' : isMenuOpen ? 'Extend menu' : 'Open Menu';
-  const isRouteIsSignIn = pathname === SIGN_IN_URL;
   const isRoteIsSignUp = pathname === NEW_USER_URL;
 
   const handleChangeDrawerOpenStatus = useTakeFuncOfChangngDrawerOpenStatus();
 
   return (
     <Grid className={classes.container} container={!isSizeSmall}>
-      {isRouteIsSignIn || isRoteIsSignUp ? (
-        <Typography variant={'h6'}>{isRoteIsSignUp ? 'Register' : 'Log In '}</Typography>
+      {startsWith(pathname,AUTH_BASE_URL) ? (
+        <Typography variant={'h6'}>{ isRoteIsSignUp ? 'Register' : 'Log In '}</Typography>
       ) : (
         <>
           {!isRouteIsAuth && (

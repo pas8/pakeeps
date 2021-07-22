@@ -2,6 +2,8 @@ import { Grid, IconButton, InputAdornment, makeStyles, TextField, Button, GridSi
 import dynamic from 'next/dynamic';
 import { ChangeEventHandler, FC, KeyboardEventHandler, MouseEvent, useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import firebase from 'firebase/app';
+import 'firebase/auth';
 import { useSnackbar } from 'notistack';
 import { capitalize, mapValues, values } from 'lodash';
 import VisibilityOutlinedIcon from '@material-ui/icons/VisibilityOutlined';
@@ -10,6 +12,7 @@ import FieldSetContainer from 'components/FieldSetContainer';
 import SwitchByPas from 'components/Switch';
 import { getUserData } from 'store/modules/App/selectors';
 import { NONE } from 'models/denotation';
+import { SnackbarSeverityNames } from 'models/unums';
 import { toChangeUserData } from 'store/modules/App/actions';
 import SettingContainer from 'components/SettingContainer';
 import { DialogLoadingComponent } from 'layouts/DialogsLayout';
@@ -39,12 +42,13 @@ const useStyles = makeStyles(({ spacing, palette, breakpoints, shape: { borderRa
 
 const Security: FC = () => {
   const classes = useStyles();
+
   const { enqueueSnackbar } = useSnackbar();
   const dispatch = useDispatch();
 
   const nameDenotationOfPasswordChanger = {
-    OLD_PASSWORD: 'Old_Password',
-    NEW_PASSWORD: 'New_Password'
+    OLD_PASSWORD: 'old_Password',
+    NEW_PASSWORD: 'new_Password'
   };
 
   const nulittyOfinputsStateOfPasswordChanger = mapValues(
@@ -121,6 +125,49 @@ const Security: FC = () => {
     xs: 12
   } as { [key: string]: GridSize };
 
+  const reauthenticate = (currentPassword: string) => {
+    const user = firebase.auth().currentUser;
+    if (!user || !user.email) return null;
+
+    const cred = firebase.auth.EmailAuthProvider.credential(user?.email, currentPassword);
+    return user?.reauthenticateWithCredential(cred);
+  };
+
+  const hadnelChangePassword = () => {
+    const oldPassword = inputsStateOfPasswordChanger[nameDenotationOfPasswordChanger.OLD_PASSWORD];
+    const newPassword = inputsStateOfPasswordChanger[nameDenotationOfPasswordChanger.NEW_PASSWORD];
+
+    if (!valuesOfInputsStateOfPasswordChanger.every(({ isValid, value }) => !!isValid && !!value)) return;
+    //@ts-ignore
+    reauthenticate(oldPassword.value)
+      .then(() => {
+        const user = firebase.auth().currentUser;
+        if (!user) return null;
+        user
+          .updatePassword(newPassword.value)
+          .then(() => {
+            enqueueSnackbar({
+              message: `Password updated! `
+            });
+          })
+          .catch(error => {
+            enqueueSnackbar({
+              message: error.message,
+        severity: SnackbarSeverityNames.ERROR,
+              
+            });
+            setInputsStateOfPasswordChanger(nulittyOfinputsStateOfPasswordChanger)
+          });
+      })
+      .catch(error => {
+        enqueueSnackbar({
+          message: error.message,
+    severity: SnackbarSeverityNames.ERROR,
+          
+        });
+      });
+  };
+
   return (
     <Grid container justify={'center'}>
       <SettingContainer container justify={'center'}>
@@ -128,7 +175,7 @@ const Security: FC = () => {
           <FieldSetContainer title={'Change password'} isOnlyTop>
             <Grid className={classes.changePasswordContainer} container item {...defaultContainerBreakpoint}>
               {valuesOfInputsStateOfPasswordChanger.map(({ name }, idx) => {
-                const label = capitalize(name);
+                const label = capitalize(name.toLowerCase());
 
                 // console.log(formState[name]);
 
@@ -187,7 +234,14 @@ const Security: FC = () => {
                   </Grid>
                 );
               })}
+               <Grid  container style={{marginBottom:20}} >
+              <Button variant={'outlined'} color={'secondary'} onClick={hadnelChangePassword} style={{width:'100%'}}>
+                Change password
+              </Button>
             </Grid>
+            </Grid>
+
+           
           </FieldSetContainer>
 
           <FieldSetContainer title={'Change pin code'} isOnlyTop>

@@ -7,17 +7,12 @@ import { makeStyles, Box, Button, Grid } from '@material-ui/core';
 import { useMeasure } from 'react-use';
 
 import { useAlpha } from 'hooks/useAlpha.hook';
+import CircularProgressLoader from 'components/CircularProgressLoader';
 import { useThemeColors } from 'hooks/useThemeColors.hook';
 import ActionsButtonGroup from 'components/ActionsButtonGroup/index';
 import { NewPakeepUtilsType } from './types';
 
-const IconsUtils = dynamic(() => import('components/IconsUtils'), {
-  loading: () => (
-    <>
-      <Skeleton variant={'rect'} width={200} height={42} />
-    </>
-  )
-});
+const IconsUtils = dynamic(() => import('components/IconsUtils'), );
 
 // import SaveOutlinedIcon from '@material-ui/icons/SaveOutlined';
 const useStyles = makeStyles(({ spacing }) => ({

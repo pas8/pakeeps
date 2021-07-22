@@ -78,7 +78,7 @@ export const getGlobalEventsArr = createSelector(
 export const getDefaultMenuPropsOfTemporaryData = createSelector(
   [({ app: { temporaryData } }: RootStoreType) => temporaryData.defaultMenuProps],
   defaultMenuProps => defaultMenuProps
-);
+); 
 
 export const getIsPakeepHovering = createSelector(
   [({ app: { temporaryData } }: RootStoreType) => temporaryData.pakeep.isHovering],

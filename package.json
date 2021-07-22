@@ -10,11 +10,10 @@
     "lint": "npm run typescript npm run lint:ts",
     "lint:ts": "eslint './src/**/*.{ts,tsx}'"
   },
+
   "dependencies": {
     "@date-io/date-fns": "^1.3.13",
     "@firebase/firestore": "^2.3.8",
-    "@fseehawer/react-circular-slider": "^2.3.5",
-    "@jalba/react-css-doodle": "^1.3.0",
     "@material-ui/core": "^4.11.3",
     "@material-ui/icons": "^4.11.2",
     "@material-ui/lab": "^4.0.0-alpha.57",
@@ -37,7 +36,6 @@
     "mix-color": "^1.1.2",
     "nanoid": "^3.1.22",
     "next": "^10.2.3",
-    "next-auth": "^3.27.3",
     "notistack": "^1.0.6",
     "random-sentence": "^1.0.4",
     "re-reselect": "^4.0.0",

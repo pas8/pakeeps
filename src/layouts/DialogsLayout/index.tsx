@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { Backdrop, CircularProgress } from '@material-ui/core';
+import { Backdrop, CircularProgress, Slide,Grid } from '@material-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
 import dynamic from 'next/dynamic';
 import { toChangeDefaultLayoutDialogProps } from 'store/modules/App/actions';
@@ -69,7 +69,14 @@ const DialogsLayout: FC<DialogsLayoutPropsType> = ({ children }) => {
           onClose,
           customColor: findedItem.customColor || customColorPlaceholder
         };
-        return <Component {...defaultMenuLayoutElementProps} key={`dialogComponentsArr_${name}_${idx}`} />;
+
+        return (
+          <Slide direction={'up'} in={true} key={`dialogComponentsArr_${name}_${idx}`}>
+            <Grid>
+            <Component {...defaultMenuLayoutElementProps} />
+            </Grid>
+          </Slide>
+        );
       })}
     </>
   );

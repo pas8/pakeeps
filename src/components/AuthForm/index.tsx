@@ -23,7 +23,25 @@ import { AuthFormPropsType } from './types';
 import { AUTH_FORGET_PASSWORD_URL } from '../../layouts/RouterLayout/denotation';
 import InputVisibilityAdornment from 'components/InputVisibilityAdornment';
 
-const useStyles = makeStyles(({ spacing, shape: { borderRadius }, palette ,breakpoints}) => ({
+const useStyles = makeStyles(({ spacing, shape: { borderRadius }, palette, breakpoints }) => ({
+  '@global': {
+    //     '#rc-anchor-container':{
+
+    // background:'red !important'
+    //     },
+    ' #recaptcha': {
+      // marginTop: spacing(1.8)
+      // '&  div,.rc-anchor .rc-anchor-normal .rc-anchor-dark,iframe': {
+      //   width: '100% !important'
+      // },
+      // '& .rc-anchor-logo-img-portrait,.rc-anchor-logo-text': {
+      //   opacity: `0 !important`
+      // },
+      // '& .rc-anchor-dark': {
+      //   background: 'red !important'
+      // }
+    }
+  },
   footerButton: {
     width: '48%'
     // '& > div': {
@@ -32,36 +50,27 @@ const useStyles = makeStyles(({ spacing, shape: { borderRadius }, palette ,break
   },
   container: {
     '& button,a': {
-      width: '32%'
-,
-      [breakpoints.down('xs')]:{
+      width: '32%',
+      [breakpoints.down('xs')]: {
         width: '100%',
-        marginBottom:spacing(1.4),
+        marginBottom: spacing(1.4),
         height: spacing(6)
-
-      },
+      }
     },
-
 
     '& .containerOfForgetPassword': {
       position: 'relative',
       paddingBottom: spacing(1),
 
-      '& a':{
+      '& a': {
         width: '80%'
-
-
-
       },
 
-      [breakpoints.down('xs')]:{
-        '& a':{
+      [breakpoints.down('xs')]: {
+        '& a': {
           height: spacing(3.6)
-
-
         },
-      paddingBottom: spacing(0)
-
+        paddingBottom: spacing(0)
       }
     }
   },
@@ -122,7 +131,22 @@ const AuthForm: FC<AuthFormPropsType> = ({ isPageIsRegisted = false }) => {
   };
 
   const handleSignIn = () => {
-    dispatch(operateToHandleSignIn({ email: formState.email.value, password: formState.password.value }));
+    const provider = new firebase.auth.RecaptchaVerifier('recaptcha', { theme: 'dark' });
+    provider.render();
+
+    provider
+      .verify()
+      .then(result => {
+        if (!result) return;
+        provider.clear();
+        dispatch(operateToHandleSignIn({ email: formState.email.value, password: formState.password.value }));
+      })
+      .catch(error =>
+        enqueueSnackbar({
+          message:error.message ||  'You are the fucking robot, baby',
+          severity: SnackbarSeverityNames.ERROR
+        })
+      );
   };
 
   const authFormDenotation = {
@@ -235,7 +259,7 @@ const AuthForm: FC<AuthFormPropsType> = ({ isPageIsRegisted = false }) => {
           </Grid>
         )}
       </Grid>
-      <Grid container item justify={'space-between'}>
+      <Grid container item justify={'space-between'} style={{ marginBottom: 16 }}>
         {/* <Grid className={classes.mainButtonConendAdornmentiner}> */}
         <Button variant={'outlined'} onClick={onClickOfAnonymousButton} aria-label={'Anonymous button'}>
           Anonymous
@@ -269,6 +293,7 @@ const AuthForm: FC<AuthFormPropsType> = ({ isPageIsRegisted = false }) => {
         <Button color={'primary'} variant={'outlined'} onClick={onClickOfMainButton} type={'submit'}>
           {isPageIsRegisted ? authFormDenotation.REGISTER : authFormDenotation.LOGIN}
         </Button>
+
         {/* <Grid className={classes.footerButton}>
           <ButtonOfSignInProvider
             onClick={onClickOfLastButton}
@@ -278,6 +303,7 @@ const AuthForm: FC<AuthFormPropsType> = ({ isPageIsRegisted = false }) => {
           />
         </Grid> */}
       </Grid>
+      {!isPageIsRegisted && <Grid id={'recaptcha'} container></Grid>}
     </Grid>
   );
 };

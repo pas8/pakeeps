@@ -21,7 +21,7 @@ const useStyles = makeStyles(
           ...subtitle1,
           fontSize: h6.fontSize
         }
-      }
+      },
     })
   })
 );

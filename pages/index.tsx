@@ -6,8 +6,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import AddIcon from '@material-ui/icons/Add';
 
 import { getAnonymousStatus, getLoginedStatus } from 'store/modules/Auth/selectors';
+import CircularProgressLoader from 'components/CircularProgressLoader';
 import { getIsAuthedWithLocalPassword } from 'store/modules/App/selectors';
-import PakeepList from 'components/PakeepList';
+// import PakeepList from 'components/PakeepList';
 import { useBreakpointNames } from 'hooks/useBreakpointNames.hook';
 import {
   toChangeDefaultLayoutDialogProps,
@@ -19,20 +20,16 @@ import { customColorPlaceholder } from 'components/AccountAvatar';
 import { nanoid } from 'nanoid';
 import { Skeleton } from '@material-ui/lab';
 
-// const PakeepList = dynamic(() => import('components/PakeepList'), {
-//   loading: () => (
-//     <Grid style={{ height: '80vh', width: '90vw' }} container alignItems={'center'} justify={'center'}>
-//       <CircularProgress />
-//     </Grid>
-//   )
-// });
+const PakeepList = dynamic(() => import('components/PakeepList'), {
+  loading: () => (
+    <Grid style={{ height: '80vh', width: '90vw' }} container alignItems={'center'} justify={'center'}>
+      <CircularProgress />
+    </Grid>
+  )
+});
 
 const NewPakeep = dynamic(() => import('components/NewPakeep'), {
-  loading: () => (
-    <>
-      <Skeleton variant={'rect'} width={'100%'} height={42} />
-    </>
-  )
+  // loading: () => <CircularProgressLoader style={{ height: 40 }} />
 });
 
 const Pakeeps: FC = () => {
@@ -63,8 +60,8 @@ const Pakeeps: FC = () => {
           <NewPakeep />
         ) : (
           <Fab
-            color={"primary"}
-            aria-label={"add"}
+            color={'primary'}
+            aria-label={'add'}
             style={{ position: 'fixed', bottom: 16, right: 16, zIndex: 2, padding: !isSiveIsXs ? 42 : '' }}
             onClick={handleOpenDialog}
           >

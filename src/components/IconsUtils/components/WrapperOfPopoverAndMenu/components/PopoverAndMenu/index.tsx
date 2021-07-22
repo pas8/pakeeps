@@ -46,10 +46,10 @@ const PopoverAndMenu: FC<PopoverAndMenuType> = ({
       horizontal: 'center' as 'center'
     }
   };
-
   const popoverProps = {
     ...defaultLocationOfPopoverToWitCentered,
     className: classes.popover,
+    open: !!sum(values(cordinates)),
     classes: { paper: classes.paper },
     anchorEl: currentTarget,
     onClose: handlePopoverClose,
@@ -66,7 +66,7 @@ const PopoverAndMenu: FC<PopoverAndMenuType> = ({
   return (
     <>
       {currentTarget && isPopoverOpen && (
-        <Popover {...popoverProps} open>
+        <Popover {...popoverProps}>
           <Typography variant={popoverTypographyVariant}>{popoverText}</Typography>
         </Popover>
       )}

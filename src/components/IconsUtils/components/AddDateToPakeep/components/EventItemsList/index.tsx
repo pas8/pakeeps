@@ -104,7 +104,7 @@ const EventItemsList: FC<EventItemsListPropsType> = ({
         return <DynamicMenuItem {...dynamicMenuListProps} key={`dateListArrOf${pakeepId}${id}`} />;
       })}
       {eventListArr.length === 1 && (
-        <Box maxWidth={296} p={0.8} borderTop={1} borderColor={'text.disabled'}>
+        <Box maxWidth={200} p={0.8} borderTop={1} borderColor={'text.disabled'}>
           <Typography component={'legend'} variant={'caption'}>
             {'U didnt not added events yet, but u can simple do this by click to the "Add custom event" button'}
           </Typography>

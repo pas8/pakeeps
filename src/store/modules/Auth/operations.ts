@@ -33,7 +33,7 @@ export type DefaultFirebaseStateType = {
 
 // const changePassword = (currentPassword, newPassword) => {
 //   this.reauthenticate(currentPassword).then(() => {
-//     var user = firebase.auth().currentUser;
+//     const user = firebase.auth().currentUser;
 //     user.updatePassword(newPassword).then(() => {
 //       console.log("Password updated!");
 //     }).catch((error) => { console.log(error); });
@@ -41,7 +41,7 @@ export type DefaultFirebaseStateType = {
 // }
 // const changeEmail = (currentPassword, newEmail) => {
 //   this.reauthenticate(currentPassword).then(() => {
-//     var user = firebase.auth().currentUser;
+//     const user = firebase.auth().currentUser;
 //     user.updateEmail(newEmail).then(() => {
 //       console.log("Email updated!");
 //     }).catch((error) => { console.log(error); });

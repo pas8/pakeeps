@@ -40,7 +40,7 @@ const AttributeGroup: FC<AttributeGroupPropsType> = ({
     <Grid spacing={1} container className={classes.labelsContainerClass}>
       {validatedPartsArr.map(({ Component, props }, idx) => (
         //@ts-ignore
-        <Component {...props} key={idx} />
+        <Component {...props} key={`${`validatedPartsArr`}_${idx}`} />
       ))}
     </Grid>
   );

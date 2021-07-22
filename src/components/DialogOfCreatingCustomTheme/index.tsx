@@ -145,7 +145,7 @@ const DialogOfCreatingCustomTheme: FC<DialogOfCreatingCustomThemePropsType> = ({
 
   const classes = useStyles({ color: secondaryColor! });
 
-  const { isSizeSmall } = useBreakpointNames();
+  const { isSizeSmall, isSiveIsXs} = useBreakpointNames();
 
   const dispatch = useDispatch();
   const [colorState, setColorState] = useState<ColorStateType>({
@@ -303,14 +303,14 @@ const DialogOfCreatingCustomTheme: FC<DialogOfCreatingCustomThemePropsType> = ({
     </Grid>
   ));
   const MenuChildren = elStateOfButtonUtilMenu.props.children;
-
   return (
     <Dialog
       open={isOpen}
+      fullScreen={isSiveIsXs}
       onClose={onClose}
       className={classes.container}
       PaperComponent={DraggablePaperComponent}
-      maxWidth={'xl'}
+      // maxWidth={'xl'}
     >
       <MenuByPas
         open={elStateOfButtonUtilMenu.anchorEl}

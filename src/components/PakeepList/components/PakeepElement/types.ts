@@ -8,6 +8,7 @@ export type ColorOfPakeepType = { backgroundColor: string; color?: string };
 
 export type UseStylesOfPakeepElementType = UseStylesCustomColorType &
   ColorOfPakeepType & {
+    isMobile:boolean
     isDragging: boolean;
     isUtilsHaveViewLikeInGoogleKeep?: boolean;
   };

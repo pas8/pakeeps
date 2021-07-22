@@ -1,4 +1,4 @@
-import { Grid, makeStyles, Grow, Fade, Theme, useTheme } from '@material-ui/core';
+import { Grid, makeStyles, Grow, Fade, Theme, useTheme, CircularProgress } from '@material-ui/core';
 import { useState, useEffect, FC, memo, MouseEventHandler } from 'react';
 import dynamic from 'next/dynamic';
 import clsx from 'clsx';
@@ -12,6 +12,7 @@ import { useGetReadableColor } from 'hooks/useGetReadableColor.hook';
 import { useFilteredLabels } from 'hooks/useFilteredLabels.hook';
 import { toChangePakeepProperty, toChangeTemporaryData, toDeleteLabelFromPakeep } from 'store/modules/App/actions';
 import { LabelIdType } from 'store/modules/App/types';
+import CircularProgressLoader from 'components/CircularProgressLoader';
 import { usePakeepUtilsFunc } from 'hooks/usePakeepUtilsFunc.hook';
 import { useLabelListFunc } from 'hooks/useLabelListFunc.hook';
 import { useThemeColors } from 'hooks/useThemeColors.hook';
@@ -23,9 +24,10 @@ import AttributeGroup from './components/AttributeGroup';
 import SkeletonView from './components/SkeletonView';
 import MainDefaultPartOfPakeepElement from './components/MainDefaultPart';
 import { NullityStatusState, PakeepElementPropsType, UseStylesOfPakeepElementType } from './types';
-import { useBreakpointNames } from 'hooks/useBreakpointNames.hook';
 
-const IconsUtils = dynamic(() => import('components/IconsUtils'), { loading: () => <p>loading</p> });
+const IconsUtils = dynamic(() => import('components/IconsUtils'), {
+  loading: () => <CircularProgressLoader />
+});
 
 const useStyles = makeStyles(({ spacing, transitions, palette }: Theme) => ({
   paperClass: ({
@@ -40,8 +42,9 @@ const useStyles = makeStyles(({ spacing, transitions, palette }: Theme) => ({
 
     const insetborderColor = useIsColorLight(backgroundColor) ? palette.background.default : backgroundColor;
     return {
+      overflow:'hidden',
       marginTop: 4,
-      padding: spacing(0.4, 1.4, isUtilsHaveViewLikeInGoogleKeep ? 8 * 0.8 : 1, 1.4),
+      padding: spacing(0.4, 1.4, isMobile ? 0 : isUtilsHaveViewLikeInGoogleKeep ? 8 * 0.8 : 1, 1.4),
       cursor: 'grab',
       position: 'relative',
       backgroundColor,
@@ -53,7 +56,7 @@ const useStyles = makeStyles(({ spacing, transitions, palette }: Theme) => ({
       }),
       userSelect: 'none',
       '&:hover': {
-        paddingBottom: `${spacing(8 * 0.8)}px !important`,
+        // paddingBottom: isMobile ? 0 : `${spacing(8 * 0.8)}px !important`,
         transition: transitions.create('all', {
           easing: transitions.easing.sharp,
           duration: transitions.duration.leavingScreen
@@ -142,6 +145,7 @@ const PakeepElement: FC<PakeepElementPropsType> = ({
 
   const classes = useStyles({
     isDragging,
+    isMobile,
     customColor,
     backgroundColor: correctBackground,
     isUtilsHaveViewLikeInGoogleKeep,
@@ -293,11 +297,11 @@ const PakeepElement: FC<PakeepElementPropsType> = ({
         </Grid>
 
         {openIn && !isDragging && !isMobile && (
-          <AnimationElement in={openIn}>
-            <Grid className={classes.iconsUtilsClass}>
-              <IconsUtils {...iconsUtilsProps} />
-            </Grid>
-          </AnimationElement>
+          // <AnimationElement in={openIn}>
+          <Grid className={classes.iconsUtilsClass}>
+            <IconsUtils {...iconsUtilsProps} />
+          </Grid>
+          // </AnimationElement>
         )}
       </MainDefaultPartOfPakeepElement>
     </Grid>

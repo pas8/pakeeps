@@ -50,7 +50,6 @@ export const useCloseDialogWithRestore: UseCloseDialogWithRestoreType = ({
     if (!isDialogOpen && isAwaited) {
       setIsDialogOpen(true);
       onClose();
-      console.log(';');
     }
   }, [isDialogOpen, isAwaited]);
 

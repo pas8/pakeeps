@@ -16,14 +16,7 @@ import { useFromNameToText } from 'hooks/useFromNameToText.hook';
 import { useThemeColors } from 'hooks/useThemeColors.hook';
 import { customColorPlaceholder } from 'components/AccountAvatar';
 import { AvatarEditorByPasPropsType } from './types';
-
-const ReactAvatarEditor = dynamic(() => import('react-avatar-editor'), {
-  loading: () => (
-    <>
-      <Skeleton variant={'rect'} width={200} height={200} />
-    </>
-  )
-});
+import ReactAvatarEditor from 'react-avatar-editor'
 
 const useStyles = makeStyles(({ spacing, transitions, breakpoints, palette: { background } }) => ({
   utilsContainer: {
@@ -182,7 +175,6 @@ const AvatarEditorByPas: FC<AvatarEditorByPasPropsType> = ({
       <Grid>
         <ReactAvatarEditor
           {...state}
-          //@ts-ignore
           ref={setEditorRef}
           borderRadius={state.width / (100 / state.borderRadius)}
           color={colorValues}

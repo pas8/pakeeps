@@ -53,7 +53,7 @@ const LabelPart: FC<LabelPartPropsType> = ({
         const labelItemProps = {
           currentColor: color,
           handleOpen,
-          aplyMargin: false,
+          aplyMargin: true,
           labelChipProps,
           customColor: notReversedCustomColor,
           parentBackgrounColor

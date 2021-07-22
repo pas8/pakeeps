@@ -1,4 +1,3 @@
-import { Provider as AuthProvider } from 'next-auth/client';
 import { FC, useEffect, useState } from 'react';
 import firebase from 'firebase/app';
 import 'firebase/auth';
@@ -67,19 +66,19 @@ const AuthLayout: FC<any> = ({ children, pageProps }) => {
       enqueueSnackbar({ message: errorMessage || 'Something went wrong', severity: 'error' });
     }
   }, [isError, errorMessage]);
-  debugger;
   useEffect(() => {
     firebase.auth().onAuthStateChanged(user => {
-      if (!user ) return dispatch(toChangeLoginStatus({ isLogined: false }));
+      console.log(user)
+      if (!user) return dispatch(toChangeLoginStatus({ isLogined: false }));
       if (!user.isAnonymous) {
         dispatch(
           // toChangeAvatarProperties({ avatarProperties: { ...defaultAvatarProperties, url: user.photoURL || NONE } })
-          toChangeAvatarProperties({ avatarProperties: { ...defaultAvatarProperties, } })
+          toChangeAvatarProperties({ avatarProperties: { ...defaultAvatarProperties } })
         );
         dispatch(
           toChangeUserData({
             userData: { email: user.email || NONE, name: user.displayName || NONE, isEmailVerified: user.emailVerified }
-          })  
+          })
         );
       } else dispatch(toChangeAnonymousStatus({ isAnonymous: user.isAnonymous }));
 
@@ -88,22 +87,21 @@ const AuthLayout: FC<any> = ({ children, pageProps }) => {
       dispatch(toChangeAllFirebaseStoreState(value!));
     });
   }, []);
-  const isLoginedAndRouteISAuth = router.pathname ===  AUTH_BASE_URL && isLogined
+  const isLoginedAndRouteISAuth = router.pathname === AUTH_BASE_URL && isLogined;
 
   const isRouteIsAuth = startsWith(router.pathname, AUTH_BASE_URL);
 
   useEffect(() => {
     if (isLogined !== NONE && !isLogined && !isRouteIsAuth) {
-      router.push(SIGN_IN_URL);
-    } else if (isRouteIsAuth && isLogined) {
+      router.push(AUTH_BASE_URL);
+    } else if (isRouteIsAuth && isLogined ) {
       router.push('/');
     }
   }, [isLogined, router.route]);
 
-
   const isChildrenVisible = isLoginedAndRouteISAuth || (isRouteIsAuth && !isLogined) || (isLogined && !isRouteIsAuth);
   // return <AuthProvider session={pageProps?.session}>{isChildrenVisible ? children : null}</AuthProvider>;
-  return <AuthProvider session={pageProps?.session}>{children}</AuthProvider>;
+  return <>{children}</>;
 };
 
 export default AuthLayout;

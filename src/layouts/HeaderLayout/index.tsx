@@ -16,12 +16,10 @@ import {
 import HeaderWhenActiveSelecto from 'components/HeaderWhenActiveSelecto';
 import { LayoutChildrenType } from 'models/types';
 import { menuOpenStatusDenotation } from 'models/denotation';
-import { BASE_URL } from 'layouts/RouterLayout/denotation';
+import { AUTH_BASE_URL, BASE_URL } from 'layouts/RouterLayout/denotation';
 import { Skeleton } from '@material-ui/lab';
 
-const HeaderByPas = dynamic(() => import('components/Header'), {
-  loading: () => <Skeleton variant={'rect'} width={'100%'} height={64} />
-});
+const HeaderByPas = dynamic(() => import('components/Header'));
 
 const useStyles = makeStyles(({ spacing, transitions, breakpoints, palette }) => ({
   '@global': {
@@ -37,7 +35,7 @@ const useStyles = makeStyles(({ spacing, transitions, breakpoints, palette }) =>
 
     a: {
       color: 'inherit',
-      textDecoration: 'none'  
+      textDecoration: 'none'
     },
 
     '*': {
@@ -118,6 +116,7 @@ const HeaderLayout: FC<LayoutChildrenType> = ({ children }) => {
   const { route } = useRouter();
 
   const isRouteIsBase = route === BASE_URL;
+  const isRouteIsAuthBase = route === AUTH_BASE_URL;
 
   const classes = useStyles({ drawerWidth, navigationViewLikeTelegram, headerHeight, isRouteIsBase });
 
@@ -141,18 +140,13 @@ const HeaderLayout: FC<LayoutChildrenType> = ({ children }) => {
 
   return (
     <Grid className={classes.container}>
-      {isShouldBeHeaderWhenActiveSelecto ? (
-        <HeaderWhenActiveSelecto {...headerWhenActiveSelectoProps} />
-      ) : (
-        <HeaderByPas {...headerByPasProps} />
-      )}
-      <main
-        className={clsx(classes.content, {
-          // [classes.contentShift]: isMenuOpen
-        })}
-      >
-        {children}
-      </main>
+      {!isRouteIsAuthBase &&
+        (isShouldBeHeaderWhenActiveSelecto ? (
+          <HeaderWhenActiveSelecto {...headerWhenActiveSelectoProps} />
+        ) : (
+          <HeaderByPas {...headerByPasProps} />
+        ))}
+      <main className={clsx(classes.content)}>{children}</main>
     </Grid>
   );
 };

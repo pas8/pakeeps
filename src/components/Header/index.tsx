@@ -18,18 +18,21 @@ import { useAlpha } from 'hooks/useAlpha.hook';
 import { usePropertyDueToRoute } from 'hooks/usePropertyDueToRoute.hook';
 import { denotationOfCorrectLayoutCases } from 'layouts/RouterLayout/denotation';
 
-import HeaderSearch from './components/Search';
-import HeaderProfileUtils from './components/ProfileUtils';
 import { HeaderByPasPropsType } from './types';
 import dynamic from 'next/dynamic';
 import { Skeleton } from '@material-ui/lab';
 
-
 const MainBar = dynamic(() => import('./components/MainBar'), {
-  loading: () => <Skeleton variant={'rect'} width={100} height={42} />
+  // loading: () => <Skeleton variant={'rect'} width={100} height={42} />
 });
 
+const HeaderSearch = dynamic(() => import('./components/Search'), {
+  // loading: () => <Skeleton variant={'rect'} width={100} height={42} />
+});
 
+const HeaderProfileUtils = dynamic(() => import('./components/ProfileUtils'), {
+  // loading: () => <Skeleton variant={'rect'} width={100} height={42} />
+});
 
 const useStyles = makeStyles(({ spacing, palette, transitions, shape: { borderRadius }, breakpoints }) => ({
   root: ({ navigationViewLikeTelegram }: any) => ({
@@ -137,7 +140,9 @@ const HeaderByPas: FC<HeaderByPasPropsType> = ({
 
   return (
     <Grid className={classes.root}>
-      {  !isAuthedWithLocalPinCode ? <Grid ref={ref}/> :isSizeSmall && !isRouteIsAuth ? (
+      {!isAuthedWithLocalPinCode ? (
+        <Grid ref={ref} />
+      ) : isSizeSmall && !isRouteIsAuth ? (
         <Grid className={classes.smallContainer} ref={ref} component={'header'}>
           <Grid alignItems={'center'} container justify={'space-between'}>
             <Grid>

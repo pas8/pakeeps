@@ -51,7 +51,7 @@ const reversedColor = useGetReversedCustomColor( customColor)
 
   const menuComponentsProps = {
     ...anchorElState.menuComponentsProps,
-    customColor:{...reversedColor }
+    customColor:{...customColor}
   };
   return (
     <Grid className={classes.container}>

@@ -9,7 +9,6 @@ export const useFindSelectedEvents: UseFindSelectedEventsType = selectedPakeeps 
   const allEvents = selectedPakeeps.map(({ events }) => events);
 
   useEffect(() => {
-    console.log(allEvents)
     setSelectedEvents(intersectionBy(...allEvents,'id'));
   }, [selectedPakeeps]);
 

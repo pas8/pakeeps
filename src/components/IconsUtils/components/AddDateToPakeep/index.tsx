@@ -33,6 +33,7 @@ const EventItemsList = dynamic(() => import('./components/EventItemsList'), {
 const useStyles = makeStyles(({ spacing, shape: { borderRadius } }) => ({
   container: ({ color }: { color: CustomColorType }) => ({
     borderRadius,
+    overflow:'hidden',
     background: !color.isUseDefault ? color.unHover : ''
   })
 }));
@@ -142,13 +143,14 @@ const AddDateToPakeep: FC<AddDateToPakeepPropsType> = ({
     onClick: (__: any) => {},
     parentBackgroundColor: customColor.isUseDefault ? DEFAULT : customColor.bgHover
   };
-  const customTitle = !!currentEventsArr ? (
-    <Grid style={{ maxWidth: 292 }}>
-      <PreviewEventList {...previewEventListProps} />
-    </Grid>
-  ) : (
-    <Typography style={{ color: customColor.isUseDefault ? '' : customColor.unHover }}> Events</Typography>
-  );
+  const customTitle =
+    !!currentEventsArr && !!currentEventsArr?.length && !!chosenItemArr.length ? (
+      <Grid style={{ maxWidth: 292 }}>
+        <PreviewEventList {...previewEventListProps} />
+      </Grid>
+    ) : (
+      <Typography style={{ color: customColor.isUseDefault ? '' : customColor.unHover }}> Events</Typography>
+    );
 
   const headerOfAddDateToPakeepProps = {
     buttonSaveState,

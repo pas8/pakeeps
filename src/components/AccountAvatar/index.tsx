@@ -163,7 +163,7 @@ export default AccountAvatar;
 //   // background: ${primaryColor};
 // }
 // --hue: calc(180 + 1.5 * @row * @col);
-// background: hsl(var(--hue), 50%, 70%);
+// background: hsl(const(--hue), 50%, 70%);
 // margin: -.2px;
 // transition: @r(.5s) ease;
 // clip-path: polygon(@pick(

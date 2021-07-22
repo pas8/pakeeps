@@ -14,7 +14,7 @@ export const menuOpenStatusDenotation = {
   EXTENDED: 'EXTENDED'
 } as const;
 
-export const SIGN_IN_URL = AUTH_BASE_URL;
+export const SIGN_IN_URL = `${AUTH_BASE_URL}/signIn`;
 export const NEW_USER_URL = `${AUTH_BASE_URL}/register`;
 
 export const TRANSPARENT = 'transparent';
@@ -72,6 +72,7 @@ export const globalClassNames = {
 };
 
 export const errorMessages = {
+  YOU_HAVE_SIGNED_UP_WITH_A_DIFFERENT_PROVIDER_FOR_THAT_EMAIL:'You have signed up with a different provider for that email.',
   SOMETHING_WENT_WRONG: 'Something went wrong',
   CAN_NOT_UPLOAD_ALL_DATA_TRY_AGAIN: 'can not upload all data,try again'
 };

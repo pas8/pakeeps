@@ -1,6 +1,7 @@
 import { FC, KeyboardEventHandler, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import _ from 'lodash';
+import dynamic from 'next/dynamic';
 import clsx from 'clsx';
 import { useCookie, useMeasure, usePageLeave } from 'react-use';
 import { nanoid } from 'nanoid';
@@ -21,8 +22,14 @@ import IconButtonByPas from 'components/IconButton';
 import { DEFAULT } from 'models/denotation';
 import { useNewPakeepUtility } from 'hooks/useNewPakeepUtility.hook';
 import { useNewPakeepStatuses } from 'hooks/useNewPakeepStatuses.hook';
-import NewPakeepUtils from './components/Utils';
 import { toAddNewPakeep } from 'store/modules/App/actions';
+import CircularProgressLoader from 'components/CircularProgressLoader';
+
+const NewPakeepUtils = dynamic(() => import('./components/Utils'), {
+  loading: () => (
+      <CircularProgressLoader/>
+  )
+});
 
 const useStyles = makeStyles(
   ({ spacing, palette, transitions, typography: { subtitle1, h5 }, shape: { borderRadius } }) => ({
@@ -263,6 +270,7 @@ const NewPaKeep: FC = () => {
             <AttributeGroup {...attributeGroupProps} />
           </Grid>
         )}
+
 
         {!statusState.isTextHidden && <NewPakeepUtils {...newPakeepUtils} />}
       </Grid>

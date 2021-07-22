@@ -4,6 +4,7 @@ import dynamic from 'next/dynamic';
 import { useIsomorphicLayoutEffect, useKeyPressEvent } from 'react-use';
 import { Backdrop, CircularProgress, Grid } from '@material-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
+import { isMobile } from 'react-device-detect';
 
 import {
   getIsCancelSelectedPakeepsId,
@@ -138,7 +139,7 @@ const PakeepList: FC = () => {
     setIsSelecting,
     SELECTED
   };
-  const isSelectoHidden = isPakeepHovering || isPakeepDragging;
+  const isSelectoHidden = (isPakeepHovering || isPakeepDragging) && isCancelSelectedPakeepsId;
 
   const cancelSelectedPakeepsId = () => {
     handleChangeSelectingStatus(true);
@@ -176,7 +177,7 @@ const PakeepList: FC = () => {
           <WrapperOfContainerOfPakeepList {...wrapperOfContainerOfAllPakeepListProps} />
         )}
       </Grid>
-      {!isSelectoHidden && !listPlaceholdersOfFolderPropertyiesProps && (
+      {!isSelectoHidden && !listPlaceholdersOfFolderPropertyiesProps && !isMobile && (
         <SelectofFPakeepListContainer {...selectoOfPakeepListContainerProps} />
       )}
     </>

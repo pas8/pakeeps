@@ -15,18 +15,11 @@ import { toChangeGlobalFolderId, toSetDrawerWidth } from 'store/modules/App/acti
 import { useBreakpointNames } from 'hooks/useBreakpointNames.hook';
 import { ColorType } from 'store/modules/App/types';
 import { FoldersTypeProps, HandleChangeFolderColorType, HandleChangeGlobalFolderIdType } from './types';
-
+import CircularProgressLoader from 'components/CircularProgressLoader';
 const FolderButtonGroupByPas = dynamic(() => import('./components/ButtonGroup'), {
-  loading: () => <Skeleton variant={'rect'} width={40} height={'60%'} style={{marginLeft:10}} animation={"wave"}/>
 });
 
-const MoreMenuOfFolders = dynamic(() => import('./components/MoreMenu'), {
-  loading: () => (
-    <Paper style={{ width: 200, height: 400 }}>
-      <CircularProgress color={'primary'} />
-    </Paper>
-  )
-});
+const MoreMenuOfFolders = dynamic(() => import('./components/MoreMenu'), {});
 
 const useStyles = makeStyles(({ spacing, transitions, breakpoints, palette }) => ({
   container: ({ height, isFolderAfterIsEmpty, isFoldersHaveDraweView }: any) => ({

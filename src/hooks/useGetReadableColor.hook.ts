@@ -1,10 +1,11 @@
+import { DEFAULT } from 'models/denotation';
 import { ColorStateType } from 'models/types';
 import { useEffect, useState } from 'react';
 import { useGetColor } from './useGetColor.hook';
 
 export const useGetReadableColor = (
   backgroundColor: string,
-  color = 'default',
+  color = DEFAULT,
   isIgnoreValidation?: boolean
 ): ColorStateType => {
   const nullityCustomColor = {

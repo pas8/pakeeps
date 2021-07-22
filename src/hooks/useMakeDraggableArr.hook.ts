@@ -16,7 +16,7 @@ import { useTakeValueFromBreakpoints } from './useTakeValueFromBreakpoints.hook'
 export const useMakeDraggableArr = (
   handlePakeepsOrderNames: HandleSetPakeepsOrderNamesType,
   maxColumnNumber = 6,
-  defaultBreakpointValue = [6, 4, 3, 2, 1]
+  defaultBreakpointValue = [6, 4, 3, 2, 2]
 ) => {
   const dispatch = useDispatch();
 

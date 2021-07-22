@@ -207,6 +207,7 @@ const ForLazyLoadingDialogOfAddingNewGlobalEvent: FC<DialogOfAddingNewGlobalEven
   const handleSave = () => {
     const minuteDiff = differenceInMinutes(Date.now(), eventState.value);
     const value = addMinutes(Date.now(), minuteDiff);
+    console.log(value.getTime() / 1000)
     dispatch(toAddGlobalEvent({ newEvent: { ...eventState, value } }));
 
     enqueueSnackbar({ message: 'Global label was successfully added' });

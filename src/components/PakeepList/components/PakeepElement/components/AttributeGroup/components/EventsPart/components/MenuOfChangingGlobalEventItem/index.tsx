@@ -65,9 +65,10 @@ const MenuOfChangingGlobalEventItem: FC<WrapperOfMenuOfLabelPartPropsType> = ({
 
   const format = menuState.onlyTime ? timeFormat : timeAndDateFormat;
   const [value, setValue] = useState<any>(toFormat(Date.now(), format));
+
   const error = !isValid(menuState.value);
 
-  const { mouseX:left , mouseY: top, ...changedEvent } = menuState;
+  const { mouseX:top , mouseY: left, ...changedEvent } = menuState;
 
   useEffect(() => {
     setMenuState(state => ({ ...state, mouseX, mouseY, ...findedEvent }));
@@ -105,10 +106,12 @@ const MenuOfChangingGlobalEventItem: FC<WrapperOfMenuOfLabelPartPropsType> = ({
     setMenuState(state => ({ ...state, value }));
   };
 
-  const handleChangeEventValue = (date: MaterialUiPickersDate, value: string | null | undefined) => {
+  const onChange = (date: MaterialUiPickersDate, value: string | null | undefined) => {
     handleChangeDateValue(date);
     setValue(value);
   };
+
+
 
   const onClickOfSaveButton = () => {
     try {
@@ -146,7 +149,7 @@ const MenuOfChangingGlobalEventItem: FC<WrapperOfMenuOfLabelPartPropsType> = ({
         component: SecondStepOfSteperOfDialogOfAddNewGlobalEvent,
         props: {
           value,
-          onChange: handleChangeEventValue,
+          onChange,
           format,
           error,
           customColor: reverserCustomColor,
