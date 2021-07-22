@@ -48,8 +48,6 @@ const AddDateToPakeep: FC<AddDateToPakeepPropsType> = ({
 
   const classes = useStyles({ color });
 
-  if (!currentEventsArr) return null;
-
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
   const FIRST_EVENT_ID = '1';
@@ -95,7 +93,7 @@ const AddDateToPakeep: FC<AddDateToPakeepPropsType> = ({
     }
   ];
 
-  const eventListArr = [...currentEventsArr, ...defaultDateListArr];
+  const eventListArr = !currentEventsArr ? defaultDateListArr : [...currentEventsArr, ...defaultDateListArr];
 
   const [chosenItemArr, setChosenItemArr] = useState<ChosenItemArrType>([]);
 
@@ -139,14 +137,13 @@ const AddDateToPakeep: FC<AddDateToPakeepPropsType> = ({
 
   const previewEventListProps = {
     validatedCurrentEvents,
-    currentEventsArr,
+    currentEventsArr: currentEventsArr!,
     customColor,
     onClick: (__: any) => {},
     parentBackgroundColor: customColor.isUseDefault ? DEFAULT : customColor.bgHover
   };
-  const customTitle = !!validatedCurrentEvents.length ? (
+  const customTitle = !!currentEventsArr ? (
     <Grid style={{ maxWidth: 292 }}>
-      {' '}
       <PreviewEventList {...previewEventListProps} />
     </Grid>
   ) : (

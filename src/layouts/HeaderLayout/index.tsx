@@ -37,7 +37,7 @@ const useStyles = makeStyles(({ spacing, transitions, breakpoints, palette }) =>
 
     a: {
       color: 'inherit',
-      textDecoration: 'none'
+      textDecoration: 'none'  
     },
 
     '*': {

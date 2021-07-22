@@ -1,28 +1,46 @@
 import { makeStyles, Button, Stepper, StepLabel, StepContent, Step, Grid, Box, Typography } from '@material-ui/core';
-import { useCounter } from 'react-use';
+import { useCounter, useMeasure } from 'react-use';
 import { useAlpha } from 'hooks/useAlpha.hook';
 import { useMix } from 'hooks/useMix.hook';
 import { FC } from 'react';
 import { SteperOfDialogOfAddNewLabelPropsType, UseStylesOfSteperOfDialogOfAddNewLabelType } from './types';
 import { useBreakpointNames } from 'hooks/useBreakpointNames.hook';
 
-const useStyles = makeStyles(({ spacing, breakpoints }) => ({
+const useStyles = makeStyles(({ spacing, breakpoints, palette }) => ({
   container: ({ customColor }: UseStylesOfSteperOfDialogOfAddNewLabelType) => {
-    if (customColor.isUseDefault) return {};
+    const defaultStyles = {
+      '& .MuiStepper-root': {
+        width: '100%'
+      },
+      '&  .Mui-checked +.MuiFormControlLabel-label  ': {
+        color: palette.secondary.main
+      }
+    };
+    if (customColor.isUseDefault) return defaultStyles;
     const customMixedColor = customColor?.secondaryColor;
 
     return {
+      ...defaultStyles,
       '& .Mui-disabled': {
         color: useAlpha(customColor?.bgUnHover, 0.42)
       },
-      '& .MuiSwitch-switchBase,.MuiFormControlLabel-label': {
+      // '& .MuiSwitch-switchBase,.MuiFormControlLabel-label': {
+      //   color: customMixedColor
+      // },
+      // '& .Mui-checked + .MuiSwitch-track,.MuiSwitch-track': {
+      //   // background: customColor?.bgHover,
+      //   background: customMixedColor
+      // },
+      '& .MuiRadio-root': {
+        color: customColor.bgUnHover,
+        '&:hover': {
+          background: useAlpha(customColor.bgUnHover)
+        }
+      },
+      '&  .Mui-checked +.MuiFormControlLabel-label  ': {
         color: customMixedColor
       },
-      '& .Mui-checked + .MuiSwitch-track,.MuiSwitch-track': {
-        // background: customColor?.bgHover,
-        background: customMixedColor
-      },
-      '& .MuiRadio-root': {
+      '&  .Mui-checked': {
         color: customMixedColor,
         '&:hover': {
           background: useAlpha(customMixedColor)
@@ -50,6 +68,10 @@ const useStyles = makeStyles(({ spacing, breakpoints }) => ({
     '&:hover': {
       background: !customColor.isUseDefault ? useAlpha(customColor?.secondaryColor) : ''
     }
+    //     [breakpoints.down('xs')]: {
+    // border:'1px solid',
+    // borderColor:!customColor.isUseDefault ? customColor?.secondaryColor : '',
+    //     },
   }),
   buttonOfPriviousStep: ({ customColor }: UseStylesOfSteperOfDialogOfAddNewLabelType) => ({
     color: !customColor.isUseDefault ? useAlpha(customColor?.bgUnHover, 0.6) : '',
@@ -63,7 +85,7 @@ const useStyles = makeStyles(({ spacing, breakpoints }) => ({
     maxWidth: spacing(12),
     [breakpoints.down('xs')]: {
       maxWidth: '100%',
-      margin: spacing(1, 0, 0, 1),
+      margin: spacing(0, 0, 0, 1),
 
       width: '100%'
     },
@@ -102,7 +124,9 @@ const SteperOfDialogOfAddNewLabel: FC<SteperOfDialogOfAddNewLabelPropsType> = ({
     bgHover: useMix({ ...customColor, hover: customColor?.secondaryColor, bgHover: customColor?.unHover }, 0.8)
   };
 
-  const { isSizeSmall,isSiveIsXs } = useBreakpointNames();
+  const { isSizeSmall, isSiveIsXs } = useBreakpointNames();
+
+  const [ref, { width }] = useMeasure<HTMLDivElement>();
 
   return (
     <Grid className={classes.container} container alignItems={'center'}>
@@ -126,8 +150,8 @@ const SteperOfDialogOfAddNewLabel: FC<SteperOfDialogOfAddNewLabelPropsType> = ({
                 </Grid>
               </StepLabel>
               <StepContent>
-                <Grid container alignItems={'center'} >
-                  <Grid>
+                <Grid container alignItems={'center'}>
+                  <Grid style={{ width: `calc(100% - ${width}px)` }}>
                     <Grid direction={'column'}>
                       <Grid container className={classes.componentContainer} alignItems={'center'}>
                         <Component {...componentProps} customColor={secondaryCustomColor} />
@@ -139,14 +163,14 @@ const SteperOfDialogOfAddNewLabel: FC<SteperOfDialogOfAddNewLabelPropsType> = ({
                       </Grid>
                     </Grid>
                   </Grid>
-                  <Grid style={{ width: isSiveIsXs ? '100%' : 'auto' }}>
+                  <Grid ref={ref}>
                     <Grid
                       container
-                      direction={isSizeSmall ? 'row' : 'column'}
-                      justify={isSizeSmall ? 'flex-end' : 'center'}
+                      direction={isSizeSmall ? 'column' : 'column'}
+                      // justify={isSizeSmall ? 'flex-end' : 'center'}
                       className={classes.buttonContainer}
                     >
-                      <Grid>
+                      <Box mb={0.4}>
                         <Button
                           disabled={activeStep === 0}
                           onClick={() => decrimentActiveStep()}
@@ -155,7 +179,7 @@ const SteperOfDialogOfAddNewLabel: FC<SteperOfDialogOfAddNewLabelPropsType> = ({
                         >
                           Back
                         </Button>
-                      </Grid>
+                      </Box>
                       <Grid>
                         <Button
                           color={'secondary'}
@@ -175,12 +199,8 @@ const SteperOfDialogOfAddNewLabel: FC<SteperOfDialogOfAddNewLabelPropsType> = ({
         )}
       </Stepper>
       {isFinished && (
-        <Box m={isSizeSmall ? 2 : 8} display={'flex'} flexDirection={isSizeSmall ? 'row' : 'column'} >
-          <Button onClick={() => decrimentActiveStep()} size={'small'}
-          
-          className={classes.buttonOfPriviousStep}
-          
-          >
+        <Box m={isSizeSmall ? 2 : 8} display={'flex'} flexDirection={isSizeSmall ? 'row' : 'column'}>
+          <Button onClick={() => decrimentActiveStep()} size={'small'} className={classes.buttonOfPriviousStep}>
             Back
           </Button>
           <Button onClick={toReset} size={'small'} color={'secondary'} className={classes.buttonOfNextStep}>

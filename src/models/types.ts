@@ -301,3 +301,16 @@ export type FieldSetContainerPropsType = { title: string; isOnlyTop?: boolean } 
 export type UseTakePakeepListPlaceholdersOfFolderPropertyiesType = () =>
   | false
   | ListPlaceholdersOfFolderPropertyiesPropsType;
+
+export type ParamOfUseCloseDialogWithRestoreType<T> = {
+  setState: Dispatch<SetStateAction<T>>;
+  onClose: (__?: any) => void;
+  state: T;
+  snackBarMessage: string;
+  nullityState: T;
+};
+
+export type UseCloseDialogWithRestoreType = <T>(param: ParamOfUseCloseDialogWithRestoreType<T>) => {
+  handleCloseDialog: (__?: any) => void;
+  isDialogOpen: boolean;
+};
