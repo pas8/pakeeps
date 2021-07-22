@@ -1,10 +1,9 @@
 import IconButtonByPas from 'components/IconButton';
 import { useGetReversedCustomColor } from 'hooks/useGetReversedCustomColor.hook';
 import { ClosePopoverOrMenuType } from 'models/types';
-import { FC, MouseEvent, ReactNode, useRef, useState } from 'react';
+import { FC, MouseEvent, MouseEventHandler, ReactNode, useRef, useState } from 'react';
 import { Optional } from 'utility-types';
 import PopoverAndMenu from './components/PopoverAndMenu';
-import WrapperOfMainComponent from './components/WrapperOfMainComponent';
 import { WrapperOfPopoverAndMenuType } from './types';
 
 const WrapperOfPopoverAndMenu: FC<WrapperOfPopoverAndMenuType> = ({
@@ -33,13 +32,10 @@ const WrapperOfPopoverAndMenu: FC<WrapperOfPopoverAndMenuType> = ({
 
   const [anchorElState, setAnchorElState] = useState<Optional<typeof nullityOfAnchorEl>>(nullityOfAnchorEl);
 
-  const handleMenuClose: ClosePopoverOrMenuType = () => setAnchorElState(nullityOfAnchorEl);
-  const handlePopoverClose: ClosePopoverOrMenuType = () =>
-    setAnchorElState(state => ({ ...state, isPopoverOpen: false,}));
+  const handleMenuClose: ClosePopoverOrMenuType = e => setAnchorElState(nullityOfAnchorEl);
+  const handlePopoverClose = (e: any) => setAnchorElState(state => ({ ...state, isPopoverOpen: false }));
 
   const popoverAndMenuProps = { ...anchorElState, handleMenuClose, handlePopoverClose, customColor, reversedColor };
-  const anchorElRef = useRef<HTMLDivElement>(null);
-
   return (
     <>
       {buttonUtilsArr.map(
@@ -69,24 +65,10 @@ const WrapperOfPopoverAndMenu: FC<WrapperOfPopoverAndMenuType> = ({
           const isArctiveIconPresent = !customColor.isUseDefault && isIconActive && !!ActiveIcon;
           const icon = isArctiveIconPresent ? ActiveIcon : Icon;
           const popoverText = isIconActive ? activePopoverText : notActivePopoverText;
-          const iconButtonProps = {
-            icon,
-            isArctiveIconPresent,
-            badgeContent,
-            customColor,
-            onClick: onClick,
-            iconName,
-            rotateDeg,
-            size: iconSize,
-            isIconActive,
-            activeIconName: anchorElState.name,
-            activeProperty: anchorElState.isPopoverOpen,
-            handleAverageMainComponentWidth
-          };
-          const mainComponent = <IconButtonByPas {...iconButtonProps} />;
+
           const allMenuComponentsProps = { onMenuClose: handleMenuClose, customColor, ...menuComponentsProps };
 
-          const handlePopoverOpen = ({ currentTarget, clientX: left, clientY: top  }: MouseEvent<HTMLElement, MouseEvent>) =>
+          const handlePopoverOpen: MouseEventHandler<HTMLElement> = ({ currentTarget, clientX: left, clientY: top }) =>
             setAnchorElState(state => ({
               ...state,
               cordinates: { left, top },
@@ -96,7 +78,7 @@ const WrapperOfPopoverAndMenu: FC<WrapperOfPopoverAndMenuType> = ({
               popoverText
             }));
 
-          const handleMenuOpen = ({ clientX: left, clientY: top }: MouseEvent<HTMLElement, MouseEvent>) =>
+          const handleMenuOpen: MouseEventHandler<HTMLElement> = ({ clientX: left, clientY: top }) =>
             setAnchorElState(state => ({
               ...state,
               cordinates: { left, top },
@@ -108,15 +90,24 @@ const WrapperOfPopoverAndMenu: FC<WrapperOfPopoverAndMenuType> = ({
               onMenuClose: null
             }));
 
-          const wrapperOfMainComponentProps = {
+          const iconButtonProps = {
+            icon,
+            isArctiveIconPresent,
+            badgeContent,
+            customColor,
+            iconName,
+            rotateDeg,
+            size: iconSize,
+            isIconActive,
+            activeIconName: anchorElState.name,
+            activeProperty: anchorElState.isPopoverOpen,
+            handleAverageMainComponentWidth,
             onMouseEnter: handlePopoverOpen,
             onMouseLeave: handlePopoverClose,
-            ref: anchorElRef,
-            onClick: handleMenuOpen,
-            key: buttonUtilsName
+            // ref: anchorElRef,
+            onClick: onClick || handleMenuOpen
           };
-
-          return <WrapperOfMainComponent {...wrapperOfMainComponentProps}>{mainComponent}</WrapperOfMainComponent>;
+          return <IconButtonByPas {...iconButtonProps} key={buttonUtilsName} />;
         }
       )}
       <PopoverAndMenu {...popoverAndMenuProps} />

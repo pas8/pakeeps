@@ -1,6 +1,6 @@
 import { useState, FC } from 'react';
 import { CircularProgress, Dialog, Grid, makeStyles } from '@material-ui/core';
-import CustomGradient from './components/CustomGradient';
+// import CustomGradient from './components/CustomGradient';
 import dynamic from 'next/dynamic';
 import { ColorPickerByPasPropsType } from './types';
 

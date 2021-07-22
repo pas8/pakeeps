@@ -2,7 +2,7 @@ import { IconButton, Link, Typography, Grid } from '@material-ui/core';
 import { useSelector } from 'react-redux';
 import { makeStyles, Tooltip } from '@material-ui/core';
 import { useRouter } from 'next/dist/client/router';
-import { capitalize, map, split } from 'lodash';
+import { capitalize, map, split, startsWith } from 'lodash';
 import { FC, Fragment } from 'react';
 import NextLink from 'next/link';
 import { SIGN_IN_URL, NEW_USER_URL } from 'models/denotation';
@@ -13,9 +13,14 @@ import { getIsAuthedWithLocalPassword } from 'store/modules/App/selectors';
 import { MainBarPropsType } from '../../types';
 import MenuButton from '../ProfileUtils/components/MenuButton';
 import { useAlpha } from 'hooks/useAlpha.hook';
+import { AUTH_BASE_URL } from 'layouts/RouterLayout/denotation';
 
-const useStyles = makeStyles(({ palette: { text, background }, spacing }) => ({
+const useStyles = makeStyles(({ palette: { text, background }, spacing, breakpoints }) => ({
   container: ({ isHeaderHavePaperColor }: { isHeaderHavePaperColor: boolean }) => ({
+    alignItems: 'center',
+    [breakpoints.down('sm')]: {
+      alignItems: ''
+    },
     '& svg,h6': {
       color: !isHeaderHavePaperColor ? background.paper : text.secondary
     },
@@ -42,12 +47,13 @@ const useStyles = makeStyles(({ palette: { text, background }, spacing }) => ({
   }
 }));
 
-const MainBar: FC<MainBarPropsType> = ({ isMenuOpen, isMenuExtended }) => {
+const MainBar: FC<MainBarPropsType> = ({ isMenuOpen, isMenuExtended, isRouteIsAuth }) => {
   const isHeaderHavePaperColor = useSelector(getIsHeaderHavePaperColor);
-  const classes = useStyles({ isHeaderHavePaperColor });
+  const { isSiveIsXs, isSizeSmall } = useBreakpointNames();
+
+  const classes = useStyles({ isHeaderHavePaperColor:isHeaderHavePaperColor || isSizeSmall });
   const { pathname } = useRouter();
 
-  const { isSiveIsXs,isSizeSmall } = useBreakpointNames();
 
   const isMainPage = pathname === '/';
 
@@ -73,22 +79,23 @@ const MainBar: FC<MainBarPropsType> = ({ isMenuOpen, isMenuExtended }) => {
       });
 
   const menuToolTipTitle = isMenuExtended ? 'Narrow down menu' : isMenuOpen ? 'Extend menu' : 'Open Menu';
-  const isRouteIsSignIn = pathname === SIGN_IN_URL;
   const isRoteIsSignUp = pathname === NEW_USER_URL;
 
   const handleChangeDrawerOpenStatus = useTakeFuncOfChangngDrawerOpenStatus();
 
   return (
-    <Grid className={classes.container} container={!isSizeSmall } alignItems={'center'}>
-      {isRouteIsSignIn || isRoteIsSignUp ? (
-        <Typography variant={'h6'}>{isRoteIsSignUp ? 'Register' : 'Log In '}</Typography>
+    <Grid className={classes.container} container={!isSizeSmall}>
+      {startsWith(pathname,AUTH_BASE_URL) ? (
+        <Typography variant={'h6'}>{ isRoteIsSignUp ? 'Register' : 'Log In '}</Typography>
       ) : (
         <>
-          <Tooltip title={menuToolTipTitle}>
-            <IconButton className={classes.menuButton} onClick={handleChangeDrawerOpenStatus}>
-              <MenuButton />
-            </IconButton>
-          </Tooltip>
+          {!isRouteIsAuth && (
+            <Tooltip title={menuToolTipTitle}>
+              <IconButton className={classes.menuButton} onClick={handleChangeDrawerOpenStatus}>
+                <MenuButton />
+              </IconButton>
+            </Tooltip>
+          )}
           {!isSizeSmall && (
             <Typography variant={'h6'} className={classes.typography}>
               {/* {headerTitle} */}

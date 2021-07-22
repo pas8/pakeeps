@@ -10,15 +10,11 @@ export type LayoutType = typeof ThemeLayout;
 const ThemeLayout = ({ children, ...props }: any) => {
   const { breakpointsValues, theme: themeColors, textColorCoefficients } = useSelector(getColor);
 
-  const { xs, sm, md, lg, xl } = breakpointsValues;
-  const breakpointsArr = [xl, lg, md, sm, xs];
 
   const textColors = mapValues(textColorCoefficients, coefficient => useAlpha(themeColors.textColor, coefficient));
   const theme = responsiveFontSizes(
     createMuiTheme({
-      breakpointsArr,
       breakpoints: {
-        //@ts-ignore
         values: breakpointsValues
       },
       // direction: 'rtl',

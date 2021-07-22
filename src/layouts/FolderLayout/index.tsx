@@ -1,12 +1,17 @@
 import { Grid, SwipeableDrawer } from '@material-ui/core';
+import dynamic from 'next/dynamic';
 import { FC, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getDrawerWidth, getHeaderHeight, getMenuOpenStatus, getPakeepDimensions } from 'store/modules/App/selectors';
+import { getDrawerWidth,  getMenuOpenStatus, getPakeepDimensions } from 'store/modules/App/selectors';
 import { getPositionOfFolderViewWithPakeepView } from 'store/modules/Settings/selectors';
+import CircularProgressLoader from 'components/CircularProgressLoader';
 import { toChangeMenuOpenStatus, toSetDrawerWidth } from 'store/modules/App/actions';
 import { menuOpenStatusDenotation } from 'models/denotation';
-import Folders from 'components/Folders';
 import { useBreakpointNames } from 'hooks/useBreakpointNames.hook';
+
+const Folders = dynamic(() => import('components/Folders'), {
+  loading: () => <CircularProgressLoader/>
+})
 
 const FolderLayout: FC = ({ children }) => {
   const dispatch = useDispatch();
@@ -38,11 +43,11 @@ const FolderLayout: FC = ({ children }) => {
     isFolderOpen
   };
 
-  const NavContainer = isFoldersHaveDraweView ? SwipeableDrawer : Nav;
+  const NavContainer: any = isFoldersHaveDraweView ? SwipeableDrawer : Nav;
   const anchor = positionsOfFolder.isRight ? 'right' : 'left';
 
   const navContainerProps = isFoldersHaveDraweView
-    ? { anchor, open: isFolderExtended, onClose: handleCloseFoldersWithDrawerView }
+    ? { anchor, open: isFolderExtended, onClose: handleCloseFoldersWithDrawerView, onOpen: () => {} }
     : {};
   const width = useSelector(getDrawerWidth);
   const {
@@ -58,7 +63,6 @@ const FolderLayout: FC = ({ children }) => {
     <Grid container>
       <Grid>
         {(isFolderExtended || isFolderOpen) && (
-          //@ts-ignore
           <NavContainer {...navContainerProps}>
             <Folders {...foldersProps} />
           </NavContainer>

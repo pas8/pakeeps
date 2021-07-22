@@ -1,24 +1,21 @@
-import { Grid } from '@material-ui/core';
-import { useSelector } from 'react-redux';
-import AuthForm from 'components/AuthForm';
-import FieldSetContainer from 'components/FieldSetContainer';
-import { getHeaderHeight } from 'store/modules/App/selectors';
+import { CircularProgress, Grid } from '@material-ui/core';
+import AuthFieldSetContainer from 'components/AuthFieldSetContainer';
+import PageCenteredContainer from 'components/PageCenteredContainer';
+import dynamic from 'next/dynamic';
 
-const Index = () => {
-  const headerHeight = useSelector(getHeaderHeight);
-  return (
-    <Grid
-   
-      style={{ height: `calc(92vh - ${headerHeight}px)` }}
-      container
-      justify={'center'}
-      alignItems={'center'}
-    >
-      <FieldSetContainer lg={4} xl={3} md={5} sm={8} xs={12} container item    title={'Register'}>
+const AuthForm = dynamic(() => import('components/AuthForm'), {
+  loading: () => <CircularProgress />,
+  ssr: false
+});
+
+const Index = () => (
+  <PageCenteredContainer>
+    <Grid style={{ padding: 12 }}>
+      <AuthFieldSetContainer title={'Register'}>
         <AuthForm isPageIsRegisted />
-      </FieldSetContainer>
+      </AuthFieldSetContainer>
     </Grid>
-  );
-};
+  </PageCenteredContainer>
+);
 
 export default Index;

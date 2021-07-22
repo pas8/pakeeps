@@ -1,14 +1,15 @@
 import { FC, MouseEventHandler, useState } from 'react';
-import { difference, flatten, uniq } from 'lodash';
+import { difference, flatten, uniq ,reverse} from 'lodash';
 import { DragDropContext, Draggable, Droppable, DropResult, OnDragEndResponder } from 'react-beautiful-dnd';
 import { makeStyles } from '@material-ui/core/styles';
-import { Grid, Typography, Button, Paper, Box } from '@material-ui/core';
+import { Grid, Typography, Box } from '@material-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
 import clsx from 'clsx';
 
 import { getHeaderProperties } from 'store/modules/App/selectors';
 import { useTakeAllHeaderUtils } from 'hooks/useTakeAllHeaderUtils.hook';
 import { useTakeIcon } from 'hooks/useTakeIcon.hook';
+import { useBreakpointNames } from 'hooks/useBreakpointNames.hook';
 import { useAlpha } from 'hooks/useAlpha.hook';
 import ButtonOfUdatingSetting from 'components/ButtonOfUdatingSetting';
 import { toChangeHeaderOrder } from 'store/modules/App/actions';
@@ -16,96 +17,108 @@ import { headerProfileUtilsDenotationIds } from 'models/denotation';
 import { NamesArrOFOrderOfHeaderUtilsType } from 'store/modules/App/types';
 import { TransferListOfHeaderUtilsPropsType } from './types';
 import ButtonUtils from './components/ButtonUtils';
+import CaptionOfSettingGroup from 'components/CaptionOfSettingGroup';
 
-const useStyles = makeStyles(({ palette, spacing, shape: { borderRadius }, typography: { subtitle1, subtitle2 } }) => ({
-  root: {
-    '& .lastItemContainer': {
-      borderBottom: 0
-    },
-    '& .alwaysInSameColumnItemContainer': {
-      color: palette.text.disabled,
-      '&:hover': {
+const useStyles = makeStyles(
+  ({ palette, spacing, shape: { borderRadius }, typography: { subtitle1, subtitle2, h6 }, breakpoints }) => ({
+    root: {
+      '& .lastItemContainer': {
+        borderBottom: 0
+      },
+      '& .alwaysInSameColumnItemContainer': {
         color: palette.text.disabled,
-        cursor: 'default'
+        '&:hover': {
+          color: palette.text.disabled,
+          cursor: 'default'
+        }
+      },
+      '& .draggingOverColumnContainer': {
+        borderColor: palette.secondary.main
+      },
+
+      '& .draggingItemContainer': {
+        borderRadius,
+        color: palette.background.default,
+        border: `1px solid ${palette.secondary.main}`,
+        background: palette.secondary.main,
+        '& p': {
+          ...subtitle2,
+          fontSize: subtitle1.fontSize
+        }
+      },
+
+      '& .selectedItemContainer': {
+        color: palette.secondary.main,
+        // borderRight:`1px solid ${palette.secondary.main}`,
+        // borderLeft:`1px solid ${palette.secondary.main}`,
+        '& p': {
+          ...subtitle2,
+          fontSize: subtitle1.fontSize
+        }
       }
     },
-    '& .draggingOverColumnContainer': {
-      borderColor: palette.secondary.main
-    },
 
-    '& .draggingItemContainer': {
+    button: {
+      margin: spacing(0.5, 0)
+    },
+    columnContainer: {
+      border: '1px solid',
       borderRadius,
-      color: palette.background.default,
-      border: `1px solid ${palette.secondary.main}`,
-      background: palette.secondary.main,
+      // padding:spacing(0,0.8),
+      borderColor: useAlpha(palette.text.secondary),
+      [breakpoints.down('xs')]: {
+        width: '100%',
+        minWidth: '100%'
+        // maxWidth:100,
+      }
+      // color: palette.secondary.main
+    },
+    itemContainer: {
+      height: 48,
+      padding: spacing(0, 0.4, 0, 1.4),
+
+      // padding: spacing(0.8, 0),
+      borderBottom: '1px solid',
+      borderBottomColor: useAlpha(palette.text.primary),
+
+      color: palette.text.secondary,
+      '& svg': {
+        marginTop: 4
+      },
       '& p': {
-        ...subtitle2,
-        fontSize: subtitle1.fontSize
+        ...subtitle1
+      },
+      '& .iconContainer': {
+        padding: spacing(0, 1.2, 0, 0)
+      },
+
+      '&:hover': {
+        background: palette.background.paper,
+        color: palette.secondary.main,
+
+        '& p': {
+          // ...subtitle2,
+          fontSize: subtitle1.fontSize
+        }
       }
     },
 
-    '& .selectedItemContainer': {
-      color: palette.secondary.main,
-      // borderRight:`1px solid ${palette.secondary.main}`,
-      // borderLeft:`1px solid ${palette.secondary.main}`,
-      '& p': {
-        ...subtitle2,
-        fontSize: subtitle1.fontSize
-      }
-    }
-  },
+    footer: {
+      margin: spacing(1.8, 0, 0),
 
-  button: {
-    margin: spacing(0.5, 0)
-  },
-  columnContainer: {
-    border: '1px solid',
-    borderRadius,
-    // padding:spacing(0,0.8),
-    borderColor: useAlpha(palette.text.secondary),
-    minWidth: 200
-    // color: palette.secondary.main
-  },
-  itemContainer: {
-    height: 48,
-    padding: spacing(0, 0.4, 0, 1.4),
-
-    // padding: spacing(0.8, 0),
-    borderBottom: '1px solid',
-    borderBottomColor: useAlpha(palette.text.primary),
-
-    color: palette.text.secondary,
-    '& svg': {
-      marginTop: 4
-    },
-    '& p': {
-      ...subtitle1
-    },
-    '& .iconContainer': {
-      padding: spacing(0, 1.2, 0, 0)
-    },
-
-    '&:hover': {
-      background: palette.background.paper,
-      color: palette.secondary.main,
-
-      '& p': {
-        // ...subtitle2,
-        fontSize: subtitle1.fontSize
+      [breakpoints.down('xs')]: {
+        '& .MuiBox-root,button': {
+          width: '100%'
+        }
       }
     }
-  },
-
-  footer: {
-    margin: spacing(1.8, 0, 0)
-  }
-}));
+  })
+);
 
 export const arrOfProfileUtilsIdOfAlwaysInSameColumn = [
   [headerProfileUtilsDenotationIds.AVATAR_BUTTON] as NamesArrOFOrderOfHeaderUtilsType,
   [headerProfileUtilsDenotationIds.SIGN_IN_AS] as NamesArrOFOrderOfHeaderUtilsType
 ];
-
 
 const TransferListOfHeaderUtils: FC<TransferListOfHeaderUtilsPropsType> = () => {
   const classes = useStyles();
@@ -115,7 +128,6 @@ const TransferListOfHeaderUtils: FC<TransferListOfHeaderUtilsPropsType> = () => 
 
   const allHeaderButtonUtils = useTakeAllHeaderUtils();
   const [selected, setSelected] = useState<NamesArrOFOrderOfHeaderUtilsType>([]);
-
 
   const [state, setState] = useState([
     difference(order.names, order.exclusionNames).filter(
@@ -160,7 +172,6 @@ const TransferListOfHeaderUtils: FC<TransferListOfHeaderUtilsPropsType> = () => 
 
     if (sInd === dInd) {
       const items = reorder(state[sInd], source.index, destination.index);
-      console.log(items);
 
       const newState = [...state];
       newState[sInd] = items;
@@ -177,9 +188,12 @@ const TransferListOfHeaderUtils: FC<TransferListOfHeaderUtilsPropsType> = () => 
   };
 
   const onSave = () => {
+    const exclusionNames = [...arrOfProfileUtilsIdOfAlwaysInSameColumn[1], ...state[1]];
+    const defaultNames =reverse( [...arrOfProfileUtilsIdOfAlwaysInSameColumn[0], ...state[0]])
+    const names = [...defaultNames, ...exclusionNames];
     dispatch(
       toChangeHeaderOrder({
-        newOrder: { exclusionNames: [...arrOfProfileUtilsIdOfAlwaysInSameColumn[1], ...state[1]] }
+        newOrder: { exclusionNames, names }
       })
     );
   };
@@ -189,14 +203,19 @@ const TransferListOfHeaderUtils: FC<TransferListOfHeaderUtilsPropsType> = () => 
     [...arrOfProfileUtilsIdOfAlwaysInSameColumn[1], ...state[1]]
   ];
 
+  const { isSiveIsXs } = useBreakpointNames();
+
   return (
     <Grid className={classes.root} container>
+      <Grid container>
+        <CaptionOfSettingGroup title={'Order'} />
+      </Grid>
       <DragDropContext onDragEnd={onDragEnd}>
         {columnsArr.map((el, idx) => (
           <>
             <Droppable key={idx} droppableId={`${idx}`}>
               {(provided, { isDraggingOver }) => (
-                <Grid ref={provided.innerRef} {...provided.droppableProps}>
+                <Grid ref={provided.innerRef} {...provided.droppableProps} style={{ width: isSiveIsXs ? '100%' : '' }}>
                   <Grid
                     container
                     className={clsx(classes.columnContainer, isDraggingOver ? 'draggingOverColumnContainer' : '')}
@@ -220,6 +239,7 @@ const TransferListOfHeaderUtils: FC<TransferListOfHeaderUtilsPropsType> = () => 
                           const draggableProps = isAlwaysInSameColumn
                             ? {
                                 ref: provided.innerRef,
+
                                 ...provided.draggableProps
                               }
                             : {
@@ -230,9 +250,8 @@ const TransferListOfHeaderUtils: FC<TransferListOfHeaderUtilsPropsType> = () => 
                           const isSelected = selected.includes(id);
 
                           const handleSelectItem: MouseEventHandler<HTMLElement> = ({ ctrlKey }) => {
-                            !isAlwaysInSameColumn &&
-                              ctrlKey &&
-                              setSelected(state => (state.includes(id) ? state : [...state, id]));
+                            (!isAlwaysInSameColumn && ctrlKey) ||
+                              (isSiveIsXs && setSelected(state => (state.includes(id) ? state : [...state, id])));
                           };
 
                           return (
@@ -265,7 +284,7 @@ const TransferListOfHeaderUtils: FC<TransferListOfHeaderUtilsPropsType> = () => 
               )}
             </Droppable>
             {idx === 0 && (
-              <Box mx={2}>
+              <Box mx={isSiveIsXs ? 0 : 2} width={!isSiveIsXs ? 'auto' : '100%'}>
                 <ButtonUtils
                   selected={selected}
                   setSelected={setSelected}

@@ -1,7 +1,8 @@
-import { Grid, makeStyles, Grow, Fade, Theme, useTheme } from '@material-ui/core';
+import { Grid, makeStyles, Grow, Fade, Theme, useTheme, CircularProgress } from '@material-ui/core';
 import { useState, useEffect, FC, memo, MouseEventHandler } from 'react';
 import dynamic from 'next/dynamic';
 import clsx from 'clsx';
+import { isMobile } from 'react-device-detect';
 import { useMeasure } from 'react-use';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -11,6 +12,7 @@ import { useGetReadableColor } from 'hooks/useGetReadableColor.hook';
 import { useFilteredLabels } from 'hooks/useFilteredLabels.hook';
 import { toChangePakeepProperty, toChangeTemporaryData, toDeleteLabelFromPakeep } from 'store/modules/App/actions';
 import { LabelIdType } from 'store/modules/App/types';
+import CircularProgressLoader from 'components/CircularProgressLoader';
 import { usePakeepUtilsFunc } from 'hooks/usePakeepUtilsFunc.hook';
 import { useLabelListFunc } from 'hooks/useLabelListFunc.hook';
 import { useThemeColors } from 'hooks/useThemeColors.hook';
@@ -21,20 +23,28 @@ import { useIsColorLight } from 'hooks/useIsColorLight.hook';
 import AttributeGroup from './components/AttributeGroup';
 import SkeletonView from './components/SkeletonView';
 import MainDefaultPartOfPakeepElement from './components/MainDefaultPart';
-import { NullityStatusState, PakeepElementPropsType, UseStylesProps } from './types';
+import { NullityStatusState, PakeepElementPropsType, UseStylesOfPakeepElementType } from './types';
 
-const IconsUtils = dynamic(() => import('components/IconsUtils'), { loading: () => <p>loading</p> });
+const IconsUtils = dynamic(() => import('components/IconsUtils'), {
+  loading: () => <CircularProgressLoader />
+});
 
 const useStyles = makeStyles(({ spacing, transitions, palette }: Theme) => ({
-  paperClass: ({ customColor, backgroundColor, color, isUtilsHaveViewLikeInGoogleKeep }: UseStylesProps) => {
+  paperClass: ({
+    customColor,
+    backgroundColor,
+    color,
+    isUtilsHaveViewLikeInGoogleKeep
+  }: UseStylesOfPakeepElementType) => {
     const isTypeLight = palette.type === 'light';
 
     const borderColor = isTypeLight ? color : useIsColorLight(backgroundColor) ? backgroundColor : color;
 
     const insetborderColor = useIsColorLight(backgroundColor) ? palette.background.default : backgroundColor;
     return {
+      overflow:'hidden',
       marginTop: 4,
-      padding: spacing(0.4, 1.4, isUtilsHaveViewLikeInGoogleKeep ? 8 * 0.8 : 1, 1.4),
+      padding: spacing(0.4, 1.4, isMobile ? 0 : isUtilsHaveViewLikeInGoogleKeep ? 8 * 0.8 : 1, 1.4),
       cursor: 'grab',
       position: 'relative',
       backgroundColor,
@@ -46,7 +56,7 @@ const useStyles = makeStyles(({ spacing, transitions, palette }: Theme) => ({
       }),
       userSelect: 'none',
       '&:hover': {
-        paddingBottom: `${spacing(8 * 0.8)}px !important`,
+        // paddingBottom: isMobile ? 0 : `${spacing(8 * 0.8)}px !important`,
         transition: transitions.create('all', {
           easing: transitions.easing.sharp,
           duration: transitions.duration.leavingScreen
@@ -58,7 +68,7 @@ const useStyles = makeStyles(({ spacing, transitions, palette }: Theme) => ({
     };
   },
 
-  isHoveredClass: ({ customColor, backgroundColor, color }: UseStylesProps) => {
+  isHoveredClass: ({ customColor, backgroundColor, color }: UseStylesOfPakeepElementType) => {
     return {
       // paddingBottom: `${spacing(8 * 0.8)}px !important`,
       // transition: transitions.create('all', {
@@ -86,10 +96,10 @@ const useStyles = makeStyles(({ spacing, transitions, palette }: Theme) => ({
   labelClass: { marginTop: spacing(0) },
   labelsContainerClass: { marginTop: spacing(0.8) },
 
-  // isDraggingClass: ({ customColor }: UseStylesProps) => ({
-  // borderColor: !customColor && palette.primary.main,
-  // boxShadow: !!customColor && `0px 0px 8px 2px ${customColor.hover} !important`
-  // }),
+  isDraggingClass: ({ customColor }: UseStylesOfPakeepElementType) => ({
+    borderColor: customColor.isUseDefault ? palette.primary.main : '',
+    boxShadow: customColor.isUseDefault ? '' : `0px 0px 8px 2px ${customColor.hover} !important`
+  }),
 
   isSelectingClass: {},
   isSomePakeepsSelectedClass: { cursor: 'pointer !important' },
@@ -134,7 +144,8 @@ const PakeepElement: FC<PakeepElementPropsType> = ({
   const correctBackground = isBackgroundColorDefault ? background.default : backgroundColor;
 
   const classes = useStyles({
-    // isDragging,
+    isDragging,
+    isMobile,
     customColor,
     backgroundColor: correctBackground,
     isUtilsHaveViewLikeInGoogleKeep,
@@ -172,7 +183,10 @@ const PakeepElement: FC<PakeepElementPropsType> = ({
     !!pakeepElementHeigth && handleResetItemSize();
   }, [pakeepElementHeigth]);
 
-  useEffect(() => setStatusState(state => ({ ...state, isLoaded: true })), []);
+  useEffect(() => {
+    setStatusState(state => ({ ...state, isLoaded: true }));
+  }, []);
+
   if (!statusState.isLoaded) return <SkeletonView />;
 
   const AnimationElement = isUtilsHaveViewLikeInGoogleKeep ? Fade : Grow;
@@ -227,6 +241,7 @@ const PakeepElement: FC<PakeepElementPropsType> = ({
     isPinIconButtonHidden,
     className: clsx(
       classes.paperClass,
+      isDragging && classes.isDraggingClass,
       !isSomePakeepsSelected && statusState.isHovered && !isSelecting && classes.isHoveredClass,
       isSelecting && classes.isSelectingClass,
       isSomePakeepsSelected && classes.isSomePakeepsSelectedClass
@@ -245,8 +260,8 @@ const PakeepElement: FC<PakeepElementPropsType> = ({
 
     className: clsx(classes.containerClass, className),
     id,
-    open: true,
-    maxWidth: 'md'
+    open: true
+    // maxWidth: 'md'
   };
   const handleSaveEvents: HandleSaveEventsType = events => {
     dispatch(toChangePakeepProperty({ pakeepId: id, property: { events } }));
@@ -281,16 +296,16 @@ const PakeepElement: FC<PakeepElementPropsType> = ({
           <AttributeGroup {...attributeGroupProps} />
         </Grid>
 
-        {openIn && !isDragging && (
-          <AnimationElement in={openIn}>
-            <Grid className={classes.iconsUtilsClass}>
-              <IconsUtils {...iconsUtilsProps} />
-            </Grid>
-          </AnimationElement>
+        {openIn && !isDragging && !isMobile && (
+          // <AnimationElement in={openIn}>
+          <Grid className={classes.iconsUtilsClass}>
+            <IconsUtils {...iconsUtilsProps} />
+          </Grid>
+          // </AnimationElement>
         )}
       </MainDefaultPartOfPakeepElement>
     </Grid>
   );
 };
 
-export default memo(PakeepElement);
+export default PakeepElement;

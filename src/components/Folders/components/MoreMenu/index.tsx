@@ -29,6 +29,10 @@ const useStyles = makeStyles(({ spacing, palette, shape: { borderRadius }, typog
     '& p,svg': {
       color: palette.text.secondary
     },
+
+    '& .selectedItemContainer  p,svg': {
+      color: palette.primary.main
+    },
     '& p': {
       ...button,
       textTransform: 'uppercase'
@@ -75,9 +79,12 @@ const MoreMenuOfFolders: FC<MoreMenuOfFoldersPropsType> = ({
                   ...defaultFolderItemProps,
                   id
                 });
-
                 return (
-                  <MenuItem key={`${key}_item_${id}_${idx}`} onClick={onClick} className={'itemContainer'}>
+                  <MenuItem
+                    key={`${key}_item_${id}_${idx}`}
+                    onClick={onClick}
+                    className={`itemContainer ${globalFolderId === id? 'selectedItemContainer' : ''}`}
+                  >
                     {icon}
                     <Typography> {title}</Typography>
                   </MenuItem>

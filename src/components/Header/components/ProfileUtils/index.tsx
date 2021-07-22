@@ -40,8 +40,9 @@ const useStyles = makeStyles(({ spacing, palette: { text, background } }) => ({
 const HeaderProfileUtils: FC = () => {
   const isHeaderHavePaperColor = useSelector(getIsHeaderHavePaperColor);
 
-  const classes = useStyles({ isHeaderHavePaperColor });
-  const { isSiveIsXs } = useBreakpointNames();
+  const { isSizeSmall } = useBreakpointNames();
+
+  const classes = useStyles({ isHeaderHavePaperColor:isHeaderHavePaperColor|| isSizeSmall});
 
   const { order } = useSelector(getHeaderProperties);
 

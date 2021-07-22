@@ -67,6 +67,7 @@ const useStyles = makeStyles(({ spacing, shape: { borderRadius }, typography: { 
       width: '100%',
 
       height: spacing(6),
+      marginBottom:spacing(1.42),
       borderColor: useAlpha(color, 0.4),
       color,
       '&:hover': {

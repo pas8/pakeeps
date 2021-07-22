@@ -1,18 +1,34 @@
 import { FC } from 'react';
+import dynamic from 'next/dynamic';
 import { useDispatch, useSelector } from 'react-redux';
-import { Box, Grid, makeStyles } from '@material-ui/core';
+import { Skeleton } from '@material-ui/lab';
+import { Box, Grid, makeStyles, Typography } from '@material-ui/core';
 
 import FieldSetContainer from 'components/FieldSetContainer';
 import SettingContainer from 'components/SettingContainer';
 import SwitchByPas from 'components/Switch';
-import TransferListOfHeaderUtils from 'components/TransferListOfHeaderUtils';
 import { APPEARANCE, appearanceIds, settingUrls } from 'layouts/RouterLayout/denotation';
 import { toChangeSettingProperty } from 'store/modules/Settings/actions';
 import { getIsHeaderHavePaperColor } from 'store/modules/Settings/selectors';
 
+const TransferListOfHeaderUtils = dynamic(() => import('components/TransferListOfHeaderUtils'), {
+  loading: () => (
+    <>
+      <Typography variant="h4">
+        <Skeleton />
+      </Typography>
+      <Skeleton variant={'rect'} width={320} height={420} />
+      <Typography variant="h4">
+        <Skeleton />
+      </Typography>
+      <Skeleton variant={'rect'} width={320} height={100} />
+    </>
+  )
+});
+
 const useStyles = makeStyles(({ spacing, transitions, breakpoints, shape, palette }) => ({
   container: {},
-  groupContainer: { padding: spacing(0, 1, 1, 1) }
+  groupContainer: { padding: spacing(0) }
 }));
 
 const SettingAppearance: FC<any> = () => {
@@ -37,11 +53,10 @@ const SettingAppearance: FC<any> = () => {
                 onChange={handleChangeHeaderHavePaperColorStatus}
               />
             </Box>
-          <Grid container>
-            <TransferListOfHeaderUtils />
+            <Grid container>
+              <TransferListOfHeaderUtils />
+            </Grid>
           </Grid>
-          </Grid>
-
         </FieldSetContainer>
       </SettingContainer>
     </Grid>

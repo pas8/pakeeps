@@ -1,6 +1,7 @@
 import { AppBar, Grid, makeStyles, Typography, Slide } from '@material-ui/core';
 import { every } from 'lodash';
 import { FC } from 'react';
+import dynamic from 'next/dynamic';
 import { useMeasure } from 'react-use';
 import { useDispatch } from 'react-redux';
 import CloseOutlinedIcon from '@material-ui/icons/CloseOutlined';
@@ -10,7 +11,6 @@ import { usePropertiesToUtils } from 'hooks/usePropertiesToUtils.hook';
 import IconButtonByPas from 'components/IconButton';
 import PakeepPropertyProvider from 'components/PakeepPropertyProviders';
 import { IconsUtilsArrDenotationNameType } from 'components/IconsUtils/types';
-import IconsUtils from 'components/IconsUtils';
 import { useFindSelectedLabels } from 'hooks/useFindSelectedLabels.hook';
 import { useGetIsColorDefault } from 'hooks/useGetIsColorDefault.hook';
 import { useThemeColors } from 'hooks/useThemeColors.hook';
@@ -30,24 +30,75 @@ import {
   PakeepPropertyiesType
 } from './types';
 import { useFindSelectedEvents } from 'hooks/useFindSelectedEvents.hook';
+import { Skeleton } from '@material-ui/lab';
+import CircularProgressLoader from 'components/CircularProgressLoader';
+import { DEFAULT } from 'models/denotation';
+import { colord, extend } from 'colord';
+import mixPlugin from 'colord/plugins/mix';
+import { useMix } from 'hooks/useMix.hook';
 
 const useStyles = makeStyles(({ spacing }) => ({
-  containerClass: {
-    padding: spacing(1, 0.4)
-  }
+  containerClass: ({ background, color }: any) => ({
+    padding: spacing(1, 0.4),
+    background,
+    color
+  })
 }));
+
+const IconsUtils = dynamic(() => import('components/IconsUtils'), {
+  loading: () => (
+    <>
+      <CircularProgressLoader style={{ width: 300, height: 30 }} />
+    </>
+  )
+});
 
 const { TOOGLE, VALUE } = VariantsOfropertiesToUtils;
 
 const HeaderWhenActiveSelecto: FC<HeaderWhenActiveSelectoPropsType> = ({ selectedPakeeps, selectedPakeepsId }) => {
   const dispatch = useDispatch();
+  extend([mixPlugin]);
 
-  const classes = useStyles();
+  const isColorDefault = useGetIsColorDefault(selectedPakeeps, 'color');
+  const isBackgroundColorDefault = useGetIsColorDefault(selectedPakeeps, 'backgroundColor');
+  const isColorsDefault = isColorDefault && isBackgroundColorDefault;
+
+  // const { backgroundColor } = selectedPakeeps.reduce(
+  //   (sum, { color, backgroundColor }, idx) => {
+  //     const newBgColor =
+  //       sum.backgroundColor === DEFAULT
+  //         ? DEFAULT
+  //         : backgroundColor === DEFAULT
+  //         ? DEFAULT
+  //         : // ? sum.backgroundColor
+  //           colord(sum.backgroundColor).mix(backgroundColor).toHex();
+  //     console.log( backgroundColor, backgroundColor === DEFAULT, sum.backgroundColor === DEFAULT);
+  //     return {
+  //       // color: color === DEFAULT ? sum.color === DEFAULT ? DEFAULT : sum.color : colord(sum.color).mix(color).toHex(),
+  //       backgroundColor: newBgColor
+  //     };
+  //   },
+  //   { backgroundColor: 'red' }
+  // );
 
   const [ref, { width: widthOfContainer }] = useMeasure();
   const [primaryColor] = useThemeColors();
+  // console.log(backgroundColor);
+  const [customColor] = useGetReadableColor(
+    // isColorsDefault ?
+    primaryColor!
+    // :backgroundColor
+    // isColorsDefault ? DEFAULT : color
+  );
 
-  const [customColor] = useGetReadableColor(primaryColor!);
+  const classes = useStyles({
+    background:
+      //  isBackgroundColorDefault ?
+
+      primaryColor
+    //  : customColor.bgHover,
+    // color: customColor.hover
+  });
 
   const cancelSelectedPakeepsId = () => {
     dispatch(toCancelSelectingStatus({ isCancelSelectedPakeepsId: true }));
@@ -60,9 +111,6 @@ const HeaderWhenActiveSelecto: FC<HeaderWhenActiveSelectoPropsType> = ({ selecte
     );
     cancelSelectedPakeepsId();
   };
-
-  const isColorDefault = useGetIsColorDefault(selectedPakeeps, 'color');
-  const isBackgroundColorDefault = useGetIsColorDefault(selectedPakeeps, 'backgroundColor');
 
   const pakeepPropertyies: PakeepPropertyiesType = {
     isInBookmark: { funcName: 'handleSetBookmarkPakeep', propertyValue: TOOGLE },
@@ -121,15 +169,14 @@ const HeaderWhenActiveSelecto: FC<HeaderWhenActiveSelectoPropsType> = ({ selecte
     'width',
     'share'
   ];
-console.log(events)
   const iconsUtilsProps = {
     id,
-    widthOfContainer,
     isBackgroundColorDefault,
     isColorDefault,
     labels,
     events,
     iconsCloser: true,
+    widthOfContainer: 400,
     customColor,
     isUtilsReversed: true,
     labelsListProps,

@@ -1,23 +1,46 @@
-import { Button, Grid, makeStyles,  TextField, Typography, useTheme } from '@material-ui/core';
-import {  mapValues,  values } from 'lodash';
+import {
+  Button,
+  Grid,
+  makeStyles,
+  TextField,
+  Typography,
+  useTheme,
+  CircularProgress,
+  Backdrop
+} from '@material-ui/core';
+import { map, mapValues, values } from 'lodash';
 import dynamic from 'next/dynamic';
-import { ChangeEventHandler, FC, MouseEventHandler, useState } from 'react';
+import firebase from 'firebase/app';
+import 'firebase/auth';
+import { ChangeEventHandler, FC, MouseEventHandler, useEffect, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { useSnackbar } from 'notistack';
 import { useToggle, useTitle } from 'react-use';
-import { getAvatarProperties, getUserData } from 'store/modules/App/selectors';
 import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
+
 import { useIsColorLight } from 'hooks/useIsColorLight.hook';
-import { NONE, TRANSPARENT } from 'models/denotation';
+import { errorMessages, NONE, TRANSPARENT } from 'models/denotation';
+import { getAvatarProperties, getUserData } from 'store/modules/App/selectors';
 import { useBreakpointNames } from 'hooks/useBreakpointNames.hook';
 import { emailRgEx } from 'components/AuthForm';
-import DialogOfEditingAvatar from 'components/DialogOfEditingAvatar';
 import { useAlpha } from 'hooks/useAlpha.hook';
 import { useFromNameToText } from 'hooks/useFromNameToText.hook';
 import SwitchByPas from 'components/Switch';
 import FieldSetContainer from 'components/FieldSetContainer';
 import SettingContainer from 'components/SettingContainer';
 import ButtonOfUdatingSetting from 'components/ButtonOfUdatingSetting';
+import { toChangeUserData } from 'store/modules/App/actions';
+import { SnackbarSeverityNames } from 'models/unums';
+import { DialogLoadingComponent } from 'layouts/DialogsLayout';
+
+const DialogOfEditingAvatar = dynamic(() => import('components/DialogOfEditingAvatar'), {
+  loading: () => <DialogLoadingComponent />
+});
+
+const DialogOfEnteringPassword = dynamic(() => import('components/DialogOfEnteringPassword'), {
+  loading: () => <DialogLoadingComponent />
+});
 
 const AccountAvatar = dynamic(() => import('components/AccountAvatar'), { ssr: false });
 
@@ -173,9 +196,11 @@ const useStyles = makeStyles(
 const SettingAccount: FC = () => {
   const avatarProperties = useSelector(getAvatarProperties);
   const userData = useSelector(getUserData);
+  const dispatch = useDispatch();
+
   const { isSiveIsXs, isSizeSmall } = useBreakpointNames();
 
-  const validationFunc = (value: any) => console.log(value);
+  const validationFunc = (value: any) => true;
 
   const [isEmailPublic, setIsEmailPublic] = useState(userData.isEmailPubic);
 
@@ -183,9 +208,14 @@ const SettingAccount: FC = () => {
     setIsEmailPublic(checked);
   };
 
+  const inputsNamesDetonation = {
+    email: 'email',
+    name: 'name',
+    userName: 'userName'
+  } as const;
+
   const inputsDetonationOfSettingAccount = {
-    email: {
-      name: 'email',
+    [inputsNamesDetonation.email]: {
       aditionalComponents: (
         <Grid container>
           <SwitchByPas title={'Is email  public?'} checked={isEmailPublic} onChange={handleChangeEmailPublicStatus} />
@@ -197,22 +227,20 @@ const SettingAccount: FC = () => {
       },
       helperText: 'U can change email, but u will need to verificate that.'
     },
-    name: {
-      name: 'name',
+    [inputsNamesDetonation.name]: {
       validationFunc,
       helperText:
         'Your name may appear around Pakeeps where you contribute or are mentioned. You can remove it at any time.'
     },
 
-    userName: {
-      name: 'userName',
+    [inputsNamesDetonation.userName]: {
       validationFunc,
 
       helperText: 'Anyone can see your userName and you also can remove it at any time.'
     }
   } as const;
 
-  const nullityOfInputsState = mapValues(inputsDetonationOfSettingAccount, ({ name }) => {
+  const nullityOfInputsState = mapValues(inputsNamesDetonation, name => {
     const element = {
       value: userData[name],
       isValid: true
@@ -222,8 +250,11 @@ const SettingAccount: FC = () => {
   });
 
   const [inputsState, setInputsState] = useState(nullityOfInputsState);
+  // console.log(inputsState ,userData)
 
-  const inputsArr = values(inputsDetonationOfSettingAccount);
+  useEffect(() => {
+    setInputsState(state => mapValues(inputsNamesDetonation, name => ({ ...state[name], value: userData[name] })));
+  }, [userData]);
 
   const isAccountHaveAvatar = avatarProperties?.url !== NONE;
   const isHaveBgColor = avatarProperties.backgroundColor !== TRANSPARENT;
@@ -271,7 +302,6 @@ const SettingAccount: FC = () => {
   const isSomethingWasChanged = inputsState !== nullityOfInputsState;
 
   const isBgColorDark = !useIsColorLight(avatarProperties.backgroundColor);
-
   const classes = useStyles({
     isAccountHaveAvatar,
     ...avatarProperties,
@@ -281,9 +311,82 @@ const SettingAccount: FC = () => {
     isSomethingWasChanged
   });
 
-  const onUpdateAccountData = () => {
-    console.log(inputsState);
+  const { enqueueSnackbar } = useSnackbar();
+
+  const [stateOfDialogOfEnteringPassword, setStateOfDialogOfEnteringPassword] = useState({ open: false, value: '' });
+
+  // console.log(userData)
+
+  const handleUpdateDefaultAccountData = () => {
+    const user = firebase.auth().currentUser;
+    if (!user) return;
+    user
+      .updateProfile({ displayName: inputsState.name.value })
+      .then(() => {
+        inputsState.userName.value !== userData.userName &&
+          enqueueSnackbar({
+            message: `User_Name  was changed `
+          });
+        dispatch(toChangeUserData({ userData: { userName: inputsState.userName.value } }));
+      })
+      .catch(error => {
+        enqueueSnackbar({
+          message: error.message || errorMessages.SOMETHING_WENT_WRONG,
+          severity: SnackbarSeverityNames.ERROR
+        });
+      });
   };
+
+  const handleOpenDialogOfPasswordConfirm = () => {
+    firebase?.auth()?.currentUser?.email !== inputsState.email.value &&
+      setStateOfDialogOfEnteringPassword(state => ({ ...state, open: true }));
+    handleUpdateDefaultAccountData();
+  };
+
+  const onCancelOfOfDialogOfEnteringPassword = () => {
+    setStateOfDialogOfEnteringPassword(state => ({ ...state, open: false, value: '' }));
+  };
+
+  const onChangeOfDialogOfEnteringPassword: ChangeEventHandler<HTMLInputElement> = ({ target: { value } }) => {
+    setStateOfDialogOfEnteringPassword(state => ({ ...state, value }));
+  };
+
+  const onUpdateAccountData = () => {
+    const user = firebase.auth().currentUser;
+    if (!user) return;
+
+    const credential = firebase.auth.EmailAuthProvider.credential(user.email!, stateOfDialogOfEnteringPassword.value);
+    user.reauthenticateWithCredential(credential).catch(error => {
+      enqueueSnackbar({
+        message: error.message || errorMessages.SOMETHING_WENT_WRONG,
+        severity: SnackbarSeverityNames.ERROR
+      });
+    });
+
+    user
+      ?.updateEmail(inputsState.email.value)
+      .then(() => {
+        enqueueSnackbar({
+          message: 'An email was sended  to the original email address ',
+          severity: SnackbarSeverityNames.INFO
+        });
+      })
+      .catch(error => {
+        enqueueSnackbar({
+          message: error.message || errorMessages.SOMETHING_WENT_WRONG,
+          severity: SnackbarSeverityNames.ERROR
+        });
+      });
+    onCancelOfOfDialogOfEnteringPassword();
+  };
+
+  const dialogOfEnteringPasswordProps = {
+    ...stateOfDialogOfEnteringPassword,
+    onChange: onChangeOfDialogOfEnteringPassword,
+    onConfirm: onUpdateAccountData,
+    onCancel: onCancelOfOfDialogOfEnteringPassword
+  };
+
   return (
     <>
       <Grid container justify={'center'} className={classes.container}>
@@ -301,40 +404,46 @@ const SettingAccount: FC = () => {
             >
               {/* > */}
               <Grid lg={6} sm={12} md={7} xl={6} xs={12} className={classes.containerOfInputs} item>
-                {inputsArr.map(({ name, helperText = '', validationFunc: useValidate, ...aditional }) => {
-                  const label = useFromNameToText(name);
-                  const value = inputsState[name].value === NONE ? '' : inputsState[name].value;
+                {map(
+                  inputsDetonationOfSettingAccount,
+                  (
+                    { helperText = '', validationFunc: useValidate, ...aditional },
+                    name: keyof typeof inputsNamesDetonation
+                  ) => {
+                    const label = useFromNameToText(name);
+                    const value = inputsState[name].value === NONE ? '' : inputsState[name].value;
 
-                  const onChange: ChangeEventHandler<HTMLInputElement> = ({ target: { name, value } }) => {
-                    const isValid = useValidate(value);
-                    setInputsState(state => ({ ...state, [name]: { value, isValid } }));
-                  };
-                  const error = !inputsState[name].isValid;
+                    const onChange: ChangeEventHandler<HTMLInputElement> = ({ target: { name, value } }) => {
+                      const isValid = useValidate(value);
+                      setInputsState(state => ({ ...state, [name]: { value, isValid } }));
+                    };
+                    const error = !inputsState[name].isValid;
 
-                  const textFieldProps = {
-                    label,
-                    placeholder: label,
-                    color: 'secondary' as const,
-                    type: 'text',
-                    value,
-                    error,
-                    helperText,
-                    onChange,
-                    name,
-                    variant: 'outlined' as const
-                  };
-                  return (
-                    <Grid className={classes.containerOftextField} key={name}>
-                      <TextField {...textFieldProps} fullWidth />
+                    const textFieldProps = {
+                      label,
+                      placeholder: label,
+                      color: 'secondary' as const,
+                      type: 'text',
+                      value,
+                      error,
+                      helperText,
+                      onChange,
+                      name,
+                      variant: 'outlined' as const
+                    };
+                    return (
+                      <Grid className={classes.containerOftextField} key={name}>
+                        <TextField {...textFieldProps} fullWidth />
 
-                      {
-                        //@ts-ignore
-                        aditional?.aditionalComponents
-                      }
-                    </Grid>
-                  );
-                })}
-                <ButtonOfUdatingSetting onClick={onUpdateAccountData} title={' Update account'} />
+                        {
+                          //@ts-ignore
+                          aditional?.aditionalComponents
+                        }
+                      </Grid>
+                    );
+                  }
+                )}
+                <ButtonOfUdatingSetting onClick={handleOpenDialogOfPasswordConfirm} title={' Update account'} />
               </Grid>
 
               <Grid className={classes.conatinerOfAvatar} lg={6} sm={10} md={5} xl={6} xs={12}>
@@ -370,7 +479,7 @@ const SettingAccount: FC = () => {
           </Grid>
         </SettingContainer>
       </Grid>
-
+      <DialogOfEnteringPassword {...dialogOfEnteringPasswordProps} />
       <DialogOfEditingAvatar {...dialogOfEditingAvatarProps} />
     </>
   );

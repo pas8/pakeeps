@@ -1,10 +1,10 @@
 import React, { useState, useEffect, FC } from 'react';
 import dynamic from 'next/dynamic';
 import { useSnackbar } from 'notistack';
-import { toChangeTemporaryData } from 'store/modules/App/actions';
+import { toChangeDefaultLayoutDialogProps, toChangeTemporaryData } from 'store/modules/App/actions';
 import { DialogLayoutName } from 'models/unums';
 import { Typography, Grid, makeStyles, CircularProgress } from '@material-ui/core';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import includes from 'lodash.includes';
 import { filter, mapKeys, map, mapValues } from 'lodash';
 import { DEFAULT } from 'models/denotation';
@@ -18,6 +18,7 @@ import {
   DateAndTimeInputsStateType,
   HandleDateAndTimeInputsStateType
 } from './types';
+import { getDefaultDialogPropsOfTemporaryData } from 'store/modules/App/selectors';
 
 const HeaderOfAddDateToPakeep = dynamic(() => import('./components/HeaderOfAddDateToPakeep'));
 
@@ -32,6 +33,7 @@ const EventItemsList = dynamic(() => import('./components/EventItemsList'), {
 const useStyles = makeStyles(({ spacing, shape: { borderRadius } }) => ({
   container: ({ color }: { color: CustomColorType }) => ({
     borderRadius,
+    overflow:'hidden',
     background: !color.isUseDefault ? color.unHover : ''
   })
 }));
@@ -46,8 +48,6 @@ const AddDateToPakeep: FC<AddDateToPakeepPropsType> = ({
   const dispatch = useDispatch();
 
   const classes = useStyles({ color });
-
-  if (!currentEventsArr) return null;
 
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
@@ -67,20 +67,19 @@ const AddDateToPakeep: FC<AddDateToPakeepPropsType> = ({
   const [focusedEventId, setFocusedEventId] = useState('');
 
   const [dateAndTimeInputsState, setDateAndTimeInputsState] = useState<DateAndTimeInputsStateType>({});
-  // console.log(dateAndTimeInputsState)
+
   const handleDateAndTimeInputsState: HandleDateAndTimeInputsStateType = (id, value, inputValue) => {
     setFocusedEventId(id);
     setDateAndTimeInputsState(state => ({ ...state, [id]: { id, value, inputValue } }));
   };
-  // const handleAddCustomEvent = newCustomEvent => {
-  //   setDateAndTimeInputsState(state => ({ ...state, addMoreEvents: [...state.addMoreEvents, newCustomEvent] }));
-  // };
 
   const handleOpenAddCustomEventsDialog = () => {
     dispatch(
-      toChangeTemporaryData({
-        newTemporaryData: {
-          defaultDialogProps: { id: pakeepId, dialogName: DialogLayoutName.EVENTS, customColor: color }
+      toChangeDefaultLayoutDialogProps({
+        props: {
+          id: pakeepId,
+          name: DialogLayoutName.EVENTS,
+          customColor: color
         }
       })
     );
@@ -95,7 +94,7 @@ const AddDateToPakeep: FC<AddDateToPakeepPropsType> = ({
     }
   ];
 
-  const eventListArr = [...currentEventsArr, ...defaultDateListArr];
+  const eventListArr = !currentEventsArr ? defaultDateListArr : [...currentEventsArr, ...defaultDateListArr];
 
   const [chosenItemArr, setChosenItemArr] = useState<ChosenItemArrType>([]);
 
@@ -139,19 +138,19 @@ const AddDateToPakeep: FC<AddDateToPakeepPropsType> = ({
 
   const previewEventListProps = {
     validatedCurrentEvents,
-    currentEventsArr,
+    currentEventsArr: currentEventsArr!,
     customColor,
     onClick: (__: any) => {},
     parentBackgroundColor: customColor.isUseDefault ? DEFAULT : customColor.bgHover
   };
-  const customTitle = !!validatedCurrentEvents.length ? (
-    <Grid style={{ maxWidth: 292 }}>
-      {' '}
-      <PreviewEventList {...previewEventListProps} />
-    </Grid>
-  ) : (
-    <Typography style={{ color: customColor.isUseDefault ? '' : customColor.unHover }}> Events</Typography>
-  );
+  const customTitle =
+    !!currentEventsArr && !!currentEventsArr?.length && !!chosenItemArr.length ? (
+      <Grid style={{ maxWidth: 292 }}>
+        <PreviewEventList {...previewEventListProps} />
+      </Grid>
+    ) : (
+      <Typography style={{ color: customColor.isUseDefault ? '' : customColor.unHover }}> Events</Typography>
+    );
 
   const headerOfAddDateToPakeepProps = {
     buttonSaveState,

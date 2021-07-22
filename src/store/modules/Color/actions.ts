@@ -26,3 +26,10 @@ export const toChangeDefaultThemesArr = (
   type: TypeNames.HANDLE_CHANGE_DEFAULT_THEMES_ARR,
   payload
 });
+
+export const toChangeAllFirebaseColorState = (
+  payload: PayloadTypes[TypeNames.HANDLE_CHANGE_ALL_FIREBASE_COLOR_STATE]
+): ColorActionTypes => ({
+  type: TypeNames.HANDLE_CHANGE_ALL_FIREBASE_COLOR_STATE,
+  payload
+});

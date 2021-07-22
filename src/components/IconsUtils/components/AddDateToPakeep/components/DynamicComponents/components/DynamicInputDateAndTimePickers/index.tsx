@@ -81,7 +81,7 @@ export const useStyles = makeStyles(({ spacing, typography: { h4 }, palette }) =
         },
         '&.Mui-focused fieldset': {
           borderColor: focusedColor,
-          boxShadow: customColor ? '' : `0px 0px 4px 1px ${error ? palette.error.main : focusedColor}`
+          boxShadow: customColor ? '' : `0px 0px 2px 1px ${error ? palette.error.main : focusedColor}`
         },
         '&.Mui-focused ': {
           color: customColor.bgUnHover

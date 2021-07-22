@@ -11,13 +11,18 @@ import { firebaseAppInitialState } from '../App/reducers';
 import { ThunkAction } from 'redux-thunk';
 import { InitialiAppFirebaseData } from '../App/types';
 import { ColorInitialStateType } from '../Color/types';
+import { toChangeAllFirebaseAppState } from '../App/actions';
+import { toChangeAllFirebaseColorState } from '../Color/actions';
+import { toChangeSettingProperty } from '../Settings/actions';
+import { colorInitialState } from '../Color/reducers';
 
 export type ParamsOfOperateToHandleRegisterType = { email: string; password: string };
 export type OperateToHandleRegisterType = ThunkAction<any, RootStoreType, unknown, any>;
 
-export const defaultFirebaseState = {
+export const defaultFirebaseState: DefaultFirebaseStateType = {
   settings: settingsInitialState,
-  app: firebaseAppInitialState
+  app: firebaseAppInitialState,
+  color: colorInitialState
 };
 
 export type DefaultFirebaseStateType = {
@@ -28,7 +33,7 @@ export type DefaultFirebaseStateType = {
 
 // const changePassword = (currentPassword, newPassword) => {
 //   this.reauthenticate(currentPassword).then(() => {
-//     var user = firebase.auth().currentUser;
+//     const user = firebase.auth().currentUser;
 //     user.updatePassword(newPassword).then(() => {
 //       console.log("Password updated!");
 //     }).catch((error) => { console.log(error); });
@@ -36,7 +41,7 @@ export type DefaultFirebaseStateType = {
 // }
 // const changeEmail = (currentPassword, newEmail) => {
 //   this.reauthenticate(currentPassword).then(() => {
-//     var user = firebase.auth().currentUser;
+//     const user = firebase.auth().currentUser;
 //     user.updateEmail(newEmail).then(() => {
 //       console.log("Email updated!");
 //     }).catch((error) => { console.log(error); });
@@ -65,20 +70,7 @@ export const operateToHandleSignIn =
     firebase
       .auth()
       .signInWithEmailAndPassword(email, password)
-      .then(result => {
-        // dispatch()
-        console.log(firebase?.auth()?.currentUser?.uid);
-        // firebase
-        //   .firestore()
-        //   .collection('users')
-        //   .doc(firebase?.auth()?.currentUser?.uid)
-        //   .get()
-        //   .then(r => {
-        //     console.log(r);
-        //   });
-
-        // dispatch(toChangeLoginStatus({ isLogined: true }));
-      })
+      // .then()
       .catch(error => {
         //@ts-ignore
         dispatch(toChangeErrorStatus({ isError: true }));

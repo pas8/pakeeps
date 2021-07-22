@@ -61,7 +61,7 @@ const useStyles = makeStyles(
       '&  .buttonWrapperOfFolderItem': {
         position: 'relative',
         width: '100%',
-        borderRadius:0,
+        borderRadius: 0,
         height: '100%',
         padding: 0,
         minWidth: 0,
@@ -79,11 +79,12 @@ const useStyles = makeStyles(
 
       '& .folderItem': {
         minWidth: defaultWidth,
+        overflow:'hidden',
         maxWidth: isFolderExtended ? extendedWidth : defaultWidth,
         '& svg,p': {
           color: text.hint
         },
-        '&  svg': {
+        '&  .containerOfCustomComponent,.iconContainer': {
           margin: isFolderExtended ? spacing(0, 0.8, 0, 1.2) : 0
         },
         '& p': {
@@ -95,7 +96,7 @@ const useStyles = makeStyles(
         },
 
         // maxWidth: isFolderExtended ? 'auto' : defaultWidth,
-        height,
+        height: height - 4,
         borderRadius: 0,
 
         '&:hover': {
@@ -156,6 +157,16 @@ const useStyles = makeStyles(
         },
         borderColor: `${useAlpha(folderColor, 1)} !important`
       },
+
+      '& .selectedFolderWithDrawerViewItem': {
+        '& svg,p': {
+          color: `${folderColor} !important`
+        },
+        borderStyle: 'none',
+        '& .MuiTouchRipple-root': {
+          background: useAlpha(folderColor, 0.2)
+        }
+      },
       '& .additionalFolder': {
         border: '2px solid',
         borderColor: useAlpha(text.primary, 0.2),
@@ -179,17 +190,24 @@ const useStyles = makeStyles(
       '& .lastAdditionalFolder': {
         borderBottomColor: folderColor
       },
-      '& .buttonWrapperOfFolderItemWidthCustomComponent': {}
+      '& .buttonWrapperOfFolderItemWidthCustomComponent': {
+        '& img': {
+          margin: 10
+        }
+      }
     }),
     containerWithDrawerViewItem: ({ folderDimensions: { container } }: USeStylesOfFolderButtonGroupByPasType) => ({
       // ...container
+      borderRadius:0,
       overflow: 'hidden',
       '& legend': {
         padding: spacing(2.4, 0, 1.8, 1.4),
         borderWidth: 0,
+      borderRadius:0,
         borderTopWidth: 2
       },
       '& .folderItem': {
+      borderRadius:0,
         height: spacing(6),
         '& button': {
           borderRadius: 0,
@@ -268,6 +286,7 @@ const FolderButtonGroupByPas: FC<FolderButtonGroupByPasPropsType> = ({
           isAdditionalArrowButtonVisible,
           setAditionalFoldersHeigthObj,
           isAdditionalButtonsVisible,
+          aditionalFoldersHeigthObj,
           ...defaultFolderItemProps,
           ...folderItemPropertyies,
           isFoldersHaveDraweView,

@@ -22,7 +22,7 @@ import { SettingsInitialStateType } from 'store/modules/Settings/types';
 import { ColorInitialStateType } from 'store/modules/Color/types';
 
 import AddCircleOutlineOutlinedIcon from '@material-ui/icons/AddCircleOutlineOutlined';
-import { ChangeEventHandler, Dispatch, ReactNode, SetStateAction, MouseEventHandler } from 'react';
+import { ChangeEventHandler, Dispatch, ReactNode, SetStateAction, MouseEventHandler, MouseEvent } from 'react';
 import {
   AppInitialStateType,
   GlobalEventsType,
@@ -50,13 +50,14 @@ import {
   DefaultLabelListPropsType,
   HandleLabelFuncsOfLabelListType
 } from 'components/IconsUtils/components/LabelsList/types';
-import { Theme } from '@material-ui/core';
+import { DialogProps, GridProps, TextFieldProps, Theme } from '@material-ui/core';
 import { UseMeasureRef } from 'react-use/lib/useMeasure';
 import {
   DefaultUseFindCorrectFolderFuncPropsType,
   HandelOpenAdditionalMenuType
 } from 'components/Folders/components/ButtonGroup/types';
 import { PropertyOfReturnValueOfUseFindFolderItemPropertyies } from './unums';
+import { ListPlaceholdersOfFolderPropertyiesPropsType } from 'components/PakeepList/components/ListPlaceholdersOfFolderPropertyies/types';
 
 export type SelectedPakeepsType = PakeepsType;
 export type SelectedPakeepsIdType = PakeepIdType[];
@@ -130,9 +131,7 @@ export type CurrentEventsArrType = CurrentEventsElementType[];
 
 export type UseFindCurrentEventsType = (
   globalEvents: GlobalEventsType,
-  events: EventsOfPakeepType,
-  timeFormat: TimeFormatType,
-  timeAndDateFromat: TimeAndDateFromatType
+  events: EventsOfPakeepType
 ) => CurrentEventsArrType | null;
 
 export type UsePakeepUtilsFuncType = (pakeepId: PakeepIdType) => IconsUtilsFunctionType;
@@ -168,13 +167,7 @@ export type UseAttributeGroupColorType = (
   currentColor: string
 ) => [string, boolean, boolean];
 
-export type UsePakeepFoldersType = ({
-  labels,
-  events
-}: {
-  labels: GlobalLabelsType;
-  events: GlobalEventsType;
-}) => FoldersType;
+export type UsePakeepFoldersType = () => FoldersType;
 
 export type HandleChangeInputsValueType = ChangeEventHandler<HTMLInputElement>;
 
@@ -196,6 +189,12 @@ export type UseNewPakeepUtilityType = ({
   iconUtilsFuncs: IconsUtilsFunctionType;
   defaultLabelListProps: DefaultLabelListPropsType;
 };
+
+export type DialogOfEnteringPasswordPropsType = {
+  onConfirm: (e?: any) => void;
+  onCancel: (e?: any) => void;
+} & DialogProps &
+  TextFieldProps;
 
 export type UseFindSelectedLabelsType = (selectedPakeeps: PakeepsType) => LabelsOfPakeepType;
 export type UseFindSelectedEventsType = (selectedPakeeps: PakeepsType) => EventsOfPakeepType;
@@ -296,3 +295,22 @@ export type ParamsOfUseConvertHeaderProfileUtilsObjToFolderArrType = {
 export type UseConvertHeaderProfileUtilsObjToFolderArrType = (
   arr: ParamsOfUseConvertHeaderProfileUtilsObjToFolderArrType
 ) => FolderArrType;
+
+export type FieldSetContainerPropsType = { title: string; isOnlyTop?: boolean } & GridProps;
+
+export type UseTakePakeepListPlaceholdersOfFolderPropertyiesType = () =>
+  | false
+  | ListPlaceholdersOfFolderPropertyiesPropsType;
+
+export type ParamOfUseCloseDialogWithRestoreType<T> = {
+  setState: Dispatch<SetStateAction<T>>;
+  onClose: (__?: any) => void;
+  state: T;
+  snackBarMessage: string;
+  nullityState: T;
+};
+
+export type UseCloseDialogWithRestoreType = <T>(param: ParamOfUseCloseDialogWithRestoreType<T>) => {
+  handleCloseDialog: (__?: any) => void;
+  isDialogOpen: boolean;
+};

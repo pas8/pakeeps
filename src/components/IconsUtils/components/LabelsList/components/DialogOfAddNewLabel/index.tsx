@@ -3,23 +3,20 @@ import { usePrevious, useToggle } from 'react-use';
 import { useDispatch } from 'react-redux';
 import includes from 'lodash.includes';
 import { nanoid } from 'nanoid';
-import { isEqual } from 'lodash';
 import { useSnackbar } from 'notistack';
-import { Dialog, DialogActions, DialogTitle, makeStyles, Box, useTheme } from '@material-ui/core';
-import RestoreOutlinedIcon from '@material-ui/icons/RestoreOutlined';
+import { Grid, makeStyles, useTheme } from '@material-ui/core';
 
 import { toAddNewGlobalLabel } from 'store/modules/App/actions';
 import { ColorType, IconNameType, LabelVariantType } from 'store/modules/App/types';
 import { useGetReversedCustomColor } from 'hooks/useGetReversedCustomColor.hook';
-import ActionsButtonGroup from 'components/ActionsButtonGroup/index';
 import { iconsArr } from 'components/Icons';
+import { DefaultMenuLayoutElementPropsType } from 'layouts/DialogsLayout/types';
+import AttributeDialogContainer from 'components/AttributeDialogContainer';
 import PreparedColorExamples from 'components/ColorChanger/components/PreparedColorExamples';
-import { DialogOfAddingNewGlobalEventPropsType } from 'components/PakeepList/components/PakeepElement/components/AttributeGroup/components/EventsPart/components/DialogOfAddingNewGlobalEvent/types';
 import ColorPickerByPas from 'components/ColorChanger';
 import { useFindIcon } from 'hooks/useFindIcon.hook';
 import LabelItem from 'components/PakeepList/components/PakeepElement/components/AttributeGroup/components/LabelPart/components/LabelItem';
 import PreparedIconSelectingList from 'components/PreparedIconSelectingList';
-import SteperOfDialogOfAddNewLabel from './components/Steper';
 import FirstStepOfSteperOfDialogOfAddNewLabel from './components/Steper/components/First';
 import SecondStepOfSteperOfDialogOfAddNewLabel from './components/Steper/components/Second';
 import ThirdStepOfSteperOfDialogOfAddNewLabel from './components/Steper/components/Third';
@@ -30,35 +27,19 @@ import {
   OnChangeOfLabelColorRadioType,
   UseStylesOfDialogOfAddNewLabelProps
 } from './types';
-import { DefaultMenuLayoutElementPropsType } from 'layouts/DialogsLayout/types';
 
-export const useStyles = makeStyles(({ spacing, palette }) => ({
-  container: ({ customColor }: UseStylesOfDialogOfAddNewLabelProps) => ({
-    '& .MuiDialog-paper': {
-      background: customColor?.isUseDefault ? '' : customColor?.bgUnHover,
 
-      '& .MuiDialogTitle-root, .MuiStepper-root,.MuiDialogActions-root': {
-        background: customColor?.isUseDefault ? '' : customColor?.bgUnHover,
-        color: customColor?.hover
-      },
-      '& .MuiStepper-root': {
-        padding: spacing(0.4, 2.8)
-      }
-    }
-  })
-}));
 
 const DialogOfAddNewLabel: FC<DefaultMenuLayoutElementPropsType> = ({ onClose, customColor }) => {
   const dispatch = useDispatch();
   const {
-    palette: { primary }
+    palette: { primary, text }
   } = useTheme();
   const handleAddNewGlobalLabel: HandleAddNewGlobalLabelType = newLabel => {
     dispatch(toAddNewGlobalLabel({ newLabel }));
   };
 
   const reverserCustomColor = useGetReversedCustomColor(customColor);
-  const classes = useStyles({ customColor });
 
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
@@ -75,9 +56,6 @@ const DialogOfAddNewLabel: FC<DefaultMenuLayoutElementPropsType> = ({ onClose, c
 
   const [newLabelState, setNewLabelState] = useState<NewLabelStateType>(nullityOfNewLabelState);
 
-  const [isDialogOpen, setIsDialogOpen] = useToggle(true);
-  const [isAwaited, setAwaitedStatus] = useToggle(false);
-
   const colorVariantsNames = ['', 'primary', 'secondary'];
   const customColorValue = includes(colorVariantsNames, newLabelState.color) ? 'customColor' : newLabelState.color;
 
@@ -93,39 +71,6 @@ const DialogOfAddNewLabel: FC<DefaultMenuLayoutElementPropsType> = ({ onClose, c
   const previuosNewLabelState = usePrevious(newLabelState);
 
   const toNullityNewLabelState = () => setNewLabelState(nullityOfNewLabelState);
-
-  const handleRestoreLastGlobalLabel = () => {
-    if (!previuosNewLabelState) return;
-
-    !isEqual(nullityOfNewLabelState, previuosNewLabelState) && setNewLabelState(previuosNewLabelState);
-    setIsDialogOpen(true);
-    closeSnackbar();
-  };
-
-  const handleCloseDialog = () => {
-    setIsDialogOpen(false);
-    toNullityNewLabelState();
-    !isEqual(nullityOfNewLabelState, newLabelState) &&
-      enqueueSnackbar({
-        message: 'Dialog of creating label was closed',
-        severity: 'warning',
-        buttonText: 'Restore',
-        onClick: handleRestoreLastGlobalLabel,
-        icon: RestoreOutlinedIcon
-      });
-
-    setTimeout(() => {
-      setAwaitedStatus(false)
-      setAwaitedStatus(true);
-    }, 4000);
-  };
-
-  useEffect(() => {
-    if (!isDialogOpen && isAwaited) {
-      setIsDialogOpen(true);
-      onClose();
-    }
-  }, [isDialogOpen, isAwaited]);
 
   const handleSave = () => {
     if (!newLabelState.title)
@@ -218,24 +163,23 @@ const DialogOfAddNewLabel: FC<DefaultMenuLayoutElementPropsType> = ({ onClose, c
   const actionsButtonGroupProps = {
     onSave: handleSave,
     colorOfSaveButton: reverserCustomColor?.isUseDefault ? primary.main : reverserCustomColor?.secondaryColor,
-    onClose: handleCloseDialog,
-    colorOfCloseButton: customColor?.unHover
+    onClose,
+    colorOfCloseButton: reverserCustomColor?.isUseDefault ? text.hint : customColor?.unHover
   };
 
   return (
-    <Dialog open={isDialogOpen} onClose={handleCloseDialog} className={classes.container}>
-      <DialogTitle>Add new global label</DialogTitle>
-      <SteperOfDialogOfAddNewLabel {...steperOfDialogOfAddNewLabelProps} />
-      <DialogActions>
-        <Box ml={2.4}>
-          {
-            //@ts-ignore
-            <LabelItem {...labelItemProps} />
-          }
-        </Box>
-        <ActionsButtonGroup {...actionsButtonGroupProps} />
-      </DialogActions>
-    </Dialog>
+      <AttributeDialogContainer
+        {...actionsButtonGroupProps}
+        customColor={customColor}
+        nullityState={nullityOfNewLabelState}
+        snackBarMessage={'Dialog of creating label was closed '}
+        state={newLabelState}
+        setState={setNewLabelState}
+        //@ts-ignore
+        previewComponent={<LabelItem {...labelItemProps} />}
+        steperProps={steperOfDialogOfAddNewLabelProps}
+        title={'Add new global label'}
+      />
   );
 };
 

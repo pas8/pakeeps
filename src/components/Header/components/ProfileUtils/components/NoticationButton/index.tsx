@@ -1,10 +1,9 @@
-import { FC, useEffect } from 'react';
+import { FC } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Badge, Grid, makeStyles } from '@material-ui/core';
 import NotificationsNoneOutlinedIcon from '@material-ui/icons/NotificationsNoneOutlined';
-import { getNotifinationCounterValue } from 'store/modules/App/selectors';
-import { useFindNotificationArr } from 'hooks/useFindNotificationArr.hook';
-import { toChangeTemporaryData } from 'store/modules/App/actions';
+import { getIsZenModeActive, getNotifinationCounterValue } from 'store/modules/App/selectors';
+import { useSetNotificationArr } from 'hooks/useSetNotificationArr.hook';
 
 const useStyles = makeStyles(({ spacing, palette }) => ({
   container: {
@@ -17,19 +16,15 @@ const useStyles = makeStyles(({ spacing, palette }) => ({
 
 const NoticationButton: FC = () => {
   const { container } = useStyles();
-  const dispatch = useDispatch();
 
   const notifinationCounterValue = useSelector(getNotifinationCounterValue);
+  const isZenModeActive = useSelector(getIsZenModeActive);
 
-  const notifinationArr = useFindNotificationArr();
-
-  useEffect(() => {
-    dispatch(toChangeTemporaryData({ newTemporaryData: { notifinationArr } }));
-  }, [notifinationArr]);
+  useSetNotificationArr();
 
   return (
     <Grid container justify={'center'} alignItems={'center'} className={container}>
-      <Badge badgeContent={notifinationCounterValue} color={'secondary'}>
+      <Badge badgeContent={notifinationCounterValue} color={'secondary'} >
         <NotificationsNoneOutlinedIcon />
       </Badge>
     </Grid>

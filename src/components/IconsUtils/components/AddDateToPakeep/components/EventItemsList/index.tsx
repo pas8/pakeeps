@@ -1,7 +1,7 @@
 import { filter, includes } from 'lodash';
 import { FC, MouseEventHandler } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { toChangeTemporaryData } from 'store/modules/App/actions';
+import { toChangeDefaultLayoutMenuProps } from 'store/modules/App/actions';
 import { MenusLayoutName } from 'models/unums';
 import { useGetReversedCustomColor } from 'hooks/useGetReversedCustomColor.hook';
 import { useTakeIcon } from 'hooks/useTakeIcon.hook';
@@ -10,6 +10,7 @@ import { getAmpmStatus } from 'store/modules/Settings/selectors';
 import DynamicInputDateAndTimePickers from '../DynamicComponents/components/DynamicInputDateAndTimePickers';
 import DynamicMenuItem from '../DynamicMenuItem';
 import { EventItemsListPropsType } from './types';
+import { Box, Typography } from '@material-ui/core';
 
 const EventItemsList: FC<EventItemsListPropsType> = ({
   eventListArr,
@@ -25,7 +26,7 @@ const EventItemsList: FC<EventItemsListPropsType> = ({
   const dispatch = useDispatch();
   const ampm = useSelector(getAmpmStatus);
   const reversedCustomColor = useGetReversedCustomColor(customColor);
-  
+
   return (
     <>
       {eventListArr.map(({ title, iconName, onClick: onMenuItemClick, onlyTime, dynamicComponent, id }) => {
@@ -52,15 +53,13 @@ const EventItemsList: FC<EventItemsListPropsType> = ({
         };
         const onClickOfEditIcon: MouseEventHandler<HTMLButtonElement> = ({ clientX: mouseX, clientY: mouseY }) => {
           dispatch(
-            toChangeTemporaryData({
-              newTemporaryData: {
-                defaultMenuProps: {
-                  mouseX,
-                  mouseY,
-                  menuName: MenusLayoutName.EVENTS,
-                  customColor: reversedCustomColor,
-                  id
-                }
+            toChangeDefaultLayoutMenuProps({
+              props: {
+                mouseX,
+                mouseY,
+                name: MenusLayoutName.EVENTS,
+                customColor: reversedCustomColor,
+                id
               }
             })
           );
@@ -104,6 +103,13 @@ const EventItemsList: FC<EventItemsListPropsType> = ({
 
         return <DynamicMenuItem {...dynamicMenuListProps} key={`dateListArrOf${pakeepId}${id}`} />;
       })}
+      {eventListArr.length === 1 && (
+        <Box maxWidth={200} p={0.8} borderTop={1} borderColor={'text.disabled'}>
+          <Typography component={'legend'} variant={'caption'}>
+            {'U didnt not added events yet, but u can simple do this by click to the "Add custom event" button'}
+          </Typography>
+        </Box>
+      )}
     </>
   );
 };

@@ -1,37 +1,22 @@
-import { mapValues } from 'lodash';
+import { DialogLayoutName } from './../models/unums';
 import { DEFAULT, NONE, pakeepFoldersKeyName, pakeepPropertyiesNames } from 'models/denotation';
 import { UsePakeepFoldersType } from 'models/types';
 import { AdditionalFolderPropertyNames } from 'models/unums';
-import { useSelector } from 'react-redux';
-import { getSearchPropertyies } from 'store/modules/App/selectors';
-import { ALL } from './../models/denotation';
+import { MouseEventHandler } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { toChangeDefaultLayoutDialogProps, toChangeTemporaryData } from 'store/modules/App/actions';
+import { getGlobalEventsArr, getLabels, getSearchPropertyies } from 'store/modules/App/selectors';
 import { useAddIdToFolder } from './useAddIdToFolder.hook';
+import { useTakeDefaultPakeepPropetiesFolderArr } from './useTakeDefaultPakeepPropetiesFolderArr.hook';
+import { customColorPlaceholder } from 'components/AccountAvatar';
 
-export const usePakeepFolders: UsePakeepFoldersType = ({ events, labels }) => {
+export const usePakeepFolders: UsePakeepFoldersType = () => {
+  const labels = useSelector(getLabels);
+  const events = useSelector(getGlobalEventsArr);
+  const dispatch = useDispatch();
   const property = { value: AdditionalFolderPropertyNames.DEFAULT };
 
-  const defaultPropetiesFolderArr = [
-    {
-      title: 'Pined',
-      iconName: 'pin',
-      id: pakeepPropertyiesNames.isPinned,
-      color: 'default'
-    },
-    {
-      title: 'Bookmark',
-      iconName: 'bookmark',
-      id: pakeepPropertyiesNames.isInBookmark,
-      color: 'default'
-    },
-    { title: 'Favorite', iconName: 'favorite', id: pakeepPropertyiesNames.isFavorite, color: 'default' },
-    {
-      title: 'With checkBoxes',
-      iconName: 'checkBox',
-      id: pakeepPropertyiesNames.isCheckBoxes,
-      color: 'default'
-    },
-    { title: 'Archiveted', iconName: 'archive', id: pakeepPropertyiesNames.isArchived, color: 'default' }
-  ].map(value => ({ ...value, property }));
+  const defaultPropetiesFolderArr = useTakeDefaultPakeepPropetiesFolderArr();
 
   const labelsArr = labels.map(({ title, iconName, id, color }) => ({
     title,
@@ -48,7 +33,32 @@ export const usePakeepFolders: UsePakeepFoldersType = ({ events, labels }) => {
     color
   }));
 
+  const ADD_NEW_LABEL = 'ADD_NEW_LABEL';
+  const ADD_NEW_EVENT = 'ADD_NEW_EVENT';
 
+  const handleOpenDialogAddingNewEvent = () => {
+    dispatch(
+      toChangeDefaultLayoutDialogProps({
+          props: {
+            name: DialogLayoutName.EVENTS,
+            customColor: customColorPlaceholder,
+            id: ADD_NEW_EVENT
+          }
+      })
+    );
+  };
+
+  const handleOpenDialogAddingNewLabel = () => {
+    dispatch(
+      toChangeDefaultLayoutDialogProps({
+        props: {
+          name: DialogLayoutName.LABELS,
+          customColor: customColorPlaceholder,
+          id: ADD_NEW_LABEL
+        }
+    })
+    );
+  };
 
   const defaultFolders = useAddIdToFolder({
     [pakeepFoldersKeyName.PAKEEP_UTILS]: {
@@ -57,11 +67,30 @@ export const usePakeepFolders: UsePakeepFoldersType = ({ events, labels }) => {
     },
     [pakeepFoldersKeyName.LABELS]: {
       label: 'Labels',
-      arr: labelsArr
+      arr: [
+        {
+          title: 'Add new label',
+          iconName: 'addLabel',
+          id: ADD_NEW_LABEL,
+          property: { value: AdditionalFolderPropertyNames.ON_CLICK, onClick: handleOpenDialogAddingNewLabel },
+          
+          color: DEFAULT
+        },
+        ...labelsArr
+      ]
     },
     [pakeepFoldersKeyName.EVENTS]: {
       label: 'Events',
-      arr: eventArr
+      arr: [
+        {
+          title: 'Add new event',
+          iconName: 'addEvent',
+          id: ADD_NEW_EVENT,
+          property: { value: AdditionalFolderPropertyNames.ON_CLICK, onClick: handleOpenDialogAddingNewEvent },
+          color: DEFAULT
+        },
+        ...eventArr
+      ]
     }
   });
 
@@ -74,7 +103,7 @@ export const usePakeepFolders: UsePakeepFoldersType = ({ events, labels }) => {
       label: '',
       arr: [
         {
-          title:name,
+          title: name,
           iconName: 'search',
           id: pakeepFoldersKeyName.SEARCH,
           property,

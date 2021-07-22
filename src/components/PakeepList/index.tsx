@@ -1,12 +1,16 @@
 import { filter, flatten, includes } from 'lodash';
 import { createContext, FC, useEffect, useRef, useState } from 'react';
+import dynamic from 'next/dynamic';
 import { useIsomorphicLayoutEffect, useKeyPressEvent } from 'react-use';
-import { Grid } from '@material-ui/core';
+import { Backdrop, CircularProgress, Grid } from '@material-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
+import { isMobile } from 'react-device-detect';
 
 import {
   getIsCancelSelectedPakeepsId,
+  getIsCurrentNumberOfPakeepColumnsIsOne,
   getIsPakeepHovering,
+  getOrderOfOnlyOnePakeepColumn,
   getPakeeps,
   getPakeepsOrderNames,
   getPinnedPakeepsOrderNames,
@@ -17,6 +21,8 @@ import { DialogLayoutName } from 'models/unums';
 import { customColorPlaceholder } from 'components/AccountAvatar';
 import {
   toCancelSelectingStatus,
+  toChangeDefaultLayoutDialogProps,
+  toChangeOrderOfOnlyOnePakeepColumn,
   toChangeTemporaryData,
   toSetOrderNamesOfPakeeps,
   toSetOrderNamesOfPinnedPakeeps,
@@ -24,24 +30,33 @@ import {
 } from 'store/modules/App/actions';
 
 import WrapperOfContainerOfPakeepList from './components/WrapperOfContainer';
-import SelectofFPakeepListContainer from './components/WrapperOfContainer/components/Container/components/Selecto';
 import {
   HandleSetPakeepsOrderNamesType,
   HandleSetPinnedPakeepsOrderNamesType,
   HandleSetSelectedPakeepsIdType,
   PakeepHoveringContextPropviderPropsValueType
 } from './types';
+import { useTakePakeepListPlaceholdersOfFolderPropertyies } from 'hooks/useTakePakeepListPlaceholdersOfFolderPropertyies.hook';
 
+const ListPlaceholdersOfFolderPropertyies = dynamic(() => import('./components/ListPlaceholdersOfFolderPropertyies'), {
+  loading: () => <CircularProgress color={'primary'} />
+});
+
+const SelectofFPakeepListContainer = dynamic(
+  () => import('./components/WrapperOfContainer/components/Container/components/Selecto')
+);
 
 const PakeepList: FC = () => {
   const dispatch = useDispatch();
   const pakeeps = useSelector(getPakeeps);
   const selectedPakeepsId = useSelector(getSelectedPakeepsId);
   const pakeepsOrderNames = useSelector(getPakeepsOrderNames);
+  const orderOfOnlyOnePakeepColumn = useSelector(getOrderOfOnlyOnePakeepColumn);
+
   const pinnedPakeepsOrderNames = useSelector(getPinnedPakeepsOrderNames);
   const isCancelSelectedPakeepsId = useSelector(getIsCancelSelectedPakeepsId);
   const isPakeepHovering = useSelector(getIsPakeepHovering);
-
+  const isCurrentNumberOfPakeepColumnsIsOne = useSelector(getIsCurrentNumberOfPakeepColumnsIsOne);
 
   const handleSetSelectedPakeepsId: HandleSetSelectedPakeepsIdType = selectedPakeepsId => {
     dispatch(toSetSelectedPakeepIdsArr({ selectedPakeepsId }));
@@ -51,8 +66,11 @@ const PakeepList: FC = () => {
   };
 
   const handleSetPakeepsOrderNames: HandleSetPakeepsOrderNamesType = pakeepsOrderNames => {
-
-    dispatch(toSetOrderNamesOfPakeeps({ pakeepsOrderNames }));
+    dispatch(
+      isCurrentNumberOfPakeepColumnsIsOne
+        ? toChangeOrderOfOnlyOnePakeepColumn({ orderOfOnlyOnePakeepColumn: pakeepsOrderNames })
+        : toSetOrderNamesOfPakeeps({ pakeepsOrderNames })
+    );
   };
 
   const handleSetPinnedPakeepsOrderNames: HandleSetPinnedPakeepsOrderNamesType = pinnedPakeepsOrderNames => {
@@ -67,9 +85,10 @@ const PakeepList: FC = () => {
 
   const handleOpenDialog = (id: PakeepIdType) => {
     dispatch(
-      toChangeTemporaryData({
-        newTemporaryData: {
-          defaultDialogProps: { id, dialogName: DialogLayoutName.PAKEEPS, customColor: customColorPlaceholder }
+      toChangeDefaultLayoutDialogProps({
+        props: {
+          id,
+          name: DialogLayoutName.PAKEEPS
         }
       })
     );
@@ -109,7 +128,7 @@ const PakeepList: FC = () => {
     columnOfPakeepListContainerProps: { ...defaultPakeepListContainerProps, isPakeepDragContextPinned: false },
     setIsPakeepDragging,
     pakeeps,
-    pakeepsOrderNames,
+    pakeepsOrderNames: isCurrentNumberOfPakeepColumnsIsOne ? orderOfOnlyOnePakeepColumn : pakeepsOrderNames,
     handleSetPakeepsOrderNames
   };
   const scrollerRef = useRef(null);
@@ -120,7 +139,7 @@ const PakeepList: FC = () => {
     setIsSelecting,
     SELECTED
   };
-  const isSelectoHidden = isPakeepHovering || isPakeepDragging;
+  const isSelectoHidden = (isPakeepHovering || isPakeepDragging) && isCancelSelectedPakeepsId;
 
   const cancelSelectedPakeepsId = () => {
     handleChangeSelectingStatus(true);
@@ -146,14 +165,21 @@ const PakeepList: FC = () => {
     !isSomePakeepsSelected && cancelSelectedPakeepsId();
   }, [isSomePakeepsSelected]);
 
+  const listPlaceholdersOfFolderPropertyiesProps = useTakePakeepListPlaceholdersOfFolderPropertyies();
+
   return (
     <>
-      <Grid ref={scrollerRef} className={'selectoContainer'} container >
+      <Grid ref={scrollerRef} className={'selectoContainer'} container>
         {/* {isFolderPropertyIsAll && <WrapperOfContainerOfPakeepList {...wrapperOfContainerOfPinnedPakeepListProps} />} */}
-
-        <WrapperOfContainerOfPakeepList {...wrapperOfContainerOfAllPakeepListProps} />
+        {!!listPlaceholdersOfFolderPropertyiesProps ? (
+          <ListPlaceholdersOfFolderPropertyies {...listPlaceholdersOfFolderPropertyiesProps} />
+        ) : (
+          <WrapperOfContainerOfPakeepList {...wrapperOfContainerOfAllPakeepListProps} />
+        )}
       </Grid>
-      {!isSelectoHidden && <SelectofFPakeepListContainer {...selectoOfPakeepListContainerProps} />}
+      {!isSelectoHidden && !listPlaceholdersOfFolderPropertyiesProps && !isMobile && (
+        <SelectofFPakeepListContainer {...selectoOfPakeepListContainerProps} />
+      )}
     </>
   );
 };

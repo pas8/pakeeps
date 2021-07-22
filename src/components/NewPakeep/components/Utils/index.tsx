@@ -1,14 +1,18 @@
-import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { useSnackbar } from 'notistack';
+import dynamic from 'next/dynamic';
+import { FC } from 'react';
+import { Skeleton } from '@material-ui/lab';
 import { makeStyles, Box, Button, Grid } from '@material-ui/core';
 import { useMeasure } from 'react-use';
+
 import { useAlpha } from 'hooks/useAlpha.hook';
+import CircularProgressLoader from 'components/CircularProgressLoader';
 import { useThemeColors } from 'hooks/useThemeColors.hook';
-import IconsUtils from 'components/IconsUtils';
 import ActionsButtonGroup from 'components/ActionsButtonGroup/index';
-import { FC } from 'react';
 import { NewPakeepUtilsType } from './types';
+
+const IconsUtils = dynamic(() => import('components/IconsUtils'), );
 
 // import SaveOutlinedIcon from '@material-ui/icons/SaveOutlined';
 const useStyles = makeStyles(({ spacing }) => ({

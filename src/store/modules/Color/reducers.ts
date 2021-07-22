@@ -81,6 +81,11 @@ export const colorInitialState = {
 
 export const ColorReducer = (state = colorInitialState, action: ColorActionTypes): ColorInitialStateType => {
   switch (action.type) {
+
+    case TypeNames.HANDLE_CHANGE_ALL_FIREBASE_COLOR_STATE: {
+      return { ...state, ...action.payload.firebaseState };
+    }
+
     case TypeNames.HANDLE_CHANGE_THEME_COLORS: {
       const { newThemeColors } = action.payload;
 

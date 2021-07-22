@@ -11,12 +11,15 @@ const useStyles = makeStyles(({ spacing, shape: { borderRadius }, palette }) => 
     // height: spacing(4.2),
     // marginLeft: spacing(0.8),
     padding: 0,
-    overflow: 'hidden',
+       width: 22,
+      height: 22,
+    // overflow: 'hidden',
     '& img': {
-      // width:'100%',
-      // height:'100%',
-      width: 42,
-      height: 42
+      
+      objectFit:'fill',
+      width:'100%',
+      height:'100%',
+   
     }
   }
 }));
@@ -31,10 +34,11 @@ const AvatarButton: FC = () => {
         <AccountCircleOutlinedIcon />
       ) : (
         <Grid
+        container
           className={classes.containerOfHeaderAvatarButton}
-          style={{ backgroundColor, borderRadius: `${borderRadius}%` }}
+          style={{ backgroundColor}} 
         >
-          <img src={url} />
+          <img src={url} style={{borderRadius: `${borderRadius}%` }}/>
         </Grid>
       )}
     </Grid>

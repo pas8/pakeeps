@@ -7,7 +7,6 @@ export type PakeepListContainerPropsType = {
   responsiveColumnOrder: OrderNamesType;
   columns: SumOfPakeepsReduceFuncType;
   onDragEnd: OnDragEndType;
-  placeholderName: string;
   onDragStart: () => void;
   columnOfPakeepListContainerProps: PropsOfColumnOfPakeepListContainerPropsType;
 };

@@ -9,6 +9,7 @@ import { PakeepElementType, PakeepsType } from 'store/modules/App/types';
 import { useMeasure, useWindowScroll, useWindowSize } from 'react-use';
 import { getDrawerWidth, getPakeepDimensions } from 'store/modules/App/selectors';
 import { useSelector } from 'react-redux';
+import { placeholderName } from '../..';
 
 const useStyles = makeStyles(({ spacing, breakpoints: { between, down }, palette }) => ({
   containerClass: () => ({
@@ -29,7 +30,6 @@ const PakeepListContainer: FC<PakeepListContainerPropsType> = ({
   responsiveColumnOrder,
   columns,
   onDragEnd,
-  placeholderName,
   onDragStart,
   columnOfPakeepListContainerProps
 }) => {
@@ -63,6 +63,7 @@ const PakeepListContainer: FC<PakeepListContainerPropsType> = ({
   };
   const arr = responsiveColumnOrder?.map((columnId, idx) => {
     const column = columns[columnId];
+    
     if (!column?.pakeepsId) return;
 
     const filteredArrToMap = column.pakeepsId.filter(id => id !== placeholderName);

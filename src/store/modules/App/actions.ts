@@ -66,6 +66,19 @@ export const toChangePakeeps = (payload: PayloadTypes[TypeNames.HANDLE_CHANGE_PA
   type: TypeNames.HANDLE_CHANGE_PAKEEPS,
   payload
 });
+export const toChangeDefaultLayoutMenuProps = (
+  payload: PayloadTypes[TypeNames.HANDLE_CHANGE_DEFAULT_LAYOUT_MENU_PROPS]
+): AppActionTypes => ({
+  type: TypeNames.HANDLE_CHANGE_DEFAULT_LAYOUT_MENU_PROPS,
+  payload
+});
+
+export const toChangeDefaultLayoutDialogProps = (
+  payload: PayloadTypes[TypeNames.HANDLE_CHANGE_DEFAULT_LAYOUT_DIALOG_PROPS]
+): AppActionTypes => ({
+  type: TypeNames.HANDLE_CHANGE_DEFAULT_LAYOUT_DIALOG_PROPS,
+  payload
+});
 
 export const toChangeUserData = (payload: PayloadTypes[TypeNames.HANDLE_CHANGE_USER_DATA]): AppActionTypes => ({
   type: TypeNames.HANDLE_CHANGE_USER_DATA,
@@ -79,10 +92,7 @@ export const toChangeMenuOpenStatus = (
   payload
 });
 
-
-export const toChangeHeaderOrder = (
-  payload: PayloadTypes[TypeNames.HANDLE_CHANGE_HEADER_ORDER]
-): AppActionTypes => ({
+export const toChangeHeaderOrder = (payload: PayloadTypes[TypeNames.HANDLE_CHANGE_HEADER_ORDER]): AppActionTypes => ({
   type: TypeNames.HANDLE_CHANGE_HEADER_ORDER,
   payload
 });
@@ -154,6 +164,20 @@ export const toAddNewGlobalLabel = (payload: PayloadTypes[TypeNames.HANDLE_ADD_N
   payload
 });
 
+export const toChangeOrderOfOnlyOnePakeepColumn = (
+  payload: PayloadTypes[TypeNames.HANDLE_CHANGE_ORDER_OF_ONLY_ONE_PAKEEP_COLUMN]
+): AppActionTypes => ({
+  type: TypeNames.HANDLE_CHANGE_ORDER_OF_ONLY_ONE_PAKEEP_COLUMN,
+  payload
+});
+
+export const toChangeQuerySearchArr = (
+  payload: PayloadTypes[TypeNames.HANDLE_CHANGE_QUERY_SEARCH_ARR]
+): AppActionTypes => ({
+  type: TypeNames.HANDLE_CHANGE_QUERY_SEARCH_ARR,
+  payload
+});
+
 export const toChangePinStatusOfPakeeps = (
   payload: PayloadTypes[TypeNames.HANDLE_PIN_STATUS_OF_PAKEEPS]
 ): AppActionTypes => ({
@@ -213,5 +237,12 @@ export const toChangePakeepCustomProperty = (
 
 export const toChangeThemeColors = (payload: PayloadTypes[TypeNames.HANDLE_CHANGE_THEME_COLORS]): AppActionTypes => ({
   type: TypeNames.HANDLE_CHANGE_THEME_COLORS,
+  payload
+});
+
+export const toChangeAllFirebaseAppState = (
+  payload: PayloadTypes[TypeNames.HANDLE_CHANGE_ALL_FIREBASE_APP_STATE]
+): AppActionTypes => ({
+  type: TypeNames.HANDLE_CHANGE_ALL_FIREBASE_APP_STATE,
   payload
 });

@@ -29,10 +29,11 @@ const useStyles = makeStyles(({ spacing, shape: { borderRadius }, palette, typog
       fontSize: subtitle1.fontSize
     },
     '&:hover .MuiTouchRipple-root': {
+      color:palette.getContrastText(palette.secondary.main),
       background: useAlpha(palette.secondary.main, 1)
     },
     '& svg': {
-      margin: spacing(0, 0.8, 0, -0.4)
+      margin: spacing(0, 1.2, 0,-0.6)
     }
   },
   menuChildContainer: {
@@ -56,13 +57,18 @@ const HeaderMenuContainer: FC<HeaderMenuContainerPropsType> = ({
       <Grid className={classes.menuChildContainer}>
         {!!componentWhenArrIsEmpty && !arr.length
           ? componentWhenArrIsEmpty
-          : arr.map(({ text, onClick, iconName = '', id, customIconComponent }, idx) => {
+          : arr.map(({ text, onClick, iconName = '', id, customIconComponent: CustomIconComponent }, idx) => {
               const [icon] = useTakeIcon(iconName);
-// console.log(customIconComponent)
               return (
                 <MenuItem onClick={onClick} className={classes.menuItemContainer} key={`${idx}_${id}_${text}`}>
                   <Grid container alignItems={'center'}>
-                    {!!iconName ? icon : !!customIconComponent ? customIconComponent : null}
+                    {!!iconName ? (
+                      icon
+                    ) : !!CustomIconComponent ? (
+                      <Grid>
+                        <CustomIconComponent />
+                      </Grid>
+                    ) : null}
                     <Typography> {text} </Typography>
                   </Grid>
                 </MenuItem>

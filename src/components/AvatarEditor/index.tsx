@@ -1,20 +1,22 @@
 import { Button, ButtonGroup, Grid, Typography, Box, Slider, makeStyles } from '@material-ui/core';
+import mixPlugin from 'colord/plugins/mix';
 import React, { ChangeEventHandler, FC, useState } from 'react';
-import ReactAvatarEditor from 'react-avatar-editor';
 import RotateRightOutlinedIcon from '@material-ui/icons/RotateRightOutlined';
 import RotateLeftOutlinedIcon from '@material-ui/icons/RotateLeftOutlined';
-import { useFromNameToText } from 'hooks/useFromNameToText.hook';
-import { useThemeColors } from 'hooks/useThemeColors.hook';
-import { colord ,extend,} from 'colord';
+import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
+import dynamic from 'next/dynamic';
+import { Skeleton } from '@material-ui/lab';
+import { colord, extend } from 'colord';
 import { includes, values } from 'lodash';
-import { AvatarEditorByPasPropsType } from './types';
+
 import ThirdStepOfSteperOfDialogOfAddNewLabel from 'components/IconsUtils/components/LabelsList/components/DialogOfAddNewLabel/components/Steper/components/Third';
 import ColorPickerByPas from 'components/ColorChanger';
-import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
-import { useCustomBreakpoint } from 'hooks/useCustomBreakpoint';
 import { useBreakpointNames } from 'hooks/useBreakpointNames.hook';
+import { useFromNameToText } from 'hooks/useFromNameToText.hook';
+import { useThemeColors } from 'hooks/useThemeColors.hook';
 import { customColorPlaceholder } from 'components/AccountAvatar';
-import mixPlugin from 'colord/plugins/mix';
+import { AvatarEditorByPasPropsType } from './types';
+import ReactAvatarEditor from 'react-avatar-editor'
 
 const useStyles = makeStyles(({ spacing, transitions, breakpoints, palette: { background } }) => ({
   utilsContainer: {
@@ -153,6 +155,7 @@ const AvatarEditorByPas: FC<AvatarEditorByPasPropsType> = ({
   const thirdStepOfSteperOfDialogOfAddNewLabelProps = {
     onChange: onChangeOfLabelColorRadio,
     colorVariants,
+    customColor: customColorPlaceholder,
     value: state.backgroundColor
   };
   const handleSaveCustomColor = (backgroundColor: string) => {

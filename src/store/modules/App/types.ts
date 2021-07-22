@@ -93,9 +93,43 @@ export type PayloadTypes = {
   [TypeNames.HANDLE_CHANGE_HEADER_ORDER]: {
     newOrder: Optional<OrderOfHeaderUtilsType>;
   };
+  [TypeNames.HANDLE_CHANGE_ALL_FIREBASE_APP_STATE]: {
+    firebaseState: InitialiAppFirebaseData;
+  };
+  [TypeNames.HANDLE_CHANGE_QUERY_SEARCH_ARR]: {
+    querySearchArr: string[];
+  };
+
+  [TypeNames.HANDLE_CHANGE_ORDER_OF_ONLY_ONE_PAKEEP_COLUMN]: {
+    orderOfOnlyOnePakeepColumn: OrderOfOnlyOnePakeepColumnType;
+  };
+  [TypeNames.HANDLE_CHANGE_DEFAULT_LAYOUT_MENU_PROPS]: {
+    props: (DefaultMenuPropsType & { isShouldBeClosed?: false }) | { name: MenusLayoutName; isShouldBeClosed: true };
+  };
+  [TypeNames.HANDLE_CHANGE_DEFAULT_LAYOUT_DIALOG_PROPS]: {
+    props: (DefaultDialogPropsType & { isShouldBeClosed?: false }) | { name: DialogLayoutName; isShouldBeClosed: true };
+  };
 };
 
 export type ActionsValueTypes = {
+  toChangeDefaultLayoutMenuProps: {
+    type: typeof TypeNames.HANDLE_CHANGE_DEFAULT_LAYOUT_MENU_PROPS;
+    payload: PayloadTypes[TypeNames.HANDLE_CHANGE_DEFAULT_LAYOUT_MENU_PROPS];
+  };
+  toChangeDefaultLayoutDialogProps: {
+    type: typeof TypeNames.HANDLE_CHANGE_DEFAULT_LAYOUT_DIALOG_PROPS;
+    payload: PayloadTypes[TypeNames.HANDLE_CHANGE_DEFAULT_LAYOUT_DIALOG_PROPS];
+  };
+
+  toChangeQuerySearchArr: {
+    type: typeof TypeNames.HANDLE_CHANGE_QUERY_SEARCH_ARR;
+    payload: PayloadTypes[TypeNames.HANDLE_CHANGE_QUERY_SEARCH_ARR];
+  };
+  toChangeAllFirebaseAppState: {
+    type: typeof TypeNames.HANDLE_CHANGE_ALL_FIREBASE_APP_STATE;
+    payload: PayloadTypes[TypeNames.HANDLE_CHANGE_ALL_FIREBASE_APP_STATE];
+  };
+
   toChangeHeaderOrder: {
     type: typeof TypeNames.HANDLE_CHANGE_HEADER_ORDER;
     payload: PayloadTypes[TypeNames.HANDLE_CHANGE_HEADER_ORDER];
@@ -261,6 +295,11 @@ export type ActionsValueTypes = {
   toChangeAllDataWasUploadedStatus: {
     type: typeof TypeNames.HANDLE_CHANGE_ALL_DATA_WAS_UPLOADED_STATUS;
     payload: PayloadTypes[TypeNames.HANDLE_CHANGE_ALL_DATA_WAS_UPLOADED_STATUS];
+  };
+
+  toChangeOrderOfOnlyOnePakeepColumn: {
+    type: typeof TypeNames.HANDLE_CHANGE_ORDER_OF_ONLY_ONE_PAKEEP_COLUMN;
+    payload: PayloadTypes[TypeNames.HANDLE_CHANGE_ORDER_OF_ONLY_ONE_PAKEEP_COLUMN];
   };
 };
 export type AppActionTypes = $Values<ActionsValueTypes>;
@@ -453,11 +492,15 @@ export type OrderOfHeaderUtilsType = {
   names: NamesArrOFOrderOfHeaderUtilsType;
   exclusionNames: NamesArrOFOrderOfHeaderUtilsType;
 };
+
+export type OrderOfOnlyOnePakeepColumnType = string[];
 export type InitialiAppFirebaseData = {
   avatarProperties: AvatarPropertiesType;
   labels: GlobalLabelsType;
   dimensions: DimensionsType;
   events: GlobalEventsType;
+  orderOfOnlyOnePakeepColumn: OrderOfOnlyOnePakeepColumnType;
+  querySearchArr: string[];
   headerPropertyies: HeaderPropertyiesType;
   folderOrderNames: FolderOrderNamesType;
   pakeeps: PakeepsType;
@@ -503,21 +546,19 @@ export type NotifinationArrType = HeaderMenuArrItemType[];
 export type TemporaryDatatype = {
   isCancelSelectedPakeepsId: boolean;
   selectedPakeepsId: SelectedPakeepsIdType;
-  isUseEditingDialogAsNewPakeep:boolean
+  isUseEditingDialogAsNewPakeep: boolean;
   searchPropertyies: SearchPropertyiesType;
   isAllDataWasUploaded: boolean;
   drawerWidth: DrawerWidthType;
   additionalMenuState: { id: string; arrLength: number };
   menuOpenStatus: IsMenuOpenType;
   globalFolderId: GlobalFolderIdType;
+  isCurrentNumberOfPakeepColumnsIsOne: boolean;
   headerHeight: number;
   notifinationArr: NotifinationArrType;
   menuAccountUtilsArr: NotifinationArrType;
-  defaultMenuProps: DefaultMenuPropsType;
-  defaultDialogProps: {
-    id: string;
-    dialogName: DialogLayoutName;
-  } & UseStylesCustomColorType;
+  defaultMenuProps: DefaultMenuPropsType[] | typeof NONE;
+  defaultDialogProps: DefaultDialogPropsType[] | typeof NONE;
   isAuthedWithLocalPinCode: boolean;
   isZenModeActive: boolean;
   pakeep: {
@@ -530,9 +571,16 @@ export type TemporaryDatatype = {
 
 export type DefaultMenuPropsType = {
   id: string;
-  customColor: CustomColorType;
-  menuName: MenusLayoutName;
+  customColor?: CustomColorType;
+  name: MenusLayoutName;
 } & CoordinatesType;
+
+export type DefaultDialogPropsType = {
+  id: string;
+  customColor?: CustomColorType;
+
+  name: DialogLayoutName;
+};
 
 export type CoordinatesType = {
   mouseX: number;

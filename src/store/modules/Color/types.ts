@@ -1,3 +1,4 @@
+import { BreakpointValues } from '@material-ui/core/styles/createBreakpoints';
 import { StringNullableChain } from 'lodash';
 import { $Values, Optional } from 'utility-types';
 import { TypeNames } from './enums';
@@ -29,9 +30,16 @@ export type PayloadTypes = {
       newArr: ItemValueOfIdColumnArrType;
     };
   };
+
+  [TypeNames.HANDLE_CHANGE_ALL_FIREBASE_COLOR_STATE]: {firebaseState:FirebaseColorInitialStateType};
 };
 
 export type ActionsValueTypes = {
+  toChangeAllFirebaseColorState: {
+    type: typeof TypeNames.HANDLE_CHANGE_ALL_FIREBASE_COLOR_STATE;
+    payload: PayloadTypes[TypeNames.HANDLE_CHANGE_ALL_FIREBASE_COLOR_STATE];
+  };
+
   HANDLE_CHANGE_ONE_COLOR_COLUMN: {
     type: typeof TypeNames.HANDLE_CHANGE_ONE_COLOR_COLUMN;
     payload: PayloadTypes[TypeNames.HANDLE_CHANGE_ONE_COLOR_COLUMN];
@@ -81,7 +89,7 @@ export type IdColumnArrType = {
   [key: string]: ItemValueOfIdColumnArrType;
 };
 
-export type ColorInitialStateType = {
+export type FirebaseColorInitialStateType = {
   textColorCoefficients: {
     max: number;
     high: number;
@@ -90,9 +98,9 @@ export type ColorInitialStateType = {
   };
   defaultThemesToChoseArr: ElementOfDefaultThemeToChoseArr[];
 
-  breakpointsValues: {
-    [key: string]: number;
-  };
+  breakpointsValues: BreakpointValues;
   theme: DefaultThemeType;
   idColumnArr: IdColumnArrType;
 };
+
+export type ColorInitialStateType = {} & FirebaseColorInitialStateType;

@@ -1,8 +1,9 @@
-import HeaderByPas from 'components/Header/index';
 import { Grid, makeStyles } from '@material-ui/core';
-import PropTypes from 'prop-types';
+import dynamic from 'next/dynamic';
+import { FC } from 'react';
+import { useRouter } from 'next/dist/client/router';
 import clsx from 'clsx';
-import { connect, useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { getNavigationViewLike } from 'store/modules/Settings/selectors';
 import {
   getDrawerWidth,
@@ -13,13 +14,12 @@ import {
   getSelectedPakeepsId
 } from 'store/modules/App/selectors';
 import HeaderWhenActiveSelecto from 'components/HeaderWhenActiveSelecto';
-import { toCancelSelectingStatus, toChangeHeaderHeigth, toChangePinStatusOfPakeeps } from 'store/modules/App/actions';
-import { FC, useEffect } from 'react';
 import { LayoutChildrenType } from 'models/types';
 import { menuOpenStatusDenotation } from 'models/denotation';
-import { useMeasure } from 'react-use';
-import { useRouter } from 'next/dist/client/router';
-import { BASE_URL } from 'layouts/RouterLayout/denotation';
+import { AUTH_BASE_URL, BASE_URL } from 'layouts/RouterLayout/denotation';
+import { Skeleton } from '@material-ui/lab';
+
+const HeaderByPas = dynamic(() => import('components/Header'));
 
 const useStyles = makeStyles(({ spacing, transitions, breakpoints, palette }) => ({
   '@global': {
@@ -27,7 +27,7 @@ const useStyles = makeStyles(({ spacing, transitions, breakpoints, palette }) =>
       minHeight: '80vh',
       // overflow: 'visible !important',
       overflowX: 'hidden !important',
-      overflow:({isRouteIsBase}:anu)=> isRouteIsBase ?'hidden' : '', 
+      overflow: ({ isRouteIsBase }: any) => (isRouteIsBase ? 'hidden' : ''),
       background: palette.background.default,
       padding: '0 !important',
       scrollBehavior: 'smooth'
@@ -116,8 +116,9 @@ const HeaderLayout: FC<LayoutChildrenType> = ({ children }) => {
   const { route } = useRouter();
 
   const isRouteIsBase = route === BASE_URL;
+  const isRouteIsAuthBase = route === AUTH_BASE_URL;
 
-  const classes = useStyles({ drawerWidth, navigationViewLikeTelegram, headerHeight ,isRouteIsBase});
+  const classes = useStyles({ drawerWidth, navigationViewLikeTelegram, headerHeight, isRouteIsBase });
 
   const isMenuExtended = menuOpenStatus === menuOpenStatusDenotation.EXTENDED;
   const isMenuOpen = menuOpenStatus === menuOpenStatusDenotation.OPEN;
@@ -138,19 +139,14 @@ const HeaderLayout: FC<LayoutChildrenType> = ({ children }) => {
   };
 
   return (
-    <Grid className={classes.container} >
-      {isShouldBeHeaderWhenActiveSelecto ? (
-        <HeaderWhenActiveSelecto {...headerWhenActiveSelectoProps} />
-      ) : (
-        <HeaderByPas {...headerByPasProps} />
-      )}
-      <main
-        className={clsx(classes.content, {
-          // [classes.contentShift]: isMenuOpen
-        })}
-      >
-        {children}
-      </main>
+    <Grid className={classes.container}>
+      {!isRouteIsAuthBase &&
+        (isShouldBeHeaderWhenActiveSelecto ? (
+          <HeaderWhenActiveSelecto {...headerWhenActiveSelectoProps} />
+        ) : (
+          <HeaderByPas {...headerByPasProps} />
+        ))}
+      <main className={clsx(classes.content)}>{children}</main>
     </Grid>
   );
 };

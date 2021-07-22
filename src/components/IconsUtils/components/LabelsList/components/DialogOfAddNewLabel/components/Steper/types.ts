@@ -1,4 +1,4 @@
-import { CustomColorType } from 'models/types';
+import { CustomColorType, UseStylesCustomColorType } from 'models/types';
 import { OnChangeOfLabelColorRadioType, StepOfDialogOfAddNewLabelType } from '../../types';
 
 export type UseStylesOfSteperOfDialogOfAddNewLabelType = {
@@ -14,4 +14,4 @@ export type ThirdStepOfSteperOfDialogOfAddNewLabelPropsType = {
   value: string;
   onChange: OnChangeOfLabelColorRadioType;
   colorVariants: { labelText: string; value: string }[];
-};
+} & UseStylesCustomColorType;

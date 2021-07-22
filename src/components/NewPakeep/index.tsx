@@ -1,6 +1,7 @@
 import { FC, KeyboardEventHandler, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import _ from 'lodash';
+import dynamic from 'next/dynamic';
 import clsx from 'clsx';
 import { useCookie, useMeasure, usePageLeave } from 'react-use';
 import { nanoid } from 'nanoid';
@@ -21,8 +22,14 @@ import IconButtonByPas from 'components/IconButton';
 import { DEFAULT } from 'models/denotation';
 import { useNewPakeepUtility } from 'hooks/useNewPakeepUtility.hook';
 import { useNewPakeepStatuses } from 'hooks/useNewPakeepStatuses.hook';
-import NewPakeepUtils from './components/Utils';
 import { toAddNewPakeep } from 'store/modules/App/actions';
+import CircularProgressLoader from 'components/CircularProgressLoader';
+
+const NewPakeepUtils = dynamic(() => import('./components/Utils'), {
+  loading: () => (
+      <CircularProgressLoader/>
+  )
+});
 
 const useStyles = makeStyles(
   ({ spacing, palette, transitions, typography: { subtitle1, h5 }, shape: { borderRadius } }) => ({
@@ -120,7 +127,7 @@ const NewPaKeep: FC = () => {
     handleAccomplishedCheckBoxesHiddenStatus
   } = useNewPakeepStatuses();
 
-  const [value, updateCookie, deleteCookie] = useCookie(JSON.stringify(state));
+  // const [value, updateCookie, deleteCookie] = useCookie(JSON.stringify(state));
 
   // const handleDeleteLabelFromPakeepFunc = (placeholder: any, labelId: LabelIdType) => handleDeleteNewLabel(labelId);
   const [ref, { width: widthOfContainer }] = useMeasure<HTMLDivElement>();
@@ -174,14 +181,14 @@ const NewPaKeep: FC = () => {
     ref
   };
   // console.log(value)
-  useEffect(() => {
-    // console.log(JSON.parse(value!));
-    // _.isEqual(state, nulittyState) && setState(JSON.parse(value!));
-  }, []);
+  // useEffect(() => {
+  //   // console.log(JSON.parse(value!));
+  //   // _.isEqual(state, nulittyState) && setState(JSON.parse(value!));
+  // }, []);
 
-  usePageLeave(() => {
-    updateCookie(JSON.stringify(state));
-  });
+  // usePageLeave(() => {
+  //   updateCookie(JSON.stringify(state));
+  // });
   const handleAddNewPakeep = () => {
     setState({ ...defaultState, ...defaultInputState, checkBoxes: [] });
     dispatch(toAddNewPakeep({ newPakeep: state }));
@@ -263,6 +270,7 @@ const NewPaKeep: FC = () => {
             <AttributeGroup {...attributeGroupProps} />
           </Grid>
         )}
+
 
         {!statusState.isTextHidden && <NewPakeepUtils {...newPakeepUtils} />}
       </Grid>

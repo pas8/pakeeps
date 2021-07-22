@@ -1,5 +1,6 @@
 import { Grid, GridProps, makeStyles, Typography } from '@material-ui/core';
 import { useAlpha } from 'hooks/useAlpha.hook';
+import { FieldSetContainerPropsType } from 'models/types';
 import { FC } from 'react';
 
 const useStyles = makeStyles(
@@ -10,7 +11,7 @@ const useStyles = makeStyles(
       display: 'flex',
       border: isOnlyTop ? '0px' : '1px solid',
       borderTop: '2px solid',
-      borderStyle:isOnlyTop ? 'solid': 'solid' ,
+      borderStyle: isOnlyTop ? 'solid' : 'solid',
       borderColor: useAlpha(palette.text.primary, 0.2),
 
       '& >  legend': {
@@ -20,17 +21,12 @@ const useStyles = makeStyles(
           ...subtitle1,
           fontSize: h6.fontSize
         }
-      }
+      },
     })
   })
 );
 
-const FieldSetContainer: FC<{ title: string; isOnlyTop?: boolean } & GridProps> = ({
-  children,
-  title,
-  isOnlyTop = true,
-  ...gridProps
-}) => {
+const FieldSetContainer: FC<FieldSetContainerPropsType> = ({ children, title, isOnlyTop = true, ...gridProps }) => {
   const classes = useStyles({ isOnlyTop });
 
   return (

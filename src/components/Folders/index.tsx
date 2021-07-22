@@ -1,19 +1,25 @@
-import { Grid, makeStyles, Slide } from '@material-ui/core';
+import { CircularProgress, Grid, makeStyles, Paper, Slide } from '@material-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
+import dynamic from 'next/dynamic';
+import { useMeasure } from 'react-use';
+import { Skeleton } from '@material-ui/lab';
 import { FC, useEffect, useState } from 'react';
 import { getGlobalFolderId, getHeaderHeight } from 'store/modules/App/selectors';
 import { size, sum, values } from 'lodash';
 import { DEFAULT } from 'models/denotation';
+
 import { HandleOpenMoreFoldersType } from 'models/types';
 import { useValidateFolderColor } from 'hooks/useValidateFolderColor.hook';
 import { useTakeFoldersPropertyies } from 'hooks/useTakeFoldersPropertyies.hook';
 import { toChangeGlobalFolderId, toSetDrawerWidth } from 'store/modules/App/actions';
+import { useBreakpointNames } from 'hooks/useBreakpointNames.hook';
 import { ColorType } from 'store/modules/App/types';
 import { FoldersTypeProps, HandleChangeFolderColorType, HandleChangeGlobalFolderIdType } from './types';
-import FolderButtonGroupByPas from './components/ButtonGroup';
-import MoreMenuOfFolders from './components/MoreMenu';
-import { useMeasure } from 'react-use';
-import { useBreakpointNames } from 'hooks/useBreakpointNames.hook';
+import CircularProgressLoader from 'components/CircularProgressLoader';
+const FolderButtonGroupByPas = dynamic(() => import('./components/ButtonGroup'), {
+});
+
+const MoreMenuOfFolders = dynamic(() => import('./components/MoreMenu'), {});
 
 const useStyles = makeStyles(({ spacing, transitions, breakpoints, palette }) => ({
   container: ({ height, isFolderAfterIsEmpty, isFoldersHaveDraweView }: any) => ({
@@ -106,10 +112,10 @@ const Folders: FC<FoldersTypeProps> = ({
   return (
     <Grid ref={ref}>
       <Grid
-        // container
-        justify={isFolderViewWithPakeepViewAlignToCenter ? 'center' : 'flex-start'}
-        wrap={'nowrap'}
-        direction={positionsOfFolder.isBottom ? 'row' : 'column'}
+      // container
+      // justify={isFolderViewWithPakeepViewAlignToCenter ? 'center' : 'flex-start'}
+      // wrap={'nowrap'}
+      // direction={positionsOfFolder.isBottom ? 'row' : 'column'}
       >
         <Slide
           in={true}

@@ -2,23 +2,30 @@ import { FC } from 'react';
 import { usePrevious, useToggle } from 'react-use';
 import RestoreOutlinedIcon from '@material-ui/icons/RestoreOutlined';
 import { useMeasure } from 'react-use';
+import dynamic from 'next/dynamic';
 import { useSnackbar } from 'notistack';
+import { Skeleton } from '@material-ui/lab';
 import { isEqual } from 'lodash';
 import { useDispatch, useSelector } from 'react-redux';
 import { Grid, makeStyles, DialogTitle, DialogContent, InputBase, Dialog, DialogActions } from '@material-ui/core';
 
-import IconsUtils from 'components/IconsUtils';
 import { useAlpha } from 'hooks/useAlpha.hook';
 import CheckBoxContainer from 'components/CheckBoxContainer';
 import ActionsButtonGroup from 'components/ActionsButtonGroup';
 import { getIsUseEditingDialogAsNewPakeep } from 'store/modules/App/selectors';
-import { DEFAULT } from 'models/denotation';
+import { DEFAULT, NONE } from 'models/denotation';
 import { DialogLayoutName } from 'models/unums';
 import { customColorPlaceholder } from 'components/AccountAvatar';
 import { useBreakpointNames } from 'hooks/useBreakpointNames.hook';
-import { toAddNewPakeep, toChangeTemporaryData, toEditPakeep } from 'store/modules/App/actions';
+import {
+  toAddNewPakeep,
+  toChangeDefaultLayoutDialogProps,
+  toChangeTemporaryData,
+  toEditPakeep
+} from 'store/modules/App/actions';
 import { useFindPakeepUsingId } from 'hooks/useFindPakeepUsingId.hook';
 import { DefaultMenuLayoutElementPropsType } from 'layouts/DialogsLayout/types';
+import { UpSildeTransition } from 'components/SildeTransitions';
 import { useNewPakeepUtility } from 'hooks/useNewPakeepUtility.hook';
 import { useGetReadableColor } from 'hooks/useGetReadableColor.hook';
 import { IconsUtilsArrDenotationNameType } from 'components/IconsUtils/types';
@@ -27,18 +34,25 @@ import { useNewPakeepStatuses } from 'hooks/useNewPakeepStatuses.hook';
 import { UseStylesOfEditingDialogOfPakeepElementtype } from './types';
 import AttributeGroup from '../PakeepElement/components/AttributeGroup';
 
+const IconsUtils = dynamic(() => import('components/IconsUtils'), {
+  loading: () => (
+    <>
+      <Skeleton variant={'rect'} width={200} height={42} />
+    </>
+  )
+});
+
 const useStyles = makeStyles(({ typography: { h4, h6, body1, h5 }, spacing }) => {
   return {
     containerClass: ({ backgroundColor, color, isSizeSmall }: UseStylesOfEditingDialogOfPakeepElementtype) => ({
       backgroundColor,
-      height:isSizeSmall ?'100vh' : '', 
+      height: isSizeSmall ? '100vh' : '',
       color,
       '& button': {
         color
       },
-      '& .MuiDialogContent-root':{
-padding:isSizeSmall ?'4px 12px' : ''
-
+      '& .MuiDialogContent-root': {
+        padding: isSizeSmall ? '4px 12px' : ''
       },
       '& .MuiDialogTitle-root': {
         paddingBottom: 0,
@@ -60,7 +74,7 @@ padding:isSizeSmall ?'4px 12px' : ''
         marginLeft: isSizeSmall ? -10 : ''
       },
       '& textarea ': {
-        ...body1,
+        ...body1
       },
       '& .footer': {
         position: isSizeSmall ? 'fixed' : 'static',
@@ -245,7 +259,7 @@ const EditingDialogOfPakeepElement: FC<DefaultMenuLayoutElementPropsType> = ({
     dispatch(
       toChangeTemporaryData({
         newTemporaryData: {
-          defaultDialogProps: { dialogName: DialogLayoutName.NONE, id: '', customColor: customColorPlaceholder },
+          defaultDialogProps: NONE,
           isUseEditingDialogAsNewPakeep: false
         }
       })
@@ -271,6 +285,7 @@ const EditingDialogOfPakeepElement: FC<DefaultMenuLayoutElementPropsType> = ({
     <Dialog
       open={isDialogOpen}
       onClose={onClose}
+      TransitionComponent={isSizeSmall ? UpSildeTransition : undefined}
       fullScreen={isSizeSmall}
       maxWidth={statusState.isNewPakeepContainerHaveFullWidth ? 'xl' : 'sm'}
       fullWidth={statusState.isNewPakeepContainerHaveFullWidth}

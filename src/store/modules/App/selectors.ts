@@ -3,6 +3,7 @@ import { RootStoreType } from 'models/types';
 import { find } from 'lodash';
 import { createSelector } from 'reselect';
 import { createArraySelector } from 'reselect-map';
+import { DefaultFirebaseStateType } from '../Auth/operations';
 
 // const getPakeeplLabels = ;
 // const getGlobalLabels = ;
@@ -77,7 +78,7 @@ export const getGlobalEventsArr = createSelector(
 export const getDefaultMenuPropsOfTemporaryData = createSelector(
   [({ app: { temporaryData } }: RootStoreType) => temporaryData.defaultMenuProps],
   defaultMenuProps => defaultMenuProps
-);
+); 
 
 export const getIsPakeepHovering = createSelector(
   [({ app: { temporaryData } }: RootStoreType) => temporaryData.pakeep.isHovering],
@@ -111,6 +112,21 @@ export const getIsAuthedWithLocalPassword = createSelector(
 export const getSearchPropertyies = createSelector(
   [({ app: { temporaryData } }: RootStoreType) => temporaryData.searchPropertyies],
   searchPropertyies => searchPropertyies
+);
+export const getQuerySearchArr = createSelector(
+  [({ app: { querySearchArr } }: RootStoreType) => querySearchArr],
+  querySearchArr => querySearchArr
+);
+
+
+export const getIsCurrentNumberOfPakeepColumnsIsOne = createSelector(
+  [({ app: { temporaryData } }: RootStoreType) => temporaryData.isCurrentNumberOfPakeepColumnsIsOne],
+  isCurrentNumberOfPakeepColumnsIsOne => isCurrentNumberOfPakeepColumnsIsOne
+);
+
+export const getOrderOfOnlyOnePakeepColumn = createSelector(
+  [({ app: { orderOfOnlyOnePakeepColumn } }: RootStoreType) => orderOfOnlyOnePakeepColumn],
+  orderOfOnlyOnePakeepColumn => orderOfOnlyOnePakeepColumn
 );
 
 export const getUserData = createSelector([({ app: { userData } }: RootStoreType) => userData], userData => userData);
@@ -191,4 +207,15 @@ export const getDefaultDialogPropsOfTemporaryData = createSelector(
     }: RootStoreType) => defaultDialogProps
   ],
   defaultDialogProps => defaultDialogProps
+);
+
+export const getAllFirebaseData = createSelector(
+  [
+    ({ app: { temporaryData, ...appData }, color, settings }: RootStoreType) => ({
+      app: { ...appData },
+      color,
+      settings
+    })
+  ],
+  allFirebaseData => allFirebaseData
 );

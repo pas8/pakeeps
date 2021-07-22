@@ -8,23 +8,22 @@ import { getGlobalEventsArr } from 'store/modules/App/selectors';
 import { getTimeAndDateFromat, getTimeFormat } from 'store/modules/Settings/selectors';
 import { GlobalEventsType } from 'store/modules/App/types';
 import { EventsPartPropsType } from './types';
-import { toChangeTemporaryData } from 'store/modules/App/actions';
+import { toChangeDefaultLayoutMenuProps, toChangeTemporaryData } from 'store/modules/App/actions';
 import { OnClickOfPreviewEventListType } from './components/PreviewEventList/types';
 
 const EventsPart: FC<EventsPartPropsType> = ({ events = [], customColor, parentBackgroundColor }) => {
   const dispatch = useDispatch();
 
-  const timeFormat = useSelector(getTimeFormat);
-  const timeAndDateFromat = useSelector(getTimeAndDateFromat);
+ 
   const globalEvents: GlobalEventsType = useSelector(getGlobalEventsArr);
 
   const sortedEvents = events.sort(compareFunc('value'));
-  const currentEventsArr = useFindCurrentEvents(globalEvents, sortedEvents, timeFormat, timeAndDateFromat);
+  const currentEventsArr = useFindCurrentEvents(globalEvents, sortedEvents );
 
   if (!currentEventsArr) return null;
 
-  const onClick: OnClickOfPreviewEventListType = defaultMenuProps => {
-    dispatch(toChangeTemporaryData({ newTemporaryData: { defaultMenuProps } }));
+  const onClick: OnClickOfPreviewEventListType = props => {
+    dispatch(toChangeDefaultLayoutMenuProps({ props }));
   };
 
   const allPreviewEventListProps = {

@@ -3,14 +3,9 @@ import clsx from 'clsx';
 import { useMeasure } from 'react-use';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppBar, makeStyles, Toolbar, Grid } from '@material-ui/core';
-import { menuOpenStatusDenotation, SIGN_IN_URL, NEW_USER_URL } from 'models/denotation';
-import { toChangeHeaderHeigth, toChangeMenuOpenStatus } from 'store/modules/App/actions';
+import { toChangeHeaderHeigth } from 'store/modules/App/actions';
 import { useRouter } from 'next/dist/client/router';
 
-import HeaderSearch from './components/Search';
-import HeaderProfileUtils from './components/ProfileUtils';
-import MainBar from './components/MainBar';
-import { HeaderByPasPropsType } from './types';
 import { useBreakpointNames } from 'hooks/useBreakpointNames.hook';
 import {
   getFolderDimensions,
@@ -20,7 +15,24 @@ import {
 } from 'store/modules/App/selectors';
 import { getIsHeaderHavePaperColor } from 'store/modules/Settings/selectors';
 import { useAlpha } from 'hooks/useAlpha.hook';
-import { PakeepDimensionsType } from 'store/modules/App/types';
+import { usePropertyDueToRoute } from 'hooks/usePropertyDueToRoute.hook';
+import { denotationOfCorrectLayoutCases } from 'layouts/RouterLayout/denotation';
+
+import { HeaderByPasPropsType } from './types';
+import dynamic from 'next/dynamic';
+import { Skeleton } from '@material-ui/lab';
+
+const MainBar = dynamic(() => import('./components/MainBar'), {
+  // loading: () => <Skeleton variant={'rect'} width={100} height={42} />
+});
+
+const HeaderSearch = dynamic(() => import('./components/Search'), {
+  // loading: () => <Skeleton variant={'rect'} width={100} height={42} />
+});
+
+const HeaderProfileUtils = dynamic(() => import('./components/ProfileUtils'), {
+  // loading: () => <Skeleton variant={'rect'} width={100} height={42} />
+});
 
 const useStyles = makeStyles(({ spacing, palette, transitions, shape: { borderRadius }, breakpoints }) => ({
   root: ({ navigationViewLikeTelegram }: any) => ({
@@ -53,16 +65,17 @@ const useStyles = makeStyles(({ spacing, palette, transitions, shape: { borderRa
   },
 
   headerGroupFloatedToEnd: {
-    // justifySelf: 'flex-end'
     display: 'flex',
     borderRadius
-    // padding: spacing(3)
   },
 
   smallContainer: ({ pakeepDimensions }: any) => ({
     border: '1px solid',
     borderRadius,
     position: 'fixed',
+    zIndex: 2,
+    // backdropFilter: 'blur(4px)',
+    background: palette.background.default,
     padding: spacing(0.2, 2),
     left: pakeepDimensions.container.paddingLeft,
     [breakpoints.down('xs')]: {
@@ -82,14 +95,18 @@ const HeaderByPas: FC<HeaderByPasPropsType> = ({
   navigationViewLikeTelegram,
   navigationViewLikePakeeps
 }) => {
-  const isHeaderHavePaperColor = useSelector(getIsHeaderHavePaperColor);
   const { pathname } = useRouter();
   const dispatch = useDispatch();
   const { isSizeSmall } = useBreakpointNames();
+
+  const isHeaderHavePaperColor = useSelector(getIsHeaderHavePaperColor);
   const pakeepDimensions = useSelector(getPakeepDimensions);
+  const isAuthedWithLocalPinCode = useSelector(getIsAuthedWithLocalPassword);
+  const isZenModeActive = useSelector(getIsZenModeActive);
 
   const classes = useStyles({
     drawerWidth,
+    isAuthedWithLocalPinCode,
     pakeepDimensions,
     navigationViewLikeTelegram,
     navigationViewLikePakeeps,
@@ -97,11 +114,20 @@ const HeaderByPas: FC<HeaderByPasPropsType> = ({
     isHeaderHavePaperColor
   });
 
-  const isHeaderHavePakeepView = true;
-
-  const isAuthedWithLocalPinCode = useSelector(getIsAuthedWithLocalPassword);
-  const isRouteIsSignIn = pathname === SIGN_IN_URL || pathname === NEW_USER_URL || !isAuthedWithLocalPinCode;
+  const property = usePropertyDueToRoute();
   const [ref, { height: headerHeight }] = useMeasure<HTMLDivElement>();
+  const [isSeaching, setIsSeaching] = useState(false);
+
+  const isHeaderHavePakeepView = true;
+  const isRouteIsAuth = denotationOfCorrectLayoutCases.FOLDER_LAYOUT_HIDDEN === property || !isAuthedWithLocalPinCode;
+  const isOnlySearchVisible = isSizeSmall && isSeaching;
+
+  const headerSearchProps = {
+    isSeaching,
+    setIsSeaching,
+    isOnlySearchVisible
+  };
+
   useEffect(() => {
     dispatch(
       toChangeHeaderHeigth({
@@ -112,28 +138,20 @@ const HeaderByPas: FC<HeaderByPasPropsType> = ({
     );
   }, [headerHeight]);
 
-  const [isSeaching, setIsSeaching] = useState(false);
-
-  const isOnlySearchVisible = isSizeSmall && isSeaching;
-
-  const headerSearchProps = {
-    isSeaching,
-    setIsSeaching,
-    isOnlySearchVisible
-  };
-
-  const isZenModeActive = useSelector(getIsZenModeActive);
-
   return (
     <Grid className={classes.root}>
-      {isSizeSmall && !isRouteIsSignIn ? (
+      {!isAuthedWithLocalPinCode ? (
+        <Grid ref={ref} />
+      ) : isSizeSmall && !isRouteIsAuth ? (
         <Grid className={classes.smallContainer} ref={ref} component={'header'}>
           <Grid alignItems={'center'} container justify={'space-between'}>
-            <Grid >
-            <Grid container>
-              {!isSeaching && <MainBar isMenuExtended={isMenuExtended} isMenuOpen={isMenuOpen} />}
-              <HeaderSearch {...headerSearchProps} />
-            </Grid>
+            <Grid>
+              <Grid container>
+                {!isSeaching && (
+                  <MainBar isMenuExtended={isMenuExtended} isMenuOpen={isMenuOpen} isRouteIsAuth={isRouteIsAuth} />
+                )}
+                <HeaderSearch {...headerSearchProps} />
+              </Grid>
             </Grid>
             {!isSeaching && <HeaderProfileUtils />}
           </Grid>
@@ -142,9 +160,11 @@ const HeaderByPas: FC<HeaderByPasPropsType> = ({
         <AppBar className={clsx(classes.appBar, { [classes.appBarShift]: isMenuOpen })} ref={ref}>
           {!isZenModeActive && (
             <Toolbar className={classes.toolBar}>
-              {!isOnlySearchVisible && <MainBar isMenuExtended={isMenuExtended} isMenuOpen={isMenuOpen} />}
-              {!isRouteIsSignIn && <HeaderSearch {...headerSearchProps} />}
-              {!isRouteIsSignIn && <HeaderProfileUtils />}
+              {!isOnlySearchVisible && (
+                <MainBar isMenuExtended={isMenuExtended} isMenuOpen={isMenuOpen} isRouteIsAuth={isRouteIsAuth} />
+              )}
+              {!isRouteIsAuth && <HeaderSearch {...headerSearchProps} />}
+              {!isRouteIsAuth && <HeaderProfileUtils />}
             </Toolbar>
           )}
         </AppBar>

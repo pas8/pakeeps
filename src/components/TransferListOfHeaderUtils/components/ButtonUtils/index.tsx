@@ -1,38 +1,37 @@
-import { Box, Button, Grid, makeStyles } from '@material-ui/core';
-import { ButtonUtilsPropsType } from 'components/TransferListOfHeaderUtils/types';
+import { Box, Button, Grid, makeStyles, Typography } from '@material-ui/core';
 import { flatten, uniq } from 'lodash';
 import { FC } from 'react';
+import { useBreakpointNames } from 'hooks/useBreakpointNames.hook';
+import { ButtonUtilsPropsType } from 'components/TransferListOfHeaderUtils/types';
 
-const useStyles = makeStyles(
-  ({ palette, spacing, shape: { borderRadius }, typography: { subtitle1, subtitle2, h5 } }) => ({
-    container: {
-      height: '100%',
-      // width:50,
-      // width:'100%',
+const useStyles = makeStyles(({ spacing, shape: { borderRadius }, breakpoints }) => ({
+  container: {
+    height: '100%',
+    [breakpoints.down('xs')]: {
+      padding: spacing(1.4, 0),
+      width: '100%',
+      '& .allItemsToSecond,.oneItemToFirst ': {
+        transform: 'rotate(-90deg)'
+      },
 
-      '& button': {
-        ...h5,
-        width: '100%',
-        height: '22.5%'
+      '& .oneItemToSecond,.allItemsToFirst': {
+        transform: 'rotate(270deg)'
+      }
+    },
+    '& button': {
+      width: '100%',
+      height: '22.5%',
+      [breakpoints.down('xs')]: {
+        height: 'auto',
+        padding: spacing(1, 0),
+        width: '22.5%'
       }
     }
-  })
-);
+  }
+}));
 
 const ButtonUtils: FC<ButtonUtilsPropsType> = ({ selected, setSelected, setState, state, exclusionNamesArr }) => {
   const classes = useStyles();
-  // const handleToggle = (value: number) => () => {
-  //   const currentIndex = checked.indexOf(value);
-  //   const newChecked = [...checked];
-
-  //   if (currentIndex === -1) {
-  //     newChecked.push(value);
-  //   } else {
-  //     newChecked.splice(currentIndex, 1);
-  //   }
-
-  //   setChecked(newChecked);
-  // };
 
   const handleMoveAllToRight = () => {
     setState(state => [[], flatten(state)]);
@@ -49,47 +48,29 @@ const ButtonUtils: FC<ButtonUtilsPropsType> = ({ selected, setSelected, setState
     setState(state => [uniq([...selected, ...state[0]]), state[1].filter(id => !selected.includes(id))]);
     setSelected([]);
   };
+  const { isSiveIsXs } = useBreakpointNames();
 
   return (
-    <Grid className={classes.container} container direction={'column'} justify={'space-between'}>
-      <Button
-        variant={'outlined'}
-        size={'small'}
-        // className={classes.button}
-        onClick={handleMoveAllToRight}
-        // disabled={left.length === 0}
-        aria-label={'move all right'}
-      >
-        ≫
+    <Grid className={classes.container} container direction={isSiveIsXs ? 'row' : 'column'} justify={'space-between'}>
+      <Button variant={'outlined'} size={'small'} onClick={handleMoveAllToRight} aria-label={'move all right'}>
+        <Typography variant={'h5'} className={'allItemsToSecond'}>
+          ≫
+        </Typography>
       </Button>
-      <Button
-        variant="outlined"
-        // size="small"
-        // className={classes.button}
-        onClick={handleCheckedRight}
-        // disabled={leftChecked.length === 0}
-        aria-label={'move selected right'}
-      >
-        &gt;
+      <Button variant={'outlined'} onClick={handleCheckedRight} aria-label={'move selected right'}>
+        <Typography variant={'h5'} className={'oneItemToSecond'}>
+          &gt;
+        </Typography>
       </Button>
-      <Button
-        variant="outlined"
-        // size="small"
-        // className={classes.button}
-        onClick={handleCheckedLeft}
-        // disabled={rightChecked.length === 0}
-        aria-label="move selected left"
-      >
-        &lt;
+      <Button variant={'outlined'} onClick={handleCheckedLeft} aria-label={'move selected left'}>
+        <Typography variant={'h5'} className={'oneItemToFirst'}>
+          &lt;
+        </Typography>
       </Button>
-      <Button
-        variant="outlined"
-        // className={classes.button}
-        onClick={handleMoveAllToLeft}
-        // disabled={right.length === 0}
-        aria-label="move all left"
-      >
-        ≪
+      <Button variant={'outlined'} onClick={handleMoveAllToLeft} aria-label={'move all left'}>
+        <Typography variant={'h5'} className={'allItemsToFirst'}>
+          ≪
+        </Typography>
       </Button>
     </Grid>
   );

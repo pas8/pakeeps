@@ -20,8 +20,8 @@ export const useSetCorrectFolderId = (folders: FoldersType) => {
       .flatten()
       .find(({ id, route }) => route === router.route)
       .value();
-      console.log(id)
-    if (!id) return;
+
+      if (!id) return;
 
     dispatch(toChangeTemporaryData({ newTemporaryData: { globalFolderId: id } }));
   }, [router, folderId]);

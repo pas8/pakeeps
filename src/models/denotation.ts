@@ -1,3 +1,5 @@
+import { AUTH_BASE_URL } from 'layouts/RouterLayout/denotation';
+
 export const pakeepPropertyiesNames = {
   isInBookmark: 'isInBookmark',
   isFavorite: 'isFavorite',
@@ -12,8 +14,8 @@ export const menuOpenStatusDenotation = {
   EXTENDED: 'EXTENDED'
 } as const;
 
-export const SIGN_IN_URL = '/auth';
-export const NEW_USER_URL = '/auth/register';
+export const SIGN_IN_URL = `${AUTH_BASE_URL}/signIn`;
+export const NEW_USER_URL = `${AUTH_BASE_URL}/register`;
 
 export const TRANSPARENT = 'transparent';
 export const NONE = 'none';
@@ -26,7 +28,7 @@ export const SECONDARY = 'secondary';
 export const attributesName = {
   EVENT: 'event',
   LABEL: 'label'
-};
+} 
 
 export const ALL = 'ALL';
 export const OPEN_MORE = 'OPEN_MORE';
@@ -37,9 +39,10 @@ export const headerProfileUtilsDenotationIds = {
   NOTICATION_BUTTON: 'NOTICATION_BUTTON',
   LOCK_BUTTON: 'LOCK_BUTTON',
   ZEN_MODE_BUTTON: 'ZEN_MODE_BUTTON',
+  CHANGE_PAKEEPS_LIST_VIEW: 'CHANGE_PAKEEPS_LIST_VIEW',
   AVATAR_BUTTON: 'AVATAR_BUTTON',
-  SIGNOUT:'SIGNOUT',
-  SIGN_IN_AS:'SIGN_IN_AS'
+  SIGNOUT: 'SIGNOUT',
+  SIGN_IN_AS: 'SIGN_IN_AS'
 };
 
 export const CLOSE_MENU_ID = 'CLOSE_MENU';
@@ -57,10 +60,38 @@ export const allPakeeepsSearchPropertyies = {
   [NONE]: NONE
 };
 
-
 export const pakeepFoldersKeyName = {
   PAKEEP_UTILS: 'PAKEEP_UTILS',
   LABELS: 'LABELS',
   EVENTS: 'EVENTS',
   SEARCH: 'SEARCH'
+};
+
+export const globalClassNames = {
+  CAPTION_OF_SETTING_GROUP: 'captionOfSettingGroup'
+};
+
+export const errorMessages = {
+  YOU_HAVE_SIGNED_UP_WITH_A_DIFFERENT_PROVIDER_FOR_THAT_EMAIL:'You have signed up with a different provider for that email.',
+  SOMETHING_WENT_WRONG: 'Something went wrong',
+  CAN_NOT_UPLOAD_ALL_DATA_TRY_AGAIN: 'can not upload all data,try again'
+};
+
+export const LOCAL_STORAGE_KEY = 'pakeep_store';
+
+export const denotationOfDefaultPakeepPropetiesOfFolders = {
+  [pakeepPropertyiesNames.isPinned]: {
+    title: 'Pined',
+    iconName: 'pin'
+  },
+  [pakeepPropertyiesNames.isInBookmark]: {
+    title: 'Bookmark',
+    iconName: 'bookmark'
+  },
+  [pakeepPropertyiesNames.isFavorite]: { title: 'Favorite', iconName: 'favorite' },
+  [pakeepPropertyiesNames.isCheckBoxes]: {
+    title: 'With checkBoxes',
+    iconName: 'checkBox'
+  },
+  [pakeepPropertyiesNames.isArchived]: { title: 'Archiveted', iconName: 'archive' }
 };

@@ -5,11 +5,12 @@ import CloseIcon from '@material-ui/icons/Close';
 import { useAlpha } from 'hooks/useAlpha.hook';
 import { CloseButtonWithIconPropsType, UseStylesOfCloseButtonWithIconType } from '../../types';
 
-const useStyles = makeStyles(({ palette, spacing }) => ({
+const useStyles = makeStyles(({ palette, spacing, breakpoints }) => ({
   container: ({ colorOfCloseButton }: UseStylesOfCloseButtonWithIconType) => {
     const color = !colorOfCloseButton ? palette.text.hint : colorOfCloseButton;
 
     return {
+
       '& button': {
         color,
         '& svg,span': {

@@ -4,6 +4,10 @@ import { useMakeDraggableArr } from 'hooks/useMakeDraggableArr.hook';
 import PakeepListContainer from './components/Container';
 import { NewOrderNamesReduceFunc, OnDragEndType, WrapperOfContainerOfPakeepListType } from './types';
 import { OrderNamesType, OrderNameType } from 'store/modules/App/types';
+import { useSelector } from 'react-redux';
+import { getIsCurrentNumberOfPakeepColumnsIsOne } from 'store/modules/App/selectors';
+
+export const placeholderName = 'placeholder';
 
 const WrapperOfContainerOfPakeepList: FC<WrapperOfContainerOfPakeepListType> = ({
   pakeeps,
@@ -12,20 +16,15 @@ const WrapperOfContainerOfPakeepList: FC<WrapperOfContainerOfPakeepListType> = (
   setIsPakeepDragging,
   columnOfPakeepListContainerProps
 }) => {
-  const placeholderName = 'placeholder';
+  const isCurrentNumberOfPakeepColumnsIsOne = useSelector(getIsCurrentNumberOfPakeepColumnsIsOne);
 
-  const { columns, responsiveColumnOrder } = useMakeDraggableArr(
-    handleSetPakeepsOrderNames
-  );
-  
+  const { columns, responsiveColumnOrder } = useMakeDraggableArr(handleSetPakeepsOrderNames);
+
   const onDragStart = () => setIsPakeepDragging(true);
 
   const onDragEnd: OnDragEndType = ({ destination, source }) => {
-    var t0 = performance.now();
-
     if (!destination) return;
 
-    // if (destination.index === source.index) return;
     setIsPakeepDragging(false);
     const isSameColumn = source.droppableId === destination.droppableId;
     if (source.index === destination.index && isSameColumn) return;
@@ -33,6 +32,13 @@ const WrapperOfContainerOfPakeepList: FC<WrapperOfContainerOfPakeepListType> = (
     const sourceDroppableNumber = +source.droppableId;
     const destinationDroppableNumber = +destination.droppableId;
 
+    if (isCurrentNumberOfPakeepColumnsIsOne) {
+      const newOrderNames = Array.from(pakeepsOrderNames);
+      const [destinationId] = newOrderNames.splice(source.index, 1);
+      newOrderNames.splice(destination.index, 0, destinationId!);
+
+      return handleSetPakeepsOrderNames(newOrderNames);
+    }
     const columnOrderLenght = responsiveColumnOrder.length;
     const sourceArrFilterFunc = (el: OrderNameType, idx: number) =>
       (idx + columnOrderLenght) % columnOrderLenght === sourceDroppableNumber % columnOrderLenght && el;
@@ -43,9 +49,10 @@ const WrapperOfContainerOfPakeepList: FC<WrapperOfContainerOfPakeepListType> = (
     const sumLengthOfAllPakeeps = pakeepsOrderNames.length;
 
     const toCorrect = +destinationDroppableNumber !== 0;
-    
+
     if (isSameColumn) {
       // clonedSourceArr.push('placeholder');
+      // console.log(clonedSourceArr)
       _.fill(clonedSourceArr, sourceArr[source.index], destination.index, destination.index + 1);
       _.fill(clonedSourceArr, sourceArr[destination.index], source.index, source.index + 1);
 
@@ -56,10 +63,11 @@ const WrapperOfContainerOfPakeepList: FC<WrapperOfContainerOfPakeepListType> = (
           (idx + columnOrderLenght) % columnOrderLenght === sourceDroppableNumber % columnOrderLenght;
 
         const newOrderNamesPakeepsElementId = isItemShoulBePasted ? clonedSourceArr[correntIdx] : el;
-
         return [...sum, newOrderNamesPakeepsElementId];
       };
-      const newOrderNames = pakeepsOrderNames.reduce(newOrderNamesReduceFunc, []);
+
+      const validetedPakeepsOrderNames = pakeepsOrderNames;
+      const newOrderNames = validetedPakeepsOrderNames.reduce(newOrderNamesReduceFunc, []);
       return handleSetPakeepsOrderNames(newOrderNames);
     }
 
@@ -72,7 +80,7 @@ const WrapperOfContainerOfPakeepList: FC<WrapperOfContainerOfPakeepListType> = (
 
     _.remove(clonedSourceArr, sourceIdx => sourceIdx === sourceArr[source.index]);
 
-    clonedDestinationArr.push('placeholder');
+    clonedDestinationArr.push(placeholderName);
     _.fill(clonedDestinationArr, sourceArr[source.index], destination.index, destination.index + 1);
     _.remove(clonedDestinationArr, (el, idx) => idx > destination.index);
 
@@ -114,8 +122,7 @@ const WrapperOfContainerOfPakeepList: FC<WrapperOfContainerOfPakeepListType> = (
     const filteredNewOrderArr = _.split(toSplitNewOrderString, uniqName);
 
     const newOrderNames = _.filter(filteredNewOrderArr, string => string !== toRemoveNameString);
-    var t1 = performance.now();
-    console.log('Call to doSomething took ' + (t1 - t0) + ' milliseconds.');
+
     return handleSetPakeepsOrderNames(newOrderNames);
   };
 
@@ -125,10 +132,9 @@ const WrapperOfContainerOfPakeepList: FC<WrapperOfContainerOfPakeepListType> = (
     columns,
     pakeeps,
     onDragEnd,
-    onDragStart,
-    placeholderName
+    onDragStart
   };
   return <PakeepListContainer {...allPakeepListContainerProps} />;
 };
 
-export default memo(WrapperOfContainerOfPakeepList)
+export default memo(WrapperOfContainerOfPakeepList);
