@@ -130,8 +130,14 @@ const AuthForm: FC<AuthFormPropsType> = ({ isPageIsRegisted = false }) => {
     dispatch(operateToHandleRegister({ email: formState.email.value, password: formState.password.value }));
   };
 
-  const handleSignIn = () => {
+  const useTakeRechanpchaProvider = () => {
     const provider = new firebase.auth.RecaptchaVerifier('recaptcha', { theme: 'dark' });
+
+    return provider;
+  };
+
+  const handleSignIn = () => {
+    const provider = useTakeRechanpchaProvider();
     provider.render();
 
     provider
@@ -143,7 +149,7 @@ const AuthForm: FC<AuthFormPropsType> = ({ isPageIsRegisted = false }) => {
       })
       .catch(error =>
         enqueueSnackbar({
-          message:error.message ||  'You are the fucking robot, baby',
+          message: error.message || 'You are the fucking robot, baby',
           severity: SnackbarSeverityNames.ERROR
         })
       );
@@ -160,7 +166,22 @@ const AuthForm: FC<AuthFormPropsType> = ({ isPageIsRegisted = false }) => {
   };
 
   const onClickOfAnonymousButton = () => {
-    firebase.auth().signInAnonymously();
+    const provider = useTakeRechanpchaProvider();
+    provider.render();
+
+    provider
+      .verify()
+      .then(result => {
+        if (!result) return;
+        provider.clear();
+        firebase.auth().signInAnonymously();
+      })
+      .catch(error =>
+        enqueueSnackbar({
+          message: error.message || 'You are the fucking robot, baby',
+          severity: SnackbarSeverityNames.ERROR
+        })
+      );
   };
 
   const onClickOfNavigationButton: MouseEventHandler = e => {
@@ -303,7 +324,7 @@ const AuthForm: FC<AuthFormPropsType> = ({ isPageIsRegisted = false }) => {
           />
         </Grid> */}
       </Grid>
-      {!isPageIsRegisted && <Grid id={'recaptcha'} container></Grid>}
+      <Grid id={'recaptcha'} container></Grid>
     </Grid>
   );
 };

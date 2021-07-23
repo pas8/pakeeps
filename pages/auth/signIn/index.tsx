@@ -51,7 +51,7 @@ const useStyles = makeStyles(({ spacing, shape: { borderRadius }, palette, break
     }
   },
   border: {
-    margin: spacing(4.2, 0, 3.2),
+    margin: spacing(2.4, 0, 4),
 
     borderBottom: `1px solid ${useAlpha(palette.text.primary, 0.2)}`
   }
