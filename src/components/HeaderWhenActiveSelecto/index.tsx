@@ -20,7 +20,8 @@ import {
   toChangePakeepProperty,
   toChangePinStatusOfPakeeps,
   toChangeSelectedPakeepsProperty,
-  toDeleteLabelFromPakeep
+  toDeleteLabelFromPakeep,
+  toSetSelectedPakeepIdsArr
 } from 'store/modules/App/actions';
 import { EventsOfPakeepType, LabelIdType, PakeepIdType, PakeepsType } from 'store/modules/App/types';
 import { VariantsOfropertiesToUtils } from 'models/unums';
@@ -36,6 +37,7 @@ import { DEFAULT } from 'models/denotation';
 import { colord, extend } from 'colord';
 import mixPlugin from 'colord/plugins/mix';
 import { useMix } from 'hooks/useMix.hook';
+import { useBreakpointNames } from 'hooks/useBreakpointNames.hook';
 
 const useStyles = makeStyles(({ spacing }) => ({
   containerClass: ({ background, color }: any) => ({
@@ -101,6 +103,8 @@ const HeaderWhenActiveSelecto: FC<HeaderWhenActiveSelectoPropsType> = ({ selecte
   });
 
   const cancelSelectedPakeepsId = () => {
+    dispatch(toSetSelectedPakeepIdsArr({ selectedPakeepsId: [] }));
+
     dispatch(toCancelSelectingStatus({ isCancelSelectedPakeepsId: true }));
   };
 
@@ -169,6 +173,8 @@ const HeaderWhenActiveSelecto: FC<HeaderWhenActiveSelectoPropsType> = ({ selecte
     'width',
     'share'
   ];
+
+  const { isSiveIsXs } = useBreakpointNames();
   const iconsUtilsProps = {
     id,
     isBackgroundColorDefault,
@@ -176,7 +182,7 @@ const HeaderWhenActiveSelecto: FC<HeaderWhenActiveSelectoPropsType> = ({ selecte
     labels,
     events,
     iconsCloser: true,
-    widthOfContainer: 400,
+    widthOfContainer: isSiveIsXs ? 320 : 800,
     customColor,
     isUtilsReversed: true,
     labelsListProps,

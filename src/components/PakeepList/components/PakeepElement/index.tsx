@@ -251,7 +251,7 @@ const PakeepElement: FC<PakeepElementPropsType> = ({
     customColor
   };
 
-  const openIn = !isSomePakeepsSelected && statusState.isHovered && !isSelecting;
+  const openIn =  statusState.isHovered && !isSelecting;
 
   const pakeepGridContainerProps = {
     onMouseEnter,
