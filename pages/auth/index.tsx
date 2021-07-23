@@ -66,6 +66,8 @@ const useStyles = makeStyles(({ spacing, shape: { borderRadius }, palette, break
       [breakpoints.down('xs')]: {
       transform: 'scale(1.6)',
 marginTop:60,
+marginLeft:-36,
+
         width: '100%',
         '& a':{
 
