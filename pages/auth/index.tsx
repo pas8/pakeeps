@@ -14,7 +14,7 @@ const useStyles = makeStyles(({ spacing, shape: { borderRadius }, palette, break
     width: '32rem',
     [breakpoints.down('xs')]: {
       width: '100%',
-      transform: 'scale(0.4)',
+      transform: 'scale(0.6)',
 
     },
     '& .welco': {
@@ -64,9 +64,14 @@ const useStyles = makeStyles(({ spacing, shape: { borderRadius }, palette, break
     },
     '& div >  div ': {
       [breakpoints.down('xs')]: {
-      transform: 'scale(2.4)',
-marginTop:80,
-        width: '100%'
+      transform: 'scale(1.6)',
+marginTop:60,
+        width: '100%',
+        '& a':{
+
+        
+        fontSize:'1.2em'
+        }
       },
       transform: 'scale(1.16)',
       marginTop:42,
@@ -74,6 +79,7 @@ marginTop:80,
 
       width: '49.6%',
       '& a': {
+      
       marginLeft:24,
 
         width: '100%'
