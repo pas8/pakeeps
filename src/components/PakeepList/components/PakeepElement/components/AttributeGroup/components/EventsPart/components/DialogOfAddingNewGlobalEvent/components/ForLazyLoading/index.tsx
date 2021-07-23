@@ -6,7 +6,7 @@ import { toAddGlobalEvent } from 'store/modules/App/actions';
 import { format as toFormat, isValid, differenceInMinutes, addMinutes } from 'date-fns';
 import { useDispatch, useSelector } from 'react-redux';
 import dynamic from 'next/dynamic';
-import { includes,isNumber } from 'lodash';
+import { includes, isNumber } from 'lodash';
 import { Skeleton } from '@material-ui/lab';
 import { colord } from 'colord';
 import { usePrevious, useToggle } from 'react-use';
@@ -64,7 +64,7 @@ const ForLazyLoadingDialogOfAddingNewGlobalEvent: FC<DialogOfAddingNewGlobalEven
     title: '',
     iconName: 'week',
     color: '',
-    value: Date.now(),
+    value: new Date(),
     onlyTime: false,
     variant: 'outlined' as LabelVariantType,
     id: nanoid()
@@ -87,8 +87,8 @@ const ForLazyLoadingDialogOfAddingNewGlobalEvent: FC<DialogOfAddingNewGlobalEven
   ];
 
   const [value, setValue] = useState<any>(toFormat(Date.now(), format));
-  const isDateIsPast = isNumber(eventState.value) ? eventState.value :  eventState.value.getTime() < Date.now()
-  const error = !isValid(eventState.value) || isDateIsPast
+  const isDateIsPast = eventState.value?.getTime() < Date.now();
+  const error = !isValid(eventState.value) || isDateIsPast;
 
   const previuosNewEventState = usePrevious(eventState);
 
@@ -207,12 +207,13 @@ const ForLazyLoadingDialogOfAddingNewGlobalEvent: FC<DialogOfAddingNewGlobalEven
   };
 
   const handleSave = () => {
-    if(isDateIsPast) return    enqueueSnackbar({ message: 'Date should be not in the past',severity: SnackbarSeverityNames.ERROR  });
-          
-    if(error) return    enqueueSnackbar({ message: 'Invalida date format',  severity: SnackbarSeverityNames.ERROR });
+    if (isDateIsPast)
+      return enqueueSnackbar({ message: 'Date should be not in the past', severity: SnackbarSeverityNames.ERROR });
+
+    if (error) return enqueueSnackbar({ message: 'Invalida date format', severity: SnackbarSeverityNames.ERROR });
 
     const minuteDiff = differenceInMinutes(Date.now(), eventState.value);
-    const value = addMinutes(Date.now(), minuteDiff).getTime()
+    const value = addMinutes(Date.now(), minuteDiff).getTime();
 
     dispatch(toAddGlobalEvent({ newEvent: { ...eventState, value } }));
     enqueueSnackbar({ message: 'Global label was successfully added' });
