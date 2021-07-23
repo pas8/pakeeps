@@ -68,7 +68,6 @@ const AuthLayout: FC<any> = ({ children, pageProps }) => {
   }, [isError, errorMessage]);
   useEffect(() => {
     firebase.auth().onAuthStateChanged(user => {
-      console.log(user)
       if (!user) return dispatch(toChangeLoginStatus({ isLogined: false }));
       if (!user.isAnonymous) {
         dispatch(

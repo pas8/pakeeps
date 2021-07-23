@@ -182,6 +182,7 @@ export type UseNewPakeepUtilityType = ({
 }) => {
   setState: Dispatch<SetStateAction<any>>;
   state: PakeepElementType;
+  toNulittyPropertyState:()=> void;
   eventsListProps: EventsListProps;
   labelsOfAttributeGroup: GlobalLabelsType;
   setCheckBoxes: Dispatch<SetStateAction<CheckBoxesArrtype>>;

@@ -67,7 +67,6 @@ const AddDateToPakeep: FC<AddDateToPakeepPropsType> = ({
   const [focusedEventId, setFocusedEventId] = useState('');
 
   const [dateAndTimeInputsState, setDateAndTimeInputsState] = useState<DateAndTimeInputsStateType>({});
-
   const handleDateAndTimeInputsState: HandleDateAndTimeInputsStateType = (id, value, inputValue) => {
     setFocusedEventId(id);
     setDateAndTimeInputsState(state => ({ ...state, [id]: { id, value, inputValue } }));

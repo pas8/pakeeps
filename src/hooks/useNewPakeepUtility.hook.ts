@@ -26,6 +26,12 @@ export const useNewPakeepUtility: UseNewPakeepUtilityType = ({
 
   const [state, setState] = useState(defaultState);
 
+const toNulittyPropertyState = () => {
+setInputState(defaultInputState)
+setCheckBoxes(defaultCheckBoxesValue)
+setState(defaultState)
+}
+
   const handleSetFavoritePakeep = () => setState(state => ({ ...state, isFavorite: !state.isFavorite }));
   const handleSetBookmarkPakeep = () => setState(state => ({ ...state, isInBookmark: !state.isInBookmark }));
   const handleSetIsPinnedPakeep = () => setState(state => ({ ...state, isPinned: !state.isPinned }));
@@ -113,6 +119,7 @@ export const useNewPakeepUtility: UseNewPakeepUtilityType = ({
   return {
     state: propertyies,
     setState,
+    toNulittyPropertyState,
     iconUtilsFuncs,
     labelsOfAttributeGroup,
     defaultLabelListProps,

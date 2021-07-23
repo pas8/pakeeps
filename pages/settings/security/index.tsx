@@ -182,7 +182,7 @@ const Security: FC = () => {
                 const onKeyPress: KeyboardEventHandler<HTMLInputElement> = ({ code }) => {
                   idx + 1 === valuesOfInputsStateOfPasswordChanger.length &&
                     code === 'Enter' &&
-                    console.log('fuck this this ');
+                  hadnelChangePassword()
                 };
 
                 const handleMouseDownPassword = (e: MouseEvent<HTMLButtonElement>) => {

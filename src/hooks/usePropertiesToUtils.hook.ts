@@ -36,7 +36,7 @@ export const usePropertiesToUtils: UsePropertiesToUtilsType = (
         };
         return { func: valueFunc, funcName };
       }
-      return { func: () => console.log(';'), funcName };
+      return { func: () => {}, funcName };
     }
   );
   //@ts-ignore

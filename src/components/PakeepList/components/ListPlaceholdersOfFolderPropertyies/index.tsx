@@ -10,6 +10,7 @@ const useStyles = makeStyles(({ spacing, typography: { h1, h2, h3 }, palette, br
       color: !!color ? color : palette.text.hint
     },
     '& svg': {
+      marginRight:40,
       fontSize: '20em',
 
       [breakpoints.down('md')]: {

@@ -112,6 +112,7 @@ const NewPaKeep: FC = () => {
     handleChangeInputsValue,
     eventsListProps,
     setCheckBoxes,
+    toNulittyPropertyState,
     labelsOfAttributeGroup
   } = useNewPakeepUtility({
     defaultState,
@@ -123,6 +124,7 @@ const NewPaKeep: FC = () => {
     statusState,
     hanldeChangeTextVisiblittyStatus,
     handleSetWidth,
+    toNulittyStatusState,
     handleStatusOfHideLabelView,
     handleAccomplishedCheckBoxesHiddenStatus
   } = useNewPakeepStatuses();
@@ -158,7 +160,11 @@ const NewPaKeep: FC = () => {
 
   const labelBargeNumber = statusState.isLabelViewHidden ? state.labels.length : 0;
 
-  const onClose = () => console.log('onClose');
+  const onClose = () => {
+toNulittyPropertyState()
+toNulittyStatusState()
+    
+  }
 
   const attributeGroupProps = {
     labels: labelsOfAttributeGroup,
@@ -190,7 +196,7 @@ const NewPaKeep: FC = () => {
   //   updateCookie(JSON.stringify(state));
   // });
   const handleAddNewPakeep = () => {
-    setState({ ...defaultState, ...defaultInputState, checkBoxes: [] });
+   onClose()
     dispatch(toAddNewPakeep({ newPakeep: state }));
   };
 

@@ -126,7 +126,7 @@ const DynamicInputDateAndTimePickers: FC<DynamicInputDateAndTimePickersPropsType
   const classes = useStyles({ customColor, onlyTime, error, color });
 
   const onChange = (date: MaterialUiPickersDate, value: string | null | undefined) => {
-    handleDateAndTimeInputsState(name, date, value);
+    handleDateAndTimeInputsState(name, date.getTime(), value);
   };
 
   const handleSetDefaultTheme = () => {
