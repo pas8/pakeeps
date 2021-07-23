@@ -93,7 +93,6 @@ const PakeepList: FC = () => {
       })
     );
   };
-
   const onClickOfPakeepElement = (id: PakeepIdType) => {
     if (!isSomePakeepsSelected) return handleOpenDialog(id);
     const newItem: HTMLElement = document.getElementById(id)!;
@@ -139,7 +138,7 @@ const PakeepList: FC = () => {
     setIsSelecting,
     SELECTED
   };
-  const isSelectoHidden = (isPakeepHovering || isPakeepDragging) && isCancelSelectedPakeepsId;
+  const isSelectoHidden =  isPakeepDragging || isPakeepHovering
 
   const cancelSelectedPakeepsId = () => {
     handleChangeSelectingStatus(true);
