@@ -9,6 +9,7 @@ export const useNewPakeepStatuses = () => {
   };
 
   const [statusState, setStatusState] = useState(defaultStatusState);
+const toNulittyStatusState = () => setStatusState(defaultStatusState)
 
   const handleAccomplishedCheckBoxesHiddenStatus = () => {
     setStatusState(state => ({
@@ -31,6 +32,7 @@ export const useNewPakeepStatuses = () => {
 
   return {
     statusState,
+    toNulittyStatusState,
     hanldeChangeTextVisiblittyStatus,
     handleSetWidth,
     handleStatusOfHideLabelView,

@@ -9,8 +9,8 @@ const AuthForm = dynamic(() => import('components/AuthForm'), {
 });
 
 const Index = () => (
-  <PageCenteredContainer>
-    <Grid style={{ padding: 12 }}>
+  <PageCenteredContainer style={{padding:12}}>
+    <Grid style={{ padding: 12 }} container alignItems={'center'}  justify={'center'}>
       <AuthFieldSetContainer title={'Register'}>
         <AuthForm isPageIsRegisted />
       </AuthFieldSetContainer>

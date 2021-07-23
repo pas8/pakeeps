@@ -128,7 +128,6 @@ const ToggleButtonUtilsOfCustomGradient = ({
   const [state, setState] = useState(['save']);
 
   const handleChange = (placeholder, value) => {
-    console.log(_);
     setState(value);
     // setStatusState(state => ({ ...state, [value]: !state[value] }));
   };
