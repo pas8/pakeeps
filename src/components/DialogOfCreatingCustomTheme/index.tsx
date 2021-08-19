@@ -308,9 +308,10 @@ const DialogOfCreatingCustomTheme: FC<DialogOfCreatingCustomThemePropsType> = ({
       open={isOpen}
       fullScreen={isSiveIsXs}
       onClose={onClose}
+
       className={classes.container}
       PaperComponent={DraggablePaperComponent}
-      // maxWidth={'xl'}
+      maxWidth={'xl'}
     >
       <MenuByPas
         open={elStateOfButtonUtilMenu.anchorEl}
@@ -334,7 +335,7 @@ const DialogOfCreatingCustomTheme: FC<DialogOfCreatingCustomThemePropsType> = ({
         {!caption.isValid && <FormHelperText error={!caption.isValid}>Theme caption is not uniq</FormHelperText>}
       </DialogTitle>
       <DialogContent className={classes.contentContainer}>
-        <Grid container={!isSizeSmall}>
+        <Grid container={!isSizeSmall} >
           <Grid>
             <Grid
               container
